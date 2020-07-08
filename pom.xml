@@ -62,6 +62,27 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<!--
+			JSPs to be in src/main/webapp/WEB-INF/jsp instead of src/main/resources/META-INF/resources/WEB-INF/jsp
+			Needed to run on Heroku
+			Ref.: https://stackoverflow.com/questions/45684146/spring-boot-jsp-not-found
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+		</dependency>
+
+		<!-- Render JSP pages -->
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
