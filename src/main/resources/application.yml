@@ -12,3 +12,6 @@ spring:
     view:
       prefix: /WEB-INF/jsp/
       suffix: .jsp
+
+  messages:
+    basename: validation
