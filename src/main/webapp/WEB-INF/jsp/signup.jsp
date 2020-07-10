@@ -15,15 +15,32 @@
 
 <body>
 
-<div class="container">
+<%@ include file = "header.jsp" %>
 
+<div class="container">
     <form:form method="POST" modelAttribute="userForm" class="form-signin">
-        <h2 class="form-signin-heading">Sign Up</h2>
+        <h4 class="form-signin-heading">Sign Up</h4>
         <spring:bind path="email">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="text" path="email" class="form-control" placeholder="E-mail"
                             autofocus="true"></form:input>
                 <form:errors path="email"></form:errors>
+            </div>
+        </spring:bind>
+
+        <spring:bind path="firstName">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="text" path="firstName" class="form-control" placeholder="First Name"
+                            autofocus="true"></form:input>
+                <form:errors path="firstName"></form:errors>
+            </div>
+        </spring:bind>
+
+        <spring:bind path="lastName">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="text" path="lastName" class="form-control" placeholder="Last Name"
+                            autofocus="true"></form:input>
+                <form:errors path="lastName"></form:errors>
             </div>
         </spring:bind>
 
@@ -43,8 +60,8 @@
         </spring:bind>
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+        <div class="text-center">Already have an account? <a href="${contextPath}/login">Log in</a>.</div>
     </form:form>
-
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
