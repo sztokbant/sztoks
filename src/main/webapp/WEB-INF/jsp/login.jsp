@@ -8,7 +8,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Login</title>
+    <title>Log in</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
@@ -16,7 +16,7 @@
 
 <body>
 
-<%@ include file = "header.jsp" %>
+<%@ include file="_header.jsp" %>
 
 <div class="container">
     <form method="POST" action="${contextPath}/login" class="form-signin">

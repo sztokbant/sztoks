@@ -1,6 +1,7 @@
 package br.net.du.myequity.persistence;
 
 import br.net.du.myequity.model.Account;
+import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.Workspace;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import static br.net.du.myequity.test.TestUtil.buildPopulatedWorkspace;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -94,7 +95,7 @@ class PersistenceTest {
         assertNotNull(actualWorkspace.getUser());
         assertEquals(user, actualWorkspace.getUser());
 
-        final Set<Account> accounts = actualWorkspace.getAccounts();
+        final Map<AccountType, List<Account>> accounts = actualWorkspace.getAccounts();
         assertTrue(accounts.isEmpty());
 
         final List<Snapshot> snapshots = actualWorkspace.getSnapshots();
@@ -125,23 +126,29 @@ class PersistenceTest {
         assertNotNull(actualWorkspace.getUser());
         assertEquals(user, actualWorkspace.getUser());
 
-        final Set<Account> accounts = actualWorkspace.getAccounts();
+        final Map<AccountType, List<Account>> accounts = actualWorkspace.getAccounts();
         assertEquals(2, accounts.size());
-        final Account firstAccount = accounts.iterator().next();
-        assertNotNull(firstAccount.getId());
-        assertNotNull(firstAccount.getWorkspace());
-        assertEquals(actualWorkspace, firstAccount.getWorkspace());
+        assertEquals(1, accounts.get(AccountType.ASSET).size());
+        assertEquals(1, accounts.get(AccountType.LIABILITY).size());
+        final Account assetAccount = accounts.get(AccountType.ASSET).get(0);
+        assertEquals(AccountType.ASSET, assetAccount.getAccountType());
+        assertNotNull(assetAccount.getId());
+        assertNotNull(assetAccount.getWorkspace());
+        assertEquals(actualWorkspace, assetAccount.getWorkspace());
 
-        final Account secondAccount = accounts.iterator().next();
-        assertNotNull(secondAccount.getId());
-        assertNotNull(secondAccount.getWorkspace());
-        assertEquals(actualWorkspace, secondAccount.getWorkspace());
+        final Account liabilityAccount = accounts.get(AccountType.LIABILITY).get(0);
+        assertEquals(AccountType.LIABILITY, liabilityAccount.getAccountType());
+        assertNotNull(liabilityAccount.getId());
+        assertNotNull(liabilityAccount.getWorkspace());
+        assertEquals(actualWorkspace, liabilityAccount.getWorkspace());
 
         final List<Snapshot> snapshots = actualWorkspace.getSnapshots();
         assertEquals(1, snapshots.size());
-        assertNotNull(snapshots.get(0).getId());
-        assertNotNull(snapshots.get(0).getWorkspace());
-        assertEquals(actualWorkspace, snapshots.get(0).getWorkspace());
+        final Snapshot snapshot = snapshots.get(0);
+        assertEquals(2, snapshot.getAccounts().size());
+        assertNotNull(snapshot.getId());
+        assertNotNull(snapshot.getWorkspace());
+        assertEquals(actualWorkspace, snapshot.getWorkspace());
     }
 
     @Test

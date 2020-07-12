@@ -155,6 +155,35 @@ class SnapshotTest {
     }
 
     @Test
+    public void getAccountsByType() {
+        // GIVEN
+        final Snapshot snapshot = new Snapshot(now, ImmutableSet.of(assetAccount, liabilityAccount));
+
+        // WHEN
+        final Map<AccountType, Map<Account, BigDecimal>> accounts = snapshot.getAccountsByType();
+
+        // THEN
+        assertEquals(2, accounts.size());
+        assertTrue(accounts.containsKey(AccountType.ASSET));
+        final Map<Account, BigDecimal> assetAccounts = accounts.get(AccountType.ASSET);
+        assertEquals(1, assetAccounts.size());
+        assertEquals(assetAccount.getBalance().getAmount(), assetAccounts.get(assetAccount));
+
+        assertTrue(accounts.containsKey(AccountType.LIABILITY));
+        final Map<Account, BigDecimal> liabilityAccounts = accounts.get(AccountType.LIABILITY);
+        assertEquals(1, liabilityAccounts.size());
+        assertEquals(liabilityAccount.getBalance().getAmount(), liabilityAccounts.get(liabilityAccount));
+
+        assertThrows(UnsupportedOperationException.class, () -> {
+            accounts.remove(AccountType.LIABILITY);
+        });
+
+        assertThrows(UnsupportedOperationException.class, () -> {
+            accounts.get(AccountType.LIABILITY).remove(liabilityAccount);
+        });
+    }
+
+    @Test
     public void equals() {
         final Snapshot snapshot = new Snapshot(LocalDate.now(), new HashSet<>());
 

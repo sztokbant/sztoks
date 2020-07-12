@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "workspaces")
@@ -98,8 +99,9 @@ public class Workspace {
      *
      * @return Defensive copy to prevent it from being modified from the outside.
      */
-    public Set<Account> getAccounts() {
-        return ImmutableSet.copyOf(accounts);
+    // TODO Test immutability
+    public Map<AccountType, List<Account>> getAccounts() {
+        return ImmutableSet.copyOf(accounts).stream().collect(Collectors.groupingBy(Account::getAccountType));
     }
 
     public void addAccount(final Account account) {

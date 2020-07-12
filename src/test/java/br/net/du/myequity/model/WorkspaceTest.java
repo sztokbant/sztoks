@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static br.net.du.myequity.test.TestUtil.newAssetAccount;
 import static br.net.du.myequity.test.TestUtil.newLiabilityAccount;
@@ -53,9 +52,10 @@ class WorkspaceTest {
         workspace.addAccount(liabilityAccont);
 
         // THEN
-        final Set<Account> accounts = workspace.getAccounts();
+        final Map<AccountType, List<Account>> accounts = workspace.getAccounts();
         assertEquals(1, accounts.size());
-        assertEquals(liabilityAccont, accounts.iterator().next());
+        assertEquals(1, accounts.get(AccountType.LIABILITY).size());
+        assertEquals(liabilityAccont, accounts.get(AccountType.LIABILITY).get(0));
         assertEquals(workspace, liabilityAccont.getWorkspace());
     }
 
@@ -69,9 +69,10 @@ class WorkspaceTest {
         workspace.addAccount(liabilityAccont);
 
         // THEN
-        final Set<Account> accounts = workspace.getAccounts();
+        final Map<AccountType, List<Account>> accounts = workspace.getAccounts();
         assertEquals(1, accounts.size());
-        assertEquals(liabilityAccont, accounts.iterator().next());
+        assertEquals(1, accounts.get(AccountType.LIABILITY).size());
+        assertEquals(liabilityAccont, accounts.get(AccountType.LIABILITY).get(0));
         assertEquals(workspace, liabilityAccont.getWorkspace());
     }
 

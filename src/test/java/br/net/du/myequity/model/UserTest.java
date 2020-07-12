@@ -29,6 +29,14 @@ class UserTest {
     public void constructor() {
         // THEN
         assertEquals("example@example.com", user.getEmail());
+        assertEquals("Bill", user.getFirstName());
+        assertEquals("Gates", user.getLastName());
+    }
+
+    @Test
+    public void getFullName() {
+        // THEN
+        assertEquals("Bill Gates", user.getFullName());
     }
 
     @Test

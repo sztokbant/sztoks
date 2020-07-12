@@ -62,6 +62,10 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getFullName() {
+        return String.format("%s %s", firstName, lastName);
+    }
+
     /**
      * Ref.: https://meri-stuff.blogspot.com/2012/03/jpa-tutorial
      * .html#RelationshipsBidirectionalOneToManyManyToOneConsistency

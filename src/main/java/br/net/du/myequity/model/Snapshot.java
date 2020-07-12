@@ -64,6 +64,28 @@ public class Snapshot {
         return ImmutableMap.copyOf(accounts);
     }
 
+    public Map<AccountType, Map<Account, BigDecimal>> getAccountsByType() {
+        final Map<AccountType, ImmutableMap.Builder<Account, BigDecimal>> buildersMap = new HashMap<>();
+
+        for (final Map.Entry<Account, BigDecimal> entry : accounts.entrySet()) {
+            final AccountType accountType = entry.getKey().getAccountType();
+
+            if (!buildersMap.containsKey(accountType)) {
+                buildersMap.put(accountType, ImmutableMap.builder());
+            }
+
+            buildersMap.get(accountType).put(entry.getKey(), entry.getValue());
+        }
+
+        final ImmutableMap.Builder<AccountType, Map<Account, BigDecimal>> accountsByTypeBuilder =
+                ImmutableMap.builder();
+        for (final Map.Entry<AccountType, ImmutableMap.Builder<Account, BigDecimal>> entry : buildersMap.entrySet()) {
+            accountsByTypeBuilder.put(entry.getKey(), entry.getValue().build());
+        }
+
+        return accountsByTypeBuilder.build();
+    }
+
     public BigDecimal getAccount(@NonNull final Account account) {
         return accounts.get(account);
     }
