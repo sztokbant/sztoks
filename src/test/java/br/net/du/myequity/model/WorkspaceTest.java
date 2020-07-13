@@ -16,6 +16,7 @@ import static br.net.du.myequity.test.TestUtil.newLiabilityAccount;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class WorkspaceTest {
@@ -41,6 +42,25 @@ class WorkspaceTest {
 
         snapshot = new Snapshot(LocalDate.now(), ImmutableSet.of(liabilityAccont, assetAccount));
         snapshot.setId(108L);
+    }
+
+    @Test
+    public void getAccounts_containersAreImmutable() {
+        // GIVEN
+        assertTrue(workspace.getAccounts().isEmpty());
+        workspace.addAccount(assetAccount);
+        workspace.addAccount(liabilityAccont);
+        final Map<AccountType, List<Account>> accounts = workspace.getAccounts();
+
+        // THEN
+        assertThrows(UnsupportedOperationException.class, () -> {
+            accounts.remove(AccountType.ASSET);
+        });
+
+        final Account notInWorkspace = newAssetAccount("50000.00");
+        assertThrows(UnsupportedOperationException.class, () -> {
+            accounts.get(AccountType.ASSET).add(notInWorkspace);
+        });
     }
 
     @Test

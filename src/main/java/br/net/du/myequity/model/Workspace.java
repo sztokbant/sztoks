@@ -2,7 +2,7 @@ package br.net.du.myequity.model;
 
 import br.net.du.myequity.util.NetWorthUtil;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +26,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 @Entity
 @Table(name = "workspaces")
@@ -97,11 +100,13 @@ public class Workspace {
      * Ref.: https://meri-stuff.blogspot.com/2012/03/jpa-tutorial
      * .html#RelationshipsBidirectionalOneToManyManyToOneConsistency
      *
-     * @return Defensive copy to prevent it from being modified from the outside.
+     * @return Immutable copy to prevent it from being modified from the outside.
      */
-    // TODO Test immutability
     public Map<AccountType, List<Account>> getAccounts() {
-        return ImmutableSet.copyOf(accounts).stream().collect(Collectors.groupingBy(Account::getAccountType));
+        return accounts.stream()
+                       .collect(collectingAndThen(groupingBy(Account::getAccountType,
+                                                             collectingAndThen(toList(), ImmutableList::copyOf)),
+                                                  ImmutableMap::copyOf));
     }
 
     public void addAccount(final Account account) {
@@ -126,7 +131,7 @@ public class Workspace {
      * Ref.: https://meri-stuff.blogspot.com/2012/03/jpa-tutorial
      * .html#RelationshipsBidirectionalOneToManyManyToOneConsistency
      *
-     * @return Defensive copy to prevent it from being modified from the outside.
+     * @return Immutable copy to prevent it from being modified from the outside.
      */
     public List<Snapshot> getSnapshots() {
         return ImmutableList.copyOf(snapshots);

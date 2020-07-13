@@ -70,7 +70,7 @@ public class User {
      * Ref.: https://meri-stuff.blogspot.com/2012/03/jpa-tutorial
      * .html#RelationshipsBidirectionalOneToManyManyToOneConsistency
      *
-     * @return Defensive copy to prevent it from being modified from the outside.
+     * @return Immutable copy to prevent it from being modified from the outside.
      */
     public Set<Workspace> getWorkspaces() {
         return ImmutableSet.copyOf(workspaces);

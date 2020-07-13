@@ -138,7 +138,7 @@ class SnapshotTest {
     }
 
     @Test
-    public void getAccounts_mapIsImmutable() {
+    public void getAccounts_containersAreImmutable() {
         // GIVEN
         final Snapshot snapshot = new Snapshot(now, ImmutableSet.of(assetAccount, liabilityAccount));
         final Map<Account, BigDecimal> accounts = snapshot.getAccounts();
