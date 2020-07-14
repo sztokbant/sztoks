@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -26,6 +27,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "snapshots")
@@ -60,6 +62,7 @@ public class Snapshot {
         }
     }
 
+    // TODO May never be used
     public Map<Account, BigDecimal> getAccounts() {
         return ImmutableMap.copyOf(accounts);
     }
@@ -126,6 +129,34 @@ public class Snapshot {
                 workspace.equals(newWorkspace);
     }
 
+    public Map<CurrencyUnit, BigDecimal> getNetWorth() {
+        return NetWorthUtil.computeByCurrency(getAccountsAsSet());
+    }
+
+    public Map<CurrencyUnit, BigDecimal> getAssetsTotal() {
+        return NetWorthUtil.computeByCurrency(getAccountsAsSet().stream()
+                                                                .filter(account -> account.getAccountType()
+                                                                                          .equals(AccountType.ASSET))
+                                                                .collect(Collectors.toSet()));
+    }
+
+    public Map<CurrencyUnit, BigDecimal> getLiabilitiesTotal() {
+        return NetWorthUtil.computeByCurrency(getAccountsAsSet().stream()
+                                                                .filter(account -> account.getAccountType()
+                                                                                          .equals(AccountType.LIABILITY))
+                                                                .collect(Collectors.toSet()));
+    }
+
+    private Set<Account> getAccountsAsSet() {
+        return accounts.entrySet().stream().map(entry -> {
+            final Account account = entry.getKey();
+            return new Account(account.getName(),
+                               account.getAccountType(),
+                               Money.of(account.getBalance().getCurrencyUnit(), entry.getValue()),
+                               account.getCreateDate());
+        }).collect(Collectors.toSet());
+    }
+
     @Override
     public boolean equals(final Object other) {
         if (this == other) {
@@ -137,10 +168,6 @@ public class Snapshot {
         }
 
         return id != null && id.equals(((Snapshot) other).getId());
-    }
-
-    public Map<CurrencyUnit, BigDecimal> getNetWorth() {
-        return NetWorthUtil.computeByCurrency(accounts);
     }
 
     @Override

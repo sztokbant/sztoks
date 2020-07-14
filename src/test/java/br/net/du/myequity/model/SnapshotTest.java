@@ -3,6 +3,7 @@ package br.net.du.myequity.model;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,8 +30,8 @@ class SnapshotTest {
     @BeforeEach
     public void setUp() {
         now = LocalDate.now();
-        liabilityAccount = newLiabilityAccount("320000.00");
         assetAccount = newAssetAccount("100.00");
+        liabilityAccount = newLiabilityAccount("320000.00");
         expectedNetWorth = ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-319900.00"));
     }
 
@@ -51,11 +52,40 @@ class SnapshotTest {
         final Snapshot snapshot = new Snapshot(now, ImmutableSet.of(assetAccount, liabilityAccount));
 
         // WHEN
-        assetAccount.setBalance(assetAccount.getBalance().plus(new BigDecimal("72.00")));
+        final Money newBalance = assetAccount.getBalance().plus(new BigDecimal("72.00"));
+        assetAccount.setBalance(newBalance);
         liabilityAccount.setBalance(liabilityAccount.getBalance().minus(new BigDecimal("99.00")));
 
         // THEN
         assertEquals(expectedNetWorth, snapshot.getNetWorth());
+    }
+
+    @Test
+    public void getAssetsTotal_afterModifyingOriginalObjects() {
+        // GIVEN
+        final Snapshot snapshot = new Snapshot(now, ImmutableSet.of(assetAccount, liabilityAccount));
+
+        // WHEN
+        assetAccount.setBalance(assetAccount.getBalance().plus(new BigDecimal("72.00")));
+        liabilityAccount.setBalance(liabilityAccount.getBalance().minus(new BigDecimal("99.00")));
+
+        // THEN
+        assertEquals(ImmutableMap.of(assetAccount.getBalance().getCurrencyUnit(), new BigDecimal("100.00")),
+                     snapshot.getAssetsTotal());
+    }
+
+    @Test
+    public void getLiabilitiesTotal_afterModifyingOriginalObjects() {
+        // GIVEN
+        final Snapshot snapshot = new Snapshot(now, ImmutableSet.of(assetAccount, liabilityAccount));
+
+        // WHEN
+        assetAccount.setBalance(assetAccount.getBalance().plus(new BigDecimal("72.00")));
+        liabilityAccount.setBalance(liabilityAccount.getBalance().minus(new BigDecimal("99.00")));
+
+        // THEN
+        assertEquals(ImmutableMap.of(liabilityAccount.getBalance().getCurrencyUnit(),
+                                     new BigDecimal("320000.00").negate()), snapshot.getLiabilitiesTotal());
     }
 
     @Test

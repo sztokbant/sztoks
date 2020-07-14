@@ -23,6 +23,15 @@
     <hr/>
 
     <h5>Assets</h5>
+    <b>Total</b>
+    <c:forEach items="${snapshot.assetsTotal}" var="entry">
+        <div>
+            ${entry.key}: ${entry.value}<br>
+        </div>
+    </c:forEach>
+
+    <br/>
+
     <c:forEach var="accountToBalance" items="${snapshot.accountsByType[assetMapKey]}">
         <div>
             ${accountToBalance.key.name}: ${accountToBalance.value}
@@ -33,6 +42,15 @@
     <hr/>
 
     <h5>Liabilities</h5>
+    <b>Total</b>
+    <c:forEach items="${snapshot.liabilitiesTotal}" var="entry">
+        <div>
+            ${entry.key}: ${entry.value}<br>
+        </div>
+    </c:forEach>
+
+    <br/>
+
     <c:forEach var="accountToBalance" items="${snapshot.accountsByType[liabilityMapKey]}">
         <div>
             ${accountToBalance.key.name}: ${accountToBalance.value}

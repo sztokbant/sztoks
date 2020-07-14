@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.groupingBy;
@@ -161,6 +162,20 @@ public class Workspace {
 
     public Map<CurrencyUnit, BigDecimal> getNetWorth() {
         return NetWorthUtil.computeByCurrency(accounts);
+    }
+
+    public Map<CurrencyUnit, BigDecimal> getAssetsTotal() {
+        return NetWorthUtil.computeByCurrency(accounts.stream()
+                                                      .filter(account -> account.getAccountType()
+                                                                                .equals(AccountType.ASSET))
+                                                      .collect(Collectors.toSet()));
+    }
+
+    public Map<CurrencyUnit, BigDecimal> getLiabilitiesTotal() {
+        return NetWorthUtil.computeByCurrency(accounts.stream()
+                                                      .filter(account -> account.getAccountType()
+                                                                                .equals(AccountType.LIABILITY))
+                                                      .collect(Collectors.toSet()));
     }
 
     @Override

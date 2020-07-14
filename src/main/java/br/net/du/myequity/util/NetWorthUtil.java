@@ -23,16 +23,4 @@ public class NetWorthUtil {
                                                                           Money::getAmount,
                                                                           BigDecimal::add)));
     }
-
-    public static Map<CurrencyUnit, BigDecimal> computeByCurrency(final Map<Account, BigDecimal> accounts) {
-        return accounts.entrySet()
-                       .stream()
-                       .map(account -> account.getKey().getAccountType().equals(AccountType.ASSET) ?
-                               Money.of(account.getKey().getBalance().getCurrencyUnit(), account.getValue()) :
-                               Money.of(account.getKey().getBalance().getCurrencyUnit(), account.getValue().negate()))
-                       .collect(Collectors.groupingBy(Money::getCurrencyUnit,
-                                                      Collectors.reducing(BigDecimal.ZERO,
-                                                                          Money::getAmount,
-                                                                          BigDecimal::add)));
-    }
 }

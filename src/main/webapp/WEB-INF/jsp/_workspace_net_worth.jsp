@@ -1,5 +1,5 @@
 <div>
-    Net Worth:
+    <b>Net Worth</b>
 </div>
 <c:choose>
     <c:when test="${not empty workspace.accounts}">

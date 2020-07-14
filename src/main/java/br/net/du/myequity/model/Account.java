@@ -46,9 +46,6 @@ public class Account {
     @Column(nullable = false)
     private BigDecimal amount;
 
-    @Transient
-    private Money balance;
-
     @Column(nullable = false)
     @Getter
     @Setter
@@ -109,10 +106,7 @@ public class Account {
     }
 
     public Money getBalance() {
-        if (balance == null) {
-            balance = Money.of(CurrencyUnit.of(currency), amount);
-        }
-        return balance;
+        return Money.of(CurrencyUnit.of(currency), amount);
     }
 
     public void setBalance(@NonNull final Money balance) {

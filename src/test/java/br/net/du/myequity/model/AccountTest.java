@@ -74,6 +74,23 @@ class AccountTest {
     }
 
     @Test
+    public void balanceGetterAndSetter() {
+        // GIVEN
+        final String accountName = "Wallet";
+        final AccountType accountType = AccountType.ASSET;
+        final Money originalBalance = Money.of(CurrencyUnit.USD, new BigDecimal("100.00"));
+        final Account account = new Account(accountName, accountType, originalBalance);
+        assertEquals(originalBalance, account.getBalance());
+
+        // WHEN
+        final Money newBalance = Money.of(CurrencyUnit.of("BRL"), new BigDecimal("550.00"));
+        account.setBalance(newBalance);
+
+        // THEN
+        assertEquals(newBalance, account.getBalance());
+    }
+
+    @Test
     public void setBalanceAmount() {
         // GIVEN
         final String accountName = "Mortgage";

@@ -29,6 +29,7 @@
                     <a href="/workspace/${workspace.id}">${workspace.name}</a>
                 </div>
                 <%@ include file="_workspace_net_worth.jsp" %>
+                <br/>
             </c:forEach>
         </c:otherwise>
     </c:choose>

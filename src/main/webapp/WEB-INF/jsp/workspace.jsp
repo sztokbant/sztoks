@@ -40,6 +40,15 @@
     <hr/>
 
     <h5>Assets</h5>
+    <b>Total</b>
+    <c:forEach items="${workspace.assetsTotal}" var="entry">
+        <div>
+            ${entry.key}: ${entry.value}<br>
+        </div>
+    </c:forEach>
+
+    <br/>
+
     <c:forEach var="account" items="${workspace.accounts[assetMapKey]}">
         <div>
             ${account.name}: ${account.balance}
@@ -50,6 +59,15 @@
     <hr/>
 
     <h5>Liabilities</h5>
+    <b>Total</b>
+    <c:forEach items="${workspace.liabilitiesTotal}" var="entry">
+        <div>
+            ${entry.key}: ${entry.value}<br>
+        </div>
+    </c:forEach>
+
+    <br/>
+
     <c:forEach var="account" items="${workspace.accounts[liabilityMapKey]}">
         <div>
             ${account.name}: ${account.balance}

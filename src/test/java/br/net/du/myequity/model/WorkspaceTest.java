@@ -216,6 +216,31 @@ class WorkspaceTest {
     }
 
     @Test
+    public void getAssetsTotal() {
+        // GIVEN
+        assertTrue(workspace.getAccounts().isEmpty());
+        workspace.addAccount(assetAccount);
+        workspace.addAccount(liabilityAccont);
+
+        // THEN
+        assertEquals(ImmutableMap.of(assetAccount.getBalance().getCurrencyUnit(),
+                                     assetAccount.getBalance().getAmount()), workspace.getAssetsTotal());
+    }
+
+    @Test
+    public void getLiabilitiesTotal() {
+        // GIVEN
+        assertTrue(workspace.getAccounts().isEmpty());
+        workspace.addAccount(assetAccount);
+        workspace.addAccount(liabilityAccont);
+
+        // THEN
+        assertEquals(ImmutableMap.of(liabilityAccont.getBalance().getCurrencyUnit(),
+                                     liabilityAccont.getBalance().getAmount().negate()),
+                     workspace.getLiabilitiesTotal());
+    }
+
+    @Test
     public void equals() {
         // Itself
         assertTrue(workspace.equals(workspace));
