@@ -138,6 +138,15 @@ class SnapshotTest {
     }
 
     @Test
+    public void getAccount_nonexisting() {
+        // GIVEN
+        final Snapshot snapshot = new Snapshot(now, ImmutableSet.of(assetAccount));
+
+        // THEN
+        assertNull(snapshot.getAccount(liabilityAccount));
+    }
+
+    @Test
     public void getAccounts_containersAreImmutable() {
         // GIVEN
         final Snapshot snapshot = new Snapshot(now, ImmutableSet.of(assetAccount, liabilityAccount));

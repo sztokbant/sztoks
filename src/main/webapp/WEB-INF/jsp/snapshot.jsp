@@ -26,6 +26,7 @@
     <c:forEach var="accountToBalance" items="${snapshot.accountsByType[assetMapKey]}">
         <div>
             ${accountToBalance.key.name}: ${accountToBalance.value}
+            <%@ include file="_update_snapshot_account_balance.jsp" %>
         </div>
     </c:forEach>
 
@@ -35,6 +36,7 @@
     <c:forEach var="accountToBalance" items="${snapshot.accountsByType[liabilityMapKey]}">
         <div>
             ${accountToBalance.key.name}: ${accountToBalance.value}
+            <%@ include file="_update_snapshot_account_balance.jsp" %>
         </div>
     </c:forEach>
 
@@ -43,6 +45,7 @@
     <div class="text-center">
         <a class="btn btn-default" href="/workspace/${snapshot.workspace.id}">Back</a>
     </div>
+
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

@@ -120,6 +120,10 @@ public class Account {
         this.amount = balance.getAmount();
     }
 
+    public void setBalanceAmount(@NonNull final BigDecimal amount) {
+        this.amount = amount;
+    }
+
     private boolean sameAsFormer(final Workspace newWorkspace) {
         return workspace == null ?
                 newWorkspace == null :

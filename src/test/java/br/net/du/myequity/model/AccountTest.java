@@ -74,6 +74,22 @@ class AccountTest {
     }
 
     @Test
+    public void setBalanceAmount() {
+        // GIVEN
+        final String accountName = "Mortgage";
+        final AccountType accountType = AccountType.LIABILITY;
+        final Money balance = Money.of(CurrencyUnit.USD, new BigDecimal("320000.00"));
+        final Account account = new Account(accountName, accountType, balance);
+
+        // WHEN
+        final BigDecimal newAmount = new BigDecimal("100000.00");
+        account.setBalanceAmount(newAmount);
+
+        // THEN
+        assertEquals(Money.of(CurrencyUnit.USD, newAmount), account.getBalance());
+    }
+
+    @Test
     public void equals() {
         final Account account = new Account("Mortgage",
                                             AccountType.LIABILITY,

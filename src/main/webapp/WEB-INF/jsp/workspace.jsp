@@ -43,6 +43,7 @@
     <c:forEach var="account" items="${workspace.accounts[assetMapKey]}">
         <div>
             ${account.name}: ${account.balance}
+            <%@ include file="_update_workspace_account_balance.jsp" %>
         </div>
     </c:forEach>
 
@@ -52,6 +53,7 @@
     <c:forEach var="account" items="${workspace.accounts[liabilityMapKey]}">
         <div>
             ${account.name}: ${account.balance}
+            <%@ include file="_update_workspace_account_balance.jsp" %>
         </div>
     </c:forEach>
 
