@@ -49,7 +49,7 @@ public class Snapshot {
     @ElementCollection
     @CollectionTable(name = "account_snapshots")
     @MapKeyJoinColumn(name = "account_id")
-    @Column(name = "balanceAmount")
+    @Column(name = "balance_amount", nullable = false)
     private Map<Account, BigDecimal> accounts = new HashMap<>();
 
     public Snapshot(final LocalDate date, @NotNull final Set<Account> accounts) {
