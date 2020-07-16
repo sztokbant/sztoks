@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableMap;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import org.joda.money.CurrencyUnit;
 
@@ -164,17 +165,9 @@ public class Workspace {
         return NetWorthUtil.computeByCurrency(accounts);
     }
 
-    public Map<CurrencyUnit, BigDecimal> getAssetsTotal() {
+    public Map<CurrencyUnit, BigDecimal> getTotalForAccountType(@NonNull final AccountType accountType) {
         return NetWorthUtil.computeByCurrency(accounts.stream()
-                                                      .filter(account -> account.getAccountType()
-                                                                                .equals(AccountType.ASSET))
-                                                      .collect(Collectors.toSet()));
-    }
-
-    public Map<CurrencyUnit, BigDecimal> getLiabilitiesTotal() {
-        return NetWorthUtil.computeByCurrency(accounts.stream()
-                                                      .filter(account -> account.getAccountType()
-                                                                                .equals(AccountType.LIABILITY))
+                                                      .filter(account -> account.getAccountType().equals(accountType))
                                                       .collect(Collectors.toSet()));
     }
 

@@ -216,7 +216,7 @@ class WorkspaceTest {
     }
 
     @Test
-    public void getAssetsTotal() {
+    public void getTotalForAccountType_asset() {
         // GIVEN
         assertTrue(workspace.getAccounts().isEmpty());
         workspace.addAccount(assetAccount);
@@ -224,11 +224,12 @@ class WorkspaceTest {
 
         // THEN
         assertEquals(ImmutableMap.of(assetAccount.getBalance().getCurrencyUnit(),
-                                     assetAccount.getBalance().getAmount()), workspace.getAssetsTotal());
+                                     assetAccount.getBalance().getAmount()),
+                     workspace.getTotalForAccountType(AccountType.ASSET));
     }
 
     @Test
-    public void getLiabilitiesTotal() {
+    public void getTotalForAccountType_liability() {
         // GIVEN
         assertTrue(workspace.getAccounts().isEmpty());
         workspace.addAccount(assetAccount);
@@ -237,7 +238,7 @@ class WorkspaceTest {
         // THEN
         assertEquals(ImmutableMap.of(liabilityAccont.getBalance().getCurrencyUnit(),
                                      liabilityAccont.getBalance().getAmount().negate()),
-                     workspace.getLiabilitiesTotal());
+                     workspace.getTotalForAccountType(AccountType.LIABILITY));
     }
 
     @Test

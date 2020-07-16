@@ -8,6 +8,9 @@
     <meta charset="utf-8">
     <title>${workspace.name}</title>
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+    <script src="${contextPath}/resources/js/update_workspace_account_balance.js"></script>
 </head>
 <body>
 
@@ -41,9 +44,9 @@
 
     <h5>Assets</h5>
     <b>Total</b>
-    <c:forEach items="${workspace.assetsTotal}" var="entry">
+    <c:forEach items="${workspace.getTotalForAccountType(assetMapKey)}" var="entry">
         <div>
-            ${entry.key}: ${entry.value}<br>
+            ${entry.key} <span id="ws_ASSET_${entry.key}">${entry.value}</span><br>
         </div>
     </c:forEach>
 
@@ -51,7 +54,6 @@
 
     <c:forEach var="account" items="${workspace.accounts[assetMapKey]}">
         <div>
-            ${account.name}: ${account.balance}
             <%@ include file="_update_workspace_account_balance.jsp" %>
         </div>
     </c:forEach>
@@ -60,9 +62,9 @@
 
     <h5>Liabilities</h5>
     <b>Total</b>
-    <c:forEach items="${workspace.liabilitiesTotal}" var="entry">
+    <c:forEach items="${workspace.getTotalForAccountType(liabilityMapKey)}" var="entry">
         <div>
-            ${entry.key}: ${entry.value}<br>
+            ${entry.key} <span id="ws_LIABILITY_${entry.key}">${entry.value}</span><br>
         </div>
     </c:forEach>
 
@@ -70,7 +72,6 @@
 
     <c:forEach var="account" items="${workspace.accounts[liabilityMapKey]}">
         <div>
-            ${account.name}: ${account.balance}
             <%@ include file="_update_workspace_account_balance.jsp" %>
         </div>
     </c:forEach>
@@ -81,7 +82,5 @@
         <a class="btn btn-default" href="/">Back</a>
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 </body>
 </html>
