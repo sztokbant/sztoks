@@ -71,6 +71,12 @@
 			</exclusions>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!--
 			JSPs to be in src/main/webapp/WEB-INF/jsp instead of src/main/resources/META-INF/resources/WEB-INF/jsp
 			Needed to run on Heroku
