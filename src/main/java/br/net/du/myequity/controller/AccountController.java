@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsToUser;
+
 @RestController
 public class AccountController extends BaseController {
     @Autowired
@@ -26,7 +28,7 @@ public class AccountController extends BaseController {
         final User user = getCurrentUser();
 
         final Optional<Account> accountOpt = accountRepository.findById(accountJsonRequest.getId());
-        if (!accountOpt.isPresent() || !accountOpt.get().getWorkspace().getUser().equals(user)) {
+        if (!accountBelongsToUser(user, accountOpt)) {
             // TODO Error message
             return AccountJsonResponse.builder().hasError(true).build();
         }

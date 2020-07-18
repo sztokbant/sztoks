@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsToUser;
+
 @Controller
 public class SnapshotController extends BaseController {
     @Autowired
@@ -30,7 +32,7 @@ public class SnapshotController extends BaseController {
         final User user = getCurrentUser();
 
         final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
-        if (!snapshotOpt.isPresent() || !snapshotOpt.get().getWorkspace().getUser().equals(user)) {
+        if (!snapshotBelongsToUser(user, snapshotOpt)) {
             // TODO Error message
             return "redirect:/";
         }
@@ -52,7 +54,7 @@ public class SnapshotController extends BaseController {
         final User user = getCurrentUser();
 
         final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
-        if (!snapshotOpt.isPresent() || !snapshotOpt.get().getWorkspace().getUser().equals(user)) {
+        if (!snapshotBelongsToUser(user, snapshotOpt)) {
             // TODO Error message
             return "redirect:/";
         }
@@ -60,8 +62,7 @@ public class SnapshotController extends BaseController {
         final Snapshot snapshot = snapshotOpt.get();
 
         final Optional<Account> accountOpt = accountRepository.findById(accountId);
-        if (!accountOpt.isPresent() || !accountOpt.get().getWorkspace().getUser().equals(user) || snapshot.getAccount(
-                accountOpt.get()) == null) {
+        if (!accountBelongsToUser(user, accountOpt) || snapshot.getAccount(accountOpt.get()) == null) {
             // TODO Error message
             return "redirect:/";
         }
@@ -73,5 +74,9 @@ public class SnapshotController extends BaseController {
         snapshotRepository.save(snapshot);
 
         return String.format("redirect:/snapshot/%s", snapshotId);
+    }
+
+    private boolean snapshotBelongsToUser(final User user, final Optional<Snapshot> snapshotOpt) {
+        return snapshotOpt.isPresent() && snapshotOpt.get().getWorkspace().getUser().equals(user);
     }
 }
