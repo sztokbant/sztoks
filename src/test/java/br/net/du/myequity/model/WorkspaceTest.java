@@ -11,8 +11,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import static br.net.du.myequity.test.TestUtil.newAssetAccount;
-import static br.net.du.myequity.test.TestUtil.newLiabilityAccount;
+import static br.net.du.myequity.test.ModelTestUtil.newAssetAccount;
+import static br.net.du.myequity.test.ModelTestUtil.newLiabilityAccount;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;

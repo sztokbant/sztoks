@@ -1,7 +1,6 @@
 package br.net.du.myequity.model;
 
 import com.google.common.collect.ImmutableSet;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

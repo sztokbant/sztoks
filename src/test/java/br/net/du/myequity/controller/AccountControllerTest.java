@@ -26,7 +26,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static br.net.du.myequity.test.TestUtil.buildUser;
+import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
+import static br.net.du.myequity.test.ModelTestUtil.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -105,10 +106,7 @@ class AccountControllerTest {
                                                                               .content(requestContent));
 
         // THEN
-        resultActions.andExpect(status().is3xxRedirection());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        assertTrue(mvcResult.getResponse().getHeader("Location").endsWith("/login"));
+        verifyRedirect(resultActions, "/login");
     }
 
     @Test
@@ -165,7 +163,7 @@ class AccountControllerTest {
 
         final User anotherUser = new User(user.getEmail(), user.getFirstName(), user.getLastName());
         final Long anotherUserId = user.getId() * 7;
-        user.setId(anotherUserId);
+        anotherUser.setId(anotherUserId);
 
         final Workspace workspace = new Workspace("My Workspace", CurrencyUnit.USD);
         workspace.setUser(anotherUser);

@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;
 
-import static br.net.du.myequity.test.TestUtil.newAssetAccount;
-import static br.net.du.myequity.test.TestUtil.newLiabilityAccount;
+import static br.net.du.myequity.test.ModelTestUtil.newAssetAccount;
+import static br.net.du.myequity.test.ModelTestUtil.newLiabilityAccount;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

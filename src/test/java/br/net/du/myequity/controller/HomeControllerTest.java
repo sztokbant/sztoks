@@ -13,9 +13,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static br.net.du.myequity.test.TestUtil.buildUser;
+import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
+import static br.net.du.myequity.test.ModelTestUtil.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,10 +45,7 @@ class HomeControllerTest {
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.get(HOME_URL));
 
         // THEN
-        resultActions.andExpect(status().is3xxRedirection());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        assertTrue(mvcResult.getResponse().getHeader("Location").endsWith("/login"));
+        verifyRedirect(resultActions, "/login");
     }
 
     @Test

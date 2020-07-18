@@ -10,7 +10,7 @@ import org.joda.money.Money;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class TestUtil {
+public class ModelTestUtil {
 
     public static Account newLiabilityAccount(final String balance) {
         return newLiabilityAccount(CurrencyUnit.USD, balance);

@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import static br.net.du.myequity.test.TestUtil.buildPopulatedWorkspace;
+import static br.net.du.myequity.test.ModelTestUtil.buildPopulatedWorkspace;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

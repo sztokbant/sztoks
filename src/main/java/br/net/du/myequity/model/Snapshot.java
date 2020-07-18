@@ -36,7 +36,7 @@ public class Snapshot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
-    @Setter(AccessLevel.PACKAGE) // for testing
+    @Setter // for testing
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -35,8 +35,10 @@ public class SnapshotController extends BaseController {
             return "redirect:/";
         }
 
+        final Snapshot snapshot = snapshotOpt.get();
+
         model.addAttribute("user", user);
-        model.addAttribute("snapshot", snapshotOpt.get());
+        model.addAttribute("snapshot", snapshot);
         model.addAttribute("assetMapKey", AccountType.ASSET);
         model.addAttribute("liabilityMapKey", AccountType.LIABILITY);
 

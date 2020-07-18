@@ -16,7 +16,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static br.net.du.myequity.test.TestUtil.buildUser;
+import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
+import static br.net.du.myequity.test.ModelTestUtil.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -113,10 +114,7 @@ class UserControllerTest {
                                                                                      PASSWORD_VALUE));
 
         // THEN
-        resultActions.andExpect(status().is3xxRedirection());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        assertTrue(mvcResult.getResponse().getHeader("Location").endsWith("/"));
+        verifyRedirect(resultActions, "/");
 
         verify(userService).save(any(User.class));
         verify(securityService).autoLogin(eq(user.getEmail()), eq(PASSWORD_VALUE));
