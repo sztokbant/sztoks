@@ -26,6 +26,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static br.net.du.myequity.test.TestUtil.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -40,11 +41,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AccountControllerTest {
 
     private static final String ACCOUNT_URL = "/account";
-
-    private static final String USER_EMAIL = "example@example.com";
-    private static final String USER_FIRST_NAME = "Bill";
-    private static final String USER_LAST_NAME = "Gates";
-    private static final Long USER_ID = 42L;
 
     private static final long ACCOUNT_ID = 1L;
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("320000.00");
@@ -78,8 +74,7 @@ class AccountControllerTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        user = new User(USER_EMAIL, USER_FIRST_NAME, USER_LAST_NAME);
-        user.setId(USER_ID);
+        user = buildUser();
 
         // WHEN
         account = new Account("Mortgage", ACCOUNT_TYPE, Money.of(CURRENCY_UNIT, CURRENT_BALANCE), LocalDate.now());
@@ -119,12 +114,12 @@ class AccountControllerTest {
     @Test
     public void post_userNotFound_hasError() throws Exception {
         // GIVEN
-        when(userService.findByEmail(USER_EMAIL)).thenReturn(null);
+        when(userService.findByEmail(user.getEmail())).thenReturn(null);
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
                                                                               .with(csrf())
-                                                                              .with(user(USER_EMAIL))
+                                                                              .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
                                                                               .content(requestContent));
 
@@ -142,13 +137,13 @@ class AccountControllerTest {
     @Test
     public void post_accountNotFound_hasError() throws Exception {
         // GIVEN
-        when(userService.findByEmail(USER_EMAIL)).thenReturn(user);
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.empty());
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
                                                                               .with(csrf())
-                                                                              .with(user(USER_EMAIL))
+                                                                              .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
                                                                               .content(requestContent));
 
@@ -166,10 +161,10 @@ class AccountControllerTest {
     @Test
     public void post_accountDoesNotBelongToUser_hasError() throws Exception {
         // GIVEN
-        when(userService.findByEmail(USER_EMAIL)).thenReturn(user);
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        final User anotherUser = new User(USER_EMAIL, USER_FIRST_NAME, USER_FIRST_NAME);
-        final Long anotherUserId = USER_ID * 7;
+        final User anotherUser = new User(user.getEmail(), user.getFirstName(), user.getLastName());
+        final Long anotherUserId = user.getId() * 7;
         user.setId(anotherUserId);
 
         final Workspace workspace = new Workspace("My Workspace", CurrencyUnit.USD);
@@ -181,7 +176,7 @@ class AccountControllerTest {
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
                                                                               .with(csrf())
-                                                                              .with(user(USER_EMAIL))
+                                                                              .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
                                                                               .content(requestContent));
 
@@ -199,7 +194,7 @@ class AccountControllerTest {
     @Test
     public void post_happy() throws Exception {
         // GIVEN
-        when(userService.findByEmail(USER_EMAIL)).thenReturn(user);
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         final Workspace workspace = new Workspace("My Workspace", CurrencyUnit.USD);
         workspace.setUser(user);
@@ -210,7 +205,7 @@ class AccountControllerTest {
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
                                                                               .with(csrf())
-                                                                              .with(user(USER_EMAIL))
+                                                                              .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
                                                                               .content(requestContent));
 

@@ -2,6 +2,7 @@ package br.net.du.myequity.test;
 
 import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.Workspace;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -42,5 +43,17 @@ public class TestUtil {
         workspace.generateSnapshot(LocalDate.now());
 
         return workspace;
+    }
+
+    public static User buildUser() {
+        final String email = "example@example.com";
+        final String firstName = "Bill";
+        final String lastName = "Gates";
+        final Long id = 42L;
+
+        final User user = new User(email, firstName, lastName);
+        user.setId(id);
+
+        return user;
     }
 }
