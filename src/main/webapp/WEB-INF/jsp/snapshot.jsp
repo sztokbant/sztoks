@@ -24,7 +24,7 @@
 
     <h5>Assets</h5>
     <b>Total</b>
-    <c:forEach items="${snapshot.assetsTotal}" var="entry">
+    <c:forEach items="${snapshot.assetsBalance}" var="entry">
         <div>
             ${entry.key}: ${entry.value}<br>
         </div>
@@ -32,9 +32,9 @@
 
     <br/>
 
-    <c:forEach var="accountToBalance" items="${snapshot.accountsByType[assetMapKey]}">
+    <c:forEach var="account" items="${assetAccounts}">
         <div>
-            ${accountToBalance.key.name}: ${accountToBalance.value}
+            ${account.name}: ${account.balanceCurrencyUnit} ${account.balanceAmount}
             <%@ include file="_update_snapshot_account_balance.jsp" %>
         </div>
     </c:forEach>
@@ -43,7 +43,7 @@
 
     <h5>Liabilities</h5>
     <b>Total</b>
-    <c:forEach items="${snapshot.liabilitiesTotal}" var="entry">
+    <c:forEach items="${snapshot.liabilitiesBalance}" var="entry">
         <div>
             ${entry.key}: ${entry.value}<br>
         </div>
@@ -51,9 +51,9 @@
 
     <br/>
 
-    <c:forEach var="accountToBalance" items="${snapshot.accountsByType[liabilityMapKey]}">
+    <c:forEach var="account" items="${liabilityAccounts}">
         <div>
-            ${accountToBalance.key.name}: ${accountToBalance.value}
+            ${account.name}: ${account.balanceCurrencyUnit} ${account.balanceAmount}
             <%@ include file="_update_snapshot_account_balance.jsp" %>
         </div>
     </c:forEach>
@@ -61,7 +61,7 @@
     <hr/>
 
     <div class="text-center">
-        <a class="btn btn-default" href="/workspace/${snapshot.workspace.id}">Back</a>
+        <a class="btn btn-default" href="/workspace/${workspace.id}">Back</a>
     </div>
 
 </div>

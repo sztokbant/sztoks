@@ -2,6 +2,7 @@ package br.net.du.myequity.controller;
 
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.UserService;
+import br.net.du.myequity.viewmodel.UserViewModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,6 @@ class HomeControllerTest {
 
         final MvcResult mvcResult = resultActions.andReturn();
         assertEquals("home", mvcResult.getModelAndView().getViewName());
-        assertEquals(user, mvcResult.getModelAndView().getModel().get("user"));
+        assertEquals(UserViewModel.of(user), mvcResult.getModelAndView().getModel().get("user"));
     }
 }

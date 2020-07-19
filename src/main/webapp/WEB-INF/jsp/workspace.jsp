@@ -27,11 +27,11 @@
 
     <h5>Snapshots</h5>
     <c:choose>
-        <c:when test="${empty workspace.snapshots}">
+        <c:when test="${empty snapshots}">
             No saved snapshots.
         </c:when>
         <c:otherwise>
-            <c:forEach var="snapshot" items="${workspace.snapshots}">
+            <c:forEach var="snapshot" items="${snapshots}">
                 <div>
                     <a href="/snapshot/${snapshot.id}">${snapshot.date}</a>
                     <%@ include file="_snapshot_net_worth.jsp" %>
@@ -44,7 +44,7 @@
 
     <h5>Assets</h5>
     <b>Total</b>
-    <c:forEach items="${workspace.getTotalForAccountType(assetMapKey)}" var="entry">
+    <c:forEach items="${workspace.assetsBalance}" var="entry">
         <div>
             ${entry.key} <span id="ws_ASSET_${entry.key}">${entry.value}</span><br>
         </div>
@@ -52,7 +52,7 @@
 
     <br/>
 
-    <c:forEach var="account" items="${workspace.accounts[assetMapKey]}">
+    <c:forEach var="account" items="${assetAccounts}">
         <div>
             <%@ include file="_update_workspace_account_balance.jsp" %>
         </div>
@@ -62,7 +62,7 @@
 
     <h5>Liabilities</h5>
     <b>Total</b>
-    <c:forEach items="${workspace.getTotalForAccountType(liabilityMapKey)}" var="entry">
+    <c:forEach items="${workspace.liabilitiesBalance}" var="entry">
         <div>
             ${entry.key} <span id="ws_LIABILITY_${entry.key}">${entry.value}</span><br>
         </div>
@@ -70,7 +70,7 @@
 
     <br/>
 
-    <c:forEach var="account" items="${workspace.accounts[liabilityMapKey]}">
+    <c:forEach var="account" items="${liabilityAccounts}">
         <div>
             <%@ include file="_update_workspace_account_balance.jsp" %>
         </div>

@@ -8,6 +8,8 @@ import br.net.du.myequity.model.Workspace;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.service.UserService;
+import br.net.du.myequity.viewmodel.SnapshotViewModel;
+import br.net.du.myequity.viewmodel.UserViewModel;
 import com.google.common.collect.ImmutableSet;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -165,12 +167,9 @@ class SnapshotControllerTest {
 
         final MvcResult mvcResult = resultActions.andReturn();
         assertEquals("snapshot", mvcResult.getModelAndView().getViewName());
-        assertEquals(user, mvcResult.getModelAndView().getModel().get("user"));
+        assertEquals(UserViewModel.of(user), mvcResult.getModelAndView().getModel().get("user"));
 
-        assertEquals(snapshot, mvcResult.getModelAndView().getModel().get("snapshot"));
-
-        assertEquals(AccountType.ASSET, mvcResult.getModelAndView().getModel().get("assetMapKey"));
-        assertEquals(AccountType.LIABILITY, mvcResult.getModelAndView().getModel().get("liabilityMapKey"));
+        assertEquals(SnapshotViewModel.of(snapshot), mvcResult.getModelAndView().getModel().get("snapshot"));
     }
 
     @Test

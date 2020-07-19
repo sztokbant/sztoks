@@ -2,7 +2,7 @@
     <b>Net Worth</b>
 </div>
 <c:choose>
-    <c:when test="${not empty workspace.accounts}">
+    <c:when test="${not empty workspace.netWorth}">
         <div>
             <c:forEach items="${workspace.netWorth}" var="entry">
                 ${entry.key} <span id="ws_nw_${entry.key}">${entry.value}</span><br>

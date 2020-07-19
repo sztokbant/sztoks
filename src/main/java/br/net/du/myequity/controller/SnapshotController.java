@@ -6,6 +6,11 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
+import br.net.du.myequity.viewmodel.AccountViewModel;
+import br.net.du.myequity.viewmodel.SnapshotViewModel;
+import br.net.du.myequity.viewmodel.UserViewModel;
+import br.net.du.myequity.viewmodel.WorkspaceViewModel;
+import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +20,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.Optional;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.ASSET_ACCOUNTS_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.LIABILITY_ACCOUNTS_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.WORKSPACE_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsToUser;
+import static java.util.stream.Collectors.toList;
 
 @Controller
 public class SnapshotController extends BaseController {
@@ -39,10 +51,25 @@ public class SnapshotController extends BaseController {
 
         final Snapshot snapshot = snapshotOpt.get();
 
-        model.addAttribute("user", user);
-        model.addAttribute("snapshot", snapshot);
-        model.addAttribute("assetMapKey", AccountType.ASSET);
-        model.addAttribute("liabilityMapKey", AccountType.LIABILITY);
+        model.addAttribute(USER_KEY, UserViewModel.of(user));
+
+        model.addAttribute(SNAPSHOT_KEY, SnapshotViewModel.of(snapshot));
+
+        final Map<AccountType, Map<Account, BigDecimal>> accountsByType = snapshot.getAccountsByType();
+
+        final Map<Account, BigDecimal> assetAccounts = accountsByType.get(AccountType.ASSET);
+        model.addAttribute(ASSET_ACCOUNTS_KEY,
+                           assetAccounts == null ?
+                                   ImmutableList.of() :
+                                   assetAccounts.entrySet().stream().map(AccountViewModel::of).collect(toList()));
+
+        final Map<Account, BigDecimal> liabilityAccounts = accountsByType.get(AccountType.LIABILITY);
+        model.addAttribute(LIABILITY_ACCOUNTS_KEY,
+                           liabilityAccounts == null ?
+                                   ImmutableList.of() :
+                                   liabilityAccounts.entrySet().stream().map(AccountViewModel::of).collect(toList()));
+
+        model.addAttribute(WORKSPACE_KEY, WorkspaceViewModel.of(snapshot.getWorkspace()));
 
         return "snapshot";
     }

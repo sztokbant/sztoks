@@ -20,11 +20,11 @@
     </div>
 
     <c:choose>
-        <c:when test="${empty user.workspaces}">
+        <c:when test="${empty workspaces}">
             No workspaces.
         </c:when>
         <c:otherwise>
-            <c:forEach var="workspace" items="${user.workspaces}">
+            <c:forEach var="workspace" items="${workspaces}">
                 <div>
                     <a href="/workspace/${workspace.id}">${workspace.name}</a>
                 </div>

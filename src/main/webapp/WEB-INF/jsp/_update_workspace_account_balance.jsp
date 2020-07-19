@@ -8,7 +8,7 @@ $(document).ready(function() {
 </script>
 
 <form id="form_${account.id}">
-    ${account.name}: ${account.balance.currencyUnit} <span id="amount_${account.id}">${account.balance.amount}</span>
+    ${account.name}: ${account.balanceCurrencyUnit} <span id="amount_${account.id}">${account.balanceAmount}</span>
     <input id="new_amount_${account.id}" name="amount" type="number" min="0" step="0.01" style="display: none;"/>
     <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
