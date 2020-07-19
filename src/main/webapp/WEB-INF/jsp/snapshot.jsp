@@ -6,8 +6,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Snapshot ${snapshot.date}</title>
+    <title>${snapshot.date}</title>
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+    <script src="${contextPath}/resources/js/update_snapshot_account_balance.js"></script>
 </head>
 <body>
 
@@ -16,7 +19,7 @@
 <div class="container">
 
     <div class="text-center">
-        <h4>Snapshot ${snapshot.date}</h4>
+        <h4>${snapshot.date}</h4>
         <%@ include file="_snapshot_net_worth.jsp" %>
     </div>
 
@@ -26,7 +29,7 @@
     <b>Total</b>
     <c:forEach items="${snapshot.assetsBalance}" var="entry">
         <div>
-            ${entry.key}: ${entry.value}<br>
+            ${entry.key} <span id="total_ASSET_${entry.key}">${entry.value}</span><br>
         </div>
     </c:forEach>
 
@@ -34,7 +37,6 @@
 
     <c:forEach var="account" items="${assetAccounts}">
         <div>
-            ${account.name}: ${account.balanceCurrencyUnit} ${account.balanceAmount}
             <%@ include file="_update_snapshot_account_balance.jsp" %>
         </div>
     </c:forEach>
@@ -45,7 +47,7 @@
     <b>Total</b>
     <c:forEach items="${snapshot.liabilitiesBalance}" var="entry">
         <div>
-            ${entry.key}: ${entry.value}<br>
+            ${entry.key} <span id="total_LIABILITY_${entry.key}">${entry.value}</span><br>
         </div>
     </c:forEach>
 
@@ -53,7 +55,6 @@
 
     <c:forEach var="account" items="${liabilityAccounts}">
         <div>
-            ${account.name}: ${account.balanceCurrencyUnit} ${account.balanceAmount}
             <%@ include file="_update_snapshot_account_balance.jsp" %>
         </div>
     </c:forEach>
@@ -61,11 +62,8 @@
     <hr/>
 
     <div class="text-center">
-        <a class="btn btn-default" href="/workspace/${workspace.id}">Back</a>
+        <a class="btn btn-default" href="/">Back</a>
     </div>
-
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,11 +1,8 @@
 package br.net.du.myequity.model;
 
-import org.apache.commons.lang3.StringUtils;
 import org.joda.money.CurrencyUnit;
-import org.joda.money.Money;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,43 +13,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class AccountTest {
 
     @Test
-    public void constructorWithNameTypeValueAndDate() {
+    public void constructorWithNameTypeCurrencyAndDate() {
         // GIVEN
         final String accountName = "Mortgage";
         final AccountType accountType = AccountType.LIABILITY;
-        final Money balance = Money.of(CurrencyUnit.USD, new BigDecimal("320000.00"));
+        final CurrencyUnit currencyUnit = CurrencyUnit.USD;
         final LocalDate now = LocalDate.now();
 
         // WHEN
-        final Account account = new Account(accountName, accountType, balance, now);
+        final Account account = new Account(accountName, accountType, currencyUnit, now);
 
         // THEN
         assertEquals(accountName, account.getName());
         assertEquals(accountType, account.getAccountType());
-        assertEquals(balance, account.getBalance());
+        assertEquals(currencyUnit, account.getCurrencyUnit());
         assertEquals(now, account.getCreateDate());
         assertFalse(account.isClosed());
         assertNull(account.getClosedDate());
-        assertEquals(StringUtils.EMPTY, account.getCategory());
-    }
-
-    @Test
-    public void constructorWithNameTypeAndBalance() {
-        // GIVEN
-        final String accountName = "Mortgage";
-        final AccountType accountType = AccountType.LIABILITY;
-        final Money balance = Money.of(CurrencyUnit.USD, new BigDecimal("320000.00"));
-
-        // WHEN
-        final Account account = new Account(accountName, accountType, balance);
-
-        // THEN
-        assertEquals(accountName, account.getName());
-        assertEquals(accountType, account.getAccountType());
-        assertEquals(balance, account.getBalance());
-        assertFalse(account.isClosed());
-        assertNull(account.getClosedDate());
-        assertEquals(StringUtils.EMPTY, account.getCategory());
     }
 
     @Test
@@ -60,71 +37,49 @@ class AccountTest {
         // GIVEN
         final String accountName = "Mortgage";
         final AccountType accountType = AccountType.LIABILITY;
+        final CurrencyUnit currencyUnit = CurrencyUnit.USD;
 
         // WHEN
-        final Account account = new Account(accountName, accountType, CurrencyUnit.USD);
+        final Account account = new Account(accountName, accountType, currencyUnit);
 
         // THEN
         assertEquals(accountName, account.getName());
         assertEquals(accountType, account.getAccountType());
-        assertEquals(new BigDecimal("0.00"), account.getBalance().getAmount());
+        assertEquals(currencyUnit, account.getCurrencyUnit());
         assertFalse(account.isClosed());
         assertNull(account.getClosedDate());
-        assertEquals(StringUtils.EMPTY, account.getCategory());
     }
 
     @Test
-    public void balanceGetterAndSetter() {
+    public void currencyGetterAndSetter() {
         // GIVEN
         final String accountName = "Wallet";
         final AccountType accountType = AccountType.ASSET;
-        final Money originalBalance = Money.of(CurrencyUnit.USD, new BigDecimal("100.00"));
-        final Account account = new Account(accountName, accountType, originalBalance);
-        assertEquals(originalBalance, account.getBalance());
+        final CurrencyUnit currencyUnit = CurrencyUnit.USD;
+        final Account account = new Account(accountName, accountType, currencyUnit);
+        assertEquals(currencyUnit, account.getCurrencyUnit());
 
         // WHEN
-        final Money newBalance = Money.of(CurrencyUnit.of("BRL"), new BigDecimal("550.00"));
-        account.setBalance(newBalance);
+        final CurrencyUnit newCurrencyUnit = CurrencyUnit.of("BRL");
+        account.setCurrencyUnit(newCurrencyUnit);
 
         // THEN
-        assertEquals(newBalance, account.getBalance());
-    }
-
-    @Test
-    public void setBalanceAmount() {
-        // GIVEN
-        final String accountName = "Mortgage";
-        final AccountType accountType = AccountType.LIABILITY;
-        final Money balance = Money.of(CurrencyUnit.USD, new BigDecimal("320000.00"));
-        final Account account = new Account(accountName, accountType, balance);
-
-        // WHEN
-        final BigDecimal newAmount = new BigDecimal("100000.00");
-        account.setBalanceAmount(newAmount);
-
-        // THEN
-        assertEquals(Money.of(CurrencyUnit.USD, newAmount), account.getBalance());
+        assertEquals(newCurrencyUnit, account.getCurrencyUnit());
     }
 
     @Test
     public void equals() {
-        final Account account = new Account("Mortgage",
-                                            AccountType.LIABILITY,
-                                            Money.of(CurrencyUnit.USD, new BigDecimal("320000.00")),
-                                            LocalDate.now());
+        final Account account = new Account("Mortgage", AccountType.LIABILITY, CurrencyUnit.USD, LocalDate.now());
 
         // Itself
         assertTrue(account.equals(account));
 
-        // Not instance of Workspace
+        // Not instance of Account
         assertFalse(account.equals(null));
         assertFalse(account.equals("Another type of object"));
 
         // Same Id null
-        final Account anotherAccount = new Account("Wallet",
-                                                   AccountType.ASSET,
-                                                   Money.of(CurrencyUnit.USD, new BigDecimal("100.00")),
-                                                   LocalDate.now());
+        final Account anotherAccount = new Account("Wallet", AccountType.ASSET, CurrencyUnit.USD, LocalDate.now());
         account.setId(null);
         anotherAccount.setId(null);
         assertFalse(account.equals(anotherAccount));

@@ -1,6 +1,7 @@
-function submitAccountBalance(accountId) {
+function submitAccountBalance(snapshotId, accountId) {
   var formData = {
-    id: accountId,
+    snapshotId: snapshotId,
+    accountId: accountId,
     balance: $("#new_amount_" + accountId).val(),
   }
 
@@ -15,8 +16,8 @@ function submitAccountBalance(accountId) {
     success: function(result) {
       if (!result.hasError) {
         $("#amount_" + accountId).html(result.balance);
-        $("#ws_nw_" + result.currencyUnit).html(result.netWorth);
-        $("#ws_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);
+        $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
+        $("#total_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);
       } else {
         alert('Error updating amount.')
       }
@@ -28,10 +29,10 @@ function submitAccountBalance(accountId) {
   });
 }
 
-function prepareAccountBalanceUpdateForm(theForm, accountId, amountSpan, newAmountInput) {
+function prepareAccountBalanceUpdateForm(theForm, snapshotId, accountId, amountSpan, newAmountInput) {
   theForm.submit(function(event) {
     event.preventDefault();
-    submitAccountBalance(accountId);
+    submitAccountBalance(snapshotId, accountId);
   });
 
   newAmountInput.focusout(function() {

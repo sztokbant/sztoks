@@ -9,15 +9,12 @@ import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.viewmodel.AccountViewModel;
 import br.net.du.myequity.viewmodel.SnapshotViewModel;
 import br.net.du.myequity.viewmodel.UserViewModel;
-import br.net.du.myequity.viewmodel.WorkspaceViewModel;
 import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -27,8 +24,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.ASSET_ACCOU
 import static br.net.du.myequity.controller.util.ControllerConstants.LIABILITY_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
-import static br.net.du.myequity.controller.util.ControllerConstants.WORKSPACE_KEY;
-import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsToUser;
+import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
 import static java.util.stream.Collectors.toList;
 
 @Controller
@@ -69,41 +65,6 @@ public class SnapshotController extends BaseController {
                                    ImmutableList.of() :
                                    liabilityAccounts.entrySet().stream().map(AccountViewModel::of).collect(toList()));
 
-        model.addAttribute(WORKSPACE_KEY, WorkspaceViewModel.of(snapshot.getWorkspace()));
-
         return "snapshot";
-    }
-
-    @PostMapping("/snapshot/{id}")
-    public String post(@PathVariable(value = "id") final Long snapshotId,
-                       @RequestParam("account_id") final Long accountId,
-                       @RequestParam("balance_amount") final BigDecimal balanceAmount) {
-        final User user = getCurrentUser();
-
-        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
-        if (!snapshotBelongsToUser(user, snapshotOpt)) {
-            // TODO Error message
-            return "redirect:/";
-        }
-
-        final Snapshot snapshot = snapshotOpt.get();
-
-        final Optional<Account> accountOpt = accountRepository.findById(accountId);
-        if (!accountBelongsToUser(user, accountOpt) || snapshot.getAccount(accountOpt.get()) == null) {
-            // TODO Error message
-            return "redirect:/";
-        }
-
-        final Account account = accountOpt.get();
-
-        snapshot.setAccount(account, balanceAmount);
-
-        snapshotRepository.save(snapshot);
-
-        return String.format("redirect:/snapshot/%s", snapshotId);
-    }
-
-    private boolean snapshotBelongsToUser(final User user, final Optional<Snapshot> snapshotOpt) {
-        return snapshotOpt.isPresent() && snapshotOpt.get().getWorkspace().getUser().equals(user);
     }
 }

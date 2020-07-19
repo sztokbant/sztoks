@@ -1,8 +1,12 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.UserService;
+import br.net.du.myequity.viewmodel.SnapshotViewModel;
 import br.net.du.myequity.viewmodel.UserViewModel;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.time.LocalDate;
 
 import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
 import static br.net.du.myequity.test.ModelTestUtil.buildUser;
@@ -27,6 +33,8 @@ class HomeControllerTest {
 
     private static final String HOME_URL = "/";
 
+    private static final Long SNAPSHOT_ID = 99L;
+
     @Autowired
     private MockMvc mvc;
 
@@ -35,9 +43,13 @@ class HomeControllerTest {
 
     private User user;
 
+    private Snapshot snapshot;
+
     @BeforeEach
     public void setUp() throws Exception {
         user = buildUser();
+        snapshot = new Snapshot(LocalDate.now(), ImmutableMap.of());
+        snapshot.setId(SNAPSHOT_ID);
     }
 
     @Test
@@ -52,6 +64,7 @@ class HomeControllerTest {
     @Test
     public void get_happy() throws Exception {
         // GIVEN
+        user.addSnapshot(snapshot);
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         // WHEN
@@ -64,5 +77,7 @@ class HomeControllerTest {
         final MvcResult mvcResult = resultActions.andReturn();
         assertEquals("home", mvcResult.getModelAndView().getViewName());
         assertEquals(UserViewModel.of(user), mvcResult.getModelAndView().getModel().get("user"));
+        assertEquals(ImmutableList.of(SnapshotViewModel.of(snapshot)),
+                     mvcResult.getModelAndView().getModel().get("snapshots"));
     }
 }

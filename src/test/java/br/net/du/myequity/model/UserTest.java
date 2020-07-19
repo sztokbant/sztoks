@@ -1,28 +1,41 @@
 package br.net.du.myequity.model;
 
+import com.google.common.collect.ImmutableMap;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserTest {
 
     private User user;
-    private Workspace workspace;
+    private Account assetAccount;
+    private Account liabilityAccount;
+    private Snapshot snapshot;
 
     @BeforeEach
     public void setUp() {
         user = new User("example@example.com", "Bill", "Gates");
         user.setId(1L);
 
-        workspace = new Workspace("My Workspace", CurrencyUnit.USD);
-        workspace.setId(42L);
+        assetAccount = new Account("Asset Account", AccountType.ASSET, CurrencyUnit.USD);
+        assetAccount.setId(99L);
+
+        liabilityAccount = new Account("Liability Account", AccountType.LIABILITY, CurrencyUnit.USD);
+        liabilityAccount.setId(7L);
+
+        snapshot = new Snapshot(LocalDate.now(), ImmutableMap.of());
+        snapshot.setId(42L);
     }
 
     @Test
@@ -40,63 +53,146 @@ class UserTest {
     }
 
     @Test
-    public void addWorkspace() {
+    public void getAccounts_containersAreImmutable() {
         // GIVEN
-        assertTrue(user.getWorkspaces().isEmpty());
-
-        // WHEN
-        user.addWorkspace(workspace);
+        assertTrue(user.getAccounts().isEmpty());
+        user.addAccount(assetAccount);
+        user.addAccount(liabilityAccount);
+        final Map<AccountType, List<Account>> accounts = user.getAccounts();
 
         // THEN
-        final Set<Workspace> workspaces = user.getWorkspaces();
-        assertEquals(1, workspaces.size());
-        assertEquals(user, workspace.getUser());
+        assertThrows(UnsupportedOperationException.class, () -> {
+            accounts.remove(AccountType.ASSET);
+        });
+
+        final Account newAccount = new Account("Another Asset Account", AccountType.ASSET, CurrencyUnit.USD);
+        assertThrows(UnsupportedOperationException.class, () -> {
+            accounts.get(AccountType.ASSET).add(newAccount);
+        });
     }
 
     @Test
-    public void addWorkspace_addSameTwice() {
+    public void addAccount() {
         // GIVEN
-        assertTrue(user.getWorkspaces().isEmpty());
-        user.addWorkspace(workspace);
+        assertTrue(user.getAccounts().isEmpty());
 
         // WHEN
-        user.addWorkspace(workspace);
+        user.addAccount(liabilityAccount);
 
         // THEN
-        final Set<Workspace> workspaces = user.getWorkspaces();
-        assertEquals(1, workspaces.size());
-        assertEquals(user, workspace.getUser());
+        final Map<AccountType, List<Account>> accounts = user.getAccounts();
+        assertEquals(1, accounts.size());
+        assertEquals(1, accounts.get(AccountType.LIABILITY).size());
+        assertEquals(liabilityAccount, accounts.get(AccountType.LIABILITY).get(0));
+        assertEquals(user, liabilityAccount.getUser());
     }
 
     @Test
-    public void removeWorkspace() {
+    public void addAccount_addSameTwice() {
         // GIVEN
-        assertTrue(user.getWorkspaces().isEmpty());
-        user.addWorkspace(workspace);
+        assertTrue(user.getAccounts().isEmpty());
+        user.addAccount(liabilityAccount);
 
         // WHEN
-        user.removeWorkspace(workspace);
+        user.addAccount(liabilityAccount);
 
         // THEN
-        final Set<Workspace> workspaces = user.getWorkspaces();
-        assertTrue(workspaces.isEmpty());
-        assertNull(workspace.getUser());
+        final Map<AccountType, List<Account>> accounts = user.getAccounts();
+        assertEquals(1, accounts.size());
+        assertEquals(1, accounts.get(AccountType.LIABILITY).size());
+        assertEquals(liabilityAccount, accounts.get(AccountType.LIABILITY).get(0));
+        assertEquals(user, liabilityAccount.getUser());
     }
 
     @Test
-    public void removeWorkspace_removeSameTwice() {
+    public void removeAccount() {
         // GIVEN
-        assertTrue(user.getWorkspaces().isEmpty());
-        user.addWorkspace(workspace);
-        user.removeWorkspace(workspace);
+        assertTrue(user.getAccounts().isEmpty());
+        user.addAccount(liabilityAccount);
 
         // WHEN
-        user.removeWorkspace(workspace);
+        user.removeAccount(liabilityAccount);
 
         // THEN
-        final Set<Workspace> workspaces = user.getWorkspaces();
-        assertTrue(workspaces.isEmpty());
-        assertNull(workspace.getUser());
+        assertTrue(user.getAccounts().isEmpty());
+        assertNull(liabilityAccount.getUser());
+    }
+
+    @Test
+    public void removeAccount_removeSameTwice() {
+        // GIVEN
+        assertTrue(user.getAccounts().isEmpty());
+        user.addAccount(liabilityAccount);
+        user.removeAccount(liabilityAccount);
+
+        // WHEN
+        user.removeAccount(liabilityAccount);
+
+        // THEN
+        assertTrue(user.getAccounts().isEmpty());
+        assertNull(liabilityAccount.getUser());
+    }
+
+    @Test
+    public void addSnapshot() {
+        // GIVEN
+        assertTrue(user.getSnapshots().isEmpty());
+
+        // WHEN
+        user.addSnapshot(snapshot);
+
+        // THEN
+        final Set<Snapshot> snapshots = user.getSnapshots();
+        assertEquals(1, snapshots.size());
+        assertEquals(snapshot, snapshots.iterator().next());
+        assertEquals(user, snapshot.getUser());
+    }
+
+    @Test
+    public void addSnapshot_addSameTwice() {
+        // GIVEN
+        assertTrue(user.getSnapshots().isEmpty());
+        user.addSnapshot(snapshot);
+
+        // WHEN
+        user.addSnapshot(snapshot);
+
+        // THEN
+        final Set<Snapshot> snapshots = user.getSnapshots();
+        assertEquals(1, snapshots.size());
+        assertEquals(snapshot, snapshots.iterator().next());
+        assertEquals(user, snapshot.getUser());
+    }
+
+    @Test
+    public void removeSnapshot() {
+        // GIVEN
+        assertTrue(user.getSnapshots().isEmpty());
+        user.addSnapshot(snapshot);
+
+        // WHEN
+        user.removeSnapshot(snapshot);
+
+        // THEN
+        final Set<Snapshot> snapshots = user.getSnapshots();
+        assertTrue(snapshots.isEmpty());
+        assertNull(snapshot.getUser());
+    }
+
+    @Test
+    public void removeSnapshot_removeSameTwice() {
+        // GIVEN
+        assertTrue(user.getSnapshots().isEmpty());
+        user.addSnapshot(snapshot);
+        user.removeSnapshot(snapshot);
+
+        // WHEN
+        user.removeSnapshot(snapshot);
+
+        // THEN
+        final Set<Snapshot> snapshots = user.getSnapshots();
+        assertTrue(snapshots.isEmpty());
+        assertNull(snapshot.getUser());
     }
 
     @Test

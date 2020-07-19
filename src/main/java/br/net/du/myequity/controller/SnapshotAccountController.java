@@ -2,9 +2,10 @@ package br.net.du.myequity.controller;
 
 import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.Workspace;
 import br.net.du.myequity.persistence.AccountRepository;
+import br.net.du.myequity.persistence.SnapshotRepository;
 import lombok.Builder;
 import lombok.Data;
 import org.joda.money.CurrencyUnit;
@@ -16,10 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsInSnapshot;
 import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsToUser;
+import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
 
 @RestController
-public class AccountController extends BaseController {
+public class SnapshotAccountController extends BaseController {
+    @Autowired
+    private SnapshotRepository snapshotRepository;
+
     @Autowired
     private AccountRepository accountRepository;
 
@@ -27,38 +33,45 @@ public class AccountController extends BaseController {
     public AccountJsonResponse post(@RequestBody final AccountJsonRequest accountJsonRequest) {
         final User user = getCurrentUser();
 
-        final Optional<Account> accountOpt = accountRepository.findById(accountJsonRequest.getId());
-        if (!accountBelongsToUser(user, accountOpt)) {
+        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(accountJsonRequest.getSnapshotId());
+        if (!snapshotBelongsToUser(user, snapshotOpt)) {
+            // TODO Error message
+            return AccountJsonResponse.builder().hasError(true).build();
+        }
+
+        final Snapshot snapshot = snapshotOpt.get();
+        final Optional<Account> accountOpt = accountRepository.findById(accountJsonRequest.getAccountId());
+        if (!accountBelongsToUser(user, accountOpt) || !accountBelongsInSnapshot(snapshot, accountOpt)) {
             // TODO Error message
             return AccountJsonResponse.builder().hasError(true).build();
         }
 
         final Account account = accountOpt.get();
-        account.setBalanceAmount(accountJsonRequest.getBalance());
 
-        accountRepository.save(account);
+        snapshot.putAccount(account, accountJsonRequest.getBalance());
 
-        final CurrencyUnit currencyUnit = account.getBalance().getCurrencyUnit();
+        snapshotRepository.save(snapshot);
+
+        final CurrencyUnit currencyUnit = account.getCurrencyUnit();
         final AccountType accountType = account.getAccountType();
-        final Workspace workspace = account.getWorkspace();
 
         return AccountJsonResponse.builder()
                                   .hasError(false)
-                                  .id(account.getId())
-                                  .balance(account.getBalance().getAmount().toString())
+                                  .balance(snapshot.getAccount(account).toString())
                                   .currencyUnit(currencyUnit.toString())
-                                  .netWorth(workspace.getNetWorth().get(currencyUnit).toString())
+                                  .netWorth(snapshot.getNetWorth().get(currencyUnit).toString())
                                   .accountType(accountType.name())
-                                  .totalForAccountType(workspace.getTotalForAccountType(accountType)
-                                                                .get(currencyUnit)
-                                                                .toString())
+                                  .totalForAccountType(snapshot.getTotalForAccountType(accountType)
+                                                               .get(currencyUnit)
+                                                               .toString())
                                   .build();
     }
 
     @Data
     @Builder
     public static class AccountJsonRequest {
-        private Long id;
+        private Long snapshotId;
+        private Long accountId;
         private BigDecimal balance;
     }
 
@@ -67,7 +80,6 @@ public class AccountController extends BaseController {
     public static class AccountJsonResponse {
         private boolean hasError;
 
-        private Long id;
         private String balance;
         private String currencyUnit;
         private String netWorth;

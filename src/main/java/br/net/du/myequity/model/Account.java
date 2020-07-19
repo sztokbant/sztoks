@@ -3,11 +3,8 @@ package br.net.du.myequity.model;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 import org.joda.money.CurrencyUnit;
-import org.joda.money.Money;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -32,7 +28,7 @@ public class Account {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Getter
-    private Workspace workspace;
+    private User user;
 
     @Column(nullable = false)
     @Getter
@@ -40,15 +36,12 @@ public class Account {
     private String name;
 
     @Column(nullable = false)
-    private String currency;
-
-    @Column(nullable = false)
-    private BigDecimal amount;
-
-    @Column(nullable = false)
     @Getter
     @Setter
     private AccountType accountType;
+
+    @Column(nullable = false)
+    private String currency;
 
     @Column(nullable = false)
     @Getter
@@ -64,63 +57,52 @@ public class Account {
     @Setter
     private LocalDate closedDate;
 
-    @Getter
-    @Setter
-    private String category;
-
-    public Account(final String name, final AccountType accountType, final Money balance, final LocalDate createDate) {
+    public Account(final String name,
+                   final AccountType accountType,
+                   final CurrencyUnit currencyUnit,
+                   final LocalDate createDate) {
         this.name = name;
         this.accountType = accountType;
-        setBalance(balance);
+        this.currency = currencyUnit.getCode();
         this.createDate = createDate;
         this.isClosed = false;
         this.closedDate = null;
-        this.category = StringUtils.EMPTY;
     }
 
-    public Account(final String name, final AccountType accountType, final Money balance) {
-        this(name, accountType, balance, LocalDate.now());
+    public Account(final String name, final AccountType accountType, final CurrencyUnit currencyUnit) {
+        this(name, accountType, currencyUnit, LocalDate.now());
     }
 
-    public Account(final String name, final AccountType accountType, final CurrencyUnit currency) {
-        this(name, accountType, Money.of(currency, BigDecimal.ZERO));
+    public CurrencyUnit getCurrencyUnit() {
+        return CurrencyUnit.of(currency);
     }
 
-    public void setWorkspace(final Workspace workspace) {
+    public void setCurrencyUnit(final CurrencyUnit currencyUnit) {
+        this.currency = currencyUnit.getCode();
+    }
+
+    public void setUser(final User user) {
         // Prevents infinite loop
-        if (sameAsFormer(workspace)) {
+        if (sameAsFormer(user)) {
             return;
         }
 
-        final Workspace oldWorkspace = this.workspace;
-        this.workspace = workspace;
+        final User oldUser = this.user;
+        this.user = user;
 
-        if (oldWorkspace != null) {
-            oldWorkspace.removeAccount(this);
+        if (oldUser != null) {
+            oldUser.removeAccount(this);
         }
 
-        if (workspace != null) {
-            workspace.addAccount(this);
+        if (user != null) {
+            user.addAccount(this);
         }
     }
 
-    public Money getBalance() {
-        return Money.of(CurrencyUnit.of(currency), amount);
-    }
-
-    public void setBalance(@NonNull final Money balance) {
-        this.currency = balance.getCurrencyUnit().getCode();
-        this.amount = balance.getAmount();
-    }
-
-    public void setBalanceAmount(@NonNull final BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    private boolean sameAsFormer(final Workspace newWorkspace) {
-        return workspace == null ?
-                newWorkspace == null :
-                workspace.equals(newWorkspace);
+    private boolean sameAsFormer(final User newUser) {
+        return user == null ?
+                newUser == null :
+                user.equals(newUser);
     }
 
     @Override

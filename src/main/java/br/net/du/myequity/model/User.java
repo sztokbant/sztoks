@@ -1,9 +1,12 @@
 package br.net.du.myequity.model;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.joda.money.CurrencyUnit;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,7 +18,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 @Entity
 @Table(name = "users")
@@ -52,8 +61,14 @@ public class User {
     @Setter
     private String passwordConfirm;
 
+    @Column(nullable = true)
+    private String defaultCurrency;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Workspace> workspaces = new HashSet<>();
+    private Set<Account> accounts = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Snapshot> snapshots = new HashSet<>();
 
     public User(final String email, final String firstName, final String lastName) {
         this.email = email;
@@ -71,26 +86,65 @@ public class User {
      *
      * @return Immutable copy to prevent it from being modified from the outside.
      */
-    public Set<Workspace> getWorkspaces() {
-        return ImmutableSet.copyOf(workspaces);
+    public Map<AccountType, List<Account>> getAccounts() {
+        return accounts.stream()
+                       .collect(collectingAndThen(groupingBy(Account::getAccountType,
+                                                             collectingAndThen(toList(), ImmutableList::copyOf)),
+                                                  ImmutableMap::copyOf));
     }
 
-    public void addWorkspace(final Workspace workspace) {
+    public void addAccount(final Account account) {
         // Prevents infinite loop
-        if (workspaces.contains(workspace)) {
+        if (accounts.contains(account)) {
             return;
         }
-        workspaces.add(workspace);
-        workspace.setUser(this);
+        accounts.add(account);
+        account.setUser(this);
     }
 
-    public void removeWorkspace(final Workspace workspace) {
+    public void removeAccount(final Account account) {
         // Prevents infinite loop
-        if (!workspaces.contains(workspace)) {
+        if (!accounts.contains(account)) {
             return;
         }
-        workspaces.remove(workspace);
-        workspace.setUser(null);
+        accounts.remove(account);
+        account.setUser(null);
+    }
+
+    /**
+     * Ref.: https://meri-stuff.blogspot.com/2012/03/jpa-tutorial
+     * .html#RelationshipsBidirectionalOneToManyManyToOneConsistency
+     *
+     * @return Immutable copy to prevent it from being modified from the outside.
+     */
+    public Set<Snapshot> getSnapshots() {
+        return ImmutableSet.copyOf(snapshots);
+    }
+
+    public void addSnapshot(final Snapshot snapshot) {
+        // Prevents infinite loop
+        if (snapshots.contains(snapshot)) {
+            return;
+        }
+        snapshots.add(snapshot);
+        snapshot.setUser(this);
+    }
+
+    public void removeSnapshot(final Snapshot snapshot) {
+        // Prevents infinite loop
+        if (!snapshots.contains(snapshot)) {
+            return;
+        }
+        snapshots.remove(snapshot);
+        snapshot.setUser(null);
+    }
+
+    public CurrencyUnit getDefaultCurrency() {
+        return CurrencyUnit.of(defaultCurrency);
+    }
+
+    public void setDefaultCurrency(final CurrencyUnit defaultCurrency) {
+        this.defaultCurrency = defaultCurrency.getCode();
     }
 
     @Override

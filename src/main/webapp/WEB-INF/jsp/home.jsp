@@ -16,19 +16,19 @@
 <div class="container">
 
     <div class="text-center">
-        <h4>Workspaces</h4>
+        <h4>Snapshots</h4>
     </div>
 
     <c:choose>
-        <c:when test="${empty workspaces}">
-            No workspaces.
+        <c:when test="${empty snapshots}">
+            No snapshots.
         </c:when>
         <c:otherwise>
-            <c:forEach var="workspace" items="${workspaces}">
+            <c:forEach var="snapshot" items="${snapshots}">
                 <div>
-                    <a href="/workspace/${workspace.id}">${workspace.name}</a>
+                    <a href="/snapshot/${snapshot.id}">${snapshot.date}</a>
                 </div>
-                <%@ include file="_workspace_net_worth.jsp" %>
+                <%@ include file="_snapshot_net_worth.jsp" %>
                 <br/>
             </c:forEach>
         </c:otherwise>

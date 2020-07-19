@@ -4,7 +4,6 @@ import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.Workspace;
 import br.net.du.myequity.service.UserService;
 import com.google.common.collect.ImmutableMap;
 import org.joda.money.CurrencyUnit;
@@ -15,10 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Map;
 
-import static br.net.du.myequity.test.ModelTestUtil.buildPopulatedWorkspace;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -37,9 +35,6 @@ class PersistenceTest {
     private UserService userService;
 
     @Autowired
-    private WorkspaceRepository workspaceRepository;
-
-    @Autowired
     private AccountRepository accountRepository;
 
     @Autowired
@@ -47,13 +42,23 @@ class PersistenceTest {
 
     private User user;
 
-    private Workspace workspace;
+    private Snapshot snapshot;
+
+    private Account assetAccount;
+    private BigDecimal assetAmount;
+    private Account liabilityAccount;
+    private BigDecimal liabilityAmount;
 
     @BeforeEach
     public void setUp() {
         user = new User(EMAIL, FIRST_NAME, LAST_NAME);
         user.setPassword(PASSWORD);
         user.setPasswordConfirm(PASSWORD);
+
+        assetAccount = new Account("Asset Account", AccountType.ASSET, CurrencyUnit.USD);
+        assetAmount = new BigDecimal("100.00");
+        liabilityAccount = new Account("Liability Account", AccountType.LIABILITY, CurrencyUnit.USD);
+        liabilityAmount = new BigDecimal("320000.00");
     }
 
     @Test
@@ -73,82 +78,71 @@ class PersistenceTest {
 
     @Test
     @Transactional
-    public void addFlatWorkspaceToPersistedUser() {
+    public void addEmptySnapshotToPersistedUser() {
         // GIVEN
         assertNull(user.getId());
         userService.save(user);
 
-        workspace = new Workspace("My Workspace", CurrencyUnit.USD);
-        assertNull(workspace.getId());
+        snapshot = new Snapshot(LocalDate.now(), ImmutableMap.of());
+        assertNull(snapshot.getId());
 
         // WHEN
-        user.addWorkspace(workspace);
+        user.addSnapshot(snapshot);
 
         // THEN
         final User actualUser = userService.findByEmail(EMAIL);
         assertNotNull(actualUser.getId());
         assertEquals(user, actualUser);
-        assertEquals(1, actualUser.getWorkspaces().size());
+        assertEquals(1, actualUser.getSnapshots().size());
+        assertEquals(snapshot, user.getSnapshots().iterator().next());
 
-        final Workspace actualWorkspace = workspaceRepository.findAll().get(0);
-        assertNotNull(actualWorkspace.getId());
-        assertNotNull(actualWorkspace.getUser());
-        assertEquals(user, actualWorkspace.getUser());
+        final Snapshot actualSnapshot = snapshotRepository.findAll().get(0);
+        assertNotNull(actualSnapshot.getId());
+        assertNotNull(actualSnapshot.getUser());
+        assertEquals(user, actualSnapshot.getUser());
 
-        final Map<AccountType, List<Account>> accounts = actualWorkspace.getAccounts();
+        final Map<Account, BigDecimal> accounts = actualSnapshot.getAccounts();
         assertTrue(accounts.isEmpty());
-
-        final List<Snapshot> snapshots = actualWorkspace.getSnapshots();
-        assertTrue(snapshots.isEmpty());
     }
 
     @Test
     @Transactional
-    public void addPopulatedWorkspaceToPersistedUser() {
+    public void addPopulatedSnapshotToPersistedUser() {
         // GIVEN
         assertNull(user.getId());
-        userService.save(user);
-
-        workspace = buildPopulatedWorkspace();
-        assertNull(workspace.getId());
+        saveUserWithAccounts();
+        initSnapshot();
 
         // WHEN
-        user.addWorkspace(workspace);
+        user.addSnapshot(snapshot);
 
         // THEN
         final User actualUser = userService.findByEmail(EMAIL);
         assertNotNull(actualUser.getId());
         assertEquals(user, actualUser);
-        assertEquals(1, actualUser.getWorkspaces().size());
+        assertEquals(1, actualUser.getSnapshots().size());
 
-        final Workspace actualWorkspace = workspaceRepository.findAll().get(0);
-        assertNotNull(actualWorkspace.getId());
-        assertNotNull(actualWorkspace.getUser());
-        assertEquals(user, actualWorkspace.getUser());
+        final Snapshot actualSnapshot = snapshotRepository.findAll().get(0);
+        assertNotNull(actualSnapshot.getId());
+        assertNotNull(actualSnapshot.getUser());
+        assertEquals(user, actualSnapshot.getUser());
 
-        final Map<AccountType, List<Account>> accounts = actualWorkspace.getAccounts();
+        final Map<AccountType, Map<Account, BigDecimal>> accounts = actualSnapshot.getAccountsByType();
         assertEquals(2, accounts.size());
         assertEquals(1, accounts.get(AccountType.ASSET).size());
         assertEquals(1, accounts.get(AccountType.LIABILITY).size());
-        final Account assetAccount = accounts.get(AccountType.ASSET).get(0);
-        assertEquals(AccountType.ASSET, assetAccount.getAccountType());
+
         assertNotNull(assetAccount.getId());
-        assertNotNull(assetAccount.getWorkspace());
-        assertEquals(actualWorkspace, assetAccount.getWorkspace());
+        assertNotNull(assetAccount.getUser());
+        assertEquals(user, assetAccount.getUser());
+        final BigDecimal actualAssetAmount = accounts.get(AccountType.ASSET).get(assetAccount);
+        assertEquals(assetAmount, actualAssetAmount);
 
-        final Account liabilityAccount = accounts.get(AccountType.LIABILITY).get(0);
-        assertEquals(AccountType.LIABILITY, liabilityAccount.getAccountType());
         assertNotNull(liabilityAccount.getId());
-        assertNotNull(liabilityAccount.getWorkspace());
-        assertEquals(actualWorkspace, liabilityAccount.getWorkspace());
-
-        final List<Snapshot> snapshots = actualWorkspace.getSnapshots();
-        assertEquals(1, snapshots.size());
-        final Snapshot snapshot = snapshots.get(0);
-        assertEquals(2, snapshot.getAccounts().size());
-        assertNotNull(snapshot.getId());
-        assertNotNull(snapshot.getWorkspace());
-        assertEquals(actualWorkspace, snapshot.getWorkspace());
+        assertNotNull(liabilityAccount.getUser());
+        assertEquals(user, liabilityAccount.getUser());
+        final BigDecimal actualLiabilityAmount = accounts.get(AccountType.LIABILITY).get(liabilityAccount);
+        assertEquals(liabilityAmount, actualLiabilityAmount);
     }
 
     @Test
@@ -156,21 +150,15 @@ class PersistenceTest {
     public void removeAccountFromSnapshot() {
         // GIVEN
         assertNull(user.getId());
-        userService.save(user);
+        saveUserWithAccounts();
+        initSnapshot();
 
-        workspace = buildPopulatedWorkspace();
-        assertNull(workspace.getId());
+        user.addSnapshot(snapshot);
 
-        user.addWorkspace(workspace);
-
-        final Workspace savedWorkspace = workspaceRepository.findAll().get(0);
-        final List<Snapshot> savedSnapshots = savedWorkspace.getSnapshots();
-        final Snapshot savedSnapshot = savedSnapshots.get(0);
-
+        final Snapshot savedSnapshot = snapshotRepository.findAll().get(0);
         assertEquals(2, savedSnapshot.getAccounts().size());
 
         // WHEN
-        final Account liabilityAccount = savedWorkspace.getAccounts().get(AccountType.LIABILITY).get(0);
         savedSnapshot.removeAccount(liabilityAccount);
 
         // THEN
@@ -183,24 +171,18 @@ class PersistenceTest {
     public void updateAccountInSnapshot() {
         // GIVEN
         assertNull(user.getId());
-        userService.save(user);
+        saveUserWithAccounts();
+        initSnapshot();
 
-        workspace = buildPopulatedWorkspace();
-        assertNull(workspace.getId());
+        user.addSnapshot(snapshot);
 
-        user.addWorkspace(workspace);
-
-        final Workspace savedWorkspace = workspaceRepository.findAll().get(0);
-        final List<Snapshot> savedSnapshots = savedWorkspace.getSnapshots();
-        final Snapshot savedSnapshot = savedSnapshots.get(0);
+        final Snapshot savedSnapshot = snapshotRepository.findAll().get(0);
 
         assertEquals(2, savedSnapshot.getAccounts().size());
         assertEquals(ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-319900.00")), savedSnapshot.getNetWorth());
 
         // WHEN
-        final Account liabilityAccount = savedWorkspace.getAccounts().get(AccountType.LIABILITY).get(0);
-        savedSnapshot.setAccount(liabilityAccount,
-                                 liabilityAccount.getBalance().getAmount().add(new BigDecimal("100000.00")));
+        savedSnapshot.putAccount(liabilityAccount, liabilityAmount.add(new BigDecimal("100000.00")));
 
         // THEN
         final Snapshot actualSnapshot = snapshotRepository.findAll().get(0);
@@ -210,26 +192,41 @@ class PersistenceTest {
 
     @Test
     @Transactional
-    public void removeWorkspaceFromPersistedUser() {
+    public void removeSnapshotFromPersistedUser() {
         // GIVEN
-        user.addWorkspace(buildPopulatedWorkspace());
+        assertNull(user.getId());
+        saveUserWithAccounts();
+        initSnapshot();
+
+        user.addSnapshot(snapshot);
+
         userService.save(user);
 
-        assertFalse(workspaceRepository.findAll().isEmpty());
         assertFalse(accountRepository.findAll().isEmpty());
         assertFalse(snapshotRepository.findAll().isEmpty());
 
         // WHEN
         final User persistedUser = userService.findByEmail(EMAIL);
-        final Workspace savedWorkspace = persistedUser.getWorkspaces().iterator().next();
-        persistedUser.removeWorkspace(savedWorkspace);
+        final Snapshot savedSnapshot = persistedUser.getSnapshots().iterator().next();
+        persistedUser.removeSnapshot(savedSnapshot);
 
         // THEN
         final User actualUser = userService.findByEmail(EMAIL);
-        assertTrue(actualUser.getWorkspaces().isEmpty());
+        assertTrue(actualUser.getSnapshots().isEmpty());
 
-        assertTrue(workspaceRepository.findAll().isEmpty());
-        assertTrue(accountRepository.findAll().isEmpty());
+        assertFalse(accountRepository.findAll().isEmpty());
         assertTrue(snapshotRepository.findAll().isEmpty());
+    }
+
+    private void saveUserWithAccounts() {
+        user.addAccount(assetAccount);
+        user.addAccount(liabilityAccount);
+        userService.save(user);
+    }
+
+    private void initSnapshot() {
+        snapshot = new Snapshot(LocalDate.now(),
+                                ImmutableMap.of(assetAccount, assetAmount, liabilityAccount, liabilityAmount));
+        assertNull(snapshot.getId());
     }
 }

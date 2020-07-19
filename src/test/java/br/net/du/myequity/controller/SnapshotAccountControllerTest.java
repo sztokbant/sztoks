@@ -2,14 +2,15 @@ package br.net.du.myequity.controller;
 
 import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.Workspace;
 import br.net.du.myequity.persistence.AccountRepository;
+import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
 import org.joda.money.CurrencyUnit;
-import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,19 +40,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AccountControllerTest {
+class SnapshotAccountControllerTest {
 
     private static final String ACCOUNT_URL = "/account";
 
-    private static final long ACCOUNT_ID = 1L;
-    private static final BigDecimal CURRENT_BALANCE = new BigDecimal("320000.00");
+    private static final Long SNAPSHOT_ID = 99L;
+
+    private static final Long ACCOUNT_ID = 1L;
     private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
     private static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
 
+    private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
     private static final BigDecimal NEW_BALANCE = new BigDecimal("108.00");
 
     private static final String JSON_HAS_ERROR = "hasError";
-    private static final String JSON_ID = "id";
     private static final String JSON_BALANCE = "balance";
     private static final String JSON_CURRENCY_UNIT = "currencyUnit";
     private static final String JSON_NET_WORTH = "netWorth";
@@ -65,11 +67,16 @@ class AccountControllerTest {
     private UserService userService;
 
     @MockBean
+    private SnapshotRepository snapshotRepository;
+
+    @MockBean
     private AccountRepository accountRepository;
 
     private String requestContent;
 
     private User user;
+
+    private Snapshot snapshot;
 
     private Account account;
 
@@ -78,11 +85,18 @@ class AccountControllerTest {
         user = buildUser();
 
         // WHEN
-        account = new Account("Mortgage", ACCOUNT_TYPE, Money.of(CURRENCY_UNIT, CURRENT_BALANCE), LocalDate.now());
+        snapshot = new Snapshot(LocalDate.now(), ImmutableMap.of());
+        snapshot.setId(SNAPSHOT_ID);
+
+        account = new Account("Mortgage", ACCOUNT_TYPE, CURRENCY_UNIT, LocalDate.now());
         account.setId(ACCOUNT_ID);
 
-        final AccountController.AccountJsonRequest accountJsonRequest =
-                AccountController.AccountJsonRequest.builder().id(ACCOUNT_ID).balance(NEW_BALANCE).build();
+        final SnapshotAccountController.AccountJsonRequest accountJsonRequest =
+                SnapshotAccountController.AccountJsonRequest.builder()
+                                                            .snapshotId(SNAPSHOT_ID)
+                                                            .accountId(ACCOUNT_ID)
+                                                            .balance(NEW_BALANCE)
+                                                            .build();
         requestContent = new ObjectMapper().writeValueAsString(accountJsonRequest);
     }
 
@@ -133,9 +147,67 @@ class AccountControllerTest {
     }
 
     @Test
+    public void post_snapshotNotFound_hasError() throws Exception {
+        // GIVEN
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
+        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.empty());
+
+        // WHEN
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+                                                                              .with(csrf())
+                                                                              .with(user(user.getEmail()))
+                                                                              .contentType(MediaType.APPLICATION_JSON)
+                                                                              .content(requestContent));
+
+        // THEN
+        resultActions.andExpect(status().isOk());
+
+        final MvcResult mvcResult = resultActions.andReturn();
+        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
+        assertNotNull(resultContentAsString);
+
+        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
+        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+    }
+
+    @Test
+    public void post_snapshotDoesNotBelongToUser_hasError() throws Exception {
+        // GIVEN
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        final User anotherUser = new User(user.getEmail(), user.getFirstName(), user.getLastName());
+        final Long anotherUserId = user.getId() * 7;
+        anotherUser.setId(anotherUserId);
+
+        snapshot.setUser(anotherUser);
+        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+
+        // WHEN
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+                                                                              .with(csrf())
+                                                                              .with(user(user.getEmail()))
+                                                                              .contentType(MediaType.APPLICATION_JSON)
+                                                                              .content(requestContent));
+
+        // THEN
+        resultActions.andExpect(status().isOk());
+
+        final MvcResult mvcResult = resultActions.andReturn();
+        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
+        assertNotNull(resultContentAsString);
+
+        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
+        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+    }
+
+    @Test
     public void post_accountNotFound_hasError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        snapshot.setUser(user);
+        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.empty());
 
         // WHEN
@@ -161,14 +233,43 @@ class AccountControllerTest {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
+        snapshot.setUser(user);
+        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+
         final User anotherUser = new User(user.getEmail(), user.getFirstName(), user.getLastName());
         final Long anotherUserId = user.getId() * 7;
         anotherUser.setId(anotherUserId);
 
-        final Workspace workspace = new Workspace("My Workspace", CurrencyUnit.USD);
-        workspace.setUser(anotherUser);
+        account.setUser(anotherUser);
+        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
-        account.setWorkspace(workspace);
+        // WHEN
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+                                                                              .with(csrf())
+                                                                              .with(user(user.getEmail()))
+                                                                              .contentType(MediaType.APPLICATION_JSON)
+                                                                              .content(requestContent));
+
+        // THEN
+        resultActions.andExpect(status().isOk());
+
+        final MvcResult mvcResult = resultActions.andReturn();
+        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
+        assertNotNull(resultContentAsString);
+
+        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
+        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+    }
+
+    @Test
+    public void post_accountDoesNotBelongInSnapshot_hasError() throws Exception {
+        // GIVEN
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        snapshot.setUser(user);
+        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+
+        account.setUser(user);
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN
@@ -194,10 +295,12 @@ class AccountControllerTest {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        final Workspace workspace = new Workspace("My Workspace", CurrencyUnit.USD);
-        workspace.setUser(user);
+        snapshot.setUser(user);
+        snapshot.putAccount(account, CURRENT_BALANCE);
 
-        account.setWorkspace(workspace);
+        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+
+        account.setUser(user);
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN
@@ -216,7 +319,6 @@ class AccountControllerTest {
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
         assertFalse(jsonNode.get(JSON_HAS_ERROR).asBoolean());
-        assertEquals(ACCOUNT_ID, jsonNode.get(JSON_ID).asLong());
         assertEquals(NEW_BALANCE.toString(), jsonNode.get(JSON_BALANCE).asText());
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(NEW_BALANCE.negate().toString(), jsonNode.get(JSON_NET_WORTH).asText());

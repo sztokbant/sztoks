@@ -1,5 +1,6 @@
 package br.net.du.myequity.viewmodel;
 
+import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import lombok.Builder;
 import lombok.Data;
@@ -23,8 +24,8 @@ public class SnapshotViewModel {
                                 .id(snapshot.getId())
                                 .date(snapshot.getDate())
                                 .netWorth(snapshot.getNetWorth())
-                                .assetsBalance(snapshot.getAssetsTotal())
-                                .liabilitiesBalance(snapshot.getLiabilitiesTotal())
+                                .assetsBalance(snapshot.getTotalForAccountType(AccountType.ASSET))
+                                .liabilitiesBalance(snapshot.getTotalForAccountType(AccountType.LIABILITY))
                                 .build();
     }
 }

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import org.joda.money.CurrencyUnit;
-import org.joda.money.Money;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -22,15 +21,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "snapshots")
+@Table(name = "snapshots", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "date"}))
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Snapshot {
     @Id
@@ -41,7 +40,7 @@ public class Snapshot {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Getter
-    private Workspace workspace;
+    private User user;
 
     @Column(nullable = false)
     @Getter
@@ -54,12 +53,9 @@ public class Snapshot {
     @Column(name = "balance_amount", nullable = false)
     private Map<Account, BigDecimal> accounts = new HashMap<>();
 
-    public Snapshot(final LocalDate date, @NotNull final Set<Account> accounts) {
+    public Snapshot(final LocalDate date, @NotNull final Map<Account, BigDecimal> accounts) {
         this.date = date;
-
-        for (final Account account : accounts) {
-            this.accounts.put(account, account.getBalance().getAmount());
-        }
+        this.accounts.putAll(accounts);
     }
 
     // TODO May never be used
@@ -93,11 +89,7 @@ public class Snapshot {
         return accounts.get(account);
     }
 
-    public void setAccount(@NonNull final Account account) {
-        setAccount(account, account.getBalance().getAmount());
-    }
-
-    public void setAccount(@NonNull final Account account, @NonNull final BigDecimal balance) {
+    public void putAccount(@NonNull final Account account, @NonNull final BigDecimal balance) {
         accounts.put(account, balance);
     }
 
@@ -105,56 +97,41 @@ public class Snapshot {
         accounts.remove(account);
     }
 
-    public void setWorkspace(final Workspace workspace) {
+    public void setUser(final User user) {
         // Prevents infinite loop
-        if (sameAsFormer(workspace)) {
+        if (sameAsFormer(user)) {
             return;
         }
 
-        final Workspace oldWorkspace = this.workspace;
-        this.workspace = workspace;
+        final User oldUser = this.user;
+        this.user = user;
 
-        if (oldWorkspace != null) {
-            oldWorkspace.removeSnapshot(this);
+        if (oldUser != null) {
+            oldUser.removeSnapshot(this);
         }
 
-        if (workspace != null) {
-            workspace.addSnapshot(this);
+        if (user != null) {
+            user.addSnapshot(this);
         }
     }
 
-    private boolean sameAsFormer(final Workspace newWorkspace) {
-        return workspace == null ?
-                newWorkspace == null :
-                workspace.equals(newWorkspace);
+    private boolean sameAsFormer(final User newUser) {
+        return user == null ?
+                newUser == null :
+                user.equals(newUser);
     }
 
     public Map<CurrencyUnit, BigDecimal> getNetWorth() {
-        return NetWorthUtil.computeByCurrency(getAccountsAsSet());
+        return NetWorthUtil.computeByCurrency(accounts.entrySet().stream().collect(Collectors.toSet()));
     }
 
-    public Map<CurrencyUnit, BigDecimal> getAssetsTotal() {
-        return NetWorthUtil.computeByCurrency(getAccountsAsSet().stream()
-                                                                .filter(account -> account.getAccountType()
-                                                                                          .equals(AccountType.ASSET))
-                                                                .collect(Collectors.toSet()));
-    }
-
-    public Map<CurrencyUnit, BigDecimal> getLiabilitiesTotal() {
-        return NetWorthUtil.computeByCurrency(getAccountsAsSet().stream()
-                                                                .filter(account -> account.getAccountType()
-                                                                                          .equals(AccountType.LIABILITY))
-                                                                .collect(Collectors.toSet()));
-    }
-
-    private Set<Account> getAccountsAsSet() {
-        return accounts.entrySet().stream().map(entry -> {
-            final Account account = entry.getKey();
-            return new Account(account.getName(),
-                               account.getAccountType(),
-                               Money.of(account.getBalance().getCurrencyUnit(), entry.getValue()),
-                               account.getCreateDate());
-        }).collect(Collectors.toSet());
+    public Map<CurrencyUnit, BigDecimal> getTotalForAccountType(@NonNull final AccountType accountType) {
+        return NetWorthUtil.computeByCurrency(accounts.entrySet()
+                                                      .stream()
+                                                      .filter(entry -> entry.getKey()
+                                                                            .getAccountType()
+                                                                            .equals(accountType))
+                                                      .collect(Collectors.toSet()));
     }
 
     @Override

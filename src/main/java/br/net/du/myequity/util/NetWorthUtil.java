@@ -12,15 +12,15 @@ import java.util.stream.Collectors;
 
 public class NetWorthUtil {
 
-    public static Map<CurrencyUnit, BigDecimal> computeByCurrency(final Set<Account> accounts) {
-        return accounts.stream()
-                       .map(account -> account.getAccountType().equals(AccountType.ASSET) ?
-                               account.getBalance() :
-                               Money.of(account.getBalance().getCurrencyUnit(),
-                                        account.getBalance().getAmount().negate()))
-                       .collect(Collectors.groupingBy(Money::getCurrencyUnit,
-                                                      Collectors.reducing(BigDecimal.ZERO,
-                                                                          Money::getAmount,
-                                                                          BigDecimal::add)));
+    public static Map<CurrencyUnit, BigDecimal> computeByCurrency(final Set<Map.Entry<Account, BigDecimal>> accountBalances) {
+        return accountBalances.stream()
+                              .map(entry -> Money.of(entry.getKey().getCurrencyUnit(),
+                                                     entry.getKey().getAccountType().equals(AccountType.ASSET) ?
+                                                             entry.getValue() :
+                                                             entry.getValue().negate()))
+                              .collect(Collectors.groupingBy(Money::getCurrencyUnit,
+                                                             Collectors.reducing(BigDecimal.ZERO,
+                                                                                 Money::getAmount,
+                                                                                 BigDecimal::add)));
     }
 }
