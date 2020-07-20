@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "accounts")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class Account {
+public class Account implements Comparable<Account> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -121,5 +121,10 @@ public class Account {
     @Override
     public int hashCode() {
         return 41;
+    }
+
+    @Override
+    public int compareTo(final Account other) {
+        return this.name.compareTo(other.getName());
     }
 }

@@ -6,9 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -58,7 +59,7 @@ class UserTest {
         assertTrue(user.getAccounts().isEmpty());
         user.addAccount(assetAccount);
         user.addAccount(liabilityAccount);
-        final Map<AccountType, List<Account>> accounts = user.getAccounts();
+        final Map<AccountType, SortedSet<Account>> accounts = user.getAccounts();
 
         // THEN
         assertThrows(UnsupportedOperationException.class, () -> {
@@ -80,10 +81,10 @@ class UserTest {
         user.addAccount(liabilityAccount);
 
         // THEN
-        final Map<AccountType, List<Account>> accounts = user.getAccounts();
+        final Map<AccountType, SortedSet<Account>> accounts = user.getAccounts();
         assertEquals(1, accounts.size());
         assertEquals(1, accounts.get(AccountType.LIABILITY).size());
-        assertEquals(liabilityAccount, accounts.get(AccountType.LIABILITY).get(0));
+        assertEquals(liabilityAccount, accounts.get(AccountType.LIABILITY).iterator().next());
         assertEquals(user, liabilityAccount.getUser());
     }
 
@@ -97,10 +98,10 @@ class UserTest {
         user.addAccount(liabilityAccount);
 
         // THEN
-        final Map<AccountType, List<Account>> accounts = user.getAccounts();
+        final Map<AccountType, SortedSet<Account>> accounts = user.getAccounts();
         assertEquals(1, accounts.size());
         assertEquals(1, accounts.get(AccountType.LIABILITY).size());
-        assertEquals(liabilityAccount, accounts.get(AccountType.LIABILITY).get(0));
+        assertEquals(liabilityAccount, accounts.get(AccountType.LIABILITY).iterator().next());
         assertEquals(user, liabilityAccount.getUser());
     }
 
@@ -193,6 +194,54 @@ class UserTest {
         final Set<Snapshot> snapshots = user.getSnapshots();
         assertTrue(snapshots.isEmpty());
         assertNull(snapshot.getUser());
+    }
+
+    @Test
+    public void compareTo_accountsOrderedByNameAscending() {
+        // GIVEN
+        user.addAccount(new Account("One", AccountType.ASSET, CurrencyUnit.USD));
+        user.addAccount(new Account("Two", AccountType.ASSET, CurrencyUnit.USD));
+        user.addAccount(new Account("Three", AccountType.ASSET, CurrencyUnit.USD));
+        user.addAccount(new Account("Four", AccountType.ASSET, CurrencyUnit.USD));
+        user.addAccount(new Account("Five", AccountType.ASSET, CurrencyUnit.USD));
+        user.addAccount(new Account("Six", AccountType.ASSET, CurrencyUnit.USD));
+        user.addAccount(new Account("Seven", AccountType.ASSET, CurrencyUnit.USD));
+
+        // WHEN
+        final Iterator<Account> iterator = user.getAccounts().get(AccountType.ASSET).iterator();
+
+        // THEN
+        assertEquals("Five", iterator.next().getName());
+        assertEquals("Four", iterator.next().getName());
+        assertEquals("One", iterator.next().getName());
+        assertEquals("Seven", iterator.next().getName());
+        assertEquals("Six", iterator.next().getName());
+        assertEquals("Three", iterator.next().getName());
+        assertEquals("Two", iterator.next().getName());
+    }
+
+    @Test
+    public void compareTo_snapshotsAreOrderedByDateDescending() {
+        // GIVEN
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 05), ImmutableMap.of()));
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 03), ImmutableMap.of()));
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 06), ImmutableMap.of()));
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 07), ImmutableMap.of()));
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 01), ImmutableMap.of()));
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 02), ImmutableMap.of()));
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 04), ImmutableMap.of()));
+
+        // WHEN
+        final Iterator<Snapshot> iterator = user.getSnapshots().iterator();
+
+        // THEN
+        assertEquals(LocalDate.of(2020, 01, 07), iterator.next().getDate());
+        assertEquals(LocalDate.of(2020, 01, 06), iterator.next().getDate());
+        assertEquals(LocalDate.of(2020, 01, 05), iterator.next().getDate());
+        assertEquals(LocalDate.of(2020, 01, 04), iterator.next().getDate());
+        assertEquals(LocalDate.of(2020, 01, 03), iterator.next().getDate());
+        assertEquals(LocalDate.of(2020, 01, 02), iterator.next().getDate());
+        assertEquals(LocalDate.of(2020, 01, 01), iterator.next().getDate());
     }
 
     @Test

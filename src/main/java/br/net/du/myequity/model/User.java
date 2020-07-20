@@ -1,11 +1,11 @@
 package br.net.du.myequity.model;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSortedSet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SortNatural;
 import org.joda.money.CurrencyUnit;
 
 import javax.persistence.CascadeType;
@@ -17,14 +17,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Entity
 @Table(name = "users")
@@ -65,10 +64,12 @@ public class User {
     private String defaultCurrency;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Account> accounts = new HashSet<>();
+    @SortNatural // Ref.: https://thorben-janssen.com/ordering-vs-sorting-hibernate-use/
+    private SortedSet<Account> accounts = new TreeSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Snapshot> snapshots = new HashSet<>();
+    @SortNatural // Ref.: https://thorben-janssen.com/ordering-vs-sorting-hibernate-use/
+    private SortedSet<Snapshot> snapshots = new TreeSet<>();
 
     public User(final String email, final String firstName, final String lastName) {
         this.email = email;
@@ -86,10 +87,10 @@ public class User {
      *
      * @return Immutable copy to prevent it from being modified from the outside.
      */
-    public Map<AccountType, List<Account>> getAccounts() {
+    public Map<AccountType, SortedSet<Account>> getAccounts() {
         return accounts.stream()
                        .collect(collectingAndThen(groupingBy(Account::getAccountType,
-                                                             collectingAndThen(toList(), ImmutableList::copyOf)),
+                                                             collectingAndThen(toSet(), ImmutableSortedSet::copyOf)),
                                                   ImmutableMap::copyOf));
     }
 
@@ -117,8 +118,8 @@ public class User {
      *
      * @return Immutable copy to prevent it from being modified from the outside.
      */
-    public Set<Snapshot> getSnapshots() {
-        return ImmutableSet.copyOf(snapshots);
+    public SortedSet<Snapshot> getSnapshots() {
+        return ImmutableSortedSet.copyOf(snapshots);
     }
 
     public void addSnapshot(final Snapshot snapshot) {

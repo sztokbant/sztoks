@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "snapshots", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "date"}))
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class Snapshot {
+public class Snapshot implements Comparable<Snapshot> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -150,5 +150,10 @@ public class Snapshot {
     @Override
     public int hashCode() {
         return 43;
+    }
+
+    @Override
+    public int compareTo(final Snapshot other) {
+        return other.getDate().compareTo(this.date);
     }
 }
