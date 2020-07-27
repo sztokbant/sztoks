@@ -15,9 +15,7 @@
 
 <div class="container">
 
-    <div class="text-center">
-        <h4>Snapshots</h4>
-    </div>
+    <div class="text-center"><h4>Snapshots</h4></div>
 
     <c:choose>
         <c:when test="${empty snapshots}">
@@ -31,6 +29,38 @@
                 <%@ include file="_snapshot_net_worth.jsp" %>
                 <br/>
             </c:forEach>
+        </c:otherwise>
+    </c:choose>
+
+    <div class="text-center"><h4>Accounts</h4></div>
+
+    <div><h5>Asset Accounts</h5></div>
+
+    <c:choose>
+        <c:when test="${empty assetAccounts}">
+            No asset accounts.
+        </c:when>
+        <c:otherwise>
+            <ul>
+                <c:forEach var="account" items="${assetAccounts}">
+                    <%@ include file="_account.jsp" %>
+                </c:forEach>
+            </ul>
+        </c:otherwise>
+    </c:choose>
+
+    <div><h5>Liability Accounts</h5></div>
+
+    <c:choose>
+        <c:when test="${empty liabilityAccounts}">
+            No liability accounts.
+        </c:when>
+        <c:otherwise>
+            <ul>
+                <c:forEach var="account" items="${liabilityAccounts}">
+                    <%@ include file="_account.jsp" %>
+                </c:forEach>
+            </ul>
         </c:otherwise>
     </c:choose>
 </div>

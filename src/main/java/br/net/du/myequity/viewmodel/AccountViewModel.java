@@ -13,6 +13,7 @@ import java.util.Map;
 public class AccountViewModel {
     private final Long id;
     private final String name;
+    private final boolean isClosed;
     private final CurrencyUnit balanceCurrencyUnit;
     private final BigDecimal balanceAmount;
 
@@ -20,11 +21,16 @@ public class AccountViewModel {
         final Account account = entry.getKey();
         final BigDecimal amount = entry.getValue();
 
-        return AccountViewModel.builder()
-                               .id(account.getId())
-                               .name(account.getName())
-                               .balanceCurrencyUnit(account.getCurrencyUnit())
-                               .balanceAmount(amount)
-                               .build();
+        return getAccountViewModelBuilderCommon(account).balanceCurrencyUnit(account.getCurrencyUnit())
+                                                        .balanceAmount(amount)
+                                                        .build();
+    }
+
+    public static AccountViewModel of(final Account account) {
+        return getAccountViewModelBuilderCommon(account).build();
+    }
+
+    private static AccountViewModelBuilder getAccountViewModelBuilderCommon(final Account account) {
+        return AccountViewModel.builder().id(account.getId()).name(account.getName()).isClosed(account.isClosed());
     }
 }

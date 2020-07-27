@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.ASSET_ACCOU
 import static br.net.du.myequity.controller.util.ControllerConstants.LIABILITY_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
+import static br.net.du.myequity.controller.util.ControllerUtils.getAccountViewModels;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
 import static java.util.stream.Collectors.toList;
 
@@ -51,19 +53,9 @@ public class SnapshotController extends BaseController {
 
         model.addAttribute(SNAPSHOT_KEY, SnapshotViewModel.of(snapshot));
 
-        final Map<AccountType, Map<Account, BigDecimal>> accountsByType = snapshot.getAccountsByType();
-
-        final Map<Account, BigDecimal> assetAccounts = accountsByType.get(AccountType.ASSET);
-        model.addAttribute(ASSET_ACCOUNTS_KEY,
-                           assetAccounts == null ?
-                                   ImmutableList.of() :
-                                   assetAccounts.entrySet().stream().map(AccountViewModel::of).collect(toList()));
-
-        final Map<Account, BigDecimal> liabilityAccounts = accountsByType.get(AccountType.LIABILITY);
-        model.addAttribute(LIABILITY_ACCOUNTS_KEY,
-                           liabilityAccounts == null ?
-                                   ImmutableList.of() :
-                                   liabilityAccounts.entrySet().stream().map(AccountViewModel::of).collect(toList()));
+        final Map<AccountType, List<AccountViewModel>> accountViewModels = getAccountViewModels(snapshot);
+        model.addAttribute(ASSET_ACCOUNTS_KEY, accountViewModels.get(AccountType.ASSET));
+        model.addAttribute(LIABILITY_ACCOUNTS_KEY, accountViewModels.get(AccountType.LIABILITY));
 
         return "snapshot";
     }
