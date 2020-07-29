@@ -5,7 +5,7 @@ function submitAccountBalance(snapshotId, accountId) {
     balance: $("#new_amount_" + accountId).val(),
   }
 
-  var postUrl = window.location.origin + "/account" + "?_csrf=" + $("#_csrf").val();
+  var postUrl = window.location.origin + "/accountbalance" + "?_csrf=" + $("#_csrf").val();
 
   $.ajax({
     type: "POST",

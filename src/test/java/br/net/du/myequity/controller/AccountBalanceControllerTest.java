@@ -40,9 +40,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SnapshotAccountControllerTest {
+class AccountBalanceControllerTest {
 
-    private static final String ACCOUNT_URL = "/account";
+    private static final String ACCOUNT_URL = "/accountbalance";
 
     private static final Long SNAPSHOT_ID = 99L;
 
@@ -91,13 +91,13 @@ class SnapshotAccountControllerTest {
         account = new Account("Mortgage", ACCOUNT_TYPE, CURRENCY_UNIT, LocalDate.now());
         account.setId(ACCOUNT_ID);
 
-        final SnapshotAccountController.AccountJsonRequest accountJsonRequest =
-                SnapshotAccountController.AccountJsonRequest.builder()
-                                                            .snapshotId(SNAPSHOT_ID)
-                                                            .accountId(ACCOUNT_ID)
-                                                            .balance(NEW_BALANCE)
-                                                            .build();
-        requestContent = new ObjectMapper().writeValueAsString(accountJsonRequest);
+        final AccountBalanceController.AccountBalanceJsonRequest accountBalanceJsonRequest =
+                AccountBalanceController.AccountBalanceJsonRequest.builder()
+                                                                  .snapshotId(SNAPSHOT_ID)
+                                                                  .accountId(ACCOUNT_ID)
+                                                                  .balance(NEW_BALANCE)
+                                                                  .build();
+        requestContent = new ObjectMapper().writeValueAsString(accountBalanceJsonRequest);
     }
 
     @Test

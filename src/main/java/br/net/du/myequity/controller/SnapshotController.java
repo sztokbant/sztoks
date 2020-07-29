@@ -1,6 +1,5 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
@@ -9,14 +8,12 @@ import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.viewmodel.AccountViewModel;
 import br.net.du.myequity.viewmodel.SnapshotViewModel;
 import br.net.du.myequity.viewmodel.UserViewModel;
-import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,7 +24,6 @@ import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KE
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getAccountViewModels;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
-import static java.util.stream.Collectors.toList;
 
 @Controller
 public class SnapshotController extends BaseController {

@@ -22,54 +22,54 @@ import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsT
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
 
 @RestController
-public class SnapshotAccountController extends BaseController {
+public class AccountBalanceController extends BaseController {
     @Autowired
     private SnapshotRepository snapshotRepository;
 
     @Autowired
     private AccountRepository accountRepository;
 
-    @PostMapping("/account")
-    public AccountJsonResponse post(@RequestBody final AccountJsonRequest accountJsonRequest) {
+    @PostMapping("/accountbalance")
+    public AccountBalanceResponse post(@RequestBody final AccountBalanceJsonRequest accountBalanceJsonRequest) {
         final User user = getCurrentUser();
 
-        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(accountJsonRequest.getSnapshotId());
+        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(accountBalanceJsonRequest.getSnapshotId());
         if (!snapshotBelongsToUser(user, snapshotOpt)) {
             // TODO Error message
-            return AccountJsonResponse.builder().hasError(true).build();
+            return AccountBalanceResponse.builder().hasError(true).build();
         }
 
         final Snapshot snapshot = snapshotOpt.get();
-        final Optional<Account> accountOpt = accountRepository.findById(accountJsonRequest.getAccountId());
+        final Optional<Account> accountOpt = accountRepository.findById(accountBalanceJsonRequest.getAccountId());
         if (!accountBelongsToUser(user, accountOpt) || !accountBelongsInSnapshot(snapshot, accountOpt)) {
             // TODO Error message
-            return AccountJsonResponse.builder().hasError(true).build();
+            return AccountBalanceResponse.builder().hasError(true).build();
         }
 
         final Account account = accountOpt.get();
 
-        snapshot.putAccount(account, accountJsonRequest.getBalance());
+        snapshot.putAccount(account, accountBalanceJsonRequest.getBalance());
 
         snapshotRepository.save(snapshot);
 
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
         final AccountType accountType = account.getAccountType();
 
-        return AccountJsonResponse.builder()
-                                  .hasError(false)
-                                  .balance(snapshot.getAccount(account).toString())
-                                  .currencyUnit(currencyUnit.toString())
-                                  .netWorth(snapshot.getNetWorth().get(currencyUnit).toString())
-                                  .accountType(accountType.name())
-                                  .totalForAccountType(snapshot.getTotalForAccountType(accountType)
-                                                               .get(currencyUnit)
-                                                               .toString())
-                                  .build();
+        return AccountBalanceResponse.builder()
+                                     .hasError(false)
+                                     .balance(snapshot.getAccount(account).toString())
+                                     .currencyUnit(currencyUnit.toString())
+                                     .netWorth(snapshot.getNetWorth().get(currencyUnit).toString())
+                                     .accountType(accountType.name())
+                                     .totalForAccountType(snapshot.getTotalForAccountType(accountType)
+                                                                  .get(currencyUnit)
+                                                                  .toString())
+                                     .build();
     }
 
     @Data
     @Builder
-    public static class AccountJsonRequest {
+    public static class AccountBalanceJsonRequest {
         private Long snapshotId;
         private Long accountId;
         private BigDecimal balance;
@@ -77,7 +77,7 @@ public class SnapshotAccountController extends BaseController {
 
     @Data
     @Builder
-    public static class AccountJsonResponse {
+    public static class AccountBalanceResponse {
         private boolean hasError;
 
         private String balance;
