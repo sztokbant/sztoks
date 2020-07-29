@@ -5,7 +5,7 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
-import br.net.du.myequity.viewmodel.AccountViewModel;
+import br.net.du.myequity.viewmodel.AccountViewModelOutput;
 import br.net.du.myequity.viewmodel.SnapshotViewModel;
 import br.net.du.myequity.viewmodel.UserViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class SnapshotController extends BaseController {
 
         model.addAttribute(SNAPSHOT_KEY, SnapshotViewModel.of(snapshot));
 
-        final Map<AccountType, List<AccountViewModel>> accountViewModels = getAccountViewModels(snapshot);
+        final Map<AccountType, List<AccountViewModelOutput>> accountViewModels = getAccountViewModels(snapshot);
         model.addAttribute(ASSET_ACCOUNTS_KEY, accountViewModels.get(AccountType.ASSET));
         model.addAttribute(LIABILITY_ACCOUNTS_KEY, accountViewModels.get(AccountType.LIABILITY));
 

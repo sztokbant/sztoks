@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -109,8 +110,7 @@ class PersistenceTest {
     @Transactional
     public void addPopulatedSnapshotToPersistedUser() {
         // GIVEN
-        assertNull(user.getId());
-        saveUserWithAccounts();
+        saveNewUserWithAccounts();
         initSnapshot();
 
         // WHEN
@@ -149,8 +149,7 @@ class PersistenceTest {
     @Transactional
     public void removeAccountFromSnapshot() {
         // GIVEN
-        assertNull(user.getId());
-        saveUserWithAccounts();
+        saveNewUserWithAccounts();
         initSnapshot();
 
         user.addSnapshot(snapshot);
@@ -170,8 +169,7 @@ class PersistenceTest {
     @Transactional
     public void updateAccountInSnapshot() {
         // GIVEN
-        assertNull(user.getId());
-        saveUserWithAccounts();
+        saveNewUserWithAccounts();
         initSnapshot();
 
         user.addSnapshot(snapshot);
@@ -194,8 +192,7 @@ class PersistenceTest {
     @Transactional
     public void removeSnapshotFromPersistedUser() {
         // GIVEN
-        assertNull(user.getId());
-        saveUserWithAccounts();
+        saveNewUserWithAccounts();
         initSnapshot();
 
         user.addSnapshot(snapshot);
@@ -203,6 +200,7 @@ class PersistenceTest {
         userService.save(user);
 
         assertFalse(accountRepository.findAll().isEmpty());
+        assertFalse(accountRepository.findByUser(user).isEmpty());
         assertFalse(snapshotRepository.findAll().isEmpty());
 
         // WHEN
@@ -215,13 +213,27 @@ class PersistenceTest {
         assertTrue(actualUser.getSnapshots().isEmpty());
 
         assertFalse(accountRepository.findAll().isEmpty());
+        assertFalse(accountRepository.findByUser(actualUser).isEmpty());
         assertTrue(snapshotRepository.findAll().isEmpty());
     }
 
-    private void saveUserWithAccounts() {
+    private void saveNewUserWithAccounts() {
+        assertNull(user.getId());
+
         user.addAccount(assetAccount);
         user.addAccount(liabilityAccount);
         userService.save(user);
+
+        final List<Account> allAccounts = accountRepository.findAll();
+        final List<Account> userAccounts = accountRepository.findByUser(user);
+
+        assertFalse(allAccounts.isEmpty());
+        assertTrue(allAccounts.contains(assetAccount));
+        assertTrue(allAccounts.contains(liabilityAccount));
+
+        assertFalse(userAccounts.isEmpty());
+        assertTrue(userAccounts.contains(assetAccount));
+        assertTrue(userAccounts.contains(liabilityAccount));
     }
 
     private void initSnapshot() {

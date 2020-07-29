@@ -10,14 +10,14 @@ import java.util.Map;
 
 @Data
 @Builder
-public class AccountViewModel {
+public class AccountViewModelOutput {
     private final Long id;
     private final String name;
     private final boolean isClosed;
     private final CurrencyUnit balanceCurrencyUnit;
     private final BigDecimal balanceAmount;
 
-    public static AccountViewModel of(final Map.Entry<Account, BigDecimal> entry) {
+    public static AccountViewModelOutput of(final Map.Entry<Account, BigDecimal> entry) {
         final Account account = entry.getKey();
         final BigDecimal amount = entry.getValue();
 
@@ -26,11 +26,14 @@ public class AccountViewModel {
                                                         .build();
     }
 
-    public static AccountViewModel of(final Account account) {
+    public static AccountViewModelOutput of(final Account account) {
         return getAccountViewModelBuilderCommon(account).build();
     }
 
-    private static AccountViewModelBuilder getAccountViewModelBuilderCommon(final Account account) {
-        return AccountViewModel.builder().id(account.getId()).name(account.getName()).isClosed(account.isClosed());
+    private static AccountViewModelOutputBuilder getAccountViewModelBuilderCommon(final Account account) {
+        return AccountViewModelOutput.builder()
+                                     .id(account.getId())
+                                     .name(account.getName())
+                                     .isClosed(account.isClosed());
     }
 }

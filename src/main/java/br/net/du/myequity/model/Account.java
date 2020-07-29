@@ -14,10 +14,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "accounts")
+@Table(name = "accounts", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "name"}))
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Account implements Comparable<Account> {
     @Id

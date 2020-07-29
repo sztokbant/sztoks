@@ -37,11 +37,6 @@ class UserValidatorTest {
         when(userService.findByEmail(eq(EMAIL))).thenReturn(null);
 
         user = new User();
-        user.setFirstName("Bill");
-        user.setLastName("Gates");
-        user.setEmail(EMAIL);
-        user.setPassword("password");
-        user.setPasswordConfirm("password");
 
         errors = new BeanPropertyBindingResult(user, "user");
     }
@@ -58,6 +53,9 @@ class UserValidatorTest {
 
     @Test
     public void validate_happy() {
+        // GIVEN
+        populateUser();
+
         // WHEN
         userValidator.validate(user, errors);
 
@@ -68,7 +66,7 @@ class UserValidatorTest {
     @Test
     public void validate_emptyObject_hasErrors() {
         // WHEN
-        userValidator.validate(new User(), errors);
+        userValidator.validate(user, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -77,6 +75,7 @@ class UserValidatorTest {
     @Test
     public void validate_invalidEmail_hasErrors() {
         // GIVEN
+        populateUser();
         user.setEmail("not_an_email");
 
         // WHEN
@@ -89,6 +88,7 @@ class UserValidatorTest {
     @Test
     public void validate_nullEmail_hasErrors() {
         // GIVEN
+        populateUser();
         user.setEmail(null);
 
         // WHEN
@@ -101,6 +101,7 @@ class UserValidatorTest {
     @Test
     public void validate_duplicateEmail_hasErrors() {
         // GIVEN
+        populateUser();
         when(userService.findByEmail(eq(EMAIL))).thenReturn(user);
 
         // WHEN
@@ -113,6 +114,7 @@ class UserValidatorTest {
     @Test
     public void validate_nullFirstName_hasErrors() {
         // GIVEN
+        populateUser();
         user.setFirstName(null);
 
         // WHEN
@@ -125,6 +127,7 @@ class UserValidatorTest {
     @Test
     public void validate_emptyFirstName_hasErrors() {
         // GIVEN
+        populateUser();
         user.setFirstName(StringUtils.EMPTY);
 
         // WHEN
@@ -137,6 +140,7 @@ class UserValidatorTest {
     @Test
     public void validate_nullLastName_hasErrors() {
         // GIVEN
+        populateUser();
         user.setLastName(null);
 
         // WHEN
@@ -149,6 +153,7 @@ class UserValidatorTest {
     @Test
     public void validate_emptyLastName_hasErrors() {
         // GIVEN
+        populateUser();
         user.setLastName(StringUtils.EMPTY);
 
         // WHEN
@@ -161,6 +166,7 @@ class UserValidatorTest {
     @Test
     public void validate_emptyPassword_hasErrors() {
         // GIVEN
+        populateUser();
         user.setPassword(StringUtils.EMPTY);
 
         // WHEN
@@ -173,6 +179,7 @@ class UserValidatorTest {
     @Test
     public void validate_nullPassword_hasErrors() {
         // GIVEN
+        populateUser();
         user.setPassword(null);
 
         // WHEN
@@ -185,6 +192,7 @@ class UserValidatorTest {
     @Test
     public void validate_shortPassword_hasErrors() {
         // GIVEN
+        populateUser();
         user.setPassword("1234567");
 
         // WHEN
@@ -197,6 +205,7 @@ class UserValidatorTest {
     @Test
     public void validate_longPassword_hasErrors() {
         // GIVEN
+        populateUser();
         user.setPassword("123456789012345678901234567890123");
 
         // WHEN
@@ -209,6 +218,7 @@ class UserValidatorTest {
     @Test
     public void validate_passwordMismatch_hasErrors() {
         // GIVEN
+        populateUser();
         user.setPasswordConfirm("something-else");
 
         // WHEN
@@ -216,5 +226,13 @@ class UserValidatorTest {
 
         // THEN
         assertTrue(errors.hasErrors());
+    }
+
+    private void populateUser() {
+        user.setFirstName("Bill");
+        user.setLastName("Gates");
+        user.setEmail(EMAIL);
+        user.setPassword("password");
+        user.setPasswordConfirm("password");
     }
 }

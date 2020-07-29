@@ -4,7 +4,7 @@ import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.viewmodel.AccountViewModel;
+import br.net.du.myequity.viewmodel.AccountViewModelOutput;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -29,7 +29,7 @@ public class ControllerUtils {
         return accountOpt.isPresent() && snapshot.getAccount(accountOpt.get()) != null;
     }
 
-    public static Map<AccountType, List<AccountViewModel>> getAccountViewModels(final User user) {
+    public static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModels(final User user) {
         final Map<AccountType, SortedSet<Account>> accountsByType = user.getAccounts();
 
         final SortedSet<Account> assetAccounts = accountsByType.get(AccountType.ASSET);
@@ -38,14 +38,14 @@ public class ControllerUtils {
         return ImmutableMap.of(AccountType.ASSET,
                                assetAccounts == null ?
                                        ImmutableList.of() :
-                                       assetAccounts.stream().map(AccountViewModel::of).collect(toList()),
+                                       assetAccounts.stream().map(AccountViewModelOutput::of).collect(toList()),
                                AccountType.LIABILITY,
                                liabilityAccounts == null ?
                                        ImmutableList.of() :
-                                       liabilityAccounts.stream().map(AccountViewModel::of).collect(toList()));
+                                       liabilityAccounts.stream().map(AccountViewModelOutput::of).collect(toList()));
     }
 
-    public static Map<AccountType, List<AccountViewModel>> getAccountViewModels(final Snapshot snapshot) {
+    public static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModels(final Snapshot snapshot) {
         final Map<AccountType, Map<Account, BigDecimal>> accountsByType = snapshot.getAccountsByType();
 
         final Map<Account, BigDecimal> assetAccounts = accountsByType.get(AccountType.ASSET);
@@ -54,13 +54,16 @@ public class ControllerUtils {
         return ImmutableMap.of(AccountType.ASSET,
                                assetAccounts == null ?
                                        ImmutableList.of() :
-                                       assetAccounts.entrySet().stream().map(AccountViewModel::of).collect(toList()),
+                                       assetAccounts.entrySet()
+                                                    .stream()
+                                                    .map(AccountViewModelOutput::of)
+                                                    .collect(toList()),
                                AccountType.LIABILITY,
                                liabilityAccounts == null ?
                                        ImmutableList.of() :
                                        liabilityAccounts.entrySet()
                                                         .stream()
-                                                        .map(AccountViewModel::of)
+                                                        .map(AccountViewModelOutput::of)
                                                         .collect(toList()));
     }
 }

@@ -34,11 +34,13 @@
 
     <div class="text-center"><h4>Accounts</h4></div>
 
+    <div class="text-center"><a href="${contextPath}/newaccount">Add Account</a></div>
+
     <div><h5>Asset Accounts</h5></div>
 
     <c:choose>
         <c:when test="${empty assetAccounts}">
-            No asset accounts.
+            <div>No asset accounts.</div>
         </c:when>
         <c:otherwise>
             <ul>
@@ -53,7 +55,7 @@
 
     <c:choose>
         <c:when test="${empty liabilityAccounts}">
-            No liability accounts.
+            <div>No liability accounts.</div>
         </c:when>
         <c:otherwise>
             <ul>

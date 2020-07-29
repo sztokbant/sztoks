@@ -2,7 +2,7 @@ package br.net.du.myequity.controller;
 
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.viewmodel.AccountViewModel;
+import br.net.du.myequity.viewmodel.AccountViewModelOutput;
 import br.net.du.myequity.viewmodel.SnapshotViewModel;
 import br.net.du.myequity.viewmodel.UserViewModel;
 import org.springframework.stereotype.Controller;
@@ -31,7 +31,7 @@ public class HomeController extends BaseController {
         final List<SnapshotViewModel> snapshotViewModels =
                 user.getSnapshots().stream().map(SnapshotViewModel::of).collect(toList());
 
-        final Map<AccountType, List<AccountViewModel>> accountViewModels = getAccountViewModels(user);
+        final Map<AccountType, List<AccountViewModelOutput>> accountViewModels = getAccountViewModels(user);
         model.addAttribute(ASSET_ACCOUNTS_KEY, accountViewModels.get(AccountType.ASSET));
         model.addAttribute(LIABILITY_ACCOUNTS_KEY, accountViewModels.get(AccountType.LIABILITY));
 
