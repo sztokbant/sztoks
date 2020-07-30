@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.UserRepository;
 import br.net.du.myequity.validator.AccountViewModelInputValidator;
@@ -12,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.math.BigDecimal;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 
@@ -43,7 +46,10 @@ public class AccountController extends BaseController {
             return "new_account";
         }
 
-        user.addAccount(accountViewModelInput.toAccount());
+        final Account account = accountViewModelInput.toAccount();
+
+        user.addAccount(account);
+        user.getSnapshots().first().putAccount(account, BigDecimal.ZERO);
         userRepository.save(user);
 
         return "redirect:/";

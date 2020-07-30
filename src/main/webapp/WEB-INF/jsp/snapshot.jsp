@@ -27,11 +27,18 @@
 
     <h5>Assets</h5>
     <b>Total</b>
-    <c:forEach items="${snapshot.assetsBalance}" var="entry">
-        <div>
-            ${entry.key} <span id="total_ASSET_${entry.key}">${entry.value}</span><br>
-        </div>
-    </c:forEach>
+    <c:choose>
+        <c:when test="${not empty snapshot.assetsBalance}">
+            <c:forEach items="${snapshot.assetsBalance}" var="entry">
+                <div>
+                    ${entry.key} <span id="total_ASSET_${entry.key}">${entry.value}</span><br>
+                </div>
+            </c:forEach>
+        </c:when>
+        <c:otherwise>
+            0.00
+        </c:otherwise>
+    </c:choose>
 
     <br/>
 
@@ -45,11 +52,18 @@
 
     <h5>Liabilities</h5>
     <b>Total</b>
-    <c:forEach items="${snapshot.liabilitiesBalance}" var="entry">
-        <div>
-            ${entry.key} <span id="total_LIABILITY_${entry.key}">${entry.value}</span><br>
-        </div>
-    </c:forEach>
+    <c:choose>
+        <c:when test="${not empty snapshot.liabilitiesBalance}">
+            <c:forEach items="${snapshot.liabilitiesBalance}" var="entry">
+                <div>
+                    ${entry.key} <span id="total_LIABILITY_${entry.key}">${entry.value}</span><br>
+                </div>
+            </c:forEach>
+        </c:when>
+        <c:otherwise>
+            0.00
+        </c:otherwise>
+    </c:choose>
 
     <br/>
 

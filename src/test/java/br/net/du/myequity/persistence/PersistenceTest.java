@@ -75,6 +75,9 @@ class PersistenceTest {
         final User actual = userService.findByEmail(EMAIL);
         assertNotNull(actual.getId());
         assertEquals(user, actual);
+
+        final List<Snapshot> snapshots = snapshotRepository.findAllByUser(user);
+        assertEquals(1, snapshots.size());
     }
 
     @Test
@@ -84,7 +87,7 @@ class PersistenceTest {
         assertNull(user.getId());
         userService.save(user);
 
-        snapshot = new Snapshot(LocalDate.now(), ImmutableMap.of());
+        snapshot = new Snapshot(LocalDate.now().minusDays(1), ImmutableMap.of());
         assertNull(snapshot.getId());
 
         // WHEN
@@ -94,8 +97,8 @@ class PersistenceTest {
         final User actualUser = userService.findByEmail(EMAIL);
         assertNotNull(actualUser.getId());
         assertEquals(user, actualUser);
-        assertEquals(1, actualUser.getSnapshots().size());
-        assertEquals(snapshot, user.getSnapshots().iterator().next());
+        assertEquals(2, actualUser.getSnapshots().size());
+        assertEquals(snapshot, user.getSnapshots().last());
 
         final Snapshot actualSnapshot = snapshotRepository.findAll().get(0);
         assertNotNull(actualSnapshot.getId());
@@ -120,9 +123,9 @@ class PersistenceTest {
         final User actualUser = userService.findByEmail(EMAIL);
         assertNotNull(actualUser.getId());
         assertEquals(user, actualUser);
-        assertEquals(1, actualUser.getSnapshots().size());
+        assertEquals(2, actualUser.getSnapshots().size());
 
-        final Snapshot actualSnapshot = snapshotRepository.findAll().get(0);
+        final Snapshot actualSnapshot = snapshotRepository.findAllByUser(user).get(1);
         assertNotNull(actualSnapshot.getId());
         assertNotNull(actualSnapshot.getUser());
         assertEquals(user, actualSnapshot.getUser());
@@ -154,14 +157,14 @@ class PersistenceTest {
 
         user.addSnapshot(snapshot);
 
-        final Snapshot savedSnapshot = snapshotRepository.findAll().get(0);
+        final Snapshot savedSnapshot = snapshotRepository.findAll().get(1);
         assertEquals(2, savedSnapshot.getAccounts().size());
 
         // WHEN
         savedSnapshot.removeAccount(liabilityAccount);
 
         // THEN
-        final Snapshot actualSnapshot = snapshotRepository.findAll().get(0);
+        final Snapshot actualSnapshot = snapshotRepository.findAll().get(1);
         assertEquals(1, actualSnapshot.getAccounts().size());
     }
 
@@ -174,7 +177,7 @@ class PersistenceTest {
 
         user.addSnapshot(snapshot);
 
-        final Snapshot savedSnapshot = snapshotRepository.findAll().get(0);
+        final Snapshot savedSnapshot = snapshotRepository.findAll().get(1);
 
         assertEquals(2, savedSnapshot.getAccounts().size());
         assertEquals(ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-319900.00")), savedSnapshot.getNetWorth());
@@ -183,7 +186,7 @@ class PersistenceTest {
         savedSnapshot.putAccount(liabilityAccount, liabilityAmount.add(new BigDecimal("100000.00")));
 
         // THEN
-        final Snapshot actualSnapshot = snapshotRepository.findAll().get(0);
+        final Snapshot actualSnapshot = snapshotRepository.findAll().get(1);
         assertEquals(2, actualSnapshot.getAccounts().size());
         assertEquals(ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-419900.00")), actualSnapshot.getNetWorth());
     }
@@ -210,11 +213,11 @@ class PersistenceTest {
 
         // THEN
         final User actualUser = userService.findByEmail(EMAIL);
-        assertTrue(actualUser.getSnapshots().isEmpty());
+        assertEquals(1, actualUser.getSnapshots().size());
 
         assertFalse(accountRepository.findAll().isEmpty());
         assertFalse(accountRepository.findByUser(actualUser).isEmpty());
-        assertTrue(snapshotRepository.findAll().isEmpty());
+        assertEquals(1, snapshotRepository.findAll().size());
     }
 
     private void saveNewUserWithAccounts() {
@@ -237,7 +240,7 @@ class PersistenceTest {
     }
 
     private void initSnapshot() {
-        snapshot = new Snapshot(LocalDate.now(),
+        snapshot = new Snapshot(LocalDate.now().minusDays(1),
                                 ImmutableMap.of(assetAccount, assetAmount, liabilityAccount, liabilityAmount));
         assertNull(snapshot.getId());
     }

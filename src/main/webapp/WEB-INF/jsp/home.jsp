@@ -32,15 +32,16 @@
         </c:otherwise>
     </c:choose>
 
+    <hr/>
+
     <div class="text-center"><h4>Accounts</h4></div>
 
     <div class="text-center"><a href="${contextPath}/newaccount">Add Account</a></div>
 
-    <div><h5>Asset Accounts</h5></div>
-
+    <h5>Assets</h5>
     <c:choose>
         <c:when test="${empty assetAccounts}">
-            <div>No asset accounts.</div>
+            <div>No assets.</div>
         </c:when>
         <c:otherwise>
             <ul>
@@ -51,11 +52,12 @@
         </c:otherwise>
     </c:choose>
 
-    <div><h5>Liability Accounts</h5></div>
+    <br/>
 
+    <h5>Liabilities</h5>
     <c:choose>
         <c:when test="${empty liabilityAccounts}">
-            <div>No liability accounts.</div>
+            <div>No liabilities.</div>
         </c:when>
         <c:otherwise>
             <ul>
