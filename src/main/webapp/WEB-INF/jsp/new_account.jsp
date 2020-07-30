@@ -25,17 +25,21 @@
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="text" path="name" class="form-control" placeholder="Account Name"
                             autofocus="true"></form:input>
-                <form:errors path="name" />
+                <form:errors path="name"/>
             </div>
         </spring:bind>
 
         <spring:bind path="accountType">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:radiobutton path="accountType" value="ASSET"/>
-                Asset
-                <form:radiobutton path="accountType" value="LIABILITY"/>
-                Liability
-                <form:errors path="accountType" />
+                <div>
+                    <form:radiobutton path="accountType" value="ASSET" id="assetRadio" checked="checked"/>
+                    <label for="assetRadio">Asset</label>
+                </div>
+                <div>
+                    <form:radiobutton path="accountType" value="LIABILITY" id="liabilityRadio"/>
+                    <label for="liabilityRadio">Liability</label>
+                </div>
+                <form:errors path="accountType"/>
             </div>
         </spring:bind>
 
@@ -43,7 +47,7 @@
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="text" path="currencyUnit" class="form-control" placeholder="Currency"
                             autofocus="true"></form:input>
-                <form:errors path="currencyUnit" />
+                <form:errors path="currencyUnit"/>
             </div>
         </spring:bind>
 
