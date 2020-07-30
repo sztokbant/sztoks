@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class AccountBalanceControllerTest {
 
-    private static final String ACCOUNT_URL = "/accountbalance";
+    private static final String ACCOUNT_BALANCE_URL = "/accountbalance";
 
     private static final Long SNAPSHOT_ID = 99L;
 
@@ -103,7 +103,7 @@ class AccountBalanceControllerTest {
     @Test
     public void post_noCsrfToken_forbidden() throws Exception {
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
                                                                               .contentType(MediaType.APPLICATION_JSON)
                                                                               .content(requestContent));
 
@@ -114,7 +114,7 @@ class AccountBalanceControllerTest {
     @Test
     public void post_withCsrfTokenUserNotLoggedIn_redirectToLogin() throws Exception {
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
                                                                               .with(csrf())
                                                                               .contentType(MediaType.APPLICATION_JSON)
                                                                               .content(requestContent));
@@ -129,7 +129,7 @@ class AccountBalanceControllerTest {
         when(userService.findByEmail(user.getEmail())).thenReturn(null);
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -153,7 +153,7 @@ class AccountBalanceControllerTest {
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.empty());
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -183,7 +183,7 @@ class AccountBalanceControllerTest {
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -211,7 +211,7 @@ class AccountBalanceControllerTest {
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.empty());
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -244,7 +244,7 @@ class AccountBalanceControllerTest {
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -273,7 +273,7 @@ class AccountBalanceControllerTest {
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -304,7 +304,7 @@ class AccountBalanceControllerTest {
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)

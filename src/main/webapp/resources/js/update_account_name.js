@@ -16,11 +16,11 @@ function submitName(accountId) {
       if (!result.hasError) {
         $("#account_name_" + accountId).html(result.name);
       } else {
-        alert('Error updating account name.')
+        alert('Result has error.');
       }
     },
     error: function(e) {
-      alert('Error updating account name.')
+      alert('Error updating account name.');
       console.log("Error: ", e);
     }
   });

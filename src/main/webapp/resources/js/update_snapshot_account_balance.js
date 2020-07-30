@@ -2,7 +2,7 @@ function submitAccountBalance(snapshotId, accountId) {
   var formData = {
     snapshotId: snapshotId,
     accountId: accountId,
-    balance: $("#new_amount_" + accountId).val(),
+    balance: $("#new_account_balance_amount_" + accountId).val(),
   }
 
   var postUrl = window.location.origin + "/accountbalance" + "?_csrf=" + $("#_csrf").val();
@@ -15,15 +15,15 @@ function submitAccountBalance(snapshotId, accountId) {
     dataType: 'json',
     success: function(result) {
       if (!result.hasError) {
-        $("#amount_" + accountId).html(result.balance);
+        $("#account_balance_amount_" + accountId).html(result.balance);
         $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
         $("#total_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);
       } else {
-        alert('Error updating amount.')
+        alert('Result has error.');
       }
     },
     error: function(e) {
-      alert('Error updating amount.')
+      alert('Error updating amount.');
       console.log("Error: ", e);
     }
   });
