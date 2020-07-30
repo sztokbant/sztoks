@@ -29,7 +29,8 @@ function submitName(accountId) {
 function prepareAccountNameUpdateForm(theForm, accountId, nameSpan, newNameInput) {
   theForm.submit(function(event) {
     event.preventDefault();
-    submitName(accountId);
+    newNameInput.hide();
+    nameSpan.show();
   });
 
   newNameInput.focusout(function() {
@@ -37,14 +38,9 @@ function prepareAccountNameUpdateForm(theForm, accountId, nameSpan, newNameInput
     var newName = newNameInput.val();
 
     if (newName && newName.trim() != "" && newName.trim() != currentName) {
-      theForm.trigger('submit');
-    } else {
-      newNameInput.hide();
-      nameSpan.show();
+        submitName(accountId);
     }
-  });
 
-  theForm.submit(function() {
     newNameInput.hide();
     nameSpan.show();
   });

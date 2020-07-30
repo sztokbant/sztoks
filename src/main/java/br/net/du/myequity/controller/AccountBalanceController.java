@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Optional;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsInSnapshot;
@@ -23,6 +24,8 @@ import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongs
 
 @RestController
 public class AccountBalanceController extends BaseController {
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.00");
+
     @Autowired
     private SnapshotRepository snapshotRepository;
 
@@ -57,13 +60,14 @@ public class AccountBalanceController extends BaseController {
 
         return AccountBalanceResponse.builder()
                                      .hasError(false)
-                                     .balance(snapshot.getAccount(account).toString())
+                                     .balance(DECIMAL_FORMAT.format(snapshot.getAccount(account).setScale(2)))
                                      .currencyUnit(currencyUnit.toString())
-                                     .netWorth(snapshot.getNetWorth().get(currencyUnit).toString())
+                                     .netWorth(DECIMAL_FORMAT.format(snapshot.getNetWorth()
+                                                                             .get(currencyUnit)
+                                                                             .setScale(2)))
                                      .accountType(accountType.name())
-                                     .totalForAccountType(snapshot.getTotalForAccountType(accountType)
-                                                                  .get(currencyUnit)
-                                                                  .toString())
+                                     .totalForAccountType(DECIMAL_FORMAT.format(snapshot.getTotalForAccountType(
+                                             accountType).get(currencyUnit).setScale(2)))
                                      .build();
     }
 

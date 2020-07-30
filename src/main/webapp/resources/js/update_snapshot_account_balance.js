@@ -32,7 +32,8 @@ function submitAccountBalance(snapshotId, accountId) {
 function prepareAccountBalanceUpdateForm(theForm, snapshotId, accountId, amountSpan, newAmountInput) {
   theForm.submit(function(event) {
     event.preventDefault();
-    submitAccountBalance(snapshotId, accountId);
+    newAmountInput.hide();
+    amountSpan.show();
   });
 
   newAmountInput.focusout(function() {
@@ -40,14 +41,9 @@ function prepareAccountBalanceUpdateForm(theForm, snapshotId, accountId, amountS
     var newAmount = newAmountInput.val();
 
     if (currentAmount != newAmount) {
-      theForm.trigger('submit');
-    } else {
-      newAmountInput.hide();
-      amountSpan.show();
+      submitAccountBalance(snapshotId, accountId);
     }
-  });
 
-  theForm.submit(function() {
     newAmountInput.hide();
     amountSpan.show();
   });
