@@ -39,7 +39,7 @@
 
     <div class="text-center"><h4>Accounts</h4></div>
 
-    <div class="text-center"><a href="${contextPath}/newaccount">Add Account</a></div>
+    <div class="text-center"><a href="${contextPath}/newaccount">Create New Account</a></div>
 
     <h5>Assets</h5>
     <c:choose>

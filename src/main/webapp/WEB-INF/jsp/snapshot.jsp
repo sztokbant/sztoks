@@ -25,6 +25,8 @@
 
     <hr/>
 
+    <div class="text-center"><a href="${contextPath}/addaccounts/${snapshot.id}">Add Accounts to Snapshot</a></div>
+
     <h5>Assets</h5>
     <b>Total</b>
     <c:choose>

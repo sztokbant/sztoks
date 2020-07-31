@@ -1,22 +1,29 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.viewmodel.AccountViewModelOutput;
+import br.net.du.myequity.viewmodel.AddAccountsViewModelInput;
 import br.net.du.myequity.viewmodel.SnapshotViewModel;
 import br.net.du.myequity.viewmodel.UserViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.ASSET_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.LIABILITY_ACCOUNTS_KEY;
@@ -46,7 +53,6 @@ public class SnapshotController extends BaseController {
         final Snapshot snapshot = snapshotOpt.get();
 
         model.addAttribute(USER_KEY, UserViewModel.of(user));
-
         model.addAttribute(SNAPSHOT_KEY, SnapshotViewModel.of(snapshot));
 
         final Map<AccountType, List<AccountViewModelOutput>> accountViewModels = getAccountViewModels(snapshot);
@@ -54,5 +60,72 @@ public class SnapshotController extends BaseController {
         model.addAttribute(LIABILITY_ACCOUNTS_KEY, accountViewModels.get(AccountType.LIABILITY));
 
         return "snapshot";
+    }
+
+    @GetMapping("/addaccounts/{id}")
+    public String addAccounts(@PathVariable(value = "id") final Long snapshotId, final Model model) {
+        final User user = getCurrentUser();
+
+        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
+        if (!snapshotBelongsToUser(user, snapshotOpt)) {
+            // TODO Error message
+            return "redirect:/";
+        }
+
+        final Snapshot snapshot = snapshotOpt.get();
+        final List<Account> allUserAccounts = accountRepository.findByUser(user);
+
+        final List<AccountViewModelOutput> availableAssets = allUserAccounts.stream()
+                                                                            .filter(account -> account.getAccountType()
+                                                                                                      .equals(AccountType.ASSET) && !snapshot
+                                                                                    .getAccounts()
+                                                                                    .keySet()
+                                                                                    .contains(account))
+                                                                            .map(AccountViewModelOutput::of)
+                                                                            .collect(Collectors.toList());
+
+        final List<AccountViewModelOutput> availableLiabilities = allUserAccounts.stream()
+                                                                                 .filter(account -> account.getAccountType()
+                                                                                                           .equals(AccountType.LIABILITY) && !snapshot
+                                                                                         .getAccounts()
+                                                                                         .keySet()
+                                                                                         .contains(account))
+                                                                                 .map(AccountViewModelOutput::of)
+                                                                                 .collect(Collectors.toList());
+
+        model.addAttribute(USER_KEY, UserViewModel.of(user));
+        model.addAttribute(SNAPSHOT_KEY, SnapshotViewModel.of(snapshot));
+        model.addAttribute("assets", availableAssets);
+        model.addAttribute("liabilities", availableLiabilities);
+        model.addAttribute("addAccountsForm", new AddAccountsViewModelInput());
+
+        return "add_accounts";
+    }
+
+    @PostMapping("/addaccounts/{id}")
+    public String addAccounts(@PathVariable(value = "id") final Long snapshotId,
+                              @ModelAttribute(
+                                      "addAccountsForm") final AddAccountsViewModelInput addAccountsViewModelInput,
+                              final BindingResult bindingResult) {
+        final User user = getCurrentUser();
+
+        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
+        if (!snapshotBelongsToUser(user, snapshotOpt)) {
+            // TODO Error message
+            return "redirect:/";
+        }
+
+        if (!addAccountsViewModelInput.getAccounts().isEmpty()) {
+            final Snapshot snapshot = snapshotOpt.get();
+
+            final List<Account> allUserAccounts = accountRepository.findByUser(user);
+            allUserAccounts.stream()
+                           .filter(account -> addAccountsViewModelInput.getAccounts().contains(account.getId()))
+                           .forEach(account -> snapshot.putAccount(account, BigDecimal.ZERO));
+
+            snapshotRepository.save(snapshot);
+        }
+
+        return "redirect:/snapshot/" + snapshotId;
     }
 }

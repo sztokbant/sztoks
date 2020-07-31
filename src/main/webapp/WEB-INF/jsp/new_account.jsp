@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Sign Up</title>
+    <title>Create New Account</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
@@ -19,7 +19,7 @@
 
 <div class="container">
     <form:form method="POST" action="${contextPath}/newaccount" modelAttribute="accountForm" class="form-signin">
-        <h4 class="form-signin-heading">New Account</h4>
+        <h4 class="form-signin-heading">Create New Account</h4>
 
         <spring:bind path="name">
             <div class="form-group ${status.error ? 'has-error' : ''}">
