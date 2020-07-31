@@ -29,7 +29,7 @@ public class ControllerUtils {
         return accountOpt.isPresent() && snapshot.getAccount(accountOpt.get()) != null;
     }
 
-    public static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModels(final User user) {
+    public static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(final User user) {
         final Map<AccountType, SortedSet<Account>> accountsByType = user.getAccounts();
 
         final SortedSet<Account> assetAccounts = accountsByType.get(AccountType.ASSET);
@@ -45,7 +45,7 @@ public class ControllerUtils {
                                        liabilityAccounts.stream().map(AccountViewModelOutput::of).collect(toList()));
     }
 
-    public static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModels(final Snapshot snapshot) {
+    public static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(final Snapshot snapshot) {
         final Map<AccountType, Map<Account, BigDecimal>> accountsByType = snapshot.getAccountsByType();
 
         final Map<Account, BigDecimal> assetAccounts = accountsByType.get(AccountType.ASSET);
@@ -57,6 +57,7 @@ public class ControllerUtils {
                                        assetAccounts.entrySet()
                                                     .stream()
                                                     .map(AccountViewModelOutput::of)
+                                                    .sorted()
                                                     .collect(toList()),
                                AccountType.LIABILITY,
                                liabilityAccounts == null ?
@@ -64,6 +65,7 @@ public class ControllerUtils {
                                        liabilityAccounts.entrySet()
                                                         .stream()
                                                         .map(AccountViewModelOutput::of)
+                                                        .sorted()
                                                         .collect(toList()));
     }
 }

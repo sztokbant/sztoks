@@ -16,7 +16,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.ASSET_ACCOU
 import static br.net.du.myequity.controller.util.ControllerConstants.LIABILITY_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
-import static br.net.du.myequity.controller.util.ControllerUtils.getAccountViewModels;
+import static br.net.du.myequity.controller.util.ControllerUtils.getAccountViewModelOutputs;
 import static java.util.stream.Collectors.toList;
 
 @Controller
@@ -31,9 +31,9 @@ public class HomeController extends BaseController {
         final List<SnapshotViewModelOutput> snapshotViewModelOutputs =
                 user.getSnapshots().stream().map(SnapshotViewModelOutput::of).collect(toList());
 
-        final Map<AccountType, List<AccountViewModelOutput>> accountViewModels = getAccountViewModels(user);
-        model.addAttribute(ASSET_ACCOUNTS_KEY, accountViewModels.get(AccountType.ASSET));
-        model.addAttribute(LIABILITY_ACCOUNTS_KEY, accountViewModels.get(AccountType.LIABILITY));
+        final Map<AccountType, List<AccountViewModelOutput>> accountViewModelOutputs = getAccountViewModelOutputs(user);
+        model.addAttribute(ASSET_ACCOUNTS_KEY, accountViewModelOutputs.get(AccountType.ASSET));
+        model.addAttribute(LIABILITY_ACCOUNTS_KEY, accountViewModelOutputs.get(AccountType.LIABILITY));
 
         model.addAttribute(SNAPSHOTS_KEY, snapshotViewModelOutputs);
 

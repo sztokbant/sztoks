@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.controller.util.ControllerUtils;
 import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
@@ -29,7 +30,6 @@ import static br.net.du.myequity.controller.util.ControllerConstants.ASSET_ACCOU
 import static br.net.du.myequity.controller.util.ControllerConstants.LIABILITY_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
-import static br.net.du.myequity.controller.util.ControllerUtils.getAccountViewModels;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
 
 @Controller
@@ -55,7 +55,8 @@ public class SnapshotController extends BaseController {
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_KEY, SnapshotViewModelOutput.of(snapshot));
 
-        final Map<AccountType, List<AccountViewModelOutput>> accountViewModels = getAccountViewModels(snapshot);
+        final Map<AccountType, List<AccountViewModelOutput>> accountViewModels =
+                ControllerUtils.getAccountViewModelOutputs(snapshot);
         model.addAttribute(ASSET_ACCOUNTS_KEY, accountViewModels.get(AccountType.ASSET));
         model.addAttribute(LIABILITY_ACCOUNTS_KEY, accountViewModels.get(AccountType.LIABILITY));
 

@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Data
 @Builder
-public class AccountViewModelOutput {
+public class AccountViewModelOutput implements Comparable<AccountViewModelOutput> {
     private final Long id;
     private final String name;
     private final boolean isClosed;
@@ -35,5 +35,12 @@ public class AccountViewModelOutput {
                                      .id(account.getId())
                                      .name(account.getName())
                                      .isClosed(account.isClosed());
+    }
+
+    @Override
+    public int compareTo(final AccountViewModelOutput other) {
+        return this.balanceCurrencyUnit.equals(other.getBalanceCurrencyUnit()) ?
+                this.name.compareTo(other.name) :
+                this.balanceCurrencyUnit.compareTo(other.getBalanceCurrencyUnit());
     }
 }
