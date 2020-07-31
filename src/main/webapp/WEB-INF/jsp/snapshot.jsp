@@ -27,59 +27,62 @@
 
     <div class="text-center"><a href="${contextPath}/addaccounts/${snapshot.id}">Add Accounts to Snapshot</a></div>
 
-    <h5>Assets</h5>
-    <b>Total</b>
-    <c:choose>
-        <c:when test="${not empty snapshot.assetsBalance}">
-            <c:forEach items="${snapshot.assetsBalance}" var="entry">
-                <div>
-                    ${entry.key} <span id="total_ASSET_${entry.key}">${entry.value}</span><br>
+    <div class="row">
+        <div class="col" style="background: lightpink;">
+            <div class="text-center">
+                <h5>Assets</h5>
+                <b>Total</b>
+                <c:choose>
+                    <c:when test="${not empty snapshot.assetsBalance}">
+                        <c:forEach items="${snapshot.assetsBalance}" var="entry">
+                            <div>
+                                ${entry.key} <span id="total_ASSET_${entry.key}">${entry.value}</span><br>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        0.00
+                    </c:otherwise>
+                </c:choose>
+            </div>
+
+            <br/>
+
+            <c:forEach var="account" items="${assetAccounts}">
+                <div class="row">
+                    <%@ include file="_snapshot_account_balance.jsp" %>
                 </div>
             </c:forEach>
-        </c:when>
-        <c:otherwise>
-            0.00
-        </c:otherwise>
-    </c:choose>
-
-    <br/>
-
-    <c:forEach var="account" items="${assetAccounts}">
-        <div>
-            <%@ include file="_snapshot_account_balance.jsp" %>
         </div>
-    </c:forEach>
+        <div class="col" style="background: lightblue;">
+            <div class="text-center">
+                <h5>Liabilities</h5>
+                <b>Total</b>
+                <c:choose>
+                    <c:when test="${not empty snapshot.liabilitiesBalance}">
+                        <c:forEach items="${snapshot.liabilitiesBalance}" var="entry">
+                            <div>
+                                ${entry.key} <span id="total_LIABILITY_${entry.key}">${entry.value}</span><br>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        0.00
+                    </c:otherwise>
+                </c:choose>
+            </div>
 
-    <hr/>
+            <br/>
 
-    <h5>Liabilities</h5>
-    <b>Total</b>
-    <c:choose>
-        <c:when test="${not empty snapshot.liabilitiesBalance}">
-            <c:forEach items="${snapshot.liabilitiesBalance}" var="entry">
-                <div>
-                    ${entry.key} <span id="total_LIABILITY_${entry.key}">${entry.value}</span><br>
+            <c:forEach var="account" items="${liabilityAccounts}">
+                <div class="row">
+                    <%@ include file="_snapshot_account_balance.jsp" %>
                 </div>
             </c:forEach>
-        </c:when>
-        <c:otherwise>
-            0.00
-        </c:otherwise>
-    </c:choose>
-
-    <br/>
-
-    <c:forEach var="account" items="${liabilityAccounts}">
-        <div>
-            <%@ include file="_snapshot_account_balance.jsp" %>
         </div>
-    </c:forEach>
-
-    <hr/>
-
-    <div class="text-center">
-        <a class="btn btn-default" href="/">Back</a>
     </div>
+
+    <div class="text-center"><a href="/">Back</a></div>
 </div>
 </body>
 </html>

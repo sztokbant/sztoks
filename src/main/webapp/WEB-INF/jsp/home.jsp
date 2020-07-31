@@ -37,39 +37,42 @@
 
     <hr/>
 
-    <div class="text-center"><h4>Accounts</h4></div>
+    <h4 class="text-center">Accounts</h4>
 
     <div class="text-center"><a href="${contextPath}/newaccount">Create New Account</a></div>
 
-    <h5>Assets</h5>
-    <c:choose>
-        <c:when test="${empty assetAccounts}">
-            <div>No assets.</div>
-        </c:when>
-        <c:otherwise>
-            <ul>
-                <c:forEach var="account" items="${assetAccounts}">
-                    <%@ include file="_account.jsp" %>
-                </c:forEach>
-            </ul>
-        </c:otherwise>
-    </c:choose>
-
-    <br/>
-
-    <h5>Liabilities</h5>
-    <c:choose>
-        <c:when test="${empty liabilityAccounts}">
-            <div>No liabilities.</div>
-        </c:when>
-        <c:otherwise>
-            <ul>
-                <c:forEach var="account" items="${liabilityAccounts}">
-                    <%@ include file="_account.jsp" %>
-                </c:forEach>
-            </ul>
-        </c:otherwise>
-    </c:choose>
+    <div class="row">
+        <div class="col" style="background: lightpink;">
+            <h5 class="text-center">Assets</h5>
+            <c:choose>
+                <c:when test="${empty assetAccounts}">
+                    <div>No assets.</div>
+                </c:when>
+                <c:otherwise>
+                    <ul>
+                        <c:forEach var="account" items="${assetAccounts}">
+                            <%@ include file="_account.jsp" %>
+                        </c:forEach>
+                    </ul>
+                </c:otherwise>
+            </c:choose>
+        </div>
+        <div class="col" style="background: lightblue;">
+            <h5 class="text-center">Liabilities</h5>
+            <c:choose>
+                <c:when test="${empty liabilityAccounts}">
+                    <div>No liabilities.</div>
+                </c:when>
+                <c:otherwise>
+                    <ul>
+                        <c:forEach var="account" items="${liabilityAccounts}">
+                            <%@ include file="_account.jsp" %>
+                        </c:forEach>
+                    </ul>
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </div>
 </div>
 </body>
 </html>
