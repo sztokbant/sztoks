@@ -4,7 +4,7 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.UserRepository;
 import br.net.du.myequity.validator.AccountViewModelInputValidator;
 import br.net.du.myequity.viewmodel.AccountViewModelInput;
-import br.net.du.myequity.viewmodel.UserViewModel;
+import br.net.du.myequity.viewmodel.UserViewModelOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +26,7 @@ public class AccountController extends BaseController {
     @GetMapping("/newaccount")
     public String newAccount(final Model model) {
         final User user = getCurrentUser();
-        model.addAttribute(USER_KEY, UserViewModel.of(user));
+        model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
 
         model.addAttribute("accountForm", new AccountViewModelInput());
 

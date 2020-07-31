@@ -3,8 +3,8 @@ package br.net.du.myequity.controller;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.viewmodel.AccountViewModelOutput;
-import br.net.du.myequity.viewmodel.SnapshotViewModel;
-import br.net.du.myequity.viewmodel.UserViewModel;
+import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
+import br.net.du.myequity.viewmodel.UserViewModelOutput;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,16 +26,16 @@ public class HomeController extends BaseController {
     public String get(final Model model) {
         final User user = getCurrentUser();
 
-        model.addAttribute(USER_KEY, UserViewModel.of(user));
+        model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
 
-        final List<SnapshotViewModel> snapshotViewModels =
-                user.getSnapshots().stream().map(SnapshotViewModel::of).collect(toList());
+        final List<SnapshotViewModelOutput> snapshotViewModelOutputs =
+                user.getSnapshots().stream().map(SnapshotViewModelOutput::of).collect(toList());
 
         final Map<AccountType, List<AccountViewModelOutput>> accountViewModels = getAccountViewModels(user);
         model.addAttribute(ASSET_ACCOUNTS_KEY, accountViewModels.get(AccountType.ASSET));
         model.addAttribute(LIABILITY_ACCOUNTS_KEY, accountViewModels.get(AccountType.LIABILITY));
 
-        model.addAttribute(SNAPSHOTS_KEY, snapshotViewModels);
+        model.addAttribute(SNAPSHOTS_KEY, snapshotViewModelOutputs);
 
         return "home";
     }

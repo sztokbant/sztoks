@@ -6,8 +6,8 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.service.UserService;
-import br.net.du.myequity.viewmodel.SnapshotViewModel;
-import br.net.du.myequity.viewmodel.UserViewModel;
+import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
+import br.net.du.myequity.viewmodel.UserViewModelOutput;
 import com.google.common.collect.ImmutableMap;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
@@ -146,8 +146,8 @@ class SnapshotControllerTest {
 
         final MvcResult mvcResult = resultActions.andReturn();
         assertEquals("snapshot", mvcResult.getModelAndView().getViewName());
-        assertEquals(UserViewModel.of(user), mvcResult.getModelAndView().getModel().get("user"));
+        assertEquals(UserViewModelOutput.of(user), mvcResult.getModelAndView().getModel().get("user"));
 
-        assertEquals(SnapshotViewModel.of(snapshot), mvcResult.getModelAndView().getModel().get("snapshot"));
+        assertEquals(SnapshotViewModelOutput.of(snapshot), mvcResult.getModelAndView().getModel().get("snapshot"));
     }
 }

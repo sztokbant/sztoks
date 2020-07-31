@@ -8,8 +8,8 @@ import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.viewmodel.AccountViewModelOutput;
 import br.net.du.myequity.viewmodel.AddAccountsViewModelInput;
-import br.net.du.myequity.viewmodel.SnapshotViewModel;
-import br.net.du.myequity.viewmodel.UserViewModel;
+import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
+import br.net.du.myequity.viewmodel.UserViewModelOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,8 +52,8 @@ public class SnapshotController extends BaseController {
 
         final Snapshot snapshot = snapshotOpt.get();
 
-        model.addAttribute(USER_KEY, UserViewModel.of(user));
-        model.addAttribute(SNAPSHOT_KEY, SnapshotViewModel.of(snapshot));
+        model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
+        model.addAttribute(SNAPSHOT_KEY, SnapshotViewModelOutput.of(snapshot));
 
         final Map<AccountType, List<AccountViewModelOutput>> accountViewModels = getAccountViewModels(snapshot);
         model.addAttribute(ASSET_ACCOUNTS_KEY, accountViewModels.get(AccountType.ASSET));
@@ -93,8 +93,8 @@ public class SnapshotController extends BaseController {
                                                                                  .map(AccountViewModelOutput::of)
                                                                                  .collect(Collectors.toList());
 
-        model.addAttribute(USER_KEY, UserViewModel.of(user));
-        model.addAttribute(SNAPSHOT_KEY, SnapshotViewModel.of(snapshot));
+        model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
+        model.addAttribute(SNAPSHOT_KEY, SnapshotViewModelOutput.of(snapshot));
         model.addAttribute("assets", availableAssets);
         model.addAttribute("liabilities", availableLiabilities);
         model.addAttribute("addAccountsForm", new AddAccountsViewModelInput());

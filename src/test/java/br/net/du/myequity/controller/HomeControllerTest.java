@@ -3,8 +3,8 @@ package br.net.du.myequity.controller;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.UserService;
-import br.net.du.myequity.viewmodel.SnapshotViewModel;
-import br.net.du.myequity.viewmodel.UserViewModel;
+import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
+import br.net.du.myequity.viewmodel.UserViewModelOutput;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,8 +76,8 @@ class HomeControllerTest {
 
         final MvcResult mvcResult = resultActions.andReturn();
         assertEquals("home", mvcResult.getModelAndView().getViewName());
-        assertEquals(UserViewModel.of(user), mvcResult.getModelAndView().getModel().get("user"));
-        assertEquals(ImmutableList.of(SnapshotViewModel.of(snapshot)),
+        assertEquals(UserViewModelOutput.of(user), mvcResult.getModelAndView().getModel().get("user"));
+        assertEquals(ImmutableList.of(SnapshotViewModelOutput.of(snapshot)),
                      mvcResult.getModelAndView().getModel().get("snapshots"));
     }
 }
