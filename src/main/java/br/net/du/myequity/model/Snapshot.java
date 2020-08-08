@@ -2,31 +2,38 @@ package br.net.du.myequity.model;
 
 import br.net.du.myequity.util.NetWorthUtil;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedSet;
 import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import org.hibernate.annotations.SortNatural;
 import org.joda.money.CurrencyUnit;
 
-import javax.persistence.CollectionTable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toSet;
 
 @Entity
 @Table(name = "snapshots", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "date"}))
@@ -47,54 +54,54 @@ public class Snapshot implements Comparable<Snapshot> {
     @Setter
     private LocalDate date;
 
-    @ElementCollection
-    @CollectionTable(name = "account_snapshots")
-    @MapKeyJoinColumn(name = "account_id")
-    @Column(name = "balance_amount", nullable = false)
-    private Map<Account, BigDecimal> accounts = new HashMap<>();
+    @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, orphanRemoval = true)
+    @SortNatural // Ref.: https://thorben-janssen.com/ordering-vs-sorting-hibernate-use/
+    private SortedSet<AccountSnapshotMetadata> accountSnapshotMetadataSet = new TreeSet<>();
 
-    public Snapshot(final LocalDate date, @NotNull final Map<Account, BigDecimal> accounts) {
+    public Snapshot(final LocalDate date,
+                    @NotNull final SortedSet<AccountSnapshotMetadata> accountSnapshotMetadataSet) {
         this.date = date;
-        this.accounts.putAll(accounts);
+        this.accountSnapshotMetadataSet.addAll(accountSnapshotMetadataSet);
     }
 
-    // TODO May never be used
-    public Map<Account, BigDecimal> getAccounts() {
-        return ImmutableMap.copyOf(accounts);
+    // TODO May never be used beyond unit-tests
+    public SortedSet<AccountSnapshotMetadata> getAccountSnapshotMetadataSet() {
+        return ImmutableSortedSet.copyOf(accountSnapshotMetadataSet);
     }
 
-    public Map<AccountType, Map<Account, BigDecimal>> getAccountsByType() {
-        final Map<AccountType, ImmutableMap.Builder<Account, BigDecimal>> buildersMap = new HashMap<>();
+    public Map<AccountType, SortedSet<AccountSnapshotMetadata>> getAccountSnapshotMetadataByType() {
+        return accountSnapshotMetadataSet.stream()
+                                         .collect(collectingAndThen(groupingBy(accountSnapshotData -> accountSnapshotData
+                                                                                       .getAccount()
+                                                                                       .getAccountType(),
+                                                                               collectingAndThen(toSet(),
+                                                                                                 ImmutableSortedSet::copyOf)),
+                                                                    ImmutableMap::copyOf));
+    }
 
-        for (final Map.Entry<Account, BigDecimal> entry : accounts.entrySet()) {
-            final AccountType accountType = entry.getKey().getAccountType();
+    public Optional<AccountSnapshotMetadata> getAccountSnapshotMetadataFor(@NonNull final Account account) {
+        return accountSnapshotMetadataSet.stream().filter(entry -> account.equals(entry.getAccount())).findFirst();
+    }
 
-            if (!buildersMap.containsKey(accountType)) {
-                buildersMap.put(accountType, ImmutableMap.builder());
-            }
+    public void addAccountSnapshotMetadata(@NonNull final AccountSnapshotMetadata accountSnapshotMetadata) {
+        // Prevents infinite loop
+        if (accountSnapshotMetadataSet.contains(accountSnapshotMetadata)) {
+            return;
+        }
+        accountSnapshotMetadataSet.add(accountSnapshotMetadata);
+        accountSnapshotMetadata.setSnapshot(this);
+    }
 
-            buildersMap.get(accountType).put(entry.getKey(), entry.getValue());
+    public void removeAccountSnapshotMetadataFor(@NonNull final Account account) {
+        // Prevents infinite loop
+        final Optional<AccountSnapshotMetadata> accountSnapshotDataOpt = getAccountSnapshotMetadataFor(account);
+        if (!accountSnapshotDataOpt.isPresent()) {
+            return;
         }
 
-        final ImmutableMap.Builder<AccountType, Map<Account, BigDecimal>> accountsByTypeBuilder =
-                ImmutableMap.builder();
-        for (final Map.Entry<AccountType, ImmutableMap.Builder<Account, BigDecimal>> entry : buildersMap.entrySet()) {
-            accountsByTypeBuilder.put(entry.getKey(), entry.getValue().build());
-        }
-
-        return accountsByTypeBuilder.build();
-    }
-
-    public BigDecimal getAccount(@NonNull final Account account) {
-        return accounts.get(account);
-    }
-
-    public void putAccount(@NonNull final Account account, @NonNull final BigDecimal balance) {
-        accounts.put(account, balance);
-    }
-
-    public void removeAccount(@NonNull final Account account) {
-        accounts.remove(account);
+        final AccountSnapshotMetadata accountSnapshotMetadata = accountSnapshotDataOpt.get();
+        accountSnapshotMetadataSet.remove(accountSnapshotMetadata);
+        accountSnapshotMetadata.setSnapshot(null);
     }
 
     public void setUser(final User user) {
@@ -122,16 +129,15 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     public Map<CurrencyUnit, BigDecimal> getNetWorth() {
-        return NetWorthUtil.computeByCurrency(accounts.entrySet().stream().collect(Collectors.toSet()));
+        return NetWorthUtil.computeByCurrency(accountSnapshotMetadataSet);
     }
 
     public Map<CurrencyUnit, BigDecimal> getTotalForAccountType(@NonNull final AccountType accountType) {
-        return NetWorthUtil.computeByCurrency(accounts.entrySet()
-                                                      .stream()
-                                                      .filter(entry -> entry.getKey()
-                                                                            .getAccountType()
-                                                                            .equals(accountType))
-                                                      .collect(Collectors.toSet()));
+        return NetWorthUtil.computeByCurrency(accountSnapshotMetadataSet.stream()
+                                                                        .filter(entry -> entry.getAccount()
+                                                                                              .getAccountType()
+                                                                                              .equals(accountType))
+                                                                        .collect(Collectors.toSet()));
     }
 
     @Override

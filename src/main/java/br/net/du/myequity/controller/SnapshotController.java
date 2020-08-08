@@ -2,6 +2,7 @@ package br.net.du.myequity.controller;
 
 import br.net.du.myequity.controller.util.ControllerUtils;
 import br.net.du.myequity.model.Account;
+import br.net.du.myequity.model.AccountSnapshotMetadata;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
@@ -79,18 +80,18 @@ public class SnapshotController extends BaseController {
         final List<AccountViewModelOutput> availableAssets = allUserAccounts.stream()
                                                                             .filter(account -> account.getAccountType()
                                                                                                       .equals(AccountType.ASSET) && !snapshot
-                                                                                    .getAccounts()
-                                                                                    .keySet()
-                                                                                    .contains(account))
+                                                                                    .getAccountSnapshotMetadataFor(
+                                                                                            account)
+                                                                                    .isPresent())
                                                                             .map(AccountViewModelOutput::of)
                                                                             .collect(Collectors.toList());
 
         final List<AccountViewModelOutput> availableLiabilities = allUserAccounts.stream()
                                                                                  .filter(account -> account.getAccountType()
                                                                                                            .equals(AccountType.LIABILITY) && !snapshot
-                                                                                         .getAccounts()
-                                                                                         .keySet()
-                                                                                         .contains(account))
+                                                                                         .getAccountSnapshotMetadataFor(
+                                                                                                 account)
+                                                                                         .isPresent())
                                                                                  .map(AccountViewModelOutput::of)
                                                                                  .collect(Collectors.toList());
 
@@ -122,7 +123,8 @@ public class SnapshotController extends BaseController {
             final List<Account> allUserAccounts = accountRepository.findByUser(user);
             allUserAccounts.stream()
                            .filter(account -> addAccountsViewModelInput.getAccounts().contains(account.getId()))
-                           .forEach(account -> snapshot.putAccount(account, BigDecimal.ZERO));
+                           .forEach(account -> snapshot.addAccountSnapshotMetadata(new AccountSnapshotMetadata(account,
+                                                                                                               BigDecimal.ZERO)));
 
             snapshotRepository.save(snapshot);
         }

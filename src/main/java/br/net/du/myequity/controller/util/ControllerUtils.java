@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller.util;
 
 import br.net.du.myequity.model.Account;
+import br.net.du.myequity.model.AccountSnapshotMetadata;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
@@ -8,7 +9,6 @@ import br.net.du.myequity.viewmodel.AccountViewModelOutput;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,7 +26,7 @@ public class ControllerUtils {
     }
 
     public static boolean accountBelongsInSnapshot(final Snapshot snapshot, final Optional<Account> accountOpt) {
-        return accountOpt.isPresent() && snapshot.getAccount(accountOpt.get()) != null;
+        return accountOpt.isPresent() && snapshot.getAccountSnapshotMetadataFor(accountOpt.get()).isPresent();
     }
 
     public static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(final User user) {
@@ -46,24 +46,23 @@ public class ControllerUtils {
     }
 
     public static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(final Snapshot snapshot) {
-        final Map<AccountType, Map<Account, BigDecimal>> accountsByType = snapshot.getAccountsByType();
+        final Map<AccountType, SortedSet<AccountSnapshotMetadata>> accountsByType =
+                snapshot.getAccountSnapshotMetadataByType();
 
-        final Map<Account, BigDecimal> assetAccounts = accountsByType.get(AccountType.ASSET);
-        final Map<Account, BigDecimal> liabilityAccounts = accountsByType.get(AccountType.LIABILITY);
+        final SortedSet<AccountSnapshotMetadata> assetAccounts = accountsByType.get(AccountType.ASSET);
+        final SortedSet<AccountSnapshotMetadata> liabilityAccounts = accountsByType.get(AccountType.LIABILITY);
 
         return ImmutableMap.of(AccountType.ASSET,
                                assetAccounts == null ?
                                        ImmutableList.of() :
-                                       assetAccounts.entrySet()
-                                                    .stream()
+                                       assetAccounts.stream()
                                                     .map(AccountViewModelOutput::of)
                                                     .sorted()
                                                     .collect(toList()),
                                AccountType.LIABILITY,
                                liabilityAccounts == null ?
                                        ImmutableList.of() :
-                                       liabilityAccounts.entrySet()
-                                                        .stream()
+                                       liabilityAccounts.stream()
                                                         .map(AccountViewModelOutput::of)
                                                         .sorted()
                                                         .collect(toList()));

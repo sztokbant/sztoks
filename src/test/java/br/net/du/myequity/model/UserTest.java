@@ -1,6 +1,6 @@
 package br.net.du.myequity.model;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedSet;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class UserTest {
         liabilityAccount = new Account("Liability Account", AccountType.LIABILITY, CurrencyUnit.USD);
         liabilityAccount.setId(7L);
 
-        snapshot = new Snapshot(LocalDate.now(), ImmutableMap.of());
+        snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
         snapshot.setId(42L);
     }
 
@@ -223,13 +223,13 @@ class UserTest {
     @Test
     public void compareTo_snapshotsAreOrderedByDateDescending() {
         // GIVEN
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 05), ImmutableMap.of()));
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 03), ImmutableMap.of()));
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 06), ImmutableMap.of()));
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 07), ImmutableMap.of()));
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 01), ImmutableMap.of()));
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 02), ImmutableMap.of()));
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 04), ImmutableMap.of()));
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 05), ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 03), ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 06), ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 07), ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 01), ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 02), ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 04), ImmutableSortedSet.of()));
 
         // WHEN
         final Iterator<Snapshot> iterator = user.getSnapshots().iterator();

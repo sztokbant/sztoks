@@ -3,7 +3,7 @@ package br.net.du.myequity.service;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.UserRepository;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     public void save(final User user) {
         if (user.getId() == null) {
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            user.addSnapshot(new Snapshot(LocalDate.now(), ImmutableMap.of()));
+            user.addSnapshot(new Snapshot(LocalDate.now(), ImmutableSortedSet.of()));
         }
         userRepository.save(user);
     }

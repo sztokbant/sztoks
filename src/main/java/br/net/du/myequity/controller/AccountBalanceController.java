@@ -1,10 +1,12 @@
 package br.net.du.myequity.controller;
 
 import br.net.du.myequity.model.Account;
+import br.net.du.myequity.model.AccountSnapshotMetadata;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.AccountRepository;
+import br.net.du.myequity.persistence.AccountSnapshotMetadataRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import lombok.Builder;
 import lombok.Data;
@@ -32,6 +34,9 @@ public class AccountBalanceController extends BaseController {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private AccountSnapshotMetadataRepository accountSnapshotMetadataRepository;
+
     @PostMapping("/accountbalance")
     public AccountBalanceResponse post(@RequestBody final AccountBalanceJsonRequest accountBalanceJsonRequest) {
         final User user = getCurrentUser();
@@ -49,18 +54,17 @@ public class AccountBalanceController extends BaseController {
             return AccountBalanceResponse.builder().hasError(true).build();
         }
 
-        final Account account = accountOpt.get();
+        final AccountSnapshotMetadata accountSnapshotMetadata =
+                accountSnapshotMetadataRepository.findByAccountId(accountBalanceJsonRequest.getAccountId()).get();
+        accountSnapshotMetadata.setAmount(accountBalanceJsonRequest.getBalance());
+        accountSnapshotMetadataRepository.save(accountSnapshotMetadata);
 
-        snapshot.putAccount(account, accountBalanceJsonRequest.getBalance());
-
-        snapshotRepository.save(snapshot);
-
-        final CurrencyUnit currencyUnit = account.getCurrencyUnit();
-        final AccountType accountType = account.getAccountType();
+        final CurrencyUnit currencyUnit = accountSnapshotMetadata.getAccount().getCurrencyUnit();
+        final AccountType accountType = accountSnapshotMetadata.getAccount().getAccountType();
 
         return AccountBalanceResponse.builder()
                                      .hasError(false)
-                                     .balance(DECIMAL_FORMAT.format(snapshot.getAccount(account).setScale(2)))
+                                     .balance(DECIMAL_FORMAT.format(accountSnapshotMetadata.getAmount().setScale(2)))
                                      .currencyUnit(currencyUnit.toString())
                                      .netWorth(DECIMAL_FORMAT.format(snapshot.getNetWorth()
                                                                              .get(currencyUnit)

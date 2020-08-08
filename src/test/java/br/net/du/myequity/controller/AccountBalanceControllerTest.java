@@ -1,15 +1,17 @@
 package br.net.du.myequity.controller;
 
 import br.net.du.myequity.model.Account;
+import br.net.du.myequity.model.AccountSnapshotMetadata;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.AccountRepository;
+import br.net.du.myequity.persistence.AccountSnapshotMetadataRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedSet;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,6 +74,9 @@ class AccountBalanceControllerTest {
     @MockBean
     private AccountRepository accountRepository;
 
+    @MockBean
+    private AccountSnapshotMetadataRepository accountSnapshotMetadataRepository;
+
     private String requestContent;
 
     private User user;
@@ -85,7 +90,7 @@ class AccountBalanceControllerTest {
         user = buildUser();
 
         // WHEN
-        snapshot = new Snapshot(LocalDate.now(), ImmutableMap.of());
+        snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
         account = new Account("Mortgage", ACCOUNT_TYPE, CURRENCY_UNIT, LocalDate.now());
@@ -296,12 +301,17 @@ class AccountBalanceControllerTest {
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        snapshot.putAccount(account, CURRENT_BALANCE);
+        final AccountSnapshotMetadata accountSnapshotMetadata = new AccountSnapshotMetadata(account, CURRENT_BALANCE);
+        accountSnapshotMetadata.setId(108L);
+        snapshot.addAccountSnapshotMetadata(accountSnapshotMetadata);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+
+        when(accountSnapshotMetadataRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.of(
+                accountSnapshotMetadata));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)

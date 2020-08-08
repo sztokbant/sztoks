@@ -8,7 +8,7 @@ import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.service.UserService;
 import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
 import br.net.du.myequity.viewmodel.UserViewModelOutput;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedSet;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,7 +65,7 @@ class SnapshotControllerTest {
         anotherUser = buildUser();
         anotherUser.setId(user.getId() * 7);
 
-        snapshot = new Snapshot(LocalDate.now(), ImmutableMap.of());
+        snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
         account = new Account("Mortgage", AccountType.ASSET, CurrencyUnit.USD, LocalDate.now());

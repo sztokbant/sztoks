@@ -6,7 +6,7 @@ import br.net.du.myequity.service.UserService;
 import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
 import br.net.du.myequity.viewmodel.UserViewModelOutput;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ class HomeControllerTest {
     @BeforeEach
     public void setUp() throws Exception {
         user = buildUser();
-        snapshot = new Snapshot(LocalDate.now(), ImmutableMap.of());
+        snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
     }
 

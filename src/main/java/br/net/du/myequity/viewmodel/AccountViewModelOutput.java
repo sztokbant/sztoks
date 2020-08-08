@@ -1,12 +1,12 @@
 package br.net.du.myequity.viewmodel;
 
 import br.net.du.myequity.model.Account;
+import br.net.du.myequity.model.AccountSnapshotMetadata;
 import lombok.Builder;
 import lombok.Data;
 import org.joda.money.CurrencyUnit;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 @Data
 @Builder
@@ -17,9 +17,9 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
     private final CurrencyUnit balanceCurrencyUnit;
     private final BigDecimal balanceAmount;
 
-    public static AccountViewModelOutput of(final Map.Entry<Account, BigDecimal> entry) {
-        final Account account = entry.getKey();
-        final BigDecimal amount = entry.getValue();
+    public static AccountViewModelOutput of(final AccountSnapshotMetadata accountSnapshotMetadata) {
+        final Account account = accountSnapshotMetadata.getAccount();
+        final BigDecimal amount = accountSnapshotMetadata.getAmount();
 
         return getAccountViewModelBuilderCommon(account).balanceCurrencyUnit(account.getCurrencyUnit())
                                                         .balanceAmount(amount)

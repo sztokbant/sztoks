@@ -1,16 +1,15 @@
 package br.net.du.myequity.util;
 
 import br.net.du.myequity.model.Account;
+import br.net.du.myequity.model.AccountSnapshotMetadata;
 import br.net.du.myequity.model.AccountType;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSortedSet;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.AbstractMap;
 import java.util.Map;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,12 +34,13 @@ class NetWorthUtilTest {
     @Test
     public void computeByCurrency_fromAccountSet_singleCurrency() {
         // GIVEN
-        final Set<Map.Entry<Account, BigDecimal>> accounts =
-                ImmutableSet.of((Map.Entry) new AbstractMap.SimpleEntry<>(assetAccount, assetAmount),
-                                (Map.Entry) new AbstractMap.SimpleEntry<>(liabilityAccount, liabilityAmount));
+        final ImmutableSortedSet<AccountSnapshotMetadata> accountSnapshotMetadata =
+                ImmutableSortedSet.of(new AccountSnapshotMetadata(assetAccount, assetAmount),
+                                      new AccountSnapshotMetadata(liabilityAccount, liabilityAmount));
 
         // WHEN
-        final Map<CurrencyUnit, BigDecimal> netWorthByCurrency = NetWorthUtil.computeByCurrency(accounts);
+        final Map<CurrencyUnit, BigDecimal> netWorthByCurrency =
+                NetWorthUtil.computeByCurrency(accountSnapshotMetadata);
 
         // THEN
         assertEquals(1, netWorthByCurrency.size());
@@ -58,14 +58,15 @@ class NetWorthUtilTest {
         final Account brlLiability = new Account("BRL Liability Account", AccountType.LIABILITY, brl);
         final BigDecimal brlLiabilityAmount = new BigDecimal("150000.00");
 
-        final Set<Map.Entry<Account, BigDecimal>> accounts =
-                ImmutableSet.of((Map.Entry) new AbstractMap.SimpleEntry<>(assetAccount, assetAmount),
-                                (Map.Entry) new AbstractMap.SimpleEntry<>(liabilityAccount, liabilityAmount),
-                                (Map.Entry) new AbstractMap.SimpleEntry<>(brlAsset, brlAssetAmount),
-                                (Map.Entry) new AbstractMap.SimpleEntry<>(brlLiability, brlLiabilityAmount));
+        final ImmutableSortedSet<AccountSnapshotMetadata> accountSnapshotMetadata =
+                ImmutableSortedSet.of(new AccountSnapshotMetadata(assetAccount, assetAmount),
+                                      new AccountSnapshotMetadata(liabilityAccount, liabilityAmount),
+                                      new AccountSnapshotMetadata(brlAsset, brlAssetAmount),
+                                      new AccountSnapshotMetadata(brlLiability, brlLiabilityAmount));
 
         // WHEN
-        final Map<CurrencyUnit, BigDecimal> netWorthByCurrency = NetWorthUtil.computeByCurrency(accounts);
+        final Map<CurrencyUnit, BigDecimal> netWorthByCurrency =
+                NetWorthUtil.computeByCurrency(accountSnapshotMetadata);
 
         // THEN
         assertEquals(2, netWorthByCurrency.size());
