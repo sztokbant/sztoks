@@ -8,6 +8,7 @@ import org.joda.money.CurrencyUnit;
 
 import java.math.BigDecimal;
 
+// TODO This class should be split into Asset and Liability
 @Data
 @Builder
 public class AccountViewModelOutput implements Comparable<AccountViewModelOutput> {
@@ -16,13 +17,22 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
     private final boolean isClosed;
     private final CurrencyUnit balanceCurrencyUnit;
     private final BigDecimal balanceAmount;
+    private final BigDecimal total;
+    private final BigDecimal shares;
+    private final BigDecimal totalCreditAvailable;
+    private final BigDecimal currentCreditAvailable;
+    private final BigDecimal lastStatementBalance;
 
     public static AccountViewModelOutput of(final AccountSnapshotMetadata accountSnapshotMetadata) {
         final Account account = accountSnapshotMetadata.getAccount();
-        final BigDecimal amount = accountSnapshotMetadata.getAmount();
 
         return getAccountViewModelBuilderCommon(account).balanceCurrencyUnit(account.getCurrencyUnit())
-                                                        .balanceAmount(amount)
+                                                        .balanceAmount(accountSnapshotMetadata.getAmount())
+                                                        .total(accountSnapshotMetadata.getTotal())
+                                                        .shares(accountSnapshotMetadata.getShares())
+                                                        .totalCreditAvailable(accountSnapshotMetadata.getTotalCreditAvailable())
+                                                        .currentCreditAvailable(accountSnapshotMetadata.getCurrentCreditAvailable())
+                                                        .lastStatementBalance(accountSnapshotMetadata.getLastStatementBalance())
                                                         .build();
     }
 

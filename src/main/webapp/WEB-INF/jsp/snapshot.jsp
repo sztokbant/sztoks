@@ -50,7 +50,7 @@
 
             <c:forEach var="account" items="${assetAccounts}">
                 <div class="row">
-                    <%@ include file="_snapshot_account_balance.jsp" %>
+                    <%@ include file="_snapshot_asset_balance.jsp" %>
                 </div>
             </c:forEach>
         </div>
@@ -76,7 +76,7 @@
 
             <c:forEach var="account" items="${liabilityAccounts}">
                 <div class="row">
-                    <%@ include file="_snapshot_account_balance.jsp" %>
+                    <%@ include file="_snapshot_liability_balance.jsp" %>
                 </div>
             </c:forEach>
         </div>

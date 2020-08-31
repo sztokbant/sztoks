@@ -301,7 +301,8 @@ class AccountBalanceControllerTest {
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final AccountSnapshotMetadata accountSnapshotMetadata = new AccountSnapshotMetadata(account, CURRENT_BALANCE);
+        final AccountSnapshotMetadata
+                accountSnapshotMetadata = new AccountSnapshotMetadata(account, CURRENT_BALANCE);
         accountSnapshotMetadata.setId(108L);
         snapshot.addAccountSnapshotMetadata(accountSnapshotMetadata);
 

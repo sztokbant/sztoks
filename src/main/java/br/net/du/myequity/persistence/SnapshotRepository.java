@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+// TODO Create a Service
 public interface SnapshotRepository extends JpaRepository<Snapshot, Long> {
     List<Snapshot> findAllByUser(User user);
 }

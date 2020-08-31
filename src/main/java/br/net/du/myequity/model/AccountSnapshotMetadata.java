@@ -40,13 +40,48 @@ public class AccountSnapshotMetadata implements Comparable<AccountSnapshotMetada
     @Setter
     private BigDecimal amount;
 
-    @Column(nullable = false)
+    // ASSET PROPERTIES
+
+    @Column(nullable = true)
+    @Getter
+    @Setter
     private BigDecimal shares;
+
+    @Column(nullable = true)
+    @Getter
+    @Setter
+    private BigDecimal initialInvestment;
+
+    // LIABILITY PROPERTIES
+
+    @Column(nullable = true)
+    @Getter
+    @Setter
+    private BigDecimal totalCreditAvailable;
+
+    @Column(nullable = true)
+    @Getter
+    @Setter
+    private BigDecimal currentCreditAvailable;
+
+    @Column(nullable = true)
+    @Getter
+    @Setter
+    private BigDecimal lastStatementBalance;
 
     public AccountSnapshotMetadata(final Account account, final BigDecimal amount) {
         this.account = account;
         this.amount = amount;
-        this.shares = BigDecimal.ONE;
+    }
+
+    public BigDecimal getTotal() {
+        if (shares == null && (totalCreditAvailable == null || currentCreditAvailable == null)) {
+            return amount;
+        } else if (shares != null) {
+            return amount.multiply(shares);
+        } else {
+            return totalCreditAvailable.subtract(currentCreditAvailable);
+        }
     }
 
     public void setSnapshot(final Snapshot snapshot) {

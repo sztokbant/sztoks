@@ -6,6 +6,7 @@ import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,8 +17,9 @@ public class NetWorthUtil {
         return accountBalances.stream()
                               .map(entry -> Money.of(entry.getAccount().getCurrencyUnit(),
                                                      entry.getAccount().getAccountType().equals(AccountType.ASSET) ?
-                                                             entry.getAmount() :
-                                                             entry.getAmount().negate()))
+                                                             entry.getTotal() :
+                                                             entry.getTotal().negate(),
+                                                     RoundingMode.HALF_UP))
                               .collect(Collectors.groupingBy(Money::getCurrencyUnit,
                                                              Collectors.reducing(BigDecimal.ZERO,
                                                                                  Money::getAmount,
