@@ -1,10 +1,10 @@
 package br.net.du.myequity.controller.util;
 
-import br.net.du.myequity.model.Account;
-import br.net.du.myequity.model.AccountSnapshot;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.viewmodel.AccountViewModelOutput;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -17,6 +17,7 @@ import java.util.SortedSet;
 import static java.util.stream.Collectors.toList;
 
 public class ControllerUtils {
+
     public static boolean accountBelongsToUser(final User user, final Optional<Account> accountOpt) {
         return accountOpt.isPresent() && accountOpt.get().getUser().equals(user);
     }

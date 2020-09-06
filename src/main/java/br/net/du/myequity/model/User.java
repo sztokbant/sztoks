@@ -1,5 +1,6 @@
 package br.net.du.myequity.model;
 
+import br.net.du.myequity.model.account.Account;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import lombok.Getter;

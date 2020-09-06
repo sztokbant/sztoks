@@ -1,10 +1,11 @@
 package br.net.du.myequity.util;
 
-import br.net.du.myequity.model.Account;
-import br.net.du.myequity.model.AccountSnapshot;
-import br.net.du.myequity.model.AccountType;
-import br.net.du.myequity.model.AssetSnapshot;
-import br.net.du.myequity.model.LiabilitySnapshot;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.SimpleAssetAccount;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
+import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import com.google.common.collect.ImmutableSortedSet;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,17 +19,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NetWorthUtilTest {
 
-    private Account assetAccount;
+    private SimpleAssetAccount simpleAssetAccount;
     private BigDecimal assetAmount;
-    private Account liabilityAccount;
+    private SimpleLiabilityAccount simpleLiabilityAccount;
     private BigDecimal liabilityAmount;
     private BigDecimal expectedNetWorth;
 
     @BeforeEach
     public void setUp() {
-        assetAccount = new Account("Asset Account", AccountType.ASSET, CurrencyUnit.USD);
+        simpleAssetAccount = new SimpleAssetAccount("Asset Account", CurrencyUnit.USD);
         assetAmount = new BigDecimal("100.00");
-        liabilityAccount = new Account("Liability Account", AccountType.LIABILITY, CurrencyUnit.USD);
+        simpleLiabilityAccount = new SimpleLiabilityAccount("Liability Account", CurrencyUnit.USD);
         liabilityAmount = new BigDecimal("320000.00");
         expectedNetWorth = new BigDecimal("-319900.00");
     }
@@ -37,8 +38,8 @@ class NetWorthUtilTest {
     public void computeByCurrency_fromAccountSet_singleCurrency() {
         // GIVEN
         final ImmutableSortedSet<AccountSnapshot> accountSnapshots =
-                ImmutableSortedSet.of(new AssetSnapshot(assetAccount, assetAmount),
-                                      new LiabilitySnapshot(liabilityAccount, liabilityAmount));
+                ImmutableSortedSet.of(new SimpleAssetSnapshot(simpleAssetAccount, assetAmount),
+                                      new SimpleLiabilitySnapshot(simpleLiabilityAccount, liabilityAmount));
 
         // WHEN
         final Map<CurrencyUnit, BigDecimal> netWorthByCurrency = NetWorthUtil.computeByCurrency(accountSnapshots);
@@ -54,16 +55,16 @@ class NetWorthUtilTest {
     public void computeByCurrency_fromAccountSet_multipleCurrencies() {
         // GIVEN
         final CurrencyUnit brl = CurrencyUnit.of("BRL");
-        final Account brlAsset = new Account("BRL Asset Account", AccountType.ASSET, brl);
+        final Account brlAsset = new SimpleAssetAccount("BRL Asset Account", brl);
         final BigDecimal brlAssetAmount = new BigDecimal("700000.00");
-        final Account brlLiability = new Account("BRL Liability Account", AccountType.LIABILITY, brl);
+        final Account brlLiability = new SimpleLiabilityAccount("BRL Liability Account", brl);
         final BigDecimal brlLiabilityAmount = new BigDecimal("150000.00");
 
         final ImmutableSortedSet<AccountSnapshot> accountSnapshots =
-                ImmutableSortedSet.of(new AssetSnapshot(assetAccount, assetAmount),
-                                      new LiabilitySnapshot(liabilityAccount, liabilityAmount),
-                                      new AssetSnapshot(brlAsset, brlAssetAmount),
-                                      new LiabilitySnapshot(brlLiability, brlLiabilityAmount));
+                ImmutableSortedSet.of(new SimpleAssetSnapshot(simpleAssetAccount, assetAmount),
+                                      new SimpleLiabilitySnapshot(simpleLiabilityAccount, liabilityAmount),
+                                      new SimpleAssetSnapshot(brlAsset, brlAssetAmount),
+                                      new SimpleLiabilitySnapshot(brlLiability, brlLiabilityAmount));
 
         // WHEN
         final Map<CurrencyUnit, BigDecimal> netWorthByCurrency = NetWorthUtil.computeByCurrency(accountSnapshots);

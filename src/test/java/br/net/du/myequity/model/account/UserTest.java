@@ -1,5 +1,8 @@
-package br.net.du.myequity.model;
+package br.net.du.myequity.model.account;
 
+import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.User;
 import com.google.common.collect.ImmutableSortedSet;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class UserTest {
 
     private User user;
-    private Account assetAccount;
-    private Account liabilityAccount;
+    private SimpleAssetAccount simpleAssetAccount;
+    private SimpleLiabilityAccount simpleLiabilityAccount;
     private Snapshot snapshot;
 
     @BeforeEach
@@ -29,11 +32,11 @@ class UserTest {
         user = new User("example@example.com", "Bill", "Gates");
         user.setId(1L);
 
-        assetAccount = new Account("Asset Account", AccountType.ASSET, CurrencyUnit.USD);
-        assetAccount.setId(99L);
+        simpleAssetAccount = new SimpleAssetAccount("Asset Account", CurrencyUnit.USD);
+        simpleAssetAccount.setId(99L);
 
-        liabilityAccount = new Account("Liability Account", AccountType.LIABILITY, CurrencyUnit.USD);
-        liabilityAccount.setId(7L);
+        simpleLiabilityAccount = new SimpleLiabilityAccount("Liability Account", CurrencyUnit.USD);
+        simpleLiabilityAccount.setId(7L);
 
         snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
         snapshot.setId(42L);
@@ -57,8 +60,8 @@ class UserTest {
     public void getAccounts_containersAreImmutable() {
         // GIVEN
         assertTrue(user.getAccounts().isEmpty());
-        user.addAccount(assetAccount);
-        user.addAccount(liabilityAccount);
+        user.addAccount(simpleAssetAccount);
+        user.addAccount(simpleLiabilityAccount);
         final Map<AccountType, SortedSet<Account>> accounts = user.getAccounts();
 
         // THEN
@@ -66,7 +69,7 @@ class UserTest {
             accounts.remove(AccountType.ASSET);
         });
 
-        final Account newAccount = new Account("Another Asset Account", AccountType.ASSET, CurrencyUnit.USD);
+        final Account newAccount = new SimpleAssetAccount("Another Asset Account", CurrencyUnit.USD);
         assertThrows(UnsupportedOperationException.class, () -> {
             accounts.get(AccountType.ASSET).add(newAccount);
         });
@@ -78,60 +81,60 @@ class UserTest {
         assertTrue(user.getAccounts().isEmpty());
 
         // WHEN
-        user.addAccount(liabilityAccount);
+        user.addAccount(simpleLiabilityAccount);
 
         // THEN
         final Map<AccountType, SortedSet<Account>> accounts = user.getAccounts();
         assertEquals(1, accounts.size());
         assertEquals(1, accounts.get(AccountType.LIABILITY).size());
-        assertEquals(liabilityAccount, accounts.get(AccountType.LIABILITY).iterator().next());
-        assertEquals(user, liabilityAccount.getUser());
+        assertEquals(simpleLiabilityAccount, accounts.get(AccountType.LIABILITY).iterator().next());
+        assertEquals(user, simpleLiabilityAccount.getUser());
     }
 
     @Test
     public void addAccount_addSameTwice() {
         // GIVEN
         assertTrue(user.getAccounts().isEmpty());
-        user.addAccount(liabilityAccount);
+        user.addAccount(simpleLiabilityAccount);
 
         // WHEN
-        user.addAccount(liabilityAccount);
+        user.addAccount(simpleLiabilityAccount);
 
         // THEN
         final Map<AccountType, SortedSet<Account>> accounts = user.getAccounts();
         assertEquals(1, accounts.size());
         assertEquals(1, accounts.get(AccountType.LIABILITY).size());
-        assertEquals(liabilityAccount, accounts.get(AccountType.LIABILITY).iterator().next());
-        assertEquals(user, liabilityAccount.getUser());
+        assertEquals(simpleLiabilityAccount, accounts.get(AccountType.LIABILITY).iterator().next());
+        assertEquals(user, simpleLiabilityAccount.getUser());
     }
 
     @Test
     public void removeAccount() {
         // GIVEN
         assertTrue(user.getAccounts().isEmpty());
-        user.addAccount(liabilityAccount);
+        user.addAccount(simpleLiabilityAccount);
 
         // WHEN
-        user.removeAccount(liabilityAccount);
+        user.removeAccount(simpleLiabilityAccount);
 
         // THEN
         assertTrue(user.getAccounts().isEmpty());
-        assertNull(liabilityAccount.getUser());
+        assertNull(simpleLiabilityAccount.getUser());
     }
 
     @Test
     public void removeAccount_removeSameTwice() {
         // GIVEN
         assertTrue(user.getAccounts().isEmpty());
-        user.addAccount(liabilityAccount);
-        user.removeAccount(liabilityAccount);
+        user.addAccount(simpleLiabilityAccount);
+        user.removeAccount(simpleLiabilityAccount);
 
         // WHEN
-        user.removeAccount(liabilityAccount);
+        user.removeAccount(simpleLiabilityAccount);
 
         // THEN
         assertTrue(user.getAccounts().isEmpty());
-        assertNull(liabilityAccount.getUser());
+        assertNull(simpleLiabilityAccount.getUser());
     }
 
     @Test

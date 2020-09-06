@@ -1,10 +1,11 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountType;
-import br.net.du.myequity.model.AssetSnapshot;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
+import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
@@ -93,7 +94,7 @@ class AccountBalanceControllerTest {
         snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
-        account = new Account("Mortgage", ACCOUNT_TYPE, CURRENCY_UNIT, LocalDate.now());
+        account = new SimpleLiabilityAccount("Mortgage", CURRENCY_UNIT, LocalDate.now());
         account.setId(ACCOUNT_ID);
 
         final AccountBalanceController.AccountBalanceJsonRequest accountBalanceJsonRequest =
@@ -301,16 +302,16 @@ class AccountBalanceControllerTest {
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final AssetSnapshot assetSnapshot = new AssetSnapshot(account, CURRENT_BALANCE);
-        assetSnapshot.setId(108L);
-        snapshot.addAccountSnapshot(assetSnapshot);
+        final SimpleAssetSnapshot simpleAssetSnapshot = new SimpleAssetSnapshot(account, CURRENT_BALANCE);
+        simpleAssetSnapshot.setId(108L);
+        snapshot.addAccountSnapshot(simpleAssetSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.of(assetSnapshot));
+        when(accountSnapshotRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.of(simpleAssetSnapshot));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)

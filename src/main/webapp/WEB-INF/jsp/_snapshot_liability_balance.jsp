@@ -6,6 +6,7 @@ $(document).ready(function() {
     $("#account_balance_amount_${account.id}"),
     $("#new_account_balance_amount_${account.id}"));
 })
+
 </script>
 
 <div class="col">

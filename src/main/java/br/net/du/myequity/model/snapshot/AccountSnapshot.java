@@ -1,5 +1,7 @@
-package br.net.du.myequity.model;
+package br.net.du.myequity.model.snapshot;
 
+import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.account.Account;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,9 +1,9 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.model.Account;
-import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.service.UserService;
 import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
@@ -68,7 +68,7 @@ class SnapshotControllerTest {
         snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
-        account = new Account("Mortgage", AccountType.ASSET, CurrencyUnit.USD, LocalDate.now());
+        account = new SimpleAssetAccount("Checking Account", CurrencyUnit.USD, LocalDate.now());
         account.setId(Long.parseLong(ACCOUNT_ID_VALUE));
     }
 

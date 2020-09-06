@@ -1,7 +1,7 @@
 package br.net.du.myequity.viewmodel;
 
-import br.net.du.myequity.model.Account;
-import br.net.du.myequity.model.AccountSnapshot;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import lombok.Builder;
 import lombok.Data;
 import org.joda.money.CurrencyUnit;

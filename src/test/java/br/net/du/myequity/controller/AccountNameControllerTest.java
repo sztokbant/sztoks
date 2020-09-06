@@ -1,8 +1,9 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -71,7 +72,7 @@ class AccountNameControllerTest {
         user = buildUser();
 
         // WHEN
-        account = new Account(ACCOUNT_NAME, ACCOUNT_TYPE, CURRENCY_UNIT, LocalDate.now());
+        account = new SimpleLiabilityAccount(ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now());
         account.setId(ACCOUNT_ID);
 
         final AccountNameController.AccountNameJsonRequest accountNameJsonRequest =

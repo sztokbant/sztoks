@@ -1,8 +1,9 @@
 package br.net.du.myequity.validator;
 
-import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.viewmodel.AccountViewModelInput;
 import com.google.common.collect.ImmutableList;
@@ -81,9 +82,7 @@ class AccountViewModelInputValidatorTest {
     public void validate_happyExintingAccountWithDifferentName() {
         // GIVEN
         populateAccountForm(ACCOUNT_NAME, ACCOUNT_TYPE, CURRENCY_UNIT);
-        defineExistingAccounts(ImmutableList.of(new Account(ANOTHER_ACCOUNT_NAME,
-                                                            AccountType.ASSET,
-                                                            CurrencyUnit.USD)));
+        defineExistingAccounts(ImmutableList.of(new SimpleAssetAccount(ANOTHER_ACCOUNT_NAME, CurrencyUnit.USD)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
@@ -187,7 +186,7 @@ class AccountViewModelInputValidatorTest {
     public void validate_existingName_hasErrors() {
         // GIVEN
         populateAccountForm(ACCOUNT_NAME, ACCOUNT_TYPE, CURRENCY_UNIT);
-        defineExistingAccounts(ImmutableList.of(new Account(ACCOUNT_NAME, AccountType.ASSET, CurrencyUnit.USD)));
+        defineExistingAccounts(ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
@@ -200,7 +199,7 @@ class AccountViewModelInputValidatorTest {
     public void validate_existingNameExtraSpaces_hasErrors() {
         // GIVEN
         populateAccountForm(" " + ACCOUNT_NAME + " ", ACCOUNT_TYPE, CURRENCY_UNIT);
-        defineExistingAccounts(ImmutableList.of(new Account(ACCOUNT_NAME, AccountType.ASSET, CurrencyUnit.USD)));
+        defineExistingAccounts(ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, user);

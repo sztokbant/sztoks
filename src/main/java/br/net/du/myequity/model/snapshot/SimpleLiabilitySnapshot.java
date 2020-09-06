@@ -1,5 +1,6 @@
-package br.net.du.myequity.model;
+package br.net.du.myequity.model.snapshot;
 
+import br.net.du.myequity.model.account.Account;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,17 +13,17 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "asset_snapshots")
+@Table(name = "simple_liability_snapshots")
 @PrimaryKeyJoinColumn(name = "id")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class AssetSnapshot extends AccountSnapshot {
+public class SimpleLiabilitySnapshot extends AccountSnapshot {
 
     @Column(nullable = false)
     @Getter
     @Setter
     private BigDecimal amount;
 
-    public AssetSnapshot(final Account account, final BigDecimal amount) {
+    public SimpleLiabilitySnapshot(final Account account, final BigDecimal amount) {
         super(account);
         this.amount = amount;
     }

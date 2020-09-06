@@ -1,7 +1,7 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.persistence.AccountRepository;
 import lombok.Builder;
 import lombok.Data;

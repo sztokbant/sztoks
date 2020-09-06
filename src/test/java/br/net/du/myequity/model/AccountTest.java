@@ -1,5 +1,8 @@
 package br.net.du.myequity.model;
 
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.SimpleAssetAccount;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +24,7 @@ class AccountTest {
         final LocalDate now = LocalDate.now();
 
         // WHEN
-        final Account account = new Account(accountName, accountType, currencyUnit, now);
+        final Account account = new SimpleLiabilityAccount(accountName, currencyUnit, now);
 
         // THEN
         assertEquals(accountName, account.getName());
@@ -40,7 +43,7 @@ class AccountTest {
         final CurrencyUnit currencyUnit = CurrencyUnit.USD;
 
         // WHEN
-        final Account account = new Account(accountName, accountType, currencyUnit);
+        final Account account = new SimpleLiabilityAccount(accountName, currencyUnit);
 
         // THEN
         assertEquals(accountName, account.getName());
@@ -56,7 +59,7 @@ class AccountTest {
         final String accountName = "Wallet";
         final AccountType accountType = AccountType.ASSET;
         final CurrencyUnit currencyUnit = CurrencyUnit.USD;
-        final Account account = new Account(accountName, accountType, currencyUnit);
+        final Account account = new SimpleAssetAccount(accountName, currencyUnit);
         assertEquals(currencyUnit, account.getCurrencyUnit());
 
         // WHEN
@@ -69,7 +72,7 @@ class AccountTest {
 
     @Test
     public void equals() {
-        final Account account = new Account("Mortgage", AccountType.LIABILITY, CurrencyUnit.USD, LocalDate.now());
+        final Account account = new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, LocalDate.now());
 
         // Itself
         assertTrue(account.equals(account));
@@ -79,7 +82,7 @@ class AccountTest {
         assertFalse(account.equals("Another type of object"));
 
         // Same Id null
-        final Account anotherAccount = new Account("Wallet", AccountType.ASSET, CurrencyUnit.USD, LocalDate.now());
+        final Account anotherAccount = new SimpleAssetAccount("Wallet", CurrencyUnit.USD, LocalDate.now());
         account.setId(null);
         anotherAccount.setId(null);
         assertFalse(account.equals(anotherAccount));

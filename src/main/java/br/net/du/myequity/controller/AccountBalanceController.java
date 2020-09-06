@@ -1,12 +1,12 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.model.Account;
-import br.net.du.myequity.model.AccountSnapshot;
 import br.net.du.myequity.model.AccountType;
-import br.net.du.myequity.model.AssetSnapshot;
-import br.net.du.myequity.model.LiabilitySnapshot;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
+import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
@@ -58,10 +58,10 @@ public class AccountBalanceController extends BaseController {
                 accountSnapshotRepository.findByAccountId(accountBalanceJsonRequest.getAccountId()).get();
 
         // TODO This if-zilla has to be cleaned up
-        if (accountSnapshot instanceof AssetSnapshot) {
-            ((AssetSnapshot) accountSnapshot).setAmount(accountBalanceJsonRequest.getBalance());
+        if (accountSnapshot instanceof SimpleAssetSnapshot) {
+            ((SimpleAssetSnapshot) accountSnapshot).setAmount(accountBalanceJsonRequest.getBalance());
         } else {
-            ((LiabilitySnapshot) accountSnapshot).setAmount(accountBalanceJsonRequest.getBalance());
+            ((SimpleLiabilitySnapshot) accountSnapshot).setAmount(accountBalanceJsonRequest.getBalance());
         }
 
         accountSnapshotRepository.save(accountSnapshot);

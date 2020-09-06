@@ -1,7 +1,9 @@
 package br.net.du.myequity.viewmodel;
 
-import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.SimpleAssetAccount;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import lombok.Data;
 import org.joda.money.CurrencyUnit;
 
@@ -14,9 +16,11 @@ public class AccountViewModelInput {
     private String currencyUnit;
 
     public Account toAccount() {
-        return new Account(this.name,
-                           AccountType.valueOf(this.accountType),
-                           CurrencyUnit.of(this.currencyUnit),
-                           LocalDate.now());
+        final AccountType accountType = AccountType.valueOf(this.accountType);
+
+        // TODO This if-zilla has to be cleaned up
+        return accountType.equals(AccountType.ASSET) ?
+                new SimpleAssetAccount(this.name, CurrencyUnit.of(this.currencyUnit), LocalDate.now()) :
+                new SimpleLiabilityAccount(this.name, CurrencyUnit.of(this.currencyUnit), LocalDate.now());
     }
 }

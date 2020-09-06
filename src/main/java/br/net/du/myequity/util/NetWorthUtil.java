@@ -1,7 +1,7 @@
 package br.net.du.myequity.util;
 
-import br.net.du.myequity.model.AccountSnapshot;
 import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 

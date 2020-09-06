@@ -1,5 +1,7 @@
 package br.net.du.myequity.model;
 
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.util.NetWorthUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;

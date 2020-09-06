@@ -1,5 +1,8 @@
-package br.net.du.myequity.model;
+package br.net.du.myequity.model.account;
 
+import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,13 +15,17 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "accounts", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "name"}))
+@Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Account implements Comparable<Account> {
     @Id
@@ -58,10 +65,10 @@ public class Account implements Comparable<Account> {
     @Setter
     private LocalDate closedDate;
 
-    public Account(final String name,
-                   final AccountType accountType,
-                   final CurrencyUnit currencyUnit,
-                   final LocalDate createDate) {
+    Account(final String name,
+            final AccountType accountType,
+            final CurrencyUnit currencyUnit,
+            final LocalDate createDate) {
         this.name = name;
         this.accountType = accountType;
         this.currency = currencyUnit.getCode();
@@ -70,8 +77,12 @@ public class Account implements Comparable<Account> {
         this.closedDate = null;
     }
 
-    public Account(final String name, final AccountType accountType, final CurrencyUnit currencyUnit) {
+    Account(final String name, final AccountType accountType, final CurrencyUnit currencyUnit) {
         this(name, accountType, currencyUnit, LocalDate.now());
+    }
+
+    public AccountSnapshot newEmptySnapshot() {
+        throw new UnsupportedOperationException();
     }
 
     public CurrencyUnit getCurrencyUnit() {

@@ -1,12 +1,14 @@
 package br.net.du.myequity.persistence;
 
-import br.net.du.myequity.model.Account;
-import br.net.du.myequity.model.AccountSnapshot;
 import br.net.du.myequity.model.AccountType;
-import br.net.du.myequity.model.AssetSnapshot;
-import br.net.du.myequity.model.LiabilitySnapshot;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.SimpleAssetAccount;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
+import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import br.net.du.myequity.service.UserService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
@@ -50,9 +52,9 @@ class PersistenceTest {
 
     private Snapshot snapshot;
 
-    private Account assetAccount;
+    private SimpleAssetAccount simpleAssetAccount;
     private BigDecimal assetAmount;
-    private Account liabilityAccount;
+    private SimpleLiabilityAccount simpleLiabilityAccount;
     private BigDecimal liabilityAmount;
 
     @BeforeEach
@@ -61,9 +63,9 @@ class PersistenceTest {
         user.setPassword(PASSWORD);
         user.setPasswordConfirm(PASSWORD);
 
-        assetAccount = new Account("Asset Account", AccountType.ASSET, CurrencyUnit.USD);
+        simpleAssetAccount = new SimpleAssetAccount("Asset Account", CurrencyUnit.USD);
         assetAmount = new BigDecimal("100.00");
-        liabilityAccount = new Account("Liability Account", AccountType.LIABILITY, CurrencyUnit.USD);
+        simpleLiabilityAccount = new SimpleLiabilityAccount("Liability Account", CurrencyUnit.USD);
         liabilityAmount = new BigDecimal("320000.00");
     }
 
@@ -141,15 +143,15 @@ class PersistenceTest {
         assertEquals(1, accountSnapshotsByType.get(AccountType.ASSET).size());
         assertEquals(1, accountSnapshotsByType.get(AccountType.LIABILITY).size());
 
-        assertNotNull(assetAccount.getId());
-        assertNotNull(assetAccount.getUser());
-        assertEquals(user, assetAccount.getUser());
+        assertNotNull(simpleAssetAccount.getId());
+        assertNotNull(simpleAssetAccount.getUser());
+        assertEquals(user, simpleAssetAccount.getUser());
         final BigDecimal actualAssetAmount = accountSnapshotsByType.get(AccountType.ASSET).iterator().next().getTotal();
         assertEquals(assetAmount, actualAssetAmount);
 
-        assertNotNull(liabilityAccount.getId());
-        assertNotNull(liabilityAccount.getUser());
-        assertEquals(user, liabilityAccount.getUser());
+        assertNotNull(simpleLiabilityAccount.getId());
+        assertNotNull(simpleLiabilityAccount.getUser());
+        assertEquals(user, simpleLiabilityAccount.getUser());
         final BigDecimal actualLiabilityAmount =
                 accountSnapshotsByType.get(AccountType.LIABILITY).iterator().next().getTotal();
         assertEquals(liabilityAmount, actualLiabilityAmount);
@@ -168,7 +170,7 @@ class PersistenceTest {
         assertEquals(2, savedSnapshot.getAccountSnapshots().size());
 
         // WHEN
-        savedSnapshot.removeAccountSnapshotFor(liabilityAccount);
+        savedSnapshot.removeAccountSnapshotFor(simpleLiabilityAccount);
 
         // THEN
         final Snapshot actualSnapshot = snapshotRepository.findAll().get(1);
@@ -190,9 +192,9 @@ class PersistenceTest {
         assertEquals(ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-319900.00")), savedSnapshot.getNetWorth());
 
         // WHEN
-        final LiabilitySnapshot liabilitySnapshot =
-                (LiabilitySnapshot) savedSnapshot.getAccountSnapshotFor(liabilityAccount).get();
-        liabilitySnapshot.setAmount(liabilitySnapshot.getAmount().add(new BigDecimal("100000.00")));
+        final SimpleLiabilitySnapshot simpleLiabilitySnapshot =
+                (SimpleLiabilitySnapshot) savedSnapshot.getAccountSnapshotFor(simpleLiabilityAccount).get();
+        simpleLiabilitySnapshot.setAmount(simpleLiabilitySnapshot.getAmount().add(new BigDecimal("100000.00")));
 
         // THEN
         final Snapshot actualSnapshot = snapshotRepository.findAll().get(1);
@@ -232,26 +234,27 @@ class PersistenceTest {
     private void saveNewUserWithAccounts() {
         assertNull(user.getId());
 
-        user.addAccount(assetAccount);
-        user.addAccount(liabilityAccount);
+        user.addAccount(simpleAssetAccount);
+        user.addAccount(simpleLiabilityAccount);
         userService.save(user);
 
         final List<Account> allAccounts = accountRepository.findAll();
         final List<Account> userAccounts = accountRepository.findByUser(user);
 
         assertFalse(allAccounts.isEmpty());
-        assertTrue(allAccounts.contains(assetAccount));
-        assertTrue(allAccounts.contains(liabilityAccount));
+        assertTrue(allAccounts.contains(simpleAssetAccount));
+        assertTrue(allAccounts.contains(simpleLiabilityAccount));
 
         assertFalse(userAccounts.isEmpty());
-        assertTrue(userAccounts.contains(assetAccount));
-        assertTrue(userAccounts.contains(liabilityAccount));
+        assertTrue(userAccounts.contains(simpleAssetAccount));
+        assertTrue(userAccounts.contains(simpleLiabilityAccount));
     }
 
     private void initSnapshot() {
         snapshot = new Snapshot(LocalDate.now().minusDays(1),
-                                ImmutableSortedSet.of(new AssetSnapshot(assetAccount, assetAmount),
-                                                      new LiabilitySnapshot(liabilityAccount, liabilityAmount)));
+                                ImmutableSortedSet.of(new SimpleAssetSnapshot(simpleAssetAccount, assetAmount),
+                                                      new SimpleLiabilitySnapshot(simpleLiabilityAccount,
+                                                                                  liabilityAmount)));
         assertNull(snapshot.getId());
     }
 }

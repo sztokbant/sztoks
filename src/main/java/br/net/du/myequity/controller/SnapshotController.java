@@ -1,12 +1,10 @@
 package br.net.du.myequity.controller;
 
 import br.net.du.myequity.controller.util.ControllerUtils;
-import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountType;
-import br.net.du.myequity.model.AssetSnapshot;
-import br.net.du.myequity.model.LiabilitySnapshot;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.viewmodel.AccountViewModelOutput;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -122,14 +119,7 @@ public class SnapshotController extends BaseController {
             final List<Account> allUserAccounts = accountRepository.findByUser(user);
             allUserAccounts.stream()
                            .filter(account -> addAccountsViewModelInput.getAccounts().contains(account.getId()))
-                           .forEach(account -> {
-                               // TODO This if-zilla has to be cleaned up
-                               if (account.getAccountType().equals(AccountType.ASSET)) {
-                                   snapshot.addAccountSnapshot(new AssetSnapshot(account, BigDecimal.ZERO));
-                               } else if (account.getAccountType().equals(AccountType.LIABILITY)) {
-                                   snapshot.addAccountSnapshot(new LiabilitySnapshot(account, BigDecimal.ZERO));
-                               }
-                           });
+                           .forEach(account -> snapshot.addAccountSnapshot(account.newEmptySnapshot()));
 
             snapshotRepository.save(snapshot);
         }
