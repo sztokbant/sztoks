@@ -1,6 +1,5 @@
 package br.net.du.myequity.validator;
 
-import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
@@ -26,7 +25,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 class AccountViewModelInputValidatorTest {
 
     private static final String ACCOUNT_NAME = "My Account";
-    private static final String ACCOUNT_TYPE = AccountType.LIABILITY.toString();
+    private static final String TYPE_NAME = "SimpleAssetAccount";
     private static final String ANOTHER_ACCOUNT_NAME = "Another Account";
     private static final String CURRENCY_UNIT = "USD";
 
@@ -68,7 +67,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_happyFirstAccount() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, ACCOUNT_TYPE, CURRENCY_UNIT);
+        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
@@ -81,7 +80,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_happyExintingAccountWithDifferentName() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, ACCOUNT_TYPE, CURRENCY_UNIT);
+        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(ImmutableList.of(new SimpleAssetAccount(ANOTHER_ACCOUNT_NAME, CurrencyUnit.USD)));
 
         // WHEN
@@ -107,7 +106,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_nullName_hasErrors() {
         // GIVEN
-        populateAccountForm(null, ACCOUNT_TYPE, CURRENCY_UNIT);
+        populateAccountForm(null, TYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
@@ -133,7 +132,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_nullCurrency_hasErrors() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, ACCOUNT_TYPE, null);
+        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, null);
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
@@ -146,7 +145,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_emptyName_hasErrors() {
         // GIVEN
-        populateAccountForm(StringUtils.EMPTY, ACCOUNT_TYPE, CURRENCY_UNIT);
+        populateAccountForm(StringUtils.EMPTY, TYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
@@ -159,7 +158,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_emptyCurrency_hasErrors() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, ACCOUNT_TYPE, StringUtils.EMPTY);
+        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, StringUtils.EMPTY);
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
@@ -172,7 +171,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_invalidCurrency_hasErrors() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, ACCOUNT_TYPE, "xyz");
+        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, "xyz");
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
@@ -185,7 +184,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_existingName_hasErrors() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, ACCOUNT_TYPE, CURRENCY_UNIT);
+        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
 
         // WHEN
@@ -198,7 +197,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_existingNameExtraSpaces_hasErrors() {
         // GIVEN
-        populateAccountForm(" " + ACCOUNT_NAME + " ", ACCOUNT_TYPE, CURRENCY_UNIT);
+        populateAccountForm(" " + ACCOUNT_NAME + " ", TYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
 
         // WHEN
@@ -211,7 +210,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_noValidationHints_throws() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, ACCOUNT_TYPE, CURRENCY_UNIT);
+        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
 
         // WHEN/THEN
         assertThrows(UnsupportedOperationException.class, () -> {
@@ -222,7 +221,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_emptyValidationHints_throws() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, ACCOUNT_TYPE, CURRENCY_UNIT);
+        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
 
         // WHEN/THEN
         assertThrows(UnsupportedOperationException.class, () -> {
@@ -233,7 +232,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_notUserInValidationHints_throws() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, ACCOUNT_TYPE, CURRENCY_UNIT);
+        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
 
         // WHEN/THEN
         assertThrows(UnsupportedOperationException.class, () -> {
@@ -243,7 +242,7 @@ class AccountViewModelInputValidatorTest {
 
     private void populateAccountForm(final String name, final String type, final String currency) {
         accountViewModelInput.setName(name);
-        accountViewModelInput.setAccountType(type);
+        accountViewModelInput.setTypeName(type);
         accountViewModelInput.setCurrencyUnit(currency);
     }
 

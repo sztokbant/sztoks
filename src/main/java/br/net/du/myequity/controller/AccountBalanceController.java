@@ -58,6 +58,8 @@ public class AccountBalanceController extends BaseController {
                 accountSnapshotRepository.findByAccountId(accountBalanceJsonRequest.getAccountId()).get();
 
         // TODO This if-zilla has to be cleaned up
+        //  -> This is probably fine as it's just to update balances of Simple* accounts. Other accounts should have
+        //  different end-points.
         if (accountSnapshot instanceof SimpleAssetSnapshot) {
             ((SimpleAssetSnapshot) accountSnapshot).setAmount(accountBalanceJsonRequest.getBalance());
         } else {

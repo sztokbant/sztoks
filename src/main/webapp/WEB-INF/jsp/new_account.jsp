@@ -29,17 +29,17 @@
             </div>
         </spring:bind>
 
-        <spring:bind path="accountType">
+        <spring:bind path="typeName">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <div>
-                    <form:radiobutton path="accountType" value="ASSET" id="assetRadio" checked="checked"/>
+                    <form:radiobutton path="typeName" value="SimpleAssetAccount" id="assetRadio" checked="checked"/>
                     <label for="assetRadio">Asset</label>
                 </div>
                 <div>
-                    <form:radiobutton path="accountType" value="LIABILITY" id="liabilityRadio"/>
+                    <form:radiobutton path="typeName" value="SimpleLiabilityAccount" id="liabilityRadio"/>
                     <label for="liabilityRadio">Liability</label>
                 </div>
-                <form:errors path="accountType"/>
+                <form:errors path="typeName"/>
             </div>
         </spring:bind>
 

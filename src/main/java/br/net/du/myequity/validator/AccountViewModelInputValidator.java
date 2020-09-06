@@ -1,6 +1,5 @@
 package br.net.du.myequity.validator;
 
-import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.persistence.AccountRepository;
@@ -45,15 +44,7 @@ public class AccountViewModelInputValidator implements SmartValidator {
     }
 
     private void rejectIfInvalidAccountType(final AccountViewModelInput accountViewModelInput, final Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "accountType", "NotEmpty");
-
-        if (StringUtils.isNotBlank(accountViewModelInput.getAccountType())) {
-            try {
-                AccountType.valueOf(accountViewModelInput.getAccountType());
-            } catch (final NullPointerException | IllegalArgumentException e) {
-                errors.rejectValue("accountType", "Invalid.accountForm.accountType");
-            }
-        }
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "typeName", "NotEmpty");
     }
 
     private void rejectIfInvalidCurrencyUnit(final AccountViewModelInput accountViewModelInput, final Errors errors) {
