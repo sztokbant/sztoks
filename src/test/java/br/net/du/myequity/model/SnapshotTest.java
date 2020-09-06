@@ -29,9 +29,9 @@ class SnapshotTest {
     public void setUp() {
         now = LocalDate.now();
         assetAccount = new Account("Asset Account", AccountType.ASSET, CurrencyUnit.USD);
-        assetData = new AccountSnapshotMetadata(assetAccount, new BigDecimal("100.00"));
+        assetData = new AssetSnapshot(assetAccount, new BigDecimal("100.00"));
         liabilityAccount = new Account("Liability Account", AccountType.LIABILITY, CurrencyUnit.USD);
-        liabilityData = new AccountSnapshotMetadata(liabilityAccount, new BigDecimal("320000.00"));
+        liabilityData = new LiabilitySnapshot(liabilityAccount, new BigDecimal("320000.00"));
         expectedNetWorth = ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-319900.00"));
     }
 
@@ -86,7 +86,7 @@ class SnapshotTest {
         // THEN
         assertEquals(1, snapshot.getAccountSnapshotMetadataSet().size());
         assertEquals(new BigDecimal("320000.00"),
-                     snapshot.getAccountSnapshotMetadataFor(liabilityAccount).get().getAmount());
+                     snapshot.getAccountSnapshotMetadataFor(liabilityAccount).get().getTotal());
         assertEquals(ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-320000.00")), snapshot.getNetWorth());
     }
 
@@ -116,8 +116,8 @@ class SnapshotTest {
         // THEN
         assertEquals(2, snapshot.getAccountSnapshotMetadataSet().size());
         assertEquals(new BigDecimal("320000.00"),
-                     snapshot.getAccountSnapshotMetadataFor(liabilityAccount).get().getAmount());
-        assertEquals(new BigDecimal("100.00"), snapshot.getAccountSnapshotMetadataFor(assetAccount).get().getAmount());
+                     snapshot.getAccountSnapshotMetadataFor(liabilityAccount).get().getTotal());
+        assertEquals(new BigDecimal("100.00"), snapshot.getAccountSnapshotMetadataFor(assetAccount).get().getTotal());
         assertFalse(snapshot.getAccountSnapshotMetadataFor(notInSnapshot).isPresent());
         assertEquals(expectedNetWorth, snapshot.getNetWorth());
     }
@@ -145,7 +145,7 @@ class SnapshotTest {
 
         final Account anotherAccount = new Account("Another Account", AccountType.ASSET, CurrencyUnit.USD);
         final AccountSnapshotMetadata notInSnapshot =
-                new AccountSnapshotMetadata(anotherAccount, new BigDecimal("50000"));
+                new AssetSnapshot(anotherAccount, new BigDecimal("50000"));
         assertThrows(UnsupportedOperationException.class, () -> {
             accountSnapshotMetadata.add(notInSnapshot);
         });

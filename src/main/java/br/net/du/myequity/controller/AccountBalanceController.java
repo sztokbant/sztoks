@@ -3,6 +3,8 @@ package br.net.du.myequity.controller;
 import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountSnapshotMetadata;
 import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.AssetSnapshot;
+import br.net.du.myequity.model.LiabilitySnapshot;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.AccountRepository;
@@ -54,7 +56,13 @@ public class AccountBalanceController extends BaseController {
 
         final AccountSnapshotMetadata accountSnapshotMetadata =
                 accountSnapshotMetadataRepository.findByAccountId(accountBalanceJsonRequest.getAccountId()).get();
-        accountSnapshotMetadata.setAmount(accountBalanceJsonRequest.getBalance());
+
+        if (accountSnapshotMetadata instanceof AssetSnapshot) {
+            ((AssetSnapshot) accountSnapshotMetadata).setAmount(accountBalanceJsonRequest.getBalance());
+        } else {
+            ((LiabilitySnapshot) accountSnapshotMetadata).setAmount(accountBalanceJsonRequest.getBalance());
+        }
+
         accountSnapshotMetadataRepository.save(accountSnapshotMetadata);
 
         final CurrencyUnit currencyUnit = accountSnapshotMetadata.getAccount().getCurrencyUnit();
@@ -62,7 +70,7 @@ public class AccountBalanceController extends BaseController {
 
         return AccountBalanceResponse.builder()
                                      .hasError(false)
-                                     .balance(DECIMAL_FORMAT.format(accountSnapshotMetadata.getAmount().setScale(2)))
+                                     .balance(DECIMAL_FORMAT.format(accountSnapshotMetadata.getTotal().setScale(2)))
                                      .currencyUnit(currencyUnit.toString())
                                      .netWorth(DECIMAL_FORMAT.format(snapshot.getNetWorth()
                                                                              .get(currencyUnit)

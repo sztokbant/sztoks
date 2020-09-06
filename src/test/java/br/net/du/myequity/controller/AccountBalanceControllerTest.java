@@ -3,6 +3,7 @@ package br.net.du.myequity.controller;
 import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountSnapshotMetadata;
 import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.AssetSnapshot;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.AccountRepository;
@@ -302,7 +303,7 @@ class AccountBalanceControllerTest {
 
         snapshot.setUser(user);
         final AccountSnapshotMetadata
-                accountSnapshotMetadata = new AccountSnapshotMetadata(account, CURRENT_BALANCE);
+                accountSnapshotMetadata = new AssetSnapshot(account, CURRENT_BALANCE);
         accountSnapshotMetadata.setId(108L);
         snapshot.addAccountSnapshotMetadata(accountSnapshotMetadata);
 

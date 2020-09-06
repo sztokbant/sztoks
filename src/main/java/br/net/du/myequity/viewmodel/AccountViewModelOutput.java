@@ -16,23 +16,13 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
     private final String name;
     private final boolean isClosed;
     private final CurrencyUnit balanceCurrencyUnit;
-    private final BigDecimal balanceAmount;
     private final BigDecimal total;
-    private final BigDecimal shares;
-    private final BigDecimal totalCreditAvailable;
-    private final BigDecimal currentCreditAvailable;
-    private final BigDecimal lastStatementBalance;
 
     public static AccountViewModelOutput of(final AccountSnapshotMetadata accountSnapshotMetadata) {
         final Account account = accountSnapshotMetadata.getAccount();
 
         return getAccountViewModelBuilderCommon(account).balanceCurrencyUnit(account.getCurrencyUnit())
-                                                        .balanceAmount(accountSnapshotMetadata.getAmount())
                                                         .total(accountSnapshotMetadata.getTotal())
-                                                        .shares(accountSnapshotMetadata.getShares())
-                                                        .totalCreditAvailable(accountSnapshotMetadata.getTotalCreditAvailable())
-                                                        .currentCreditAvailable(accountSnapshotMetadata.getCurrentCreditAvailable())
-                                                        .lastStatementBalance(accountSnapshotMetadata.getLastStatementBalance())
                                                         .build();
     }
 

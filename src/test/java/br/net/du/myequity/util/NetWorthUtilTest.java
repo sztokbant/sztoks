@@ -3,6 +3,8 @@ package br.net.du.myequity.util;
 import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountSnapshotMetadata;
 import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.AssetSnapshot;
+import br.net.du.myequity.model.LiabilitySnapshot;
 import com.google.common.collect.ImmutableSortedSet;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,8 +37,8 @@ class NetWorthUtilTest {
     public void computeByCurrency_fromAccountSet_singleCurrency() {
         // GIVEN
         final ImmutableSortedSet<AccountSnapshotMetadata> accountSnapshotMetadata =
-                ImmutableSortedSet.of(new AccountSnapshotMetadata(assetAccount, assetAmount),
-                                      new AccountSnapshotMetadata(liabilityAccount, liabilityAmount));
+                ImmutableSortedSet.of(new AssetSnapshot(assetAccount, assetAmount),
+                                      new LiabilitySnapshot(liabilityAccount, liabilityAmount));
 
         // WHEN
         final Map<CurrencyUnit, BigDecimal> netWorthByCurrency =
@@ -59,10 +61,10 @@ class NetWorthUtilTest {
         final BigDecimal brlLiabilityAmount = new BigDecimal("150000.00");
 
         final ImmutableSortedSet<AccountSnapshotMetadata> accountSnapshotMetadata =
-                ImmutableSortedSet.of(new AccountSnapshotMetadata(assetAccount, assetAmount),
-                                      new AccountSnapshotMetadata(liabilityAccount, liabilityAmount),
-                                      new AccountSnapshotMetadata(brlAsset, brlAssetAmount),
-                                      new AccountSnapshotMetadata(brlLiability, brlLiabilityAmount));
+                ImmutableSortedSet.of(new AssetSnapshot(assetAccount, assetAmount),
+                                      new LiabilitySnapshot(liabilityAccount, liabilityAmount),
+                                      new AssetSnapshot(brlAsset, brlAssetAmount),
+                                      new LiabilitySnapshot(brlLiability, brlLiabilityAmount));
 
         // WHEN
         final Map<CurrencyUnit, BigDecimal> netWorthByCurrency =

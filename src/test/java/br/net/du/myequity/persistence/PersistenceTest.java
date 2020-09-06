@@ -3,6 +3,8 @@ package br.net.du.myequity.persistence;
 import br.net.du.myequity.model.Account;
 import br.net.du.myequity.model.AccountSnapshotMetadata;
 import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.AssetSnapshot;
+import br.net.du.myequity.model.LiabilitySnapshot;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.UserService;
@@ -144,14 +146,14 @@ class PersistenceTest {
         assertNotNull(assetAccount.getUser());
         assertEquals(user, assetAccount.getUser());
         final BigDecimal actualAssetAmount =
-                accountSnapshotDatasByType.get(AccountType.ASSET).iterator().next().getAmount();
+                accountSnapshotDatasByType.get(AccountType.ASSET).iterator().next().getTotal();
         assertEquals(assetAmount, actualAssetAmount);
 
         assertNotNull(liabilityAccount.getId());
         assertNotNull(liabilityAccount.getUser());
         assertEquals(user, liabilityAccount.getUser());
         final BigDecimal actualLiabilityAmount =
-                accountSnapshotDatasByType.get(AccountType.LIABILITY).iterator().next().getAmount();
+                accountSnapshotDatasByType.get(AccountType.LIABILITY).iterator().next().getTotal();
         assertEquals(liabilityAmount, actualLiabilityAmount);
     }
 
@@ -190,7 +192,7 @@ class PersistenceTest {
         assertEquals(ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-319900.00")), savedSnapshot.getNetWorth());
 
         // WHEN
-        final AccountSnapshotMetadata accountSnapshotMetadata =
+        final LiabilitySnapshot accountSnapshotMetadata = (LiabilitySnapshot)
                 savedSnapshot.getAccountSnapshotMetadataFor(liabilityAccount).get();
         accountSnapshotMetadata.setAmount(accountSnapshotMetadata.getAmount().add(new BigDecimal("100000.00")));
 
@@ -250,8 +252,8 @@ class PersistenceTest {
 
     private void initSnapshot() {
         snapshot = new Snapshot(LocalDate.now().minusDays(1),
-                                ImmutableSortedSet.of(new AccountSnapshotMetadata(assetAccount, assetAmount),
-                                                      new AccountSnapshotMetadata(liabilityAccount, liabilityAmount)));
+                                ImmutableSortedSet.of(new AssetSnapshot(assetAccount, assetAmount),
+                                                      new LiabilitySnapshot(liabilityAccount, liabilityAmount)));
         assertNull(snapshot.getId());
     }
 }

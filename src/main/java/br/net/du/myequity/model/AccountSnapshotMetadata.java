@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -19,6 +21,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "account_snapshot_metadata",
         uniqueConstraints = @UniqueConstraint(columnNames = {"snapshot_id", "account_id"}))
+@Inheritance(strategy= InheritanceType.JOINED)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class AccountSnapshotMetadata implements Comparable<AccountSnapshotMetadata> {
     @Id
@@ -35,53 +38,12 @@ public class AccountSnapshotMetadata implements Comparable<AccountSnapshotMetada
     @Getter
     private Account account;
 
-    @Column(nullable = false)
-    @Getter
-    @Setter
-    private BigDecimal amount;
-
-    // ASSET PROPERTIES
-
-    @Column(nullable = true)
-    @Getter
-    @Setter
-    private BigDecimal shares;
-
-    @Column(nullable = true)
-    @Getter
-    @Setter
-    private BigDecimal initialInvestment;
-
-    // LIABILITY PROPERTIES
-
-    @Column(nullable = true)
-    @Getter
-    @Setter
-    private BigDecimal totalCreditAvailable;
-
-    @Column(nullable = true)
-    @Getter
-    @Setter
-    private BigDecimal currentCreditAvailable;
-
-    @Column(nullable = true)
-    @Getter
-    @Setter
-    private BigDecimal lastStatementBalance;
-
-    public AccountSnapshotMetadata(final Account account, final BigDecimal amount) {
+    public AccountSnapshotMetadata(final Account account) {
         this.account = account;
-        this.amount = amount;
     }
 
     public BigDecimal getTotal() {
-        if (shares == null && (totalCreditAvailable == null || currentCreditAvailable == null)) {
-            return amount;
-        } else if (shares != null) {
-            return amount.multiply(shares);
-        } else {
-            return totalCreditAvailable.subtract(currentCreditAvailable);
-        }
+        throw new UnsupportedOperationException();
     }
 
     public void setSnapshot(final Snapshot snapshot) {

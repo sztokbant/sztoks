@@ -2,8 +2,9 @@ package br.net.du.myequity.controller;
 
 import br.net.du.myequity.controller.util.ControllerUtils;
 import br.net.du.myequity.model.Account;
-import br.net.du.myequity.model.AccountSnapshotMetadata;
 import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.AssetSnapshot;
+import br.net.du.myequity.model.LiabilitySnapshot;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.AccountRepository;
@@ -123,8 +124,13 @@ public class SnapshotController extends BaseController {
             final List<Account> allUserAccounts = accountRepository.findByUser(user);
             allUserAccounts.stream()
                            .filter(account -> addAccountsViewModelInput.getAccounts().contains(account.getId()))
-                           .forEach(account -> snapshot.addAccountSnapshotMetadata(new AccountSnapshotMetadata(account,
-                                                                                                               BigDecimal.ZERO)));
+                           .forEach(account -> {
+                               if (account.getAccountType().equals(AccountType.ASSET)) {
+                                   snapshot.addAccountSnapshotMetadata(new AssetSnapshot(account, BigDecimal.ZERO));
+                               } else if (account.getAccountType().equals(AccountType.LIABILITY)) {
+                                   snapshot.addAccountSnapshotMetadata(new LiabilitySnapshot(account, BigDecimal.ZERO));
+                               }
+                           });
 
             snapshotRepository.save(snapshot);
         }
