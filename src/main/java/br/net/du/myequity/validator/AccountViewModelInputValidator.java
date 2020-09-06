@@ -18,7 +18,7 @@ import java.util.List;
 
 @Component
 public class AccountViewModelInputValidator implements SmartValidator {
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     @Autowired
     public AccountViewModelInputValidator(final AccountRepository accountRepository) {

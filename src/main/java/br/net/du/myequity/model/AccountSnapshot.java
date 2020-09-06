@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,11 +18,10 @@ import javax.persistence.UniqueConstraint;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "account_snapshot_metadata",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"snapshot_id", "account_id"}))
-@Inheritance(strategy= InheritanceType.JOINED)
+@Table(name = "account_snapshots", uniqueConstraints = @UniqueConstraint(columnNames = {"snapshot_id", "account_id"}))
+@Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class AccountSnapshotMetadata implements Comparable<AccountSnapshotMetadata> {
+public class AccountSnapshot implements Comparable<AccountSnapshot> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -38,7 +36,7 @@ public class AccountSnapshotMetadata implements Comparable<AccountSnapshotMetada
     @Getter
     private Account account;
 
-    public AccountSnapshotMetadata(final Account account) {
+    public AccountSnapshot(final Account account) {
         this.account = account;
     }
 
@@ -56,11 +54,11 @@ public class AccountSnapshotMetadata implements Comparable<AccountSnapshotMetada
         this.snapshot = snapshot;
 
         if (oldSnapshot != null) {
-            oldSnapshot.removeAccountSnapshotMetadataFor(this.getAccount());
+            oldSnapshot.removeAccountSnapshotFor(this.getAccount());
         }
 
         if (snapshot != null) {
-            snapshot.addAccountSnapshotMetadata(this);
+            snapshot.addAccountSnapshot(this);
         }
     }
 
@@ -76,11 +74,11 @@ public class AccountSnapshotMetadata implements Comparable<AccountSnapshotMetada
             return true;
         }
 
-        if (!(other instanceof AccountSnapshotMetadata)) {
+        if (!(other instanceof AccountSnapshot)) {
             return false;
         }
 
-        return id != null && id.equals(((AccountSnapshotMetadata) other).getId());
+        return id != null && id.equals(((AccountSnapshot) other).getId());
     }
 
     @Override
@@ -89,7 +87,7 @@ public class AccountSnapshotMetadata implements Comparable<AccountSnapshotMetada
     }
 
     @Override
-    public int compareTo(final AccountSnapshotMetadata other) {
+    public int compareTo(final AccountSnapshot other) {
         return this.getAccount().compareTo(other.getAccount());
     }
 }

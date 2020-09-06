@@ -1,7 +1,7 @@
 package br.net.du.myequity.util;
 
 import br.net.du.myequity.model.Account;
-import br.net.du.myequity.model.AccountSnapshotMetadata;
+import br.net.du.myequity.model.AccountSnapshot;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.AssetSnapshot;
 import br.net.du.myequity.model.LiabilitySnapshot;
@@ -36,13 +36,12 @@ class NetWorthUtilTest {
     @Test
     public void computeByCurrency_fromAccountSet_singleCurrency() {
         // GIVEN
-        final ImmutableSortedSet<AccountSnapshotMetadata> accountSnapshotMetadata =
+        final ImmutableSortedSet<AccountSnapshot> accountSnapshots =
                 ImmutableSortedSet.of(new AssetSnapshot(assetAccount, assetAmount),
                                       new LiabilitySnapshot(liabilityAccount, liabilityAmount));
 
         // WHEN
-        final Map<CurrencyUnit, BigDecimal> netWorthByCurrency =
-                NetWorthUtil.computeByCurrency(accountSnapshotMetadata);
+        final Map<CurrencyUnit, BigDecimal> netWorthByCurrency = NetWorthUtil.computeByCurrency(accountSnapshots);
 
         // THEN
         assertEquals(1, netWorthByCurrency.size());
@@ -60,15 +59,14 @@ class NetWorthUtilTest {
         final Account brlLiability = new Account("BRL Liability Account", AccountType.LIABILITY, brl);
         final BigDecimal brlLiabilityAmount = new BigDecimal("150000.00");
 
-        final ImmutableSortedSet<AccountSnapshotMetadata> accountSnapshotMetadata =
+        final ImmutableSortedSet<AccountSnapshot> accountSnapshots =
                 ImmutableSortedSet.of(new AssetSnapshot(assetAccount, assetAmount),
                                       new LiabilitySnapshot(liabilityAccount, liabilityAmount),
                                       new AssetSnapshot(brlAsset, brlAssetAmount),
                                       new LiabilitySnapshot(brlLiability, brlLiabilityAmount));
 
         // WHEN
-        final Map<CurrencyUnit, BigDecimal> netWorthByCurrency =
-                NetWorthUtil.computeByCurrency(accountSnapshotMetadata);
+        final Map<CurrencyUnit, BigDecimal> netWorthByCurrency = NetWorthUtil.computeByCurrency(accountSnapshots);
 
         // THEN
         assertEquals(2, netWorthByCurrency.size());

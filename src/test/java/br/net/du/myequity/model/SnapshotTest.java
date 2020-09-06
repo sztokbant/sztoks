@@ -20,36 +20,36 @@ class SnapshotTest {
 
     private LocalDate now;
     private Account assetAccount;
-    private AccountSnapshotMetadata assetData;
+    private AssetSnapshot assetSnapshot;
     private Account liabilityAccount;
-    private AccountSnapshotMetadata liabilityData;
+    private LiabilitySnapshot liabilitySnapshot;
     private Map<CurrencyUnit, BigDecimal> expectedNetWorth;
 
     @BeforeEach
     public void setUp() {
         now = LocalDate.now();
         assetAccount = new Account("Asset Account", AccountType.ASSET, CurrencyUnit.USD);
-        assetData = new AssetSnapshot(assetAccount, new BigDecimal("100.00"));
+        assetSnapshot = new AssetSnapshot(assetAccount, new BigDecimal("100.00"));
         liabilityAccount = new Account("Liability Account", AccountType.LIABILITY, CurrencyUnit.USD);
-        liabilityData = new LiabilitySnapshot(liabilityAccount, new BigDecimal("320000.00"));
+        liabilitySnapshot = new LiabilitySnapshot(liabilityAccount, new BigDecimal("320000.00"));
         expectedNetWorth = ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-319900.00"));
     }
 
     @Test
     public void constructor() {
         // WHEN
-        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetData, liabilityData));
+        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetSnapshot, liabilitySnapshot));
 
         // THEN
         assertEquals(now, snapshot.getDate());
-        assertEquals(2, snapshot.getAccountSnapshotMetadataSet().size());
+        assertEquals(2, snapshot.getAccountSnapshots().size());
         assertEquals(expectedNetWorth, snapshot.getNetWorth());
     }
 
     @Test
     public void getNetWorth() {
         // GIVEN
-        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetData, liabilityData));
+        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetSnapshot, liabilitySnapshot));
 
         // THEN
         assertEquals(expectedNetWorth, snapshot.getNetWorth());
@@ -58,7 +58,7 @@ class SnapshotTest {
     @Test
     public void getTotalForAccountType_assets() {
         // GIVEN
-        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetData, liabilityData));
+        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetSnapshot, liabilitySnapshot));
 
         // THEN
         assertEquals(ImmutableMap.of(assetAccount.getCurrencyUnit(), new BigDecimal("100.00")),
@@ -68,7 +68,7 @@ class SnapshotTest {
     @Test
     public void getTotalForAccountType_liabilities() {
         // GIVEN
-        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetData, liabilityData));
+        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetSnapshot, liabilitySnapshot));
 
         // THEN
         assertEquals(ImmutableMap.of(liabilityAccount.getCurrencyUnit(), new BigDecimal("320000.00").negate()),
@@ -81,103 +81,100 @@ class SnapshotTest {
         final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of());
 
         // WHEN
-        snapshot.addAccountSnapshotMetadata(liabilityData);
+        snapshot.addAccountSnapshot(liabilitySnapshot);
 
         // THEN
-        assertEquals(1, snapshot.getAccountSnapshotMetadataSet().size());
-        assertEquals(new BigDecimal("320000.00"),
-                     snapshot.getAccountSnapshotMetadataFor(liabilityAccount).get().getTotal());
+        assertEquals(1, snapshot.getAccountSnapshots().size());
+        assertEquals(new BigDecimal("320000.00"), snapshot.getAccountSnapshotFor(liabilityAccount).get().getTotal());
         assertEquals(ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-320000.00")), snapshot.getNetWorth());
     }
 
     @Test
     public void removeAccount_existing() {
         // GIVEN
-        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetData, liabilityData));
+        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetSnapshot, liabilitySnapshot));
 
         // WHEN
-        snapshot.removeAccountSnapshotMetadataFor(liabilityAccount);
+        snapshot.removeAccountSnapshotFor(liabilityAccount);
 
         // THEN
-        assertEquals(1, snapshot.getAccountSnapshotMetadataSet().size());
-        assertFalse(snapshot.getAccountSnapshotMetadataFor(liabilityAccount).isPresent());
+        assertEquals(1, snapshot.getAccountSnapshots().size());
+        assertFalse(snapshot.getAccountSnapshotFor(liabilityAccount).isPresent());
         assertEquals(ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("100.00")), snapshot.getNetWorth());
     }
 
     @Test
     public void removeAccount_nonexisting() {
         // GIVEN
-        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetData, liabilityData));
+        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetSnapshot, liabilitySnapshot));
 
         // WHEN
         final Account notInSnapshot = new Account("Another Account", AccountType.ASSET, CurrencyUnit.USD);
-        snapshot.removeAccountSnapshotMetadataFor(notInSnapshot);
+        snapshot.removeAccountSnapshotFor(notInSnapshot);
 
         // THEN
-        assertEquals(2, snapshot.getAccountSnapshotMetadataSet().size());
-        assertEquals(new BigDecimal("320000.00"),
-                     snapshot.getAccountSnapshotMetadataFor(liabilityAccount).get().getTotal());
-        assertEquals(new BigDecimal("100.00"), snapshot.getAccountSnapshotMetadataFor(assetAccount).get().getTotal());
-        assertFalse(snapshot.getAccountSnapshotMetadataFor(notInSnapshot).isPresent());
+        assertEquals(2, snapshot.getAccountSnapshots().size());
+        assertEquals(new BigDecimal("320000.00"), snapshot.getAccountSnapshotFor(liabilityAccount).get().getTotal());
+        assertEquals(new BigDecimal("100.00"), snapshot.getAccountSnapshotFor(assetAccount).get().getTotal());
+        assertFalse(snapshot.getAccountSnapshotFor(notInSnapshot).isPresent());
         assertEquals(expectedNetWorth, snapshot.getNetWorth());
     }
 
     @Test
     public void getAccount_nonexisting() {
         // GIVEN
-        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetData));
+        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetSnapshot));
 
         // THEN
-        assertFalse(snapshot.getAccountSnapshotMetadataFor(liabilityAccount).isPresent());
+        assertFalse(snapshot.getAccountSnapshotFor(liabilityAccount).isPresent());
     }
 
     @Test
     public void getAccounts_containersAreImmutable() {
         // GIVEN
-        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetData, liabilityData));
+        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetSnapshot, liabilitySnapshot));
 
-        final SortedSet<AccountSnapshotMetadata> accountSnapshotMetadata = snapshot.getAccountSnapshotMetadataSet();
+        final SortedSet<AccountSnapshot> accountSnapshots = snapshot.getAccountSnapshots();
 
         // THEN
         assertThrows(UnsupportedOperationException.class, () -> {
-            accountSnapshotMetadata.remove(assetData);
+            accountSnapshots.remove(assetSnapshot);
         });
 
         final Account anotherAccount = new Account("Another Account", AccountType.ASSET, CurrencyUnit.USD);
-        final AccountSnapshotMetadata notInSnapshot =
-                new AssetSnapshot(anotherAccount, new BigDecimal("50000"));
+        final AccountSnapshot notInSnapshot = new AssetSnapshot(anotherAccount, new BigDecimal("50000"));
         assertThrows(UnsupportedOperationException.class, () -> {
-            accountSnapshotMetadata.add(notInSnapshot);
+            accountSnapshots.add(notInSnapshot);
         });
     }
 
     @Test
     public void getAccountsByType() {
         // GIVEN
-        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetData, liabilityData));
+        final Snapshot snapshot = new Snapshot(now, ImmutableSortedSet.of(assetSnapshot, liabilitySnapshot));
 
         // WHEN
-        final Map<AccountType, SortedSet<AccountSnapshotMetadata>> accountSnapshotDatas =
-                snapshot.getAccountSnapshotMetadataByType();
+        final Map<AccountType, SortedSet<AccountSnapshot>> accountSnapshotsByType =
+                snapshot.getAccountSnapshotsByType();
 
         // THEN
-        assertEquals(2, accountSnapshotDatas.size());
-        assertTrue(accountSnapshotDatas.containsKey(AccountType.ASSET));
-        final SortedSet<AccountSnapshotMetadata> assetAccounts = accountSnapshotDatas.get(AccountType.ASSET);
+        assertEquals(2, accountSnapshotsByType.size());
+        assertTrue(accountSnapshotsByType.containsKey(AccountType.ASSET));
+        final SortedSet<AccountSnapshot> assetAccounts = accountSnapshotsByType.get(AccountType.ASSET);
         assertEquals(1, assetAccounts.size());
-        assertEquals(assetData, assetAccounts.iterator().next());
+        assertEquals(assetSnapshot, assetAccounts.iterator().next());
 
-        assertTrue(accountSnapshotDatas.containsKey(AccountType.LIABILITY));
-        final SortedSet<AccountSnapshotMetadata> liabilityAccounts = accountSnapshotDatas.get(AccountType.LIABILITY);
+        assertTrue(accountSnapshotsByType.containsKey(AccountType.LIABILITY));
+        final SortedSet<AccountSnapshot> liabilityAccounts = accountSnapshotsByType.get(AccountType.LIABILITY);
         assertEquals(1, liabilityAccounts.size());
-        assertEquals(liabilityData, liabilityAccounts.iterator().next());
+        assertEquals(liabilitySnapshot, liabilityAccounts.iterator().next());
 
         assertThrows(UnsupportedOperationException.class, () -> {
-            accountSnapshotDatas.remove(AccountType.LIABILITY);
+            accountSnapshotsByType.remove(AccountType.LIABILITY);
         });
 
         assertThrows(UnsupportedOperationException.class, () -> {
-            accountSnapshotDatas.get(AccountType.LIABILITY).remove(liabilityAccount);
+            accountSnapshotsByType.get(AccountType.LIABILITY).remove(liabilityAccount);
         });
     }
 

@@ -1,7 +1,7 @@
 package br.net.du.myequity.controller.util;
 
 import br.net.du.myequity.model.Account;
-import br.net.du.myequity.model.AccountSnapshotMetadata;
+import br.net.du.myequity.model.AccountSnapshot;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
@@ -26,7 +26,7 @@ public class ControllerUtils {
     }
 
     public static boolean accountBelongsInSnapshot(final Snapshot snapshot, final Optional<Account> accountOpt) {
-        return accountOpt.isPresent() && snapshot.getAccountSnapshotMetadataFor(accountOpt.get()).isPresent();
+        return accountOpt.isPresent() && snapshot.getAccountSnapshotFor(accountOpt.get()).isPresent();
     }
 
     public static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(final User user) {
@@ -46,11 +46,10 @@ public class ControllerUtils {
     }
 
     public static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(final Snapshot snapshot) {
-        final Map<AccountType, SortedSet<AccountSnapshotMetadata>> accountsByType =
-                snapshot.getAccountSnapshotMetadataByType();
+        final Map<AccountType, SortedSet<AccountSnapshot>> accountsByType = snapshot.getAccountSnapshotsByType();
 
-        final SortedSet<AccountSnapshotMetadata> assetAccounts = accountsByType.get(AccountType.ASSET);
-        final SortedSet<AccountSnapshotMetadata> liabilityAccounts = accountsByType.get(AccountType.LIABILITY);
+        final SortedSet<AccountSnapshot> assetAccounts = accountsByType.get(AccountType.ASSET);
+        final SortedSet<AccountSnapshot> liabilityAccounts = accountsByType.get(AccountType.LIABILITY);
 
         return ImmutableMap.of(AccountType.ASSET,
                                assetAccounts == null ?

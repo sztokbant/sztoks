@@ -81,8 +81,7 @@ public class SnapshotController extends BaseController {
         final List<AccountViewModelOutput> availableAssets = allUserAccounts.stream()
                                                                             .filter(account -> account.getAccountType()
                                                                                                       .equals(AccountType.ASSET) && !snapshot
-                                                                                    .getAccountSnapshotMetadataFor(
-                                                                                            account)
+                                                                                    .getAccountSnapshotFor(account)
                                                                                     .isPresent())
                                                                             .map(AccountViewModelOutput::of)
                                                                             .collect(Collectors.toList());
@@ -90,8 +89,7 @@ public class SnapshotController extends BaseController {
         final List<AccountViewModelOutput> availableLiabilities = allUserAccounts.stream()
                                                                                  .filter(account -> account.getAccountType()
                                                                                                            .equals(AccountType.LIABILITY) && !snapshot
-                                                                                         .getAccountSnapshotMetadataFor(
-                                                                                                 account)
+                                                                                         .getAccountSnapshotFor(account)
                                                                                          .isPresent())
                                                                                  .map(AccountViewModelOutput::of)
                                                                                  .collect(Collectors.toList());
@@ -125,10 +123,11 @@ public class SnapshotController extends BaseController {
             allUserAccounts.stream()
                            .filter(account -> addAccountsViewModelInput.getAccounts().contains(account.getId()))
                            .forEach(account -> {
+                               // TODO This if-zilla has to be cleaned up
                                if (account.getAccountType().equals(AccountType.ASSET)) {
-                                   snapshot.addAccountSnapshotMetadata(new AssetSnapshot(account, BigDecimal.ZERO));
+                                   snapshot.addAccountSnapshot(new AssetSnapshot(account, BigDecimal.ZERO));
                                } else if (account.getAccountType().equals(AccountType.LIABILITY)) {
-                                   snapshot.addAccountSnapshotMetadata(new LiabilitySnapshot(account, BigDecimal.ZERO));
+                                   snapshot.addAccountSnapshot(new LiabilitySnapshot(account, BigDecimal.ZERO));
                                }
                            });
 

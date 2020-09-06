@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 public class UserValidator implements Validator {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^(.+)@(.+)$");
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserValidator(final UserService userService) {

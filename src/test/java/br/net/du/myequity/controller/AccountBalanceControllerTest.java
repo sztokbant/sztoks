@@ -1,13 +1,12 @@
 package br.net.du.myequity.controller;
 
 import br.net.du.myequity.model.Account;
-import br.net.du.myequity.model.AccountSnapshotMetadata;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.AssetSnapshot;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.AccountRepository;
-import br.net.du.myequity.persistence.AccountSnapshotMetadataRepository;
+import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -76,7 +75,7 @@ class AccountBalanceControllerTest {
     private AccountRepository accountRepository;
 
     @MockBean
-    private AccountSnapshotMetadataRepository accountSnapshotMetadataRepository;
+    private AccountSnapshotRepository accountSnapshotRepository;
 
     private String requestContent;
 
@@ -302,18 +301,16 @@ class AccountBalanceControllerTest {
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final AccountSnapshotMetadata
-                accountSnapshotMetadata = new AssetSnapshot(account, CURRENT_BALANCE);
-        accountSnapshotMetadata.setId(108L);
-        snapshot.addAccountSnapshotMetadata(accountSnapshotMetadata);
+        final AssetSnapshot assetSnapshot = new AssetSnapshot(account, CURRENT_BALANCE);
+        assetSnapshot.setId(108L);
+        snapshot.addAccountSnapshot(assetSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotMetadataRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.of(
-                accountSnapshotMetadata));
+        when(accountSnapshotRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.of(assetSnapshot));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)

@@ -56,52 +56,50 @@ public class Snapshot implements Comparable<Snapshot> {
 
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural // Ref.: https://thorben-janssen.com/ordering-vs-sorting-hibernate-use/
-    private SortedSet<AccountSnapshotMetadata> accountSnapshotMetadataSet = new TreeSet<>();
+    private final SortedSet<AccountSnapshot> accountSnapshots = new TreeSet<>();
 
-    public Snapshot(final LocalDate date,
-                    @NotNull final SortedSet<AccountSnapshotMetadata> accountSnapshotMetadataSet) {
+    public Snapshot(final LocalDate date, @NotNull final SortedSet<AccountSnapshot> accountSnapshots) {
         this.date = date;
-        this.accountSnapshotMetadataSet.addAll(accountSnapshotMetadataSet);
+        this.accountSnapshots.addAll(accountSnapshots);
     }
 
     // TODO May never be used beyond unit-tests
-    public SortedSet<AccountSnapshotMetadata> getAccountSnapshotMetadataSet() {
-        return ImmutableSortedSet.copyOf(accountSnapshotMetadataSet);
+    public SortedSet<AccountSnapshot> getAccountSnapshots() {
+        return ImmutableSortedSet.copyOf(accountSnapshots);
     }
 
-    public Map<AccountType, SortedSet<AccountSnapshotMetadata>> getAccountSnapshotMetadataByType() {
-        return accountSnapshotMetadataSet.stream()
-                                         .collect(collectingAndThen(groupingBy(accountSnapshotData -> accountSnapshotData
-                                                                                       .getAccount()
-                                                                                       .getAccountType(),
-                                                                               collectingAndThen(toSet(),
-                                                                                                 ImmutableSortedSet::copyOf)),
-                                                                    ImmutableMap::copyOf));
+    public Map<AccountType, SortedSet<AccountSnapshot>> getAccountSnapshotsByType() {
+        return accountSnapshots.stream()
+                               .collect(collectingAndThen(groupingBy(accountSnapshotData -> accountSnapshotData.getAccount()
+                                                                                                               .getAccountType(),
+                                                                     collectingAndThen(toSet(),
+                                                                                       ImmutableSortedSet::copyOf)),
+                                                          ImmutableMap::copyOf));
     }
 
-    public Optional<AccountSnapshotMetadata> getAccountSnapshotMetadataFor(@NonNull final Account account) {
-        return accountSnapshotMetadataSet.stream().filter(entry -> account.equals(entry.getAccount())).findFirst();
+    public Optional<AccountSnapshot> getAccountSnapshotFor(@NonNull final Account account) {
+        return accountSnapshots.stream().filter(entry -> account.equals(entry.getAccount())).findFirst();
     }
 
-    public void addAccountSnapshotMetadata(@NonNull final AccountSnapshotMetadata accountSnapshotMetadata) {
+    public void addAccountSnapshot(@NonNull final AccountSnapshot accountSnapshot) {
         // Prevents infinite loop
-        if (accountSnapshotMetadataSet.contains(accountSnapshotMetadata)) {
+        if (accountSnapshots.contains(accountSnapshot)) {
             return;
         }
-        accountSnapshotMetadataSet.add(accountSnapshotMetadata);
-        accountSnapshotMetadata.setSnapshot(this);
+        accountSnapshots.add(accountSnapshot);
+        accountSnapshot.setSnapshot(this);
     }
 
-    public void removeAccountSnapshotMetadataFor(@NonNull final Account account) {
+    public void removeAccountSnapshotFor(@NonNull final Account account) {
         // Prevents infinite loop
-        final Optional<AccountSnapshotMetadata> accountSnapshotDataOpt = getAccountSnapshotMetadataFor(account);
+        final Optional<AccountSnapshot> accountSnapshotDataOpt = getAccountSnapshotFor(account);
         if (!accountSnapshotDataOpt.isPresent()) {
             return;
         }
 
-        final AccountSnapshotMetadata accountSnapshotMetadata = accountSnapshotDataOpt.get();
-        accountSnapshotMetadataSet.remove(accountSnapshotMetadata);
-        accountSnapshotMetadata.setSnapshot(null);
+        final AccountSnapshot accountSnapshot = accountSnapshotDataOpt.get();
+        accountSnapshots.remove(accountSnapshot);
+        accountSnapshot.setSnapshot(null);
     }
 
     public void setUser(final User user) {
@@ -129,15 +127,15 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     public Map<CurrencyUnit, BigDecimal> getNetWorth() {
-        return NetWorthUtil.computeByCurrency(accountSnapshotMetadataSet);
+        return NetWorthUtil.computeByCurrency(accountSnapshots);
     }
 
     public Map<CurrencyUnit, BigDecimal> getTotalForAccountType(@NonNull final AccountType accountType) {
-        return NetWorthUtil.computeByCurrency(accountSnapshotMetadataSet.stream()
-                                                                        .filter(entry -> entry.getAccount()
-                                                                                              .getAccountType()
-                                                                                              .equals(accountType))
-                                                                        .collect(Collectors.toSet()));
+        return NetWorthUtil.computeByCurrency(accountSnapshots.stream()
+                                                              .filter(entry -> entry.getAccount()
+                                                                                    .getAccountType()
+                                                                                    .equals(accountType))
+                                                              .collect(Collectors.toSet()));
     }
 
     @Override

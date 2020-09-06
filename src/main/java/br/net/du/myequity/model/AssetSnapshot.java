@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Table(name = "asset_snapshots")
 @PrimaryKeyJoinColumn(name = "id")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class AssetSnapshot extends AccountSnapshotMetadata {
+public class AssetSnapshot extends AccountSnapshot {
 
     @Column(nullable = false)
     @Getter

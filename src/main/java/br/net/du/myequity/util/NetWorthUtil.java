@@ -1,6 +1,6 @@
 package br.net.du.myequity.util;
 
-import br.net.du.myequity.model.AccountSnapshotMetadata;
+import br.net.du.myequity.model.AccountSnapshot;
 import br.net.du.myequity.model.AccountType;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class NetWorthUtil {
 
-    public static Map<CurrencyUnit, BigDecimal> computeByCurrency(final Set<AccountSnapshotMetadata> accountBalances) {
+    public static Map<CurrencyUnit, BigDecimal> computeByCurrency(final Set<AccountSnapshot> accountBalances) {
         return accountBalances.stream()
                               .map(entry -> Money.of(entry.getAccount().getCurrencyUnit(),
                                                      entry.getAccount().getAccountType().equals(AccountType.ASSET) ?

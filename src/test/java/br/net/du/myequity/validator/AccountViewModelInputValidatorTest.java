@@ -238,7 +238,7 @@ class AccountViewModelInputValidatorTest {
 
         // WHEN/THEN
         assertThrows(UnsupportedOperationException.class, () -> {
-            accountViewModelInputValidator.validate(accountViewModelInput, errors, new Object[]{"A String!"});
+            accountViewModelInputValidator.validate(accountViewModelInput, errors, "A String!");
         });
     }
 

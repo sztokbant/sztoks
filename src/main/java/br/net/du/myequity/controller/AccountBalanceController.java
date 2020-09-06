@@ -1,14 +1,14 @@
 package br.net.du.myequity.controller;
 
 import br.net.du.myequity.model.Account;
-import br.net.du.myequity.model.AccountSnapshotMetadata;
+import br.net.du.myequity.model.AccountSnapshot;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.AssetSnapshot;
 import br.net.du.myequity.model.LiabilitySnapshot;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.AccountRepository;
-import br.net.du.myequity.persistence.AccountSnapshotMetadataRepository;
+import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +35,7 @@ public class AccountBalanceController extends BaseController {
     private AccountRepository accountRepository;
 
     @Autowired
-    private AccountSnapshotMetadataRepository accountSnapshotMetadataRepository;
+    private AccountSnapshotRepository accountSnapshotRepository;
 
     @PostMapping("/accountbalance")
     public AccountBalanceResponse post(@RequestBody final AccountBalanceJsonRequest accountBalanceJsonRequest) {
@@ -54,23 +54,24 @@ public class AccountBalanceController extends BaseController {
             return AccountBalanceResponse.builder().hasError(true).build();
         }
 
-        final AccountSnapshotMetadata accountSnapshotMetadata =
-                accountSnapshotMetadataRepository.findByAccountId(accountBalanceJsonRequest.getAccountId()).get();
+        final AccountSnapshot accountSnapshot =
+                accountSnapshotRepository.findByAccountId(accountBalanceJsonRequest.getAccountId()).get();
 
-        if (accountSnapshotMetadata instanceof AssetSnapshot) {
-            ((AssetSnapshot) accountSnapshotMetadata).setAmount(accountBalanceJsonRequest.getBalance());
+        // TODO This if-zilla has to be cleaned up
+        if (accountSnapshot instanceof AssetSnapshot) {
+            ((AssetSnapshot) accountSnapshot).setAmount(accountBalanceJsonRequest.getBalance());
         } else {
-            ((LiabilitySnapshot) accountSnapshotMetadata).setAmount(accountBalanceJsonRequest.getBalance());
+            ((LiabilitySnapshot) accountSnapshot).setAmount(accountBalanceJsonRequest.getBalance());
         }
 
-        accountSnapshotMetadataRepository.save(accountSnapshotMetadata);
+        accountSnapshotRepository.save(accountSnapshot);
 
-        final CurrencyUnit currencyUnit = accountSnapshotMetadata.getAccount().getCurrencyUnit();
-        final AccountType accountType = accountSnapshotMetadata.getAccount().getAccountType();
+        final CurrencyUnit currencyUnit = accountSnapshot.getAccount().getCurrencyUnit();
+        final AccountType accountType = accountSnapshot.getAccount().getAccountType();
 
         return AccountBalanceResponse.builder()
                                      .hasError(false)
-                                     .balance(DECIMAL_FORMAT.format(accountSnapshotMetadata.getTotal().setScale(2)))
+                                     .balance(DECIMAL_FORMAT.format(accountSnapshot.getTotal().setScale(2)))
                                      .currencyUnit(currencyUnit.toString())
                                      .netWorth(DECIMAL_FORMAT.format(snapshot.getNetWorth()
                                                                              .get(currencyUnit)
