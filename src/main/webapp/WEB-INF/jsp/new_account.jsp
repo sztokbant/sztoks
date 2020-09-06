@@ -32,12 +32,16 @@
         <spring:bind path="typeName">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <div>
-                    <form:radiobutton path="typeName" value="SimpleAssetAccount" id="assetRadio" checked="checked"/>
-                    <label for="assetRadio">Asset</label>
+                    <form:radiobutton path="typeName" value="SimpleAssetAccount" id="simpleAssetRadio" checked="checked"/>
+                    <label for="simpleAssetRadio">Simple Asset</label>
                 </div>
                 <div>
-                    <form:radiobutton path="typeName" value="SimpleLiabilityAccount" id="liabilityRadio"/>
-                    <label for="liabilityRadio">Liability</label>
+                    <form:radiobutton path="typeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"/>
+                    <label for="simpleLiabilityRadio">Simple Liability</label>
+                </div>
+                <div>
+                    <form:radiobutton path="typeName" value="CreditCardAccount" id="creditCardRadio"/>
+                    <label for="creditCardRadio">Credit Card</label>
                 </div>
                 <form:errors path="typeName"/>
             </div>
