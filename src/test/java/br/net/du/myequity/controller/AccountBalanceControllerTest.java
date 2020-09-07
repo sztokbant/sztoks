@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class AccountBalanceControllerTest {
 
-    private static final String ACCOUNT_BALANCE_URL = "/accountbalance";
+    private static final String ACCOUNT_BALANCE_URL = "/updateAccountBalance";
 
     private static final Long SNAPSHOT_ID = 99L;
 
@@ -101,7 +101,7 @@ class AccountBalanceControllerTest {
                 AccountBalanceController.AccountBalanceJsonRequest.builder()
                                                                   .snapshotId(SNAPSHOT_ID)
                                                                   .accountId(ACCOUNT_ID)
-                                                                  .balance(NEW_BALANCE)
+                                                                  .newValue(NEW_BALANCE)
                                                                   .build();
         requestContent = new ObjectMapper().writeValueAsString(accountBalanceJsonRequest);
     }

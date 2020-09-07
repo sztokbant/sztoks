@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class AccountNameControllerTest {
 
-    private static final String ACCOUNT_NAME_URL = "/accountname";
+    private static final String ACCOUNT_NAME_URL = "/updateAccountName";
 
     private static final Long ACCOUNT_ID = 1L;
     private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
@@ -78,7 +78,7 @@ class AccountNameControllerTest {
         final AccountNameController.AccountNameJsonRequest accountNameJsonRequest =
                 AccountNameController.AccountNameJsonRequest.builder()
                                                             .accountId(ACCOUNT_ID)
-                                                            .name(NEW_ACCOUNT_NAME_NOT_TRIMMED)
+                                                            .newValue(NEW_ACCOUNT_NAME_NOT_TRIMMED)
                                                             .build();
         requestContent = new ObjectMapper().writeValueAsString(accountNameJsonRequest);
     }

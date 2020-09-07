@@ -1,11 +1,16 @@
 <script type="text/javascript">
 $(document).ready(function() {
-  prepareAccountNameUpdateForm($("#form_account_name_${account.id}"),
-    ${account.id},
+  var data = {
+    accountId: ${account.id},
+  }
+  prepareUpdateForm($("#form_account_name_${account.id}"),
     $("#account_name_${account.id}"),
-    $("#new_account_name_${account.id}"));
+    $("#new_account_name_${account.id}"),
+    "updateAccountName",
+    data,
+    accountNameUpdateSuccessCallback,
+  );
 })
-
 </script>
 
 <li>

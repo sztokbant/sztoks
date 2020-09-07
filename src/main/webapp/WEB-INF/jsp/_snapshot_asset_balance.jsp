@@ -1,12 +1,17 @@
 <script type="text/javascript">
 $(document).ready(function() {
-  prepareAccountBalanceUpdateForm($("#form_account_balance_${account.id}"),
-    ${snapshot.id},
-    ${account.id},
+  var data = {
+    snapshotId: ${snapshot.id},
+    accountId: ${account.id},
+  }
+  prepareUpdateForm($("#form_account_balance_${account.id}"),
     $("#account_balance_amount_${account.id}"),
-    $("#new_account_balance_amount_${account.id}"));
+    $("#new_account_balance_amount_${account.id}"),
+    "updateAccountBalance",
+    data,
+    accountBalanceUpdateSuccessCallback,
+  );
 })
-
 </script>
 
 <div class="col">

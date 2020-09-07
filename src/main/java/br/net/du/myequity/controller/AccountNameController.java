@@ -19,7 +19,7 @@ public class AccountNameController extends BaseController {
     @Autowired
     private AccountRepository accountRepository;
 
-    @PostMapping("/accountname")
+    @PostMapping("/updateAccountName")
     public AccountNameResponse post(@RequestBody final AccountNameJsonRequest accountNameJsonRequest) {
         final User user = getCurrentUser();
 
@@ -31,7 +31,7 @@ public class AccountNameController extends BaseController {
 
         final Account account = accountOpt.get();
 
-        account.setName(accountNameJsonRequest.getName().trim());
+        account.setName(accountNameJsonRequest.getNewValue().trim());
         accountRepository.save(account);
 
         return AccountNameResponse.builder().hasError(false).name(account.getName()).build();
@@ -41,7 +41,7 @@ public class AccountNameController extends BaseController {
     @Builder
     public static class AccountNameJsonRequest {
         private Long accountId;
-        private String name;
+        private String newValue;
     }
 
     @Data

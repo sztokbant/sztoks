@@ -37,7 +37,7 @@ public class AccountBalanceController extends BaseController {
     @Autowired
     private AccountSnapshotRepository accountSnapshotRepository;
 
-    @PostMapping("/accountbalance")
+    @PostMapping("/updateAccountBalance")
     public AccountBalanceResponse post(@RequestBody final AccountBalanceJsonRequest accountBalanceJsonRequest) {
         final User user = getCurrentUser();
 
@@ -61,9 +61,9 @@ public class AccountBalanceController extends BaseController {
         //  -> This is probably fine as it's just to update balances of Simple* accounts. Other accounts should have
         //  different end-points.
         if (accountSnapshot instanceof SimpleAssetSnapshot) {
-            ((SimpleAssetSnapshot) accountSnapshot).setAmount(accountBalanceJsonRequest.getBalance());
+            ((SimpleAssetSnapshot) accountSnapshot).setAmount(accountBalanceJsonRequest.getNewValue());
         } else {
-            ((SimpleLiabilitySnapshot) accountSnapshot).setAmount(accountBalanceJsonRequest.getBalance());
+            ((SimpleLiabilitySnapshot) accountSnapshot).setAmount(accountBalanceJsonRequest.getNewValue());
         }
 
         accountSnapshotRepository.save(accountSnapshot);
@@ -89,7 +89,7 @@ public class AccountBalanceController extends BaseController {
     public static class AccountBalanceJsonRequest {
         private Long snapshotId;
         private Long accountId;
-        private BigDecimal balance;
+        private BigDecimal newValue;
     }
 
     @Data
