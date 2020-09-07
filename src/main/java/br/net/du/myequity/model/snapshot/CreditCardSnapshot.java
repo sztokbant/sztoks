@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Table(name = "credit_card_snapshots")
 @PrimaryKeyJoinColumn(name = "id")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class SimpleCreditCardSnapshot extends AccountSnapshot {
+public class CreditCardSnapshot extends AccountSnapshot {
 
     @Column(nullable = false)
     @Getter
@@ -28,9 +28,7 @@ public class SimpleCreditCardSnapshot extends AccountSnapshot {
     @Setter
     private BigDecimal availableCredit;
 
-    public SimpleCreditCardSnapshot(final Account account,
-                                    final BigDecimal totalCredit,
-                                    final BigDecimal availableCredit) {
+    public CreditCardSnapshot(final Account account, final BigDecimal totalCredit, final BigDecimal availableCredit) {
         super(account);
         this.totalCredit = totalCredit;
         this.availableCredit = availableCredit;

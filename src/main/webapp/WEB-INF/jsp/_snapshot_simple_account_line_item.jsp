@@ -19,6 +19,14 @@ $(document).ready(function() {
 </div>
 
 <div class="col">
+    &nbsp;
+</div>
+
+<div class="col">
+    &nbsp;
+</div>
+
+<div class="col">
     <form id="form_account_balance_${account.id}">
         ${account.balanceCurrencyUnit}
         <span id="account_balance_amount_${account.id}">${account.total}</span>

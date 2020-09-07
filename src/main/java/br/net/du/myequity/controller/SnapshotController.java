@@ -7,8 +7,9 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
-import br.net.du.myequity.viewmodel.AccountViewModelOutput;
-import br.net.du.myequity.viewmodel.AddAccountsViewModelInput;
+import br.net.du.myequity.viewmodel.AddAccountsToSnapshotViewModelInput;
+import br.net.du.myequity.viewmodel.CreditCardViewModelOutput;
+import br.net.du.myequity.viewmodel.SimpleAccountViewModelOutput;
 import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
 import br.net.du.myequity.viewmodel.UserViewModelOutput;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static br.net.du.myequity.controller.util.ControllerConstants.ASSET_ACCOUNTS_KEY;
-import static br.net.du.myequity.controller.util.ControllerConstants.LIABILITY_ACCOUNTS_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.CREDIT_CARD_ACCOUNTS_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_ASSET_ACCOUNTS_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_LIABILITY_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
@@ -54,12 +58,40 @@ public class SnapshotController extends BaseController {
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_KEY, SnapshotViewModelOutput.of(snapshot));
 
-        final Map<AccountType, List<AccountViewModelOutput>> accountViewModels =
-                ControllerUtils.getAccountViewModelOutputs(snapshot);
-        model.addAttribute(ASSET_ACCOUNTS_KEY, accountViewModels.get(AccountType.ASSET));
-        model.addAttribute(LIABILITY_ACCOUNTS_KEY, accountViewModels.get(AccountType.LIABILITY));
+        addAccountsToModel(model, snapshot);
 
         return "snapshot";
+    }
+
+    private void addAccountsToModel(Model model, Snapshot snapshot) {
+        final Map<AccountType, List<SimpleAccountViewModelOutput>> accountViewModels =
+                ControllerUtils.getAccountViewModelOutputs(snapshot);
+
+        final Map<String, List<SimpleAccountViewModelOutput>> assetsByType =
+                breakDownAccountsByType(accountViewModels.get(AccountType.ASSET));
+        model.addAttribute(SIMPLE_ASSET_ACCOUNTS_KEY,
+                           assetsByType.get(SimpleAccountViewModelOutput.class.getSimpleName()));
+
+        final Map<String, List<SimpleAccountViewModelOutput>> liabilitiesByType =
+                breakDownAccountsByType(accountViewModels.get(AccountType.LIABILITY));
+        model.addAttribute(SIMPLE_LIABILITY_ACCOUNTS_KEY,
+                           liabilitiesByType.get(SimpleAccountViewModelOutput.class.getSimpleName()));
+        model.addAttribute(CREDIT_CARD_ACCOUNTS_KEY,
+                           liabilitiesByType.get(CreditCardViewModelOutput.class.getSimpleName()));
+    }
+
+    private Map<String, List<SimpleAccountViewModelOutput>> breakDownAccountsByType(final List<SimpleAccountViewModelOutput> accounts) {
+        final Map<String, List<SimpleAccountViewModelOutput>> accountsByType = new HashMap<>();
+
+        for (final SimpleAccountViewModelOutput account : accounts) {
+            final String key = account.getClass().getSimpleName();
+            if (!accountsByType.containsKey(key)) {
+                accountsByType.put(key, new ArrayList<>());
+            }
+            accountsByType.get(key).add(account);
+        }
+
+        return accountsByType;
     }
 
     @GetMapping("/addaccounts/{id}")
@@ -75,27 +107,28 @@ public class SnapshotController extends BaseController {
         final Snapshot snapshot = snapshotOpt.get();
         final List<Account> allUserAccounts = accountRepository.findByUser(user);
 
-        final List<AccountViewModelOutput> availableAssets = allUserAccounts.stream()
-                                                                            .filter(account -> account.getAccountType()
-                                                                                                      .equals(AccountType.ASSET) && !snapshot
-                                                                                    .getAccountSnapshotFor(account)
-                                                                                    .isPresent())
-                                                                            .map(AccountViewModelOutput::of)
-                                                                            .collect(Collectors.toList());
+        final List<SimpleAccountViewModelOutput> availableAssets = allUserAccounts.stream()
+                                                                                  .filter(account -> account.getAccountType()
+                                                                                                            .equals(AccountType.ASSET) && !snapshot
+                                                                                          .getAccountSnapshotFor(account)
+                                                                                          .isPresent())
+                                                                                  .map(SimpleAccountViewModelOutput::of)
+                                                                                  .collect(Collectors.toList());
 
-        final List<AccountViewModelOutput> availableLiabilities = allUserAccounts.stream()
-                                                                                 .filter(account -> account.getAccountType()
-                                                                                                           .equals(AccountType.LIABILITY) && !snapshot
-                                                                                         .getAccountSnapshotFor(account)
-                                                                                         .isPresent())
-                                                                                 .map(AccountViewModelOutput::of)
-                                                                                 .collect(Collectors.toList());
+        final List<SimpleAccountViewModelOutput> availableLiabilities = allUserAccounts.stream()
+                                                                                       .filter(account -> account.getAccountType()
+                                                                                                                 .equals(AccountType.LIABILITY) && !snapshot
+                                                                                               .getAccountSnapshotFor(
+                                                                                                       account)
+                                                                                               .isPresent())
+                                                                                       .map(SimpleAccountViewModelOutput::of)
+                                                                                       .collect(Collectors.toList());
 
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_KEY, SnapshotViewModelOutput.of(snapshot));
         model.addAttribute("assets", availableAssets);
         model.addAttribute("liabilities", availableLiabilities);
-        model.addAttribute("addAccountsForm", new AddAccountsViewModelInput());
+        model.addAttribute("addAccountsForm", new AddAccountsToSnapshotViewModelInput());
 
         return "add_accounts";
     }
@@ -103,7 +136,7 @@ public class SnapshotController extends BaseController {
     @PostMapping("/addaccounts/{id}")
     public String addAccounts(@PathVariable(value = "id") final Long snapshotId,
                               @ModelAttribute(
-                                      "addAccountsForm") final AddAccountsViewModelInput addAccountsViewModelInput,
+                                      "addAccountsForm") final AddAccountsToSnapshotViewModelInput addAccountsViewModelInput,
                               final BindingResult bindingResult) {
         final User user = getCurrentUser();
 

@@ -5,6 +5,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class AddAccountsViewModelInput {
+public class AddAccountsToSnapshotViewModelInput {
     private List<Long> accounts;
 }

@@ -2,7 +2,7 @@ package br.net.du.myequity.model.account;
 
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.model.snapshot.SimpleCreditCardSnapshot;
+import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.joda.money.CurrencyUnit;
@@ -28,6 +28,6 @@ public class CreditCardAccount extends Account {
 
     @Override
     public AccountSnapshot newEmptySnapshot() {
-        return new SimpleCreditCardSnapshot(this, BigDecimal.ZERO, BigDecimal.ZERO);
+        return new CreditCardSnapshot(this, BigDecimal.ZERO, BigDecimal.ZERO);
     }
 }

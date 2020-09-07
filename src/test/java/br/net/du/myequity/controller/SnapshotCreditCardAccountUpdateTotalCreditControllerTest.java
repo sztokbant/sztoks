@@ -4,8 +4,8 @@ import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.SimpleLiabilityAccount;
-import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
+import br.net.du.myequity.model.account.CreditCardAccount;
+import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
@@ -30,6 +30,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static br.net.du.myequity.controller.SnapshotAccountUpdateControllerBase.SnapshotAccountUpdateJsonRequest;
 import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
 import static br.net.du.myequity.test.ModelTestUtil.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,9 +44,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AccountBalanceControllerTest {
+class SnapshotCreditCardAccountUpdateTotalCreditControllerTest {
 
-    private static final String ACCOUNT_BALANCE_URL = "/updateAccountBalance";
+    private static final String UPDATE_CREDIT_CARD_TOTAL_CREDIT_URL = "/updateCreditCardTotalCredit";
 
     private static final Long SNAPSHOT_ID = 99L;
 
@@ -53,10 +54,13 @@ class AccountBalanceControllerTest {
     private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
     private static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
 
-    private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
-    private static final BigDecimal NEW_BALANCE = new BigDecimal("108.00");
+    private static final BigDecimal CURRENT_TOTAL_CREDIT = new BigDecimal("3000.00");
+    private static final BigDecimal NEW_TOTAL_CREDIT = new BigDecimal("7000.00");
+
+    private static final BigDecimal CURRENT_AVAILABLE_CREDIT = new BigDecimal("2100.00");
 
     private static final String JSON_HAS_ERROR = "hasError";
+    private static final String JSON_TOTAL_CREDIT = "totalCredit";
     private static final String JSON_BALANCE = "balance";
     private static final String JSON_CURRENCY_UNIT = "currencyUnit";
     private static final String JSON_NET_WORTH = "netWorth";
@@ -94,22 +98,22 @@ class AccountBalanceControllerTest {
         snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
-        account = new SimpleLiabilityAccount("Mortgage", CURRENCY_UNIT, LocalDate.now());
+        account = new CreditCardAccount("Chase Sapphire Reserve", CURRENCY_UNIT, LocalDate.now());
         account.setId(ACCOUNT_ID);
 
-        final AccountBalanceController.AccountBalanceJsonRequest accountBalanceJsonRequest =
-                AccountBalanceController.AccountBalanceJsonRequest.builder()
-                                                                  .snapshotId(SNAPSHOT_ID)
-                                                                  .accountId(ACCOUNT_ID)
-                                                                  .newValue(NEW_BALANCE)
-                                                                  .build();
-        requestContent = new ObjectMapper().writeValueAsString(accountBalanceJsonRequest);
+        final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest =
+                SnapshotAccountUpdateJsonRequest.builder()
+                                                .snapshotId(SNAPSHOT_ID)
+                                                .accountId(ACCOUNT_ID)
+                                                .newValue(NEW_TOTAL_CREDIT)
+                                                .build();
+        requestContent = new ObjectMapper().writeValueAsString(snapshotAccountUpdateJsonRequest);
     }
 
     @Test
-    public void post_noCsrfToken_forbidden() throws Exception {
+    public void updateAccountBalance_noCsrfToken_forbidden() throws Exception {
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_CREDIT_CARD_TOTAL_CREDIT_URL)
                                                                               .contentType(MediaType.APPLICATION_JSON)
                                                                               .content(requestContent));
 
@@ -118,9 +122,9 @@ class AccountBalanceControllerTest {
     }
 
     @Test
-    public void post_withCsrfTokenUserNotLoggedIn_redirectToLogin() throws Exception {
+    public void updateAccountBalance_withCsrfTokenUserNotLoggedIn_redirectToLogin() throws Exception {
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_CREDIT_CARD_TOTAL_CREDIT_URL)
                                                                               .with(csrf())
                                                                               .contentType(MediaType.APPLICATION_JSON)
                                                                               .content(requestContent));
@@ -130,12 +134,12 @@ class AccountBalanceControllerTest {
     }
 
     @Test
-    public void post_userNotFound_hasError() throws Exception {
+    public void updateAccountBalance_userNotFound_hasError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(null);
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_CREDIT_CARD_TOTAL_CREDIT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -153,13 +157,13 @@ class AccountBalanceControllerTest {
     }
 
     @Test
-    public void post_snapshotNotFound_hasError() throws Exception {
+    public void updateAccountBalance_snapshotNotFound_hasError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.empty());
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_CREDIT_CARD_TOTAL_CREDIT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -177,7 +181,7 @@ class AccountBalanceControllerTest {
     }
 
     @Test
-    public void post_snapshotDoesNotBelongToUser_hasError() throws Exception {
+    public void updateAccountBalance_snapshotDoesNotBelongToUser_hasError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -189,7 +193,7 @@ class AccountBalanceControllerTest {
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_CREDIT_CARD_TOTAL_CREDIT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -207,7 +211,7 @@ class AccountBalanceControllerTest {
     }
 
     @Test
-    public void post_accountNotFound_hasError() throws Exception {
+    public void updateAccountBalance_accountNotFound_hasError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -217,7 +221,7 @@ class AccountBalanceControllerTest {
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.empty());
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_CREDIT_CARD_TOTAL_CREDIT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -235,7 +239,7 @@ class AccountBalanceControllerTest {
     }
 
     @Test
-    public void post_accountDoesNotBelongToUser_hasError() throws Exception {
+    public void updateAccountBalance_accountDoesNotBelongToUser_hasError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -250,7 +254,7 @@ class AccountBalanceControllerTest {
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_CREDIT_CARD_TOTAL_CREDIT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -268,7 +272,7 @@ class AccountBalanceControllerTest {
     }
 
     @Test
-    public void post_accountDoesNotBelongInSnapshot_hasError() throws Exception {
+    public void updateAccountBalance_accountDoesNotBelongInSnapshot_hasError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -279,7 +283,7 @@ class AccountBalanceControllerTest {
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_CREDIT_CARD_TOTAL_CREDIT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -297,24 +301,25 @@ class AccountBalanceControllerTest {
     }
 
     @Test
-    public void post_happy() throws Exception {
+    public void updateAccountBalance_happy() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final SimpleAssetSnapshot simpleAssetSnapshot = new SimpleAssetSnapshot(account, CURRENT_BALANCE);
-        simpleAssetSnapshot.setId(108L);
-        snapshot.addAccountSnapshot(simpleAssetSnapshot);
+        final CreditCardSnapshot creditCardSnapshot =
+                new CreditCardSnapshot(account, CURRENT_TOTAL_CREDIT, CURRENT_AVAILABLE_CREDIT);
+        creditCardSnapshot.setId(108L);
+        snapshot.addAccountSnapshot(creditCardSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.of(simpleAssetSnapshot));
+        when(accountSnapshotRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.of(creditCardSnapshot));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(ACCOUNT_BALANCE_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_CREDIT_CARD_TOTAL_CREDIT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -329,10 +334,15 @@ class AccountBalanceControllerTest {
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
         assertFalse(jsonNode.get(JSON_HAS_ERROR).asBoolean());
-        assertEquals(NEW_BALANCE.toString(), jsonNode.get(JSON_BALANCE).asText());
+
+        assertEquals(NEW_TOTAL_CREDIT.toString(), jsonNode.get(JSON_TOTAL_CREDIT).asText());
+
+        final BigDecimal expectedAccountBalance = NEW_TOTAL_CREDIT.subtract(CURRENT_AVAILABLE_CREDIT);
+        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_BALANCE).asText());
+
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
-        assertEquals(NEW_BALANCE.negate().toString(), jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals(expectedAccountBalance.negate().toString(), jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals(NEW_BALANCE.negate().toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertEquals(expectedAccountBalance.negate().toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
     }
 }

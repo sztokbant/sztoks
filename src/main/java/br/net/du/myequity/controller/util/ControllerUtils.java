@@ -5,7 +5,9 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.viewmodel.AccountViewModelOutput;
+import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
+import br.net.du.myequity.viewmodel.CreditCardViewModelOutput;
+import br.net.du.myequity.viewmodel.SimpleAccountViewModelOutput;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -30,7 +32,7 @@ public class ControllerUtils {
         return accountOpt.isPresent() && snapshot.getAccountSnapshotFor(accountOpt.get()).isPresent();
     }
 
-    public static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(final User user) {
+    public static Map<AccountType, List<SimpleAccountViewModelOutput>> getAccountViewModelOutputs(final User user) {
         final Map<AccountType, SortedSet<Account>> accountsByType = user.getAccounts();
 
         final SortedSet<Account> assetAccounts = accountsByType.get(AccountType.ASSET);
@@ -39,14 +41,16 @@ public class ControllerUtils {
         return ImmutableMap.of(AccountType.ASSET,
                                assetAccounts == null ?
                                        ImmutableList.of() :
-                                       assetAccounts.stream().map(AccountViewModelOutput::of).collect(toList()),
+                                       assetAccounts.stream().map(SimpleAccountViewModelOutput::of).collect(toList()),
                                AccountType.LIABILITY,
                                liabilityAccounts == null ?
                                        ImmutableList.of() :
-                                       liabilityAccounts.stream().map(AccountViewModelOutput::of).collect(toList()));
+                                       liabilityAccounts.stream()
+                                                        .map(SimpleAccountViewModelOutput::of)
+                                                        .collect(toList()));
     }
 
-    public static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(final Snapshot snapshot) {
+    public static Map<AccountType, List<SimpleAccountViewModelOutput>> getAccountViewModelOutputs(final Snapshot snapshot) {
         final Map<AccountType, SortedSet<AccountSnapshot>> accountsByType = snapshot.getAccountSnapshotsByType();
 
         final SortedSet<AccountSnapshot> assetAccounts = accountsByType.get(AccountType.ASSET);
@@ -55,16 +59,19 @@ public class ControllerUtils {
         return ImmutableMap.of(AccountType.ASSET,
                                assetAccounts == null ?
                                        ImmutableList.of() :
-                                       assetAccounts.stream()
-                                                    .map(AccountViewModelOutput::of)
-                                                    .sorted()
-                                                    .collect(toList()),
+                                       getViewModelOutputs(assetAccounts),
                                AccountType.LIABILITY,
                                liabilityAccounts == null ?
                                        ImmutableList.of() :
-                                       liabilityAccounts.stream()
-                                                        .map(AccountViewModelOutput::of)
-                                                        .sorted()
-                                                        .collect(toList()));
+                                       getViewModelOutputs(liabilityAccounts));
+    }
+
+    private static List<SimpleAccountViewModelOutput> getViewModelOutputs(final SortedSet<AccountSnapshot> accountSnapshots) {
+        return accountSnapshots.stream().map(accountSnapshot -> {
+            if (accountSnapshot instanceof CreditCardSnapshot) {
+                return CreditCardViewModelOutput.of(accountSnapshot);
+            }
+            return SimpleAccountViewModelOutput.of(accountSnapshot);
+        }).sorted().collect(toList());
     }
 }

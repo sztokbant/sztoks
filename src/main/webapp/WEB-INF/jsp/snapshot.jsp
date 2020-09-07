@@ -49,11 +49,28 @@
 
             <br/>
 
-            <c:forEach var="account" items="${assetAccounts}">
-                <div class="row">
-                    <%@ include file="_snapshot_asset_balance.jsp" %>
-                </div>
-            </c:forEach>
+            <c:choose>
+                <c:when test="${not empty simpleAssetAccounts}">
+                    <div class="row">
+                        <div class="col"><i>Simple Assets</i></div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">Balance</div>
+                    </div>
+                    <div class="row">
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                    </div>
+                    <c:forEach var="account" items="${simpleAssetAccounts}">
+                        <div class="row">
+                            <%@ include file="_snapshot_simple_account_line_item.jsp" %>
+                        </div>
+                    </c:forEach>
+                    <div class="row"></div>
+                </c:when>
+            </c:choose>
         </div>
         <div class="col" style="background: lightblue;">
             <div class="text-center">
@@ -75,11 +92,61 @@
 
             <br/>
 
-            <c:forEach var="account" items="${liabilityAccounts}">
-                <div class="row">
-                    <%@ include file="_snapshot_liability_balance.jsp" %>
-                </div>
-            </c:forEach>
+            <c:choose>
+                <c:when test="${not empty simpleLiabilityAccounts}">
+                    <div class="row">
+                        <div class="col"><i>Simple Liabilities</i></div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">Balance</div>
+                    </div>
+                    <div class="row">
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                    </div>
+                    <c:forEach var="account" items="${simpleLiabilityAccounts}">
+                        <div class="row">
+                            <%@ include file="_snapshot_simple_account_line_item.jsp" %>
+                        </div>
+                    </c:forEach>
+                    <div class="row">
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                    </div>
+                </c:when>
+            </c:choose>
+
+            <c:choose>
+                <c:when test="${not empty creditCardAccounts}">
+                    <div class="row">
+                        <div class="col"><i>Credit Cards</i></div>
+                        <div class="col">Total Credit</div>
+                        <div class="col">Available Credit</div>
+                        <div class="col">Balance</div>
+                    </div>
+                    <div class="row">
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                    </div>
+                    <c:forEach var="account" items="${creditCardAccounts}">
+                        <div class="row">
+                            <%@ include file="_snapshot_credit_card_line_item.jsp" %>
+                        </div>
+                    </c:forEach>
+                    <div class="row">
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                    </div>
+                </c:when>
+            </c:choose>
         </div>
     </div>
 
