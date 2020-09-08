@@ -26,7 +26,7 @@ $(document).ready(function() {
     &nbsp;
 </div>
 
-<div class="col">
+<div class="col editable-liability">
     <form id="form_account_balance_${account.id}">
         ${account.balanceCurrencyUnit}
         <span id="account_balance_amount_${account.id}">${account.total}</span>

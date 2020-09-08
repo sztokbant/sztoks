@@ -12,6 +12,7 @@
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
     <script src="${contextPath}/resources/js/ajax_field_update.js"></script>
     <script src="${contextPath}/resources/js/success_callback_functions.js"></script>
+    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 </head>
 <body>
 
@@ -57,18 +58,13 @@
                         <div class="col">&nbsp;</div>
                         <div class="col">Balance</div>
                     </div>
-                    <div class="row">
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                    </div>
+                    <br/>
                     <c:forEach var="account" items="${simpleAssetAccounts}">
                         <div class="row">
-                            <%@ include file="_snapshot_simple_account_line_item.jsp" %>
+                            <%@ include file="_snapshot_simple_asset_line_item.jsp" %>
                         </div>
                     </c:forEach>
-                    <div class="row"></div>
+                    <br/>
                 </c:when>
             </c:choose>
         </div>
@@ -100,23 +96,13 @@
                         <div class="col">&nbsp;</div>
                         <div class="col">Balance</div>
                     </div>
-                    <div class="row">
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                    </div>
+                    <br/>
                     <c:forEach var="account" items="${simpleLiabilityAccounts}">
                         <div class="row">
-                            <%@ include file="_snapshot_simple_account_line_item.jsp" %>
+                            <%@ include file="_snapshot_simple_liability_line_item.jsp" %>
                         </div>
                     </c:forEach>
-                    <div class="row">
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                    </div>
+                    <br/>
                 </c:when>
             </c:choose>
 
@@ -128,23 +114,13 @@
                         <div class="col">Available Credit</div>
                         <div class="col">Balance</div>
                     </div>
-                    <div class="row">
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                    </div>
+                    <br/>
                     <c:forEach var="account" items="${creditCardAccounts}">
                         <div class="row">
                             <%@ include file="_snapshot_credit_card_line_item.jsp" %>
                         </div>
                     </c:forEach>
-                    <div class="row">
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                    </div>
+                    <br/>
                 </c:when>
             </c:choose>
         </div>

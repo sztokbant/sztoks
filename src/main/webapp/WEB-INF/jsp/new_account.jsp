@@ -10,7 +10,6 @@
     <title>Create New Account</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 </head>
 
 <body>
@@ -31,10 +30,12 @@
 
         <spring:bind path="typeName">
             <div class="form-group ${status.error ? 'has-error' : ''}">
+                <h5>Assets</h5>
                 <div>
                     <form:radiobutton path="typeName" value="SimpleAssetAccount" id="simpleAssetRadio" checked="checked"/>
                     <label for="simpleAssetRadio">Simple Asset</label>
                 </div>
+                <h5>Liabilities</h5>
                 <div>
                     <form:radiobutton path="typeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"/>
                     <label for="simpleLiabilityRadio">Simple Liability</label>

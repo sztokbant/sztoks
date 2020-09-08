@@ -12,6 +12,7 @@
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
     <script src="${contextPath}/resources/js/ajax_field_update.js"></script>
     <script src="${contextPath}/resources/js/success_callback_functions.js"></script>
+    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 </head>
 <body>
 
@@ -52,7 +53,7 @@
                 <c:otherwise>
                     <ul>
                         <c:forEach var="account" items="${assetAccounts}">
-                            <%@ include file="_account.jsp" %>
+                            <%@ include file="_asset_account.jsp" %>
                         </c:forEach>
                     </ul>
                 </c:otherwise>
@@ -67,7 +68,7 @@
                 <c:otherwise>
                     <ul>
                         <c:forEach var="account" items="${liabilityAccounts}">
-                            <%@ include file="_account.jsp" %>
+                            <%@ include file="_liability_account.jsp" %>
                         </c:forEach>
                     </ul>
                 </c:otherwise>

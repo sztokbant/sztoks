@@ -27,7 +27,7 @@ $(document).ready(function() {
     ${account.name}
 </div>
 
-<div class="col">
+<div class="col editable-liability">
     <form id="form_credit_card_total_credit_${account.id}">
         ${account.balanceCurrencyUnit}
         <span id="credit_card_total_credit_${account.id}">${account.totalCredit}</span>
@@ -37,7 +37,7 @@ $(document).ready(function() {
     </form>
 </div>
 
-<div class="col">
+<div class="col editable-liability">
     <form id="form_credit_card_available_credit_${account.id}">
         ${account.balanceCurrencyUnit}
         <span id="credit_card_available_credit_${account.id}">${account.availableCredit}</span>
