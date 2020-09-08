@@ -12,8 +12,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
+
 @Controller
 public class UserController {
+    private static final String SIGNUP_MAPPING = "/signup";
+    private static final String SIGNUP_TEMPLATE = "signup";
+    private static final String USER_FORM = "userForm";
+
     @Autowired
     private UserService userService;
 
@@ -23,26 +29,25 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
 
-    @GetMapping("/signup")
+    @GetMapping(SIGNUP_MAPPING)
     public String signup(final Model model) {
-        model.addAttribute("userForm", new User());
+        model.addAttribute(USER_FORM, new User());
 
-        return "signup";
+        return SIGNUP_TEMPLATE;
     }
 
-    @PostMapping("/signup")
-    public String signup(@ModelAttribute("userForm") final User userForm, final BindingResult bindingResult) {
+    @PostMapping(SIGNUP_MAPPING)
+    public String signup(@ModelAttribute(USER_FORM) final User userForm, final BindingResult bindingResult) {
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "signup";
+            return SIGNUP_TEMPLATE;
         }
 
         userService.save(userForm);
-
         securityService.autoLogin(userForm.getEmail(), userForm.getPasswordConfirm());
 
-        return "redirect:/";
+        return REDIRECT_TO_HOME;
     }
 
     @GetMapping("/login")

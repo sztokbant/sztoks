@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.DECIMAL_FORMAT;
-import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsInSnapshot;
 import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsToUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
@@ -51,6 +50,10 @@ public class SnapshotAccountUpdateControllerBase {
         }
 
         return snapshot;
+    }
+
+    private static boolean accountBelongsInSnapshot(final Snapshot snapshot, final Optional<Account> accountOpt) {
+        return accountOpt.isPresent() && snapshot.getAccountSnapshotFor(accountOpt.get()).isPresent();
     }
 
     SnapshotAccountUpdateJsonResponse.SnapshotAccountUpdateJsonResponseBuilder getDefaultResponseBuilder(final Snapshot snapshot,

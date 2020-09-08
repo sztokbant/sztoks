@@ -13,41 +13,44 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 
 @Controller
 public class AccountController {
+    public static final String ACCOUNT_FORM = "accountForm";
+    private static final String NEW_ACCOUNT_TEMPLATE = "new_account";
+    private static final String NEWACCOUNT_MAPPING = "/newaccount";
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private AccountViewModelInputValidator accountViewModelInputValidator;
 
-    @GetMapping("/newaccount")
+    @GetMapping(NEWACCOUNT_MAPPING)
     public String newAccount(final Model model) {
-        final User user = getLoggedUser(model);
-        model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
+        model.addAttribute(USER_KEY, UserViewModelOutput.of(getLoggedUser(model)));
+        model.addAttribute(ACCOUNT_FORM, new AccountViewModelInput());
 
-        model.addAttribute("accountForm", new AccountViewModelInput());
-
-        return "new_account";
+        return NEW_ACCOUNT_TEMPLATE;
     }
 
-    @PostMapping("/newaccount")
+    @PostMapping(NEWACCOUNT_MAPPING)
     public String newAccount(final Model model,
-                             @ModelAttribute("accountForm") final AccountViewModelInput accountViewModelInput,
+                             @ModelAttribute(ACCOUNT_FORM) final AccountViewModelInput accountViewModelInput,
                              final BindingResult bindingResult) {
         final User user = getLoggedUser(model);
         accountViewModelInputValidator.validate(accountViewModelInput, bindingResult, user);
 
         if (bindingResult.hasErrors()) {
-            return "new_account";
+            return NEW_ACCOUNT_TEMPLATE;
         }
 
         user.addAccount(accountViewModelInput.toAccount());
         userRepository.save(user);
 
-        return "redirect:/";
+        return REDIRECT_TO_HOME;
     }
 }

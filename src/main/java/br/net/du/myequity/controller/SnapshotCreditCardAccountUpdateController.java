@@ -18,46 +18,42 @@ public class SnapshotCreditCardAccountUpdateController extends SnapshotAccountUp
     public SnapshotAccountUpdateJsonResponse updateCreditCardTotalCredit(final Model model,
                                                                          @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
+        assert snapshot != null;
 
-        final AccountSnapshot accountSnapshot =
-                accountSnapshotRepository.findByAccountId(snapshotAccountUpdateJsonRequest.getAccountId()).get();
-
-        if (!(accountSnapshot instanceof CreditCardSnapshot)) {
-            assert false : "accountSnapshot not an instance of " + CreditCardSnapshot.class.getSimpleName();
-        }
-
-        final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
+        final CreditCardSnapshot creditCardSnapshot = getCreditCardSnapshot(snapshotAccountUpdateJsonRequest);
 
         creditCardSnapshot.setTotalCredit(snapshotAccountUpdateJsonRequest.getNewValue());
 
-        accountSnapshotRepository.save(accountSnapshot);
+        accountSnapshotRepository.save(creditCardSnapshot);
 
-        return getDefaultResponseBuilder(snapshot, accountSnapshot).totalCredit(DECIMAL_FORMAT.format(creditCardSnapshot
-                                                                                                              .getTotalCredit()
-                                                                                                              .setScale(
-                                                                                                                      2)))
-                                                                   .build();
+        return getDefaultResponseBuilder(snapshot, creditCardSnapshot).totalCredit(DECIMAL_FORMAT.format(
+                creditCardSnapshot.getTotalCredit().setScale(2))).build();
     }
 
     @PostMapping("/updateCreditCardAvailableCredit")
     public SnapshotAccountUpdateJsonResponse updateCreditCardAvailableCredit(final Model model,
                                                                              @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
+        assert snapshot != null;
 
+        final CreditCardSnapshot creditCardSnapshot = getCreditCardSnapshot(snapshotAccountUpdateJsonRequest);
+
+        creditCardSnapshot.setAvailableCredit(snapshotAccountUpdateJsonRequest.getNewValue());
+
+        accountSnapshotRepository.save(creditCardSnapshot);
+
+        return getDefaultResponseBuilder(snapshot, creditCardSnapshot).availableCredit(DECIMAL_FORMAT.format(
+                creditCardSnapshot.getAvailableCredit().setScale(2))).build();
+    }
+
+    private CreditCardSnapshot getCreditCardSnapshot(@RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
         final AccountSnapshot accountSnapshot =
                 accountSnapshotRepository.findByAccountId(snapshotAccountUpdateJsonRequest.getAccountId()).get();
 
         if (!(accountSnapshot instanceof CreditCardSnapshot)) {
-            assert false : "accountSnapshot not an instance of " + CreditCardSnapshot.class.getSimpleName();
+            throw new IllegalArgumentException("accountSnapshot not an instance of " + CreditCardSnapshot.class.getSimpleName());
         }
 
-        final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
-
-        creditCardSnapshot.setAvailableCredit(snapshotAccountUpdateJsonRequest.getNewValue());
-
-        accountSnapshotRepository.save(accountSnapshot);
-
-        return getDefaultResponseBuilder(snapshot, accountSnapshot).availableCredit(DECIMAL_FORMAT.format(
-                creditCardSnapshot.getAvailableCredit().setScale(2))).build();
+        return (CreditCardSnapshot) accountSnapshot;
     }
 }

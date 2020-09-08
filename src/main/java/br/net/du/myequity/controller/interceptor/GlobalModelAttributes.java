@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.Optional;
 
-import static br.net.du.myequity.controller.util.ControllerConstants.LOGGED_USER;
-
 @ControllerAdvice(annotations = {Controller.class})
 public class GlobalModelAttributes {
+    public static final String LOGGED_USER = "loggedUser";
+
     @Autowired
     private UserService userService;
 

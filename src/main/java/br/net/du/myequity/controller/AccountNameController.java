@@ -2,7 +2,6 @@ package br.net.du.myequity.controller;
 
 import br.net.du.myequity.controller.model.AccountNameJsonRequest;
 import br.net.du.myequity.controller.model.AccountNameJsonResponse;
-import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.persistence.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +32,6 @@ public class AccountNameController {
     }
 
     private Account getAccount(final Model model, final AccountNameJsonRequest accountNameJsonRequest) {
-        final Optional<User> user = (Optional<User>) model.getAttribute("loggedUser");
-
         final Optional<Account> accountOpt = accountRepository.findById(accountNameJsonRequest.getAccountId());
         if (!accountBelongsToUser(getLoggedUser(model), accountOpt)) {
             throw new IllegalArgumentException();

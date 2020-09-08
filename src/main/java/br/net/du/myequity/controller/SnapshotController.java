@@ -1,10 +1,11 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.controller.util.ControllerUtils;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.viewmodel.AddAccountsToSnapshotViewModelInput;
@@ -12,6 +13,8 @@ import br.net.du.myequity.viewmodel.CreditCardViewModelOutput;
 import br.net.du.myequity.viewmodel.SimpleAccountViewModelOutput;
 import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
 import br.net.du.myequity.viewmodel.UserViewModelOutput;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,18 +29,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.CREDIT_CARD_ACCOUNTS_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
 import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_ASSET_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_LIABILITY_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUserOpt;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
+import static java.util.stream.Collectors.toList;
 
 @Controller
 public class SnapshotController {
+    private static final String ADD_ACCOUNTS_FORM = "addAccountsForm";
+
     @Autowired
     private SnapshotRepository snapshotRepository;
 
@@ -51,7 +59,7 @@ public class SnapshotController {
         final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
         if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
-            return "redirect:/";
+            return REDIRECT_TO_HOME;
         }
 
         final User user = userOpt.get();
@@ -67,7 +75,7 @@ public class SnapshotController {
 
     private void addAccountsToModel(Model model, Snapshot snapshot) {
         final Map<AccountType, List<SimpleAccountViewModelOutput>> accountViewModels =
-                ControllerUtils.getAccountViewModelOutputs(snapshot);
+                getAccountViewModelOutputs(snapshot);
 
         final Map<String, List<SimpleAccountViewModelOutput>> assetsByType =
                 breakDownAccountsByType(accountViewModels.get(AccountType.ASSET));
@@ -80,6 +88,31 @@ public class SnapshotController {
                            liabilitiesByType.get(SimpleAccountViewModelOutput.class.getSimpleName()));
         model.addAttribute(CREDIT_CARD_ACCOUNTS_KEY,
                            liabilitiesByType.get(CreditCardViewModelOutput.class.getSimpleName()));
+    }
+
+    private static Map<AccountType, List<SimpleAccountViewModelOutput>> getAccountViewModelOutputs(final Snapshot snapshot) {
+        final Map<AccountType, SortedSet<AccountSnapshot>> accountsByType = snapshot.getAccountSnapshotsByType();
+
+        final SortedSet<AccountSnapshot> assetAccounts = accountsByType.get(AccountType.ASSET);
+        final SortedSet<AccountSnapshot> liabilityAccounts = accountsByType.get(AccountType.LIABILITY);
+
+        return ImmutableMap.of(AccountType.ASSET,
+                               assetAccounts == null ?
+                                       ImmutableList.of() :
+                                       getViewModelOutputs(assetAccounts),
+                               AccountType.LIABILITY,
+                               liabilityAccounts == null ?
+                                       ImmutableList.of() :
+                                       getViewModelOutputs(liabilityAccounts));
+    }
+
+    private static List<SimpleAccountViewModelOutput> getViewModelOutputs(final SortedSet<AccountSnapshot> accountSnapshots) {
+        return accountSnapshots.stream().map(accountSnapshot -> {
+            if (accountSnapshot instanceof CreditCardSnapshot) {
+                return CreditCardViewModelOutput.of(accountSnapshot);
+            }
+            return SimpleAccountViewModelOutput.of(accountSnapshot);
+        }).sorted().collect(toList());
     }
 
     private Map<String, List<SimpleAccountViewModelOutput>> breakDownAccountsByType(final List<SimpleAccountViewModelOutput> accounts) {
@@ -103,7 +136,7 @@ public class SnapshotController {
         final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
         if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
-            return "redirect:/";
+            return REDIRECT_TO_HOME;
         }
 
         final User user = userOpt.get();
@@ -132,7 +165,7 @@ public class SnapshotController {
         model.addAttribute(SNAPSHOT_KEY, SnapshotViewModelOutput.of(snapshot));
         model.addAttribute("assets", availableAssets);
         model.addAttribute("liabilities", availableLiabilities);
-        model.addAttribute("addAccountsForm", new AddAccountsToSnapshotViewModelInput());
+        model.addAttribute(ADD_ACCOUNTS_FORM, new AddAccountsToSnapshotViewModelInput());
 
         return "add_accounts";
     }
@@ -141,14 +174,14 @@ public class SnapshotController {
     public String addAccounts(@PathVariable(value = "id") final Long snapshotId,
                               final Model model,
                               @ModelAttribute(
-                                      "addAccountsForm") final AddAccountsToSnapshotViewModelInput addAccountsViewModelInput,
+                                      ADD_ACCOUNTS_FORM) final AddAccountsToSnapshotViewModelInput addAccountsViewModelInput,
                               final BindingResult bindingResult) {
         final Optional<User> userOpt = getLoggedUserOpt(model);
 
         final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
         if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
-            return "redirect:/";
+            return REDIRECT_TO_HOME;
         }
 
         if (!addAccountsViewModelInput.getAccounts().isEmpty()) {
