@@ -56,6 +56,7 @@ public class SnapshotAccountUpdateControllerBase {
         return accountOpt.isPresent() && snapshot.getAccountSnapshotFor(accountOpt.get()).isPresent();
     }
 
+    // TODO Simplify use-cases that don't need all of these attributes
     SnapshotAccountUpdateJsonResponse.SnapshotAccountUpdateJsonResponseBuilder getDefaultResponseBuilder(final Snapshot snapshot,
                                                                                                          final AccountSnapshot accountSnapshot) {
         final CurrencyUnit currencyUnit = accountSnapshot.getAccount().getCurrencyUnit();

@@ -6,10 +6,12 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
+import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.viewmodel.AddAccountsToSnapshotViewModelInput;
 import br.net.du.myequity.viewmodel.CreditCardViewModelOutput;
+import br.net.du.myequity.viewmodel.InvestmentViewModelOutput;
 import br.net.du.myequity.viewmodel.SimpleAccountViewModelOutput;
 import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
 import br.net.du.myequity.viewmodel.UserViewModelOutput;
@@ -33,6 +35,7 @@ import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.CREDIT_CARD_ACCOUNTS_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.INVESTMENT_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
 import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_ASSET_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_LIABILITY_ACCOUNTS_KEY;
@@ -81,6 +84,7 @@ public class SnapshotController {
                 breakDownAccountsByType(accountViewModels.get(AccountType.ASSET));
         model.addAttribute(SIMPLE_ASSET_ACCOUNTS_KEY,
                            assetsByType.get(SimpleAccountViewModelOutput.class.getSimpleName()));
+        model.addAttribute(INVESTMENT_ACCOUNTS_KEY, assetsByType.get(InvestmentViewModelOutput.class.getSimpleName()));
 
         final Map<String, List<SimpleAccountViewModelOutput>> liabilitiesByType =
                 breakDownAccountsByType(accountViewModels.get(AccountType.LIABILITY));
@@ -108,8 +112,11 @@ public class SnapshotController {
 
     private static List<SimpleAccountViewModelOutput> getViewModelOutputs(final SortedSet<AccountSnapshot> accountSnapshots) {
         return accountSnapshots.stream().map(accountSnapshot -> {
+            // TODO Remove if-zilla by deriving the ViewModelOutput class name from the Snapshot class name
             if (accountSnapshot instanceof CreditCardSnapshot) {
                 return CreditCardViewModelOutput.of(accountSnapshot);
+            } else if (accountSnapshot instanceof InvestmentSnapshot) {
+                return InvestmentViewModelOutput.of(accountSnapshot);
             }
             return SimpleAccountViewModelOutput.of(accountSnapshot);
         }).sorted().collect(toList());

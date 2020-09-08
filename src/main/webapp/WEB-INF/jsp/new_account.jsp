@@ -35,6 +35,10 @@
                     <form:radiobutton path="typeName" value="SimpleAssetAccount" id="simpleAssetRadio" checked="checked"/>
                     <label for="simpleAssetRadio">Simple Asset</label>
                 </div>
+                <div>
+                    <form:radiobutton path="typeName" value="InvestmentAccount" id="investmentRadio"/>
+                    <label for="investmentRadio">Investment</label>
+                </div>
                 <h5>Liabilities</h5>
                 <div>
                     <form:radiobutton path="typeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"/>

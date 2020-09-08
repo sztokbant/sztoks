@@ -9,6 +9,8 @@ import org.joda.money.CurrencyUnit;
 
 import java.math.BigDecimal;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.DECIMAL_FORMAT;
+
 @AllArgsConstructor
 @Data
 @Builder
@@ -30,8 +32,9 @@ public class SimpleAccountViewModelOutput implements Comparable<SimpleAccountVie
     public static SimpleAccountViewModelOutput of(final AccountSnapshot accountSnapshot) {
         final Account account = accountSnapshot.getAccount();
 
+        final BigDecimal total = new BigDecimal(DECIMAL_FORMAT.format(accountSnapshot.getTotal().setScale(2)));
         return getAccountViewModelBuilderCommon(account).balanceCurrencyUnit(account.getCurrencyUnit())
-                                                        .total(accountSnapshot.getTotal())
+                                                        .total(total)
                                                         .build();
     }
 

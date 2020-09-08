@@ -26,6 +26,14 @@ $(document).ready(function() {
     &nbsp;
 </div>
 
+<div class="col">
+    &nbsp;
+</div>
+
+<div class="col">
+    &nbsp;
+</div>
+
 <div class="col editable-asset">
     <form id="form_account_balance_${account.id}">
         ${account.balanceCurrencyUnit}

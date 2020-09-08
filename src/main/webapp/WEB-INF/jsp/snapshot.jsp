@@ -56,12 +56,33 @@
                         <div class="col"><i>Simple Assets</i></div>
                         <div class="col">&nbsp;</div>
                         <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
                         <div class="col">Balance</div>
                     </div>
                     <br/>
                     <c:forEach var="account" items="${simpleAssetAccounts}">
                         <div class="row">
                             <%@ include file="_snapshot_simple_asset_line_item.jsp" %>
+                        </div>
+                    </c:forEach>
+                    <br/>
+                </c:when>
+            </c:choose>
+
+            <c:choose>
+                <c:when test="${not empty investmentAccounts}">
+                    <div class="row">
+                        <div class="col"><i>Investments</i></div>
+                        <div class="col">Shares</div>
+                        <div class="col">Original Share Value</div>
+                        <div class="col">Current Share Value</div>
+                        <div class="col">Profit</div>
+                        <div class="col">Balance</div>
+                    </div>
+                    <br/>
+                    <c:forEach var="account" items="${investmentAccounts}">
+                        <div class="row">
+                            <%@ include file="_snapshot_investment_line_item.jsp" %>
                         </div>
                     </c:forEach>
                     <br/>

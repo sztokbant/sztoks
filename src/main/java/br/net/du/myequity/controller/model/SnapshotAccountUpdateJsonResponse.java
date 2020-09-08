@@ -13,6 +13,14 @@ public class SnapshotAccountUpdateJsonResponse {
     private String totalForAccountType;
 
     // Credit Card only
+    // TODO Extract class
     private String totalCredit;
     private String availableCredit;
+
+    // Investment only
+    // TODO Extract class
+    private String shares;
+    private String originalShareValue;
+    private String currentShareValue;
+    private String profitPercentage;
 }
