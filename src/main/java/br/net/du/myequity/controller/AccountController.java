@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
+import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 
 @Controller
-public class AccountController extends BaseController {
+public class AccountController {
     @Autowired
     private UserRepository userRepository;
 
@@ -25,7 +26,7 @@ public class AccountController extends BaseController {
 
     @GetMapping("/newaccount")
     public String newAccount(final Model model) {
-        final User user = getCurrentUser();
+        final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
 
         model.addAttribute("accountForm", new AccountViewModelInput());
@@ -34,9 +35,10 @@ public class AccountController extends BaseController {
     }
 
     @PostMapping("/newaccount")
-    public String newAccount(@ModelAttribute("accountForm") final AccountViewModelInput accountViewModelInput,
+    public String newAccount(final Model model,
+                             @ModelAttribute("accountForm") final AccountViewModelInput accountViewModelInput,
                              final BindingResult bindingResult) {
-        final User user = getCurrentUser();
+        final User user = getLoggedUser(model);
         accountViewModelInputValidator.validate(accountViewModelInput, bindingResult, user);
 
         if (bindingResult.hasErrors()) {

@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonRequest;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
@@ -30,13 +31,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static br.net.du.myequity.controller.SnapshotAccountUpdateControllerBase.SnapshotAccountUpdateJsonRequest;
 import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
 import static br.net.du.myequity.test.ModelTestUtil.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -57,7 +55,6 @@ class SnapshotSimpleAccountUpdateControllerTest {
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
     private static final BigDecimal NEW_BALANCE = new BigDecimal("108.00");
 
-    private static final String JSON_HAS_ERROR = "hasError";
     private static final String JSON_BALANCE = "balance";
     private static final String JSON_CURRENCY_UNIT = "currencyUnit";
     private static final String JSON_NET_WORTH = "netWorth";
@@ -131,7 +128,7 @@ class SnapshotSimpleAccountUpdateControllerTest {
     }
 
     @Test
-    public void updateAccountBalance_userNotFound_hasError() throws Exception {
+    public void updateAccountBalance_userNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(null);
 
@@ -143,18 +140,11 @@ class SnapshotSimpleAccountUpdateControllerTest {
                                                                               .content(requestContent));
 
         // THEN
-        resultActions.andExpect(status().isOk());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
-        assertNotNull(resultContentAsString);
-
-        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
-    public void updateAccountBalance_snapshotNotFound_hasError() throws Exception {
+    public void updateAccountBalance_snapshotNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.empty());
@@ -167,18 +157,11 @@ class SnapshotSimpleAccountUpdateControllerTest {
                                                                               .content(requestContent));
 
         // THEN
-        resultActions.andExpect(status().isOk());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
-        assertNotNull(resultContentAsString);
-
-        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
-    public void updateAccountBalance_snapshotDoesNotBelongToUser_hasError() throws Exception {
+    public void updateAccountBalance_snapshotDoesNotBelongToUser_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -197,18 +180,11 @@ class SnapshotSimpleAccountUpdateControllerTest {
                                                                               .content(requestContent));
 
         // THEN
-        resultActions.andExpect(status().isOk());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
-        assertNotNull(resultContentAsString);
-
-        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
-    public void updateAccountBalance_accountNotFound_hasError() throws Exception {
+    public void updateAccountBalance_accountNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -225,18 +201,11 @@ class SnapshotSimpleAccountUpdateControllerTest {
                                                                               .content(requestContent));
 
         // THEN
-        resultActions.andExpect(status().isOk());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
-        assertNotNull(resultContentAsString);
-
-        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
-    public void updateAccountBalance_accountDoesNotBelongToUser_hasError() throws Exception {
+    public void updateAccountBalance_accountDoesNotBelongToUser_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -258,18 +227,11 @@ class SnapshotSimpleAccountUpdateControllerTest {
                                                                               .content(requestContent));
 
         // THEN
-        resultActions.andExpect(status().isOk());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
-        assertNotNull(resultContentAsString);
-
-        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
-    public void updateAccountBalance_accountDoesNotBelongInSnapshot_hasError() throws Exception {
+    public void updateAccountBalance_accountDoesNotBelongInSnapshot_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -287,14 +249,7 @@ class SnapshotSimpleAccountUpdateControllerTest {
                                                                               .content(requestContent));
 
         // THEN
-        resultActions.andExpect(status().isOk());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
-        assertNotNull(resultContentAsString);
-
-        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -329,7 +284,6 @@ class SnapshotSimpleAccountUpdateControllerTest {
         assertNotNull(resultContentAsString);
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertFalse(jsonNode.get(JSON_HAS_ERROR).asBoolean());
         assertEquals(NEW_BALANCE.toString(), jsonNode.get(JSON_BALANCE).asText());
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(NEW_BALANCE.negate().toString(), jsonNode.get(JSON_NET_WORTH).asText());

@@ -17,14 +17,15 @@ import static br.net.du.myequity.controller.util.ControllerConstants.LIABILITY_A
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getAccountViewModelOutputs;
+import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static java.util.stream.Collectors.toList;
 
 @Controller
-public class HomeController extends BaseController {
+public class HomeController {
 
     @GetMapping("/")
     public String get(final Model model) {
-        final User user = getCurrentUser();
+        final User user = getLoggedUser(model);
 
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
 

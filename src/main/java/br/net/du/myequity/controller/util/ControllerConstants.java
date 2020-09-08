@@ -3,6 +3,8 @@ package br.net.du.myequity.controller.util;
 import java.text.DecimalFormat;
 
 public class ControllerConstants {
+    public static final String LOGGED_USER = "loggedUser";
+
     public static final String ASSET_ACCOUNTS_KEY = "assetAccounts";
     public static final String LIABILITY_ACCOUNTS_KEY = "liabilityAccounts";
     public static final String CREDIT_CARD_ACCOUNTS_KEY = "creditCardAccounts";

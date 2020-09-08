@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.controller.model.AccountNameJsonRequest;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
@@ -27,9 +27,7 @@ import java.util.Optional;
 import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
 import static br.net.du.myequity.test.ModelTestUtil.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -42,10 +40,8 @@ class AccountNameControllerTest {
     private static final String ACCOUNT_NAME_URL = "/updateAccountName";
 
     private static final Long ACCOUNT_ID = 1L;
-    private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
     private static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
 
-    private static final String JSON_HAS_ERROR = "hasError";
     private static final String JSON_NAME = "name";
 
     private static final String ACCOUNT_NAME = "Mortgage";
@@ -75,11 +71,8 @@ class AccountNameControllerTest {
         account = new SimpleLiabilityAccount(ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now());
         account.setId(ACCOUNT_ID);
 
-        final AccountNameController.AccountNameJsonRequest accountNameJsonRequest =
-                AccountNameController.AccountNameJsonRequest.builder()
-                                                            .accountId(ACCOUNT_ID)
-                                                            .newValue(NEW_ACCOUNT_NAME_NOT_TRIMMED)
-                                                            .build();
+        final AccountNameJsonRequest accountNameJsonRequest =
+                AccountNameJsonRequest.builder().accountId(ACCOUNT_ID).newValue(NEW_ACCOUNT_NAME_NOT_TRIMMED).build();
         requestContent = new ObjectMapper().writeValueAsString(accountNameJsonRequest);
     }
 
@@ -107,7 +100,7 @@ class AccountNameControllerTest {
     }
 
     @Test
-    public void post_userNotFound_hasError() throws Exception {
+    public void post_userNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(null);
 
@@ -119,18 +112,11 @@ class AccountNameControllerTest {
                                                                               .content(requestContent));
 
         // THEN
-        resultActions.andExpect(status().isOk());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
-        assertNotNull(resultContentAsString);
-
-        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
-    public void post_snapshotNotFound_hasError() throws Exception {
+    public void post_snapshotNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -142,18 +128,11 @@ class AccountNameControllerTest {
                                                                               .content(requestContent));
 
         // THEN
-        resultActions.andExpect(status().isOk());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
-        assertNotNull(resultContentAsString);
-
-        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
-    public void post_snapshotDoesNotBelongToUser_hasError() throws Exception {
+    public void post_snapshotDoesNotBelongToUser_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -169,18 +148,11 @@ class AccountNameControllerTest {
                                                                               .content(requestContent));
 
         // THEN
-        resultActions.andExpect(status().isOk());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
-        assertNotNull(resultContentAsString);
-
-        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
-    public void post_accountNotFound_hasError() throws Exception {
+    public void post_accountNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -194,18 +166,11 @@ class AccountNameControllerTest {
                                                                               .content(requestContent));
 
         // THEN
-        resultActions.andExpect(status().isOk());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
-        assertNotNull(resultContentAsString);
-
-        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
-    public void post_accountDoesNotBelongToUser_hasError() throws Exception {
+    public void post_accountDoesNotBelongToUser_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -224,14 +189,7 @@ class AccountNameControllerTest {
                                                                               .content(requestContent));
 
         // THEN
-        resultActions.andExpect(status().isOk());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
-        assertNotNull(resultContentAsString);
-
-        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertTrue(jsonNode.get(JSON_HAS_ERROR).asBoolean());
+        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -257,7 +215,6 @@ class AccountNameControllerTest {
         assertNotNull(resultContentAsString);
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertFalse(jsonNode.get(JSON_HAS_ERROR).asBoolean());
         assertEquals(NEW_ACCOUNT_NAME_TRIMMED, jsonNode.get(JSON_NAME).textValue());
     }
 }

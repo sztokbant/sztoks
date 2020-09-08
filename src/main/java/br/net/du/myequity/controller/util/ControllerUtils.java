@@ -10,15 +10,31 @@ import br.net.du.myequity.viewmodel.CreditCardViewModelOutput;
 import br.net.du.myequity.viewmodel.SimpleAccountViewModelOutput;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SortedSet;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.LOGGED_USER;
 import static java.util.stream.Collectors.toList;
 
 public class ControllerUtils {
+
+    public static User getLoggedUser(final Model model) {
+        final Optional<User> loggedUserOpt = getLoggedUserOpt(model);
+        if (!loggedUserOpt.isPresent()) {
+            throw new RuntimeException();
+        }
+        return loggedUserOpt.get();
+    }
+
+    public static Optional<User> getLoggedUserOpt(final Model model) {
+        return model.containsAttribute(LOGGED_USER) ?
+                (Optional<User>) model.getAttribute(LOGGED_USER) :
+                Optional.empty();
+    }
 
     public static boolean accountBelongsToUser(final User user, final Optional<Account> accountOpt) {
         return accountOpt.isPresent() && accountOpt.get().getUser().equals(user);

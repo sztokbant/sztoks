@@ -33,10 +33,11 @@ import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_ASSE
 import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_LIABILITY_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
+import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUserOpt;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
 
 @Controller
-public class SnapshotController extends BaseController {
+public class SnapshotController {
     @Autowired
     private SnapshotRepository snapshotRepository;
 
@@ -45,14 +46,15 @@ public class SnapshotController extends BaseController {
 
     @GetMapping("/snapshot/{id}")
     public String get(@PathVariable(value = "id") final Long snapshotId, final Model model) {
-        final User user = getCurrentUser();
+        final Optional<User> userOpt = getLoggedUserOpt(model);
 
         final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
-        if (!snapshotBelongsToUser(user, snapshotOpt)) {
+        if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
             return "redirect:/";
         }
 
+        final User user = userOpt.get();
         final Snapshot snapshot = snapshotOpt.get();
 
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
@@ -96,15 +98,17 @@ public class SnapshotController extends BaseController {
 
     @GetMapping("/addaccounts/{id}")
     public String addAccounts(@PathVariable(value = "id") final Long snapshotId, final Model model) {
-        final User user = getCurrentUser();
+        final Optional<User> userOpt = getLoggedUserOpt(model);
 
         final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
-        if (!snapshotBelongsToUser(user, snapshotOpt)) {
+        if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
             return "redirect:/";
         }
 
+        final User user = userOpt.get();
         final Snapshot snapshot = snapshotOpt.get();
+
         final List<Account> allUserAccounts = accountRepository.findByUser(user);
 
         final List<SimpleAccountViewModelOutput> availableAssets = allUserAccounts.stream()
@@ -135,18 +139,20 @@ public class SnapshotController extends BaseController {
 
     @PostMapping("/addaccounts/{id}")
     public String addAccounts(@PathVariable(value = "id") final Long snapshotId,
+                              final Model model,
                               @ModelAttribute(
                                       "addAccountsForm") final AddAccountsToSnapshotViewModelInput addAccountsViewModelInput,
                               final BindingResult bindingResult) {
-        final User user = getCurrentUser();
+        final Optional<User> userOpt = getLoggedUserOpt(model);
 
         final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
-        if (!snapshotBelongsToUser(user, snapshotOpt)) {
+        if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
             return "redirect:/";
         }
 
         if (!addAccountsViewModelInput.getAccounts().isEmpty()) {
+            final User user = userOpt.get();
             final Snapshot snapshot = snapshotOpt.get();
 
             final List<Account> allUserAccounts = accountRepository.findByUser(user);

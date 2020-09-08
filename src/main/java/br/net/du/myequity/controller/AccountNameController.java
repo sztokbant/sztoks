@@ -1,11 +1,12 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.controller.model.AccountNameJsonRequest;
+import br.net.du.myequity.controller.model.AccountNameJsonResponse;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.persistence.AccountRepository;
-import lombok.Builder;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,41 +14,32 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsToUser;
+import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 
 @RestController
-public class AccountNameController extends BaseController {
+public class AccountNameController {
     @Autowired
     private AccountRepository accountRepository;
 
     @PostMapping("/updateAccountName")
-    public AccountNameResponse post(@RequestBody final AccountNameJsonRequest accountNameJsonRequest) {
-        final User user = getCurrentUser();
-
-        final Optional<Account> accountOpt = accountRepository.findById(accountNameJsonRequest.getAccountId());
-        if (!accountBelongsToUser(user, accountOpt)) {
-            // TODO Error message
-            return AccountNameResponse.builder().hasError(true).build();
-        }
-
-        final Account account = accountOpt.get();
+    public AccountNameJsonResponse post(final Model model,
+                                        @RequestBody final AccountNameJsonRequest accountNameJsonRequest) {
+        final Account account = getAccount(model, accountNameJsonRequest);
 
         account.setName(accountNameJsonRequest.getNewValue().trim());
         accountRepository.save(account);
 
-        return AccountNameResponse.builder().hasError(false).name(account.getName()).build();
+        return AccountNameJsonResponse.builder().name(account.getName()).build();
     }
 
-    @Data
-    @Builder
-    public static class AccountNameJsonRequest {
-        private Long accountId;
-        private String newValue;
-    }
+    private Account getAccount(final Model model, final AccountNameJsonRequest accountNameJsonRequest) {
+        final Optional<User> user = (Optional<User>) model.getAttribute("loggedUser");
 
-    @Data
-    @Builder
-    public static class AccountNameResponse {
-        private boolean hasError;
-        private String name;
+        final Optional<Account> accountOpt = accountRepository.findById(accountNameJsonRequest.getAccountId());
+        if (!accountBelongsToUser(getLoggedUser(model), accountOpt)) {
+            throw new IllegalArgumentException();
+        }
+
+        return accountOpt.get();
     }
 }
