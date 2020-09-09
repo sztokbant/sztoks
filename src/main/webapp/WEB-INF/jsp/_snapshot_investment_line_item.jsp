@@ -31,11 +31,11 @@ $(document).ready(function() {
 })
 </script>
 
-<div class="col">
+<div class="col col-account-name">
     ${account.name}
 </div>
 
-<div class="col editable-asset">
+<div class="col col-value editable-asset">
     <form id="form_investment_shares_${account.id}">
         <span id="investment_shares_${account.id}">${account.shares}</span>
         <span><input id="new_investment_shares_${account.id}" name="amount" type="number" min="0"
@@ -44,7 +44,7 @@ $(document).ready(function() {
     </form>
 </div>
 
-<div class="col editable-asset">
+<div class="col col-value editable-asset">
     <form id="form_investment_original_share_value_${account.id}">
         ${account.balanceCurrencyUnit}
         <span id="investment_original_share_value_${account.id}">${account.originalShareValue}</span>
@@ -54,7 +54,7 @@ $(document).ready(function() {
     </form>
 </div>
 
-<div class="col editable-asset">
+<div class="col col-value editable-asset">
     <form id="form_investment_current_share_value_${account.id}">
         ${account.balanceCurrencyUnit}
         <span id="investment_current_share_value_${account.id}">${account.currentShareValue}</span>
@@ -64,7 +64,7 @@ $(document).ready(function() {
     </form>
 </div>
 
-<div class="col">
+<div class="col col-value">
     <span id="investment_profit_percentage_${account.id}">${account.profitPercentage}%</span>
 </div>
 

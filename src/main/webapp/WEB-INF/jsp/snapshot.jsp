@@ -53,39 +53,35 @@
             <c:choose>
                 <c:when test="${not empty simpleAssetAccounts}">
                     <div class="row">
-                        <div class="col"><i>Simple Assets</i></div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">Balance</div>
+                        <div class="col col-title"><i>Simple Assets</i></div>
+                        <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">Balance</div>
                     </div>
-                    <br/>
                     <c:forEach var="account" items="${simpleAssetAccounts}">
                         <div class="row">
                             <%@ include file="_snapshot_simple_asset_line_item.jsp" %>
                         </div>
                     </c:forEach>
-                    <br/>
                 </c:when>
             </c:choose>
 
             <c:choose>
                 <c:when test="${not empty investmentAccounts}">
                     <div class="row">
-                        <div class="col"><i>Investments</i></div>
-                        <div class="col">Shares</div>
-                        <div class="col">Original Share Value</div>
-                        <div class="col">Current Share Value</div>
-                        <div class="col">Profit</div>
-                        <div class="col">Balance</div>
+                        <div class="col col-title"><i>Investments</i></div>
+                        <div class="col col-title">Shares</div>
+                        <div class="col col-title">Original Share Value</div>
+                        <div class="col col-title">Current Share Value</div>
+                        <div class="col col-title">Profit</div>
+                        <div class="col col-title">Balance</div>
                     </div>
-                    <br/>
                     <c:forEach var="account" items="${investmentAccounts}">
                         <div class="row">
                             <%@ include file="_snapshot_investment_line_item.jsp" %>
                         </div>
                     </c:forEach>
-                    <br/>
                 </c:when>
             </c:choose>
         </div>
@@ -112,38 +108,34 @@
             <c:choose>
                 <c:when test="${not empty simpleLiabilityAccounts}">
                     <div class="row">
-                        <div class="col"><i>Simple Liabilities</i></div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">&nbsp;</div>
-                        <div class="col">Balance</div>
+                        <div class="col col-title"><i>Simple Liabilities</i></div>
+                        <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">Balance</div>
                     </div>
-                    <br/>
                     <c:forEach var="account" items="${simpleLiabilityAccounts}">
                         <div class="row">
                             <%@ include file="_snapshot_simple_liability_line_item.jsp" %>
                         </div>
                     </c:forEach>
-                    <br/>
                 </c:when>
             </c:choose>
 
             <c:choose>
                 <c:when test="${not empty creditCardAccounts}">
                     <div class="row">
-                        <div class="col"><i>Credit Cards</i></div>
-                        <div class="col">Total Credit</div>
-                        <div class="col">Available Credit</div>
-                        <div class="col">Used Credit</div>
-                        <div class="col">Balance</div>
+                        <div class="col col-title"><i>Credit Cards</i></div>
+                        <div class="col col-title">Total Credit</div>
+                        <div class="col col-title">Available Credit</div>
+                        <div class="col col-title">Used Credit</div>
+                        <div class="col col-title">Balance</div>
                     </div>
-                    <br/>
                     <c:forEach var="account" items="${creditCardAccounts}">
                         <div class="row">
                             <%@ include file="_snapshot_credit_card_line_item.jsp" %>
                         </div>
                     </c:forEach>
-                    <br/>
                 </c:when>
             </c:choose>
         </div>

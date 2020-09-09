@@ -1,3 +1,22 @@
+.col {
+    font-size: 12px;
+}
+
+.col-title {
+    background: #777;
+    color: #ddd;
+    font-weight: bold;
+    text-align: center;
+}
+
+.col-account-name {
+    font-weight: bold;
+}
+
+.col-value {
+    text-align: right;
+}
+
 .editable-asset {
     background: coral;
 }
