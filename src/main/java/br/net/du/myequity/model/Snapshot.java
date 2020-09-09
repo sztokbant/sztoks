@@ -94,12 +94,18 @@ public class Snapshot implements Comparable<Snapshot> {
 
     public void removeAccountSnapshotFor(@NonNull final Account account) {
         // Prevents infinite loop
-        final Optional<AccountSnapshot> accountSnapshotDataOpt = getAccountSnapshotFor(account);
-        if (!accountSnapshotDataOpt.isPresent()) {
+        final Optional<AccountSnapshot> accountSnapshotOpt = getAccountSnapshotFor(account);
+        if (!accountSnapshotOpt.isPresent()) {
             return;
         }
+        removeAccountSnapshot(accountSnapshotOpt.get());
+    }
 
-        final AccountSnapshot accountSnapshot = accountSnapshotDataOpt.get();
+    public void removeAccountSnapshot(@NonNull final AccountSnapshot accountSnapshot) {
+        // Prevents infinite loop
+        if (!accountSnapshots.contains(accountSnapshot)) {
+            return;
+        }
         accountSnapshots.remove(accountSnapshot);
         accountSnapshot.setSnapshot(null);
     }

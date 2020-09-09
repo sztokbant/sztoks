@@ -56,7 +56,7 @@ public class AccountSnapshot implements Comparable<AccountSnapshot> {
         this.snapshot = snapshot;
 
         if (oldSnapshot != null) {
-            oldSnapshot.removeAccountSnapshotFor(this.getAccount());
+            oldSnapshot.removeAccountSnapshot(this);
         }
 
         if (snapshot != null) {

@@ -8,6 +8,7 @@ import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
+import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.viewmodel.AddAccountsToSnapshotViewModelInput;
 import br.net.du.myequity.viewmodel.CreditCardViewModelOutput;
@@ -48,12 +49,16 @@ import static java.util.stream.Collectors.toList;
 @Controller
 public class SnapshotController {
     private static final String ADD_ACCOUNTS_FORM = "addAccountsForm";
+    public static final String REDIRECT_SNAPSHOT_TEMPLATE = "redirect:/snapshot/%d";
 
     @Autowired
     private SnapshotRepository snapshotRepository;
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private AccountSnapshotRepository accountSnapshotRepository;
 
     @GetMapping("/snapshot/{id}")
     public String get(@PathVariable(value = "id") final Long snapshotId, final Model model) {
@@ -76,7 +81,7 @@ public class SnapshotController {
         return "snapshot";
     }
 
-    private void addAccountsToModel(Model model, Snapshot snapshot) {
+    private void addAccountsToModel(final Model model, final Snapshot snapshot) {
         final Map<AccountType, List<SimpleAccountViewModelOutput>> accountViewModels =
                 getAccountViewModelOutputs(snapshot);
 
@@ -203,6 +208,30 @@ public class SnapshotController {
             snapshotRepository.save(snapshot);
         }
 
-        return "redirect:/snapshot/" + snapshotId;
+        return String.format(REDIRECT_SNAPSHOT_TEMPLATE, snapshotId);
+    }
+
+    @PostMapping("/removeAccountFromSnapshot/{snapshotId}/{accountId}")
+    public String removeAccountFromSnapshot(@PathVariable(value = "snapshotId") final Long snapshotId,
+                                            @PathVariable(value = "accountId") final Long accountId,
+                                            final Model model) {
+        final Optional<User> userOpt = getLoggedUserOpt(model);
+
+        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
+        if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
+            // TODO Error message
+            return REDIRECT_TO_HOME;
+        }
+
+        final Snapshot snapshot = snapshotOpt.get();
+
+        final Optional<AccountSnapshot> accountSnapshotOpt =
+                accountSnapshotRepository.findBySnapshotAndAccountId(snapshot, accountId);
+        if (accountSnapshotOpt.isPresent() && snapshot.getAccountSnapshots().contains(accountSnapshotOpt.get())) {
+            snapshot.removeAccountSnapshot(accountSnapshotOpt.get());
+            snapshotRepository.save(snapshot);
+        }
+
+        return String.format(REDIRECT_SNAPSHOT_TEMPLATE, snapshotId);
     }
 }

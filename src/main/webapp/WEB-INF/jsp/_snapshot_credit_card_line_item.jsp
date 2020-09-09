@@ -25,9 +25,7 @@ $(document).ready(function() {
 })
 </script>
 
-<div class="col col-account-name">
-    ${account.name}
-</div>
+<%@ include file="_snapshot_col_account_name.jsp" %>
 
 <div class="col col-value editable-liability">
     <form id="form_credit_card_total_credit_${account.id}">
