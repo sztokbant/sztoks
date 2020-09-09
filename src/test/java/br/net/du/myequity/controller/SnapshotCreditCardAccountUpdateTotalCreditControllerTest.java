@@ -57,12 +57,13 @@ class SnapshotCreditCardAccountUpdateTotalCreditControllerTest {
 
     private static final BigDecimal CURRENT_AVAILABLE_CREDIT = new BigDecimal("2100.00");
 
-    private static final String JSON_TOTAL_CREDIT = "totalCredit";
+    private static final String JSON_ACCOUNT_TYPE = "accountType";
     private static final String JSON_BALANCE = "balance";
     private static final String JSON_CURRENCY_UNIT = "currencyUnit";
     private static final String JSON_NET_WORTH = "netWorth";
-    private static final String JSON_ACCOUNT_TYPE = "accountType";
+    private static final String JSON_TOTAL_CREDIT = "totalCredit";
     private static final String JSON_TOTAL_FOR_ACCOUNT_TYPE = "totalForAccountType";
+    private static final String JSON_USED_CREDIT_PERCENTAGE = "usedCreditPercentage";
 
     @Autowired
     private MockMvc mvc;
@@ -290,6 +291,9 @@ class SnapshotCreditCardAccountUpdateTotalCreditControllerTest {
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
         assertEquals(NEW_TOTAL_CREDIT.toString(), jsonNode.get(JSON_TOTAL_CREDIT).asText());
+
+        final String expectedCreditAvailablePercentage = "70.00%";
+        assertEquals(expectedCreditAvailablePercentage, jsonNode.get(JSON_USED_CREDIT_PERCENTAGE).asText());
 
         final BigDecimal expectedAccountBalance = NEW_TOTAL_CREDIT.subtract(CURRENT_AVAILABLE_CREDIT);
         assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_BALANCE).asText());

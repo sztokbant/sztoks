@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity
 @Table(name = "credit_card_snapshots")
@@ -37,5 +38,14 @@ public class CreditCardSnapshot extends AccountSnapshot {
     @Override
     public BigDecimal getTotal() {
         return totalCredit.subtract(availableCredit);
+    }
+
+    public BigDecimal getUsedCreditPercentage() {
+        if (totalCredit.compareTo(BigDecimal.ZERO) == 0) {
+            return BigDecimal.ZERO;
+        }
+
+        final BigDecimal oneHundred = new BigDecimal("100");
+        return (totalCredit.subtract(availableCredit)).multiply(oneHundred).divide(totalCredit, RoundingMode.HALF_UP);
     }
 }

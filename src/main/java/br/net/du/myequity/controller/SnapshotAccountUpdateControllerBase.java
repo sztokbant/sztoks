@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
-import static br.net.du.myequity.controller.util.ControllerConstants.DECIMAL_FORMAT;
 import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsToUser;
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
 
@@ -63,13 +63,11 @@ public class SnapshotAccountUpdateControllerBase {
         final AccountType accountType = accountSnapshot.getAccount().getAccountType();
 
         return SnapshotAccountUpdateJsonResponse.builder()
-                                                .balance(DECIMAL_FORMAT.format(accountSnapshot.getTotal().setScale(2)))
+                                                .balance(formatAsDecimal(accountSnapshot.getTotal()))
                                                 .currencyUnit(currencyUnit.toString())
-                                                .netWorth(DECIMAL_FORMAT.format(snapshot.getNetWorth()
-                                                                                        .get(currencyUnit)
-                                                                                        .setScale(2)))
+                                                .netWorth(formatAsDecimal(snapshot.getNetWorth().get(currencyUnit)))
                                                 .accountType(accountType.name())
-                                                .totalForAccountType(DECIMAL_FORMAT.format(snapshot.getTotalForAccountType(
-                                                        accountType).get(currencyUnit).setScale(2)));
+                                                .totalForAccountType(formatAsDecimal(snapshot.getTotalForAccountType(
+                                                        accountType).get(currencyUnit)));
     }
 }

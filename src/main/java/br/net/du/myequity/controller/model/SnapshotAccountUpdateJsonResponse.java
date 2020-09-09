@@ -16,6 +16,7 @@ public class SnapshotAccountUpdateJsonResponse {
     // TODO Extract class
     private String totalCredit;
     private String availableCredit;
+    private String usedCreditPercentage;
 
     // Investment only
     // TODO Extract class

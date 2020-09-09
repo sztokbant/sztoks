@@ -58,11 +58,11 @@ class SnapshotInvestmentAccountUpdateSharesControllerTest {
     private static final BigDecimal CURRENT_ORIGINAL_SHARE_VALUE = new BigDecimal("2100.00");
     private static final BigDecimal CURRENT_CURRENT_SHARE_VALUE = new BigDecimal("4200.00");
 
-    private static final String JSON_SHARES = "shares";
+    private static final String JSON_ACCOUNT_TYPE = "accountType";
     private static final String JSON_BALANCE = "balance";
     private static final String JSON_CURRENCY_UNIT = "currencyUnit";
     private static final String JSON_NET_WORTH = "netWorth";
-    private static final String JSON_ACCOUNT_TYPE = "accountType";
+    private static final String JSON_SHARES = "shares";
     private static final String JSON_TOTAL_FOR_ACCOUNT_TYPE = "totalForAccountType";
 
     @Autowired

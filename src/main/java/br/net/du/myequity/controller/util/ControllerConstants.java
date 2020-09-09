@@ -1,7 +1,5 @@
 package br.net.du.myequity.controller.util;
 
-import java.text.DecimalFormat;
-
 public class ControllerConstants {
     public static final String REDIRECT_TO_HOME = "redirect:/";
 
@@ -14,6 +12,4 @@ public class ControllerConstants {
     public static final String SNAPSHOT_KEY = "snapshot";
     public static final String SNAPSHOTS_KEY = "snapshots";
     public static final String USER_KEY = "user";
-
-    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.00");
 }

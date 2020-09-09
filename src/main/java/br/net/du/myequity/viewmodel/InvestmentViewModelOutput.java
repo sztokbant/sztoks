@@ -6,7 +6,7 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 
-import static br.net.du.myequity.controller.util.ControllerConstants.DECIMAL_FORMAT;
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
 
 @Getter
 public class InvestmentViewModelOutput extends SimpleAccountViewModelOutput {
@@ -17,8 +17,7 @@ public class InvestmentViewModelOutput extends SimpleAccountViewModelOutput {
 
     public static InvestmentViewModelOutput of(final AccountSnapshot accountSnapshot) {
         final InvestmentSnapshot investmentSnapshot = (InvestmentSnapshot) accountSnapshot;
-        final BigDecimal profitPercentage =
-                new BigDecimal(DECIMAL_FORMAT.format(investmentSnapshot.getProfitPercentage().setScale(2)));
+        final BigDecimal profitPercentage = new BigDecimal(formatAsDecimal(investmentSnapshot.getProfitPercentage()));
 
         return new InvestmentViewModelOutput(SimpleAccountViewModelOutput.of(accountSnapshot),
                                              investmentSnapshot.getShares(),

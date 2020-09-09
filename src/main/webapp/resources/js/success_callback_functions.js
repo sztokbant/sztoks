@@ -10,6 +10,7 @@ function accountBalanceUpdateSuccessCallback(data, result) {
 
 function creditCardTotalCreditUpdateSuccessCallback(data, result) {
   $("#credit_card_total_credit_" + data.accountId).html(result.totalCredit);
+  $("#credit_card_used_credit_percentage_" + data.accountId).html(result.usedCreditPercentage);
   $("#credit_card_total_" + data.accountId).html(result.balance);
   $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
   $("#total_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);
@@ -17,6 +18,7 @@ function creditCardTotalCreditUpdateSuccessCallback(data, result) {
 
 function creditCardAvailableCreditUpdateSuccessCallback(data, result) {
   $("#credit_card_available_credit_" + data.accountId).html(result.availableCredit);
+  $("#credit_card_used_credit_percentage_" + data.accountId).html(result.usedCreditPercentage);
   $("#credit_card_total_" + data.accountId).html(result.balance);
   $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
   $("#total_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);

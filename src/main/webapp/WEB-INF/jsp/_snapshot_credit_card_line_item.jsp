@@ -48,6 +48,10 @@ $(document).ready(function() {
 </div>
 
 <div class="col">
+    <span id="credit_card_used_credit_percentage_${account.id}">${account.usedCreditPercentage}%</span>
+</div>
+
+<div class="col">
     ${account.balanceCurrencyUnit}
     <span id="credit_card_total_${account.id}">${account.total}</span>
 </div>

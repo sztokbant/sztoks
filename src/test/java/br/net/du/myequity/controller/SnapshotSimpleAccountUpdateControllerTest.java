@@ -55,10 +55,10 @@ class SnapshotSimpleAccountUpdateControllerTest {
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
     private static final BigDecimal NEW_BALANCE = new BigDecimal("108.00");
 
+    private static final String JSON_ACCOUNT_TYPE = "accountType";
     private static final String JSON_BALANCE = "balance";
     private static final String JSON_CURRENCY_UNIT = "currencyUnit";
     private static final String JSON_NET_WORTH = "netWorth";
-    private static final String JSON_ACCOUNT_TYPE = "accountType";
     private static final String JSON_TOTAL_FOR_ACCOUNT_TYPE = "totalForAccountType";
 
     @Autowired

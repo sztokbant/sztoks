@@ -115,6 +115,7 @@
                         <div class="col"><i>Simple Liabilities</i></div>
                         <div class="col">&nbsp;</div>
                         <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
                         <div class="col">Balance</div>
                     </div>
                     <br/>
@@ -133,6 +134,7 @@
                         <div class="col"><i>Credit Cards</i></div>
                         <div class="col">Total Credit</div>
                         <div class="col">Available Credit</div>
+                        <div class="col">Used Credit</div>
                         <div class="col">Balance</div>
                     </div>
                     <br/>

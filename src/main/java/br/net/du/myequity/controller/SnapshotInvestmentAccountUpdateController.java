@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 
-import static br.net.du.myequity.controller.util.ControllerConstants.DECIMAL_FORMAT;
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
 
 @RestController
 public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUpdateControllerBase {
-
-    private static final String PROFIT_PERCENTAGE_TEMPLATE = "%s%%";
 
     @PostMapping("/updateInvestmentShares")
     public SnapshotAccountUpdateJsonResponse updateInvestmentShares(final Model model,
@@ -31,8 +30,7 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
 
         accountSnapshotRepository.save(investmentSnapshot);
 
-        final String shares =
-                new BigDecimal(DECIMAL_FORMAT.format(investmentSnapshot.getShares().setScale(2))).toString();
+        final String shares = new BigDecimal(formatAsDecimal(investmentSnapshot.getShares())).toString();
         return getDefaultResponseBuilder(snapshot, investmentSnapshot).shares(shares).build();
     }
 
@@ -49,14 +47,10 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
         accountSnapshotRepository.save(investmentSnapshot);
 
         final String originalShareValue =
-                new BigDecimal(DECIMAL_FORMAT.format(investmentSnapshot.getOriginalShareValue()
-                                                                       .setScale(2))).toString();
-        final String profitPercentage =
-                new BigDecimal(DECIMAL_FORMAT.format(investmentSnapshot.getProfitPercentage().setScale(2))).toString();
+                new BigDecimal(formatAsDecimal(investmentSnapshot.getOriginalShareValue())).toString();
         return getDefaultResponseBuilder(snapshot, investmentSnapshot).originalShareValue(originalShareValue)
-                                                                      .profitPercentage(String.format(
-                                                                              PROFIT_PERCENTAGE_TEMPLATE,
-                                                                              profitPercentage))
+                                                                      .profitPercentage(formatAsPercentage(
+                                                                              investmentSnapshot.getProfitPercentage()))
                                                                       .build();
     }
 
@@ -73,13 +67,10 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
         accountSnapshotRepository.save(investmentSnapshot);
 
         final String currentShareValue =
-                new BigDecimal(DECIMAL_FORMAT.format(investmentSnapshot.getCurrentShareValue().setScale(2))).toString();
-        final String profitPercentage =
-                new BigDecimal(DECIMAL_FORMAT.format(investmentSnapshot.getProfitPercentage().setScale(2))).toString();
+                new BigDecimal(formatAsDecimal(investmentSnapshot.getCurrentShareValue())).toString();
         return getDefaultResponseBuilder(snapshot, investmentSnapshot).currentShareValue(currentShareValue)
-                                                                      .profitPercentage(String.format(
-                                                                              PROFIT_PERCENTAGE_TEMPLATE,
-                                                                              profitPercentage))
+                                                                      .profitPercentage(formatAsPercentage(
+                                                                              investmentSnapshot.getProfitPercentage()))
                                                                       .build();
     }
 

@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity
 @Table(name = "investment_snapshots")
@@ -52,7 +53,8 @@ public class InvestmentSnapshot extends AccountSnapshot {
         if (originalShareValue.compareTo(BigDecimal.ZERO) == 0) {
             return BigDecimal.ZERO;
         }
-        return ((currentShareValue.divide(originalShareValue)).subtract(BigDecimal.ONE)).multiply(new BigDecimal("100"
-        ));
+        final BigDecimal oneHundred = new BigDecimal("100");
+        return (currentShareValue.multiply(oneHundred).divide(originalShareValue, RoundingMode.HALF_UP)).subtract(
+                oneHundred);
     }
 }

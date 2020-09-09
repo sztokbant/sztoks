@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import static br.net.du.myequity.controller.util.ControllerConstants.DECIMAL_FORMAT;
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
 
 @RestController
 public class SnapshotCreditCardAccountUpdateController extends SnapshotAccountUpdateControllerBase {
@@ -26,8 +27,10 @@ public class SnapshotCreditCardAccountUpdateController extends SnapshotAccountUp
 
         accountSnapshotRepository.save(creditCardSnapshot);
 
-        return getDefaultResponseBuilder(snapshot, creditCardSnapshot).totalCredit(DECIMAL_FORMAT.format(
-                creditCardSnapshot.getTotalCredit().setScale(2))).build();
+        return getDefaultResponseBuilder(snapshot,
+                                         creditCardSnapshot).totalCredit(formatAsDecimal(creditCardSnapshot.getTotalCredit()))
+                                                            .usedCreditPercentage(formatAsPercentage(creditCardSnapshot.getUsedCreditPercentage()))
+                                                            .build();
     }
 
     @PostMapping("/updateCreditCardAvailableCredit")
@@ -42,8 +45,11 @@ public class SnapshotCreditCardAccountUpdateController extends SnapshotAccountUp
 
         accountSnapshotRepository.save(creditCardSnapshot);
 
-        return getDefaultResponseBuilder(snapshot, creditCardSnapshot).availableCredit(DECIMAL_FORMAT.format(
-                creditCardSnapshot.getAvailableCredit().setScale(2))).build();
+        return getDefaultResponseBuilder(snapshot, creditCardSnapshot).availableCredit(formatAsDecimal(
+                creditCardSnapshot.getAvailableCredit()))
+                                                                      .usedCreditPercentage(formatAsPercentage(
+                                                                              creditCardSnapshot.getUsedCreditPercentage()))
+                                                                      .build();
     }
 
     private CreditCardSnapshot getCreditCardSnapshot(@RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
