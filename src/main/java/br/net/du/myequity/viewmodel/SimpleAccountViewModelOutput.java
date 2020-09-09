@@ -5,7 +5,6 @@ import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.joda.money.CurrencyUnit;
 
 import java.math.BigDecimal;
 
@@ -18,14 +17,16 @@ public class SimpleAccountViewModelOutput implements Comparable<SimpleAccountVie
     private final Long id;
     private final String name;
     private final boolean isClosed;
-    private final CurrencyUnit balanceCurrencyUnit;
+    private final String currencyUnit;
+    private final String currencyUnitSymbol;
     private final BigDecimal total;
 
     public SimpleAccountViewModelOutput(final SimpleAccountViewModelOutput other) {
         this.id = other.getId();
         this.name = other.getName();
         this.isClosed = other.isClosed();
-        this.balanceCurrencyUnit = other.getBalanceCurrencyUnit();
+        this.currencyUnit = other.getCurrencyUnit();
+        this.currencyUnitSymbol = other.getCurrencyUnitSymbol();
         this.total = other.getTotal();
     }
 
@@ -33,7 +34,8 @@ public class SimpleAccountViewModelOutput implements Comparable<SimpleAccountVie
         final Account account = accountSnapshot.getAccount();
 
         final BigDecimal total = new BigDecimal(formatAsDecimal(accountSnapshot.getTotal()));
-        return getAccountViewModelBuilderCommon(account).balanceCurrencyUnit(account.getCurrencyUnit())
+        return getAccountViewModelBuilderCommon(account).currencyUnit(account.getCurrencyUnit().getCode())
+                                                        .currencyUnitSymbol(account.getCurrencyUnit().getSymbol())
                                                         .total(total)
                                                         .build();
     }
@@ -51,8 +53,8 @@ public class SimpleAccountViewModelOutput implements Comparable<SimpleAccountVie
 
     @Override
     public int compareTo(final SimpleAccountViewModelOutput other) {
-        return this.balanceCurrencyUnit.equals(other.getBalanceCurrencyUnit()) ?
+        return this.currencyUnit.equals(other.getCurrencyUnit()) ?
                 this.name.compareTo(other.name) :
-                this.balanceCurrencyUnit.compareTo(other.getBalanceCurrencyUnit());
+                this.currencyUnit.compareTo(other.getCurrencyUnit());
     }
 }

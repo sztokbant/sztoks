@@ -9,6 +9,7 @@ $(document).ready(function() {
     $("#investment_shares_${account.id}"),
     $("#new_investment_shares_${account.id}"),
     "updateInvestmentShares",
+    "${account.currencyUnitSymbol}",
     data,
     investmentSharesUpdateSuccessCallback,
   );
@@ -17,6 +18,7 @@ $(document).ready(function() {
     $("#investment_original_share_value_${account.id}"),
     $("#new_investment_original_share_value_${account.id}"),
     "updateInvestmentOriginalShareValue",
+    "${account.currencyUnitSymbol}",
     data,
     investmentOriginalShareValueUpdateSuccessCallback,
   );
@@ -25,6 +27,7 @@ $(document).ready(function() {
     $("#investment_current_share_value_${account.id}"),
     $("#new_investment_current_share_value_${account.id}"),
     "updateInvestmentCurrentShareValue",
+    "${account.currencyUnitSymbol}",
     data,
     investmentCurrentShareValueUpdateSuccessCallback,
   );
@@ -46,8 +49,7 @@ $(document).ready(function() {
 
 <div class="col col-value editable-asset">
     <form id="form_investment_original_share_value_${account.id}">
-        ${account.balanceCurrencyUnit}
-        <span id="investment_original_share_value_${account.id}">${account.originalShareValue}</span>
+        <span id="investment_original_share_value_${account.id}">${account.currencyUnitSymbol}${account.originalShareValue}</span>
         <span><input id="new_investment_original_share_value_${account.id}" name="amount" type="number" min="0"
                      step="0.01" style="display: none;"/></span>
         <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -56,8 +58,7 @@ $(document).ready(function() {
 
 <div class="col col-value editable-asset">
     <form id="form_investment_current_share_value_${account.id}">
-        ${account.balanceCurrencyUnit}
-        <span id="investment_current_share_value_${account.id}">${account.currentShareValue}</span>
+        <span id="investment_current_share_value_${account.id}">${account.currencyUnitSymbol}${account.currentShareValue}</span>
         <span><input id="new_investment_current_share_value_${account.id}" name="amount" type="number" min="0"
                      step="0.01" style="display: none;"/></span>
         <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -69,6 +70,5 @@ $(document).ready(function() {
 </div>
 
 <div class="col">
-    ${account.balanceCurrencyUnit}
-    <span id="investment_total_${account.id}">${account.total}</span>
+    <span id="investment_total_${account.id}">${account.currencyUnitSymbol}${account.total}</span>
 </div>

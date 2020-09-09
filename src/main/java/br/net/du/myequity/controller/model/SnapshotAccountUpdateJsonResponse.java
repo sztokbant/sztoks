@@ -8,6 +8,7 @@ import lombok.Data;
 public class SnapshotAccountUpdateJsonResponse {
     private String balance;
     private String currencyUnit;
+    private String currencyUnitSymbol;
     private String netWorth;
     private String accountType;
     private String totalForAccountType;

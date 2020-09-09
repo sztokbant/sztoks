@@ -9,6 +9,7 @@ $(document).ready(function() {
     $("#credit_card_total_credit_${account.id}"),
     $("#new_credit_card_total_credit_${account.id}"),
     "updateCreditCardTotalCredit",
+    "${account.currencyUnitSymbol}",
     data,
     creditCardTotalCreditUpdateSuccessCallback,
   );
@@ -17,6 +18,7 @@ $(document).ready(function() {
     $("#credit_card_available_credit_${account.id}"),
     $("#new_credit_card_available_credit_${account.id}"),
     "updateCreditCardAvailableCredit",
+    "${account.currencyUnitSymbol}",
     data,
     creditCardAvailableCreditUpdateSuccessCallback,
   );
@@ -29,8 +31,7 @@ $(document).ready(function() {
 
 <div class="col col-value editable-liability">
     <form id="form_credit_card_total_credit_${account.id}">
-        ${account.balanceCurrencyUnit}
-        <span id="credit_card_total_credit_${account.id}">${account.totalCredit}</span>
+        <span id="credit_card_total_credit_${account.id}">${account.currencyUnitSymbol}${account.totalCredit}</span>
         <span><input id="new_credit_card_total_credit_${account.id}" name="amount" type="number" min="0"
                      step="0.01" style="display: none;"/></span>
         <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -39,8 +40,7 @@ $(document).ready(function() {
 
 <div class="col col-value editable-liability">
     <form id="form_credit_card_available_credit_${account.id}">
-        ${account.balanceCurrencyUnit}
-        <span id="credit_card_available_credit_${account.id}">${account.availableCredit}</span>
+        <span id="credit_card_available_credit_${account.id}">${account.currencyUnitSymbol}${account.availableCredit}</span>
         <span><input id="new_credit_card_available_credit_${account.id}" name="amount" type="number" min="0"
                      step="0.01" style="display: none;"/></span>
         <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -52,6 +52,5 @@ $(document).ready(function() {
 </div>
 
 <div class="col col-value">
-    ${account.balanceCurrencyUnit}
-    <span id="credit_card_total_${account.id}">${account.total}</span>
+    <span id="credit_card_total_${account.id}">${account.currencyUnitSymbol}${account.total}</span>
 </div>

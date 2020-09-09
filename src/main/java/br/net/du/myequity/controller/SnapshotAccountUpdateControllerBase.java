@@ -64,7 +64,8 @@ public class SnapshotAccountUpdateControllerBase {
 
         return SnapshotAccountUpdateJsonResponse.builder()
                                                 .balance(formatAsDecimal(accountSnapshot.getTotal()))
-                                                .currencyUnit(currencyUnit.toString())
+                                                .currencyUnit(currencyUnit.getCode())
+                                                .currencyUnitSymbol(currencyUnit.getSymbol())
                                                 .netWorth(formatAsDecimal(snapshot.getNetWorth().get(currencyUnit)))
                                                 .accountType(accountType.name())
                                                 .totalForAccountType(formatAsDecimal(snapshot.getTotalForAccountType(

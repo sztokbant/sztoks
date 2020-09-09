@@ -7,6 +7,7 @@ $(document).ready(function() {
     $("#account_name_${account.id}"),
     $("#new_account_name_${account.id}"),
     "updateAccountName",
+    "${account.currencyUnitSymbol}",
     data,
     accountNameUpdateSuccessCallback,
   );

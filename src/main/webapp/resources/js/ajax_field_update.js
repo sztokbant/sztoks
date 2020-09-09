@@ -1,4 +1,4 @@
-function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, data, successCallback) {
+function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, currencyUnitSymbol, data, successCallback) {
   theForm.submit(function(event) {
     event.preventDefault();
     newValueInput.hide();
@@ -20,7 +20,7 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, d
 
   currentValueSpan.click(function() {
     currentValueSpan.hide();
-    newValueInput.val(currentValueSpan.text());
+    newValueInput.val(currentValueSpan.text().replace(currencyUnitSymbol, ''));
     newValueInput.show();
     newValueInput.focus();
   });
