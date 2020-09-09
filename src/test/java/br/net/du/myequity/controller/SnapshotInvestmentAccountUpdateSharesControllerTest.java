@@ -61,6 +61,7 @@ class SnapshotInvestmentAccountUpdateSharesControllerTest {
     private static final String JSON_ACCOUNT_TYPE = "accountType";
     private static final String JSON_BALANCE = "balance";
     private static final String JSON_CURRENCY_UNIT = "currencyUnit";
+    private static final String JSON_CURRENCY_UNIT_SYMBOL = "currencyUnitSymbol";
     private static final String JSON_NET_WORTH = "netWorth";
     private static final String JSON_SHARES = "shares";
     private static final String JSON_TOTAL_FOR_ACCOUNT_TYPE = "totalForAccountType";
@@ -298,6 +299,7 @@ class SnapshotInvestmentAccountUpdateSharesControllerTest {
         assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_BALANCE).asText());
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
+        assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
         assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
         assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());

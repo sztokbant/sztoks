@@ -61,9 +61,7 @@
                         <div class="col col-title">Balance</div>
                     </div>
                     <c:forEach var="account" items="${simpleAssetAccounts}">
-                        <div class="row">
-                            <%@ include file="_snapshot_simple_asset_line_item.jsp" %>
-                        </div>
+                        <%@ include file="_snapshot_simple_asset_line_item.jsp" %>
                     </c:forEach>
                 </c:when>
             </c:choose>
@@ -79,9 +77,7 @@
                         <div class="col col-title">Balance</div>
                     </div>
                     <c:forEach var="account" items="${investmentAccounts}">
-                        <div class="row">
-                            <%@ include file="_snapshot_investment_line_item.jsp" %>
-                        </div>
+                        <%@ include file="_snapshot_investment_line_item.jsp" %>
                     </c:forEach>
                 </c:when>
             </c:choose>
@@ -93,9 +89,7 @@
                 <c:choose>
                     <c:when test="${not empty snapshot.liabilitiesBalance}">
                         <c:forEach items="${snapshot.liabilitiesBalance}" var="entry">
-                            <div>
-                                ${entry.key} <span id="total_LIABILITY_${entry.key}">${entry.value}</span><br>
-                            </div>
+                            ${entry.key} <span id="total_LIABILITY_${entry.key}">${entry.value}</span><br>
                         </c:forEach>
                     </c:when>
                     <c:otherwise>
@@ -116,9 +110,7 @@
                         <div class="col col-title">Balance</div>
                     </div>
                     <c:forEach var="account" items="${simpleLiabilityAccounts}">
-                        <div class="row">
-                            <%@ include file="_snapshot_simple_liability_line_item.jsp" %>
-                        </div>
+                        <%@ include file="_snapshot_simple_liability_line_item.jsp" %>
                     </c:forEach>
                 </c:when>
             </c:choose>
@@ -133,9 +125,7 @@
                         <div class="col col-title">Balance</div>
                     </div>
                     <c:forEach var="account" items="${creditCardAccounts}">
-                        <div class="row">
-                            <%@ include file="_snapshot_credit_card_line_item.jsp" %>
-                        </div>
+                        <%@ include file="_snapshot_credit_card_line_item.jsp" %>
                     </c:forEach>
                 </c:when>
             </c:choose>

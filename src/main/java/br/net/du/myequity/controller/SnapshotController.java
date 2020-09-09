@@ -210,28 +210,4 @@ public class SnapshotController {
 
         return String.format(REDIRECT_SNAPSHOT_TEMPLATE, snapshotId);
     }
-
-    @PostMapping("/removeAccountFromSnapshot/{snapshotId}/{accountId}")
-    public String removeAccountFromSnapshot(@PathVariable(value = "snapshotId") final Long snapshotId,
-                                            @PathVariable(value = "accountId") final Long accountId,
-                                            final Model model) {
-        final Optional<User> userOpt = getLoggedUserOpt(model);
-
-        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
-        if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
-            // TODO Error message
-            return REDIRECT_TO_HOME;
-        }
-
-        final Snapshot snapshot = snapshotOpt.get();
-
-        final Optional<AccountSnapshot> accountSnapshotOpt =
-                accountSnapshotRepository.findBySnapshotAndAccountId(snapshot, accountId);
-        if (accountSnapshotOpt.isPresent() && snapshot.getAccountSnapshots().contains(accountSnapshotOpt.get())) {
-            snapshot.removeAccountSnapshot(accountSnapshotOpt.get());
-            snapshotRepository.save(snapshot);
-        }
-
-        return String.format(REDIRECT_SNAPSHOT_TEMPLATE, snapshotId);
-    }
 }

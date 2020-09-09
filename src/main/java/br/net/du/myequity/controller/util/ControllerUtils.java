@@ -39,11 +39,17 @@ public class ControllerUtils {
         return snapshotOpt.isPresent() && snapshotOpt.get().getUser().equals(user);
     }
 
-    public static String formatAsPercentage(final BigDecimal value) {
+    public static String formatAsPercentage(BigDecimal value) {
+        if (value == null) {
+            value = BigDecimal.ZERO;
+        }
         return String.format(PERCENTAGE_TEMPLATE, formatAsDecimal(value));
     }
 
-    public static String formatAsDecimal(final BigDecimal value) {
+    public static String formatAsDecimal(BigDecimal value) {
+        if (value == null) {
+            value = BigDecimal.ZERO;
+        }
         return new BigDecimal(DECIMAL_FORMAT.format(value.setScale(2, RoundingMode.HALF_UP))).toString();
     }
 }

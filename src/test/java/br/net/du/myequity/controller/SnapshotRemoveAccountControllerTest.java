@@ -5,8 +5,8 @@ import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.InvestmentAccount;
-import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
+import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
@@ -42,29 +42,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
+class SnapshotRemoveAccountControllerTest {
 
-    private static final String UPDATE_INVESTMENT_SHARES_URL = "/updateInvestmentCurrentShareValue";
+    private static final String REMOVE_ACCOUNT_FROM_SNAPSHOT_URL = "/removeAccountFromSnapshot";
 
     private static final Long SNAPSHOT_ID = 99L;
 
     private static final Long ACCOUNT_ID = 1L;
-    private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
+    private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
     private static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
 
-    private static final BigDecimal CURRENT_CURRENT_SHARE_VALUE = new BigDecimal("2000.00");
-    private static final BigDecimal NEW_CURRENT_SHARE_VALUE = new BigDecimal("4500.00");
-
-    private static final BigDecimal CURRENT_SHARES = new BigDecimal("15.00");
-    private static final BigDecimal CURRENT_ORIGINAL_SHARE_VALUE = new BigDecimal("1500.00");
+    private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
 
     private static final String JSON_ACCOUNT_TYPE = "accountType";
-    private static final String JSON_BALANCE = "balance";
-    private static final String JSON_CURRENT_SHARE_VALUE = "currentShareValue";
     private static final String JSON_CURRENCY_UNIT = "currencyUnit";
     private static final String JSON_CURRENCY_UNIT_SYMBOL = "currencyUnitSymbol";
     private static final String JSON_NET_WORTH = "netWorth";
-    private static final String JSON_PROFIT_PERCENTAGE = "profitPercentage";
     private static final String JSON_TOTAL_FOR_ACCOUNT_TYPE = "totalForAccountType";
 
     @Autowired
@@ -98,22 +91,18 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
         snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
-        account = new InvestmentAccount("AMZN", CURRENCY_UNIT, LocalDate.now());
+        account = new SimpleLiabilityAccount("Mortgage", CURRENCY_UNIT, LocalDate.now());
         account.setId(ACCOUNT_ID);
 
         final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest =
-                SnapshotAccountUpdateJsonRequest.builder()
-                                                .snapshotId(SNAPSHOT_ID)
-                                                .accountId(ACCOUNT_ID)
-                                                .newValue(NEW_CURRENT_SHARE_VALUE)
-                                                .build();
+                SnapshotAccountUpdateJsonRequest.builder().snapshotId(SNAPSHOT_ID).accountId(ACCOUNT_ID).build();
         requestContent = new ObjectMapper().writeValueAsString(snapshotAccountUpdateJsonRequest);
     }
 
     @Test
-    public void updateInvestmentOriginalShareValue_noCsrfToken_forbidden() throws Exception {
+    public void removeAccountFromSnapshot_noCsrfToken_forbidden() throws Exception {
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_INVESTMENT_SHARES_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(REMOVE_ACCOUNT_FROM_SNAPSHOT_URL)
                                                                               .contentType(MediaType.APPLICATION_JSON)
                                                                               .content(requestContent));
 
@@ -122,9 +111,9 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
     }
 
     @Test
-    public void updateInvestmentOriginalShareValue_withCsrfTokenUserNotLoggedIn_redirectToLogin() throws Exception {
+    public void removeAccountFromSnapshot_withCsrfTokenUserNotLoggedIn_redirectToLogin() throws Exception {
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_INVESTMENT_SHARES_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(REMOVE_ACCOUNT_FROM_SNAPSHOT_URL)
                                                                               .with(csrf())
                                                                               .contentType(MediaType.APPLICATION_JSON)
                                                                               .content(requestContent));
@@ -134,12 +123,12 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
     }
 
     @Test
-    public void updateInvestmentOriginalShareValue_userNotFound_clientError() throws Exception {
+    public void removeAccountFromSnapshot_userNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(null);
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_INVESTMENT_SHARES_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(REMOVE_ACCOUNT_FROM_SNAPSHOT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -150,13 +139,13 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
     }
 
     @Test
-    public void updateInvestmentOriginalShareValue_snapshotNotFound_clientError() throws Exception {
+    public void removeAccountFromSnapshot_snapshotNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.empty());
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_INVESTMENT_SHARES_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(REMOVE_ACCOUNT_FROM_SNAPSHOT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -167,7 +156,7 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
     }
 
     @Test
-    public void updateInvestmentOriginalShareValue_snapshotDoesNotBelongToUser_clientError() throws Exception {
+    public void removeAccountFromSnapshot_snapshotDoesNotBelongToUser_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -179,7 +168,7 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_INVESTMENT_SHARES_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(REMOVE_ACCOUNT_FROM_SNAPSHOT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -190,7 +179,7 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
     }
 
     @Test
-    public void updateInvestmentOriginalShareValue_accountNotFound_clientError() throws Exception {
+    public void removeAccountFromSnapshot_accountNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -200,7 +189,7 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.empty());
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_INVESTMENT_SHARES_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(REMOVE_ACCOUNT_FROM_SNAPSHOT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -211,7 +200,7 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
     }
 
     @Test
-    public void updateInvestmentOriginalShareValue_accountDoesNotBelongToUser_clientError() throws Exception {
+    public void removeAccountFromSnapshot_accountDoesNotBelongToUser_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -226,7 +215,7 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_INVESTMENT_SHARES_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(REMOVE_ACCOUNT_FROM_SNAPSHOT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -237,7 +226,7 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
     }
 
     @Test
-    public void updateInvestmentOriginalShareValue_accountDoesNotBelongInSnapshot_clientError() throws Exception {
+    public void removeAccountFromSnapshot_accountDoesNotBelongInSnapshot_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -248,7 +237,7 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_INVESTMENT_SHARES_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(REMOVE_ACCOUNT_FROM_SNAPSHOT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -259,27 +248,25 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
     }
 
     @Test
-    public void updateInvestmentOriginalShareValue_happy() throws Exception {
+    public void removeAccountFromSnapshot_happy() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final InvestmentSnapshot investmentSnapshot = new InvestmentSnapshot(account,
-                                                                             CURRENT_SHARES,
-                                                                             CURRENT_ORIGINAL_SHARE_VALUE,
-                                                                             CURRENT_CURRENT_SHARE_VALUE);
-        investmentSnapshot.setId(108L);
-        snapshot.addAccountSnapshot(investmentSnapshot);
+        final SimpleLiabilitySnapshot simpleLiabilitySnapshot = new SimpleLiabilitySnapshot(account, CURRENT_BALANCE);
+        simpleLiabilitySnapshot.setId(108L);
+        snapshot.addAccountSnapshot(simpleLiabilitySnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.of(investmentSnapshot));
+        when(accountSnapshotRepository.findBySnapshotAndAccountId(snapshot, ACCOUNT_ID)).thenReturn(Optional.of(
+                simpleLiabilitySnapshot));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(UPDATE_INVESTMENT_SHARES_URL)
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(REMOVE_ACCOUNT_FROM_SNAPSHOT_URL)
                                                                               .with(csrf())
                                                                               .with(user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
@@ -293,19 +280,10 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest {
         assertNotNull(resultContentAsString);
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-
-        assertEquals(NEW_CURRENT_SHARE_VALUE.toString(), jsonNode.get(JSON_CURRENT_SHARE_VALUE).asText());
-
-        final String expectedProfitPercentage = "200.00%";
-        assertEquals(expectedProfitPercentage, jsonNode.get(JSON_PROFIT_PERCENTAGE).asText());
-
-        final BigDecimal expectedAccountBalance = CURRENT_SHARES.multiply(NEW_CURRENT_SHARE_VALUE).setScale(2);
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_BALANCE).asText());
-
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals("0.00", jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertEquals("0.00", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
     }
 }
