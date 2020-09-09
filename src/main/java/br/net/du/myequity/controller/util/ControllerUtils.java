@@ -6,6 +6,7 @@ import br.net.du.myequity.model.account.Account;
 import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Optional;
 
@@ -43,6 +44,6 @@ public class ControllerUtils {
     }
 
     public static String formatAsDecimal(final BigDecimal value) {
-        return new BigDecimal(DECIMAL_FORMAT.format(value.setScale(2))).toString();
+        return new BigDecimal(DECIMAL_FORMAT.format(value.setScale(2, RoundingMode.HALF_UP))).toString();
     }
 }

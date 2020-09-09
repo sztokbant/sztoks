@@ -53,7 +53,7 @@ public class InvestmentSnapshot extends AccountSnapshot {
         if (originalShareValue.compareTo(BigDecimal.ZERO) == 0) {
             return BigDecimal.ZERO;
         }
-        final BigDecimal oneHundred = new BigDecimal("100");
+        final BigDecimal oneHundred = new BigDecimal("100.00");
         return (currentShareValue.multiply(oneHundred).divide(originalShareValue, RoundingMode.HALF_UP)).subtract(
                 oneHundred);
     }

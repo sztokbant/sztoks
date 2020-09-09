@@ -45,7 +45,7 @@ public class CreditCardSnapshot extends AccountSnapshot {
             return BigDecimal.ZERO;
         }
 
-        final BigDecimal oneHundred = new BigDecimal("100");
+        final BigDecimal oneHundred = new BigDecimal("100.00");
         return (totalCredit.subtract(availableCredit)).multiply(oneHundred).divide(totalCredit, RoundingMode.HALF_UP);
     }
 }
