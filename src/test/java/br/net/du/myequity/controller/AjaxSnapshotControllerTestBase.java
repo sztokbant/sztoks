@@ -1,121 +1,85 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.controller.model.AccountNameJsonRequest;
+import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonRequest;
+import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.persistence.AccountRepository;
-import com.fasterxml.jackson.databind.JsonNode;
+import br.net.du.myequity.persistence.SnapshotRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableSortedSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
-import static br.net.du.myequity.test.ModelTestUtil.buildUser;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class AccountNameControllerTest extends AjaxControllerTestBase {
+abstract class AjaxSnapshotControllerTestBase extends AjaxControllerTestBase {
 
-    private static final String JSON_NAME = "name";
+    static final Long SNAPSHOT_ID = 99L;
 
-    private static final String ACCOUNT_NAME = "Mortgage";
-    private static final String NEW_ACCOUNT_NAME_NOT_TRIMMED = "   Wells Fargo Mortgage   ";
-    private static final String NEW_ACCOUNT_NAME_TRIMMED = "Wells Fargo Mortgage";
+    static final String JSON_ACCOUNT_TYPE = "accountType";
+    static final String JSON_AVAILABLE_CREDIT = "availableCredit";
+    static final String JSON_BALANCE = "balance";
+    static final String JSON_CURRENCY_UNIT = "currencyUnit";
+    static final String JSON_CURRENCY_UNIT_SYMBOL = "currencyUnitSymbol";
+    static final String JSON_CURRENT_SHARE_VALUE = "currentShareValue";
+    static final String JSON_NET_WORTH = "netWorth";
+    static final String JSON_ORIGINAL_SHARE_VALUE = "originalShareValue";
+    static final String JSON_PROFIT_PERCENTAGE = "profitPercentage";
+    static final String JSON_SHARES = "shares";
+    static final String JSON_TOTAL_CREDIT = "totalCredit";
+    static final String JSON_TOTAL_FOR_ACCOUNT_TYPE = "totalForAccountType";
+    static final String JSON_USED_CREDIT_PERCENTAGE = "usedCreditPercentage";
 
-    @Autowired
-    private MockMvc mvc;
+    final BigDecimal newValue;
 
     @MockBean
-    private AccountRepository accountRepository;
+    SnapshotRepository snapshotRepository;
 
-    private String requestContent;
+    @MockBean
+    AccountRepository accountRepository;
 
-    private User user;
+    Snapshot snapshot;
 
-    private Account account;
+    Account account;
 
-    public AccountNameControllerTest() {
-        super("/updateAccountName");
+    AjaxSnapshotControllerTestBase(final String url, final BigDecimal newValue) {
+        super(url);
+        this.newValue = newValue;
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
-        user = buildUser();
-        createAccount();
+    public void ajaxSnapshotControllerTestBaseSetUp() throws Exception {
+        snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
+        snapshot.setId(SNAPSHOT_ID);
 
-        final AccountNameJsonRequest accountNameJsonRequest =
-                AccountNameJsonRequest.builder().accountId(ACCOUNT_ID).newValue(NEW_ACCOUNT_NAME_NOT_TRIMMED).build();
-        requestContent = new ObjectMapper().writeValueAsString(accountNameJsonRequest);
-    }
-
-    @Override
-    public void createAccount() {
-        account = new SimpleLiabilityAccount(ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now());
-        account.setId(ACCOUNT_ID);
-    }
-
-    @Test
-    public void post_noCsrfToken_forbidden() throws Exception {
-        // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
-
-        // THEN
-        resultActions.andExpect(status().isForbidden());
-    }
-
-    @Test
-    public void post_withCsrfTokenUserNotLoggedIn_redirectToLogin() throws Exception {
-        // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
-
-        // THEN
-        verifyRedirect(resultActions, "/login");
-    }
-
-    @Test
-    public void post_userNotFound_clientError() throws Exception {
-        // GIVEN
-        when(userService.findByEmail(user.getEmail())).thenReturn(null);
-
-        // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
-
-        // THEN
-        resultActions.andExpect(status().is4xxClientError());
+        final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest =
+                SnapshotAccountUpdateJsonRequest.builder()
+                                                .snapshotId(SNAPSHOT_ID)
+                                                .accountId(ACCOUNT_ID)
+                                                .newValue(newValue)
+                                                .build();
+        requestContent = new ObjectMapper().writeValueAsString(snapshotAccountUpdateJsonRequest);
     }
 
     @Test
     public void post_accountNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        snapshot.setUser(user);
+        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.empty());
 
@@ -134,6 +98,9 @@ class AccountNameControllerTest extends AjaxControllerTestBase {
     public void post_accountDoesNotBelongToUser_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        snapshot.setUser(user);
+        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         final User anotherUser = new User(user.getEmail(), user.getFirstName(), user.getLastName());
         final Long anotherUserId = user.getId() * 7;
@@ -154,9 +121,52 @@ class AccountNameControllerTest extends AjaxControllerTestBase {
     }
 
     @Test
-    public void post_happy() throws Exception {
+    public void post_snapshotNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
+        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.empty());
+
+        // WHEN
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
+                                                                              .with(csrf())
+                                                                              .with(user(user.getEmail()))
+                                                                              .contentType(MediaType.APPLICATION_JSON)
+                                                                              .content(requestContent));
+
+        // THEN
+        resultActions.andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void post_snapshotDoesNotBelongToUser_clientError() throws Exception {
+        // GIVEN
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        final User anotherUser = new User(user.getEmail(), user.getFirstName(), user.getLastName());
+        final Long anotherUserId = user.getId() * 7;
+        anotherUser.setId(anotherUserId);
+
+        snapshot.setUser(anotherUser);
+        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+
+        // WHEN
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
+                                                                              .with(csrf())
+                                                                              .with(user(user.getEmail()))
+                                                                              .contentType(MediaType.APPLICATION_JSON)
+                                                                              .content(requestContent));
+
+        // THEN
+        resultActions.andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void post_accountDoesNotBelongInSnapshot_clientError() throws Exception {
+        // GIVEN
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        snapshot.setUser(user);
+        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
@@ -169,13 +179,6 @@ class AccountNameControllerTest extends AjaxControllerTestBase {
                                                                               .content(requestContent));
 
         // THEN
-        resultActions.andExpect(status().isOk());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
-        assertNotNull(resultContentAsString);
-
-        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertEquals(NEW_ACCOUNT_NAME_TRIMMED, jsonNode.get(JSON_NAME).textValue());
+        resultActions.andExpect(status().is4xxClientError());
     }
 }
