@@ -16,9 +16,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Optional;
 
+import static br.net.du.myequity.test.TestConstants.now;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -27,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 abstract class AjaxSnapshotControllerTestBase extends AjaxControllerTestBase {
 
     static final Long SNAPSHOT_ID = 99L;
+    static final long SNAPSHOT_INDEX = 1L;
 
     static final String JSON_ACCOUNT_TYPE = "accountType";
     static final String JSON_AVAILABLE_CREDIT = "availableCredit";
@@ -61,7 +62,7 @@ abstract class AjaxSnapshotControllerTestBase extends AjaxControllerTestBase {
 
     @BeforeEach
     public void ajaxSnapshotControllerTestBaseSetUp() throws Exception {
-        snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
+        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
         final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest =

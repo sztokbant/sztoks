@@ -22,6 +22,13 @@
 
     <div class="text-center"><h4>Snapshots</h4></div>
 
+    <div class="text-center">
+        <form method="post" action="${contextPath}/snapshot/new">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <input type="submit" value="New Snapshot"/>
+        </form>
+    </div>
+
     <c:choose>
         <c:when test="${empty snapshots}">
             No snapshots.
@@ -29,7 +36,7 @@
         <c:otherwise>
             <c:forEach var="snapshot" items="${snapshots}">
                 <div>
-                    <a href="/snapshot/${snapshot.id}">${snapshot.date}</a>
+                    <a href="/snapshot/${snapshot.id}">${snapshot.name}</a>
                 </div>
                 <%@ include file="_snapshot_net_worth.jsp" %>
                 <br/>

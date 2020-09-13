@@ -7,14 +7,13 @@ import lombok.Data;
 import org.joda.money.CurrencyUnit;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Map;
 
 @Data
 @Builder
 public class SnapshotViewModelOutput {
     private final Long id;
-    private final LocalDate date;
+    private final String name;
     private final Map<CurrencyUnit, BigDecimal> netWorth;
     private final Map<CurrencyUnit, BigDecimal> assetsBalance;
     private final Map<CurrencyUnit, BigDecimal> liabilitiesBalance;
@@ -22,7 +21,7 @@ public class SnapshotViewModelOutput {
     public static SnapshotViewModelOutput of(final Snapshot snapshot) {
         return SnapshotViewModelOutput.builder()
                                       .id(snapshot.getId())
-                                      .date(snapshot.getDate())
+                                      .name(snapshot.getName())
                                       .netWorth(snapshot.getNetWorth())
                                       .assetsBalance(snapshot.getTotalForAccountType(AccountType.ASSET))
                                       .liabilitiesBalance(snapshot.getTotalForAccountType(AccountType.LIABILITY))

@@ -70,7 +70,8 @@ class SnapshotRemoveAccountControllerTest extends AjaxSnapshotControllerTestBase
         account.setUser(user);
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findBySnapshotAndAccountId(snapshot, ACCOUNT_ID)).thenReturn(Optional.of(
+        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
+                                                                    ACCOUNT_ID)).thenReturn(Optional.of(
                 simpleLiabilitySnapshot));
 
         // WHEN

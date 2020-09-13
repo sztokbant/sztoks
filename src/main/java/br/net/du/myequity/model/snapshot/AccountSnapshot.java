@@ -2,9 +2,11 @@ package br.net.du.myequity.model.snapshot;
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
+import com.google.common.annotations.VisibleForTesting;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -36,13 +38,22 @@ public class AccountSnapshot implements Comparable<AccountSnapshot> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Getter
-    private Account account;
+    Account account;
 
-    public AccountSnapshot(final Account account) {
+    public AccountSnapshot(@NonNull final Account account) {
         this.account = account;
     }
 
     public BigDecimal getTotal() {
+        throw new UnsupportedOperationException();
+    }
+
+    public AccountSnapshot copy() {
+        throw new UnsupportedOperationException();
+    }
+
+    @VisibleForTesting
+    public boolean equalsIgnoreId(final Object other) {
         throw new UnsupportedOperationException();
     }
 

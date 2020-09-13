@@ -1,9 +1,11 @@
 package br.net.du.myequity.model.snapshot;
 
 import br.net.du.myequity.model.account.Account;
+import com.google.common.annotations.VisibleForTesting;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -34,10 +36,10 @@ public class InvestmentSnapshot extends AccountSnapshot {
     @Setter
     private BigDecimal currentShareValue;
 
-    public InvestmentSnapshot(final Account account,
-                              final BigDecimal shares,
-                              final BigDecimal originalShareValue,
-                              final BigDecimal currentShareValue) {
+    public InvestmentSnapshot(@NonNull final Account account,
+                              @NonNull final BigDecimal shares,
+                              @NonNull final BigDecimal originalShareValue,
+                              @NonNull final BigDecimal currentShareValue) {
         super(account);
         this.shares = shares;
         this.originalShareValue = originalShareValue;
@@ -47,6 +49,29 @@ public class InvestmentSnapshot extends AccountSnapshot {
     @Override
     public BigDecimal getTotal() {
         return shares.multiply(currentShareValue);
+    }
+
+    @Override
+    public InvestmentSnapshot copy() {
+        return new InvestmentSnapshot(account, shares, originalShareValue, currentShareValue);
+    }
+
+    @Override
+    @VisibleForTesting
+    public boolean equalsIgnoreId(final Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (!(other instanceof InvestmentSnapshot)) {
+            return false;
+        }
+
+        final InvestmentSnapshot otherInvestmentSnapshot = (InvestmentSnapshot) other;
+        return account.equals(otherInvestmentSnapshot.getAccount()) &&
+                shares.compareTo(otherInvestmentSnapshot.getShares()) == 0 &&
+                originalShareValue.compareTo(otherInvestmentSnapshot.getOriginalShareValue()) == 0 &&
+                currentShareValue.compareTo(otherInvestmentSnapshot.getCurrentShareValue()) == 0;
     }
 
     public BigDecimal getProfitPercentage() {

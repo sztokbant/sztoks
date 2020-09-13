@@ -3,7 +3,6 @@ package br.net.du.myequity.controller;
 import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonRequest;
 import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonResponse;
 import br.net.du.myequity.model.Snapshot;
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +20,8 @@ public class SnapshotCreditCardAccountUpdateController extends SnapshotAccountUp
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
         assert snapshot != null;
 
-        final CreditCardSnapshot creditCardSnapshot = getCreditCardSnapshot(snapshotAccountUpdateJsonRequest);
+        final CreditCardSnapshot creditCardSnapshot =
+                (CreditCardSnapshot) getAccountSnapshot(snapshotAccountUpdateJsonRequest, CreditCardSnapshot.class);
 
         creditCardSnapshot.setTotalCredit(snapshotAccountUpdateJsonRequest.getNewValue());
 
@@ -39,7 +39,8 @@ public class SnapshotCreditCardAccountUpdateController extends SnapshotAccountUp
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
         assert snapshot != null;
 
-        final CreditCardSnapshot creditCardSnapshot = getCreditCardSnapshot(snapshotAccountUpdateJsonRequest);
+        final CreditCardSnapshot creditCardSnapshot =
+                (CreditCardSnapshot) getAccountSnapshot(snapshotAccountUpdateJsonRequest, CreditCardSnapshot.class);
 
         creditCardSnapshot.setAvailableCredit(snapshotAccountUpdateJsonRequest.getNewValue());
 
@@ -50,16 +51,5 @@ public class SnapshotCreditCardAccountUpdateController extends SnapshotAccountUp
                                                                       .usedCreditPercentage(formatAsPercentage(
                                                                               creditCardSnapshot.getUsedCreditPercentage()))
                                                                       .build();
-    }
-
-    private CreditCardSnapshot getCreditCardSnapshot(@RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
-        final AccountSnapshot accountSnapshot =
-                accountSnapshotRepository.findByAccountId(snapshotAccountUpdateJsonRequest.getAccountId()).get();
-
-        if (!(accountSnapshot instanceof CreditCardSnapshot)) {
-            throw new IllegalArgumentException("accountSnapshot not an instance of " + CreditCardSnapshot.class.getSimpleName());
-        }
-
-        return (CreditCardSnapshot) accountSnapshot;
     }
 }

@@ -10,6 +10,7 @@ import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
+import br.net.du.myequity.service.SnapshotService;
 import br.net.du.myequity.viewmodel.AddAccountsToSnapshotViewModelInput;
 import br.net.du.myequity.viewmodel.CreditCardViewModelOutput;
 import br.net.du.myequity.viewmodel.InvestmentViewModelOutput;
@@ -49,7 +50,11 @@ import static java.util.stream.Collectors.toList;
 @Controller
 public class SnapshotController {
     private static final String ADD_ACCOUNTS_FORM = "addAccountsForm";
-    public static final String REDIRECT_SNAPSHOT_TEMPLATE = "redirect:/snapshot/%d";
+    private static final String REDIRECT_SNAPSHOT_TEMPLATE = "redirect:/snapshot/%d";
+    private static final String SNAPSHOT = "snapshot";
+
+    @Autowired
+    private SnapshotService snapshotService;
 
     @Autowired
     private SnapshotRepository snapshotRepository;
@@ -78,7 +83,23 @@ public class SnapshotController {
 
         addAccountsToModel(model, snapshot);
 
-        return "snapshot";
+        return SNAPSHOT;
+    }
+
+    @PostMapping("/snapshot/new")
+    public String copy(final Model model) {
+        final Optional<User> userOpt = getLoggedUserOpt(model);
+
+        if (!userOpt.isPresent()) {
+            // TODO Error message
+            return REDIRECT_TO_HOME;
+        }
+
+        final User user = userOpt.get();
+
+        final Snapshot newSnapshot = snapshotService.newSnapshot(user);
+
+        return String.format(REDIRECT_SNAPSHOT_TEMPLATE, newSnapshot.getId());
     }
 
     private void addAccountsToModel(final Model model, final Snapshot snapshot) {
@@ -157,19 +178,23 @@ public class SnapshotController {
         final List<Account> allUserAccounts = accountRepository.findByUser(user);
 
         final List<SimpleAccountViewModelOutput> availableAssets = allUserAccounts.stream()
-                                                                                  .filter(account -> account.getAccountType()
-                                                                                                            .equals(AccountType.ASSET) && !snapshot
-                                                                                          .getAccountSnapshotFor(account)
-                                                                                          .isPresent())
+                                                                                  .filter(account ->
+                                                                                                  account.getAccountType()
+                                                                                                         .equals(AccountType.ASSET) &&
+                                                                                                          !snapshot.getAccountSnapshotFor(
+                                                                                                                  account)
+                                                                                                                   .isPresent())
                                                                                   .map(SimpleAccountViewModelOutput::of)
                                                                                   .collect(Collectors.toList());
 
         final List<SimpleAccountViewModelOutput> availableLiabilities = allUserAccounts.stream()
-                                                                                       .filter(account -> account.getAccountType()
-                                                                                                                 .equals(AccountType.LIABILITY) && !snapshot
-                                                                                               .getAccountSnapshotFor(
-                                                                                                       account)
-                                                                                               .isPresent())
+                                                                                       .filter(account ->
+                                                                                                       account.getAccountType()
+                                                                                                              .equals(AccountType.LIABILITY) &&
+                                                                                                               !snapshot
+                                                                                                                       .getAccountSnapshotFor(
+                                                                                                                               account)
+                                                                                                                       .isPresent())
                                                                                        .map(SimpleAccountViewModelOutput::of)
                                                                                        .collect(Collectors.toList());
 

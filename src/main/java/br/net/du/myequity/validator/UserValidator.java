@@ -48,8 +48,8 @@ public class UserValidator implements Validator {
     }
 
     private void rejectIfInvalidPassword(final Errors errors, final User user) {
-        if (StringUtils.isEmpty(user.getPassword()) || user.getPassword().length() < 8 || user.getPassword()
-                                                                                              .length() > 32) {
+        if (StringUtils.isEmpty(user.getPassword()) || user.getPassword().length() < 8 ||
+                user.getPassword().length() > 32) {
             errors.rejectValue("password", "Size.userForm.password");
         } else if (!user.getPasswordConfirm().equals(user.getPassword())) {
             errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");

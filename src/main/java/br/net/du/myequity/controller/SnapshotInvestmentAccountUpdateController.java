@@ -3,7 +3,6 @@ package br.net.du.myequity.controller;
 import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonRequest;
 import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonResponse;
 import br.net.du.myequity.model.Snapshot;
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +23,8 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
         assert snapshot != null;
 
-        final InvestmentSnapshot investmentSnapshot = getInvestmentSnapshot(snapshotAccountUpdateJsonRequest);
+        final InvestmentSnapshot investmentSnapshot =
+                (InvestmentSnapshot) getAccountSnapshot(snapshotAccountUpdateJsonRequest, InvestmentSnapshot.class);
 
         investmentSnapshot.setShares(snapshotAccountUpdateJsonRequest.getNewValue());
 
@@ -40,7 +40,8 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
         assert snapshot != null;
 
-        final InvestmentSnapshot investmentSnapshot = getInvestmentSnapshot(snapshotAccountUpdateJsonRequest);
+        final InvestmentSnapshot investmentSnapshot =
+                (InvestmentSnapshot) getAccountSnapshot(snapshotAccountUpdateJsonRequest, InvestmentSnapshot.class);
 
         investmentSnapshot.setOriginalShareValue(snapshotAccountUpdateJsonRequest.getNewValue());
 
@@ -60,7 +61,8 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
         assert snapshot != null;
 
-        final InvestmentSnapshot investmentSnapshot = getInvestmentSnapshot(snapshotAccountUpdateJsonRequest);
+        final InvestmentSnapshot investmentSnapshot =
+                (InvestmentSnapshot) getAccountSnapshot(snapshotAccountUpdateJsonRequest, InvestmentSnapshot.class);
 
         investmentSnapshot.setCurrentShareValue(snapshotAccountUpdateJsonRequest.getNewValue());
 
@@ -72,16 +74,5 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
                                                                       .profitPercentage(formatAsPercentage(
                                                                               investmentSnapshot.getProfitPercentage()))
                                                                       .build();
-    }
-
-    private InvestmentSnapshot getInvestmentSnapshot(@RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
-        final AccountSnapshot accountSnapshot =
-                accountSnapshotRepository.findByAccountId(snapshotAccountUpdateJsonRequest.getAccountId()).get();
-
-        if (!(accountSnapshot instanceof InvestmentSnapshot)) {
-            throw new IllegalArgumentException("accountSnapshot not an instance of " + InvestmentSnapshot.class.getSimpleName());
-        }
-
-        return (InvestmentSnapshot) accountSnapshot;
     }
 }

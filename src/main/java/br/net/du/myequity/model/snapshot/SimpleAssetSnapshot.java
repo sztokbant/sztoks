@@ -1,9 +1,11 @@
 package br.net.du.myequity.model.snapshot;
 
 import br.net.du.myequity.model.account.Account;
+import com.google.common.annotations.VisibleForTesting;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -23,7 +25,7 @@ public class SimpleAssetSnapshot extends AccountSnapshot {
     @Setter
     private BigDecimal amount;
 
-    public SimpleAssetSnapshot(final Account account, final BigDecimal amount) {
+    public SimpleAssetSnapshot(@NonNull final Account account, @NonNull final BigDecimal amount) {
         super(account);
         this.amount = amount;
     }
@@ -31,5 +33,26 @@ public class SimpleAssetSnapshot extends AccountSnapshot {
     @Override
     public BigDecimal getTotal() {
         return amount;
+    }
+
+    @Override
+    public SimpleAssetSnapshot copy() {
+        return new SimpleAssetSnapshot(account, amount);
+    }
+
+    @Override
+    @VisibleForTesting
+    public boolean equalsIgnoreId(final Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (!(other instanceof SimpleAssetSnapshot)) {
+            return false;
+        }
+
+        final SimpleAssetSnapshot otherSimpleAssetSnapshot = (SimpleAssetSnapshot) other;
+        return account.equals(otherSimpleAssetSnapshot.getAccount()) &&
+                amount.compareTo(otherSimpleAssetSnapshot.getAmount()) == 0;
     }
 }

@@ -18,10 +18,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.LocalDate;
-
 import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
 import static br.net.du.myequity.test.ModelTestUtil.buildUser;
+import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -34,6 +33,7 @@ class HomeControllerTest {
     private static final String HOME_URL = "/";
 
     private static final Long SNAPSHOT_ID = 99L;
+    private static final long SNAPSHOT_INDEX = 1L;
 
     @Autowired
     private MockMvc mvc;
@@ -48,7 +48,7 @@ class HomeControllerTest {
     @BeforeEach
     public void setUp() throws Exception {
         user = buildUser();
-        snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
+        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
     }
 

@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-
 @Service
 public class UserServiceImpl implements UserService {
+    private static final String FIRST_SNAPSHOT_NAME = "First Snapshot";
+
     @Autowired
     private UserRepository userRepository;
 
@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     public void save(final User user) {
         if (user.getId() == null) {
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            user.addSnapshot(new Snapshot(LocalDate.now(), ImmutableSortedSet.of()));
+            user.addSnapshot(new Snapshot(1L, FIRST_SNAPSHOT_NAME, ImmutableSortedSet.of()));
         }
         userRepository.save(user);
     }

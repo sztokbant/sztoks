@@ -63,7 +63,9 @@ class SnapshotCreditCardAccountUpdateAvailableCreditControllerTest extends AjaxS
         account.setUser(user);
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.of(creditCardSnapshot));
+        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
+                                                                    ACCOUNT_ID)).thenReturn(Optional.of(
+                creditCardSnapshot));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)

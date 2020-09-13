@@ -26,7 +26,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SortedSet;
@@ -38,7 +37,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
 
 @Entity
-@Table(name = "snapshots", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "date"}))
+@Table(name = "snapshots", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "idx"}))
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Snapshot implements Comparable<Snapshot> {
     @Id
@@ -54,18 +53,27 @@ public class Snapshot implements Comparable<Snapshot> {
     @Column(nullable = false)
     @Getter
     @Setter
-    private LocalDate date;
+    private String name;
+
+    @Column(name = "idx", nullable = false)
+    @Getter
+    @Setter
+    private Long index;
 
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural // Ref.: https://thorben-janssen.com/ordering-vs-sorting-hibernate-use/
     private final SortedSet<AccountSnapshot> accountSnapshots = new TreeSet<>();
 
-    public Snapshot(final LocalDate date, @NotNull final SortedSet<AccountSnapshot> accountSnapshots) {
-        this.date = date;
-        this.accountSnapshots.addAll(accountSnapshots);
+    public Snapshot(final Long index, final String name, @NotNull final SortedSet<AccountSnapshot> accountSnapshots) {
+        this.index = index;
+
+        this.name = name;
+
+        for (final AccountSnapshot accountSnapshot : accountSnapshots) {
+            addAccountSnapshot(accountSnapshot.copy());
+        }
     }
 
-    // TODO May never be used beyond unit-tests
     public SortedSet<AccountSnapshot> getAccountSnapshots() {
         return ImmutableSortedSet.copyOf(accountSnapshots);
     }
@@ -166,6 +174,6 @@ public class Snapshot implements Comparable<Snapshot> {
 
     @Override
     public int compareTo(final Snapshot other) {
-        return other.getDate().compareTo(this.date);
+        return other.getIndex().compareTo(this.index);
     }
 }

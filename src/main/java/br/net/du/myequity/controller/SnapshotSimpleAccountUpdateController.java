@@ -20,16 +20,14 @@ public class SnapshotSimpleAccountUpdateController extends SnapshotAccountUpdate
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
         assert snapshot != null;
 
-        final AccountSnapshot accountSnapshot =
-                accountSnapshotRepository.findByAccountId(snapshotAccountUpdateJsonRequest.getAccountId()).get();
+        final AccountSnapshot accountSnapshot = getAccountSnapshot(snapshotAccountUpdateJsonRequest,
+                                                                   SimpleAssetSnapshot.class,
+                                                                   SimpleLiabilitySnapshot.class);
 
         if (accountSnapshot instanceof SimpleAssetSnapshot) {
             ((SimpleAssetSnapshot) accountSnapshot).setAmount(snapshotAccountUpdateJsonRequest.getNewValue());
-        } else if (accountSnapshot instanceof SimpleLiabilitySnapshot) {
-            ((SimpleLiabilitySnapshot) accountSnapshot).setAmount(snapshotAccountUpdateJsonRequest.getNewValue());
         } else {
-            throw new IllegalArgumentException("accountSnapshot not an instance of " + SimpleAssetSnapshot.class.getSimpleName() + " nor " + SimpleLiabilitySnapshot.class
-                    .getSimpleName());
+            ((SimpleLiabilitySnapshot) accountSnapshot).setAmount(snapshotAccountUpdateJsonRequest.getNewValue());
         }
 
         accountSnapshotRepository.save(accountSnapshot);

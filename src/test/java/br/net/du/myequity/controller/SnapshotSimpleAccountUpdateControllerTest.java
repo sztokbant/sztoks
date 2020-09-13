@@ -61,7 +61,9 @@ class SnapshotSimpleAccountUpdateControllerTest extends AjaxSnapshotControllerTe
         account.setUser(user);
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.of(simpleLiabilitySnapshot));
+        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
+                                                                    ACCOUNT_ID)).thenReturn(Optional.of(
+                simpleLiabilitySnapshot));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)

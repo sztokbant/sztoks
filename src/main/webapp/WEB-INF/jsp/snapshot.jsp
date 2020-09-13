@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>${snapshot.date}</title>
+    <title>${snapshot.name}</title>
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
@@ -22,7 +22,7 @@
 <div class="container">
 
     <div class="text-center">
-        <h4>${snapshot.date}</h4>
+        <h4>${snapshot.name}</h4>
         <%@ include file="_snapshot_net_worth.jsp" %>
     </div>
 

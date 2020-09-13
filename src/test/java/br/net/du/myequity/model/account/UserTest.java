@@ -8,12 +8,12 @@ import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
+import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserTest {
+
+    private static final long SNAPSHOT_INDEX = 1L;
 
     private User user;
     private SimpleAssetAccount simpleAssetAccount;
@@ -38,7 +40,7 @@ class UserTest {
         simpleLiabilityAccount = new SimpleLiabilityAccount("Liability Account", CurrencyUnit.USD);
         simpleLiabilityAccount.setId(7L);
 
-        snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
+        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of());
         snapshot.setId(42L);
     }
 
@@ -224,27 +226,27 @@ class UserTest {
     }
 
     @Test
-    public void compareTo_snapshotsAreOrderedByDateDescending() {
+    public void compareTo_snapshotsAreOrderedByIndexDescending() {
         // GIVEN
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 05), ImmutableSortedSet.of()));
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 03), ImmutableSortedSet.of()));
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 06), ImmutableSortedSet.of()));
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 07), ImmutableSortedSet.of()));
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 01), ImmutableSortedSet.of()));
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 02), ImmutableSortedSet.of()));
-        user.addSnapshot(new Snapshot(LocalDate.of(2020, 01, 04), ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(5L, now, ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(3L, now, ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(6L, now, ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(7L, now, ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(1L, now, ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(2L, now, ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(4L, now, ImmutableSortedSet.of()));
 
         // WHEN
         final Iterator<Snapshot> iterator = user.getSnapshots().iterator();
 
         // THEN
-        assertEquals(LocalDate.of(2020, 01, 07), iterator.next().getDate());
-        assertEquals(LocalDate.of(2020, 01, 06), iterator.next().getDate());
-        assertEquals(LocalDate.of(2020, 01, 05), iterator.next().getDate());
-        assertEquals(LocalDate.of(2020, 01, 04), iterator.next().getDate());
-        assertEquals(LocalDate.of(2020, 01, 03), iterator.next().getDate());
-        assertEquals(LocalDate.of(2020, 01, 02), iterator.next().getDate());
-        assertEquals(LocalDate.of(2020, 01, 01), iterator.next().getDate());
+        assertEquals(7L, iterator.next().getIndex());
+        assertEquals(6L, iterator.next().getIndex());
+        assertEquals(5L, iterator.next().getIndex());
+        assertEquals(4L, iterator.next().getIndex());
+        assertEquals(3L, iterator.next().getIndex());
+        assertEquals(2L, iterator.next().getIndex());
+        assertEquals(1L, iterator.next().getIndex());
     }
 
     @Test

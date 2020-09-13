@@ -20,11 +20,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
+import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -94,7 +94,7 @@ class PersistenceTest {
         assertNull(user.getId());
         userService.save(user);
 
-        snapshot = new Snapshot(LocalDate.now().minusDays(1), ImmutableSortedSet.of());
+        snapshot = new Snapshot(2L, now, ImmutableSortedSet.of());
         assertNull(snapshot.getId());
 
         // WHEN
@@ -105,7 +105,7 @@ class PersistenceTest {
         assertNotNull(actualUser.getId());
         assertEquals(user, actualUser);
         assertEquals(2, actualUser.getSnapshots().size());
-        assertEquals(snapshot, user.getSnapshots().last());
+        assertEquals(snapshot, user.getSnapshots().first());
 
         final Snapshot actualSnapshot = snapshotRepository.findAll().get(0);
         assertNotNull(actualSnapshot.getId());
@@ -251,7 +251,8 @@ class PersistenceTest {
     }
 
     private void initSnapshot() {
-        snapshot = new Snapshot(LocalDate.now().minusDays(1),
+        snapshot = new Snapshot(2L,
+                                now,
                                 ImmutableSortedSet.of(new SimpleAssetSnapshot(simpleAssetAccount, assetAmount),
                                                       new SimpleLiabilitySnapshot(simpleLiabilityAccount,
                                                                                   liabilityAmount)));

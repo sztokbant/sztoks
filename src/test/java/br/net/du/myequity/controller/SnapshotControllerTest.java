@@ -26,6 +26,7 @@ import java.util.Optional;
 
 import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
 import static br.net.du.myequity.test.ModelTestUtil.buildUser;
+import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -37,7 +38,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class SnapshotControllerTest {
 
     private static final String SNAPSHOT_URL_TEMPLATE = "/snapshot/%d";
-    private static final Long SNAPSHOT_ID = 99L;
+    private static final long SNAPSHOT_ID = 99L;
+    private static final long SNAPSHOT_INDEX = 1L;
 
     private static final String ACCOUNT_ID_VALUE = "42";
 
@@ -65,7 +67,7 @@ class SnapshotControllerTest {
         anotherUser = buildUser();
         anotherUser.setId(user.getId() * 7);
 
-        snapshot = new Snapshot(LocalDate.now(), ImmutableSortedSet.of());
+        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
         account = new SimpleAssetAccount("Checking Account", CurrencyUnit.USD, LocalDate.now());

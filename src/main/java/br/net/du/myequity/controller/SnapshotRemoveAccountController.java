@@ -25,8 +25,8 @@ public class SnapshotRemoveAccountController extends SnapshotAccountUpdateContro
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
         assert snapshot != null;
 
-        final Optional<AccountSnapshot> accountSnapshotOpt = accountSnapshotRepository.findBySnapshotAndAccountId(
-                snapshot,
+        final Optional<AccountSnapshot> accountSnapshotOpt = accountSnapshotRepository.findBySnapshotIdAndAccountId(
+                snapshot.getId(),
                 snapshotAccountUpdateJsonRequest.getAccountId());
         if (!accountSnapshotOpt.isPresent() || !snapshot.getAccountSnapshots().contains(accountSnapshotOpt.get())) {
             throw new IllegalArgumentException();
