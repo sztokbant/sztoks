@@ -4,17 +4,15 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
 @Service
+@RequiredArgsConstructor
 public class SnapshotService {
     private final SnapshotRepository snapshotRepository;
-
-    public SnapshotService(final SnapshotRepository snapshotRepository) {
-        this.snapshotRepository = snapshotRepository;
-    }
 
     public Snapshot newSnapshot(@NonNull final User user) {
         assert !user.getSnapshots().isEmpty();

@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.controller.model.AccountNameJsonRequest;
+import br.net.du.myequity.controller.model.AccountDeleteJsonRequest;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
@@ -33,12 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AccountNameControllerTest extends AjaxControllerTestBase {
+class AccountDeleteControllerTest extends AjaxControllerTestBase {
 
-    private static final String JSON_NAME = "name";
-
-    private static final String NEW_ACCOUNT_NAME_NOT_TRIMMED = "   Wells Fargo Mortgage   ";
-    private static final String NEW_ACCOUNT_NAME_TRIMMED = "Wells Fargo Mortgage";
+    private static final String JSON_ACCOUNT_ID = "accountId";
 
     @Autowired
     private MockMvc mvc;
@@ -52,8 +49,8 @@ class AccountNameControllerTest extends AjaxControllerTestBase {
 
     private Account account;
 
-    public AccountNameControllerTest() {
-        super("/account/updateName");
+    public AccountDeleteControllerTest() {
+        super("/account/delete");
     }
 
     @BeforeEach
@@ -61,9 +58,9 @@ class AccountNameControllerTest extends AjaxControllerTestBase {
         user = buildUser();
         createAccount();
 
-        final AccountNameJsonRequest accountNameJsonRequest =
-                AccountNameJsonRequest.builder().accountId(ACCOUNT_ID).newValue(NEW_ACCOUNT_NAME_NOT_TRIMMED).build();
-        requestContent = new ObjectMapper().writeValueAsString(accountNameJsonRequest);
+        final AccountDeleteJsonRequest accountDeleteJsonRequest =
+                AccountDeleteJsonRequest.builder().accountId(ACCOUNT_ID).build();
+        requestContent = new ObjectMapper().writeValueAsString(accountDeleteJsonRequest);
     }
 
     @Override
@@ -175,6 +172,6 @@ class AccountNameControllerTest extends AjaxControllerTestBase {
         assertNotNull(resultContentAsString);
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertEquals(NEW_ACCOUNT_NAME_TRIMMED, jsonNode.get(JSON_NAME).textValue());
+        assertEquals(ACCOUNT_ID, jsonNode.get(JSON_ACCOUNT_ID).numberValue().longValue());
     }
 }

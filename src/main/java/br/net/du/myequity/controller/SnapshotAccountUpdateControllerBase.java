@@ -14,7 +14,6 @@ import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
@@ -23,7 +22,6 @@ import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
 
-@RestController
 public class SnapshotAccountUpdateControllerBase {
     @Autowired
     SnapshotRepository snapshotRepository;

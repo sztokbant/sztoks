@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller.util;
 
+import br.net.du.myequity.controller.model.AccountNameJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;

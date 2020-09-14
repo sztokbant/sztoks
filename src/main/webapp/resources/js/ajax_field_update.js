@@ -36,14 +36,14 @@ function ajaxPost(endpoint, data, successCallback) {
     data: JSON.stringify(data),
     dataType: 'json',
     success: function(result) {
-      if (!result.hasError) {
+      if (!result.errorMessage) {
         successCallback(data, result);
       } else {
-        alert('Result has error.');
+        alert(result.errorMessage);
       }
     },
     error: function(e) {
-      alert('Error updating field.');
+      alert('Unexpected error.');
       console.log("Error: ", e);
     }
   });

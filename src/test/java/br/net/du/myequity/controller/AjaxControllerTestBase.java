@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 abstract class AjaxControllerTestBase {
     static final Long ACCOUNT_ID = 1L;
+    static final String ACCOUNT_NAME = "Mortgage";
     static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
 
     @Autowired
