@@ -28,7 +28,7 @@
 
     <hr/>
 
-    <div class="text-center"><a href="${contextPath}/addaccounts/${snapshot.id}">Add Accounts to Snapshot</a></div>
+    <div class="text-center"><a href="${contextPath}/snapshot/addAccounts/${snapshot.id}">Add Accounts to Snapshot</a></div>
 
     <div class="row">
         <div class="col" style="background: lightpink;">

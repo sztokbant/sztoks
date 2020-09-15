@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SnapshotSimpleAccountUpdateController extends SnapshotAccountUpdateControllerBase {
 
-    @PostMapping("/updateAccountBalance")
-    public SnapshotAccountUpdateJsonResponse updateAccountBalance(final Model model,
-                                                                  @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
+    @PostMapping("/snapshot/updateAccountBalance")
+    public SnapshotAccountUpdateJsonResponse post(final Model model,
+                                                  @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
         assert snapshot != null;
 

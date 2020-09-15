@@ -38,7 +38,7 @@ class SnapshotCreditCardAccountUpdateTotalCreditControllerTest extends AjaxSnaps
     private AccountSnapshotRepository accountSnapshotRepository;
 
     SnapshotCreditCardAccountUpdateTotalCreditControllerTest() {
-        super("/updateCreditCardTotalCredit", new BigDecimal("7000.00"));
+        super("/snapshot/updateCreditCardTotalCredit", new BigDecimal("7000.00"));
     }
 
     @Override

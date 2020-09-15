@@ -17,7 +17,7 @@
 <%@ include file="_header.jsp" %>
 
 <div class="container">
-    <form:form method="POST" action="${contextPath}/addaccounts/${snapshot.id}" modelAttribute="addAccountsForm"
+    <form:form method="POST" action="${contextPath}/snapshot/addAccounts/${snapshot.id}" modelAttribute="addAccountsForm"
                class="form-signin">
         <h4 class="form-signin-heading">Add Accounts to Snapshot</h4>
 

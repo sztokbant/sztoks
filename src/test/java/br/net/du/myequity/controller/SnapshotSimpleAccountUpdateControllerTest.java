@@ -37,7 +37,7 @@ class SnapshotSimpleAccountUpdateControllerTest extends AjaxSnapshotControllerTe
     private AccountSnapshotRepository accountSnapshotRepository;
 
     SnapshotSimpleAccountUpdateControllerTest() {
-        super("/updateAccountBalance", new BigDecimal("108.00"));
+        super("/snapshot/updateAccountBalance", new BigDecimal("108.00"));
     }
 
     @Override
@@ -47,7 +47,7 @@ class SnapshotSimpleAccountUpdateControllerTest extends AjaxSnapshotControllerTe
     }
 
     @Test
-    public void updateAccountBalance_happy() throws Exception {
+    public void post_happy() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 

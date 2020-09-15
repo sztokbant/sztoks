@@ -17,7 +17,7 @@ import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercent
 @RestController
 public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUpdateControllerBase {
 
-    @PostMapping("/updateInvestmentShares")
+    @PostMapping("/snapshot/updateInvestmentShares")
     public SnapshotAccountUpdateJsonResponse updateInvestmentShares(final Model model,
                                                                     @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
@@ -34,7 +34,7 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
         return getDefaultResponseBuilder(snapshot, investmentSnapshot).shares(shares).build();
     }
 
-    @PostMapping("/updateInvestmentOriginalShareValue")
+    @PostMapping("/snapshot/updateInvestmentOriginalShareValue")
     public SnapshotAccountUpdateJsonResponse updateInvestmentOriginalShareValue(final Model model,
                                                                                 @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
@@ -55,7 +55,7 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
                                                                       .build();
     }
 
-    @PostMapping("/updateInvestmentCurrentShareValue")
+    @PostMapping("/snapshot/updateInvestmentCurrentShareValue")
     public SnapshotAccountUpdateJsonResponse updateInvestmentCurrentShareValue(final Model model,
                                                                                @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);

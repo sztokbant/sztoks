@@ -39,7 +39,7 @@ class SnapshotRemoveAccountControllerTest extends AjaxSnapshotControllerTestBase
     private AccountSnapshotRepository accountSnapshotRepository;
 
     SnapshotRemoveAccountControllerTest() {
-        super("/removeAccountFromSnapshot", null);
+        super("/snapshot/removeAccount", null);
     }
 
     @BeforeEach
@@ -56,7 +56,7 @@ class SnapshotRemoveAccountControllerTest extends AjaxSnapshotControllerTestBase
     }
 
     @Test
-    public void removeAccountFromSnapshot_happy() throws Exception {
+    public void post_happy() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 

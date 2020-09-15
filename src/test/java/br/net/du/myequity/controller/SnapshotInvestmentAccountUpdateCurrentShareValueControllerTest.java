@@ -39,7 +39,7 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest extends Aja
     private AccountSnapshotRepository accountSnapshotRepository;
 
     SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest() {
-        super("/updateInvestmentCurrentShareValue", new BigDecimal("4500.00"));
+        super("/snapshot/updateInvestmentCurrentShareValue", new BigDecimal("4500.00"));
     }
 
     @Override

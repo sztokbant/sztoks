@@ -8,7 +8,7 @@ $(document).ready(function() {
   prepareUpdateForm($("#form_account_balance_${account.id}"),
     $("#account_balance_amount_${account.id}"),
     $("#new_account_balance_amount_${account.id}"),
-    "updateAccountBalance",
+    "snapshot/updateAccountBalance",
     "${account.currencyUnitSymbol}",
     data,
     accountBalanceUpdateSuccessCallback,

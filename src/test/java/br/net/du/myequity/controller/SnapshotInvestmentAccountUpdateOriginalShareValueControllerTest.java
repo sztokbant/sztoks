@@ -39,7 +39,7 @@ class SnapshotInvestmentAccountUpdateOriginalShareValueControllerTest extends Aj
     private AccountSnapshotRepository accountSnapshotRepository;
 
     SnapshotInvestmentAccountUpdateOriginalShareValueControllerTest() {
-        super("/updateInvestmentOriginalShareValue", new BigDecimal("2000.00"));
+        super("/snapshot/updateInvestmentOriginalShareValue", new BigDecimal("2000.00"));
     }
 
     @Override

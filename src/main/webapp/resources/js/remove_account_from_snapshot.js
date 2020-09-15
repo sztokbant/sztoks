@@ -7,7 +7,7 @@ function removeAccountFromSnapshot(accountName, accountId, snapshotId) {
         accountId: accountId,
       };
 
-      ajaxPost('removeAccountFromSnapshot', data, removeAccountFromSnapshotSuccessCallback);
+      ajaxPost('snapshot/removeAccount', data, removeAccountFromSnapshotSuccessCallback);
     }
 }
 

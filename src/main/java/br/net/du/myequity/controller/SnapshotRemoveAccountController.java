@@ -19,9 +19,9 @@ import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal
 @RestController
 public class SnapshotRemoveAccountController extends SnapshotAccountUpdateControllerBase {
 
-    @PostMapping("/removeAccountFromSnapshot")
-    public SnapshotRemoveAccountJsonResponse removeAccountFromSnapshot(final Model model,
-                                                                       @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
+    @PostMapping("/snapshot/removeAccount")
+    public SnapshotRemoveAccountJsonResponse post(final Model model,
+                                                  @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
         assert snapshot != null;
 

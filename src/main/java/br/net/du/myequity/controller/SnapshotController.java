@@ -162,7 +162,7 @@ public class SnapshotController {
         return accountsByType;
     }
 
-    @GetMapping("/addaccounts/{id}")
+    @GetMapping("/snapshot/addAccounts/{id}")
     public String addAccounts(@PathVariable(value = "id") final Long snapshotId, final Model model) {
         final Optional<User> userOpt = getLoggedUserOpt(model);
 
@@ -207,7 +207,7 @@ public class SnapshotController {
         return "add_accounts";
     }
 
-    @PostMapping("/addaccounts/{id}")
+    @PostMapping("/snapshot/addAccounts/{id}")
     public String addAccounts(@PathVariable(value = "id") final Long snapshotId,
                               final Model model,
                               @ModelAttribute(
