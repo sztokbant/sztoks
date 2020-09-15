@@ -1,5 +1,6 @@
 package br.net.du.myequity.service;
 
+import br.net.du.myequity.exception.MyEquityException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
@@ -12,6 +13,7 @@ import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import br.net.du.myequity.persistence.SnapshotRepository;
+import br.net.du.myequity.persistence.UserRepository;
 import com.google.common.collect.ImmutableSortedSet;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +27,7 @@ import java.util.SortedSet;
 import static br.net.du.myequity.test.ModelTestUtil.buildUser;
 import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -58,6 +61,9 @@ public class SnapshotServiceTest {
     @Mock
     private SnapshotRepository snapshotRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
     private User user;
 
     private Snapshot snapshot;
@@ -81,7 +87,7 @@ public class SnapshotServiceTest {
         INVESTMENT_SNAPSHOT.setId(4L);
         snapshot.addAccountSnapshot(INVESTMENT_SNAPSHOT);
 
-        snapshotService = new SnapshotService(snapshotRepository);
+        snapshotService = new SnapshotService(snapshotRepository, userRepository);
     }
 
     @Test
@@ -106,5 +112,33 @@ public class SnapshotServiceTest {
         }
 
         verify(snapshotRepository).save(newSnapshot);
+    }
+
+    @Test
+    public void deleteSnapshot_happy() {
+        // GIVEN
+        final Snapshot secondSnapshot = new Snapshot(SNAPSHOT_INDEX + 1, now, ImmutableSortedSet.of());
+        secondSnapshot.setId(99L);
+        user.addSnapshot(secondSnapshot);
+        assertEquals(2, user.getSnapshots().size());
+
+        // WHEN
+        snapshotService.deleteSnapshot(user, snapshot);
+
+        // THEN
+        assertEquals(1, user.getSnapshots().size());
+    }
+
+    @Test
+    public void deleteSnapshot_lastSnapshot() {
+        // GIVEN
+        assertEquals(1, user.getSnapshots().size());
+
+        // THEN
+        assertThrows(MyEquityException.class, () -> {
+            snapshotService.deleteSnapshot(user, snapshot);
+        });
+
+        assertEquals(1, user.getSnapshots().size());
     }
 }

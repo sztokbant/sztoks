@@ -102,6 +102,24 @@ public class SnapshotController {
         return String.format(REDIRECT_SNAPSHOT_TEMPLATE, newSnapshot.getId());
     }
 
+    @PostMapping("/snapshot/delete/{id}")
+    public String delete(@PathVariable(value = "id") final Long snapshotId, final Model model) {
+        final Optional<User> userOpt = getLoggedUserOpt(model);
+
+        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
+        if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
+            // TODO Error message
+            return REDIRECT_TO_HOME;
+        }
+
+        final User user = userOpt.get();
+        final Snapshot snapshot = snapshotOpt.get();
+
+        snapshotService.deleteSnapshot(user, snapshot);
+
+        return REDIRECT_TO_HOME;
+    }
+
     private void addAccountsToModel(final Model model, final Snapshot snapshot) {
         final Map<AccountType, List<SimpleAccountViewModelOutput>> accountViewModels =
                 getAccountViewModelOutputs(snapshot);

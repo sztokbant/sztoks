@@ -31,9 +31,19 @@
     </div>
 
     <c:forEach var="snapshot" items="${snapshots}">
+        <c:if test="${snapshots.size() gt 1}">
+            <div class="delete-icon">
+                <form method="post" action="${contextPath}/snapshot/delete/${snapshot.id}"
+                      onsubmit="return confirm('Are you sure you want to permanently delete snapshot \'${snapshot.name}\'?');">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <input type="submit" value="&#x26D4" class="transparent-button"/>
+                </form>
+            </div>
+        </c:if>
         <div>
             <a href="/snapshot/${snapshot.id}">${snapshot.name}</a>
         </div>
+        <br/>
         <%@ include file="_snapshot_net_worth.jsp" %>
         <br/>
     </c:forEach>
@@ -59,6 +69,7 @@
                     </c:forEach>
                 </c:otherwise>
             </c:choose>
+            <br/>
         </div>
         <div class="col" style="background: lightblue;">
             <h5 class="text-center">Liabilities</h5>
@@ -74,6 +85,7 @@
                     </c:forEach>
                 </c:otherwise>
             </c:choose>
+            <br/>
         </div>
     </div>
 </div>
