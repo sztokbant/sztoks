@@ -39,7 +39,7 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest extends Aja
     private AccountSnapshotRepository accountSnapshotRepository;
 
     SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest() {
-        super("/snapshot/updateInvestmentCurrentShareValue", new BigDecimal("4500.00"));
+        super("/snapshot/updateInvestmentCurrentShareValue", "4500.00");
     }
 
     @Override
@@ -86,12 +86,12 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest extends Aja
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
-        assertEquals(newValue.toString(), jsonNode.get(JSON_CURRENT_SHARE_VALUE).asText());
+        assertEquals(newValue, jsonNode.get(JSON_CURRENT_SHARE_VALUE).asText());
 
         final String expectedProfitPercentage = "200.00%";
         assertEquals(expectedProfitPercentage, jsonNode.get(JSON_PROFIT_PERCENTAGE).asText());
 
-        final BigDecimal expectedAccountBalance = CURRENT_SHARES.multiply(newValue).setScale(2);
+        final BigDecimal expectedAccountBalance = CURRENT_SHARES.multiply(new BigDecimal(newValue)).setScale(2);
         assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_BALANCE).asText());
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());

@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import static br.net.du.myequity.test.TestConstants.now;
@@ -35,6 +34,7 @@ abstract class AjaxSnapshotControllerTestBase extends AjaxControllerTestBase {
     static final String JSON_CURRENCY_UNIT = "currencyUnit";
     static final String JSON_CURRENCY_UNIT_SYMBOL = "currencyUnitSymbol";
     static final String JSON_CURRENT_SHARE_VALUE = "currentShareValue";
+    static final String JSON_DUE_DATE = "dueDate";
     static final String JSON_NET_WORTH = "netWorth";
     static final String JSON_ORIGINAL_SHARE_VALUE = "originalShareValue";
     static final String JSON_PROFIT_PERCENTAGE = "profitPercentage";
@@ -43,7 +43,7 @@ abstract class AjaxSnapshotControllerTestBase extends AjaxControllerTestBase {
     static final String JSON_TOTAL_FOR_ACCOUNT_TYPE = "totalForAccountType";
     static final String JSON_USED_CREDIT_PERCENTAGE = "usedCreditPercentage";
 
-    final BigDecimal newValue;
+    final String newValue;
 
     @MockBean
     SnapshotRepository snapshotRepository;
@@ -55,7 +55,7 @@ abstract class AjaxSnapshotControllerTestBase extends AjaxControllerTestBase {
 
     Account account;
 
-    AjaxSnapshotControllerTestBase(final String url, final BigDecimal newValue) {
+    AjaxSnapshotControllerTestBase(final String url, final String newValue) {
         super(url);
         this.newValue = newValue;
     }

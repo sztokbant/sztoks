@@ -38,7 +38,7 @@ class SnapshotCreditCardAccountUpdateAvailableCreditControllerTest extends AjaxS
     private AccountSnapshotRepository accountSnapshotRepository;
 
     SnapshotCreditCardAccountUpdateAvailableCreditControllerTest() {
-        super("/snapshot/updateCreditCardAvailableCredit", new BigDecimal("2900.00"));
+        super("/snapshot/updateCreditCardAvailableCredit", "2900.00");
     }
 
     @Override
@@ -83,12 +83,12 @@ class SnapshotCreditCardAccountUpdateAvailableCreditControllerTest extends AjaxS
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
-        assertEquals(newValue.toString(), jsonNode.get(JSON_AVAILABLE_CREDIT).asText());
+        assertEquals(newValue, jsonNode.get(JSON_AVAILABLE_CREDIT).asText());
 
         final String expectedCreditUsedPercentage = "3.33%";
         assertEquals(expectedCreditUsedPercentage, jsonNode.get(JSON_USED_CREDIT_PERCENTAGE).asText());
 
-        final BigDecimal expectedAccountBalance = CURRENT_TOTAL_CREDIT.subtract(newValue);
+        final BigDecimal expectedAccountBalance = CURRENT_TOTAL_CREDIT.subtract(new BigDecimal(newValue));
         assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_BALANCE).asText());
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());

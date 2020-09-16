@@ -38,6 +38,10 @@
                         <label for="simpleAssetRadio">Simple Asset</label>
                     </div>
                     <div>
+                        <form:radiobutton path="typeName" value="ReceivableAccount" id="receivableRadio" />
+                        <label for="receivableRadio">Receivable</label>
+                    </div>
+                    <div>
                         <form:radiobutton path="typeName" value="InvestmentAccount" id="investmentRadio"/>
                         <label for="investmentRadio">Investment</label>
                     </div>
@@ -45,6 +49,10 @@
                     <div>
                         <form:radiobutton path="typeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"/>
                         <label for="simpleLiabilityRadio">Simple Liability</label>
+                    </div>
+                    <div>
+                        <form:radiobutton path="typeName" value="PayableAccount" id="payableRadio" />
+                        <label for="payableRadio">Payable</label>
                     </div>
                     <div>
                         <form:radiobutton path="typeName" value="CreditCardAccount" id="creditCardRadio"/>

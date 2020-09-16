@@ -26,7 +26,8 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
         final InvestmentSnapshot investmentSnapshot =
                 (InvestmentSnapshot) getAccountSnapshot(snapshotAccountUpdateJsonRequest, InvestmentSnapshot.class);
 
-        investmentSnapshot.setShares(snapshotAccountUpdateJsonRequest.getNewValue());
+        final BigDecimal newValue = new BigDecimal(snapshotAccountUpdateJsonRequest.getNewValue());
+        investmentSnapshot.setShares(newValue);
 
         accountSnapshotRepository.save(investmentSnapshot);
 
@@ -43,7 +44,8 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
         final InvestmentSnapshot investmentSnapshot =
                 (InvestmentSnapshot) getAccountSnapshot(snapshotAccountUpdateJsonRequest, InvestmentSnapshot.class);
 
-        investmentSnapshot.setOriginalShareValue(snapshotAccountUpdateJsonRequest.getNewValue());
+        final BigDecimal newValue = new BigDecimal(snapshotAccountUpdateJsonRequest.getNewValue());
+        investmentSnapshot.setOriginalShareValue(newValue);
 
         accountSnapshotRepository.save(investmentSnapshot);
 
@@ -64,7 +66,8 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
         final InvestmentSnapshot investmentSnapshot =
                 (InvestmentSnapshot) getAccountSnapshot(snapshotAccountUpdateJsonRequest, InvestmentSnapshot.class);
 
-        investmentSnapshot.setCurrentShareValue(snapshotAccountUpdateJsonRequest.getNewValue());
+        final BigDecimal newValue = new BigDecimal(snapshotAccountUpdateJsonRequest.getNewValue());
+        investmentSnapshot.setCurrentShareValue(newValue);
 
         accountSnapshotRepository.save(investmentSnapshot);
 

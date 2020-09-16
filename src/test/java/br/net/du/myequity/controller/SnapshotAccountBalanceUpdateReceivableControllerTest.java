@@ -1,8 +1,8 @@
 package br.net.du.myequity.controller;
 
 import br.net.du.myequity.model.AccountType;
-import br.net.du.myequity.model.account.InvestmentAccount;
-import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
+import br.net.du.myequity.model.account.ReceivableAccount;
+import br.net.du.myequity.model.snapshot.ReceivableSnapshot;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,38 +28,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SnapshotInvestmentAccountUpdateOriginalShareValueControllerTest extends AjaxSnapshotControllerTestBase {
+class SnapshotAccountBalanceUpdateReceivableControllerTest extends AjaxSnapshotControllerTestBase {
 
     private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
-    private static final BigDecimal CURRENT_CURRENT_SHARE_VALUE = new BigDecimal("4000.00");
-    private static final BigDecimal CURRENT_ORIGINAL_SHARE_VALUE = new BigDecimal("2100.00");
-    private static final BigDecimal CURRENT_SHARES = new BigDecimal("15.00");
+    private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
 
     @MockBean
     private AccountSnapshotRepository accountSnapshotRepository;
 
-    SnapshotInvestmentAccountUpdateOriginalShareValueControllerTest() {
-        super("/snapshot/updateInvestmentOriginalShareValue", "2000.00");
+    SnapshotAccountBalanceUpdateReceivableControllerTest() {
+        super("/snapshot/updateAccountBalance", "108.00");
     }
 
     @Override
     public void createEntity() {
-        account = new InvestmentAccount("AMZN", CURRENCY_UNIT, LocalDate.now());
+        account = new ReceivableAccount("Friend", CURRENCY_UNIT, LocalDate.now());
         account.setId(ENTITY_ID);
     }
 
     @Test
-    public void updateInvestmentOriginalShareValue_happy() throws Exception {
+    public void post_happy() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final InvestmentSnapshot investmentSnapshot = new InvestmentSnapshot(account,
-                                                                             CURRENT_SHARES,
-                                                                             CURRENT_ORIGINAL_SHARE_VALUE,
-                                                                             CURRENT_CURRENT_SHARE_VALUE);
-        investmentSnapshot.setId(108L);
-        snapshot.addAccountSnapshot(investmentSnapshot);
+        final ReceivableSnapshot accountSnapshot = new ReceivableSnapshot(account, LocalDate.now(), CURRENT_BALANCE);
+        accountSnapshot.setId(108L);
+        snapshot.addAccountSnapshot(accountSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
@@ -67,8 +62,7 @@ class SnapshotInvestmentAccountUpdateOriginalShareValueControllerTest extends Aj
         when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
-                                                                    ENTITY_ID)).thenReturn(Optional.of(
-                investmentSnapshot));
+                                                                    ENTITY_ID)).thenReturn(Optional.of(accountSnapshot));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
@@ -85,19 +79,10 @@ class SnapshotInvestmentAccountUpdateOriginalShareValueControllerTest extends Aj
         assertNotNull(resultContentAsString);
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-
-        assertEquals(newValue, jsonNode.get(JSON_ORIGINAL_SHARE_VALUE).asText());
-
-        final String expectedProfitPercentage = "100.00%";
-        assertEquals(expectedProfitPercentage, jsonNode.get(JSON_PROFIT_PERCENTAGE).asText());
-
-        final BigDecimal expectedAccountBalance = CURRENT_SHARES.multiply(CURRENT_CURRENT_SHARE_VALUE).setScale(2);
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_BALANCE).asText());
-
+        assertEquals(newValue, jsonNode.get(JSON_BALANCE).asText());
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
-        assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals(new BigDecimal(newValue).toString(), jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertEquals(new BigDecimal(newValue).toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
     }
 }

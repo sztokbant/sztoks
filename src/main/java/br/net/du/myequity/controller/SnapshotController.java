@@ -7,6 +7,8 @@ import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
+import br.net.du.myequity.model.snapshot.PayableSnapshot;
+import br.net.du.myequity.model.snapshot.ReceivableSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
@@ -14,6 +16,8 @@ import br.net.du.myequity.service.SnapshotService;
 import br.net.du.myequity.viewmodel.AddAccountsToSnapshotViewModelInput;
 import br.net.du.myequity.viewmodel.CreditCardViewModelOutput;
 import br.net.du.myequity.viewmodel.InvestmentViewModelOutput;
+import br.net.du.myequity.viewmodel.PayableViewModelOutput;
+import br.net.du.myequity.viewmodel.ReceivableViewModelOutput;
 import br.net.du.myequity.viewmodel.SimpleAccountViewModelOutput;
 import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
 import br.net.du.myequity.viewmodel.UserViewModelOutput;
@@ -38,6 +42,8 @@ import java.util.stream.Collectors;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.CREDIT_CARD_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.INVESTMENT_ACCOUNTS_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.PAYABLE_ACCOUNTS_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.RECEIVABLE_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
 import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_ASSET_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_LIABILITY_ACCOUNTS_KEY;
@@ -128,12 +134,14 @@ public class SnapshotController {
                 breakDownAccountsByType(accountViewModels.get(AccountType.ASSET));
         model.addAttribute(SIMPLE_ASSET_ACCOUNTS_KEY,
                            assetsByType.get(SimpleAccountViewModelOutput.class.getSimpleName()));
+        model.addAttribute(RECEIVABLE_ACCOUNTS_KEY, assetsByType.get(ReceivableViewModelOutput.class.getSimpleName()));
         model.addAttribute(INVESTMENT_ACCOUNTS_KEY, assetsByType.get(InvestmentViewModelOutput.class.getSimpleName()));
 
         final Map<String, List<SimpleAccountViewModelOutput>> liabilitiesByType =
                 breakDownAccountsByType(accountViewModels.get(AccountType.LIABILITY));
         model.addAttribute(SIMPLE_LIABILITY_ACCOUNTS_KEY,
                            liabilitiesByType.get(SimpleAccountViewModelOutput.class.getSimpleName()));
+        model.addAttribute(PAYABLE_ACCOUNTS_KEY, liabilitiesByType.get(PayableViewModelOutput.class.getSimpleName()));
         model.addAttribute(CREDIT_CARD_ACCOUNTS_KEY,
                            liabilitiesByType.get(CreditCardViewModelOutput.class.getSimpleName()));
     }
@@ -161,6 +169,10 @@ public class SnapshotController {
                 return CreditCardViewModelOutput.of(accountSnapshot);
             } else if (accountSnapshot instanceof InvestmentSnapshot) {
                 return InvestmentViewModelOutput.of(accountSnapshot);
+            } else if (accountSnapshot instanceof ReceivableSnapshot) {
+                return ReceivableViewModelOutput.of(accountSnapshot);
+            } else if (accountSnapshot instanceof PayableSnapshot) {
+                return PayableViewModelOutput.of(accountSnapshot);
             }
             return SimpleAccountViewModelOutput.of(accountSnapshot);
         }).sorted().collect(toList());

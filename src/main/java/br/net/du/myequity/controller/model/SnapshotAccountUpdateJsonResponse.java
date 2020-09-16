@@ -25,4 +25,8 @@ public class SnapshotAccountUpdateJsonResponse {
     private String originalShareValue;
     private String currentShareValue;
     private String profitPercentage;
+
+    // Payable/Receivable only
+    // TODO Extract class
+    private String dueDate;
 }

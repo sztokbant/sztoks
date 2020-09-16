@@ -47,3 +47,11 @@ function investmentCurrentShareValueUpdateSuccessCallback(data, result) {
   $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
   $("#total_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);
 }
+
+function payableDueDateUpdateSuccessCallback(data, result) {
+  $("#payable_due_date_" + data.accountId).html(result.dueDate);
+}
+
+function receivableDueDateUpdateSuccessCallback(data, result) {
+  $("#receivable_due_date_" + data.accountId).html(result.dueDate);
+}

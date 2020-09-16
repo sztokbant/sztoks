@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
 
@@ -23,7 +25,8 @@ public class SnapshotCreditCardAccountUpdateController extends SnapshotAccountUp
         final CreditCardSnapshot creditCardSnapshot =
                 (CreditCardSnapshot) getAccountSnapshot(snapshotAccountUpdateJsonRequest, CreditCardSnapshot.class);
 
-        creditCardSnapshot.setTotalCredit(snapshotAccountUpdateJsonRequest.getNewValue());
+        final BigDecimal newValue = new BigDecimal(snapshotAccountUpdateJsonRequest.getNewValue());
+        creditCardSnapshot.setTotalCredit(newValue);
 
         accountSnapshotRepository.save(creditCardSnapshot);
 
@@ -42,7 +45,8 @@ public class SnapshotCreditCardAccountUpdateController extends SnapshotAccountUp
         final CreditCardSnapshot creditCardSnapshot =
                 (CreditCardSnapshot) getAccountSnapshot(snapshotAccountUpdateJsonRequest, CreditCardSnapshot.class);
 
-        creditCardSnapshot.setAvailableCredit(snapshotAccountUpdateJsonRequest.getNewValue());
+        final BigDecimal newValue = new BigDecimal(snapshotAccountUpdateJsonRequest.getNewValue());
+        creditCardSnapshot.setAvailableCredit(newValue);
 
         accountSnapshotRepository.save(creditCardSnapshot);
 

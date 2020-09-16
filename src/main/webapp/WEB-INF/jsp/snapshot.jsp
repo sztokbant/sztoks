@@ -63,6 +63,21 @@
             </c:choose>
 
             <c:choose>
+                <c:when test="${not empty receivableAccounts}">
+                    <div class="row">
+                        <div class="col col-title"><i>Receivables</i></div>
+                        <div class="col col-title">Due Date</div>
+                        <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">Balance</div>
+                    </div>
+                    <c:forEach var="account" items="${receivableAccounts}">
+                        <%@ include file="_snapshot_receivable_line_item.jsp" %>
+                    </c:forEach>
+                </c:when>
+            </c:choose>
+
+            <c:choose>
                 <c:when test="${not empty investmentAccounts}">
                     <div class="row">
                         <div class="col col-title"><i>Investments</i></div>
@@ -109,6 +124,21 @@
                     </div>
                     <c:forEach var="account" items="${simpleLiabilityAccounts}">
                         <%@ include file="_snapshot_simple_liability_line_item.jsp" %>
+                    </c:forEach>
+                </c:when>
+            </c:choose>
+
+            <c:choose>
+                <c:when test="${not empty payableAccounts}">
+                    <div class="row">
+                        <div class="col col-title"><i>Payables</i></div>
+                        <div class="col col-title">Due Date</div>
+                        <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">Balance</div>
+                    </div>
+                    <c:forEach var="account" items="${payableAccounts}">
+                        <%@ include file="_snapshot_payable_line_item.jsp" %>
                     </c:forEach>
                 </c:when>
             </c:choose>

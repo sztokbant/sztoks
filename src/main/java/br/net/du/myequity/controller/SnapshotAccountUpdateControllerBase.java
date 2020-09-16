@@ -75,7 +75,6 @@ public class SnapshotAccountUpdateControllerBase {
                 return true;
             }
         }
-
         return false;
     }
 
