@@ -1,5 +1,9 @@
 function accountNameUpdateSuccessCallback(data, result) {
-  $("#account_name_" + data.accountId).html(result.name);
+  $("#account_name_" + data.id).html(result.name);
+}
+
+function snapshotNameUpdateSuccessCallback(data, result) {
+  $("#snapshot_name_" + data.id).html(result.name);
 }
 
 function accountBalanceUpdateSuccessCallback(data, result) {

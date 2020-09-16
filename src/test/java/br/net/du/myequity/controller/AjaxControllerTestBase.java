@@ -20,7 +20,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 abstract class AjaxControllerTestBase {
-    static final Long ACCOUNT_ID = 1L;
+    static final Long ENTITY_ID = 1L;
     static final String ACCOUNT_NAME = "Mortgage";
     static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
 
@@ -43,10 +43,10 @@ abstract class AjaxControllerTestBase {
     @BeforeEach
     public void ajaxControllerTestBaseSetUp() throws Exception {
         user = buildUser();
-        createAccount();
+        createEntity();
     }
 
-    abstract void createAccount();
+    abstract void createEntity();
 
     @Test
     public void post_noCsrfToken_forbidden() throws Exception {

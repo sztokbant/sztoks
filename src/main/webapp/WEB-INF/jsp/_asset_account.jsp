@@ -1,7 +1,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
   var data = {
-    accountId: ${account.id},
+    id: ${account.id},
   }
   prepareUpdateForm($("#form_account_name_${account.id}"),
     $("#account_name_${account.id}"),

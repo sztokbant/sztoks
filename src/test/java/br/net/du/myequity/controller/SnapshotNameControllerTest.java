@@ -1,12 +1,12 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.controller.model.AccountDeleteJsonRequest;
+import br.net.du.myequity.controller.model.EntityNameJsonRequest;
+import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.SimpleLiabilityAccount;
-import br.net.du.myequity.persistence.AccountRepository;
+import br.net.du.myequity.persistence.SnapshotRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableSortedSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
@@ -33,24 +32,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AccountDeleteControllerTest extends AjaxControllerTestBase {
+class SnapshotNameControllerTest extends AjaxControllerTestBase {
 
-    private static final String JSON_ACCOUNT_ID = "accountId";
+    private static final String JSON_NAME = "name";
+
+    private static final String NEW_SNAPSHOT_NAME_NOT_TRIMMED = "   My Best Snapshot   ";
+    private static final String NEW_SNAPSHOT_NAME_TRIMMED = "My Best Snapshot";
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private AccountRepository accountRepository;
+    private SnapshotRepository snapshotRepository;
 
     private String requestContent;
 
     private User user;
 
-    private Account account;
+    private Snapshot snapshot;
 
-    public AccountDeleteControllerTest() {
-        super("/account/delete");
+    public SnapshotNameControllerTest() {
+        super("/snapshot/updateName");
     }
 
     @BeforeEach
@@ -58,15 +60,15 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
         user = buildUser();
         createEntity();
 
-        final AccountDeleteJsonRequest accountDeleteJsonRequest =
-                AccountDeleteJsonRequest.builder().accountId(ENTITY_ID).build();
-        requestContent = new ObjectMapper().writeValueAsString(accountDeleteJsonRequest);
+        final EntityNameJsonRequest entityNameJsonRequest =
+                EntityNameJsonRequest.builder().id(ENTITY_ID).newValue(NEW_SNAPSHOT_NAME_NOT_TRIMMED).build();
+        requestContent = new ObjectMapper().writeValueAsString(entityNameJsonRequest);
     }
 
     @Override
     public void createEntity() {
-        account = new SimpleLiabilityAccount(ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now());
-        account.setId(ENTITY_ID);
+        snapshot = new Snapshot(2L, "Original Name", ImmutableSortedSet.of());
+        snapshot.setId(ENTITY_ID);
     }
 
     @Test
@@ -109,11 +111,11 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
     }
 
     @Test
-    public void post_accountNotFound_clientError() throws Exception {
+    public void post_snapshotNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.empty());
+        when(snapshotRepository.findById(ENTITY_ID)).thenReturn(Optional.empty());
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
@@ -127,7 +129,7 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
     }
 
     @Test
-    public void post_accountDoesNotBelongToUser_clientError() throws Exception {
+    public void post_snapshotDoesNotBelongToUser_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -135,8 +137,8 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
         final Long anotherUserId = user.getId() * 7;
         anotherUser.setId(anotherUserId);
 
-        account.setUser(anotherUser);
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        snapshot.setUser(anotherUser);
+        when(snapshotRepository.findById(ENTITY_ID)).thenReturn(Optional.of(snapshot));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
@@ -154,8 +156,8 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        account.setUser(user);
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        snapshot.setUser(user);
+        when(snapshotRepository.findById(ENTITY_ID)).thenReturn(Optional.of(snapshot));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
@@ -172,6 +174,6 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
         assertNotNull(resultContentAsString);
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertEquals(ENTITY_ID, jsonNode.get(JSON_ACCOUNT_ID).numberValue().longValue());
+        assertEquals(NEW_SNAPSHOT_NAME_TRIMMED, jsonNode.get(JSON_NAME).textValue());
     }
 }

@@ -42,9 +42,9 @@ class SnapshotCreditCardAccountUpdateAvailableCreditControllerTest extends AjaxS
     }
 
     @Override
-    public void createAccount() {
+    public void createEntity() {
         account = new CreditCardAccount("Chase Sapphire Reserve", CURRENCY_UNIT, LocalDate.now());
-        account.setId(ACCOUNT_ID);
+        account.setId(ENTITY_ID);
     }
 
     @Test
@@ -61,10 +61,10 @@ class SnapshotCreditCardAccountUpdateAvailableCreditControllerTest extends AjaxS
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
-        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
-                                                                    ACCOUNT_ID)).thenReturn(Optional.of(
+                                                                    ENTITY_ID)).thenReturn(Optional.of(
                 creditCardSnapshot));
 
         // WHEN

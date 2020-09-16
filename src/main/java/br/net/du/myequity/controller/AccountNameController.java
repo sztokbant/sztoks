@@ -1,7 +1,7 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.controller.model.AccountNameJsonRequest;
-import br.net.du.myequity.controller.model.AccountNameJsonResponse;
+import br.net.du.myequity.controller.model.EntityNameJsonRequest;
+import br.net.du.myequity.controller.model.EntityNameJsonResponse;
 import br.net.du.myequity.model.account.Account;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountNameController extends AccountControllerBase {
 
     @PostMapping("/account/updateName")
-    public AccountNameJsonResponse post(final Model model,
-                                        @RequestBody final AccountNameJsonRequest accountNameJsonRequest) {
-        final Account account = getAccount(model, accountNameJsonRequest.getAccountId());
+    public EntityNameJsonResponse post(final Model model,
+                                       @RequestBody final EntityNameJsonRequest entityNameJsonRequest) {
+        final Account account = getAccount(model, entityNameJsonRequest.getId());
 
-        account.setName(accountNameJsonRequest.getNewValue().trim());
+        account.setName(entityNameJsonRequest.getNewValue().trim());
         accountRepository.save(account);
 
-        return AccountNameJsonResponse.builder().name(account.getName()).build();
+        return EntityNameJsonResponse.builder().name(account.getName()).build();
     }
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AccountNameJsonRequest {
-    private Long accountId;
+public class EntityNameJsonRequest {
+    private Long id;
     private String newValue;
 }

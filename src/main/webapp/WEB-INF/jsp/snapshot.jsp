@@ -14,13 +14,14 @@
     <script src="${contextPath}/resources/js/success_callback_functions.js"></script>
     <script src="${contextPath}/resources/js/remove_account_from_snapshot.js"></script>
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
+    <link href="${contextPath}/resources/css/snapshot.css" rel="stylesheet">
 </head>
 <body>
 
 <%@ include file="_header.jsp" %>
 
 <div class="text-center">
-    <h4>${snapshot.name}</h4>
+    <%@ include file="_snapshot_name.jsp" %>
     <%@ include file="_snapshot_net_worth.jsp" %>
 </div>
 

@@ -68,7 +68,7 @@ abstract class AjaxSnapshotControllerTestBase extends AjaxControllerTestBase {
         final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest =
                 SnapshotAccountUpdateJsonRequest.builder()
                                                 .snapshotId(SNAPSHOT_ID)
-                                                .accountId(ACCOUNT_ID)
+                                                .accountId(ENTITY_ID)
                                                 .newValue(newValue)
                                                 .build();
         requestContent = new ObjectMapper().writeValueAsString(snapshotAccountUpdateJsonRequest);
@@ -82,7 +82,7 @@ abstract class AjaxSnapshotControllerTestBase extends AjaxControllerTestBase {
         snapshot.setUser(user);
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
-        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.empty());
+        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.empty());
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
@@ -108,7 +108,7 @@ abstract class AjaxSnapshotControllerTestBase extends AjaxControllerTestBase {
         anotherUser.setId(anotherUserId);
 
         account.setUser(anotherUser);
-        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
@@ -170,7 +170,7 @@ abstract class AjaxSnapshotControllerTestBase extends AjaxControllerTestBase {
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
-        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)

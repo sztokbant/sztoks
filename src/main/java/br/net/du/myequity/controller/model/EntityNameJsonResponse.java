@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AccountNameJsonResponse {
+public class EntityNameJsonResponse {
     private String name;
 }

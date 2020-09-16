@@ -45,14 +45,14 @@ class SnapshotRemoveAccountControllerTest extends AjaxSnapshotControllerTestBase
     @BeforeEach
     public void setUp() throws Exception {
         final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest =
-                SnapshotAccountUpdateJsonRequest.builder().snapshotId(SNAPSHOT_ID).accountId(ACCOUNT_ID).build();
+                SnapshotAccountUpdateJsonRequest.builder().snapshotId(SNAPSHOT_ID).accountId(ENTITY_ID).build();
         requestContent = new ObjectMapper().writeValueAsString(snapshotAccountUpdateJsonRequest);
     }
 
     @Override
-    public void createAccount() {
+    public void createEntity() {
         account = new SimpleLiabilityAccount("Mortgage", CURRENCY_UNIT, LocalDate.now());
-        account.setId(ACCOUNT_ID);
+        account.setId(ENTITY_ID);
     }
 
     @Test
@@ -68,10 +68,10 @@ class SnapshotRemoveAccountControllerTest extends AjaxSnapshotControllerTestBase
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
-        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
-                                                                    ACCOUNT_ID)).thenReturn(Optional.of(
+                                                                    ENTITY_ID)).thenReturn(Optional.of(
                 simpleLiabilitySnapshot));
 
         // WHEN

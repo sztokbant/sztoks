@@ -41,9 +41,9 @@ class SnapshotSimpleAccountUpdateControllerTest extends AjaxSnapshotControllerTe
     }
 
     @Override
-    public void createAccount() {
+    public void createEntity() {
         account = new SimpleLiabilityAccount("Mortgage", CURRENCY_UNIT, LocalDate.now());
-        account.setId(ACCOUNT_ID);
+        account.setId(ENTITY_ID);
     }
 
     @Test
@@ -59,10 +59,10 @@ class SnapshotSimpleAccountUpdateControllerTest extends AjaxSnapshotControllerTe
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
-        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
-                                                                    ACCOUNT_ID)).thenReturn(Optional.of(
+                                                                    ENTITY_ID)).thenReturn(Optional.of(
                 simpleLiabilitySnapshot));
 
         // WHEN

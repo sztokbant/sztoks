@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.controller.model.AccountNameJsonRequest;
+import br.net.du.myequity.controller.model.EntityNameJsonRequest;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
@@ -59,17 +59,17 @@ class AccountNameControllerTest extends AjaxControllerTestBase {
     @BeforeEach
     public void setUp() throws Exception {
         user = buildUser();
-        createAccount();
+        createEntity();
 
-        final AccountNameJsonRequest accountNameJsonRequest =
-                AccountNameJsonRequest.builder().accountId(ACCOUNT_ID).newValue(NEW_ACCOUNT_NAME_NOT_TRIMMED).build();
-        requestContent = new ObjectMapper().writeValueAsString(accountNameJsonRequest);
+        final EntityNameJsonRequest entityNameJsonRequest =
+                EntityNameJsonRequest.builder().id(ENTITY_ID).newValue(NEW_ACCOUNT_NAME_NOT_TRIMMED).build();
+        requestContent = new ObjectMapper().writeValueAsString(entityNameJsonRequest);
     }
 
     @Override
-    public void createAccount() {
+    public void createEntity() {
         account = new SimpleLiabilityAccount(ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now());
-        account.setId(ACCOUNT_ID);
+        account.setId(ENTITY_ID);
     }
 
     @Test
@@ -116,7 +116,7 @@ class AccountNameControllerTest extends AjaxControllerTestBase {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.empty());
+        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.empty());
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
@@ -139,7 +139,7 @@ class AccountNameControllerTest extends AjaxControllerTestBase {
         anotherUser.setId(anotherUserId);
 
         account.setUser(anotherUser);
-        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
@@ -158,7 +158,7 @@ class AccountNameControllerTest extends AjaxControllerTestBase {
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         account.setUser(user);
-        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
