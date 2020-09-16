@@ -34,3 +34,19 @@
     border: none;
     background: transparent;
 }
+
+.full-width {
+    width: 98%;
+    padding-left: 2%;
+}
+
+.center-w640 {
+    width: 640px;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.btn-myequity {
+    background: blanchedalmond;
+}

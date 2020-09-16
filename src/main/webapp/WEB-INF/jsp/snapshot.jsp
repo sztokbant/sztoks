@@ -19,17 +19,12 @@
 
 <%@ include file="_header.jsp" %>
 
-<div class="container">
+<div class="text-center">
+    <h4>${snapshot.name}</h4>
+    <%@ include file="_snapshot_net_worth.jsp" %>
+</div>
 
-    <div class="text-center">
-        <h4>${snapshot.name}</h4>
-        <%@ include file="_snapshot_net_worth.jsp" %>
-    </div>
-
-    <hr/>
-
-    <div class="text-center"><a href="${contextPath}/snapshot/addAccounts/${snapshot.id}">Add Accounts to Snapshot</a></div>
-
+<div class="full-width">
     <div class="row">
         <div class="col" style="background: lightpink;">
             <div class="text-center">
@@ -89,7 +84,9 @@
                 <c:choose>
                     <c:when test="${not empty snapshot.liabilitiesBalance}">
                         <c:forEach items="${snapshot.liabilitiesBalance}" var="entry">
-                            ${entry.key} <span id="total_LIABILITY_${entry.key}">${entry.value}</span><br>
+                            <div>
+                                ${entry.key} <span id="total_LIABILITY_${entry.key}">${entry.value}</span><br>
+                            </div>
                         </c:forEach>
                     </c:when>
                     <c:otherwise>
@@ -132,7 +129,14 @@
         </div>
     </div>
 
+    <br/>
+
+    <div class="text-center">
+        <a class="btn btn-myequity" href="${contextPath}/snapshot/addAccounts/${snapshot.id}">Add Accounts to Snapshot</a>
+    </div>
+
     <div class="text-center"><a href="/">Back</a></div>
 </div>
+
 </body>
 </html>

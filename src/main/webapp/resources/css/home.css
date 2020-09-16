@@ -1,0 +1,18 @@
+.snapshots-row {
+    border: 1px;
+    border-style: solid;
+}
+
+.snapshots-title {
+    text-align: center;
+    color: white;
+    background: #666;
+}
+
+.snapshots-cell {
+    vertical-align: top;
+}
+
+.net-worth-cell {
+    text-align: right;
+}
