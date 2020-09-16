@@ -44,6 +44,10 @@ $(document).ready(function() {
         &nbsp;
     </div>
 
+    <div class="col">
+        &nbsp;
+    </div>
+
     <div class="col col-value editable-asset">
         <form id="form_account_balance_${account.id}">
             <span id="account_balance_amount_${account.id}">${account.currencyUnitSymbol}${account.total}</span>

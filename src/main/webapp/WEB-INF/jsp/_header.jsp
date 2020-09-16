@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <ul class="nav navbar-brand">
             <li>
-                <b>My Equity</b>
+                <a href="/"><b>My Equity</b></a>
             </li>
         </ul>
         <c:if test="${not empty pageContext.request.userPrincipal}">

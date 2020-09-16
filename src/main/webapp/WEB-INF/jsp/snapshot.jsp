@@ -54,6 +54,7 @@
                         <div class="col col-title">&nbsp;</div>
                         <div class="col col-title">&nbsp;</div>
                         <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">&nbsp;</div>
                         <div class="col col-title">Balance</div>
                     </div>
                     <c:forEach var="account" items="${simpleAssetAccounts}">
@@ -67,6 +68,7 @@
                     <div class="row">
                         <div class="col col-title"><i>Receivables</i></div>
                         <div class="col col-title">Due Date</div>
+                        <div class="col col-title">&nbsp;</div>
                         <div class="col col-title">&nbsp;</div>
                         <div class="col col-title">&nbsp;</div>
                         <div class="col col-title">Balance</div>

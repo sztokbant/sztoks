@@ -23,6 +23,10 @@
                    class="form-signin">
             <h4 class="form-signin-heading">Add Accounts to Snapshot</h4>
 
+            <div class="text-center">
+                <a class="btn btn-myequity" href="${contextPath}/newaccount">Create New Account</a>
+            </div>
+
             <spring:bind path="accounts">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <h5>Assets</h5>
