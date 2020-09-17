@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
 
 @Getter
-public class InvestmentViewModelOutput extends SimpleAccountViewModelOutput {
+public class InvestmentViewModelOutput extends AccountViewModelOutputBase {
     private final BigDecimal shares;
     private final BigDecimal originalShareValue;
     private final BigDecimal currentShareValue;
@@ -19,14 +19,14 @@ public class InvestmentViewModelOutput extends SimpleAccountViewModelOutput {
         final InvestmentSnapshot investmentSnapshot = (InvestmentSnapshot) accountSnapshot;
         final BigDecimal profitPercentage = new BigDecimal(formatAsDecimal(investmentSnapshot.getProfitPercentage()));
 
-        return new InvestmentViewModelOutput(SimpleAccountViewModelOutput.of(accountSnapshot),
+        return new InvestmentViewModelOutput(AccountViewModelOutputBase.of(accountSnapshot),
                                              investmentSnapshot.getShares(),
                                              investmentSnapshot.getOriginalShareValue(),
                                              investmentSnapshot.getCurrentShareValue(),
                                              profitPercentage);
     }
 
-    public InvestmentViewModelOutput(final SimpleAccountViewModelOutput simpleAccountViewModelOutput,
+    public InvestmentViewModelOutput(final AccountViewModelOutputBase simpleAccountViewModelOutput,
                                      final BigDecimal shares,
                                      final BigDecimal originalShareValue,
                                      final BigDecimal currentShareValue,

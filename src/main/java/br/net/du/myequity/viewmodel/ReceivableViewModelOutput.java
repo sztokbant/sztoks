@@ -7,23 +7,23 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-public class ReceivableViewModelOutput extends SimpleAccountViewModelOutput {
+public class ReceivableViewModelOutput extends AccountViewModelOutputBase {
     private final LocalDate dueDate;
 
     public static ReceivableViewModelOutput of(final AccountSnapshot accountSnapshot) {
         final ReceivableSnapshot receivableSnapshot = (ReceivableSnapshot) accountSnapshot;
-        return new ReceivableViewModelOutput(SimpleAccountViewModelOutput.of(accountSnapshot),
+        return new ReceivableViewModelOutput(AccountViewModelOutputBase.of(accountSnapshot),
                                              receivableSnapshot.getDueDate());
     }
 
-    public ReceivableViewModelOutput(final SimpleAccountViewModelOutput simpleAccountViewModelOutput,
+    public ReceivableViewModelOutput(final AccountViewModelOutputBase simpleAccountViewModelOutput,
                                      final LocalDate dueDate) {
         super(simpleAccountViewModelOutput);
         this.dueDate = dueDate;
     }
 
     @Override
-    public int compareTo(final SimpleAccountViewModelOutput other) {
+    public int compareTo(final AccountViewModelOutputBase other) {
         if (!(other instanceof ReceivableViewModelOutput) ||
                 dueDate.equals(((ReceivableViewModelOutput) other).getDueDate())) {
             return super.compareTo(other);

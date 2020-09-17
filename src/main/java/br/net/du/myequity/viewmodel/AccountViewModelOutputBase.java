@@ -13,7 +13,7 @@ import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal
 @AllArgsConstructor
 @Data
 @Builder
-public class SimpleAccountViewModelOutput implements Comparable<SimpleAccountViewModelOutput> {
+public class AccountViewModelOutputBase implements Comparable<AccountViewModelOutputBase> {
     private final Long id;
     private final String name;
     private final boolean isClosed;
@@ -21,7 +21,7 @@ public class SimpleAccountViewModelOutput implements Comparable<SimpleAccountVie
     private final String currencyUnitSymbol;
     private final BigDecimal total;
 
-    public SimpleAccountViewModelOutput(final SimpleAccountViewModelOutput other) {
+    public AccountViewModelOutputBase(final AccountViewModelOutputBase other) {
         this.id = other.getId();
         this.name = other.getName();
         this.isClosed = other.isClosed();
@@ -30,7 +30,7 @@ public class SimpleAccountViewModelOutput implements Comparable<SimpleAccountVie
         this.total = other.getTotal();
     }
 
-    public static SimpleAccountViewModelOutput of(final AccountSnapshot accountSnapshot) {
+    public static AccountViewModelOutputBase of(final AccountSnapshot accountSnapshot) {
         final Account account = accountSnapshot.getAccount();
 
         final BigDecimal total = new BigDecimal(formatAsDecimal(accountSnapshot.getTotal()));
@@ -40,19 +40,19 @@ public class SimpleAccountViewModelOutput implements Comparable<SimpleAccountVie
                                                         .build();
     }
 
-    public static SimpleAccountViewModelOutput of(final Account account) {
+    public static AccountViewModelOutputBase of(final Account account) {
         return getAccountViewModelBuilderCommon(account).build();
     }
 
-    static SimpleAccountViewModelOutputBuilder getAccountViewModelBuilderCommon(final Account account) {
-        return SimpleAccountViewModelOutput.builder()
-                                           .id(account.getId())
-                                           .name(account.getName())
-                                           .isClosed(account.isClosed());
+    static AccountViewModelOutputBaseBuilder getAccountViewModelBuilderCommon(final Account account) {
+        return AccountViewModelOutputBase.builder()
+                                         .id(account.getId())
+                                         .name(account.getName())
+                                         .isClosed(account.isClosed());
     }
 
     @Override
-    public int compareTo(final SimpleAccountViewModelOutput other) {
+    public int compareTo(final AccountViewModelOutputBase other) {
         return this.currencyUnit.equals(other.getCurrencyUnit()) ?
                 this.name.compareTo(other.name) :
                 this.currencyUnit.compareTo(other.getCurrencyUnit());
