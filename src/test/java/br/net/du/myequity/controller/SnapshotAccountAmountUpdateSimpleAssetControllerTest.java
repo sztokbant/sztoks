@@ -1,8 +1,8 @@
 package br.net.du.myequity.controller;
 
 import br.net.du.myequity.model.AccountType;
-import br.net.du.myequity.model.account.ReceivableAccount;
-import br.net.du.myequity.model.snapshot.ReceivableSnapshot;
+import br.net.du.myequity.model.account.SimpleAssetAccount;
+import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SnapshotAccountBalanceUpdateReceivableControllerTest extends AjaxSnapshotControllerTestBase {
+class SnapshotAccountAmountUpdateSimpleAssetControllerTest extends AjaxSnapshotControllerTestBase {
 
     private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
@@ -36,13 +36,13 @@ class SnapshotAccountBalanceUpdateReceivableControllerTest extends AjaxSnapshotC
     @MockBean
     private AccountSnapshotRepository accountSnapshotRepository;
 
-    SnapshotAccountBalanceUpdateReceivableControllerTest() {
+    SnapshotAccountAmountUpdateSimpleAssetControllerTest() {
         super("/snapshot/updateAccountBalance", "108.00");
     }
 
     @Override
     public void createEntity() {
-        account = new ReceivableAccount("Friend", CURRENCY_UNIT, LocalDate.now());
+        account = new SimpleAssetAccount("Savings", CURRENCY_UNIT, LocalDate.now());
         account.setId(ENTITY_ID);
     }
 
@@ -52,7 +52,7 @@ class SnapshotAccountBalanceUpdateReceivableControllerTest extends AjaxSnapshotC
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final ReceivableSnapshot accountSnapshot = new ReceivableSnapshot(account, LocalDate.now(), CURRENT_BALANCE);
+        final SimpleAssetSnapshot accountSnapshot = new SimpleAssetSnapshot(account, CURRENT_BALANCE);
         accountSnapshot.setId(108L);
         snapshot.addAccountSnapshot(accountSnapshot);
 

@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsToUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
@@ -31,6 +32,29 @@ public class SnapshotAccountUpdateControllerBase {
 
     @Autowired
     AccountSnapshotRepository accountSnapshotRepository;
+
+    SnapshotAccountUpdateJsonResponse updateAccountSnapshotField(final Model model,
+                                                                 @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest,
+                                                                 final Class clazz,
+                                                                 final BiFunction<SnapshotAccountUpdateJsonRequest,
+                                                                         AccountSnapshot,
+                                                                         SnapshotAccountUpdateJsonResponse> function) {
+        final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
+        assert snapshot != null;
+
+        final AccountSnapshot accountSnapshot = getAccountSnapshot(snapshotAccountUpdateJsonRequest);
+
+        if (!clazz.isInstance(accountSnapshot)) {
+            throw new IllegalArgumentException("accountSnapshot not found");
+        }
+
+        final SnapshotAccountUpdateJsonResponse jsonResponse =
+                function.apply(snapshotAccountUpdateJsonRequest, accountSnapshot);
+
+        accountSnapshotRepository.save(accountSnapshot);
+
+        return jsonResponse;
+    }
 
     Snapshot getSnapshot(final Model model, final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
         final User user = getLoggedUser(model);
@@ -55,32 +79,21 @@ public class SnapshotAccountUpdateControllerBase {
         return accountOpt.isPresent() && snapshot.getAccountSnapshotFor(accountOpt.get()).isPresent();
     }
 
-    AccountSnapshot getAccountSnapshot(@RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest,
-                                       final Class<? extends AccountSnapshot>... classes) {
+    private AccountSnapshot getAccountSnapshot(@RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
         final Optional<AccountSnapshot> accountSnapshotOpt = accountSnapshotRepository.findBySnapshotIdAndAccountId(
                 snapshotAccountUpdateJsonRequest.getSnapshotId(),
                 snapshotAccountUpdateJsonRequest.getAccountId());
 
-        if (!accountSnapshotOpt.isPresent() || !isInstance(accountSnapshotOpt.get(), classes)) {
+        if (!accountSnapshotOpt.isPresent()) {
             throw new IllegalArgumentException("accountSnapshot not found");
         }
 
         return accountSnapshotOpt.get();
     }
 
-    private boolean isInstance(final AccountSnapshot accountSnapshot,
-                               final Class<? extends AccountSnapshot>... classes) {
-        for (final Class clazz : classes) {
-            if (clazz.isInstance(accountSnapshot)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     // TODO Simplify use-cases that don't need all of these attributes
-    SnapshotAccountUpdateJsonResponse.SnapshotAccountUpdateJsonResponseBuilder getDefaultResponseBuilder(final Snapshot snapshot,
-                                                                                                         final AccountSnapshot accountSnapshot) {
+    SnapshotAccountUpdateJsonResponse.SnapshotAccountUpdateJsonResponseBuilder getDefaultResponseBuilder(final AccountSnapshot accountSnapshot) {
+        final Snapshot snapshot = accountSnapshot.getSnapshot();
         final CurrencyUnit currencyUnit = accountSnapshot.getAccount().getCurrencyUnit();
         final AccountType accountType = accountSnapshot.getAccount().getAccountType();
 

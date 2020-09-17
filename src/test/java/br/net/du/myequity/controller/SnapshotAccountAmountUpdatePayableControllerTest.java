@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SnapshotAccountBalanceUpdatePayableControllerTest extends AjaxSnapshotControllerTestBase {
+class SnapshotAccountAmountUpdatePayableControllerTest extends AjaxSnapshotControllerTestBase {
 
     private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
@@ -36,7 +36,7 @@ class SnapshotAccountBalanceUpdatePayableControllerTest extends AjaxSnapshotCont
     @MockBean
     private AccountSnapshotRepository accountSnapshotRepository;
 
-    SnapshotAccountBalanceUpdatePayableControllerTest() {
+    SnapshotAccountAmountUpdatePayableControllerTest() {
         super("/snapshot/updateAccountBalance", "108.00");
     }
 

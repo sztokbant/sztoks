@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @Table(name = "payable_snapshots")
 @PrimaryKeyJoinColumn(name = "id")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class PayableSnapshot extends AccountSnapshot {
+public class PayableSnapshot extends AccountSnapshot implements AmountUpdateable, DueDateUpdateable {
 
     @Column(nullable = false)
     @Getter

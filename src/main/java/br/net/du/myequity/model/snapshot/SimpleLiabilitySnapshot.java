@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @Table(name = "simple_liability_snapshots")
 @PrimaryKeyJoinColumn(name = "id")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class SimpleLiabilitySnapshot extends AccountSnapshot {
+public class SimpleLiabilitySnapshot extends AccountSnapshot implements AmountUpdateable {
 
     @Column(nullable = false)
     @Getter
