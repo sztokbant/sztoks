@@ -204,13 +204,13 @@ class UserTest {
     @Test
     public void compareTo_accountsOrderedByNameAscending() {
         // GIVEN
-        user.addAccount(new Account("One", AccountType.ASSET, CurrencyUnit.USD));
-        user.addAccount(new Account("Two", AccountType.ASSET, CurrencyUnit.USD));
-        user.addAccount(new Account("Three", AccountType.ASSET, CurrencyUnit.USD));
-        user.addAccount(new Account("Four", AccountType.ASSET, CurrencyUnit.USD));
-        user.addAccount(new Account("Five", AccountType.ASSET, CurrencyUnit.USD));
-        user.addAccount(new Account("Six", AccountType.ASSET, CurrencyUnit.USD));
-        user.addAccount(new Account("Seven", AccountType.ASSET, CurrencyUnit.USD));
+        user.addAccount(new SimpleAssetAccount("One", CurrencyUnit.USD));
+        user.addAccount(new SimpleAssetAccount("Two", CurrencyUnit.USD));
+        user.addAccount(new SimpleAssetAccount("Three", CurrencyUnit.USD));
+        user.addAccount(new SimpleAssetAccount("Four", CurrencyUnit.USD));
+        user.addAccount(new SimpleAssetAccount("Five", CurrencyUnit.USD));
+        user.addAccount(new SimpleAssetAccount("Six", CurrencyUnit.USD));
+        user.addAccount(new SimpleAssetAccount("Seven", CurrencyUnit.USD));
 
         // WHEN
         final Iterator<Account> iterator = user.getAccounts().get(AccountType.ASSET).iterator();

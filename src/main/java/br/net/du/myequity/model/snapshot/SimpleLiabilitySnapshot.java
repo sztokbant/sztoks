@@ -1,6 +1,7 @@
 package br.net.du.myequity.model.snapshot;
 
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,18 +10,16 @@ import lombok.NonNull;
 import lombok.Setter;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "simple_liability_snapshots")
-@PrimaryKeyJoinColumn(name = "id")
+@DiscriminatorValue(SimpleLiabilityAccount.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class SimpleLiabilitySnapshot extends AccountSnapshot implements AmountUpdateable {
 
-    @Column(nullable = false)
+    @Column
     @Getter
     @Setter
     private BigDecimal amount;

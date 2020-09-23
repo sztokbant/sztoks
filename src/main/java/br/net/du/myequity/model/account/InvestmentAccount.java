@@ -7,17 +7,18 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.joda.money.CurrencyUnit;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "investment_accounts")
-@PrimaryKeyJoinColumn(name = "id")
+@DiscriminatorValue(InvestmentAccount.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class InvestmentAccount extends Account {
+
+    public static final String ACCOUNT_SUB_TYPE = "INVESTMENT";
+
     public InvestmentAccount(final String name, final CurrencyUnit currencyUnit, final LocalDate createDate) {
         super(name, AccountType.ASSET, currencyUnit, createDate);
     }

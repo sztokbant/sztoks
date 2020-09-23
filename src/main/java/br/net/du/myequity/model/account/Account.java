@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.joda.money.CurrencyUnit;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,9 +25,13 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "accounts", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "name"}))
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = Account.DISCRIMINATOR_COLUMN)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class Account implements Comparable<Account> {
+public abstract class Account implements Comparable<Account> {
+
+    public static final String DISCRIMINATOR_COLUMN = "account_sub_type";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -80,9 +85,7 @@ public class Account implements Comparable<Account> {
         this(name, accountType, currencyUnit, LocalDate.now());
     }
 
-    public AccountSnapshot newEmptySnapshot() {
-        throw new UnsupportedOperationException();
-    }
+    public abstract AccountSnapshot newEmptySnapshot();
 
     public CurrencyUnit getCurrencyUnit() {
         return CurrencyUnit.of(currency);

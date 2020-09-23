@@ -1,15 +1,16 @@
-package br.net.du.myequity.model.account;
+package br.net.du.myequity.viewmodel;
 
+import br.net.du.myequity.model.account.Account;
 import org.joda.money.CurrencyUnit;
 
 import java.lang.reflect.Constructor;
 import java.time.LocalDate;
 
 public class AccountFactory {
-    public static Account newInstance(final String typeName,
-                                      final String name,
-                                      final CurrencyUnit currencyUnit,
-                                      final LocalDate date) {
+    static Account newInstance(final String typeName,
+                               final String name,
+                               final CurrencyUnit currencyUnit,
+                               final LocalDate date) {
         final String packageName = Account.class.getPackage().getName();
         try {
             final Class<? extends Account> clazz =

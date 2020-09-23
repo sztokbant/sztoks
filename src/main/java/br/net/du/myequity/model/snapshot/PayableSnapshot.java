@@ -1,6 +1,7 @@
 package br.net.du.myequity.model.snapshot;
 
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.PayableAccount;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,24 +10,22 @@ import lombok.NonNull;
 import lombok.Setter;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "payable_snapshots")
-@PrimaryKeyJoinColumn(name = "id")
+@DiscriminatorValue(PayableAccount.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class PayableSnapshot extends AccountSnapshot implements AmountUpdateable, DueDateUpdateable {
 
-    @Column(nullable = false)
+    @Column
     @Getter
     @Setter
     private BigDecimal amount;
 
-    @Column(nullable = false)
+    @Column
     @Getter
     @Setter
     private LocalDate dueDate;

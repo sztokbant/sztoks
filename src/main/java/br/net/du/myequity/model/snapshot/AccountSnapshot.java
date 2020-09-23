@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,9 +24,10 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "account_snapshots", uniqueConstraints = @UniqueConstraint(columnNames = {"snapshot_id", "account_id"}))
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = Account.DISCRIMINATOR_COLUMN)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class AccountSnapshot implements Comparable<AccountSnapshot> {
+public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -44,18 +46,12 @@ public class AccountSnapshot implements Comparable<AccountSnapshot> {
         this.account = account;
     }
 
-    public BigDecimal getTotal() {
-        throw new UnsupportedOperationException();
-    }
+    public abstract BigDecimal getTotal();
 
-    public AccountSnapshot copy() {
-        throw new UnsupportedOperationException();
-    }
+    public abstract AccountSnapshot copy();
 
     @VisibleForTesting
-    public boolean equalsIgnoreId(final Object other) {
-        throw new UnsupportedOperationException();
-    }
+    public abstract boolean equalsIgnoreId(final Object other);
 
     public void setSnapshot(final Snapshot snapshot) {
         // Prevents infinite loop
