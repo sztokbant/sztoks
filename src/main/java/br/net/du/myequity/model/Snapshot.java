@@ -37,7 +37,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
 
 @Entity
-@Table(name = "snapshots", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "idx"}))
+@Table(name = "snapshots", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "[index]"}))
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Snapshot implements Comparable<Snapshot> {
     @Id
@@ -55,7 +55,7 @@ public class Snapshot implements Comparable<Snapshot> {
     @Setter
     private String name;
 
-    @Column(name = "idx", nullable = false)
+    @Column(name = "[index]", nullable = false)
     @Getter
     @Setter
     private Long index;

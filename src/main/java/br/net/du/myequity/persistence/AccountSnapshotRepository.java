@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 // TODO Create a Service
-public interface AccountSnapshotRepository extends JpaRepository<AccountSnapshot, Long> {
-    Optional<AccountSnapshot> findBySnapshotIdAndAccountId(Long snapshot, Long accountId);
+public interface AccountSnapshotRepository extends JpaRepository<AccountSnapshot, AccountSnapshot.PK> {
+    Optional<AccountSnapshot> findBySnapshotIdAndAccountId(Long snapshotId, Long accountId);
 
     List<AccountSnapshot> findAllByAccount(Account account);
 }

@@ -7,40 +7,40 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "account_snapshots", uniqueConstraints = @UniqueConstraint(columnNames = {"snapshot_id", "account_id"}))
+@Table(name = "account_snapshots")
+@IdClass(AccountSnapshot.PK.class)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = Account.DISCRIMINATOR_COLUMN)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
+    public static class PK implements Serializable {
+        private Long account;
+        private Long snapshot;
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter // for testing
-    private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Getter
-    private Snapshot snapshot;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @Getter
     Account account;
+
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Getter
+    private Snapshot snapshot;
 
     public AccountSnapshot(@NonNull final Account account) {
         this.account = account;
@@ -87,7 +87,9 @@ public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
             return false;
         }
 
-        return id != null && id.equals(((AccountSnapshot) other).getId());
+        final AccountSnapshot otherAccountSnapshot = (AccountSnapshot) other;
+        return this.account != null && account.equals(otherAccountSnapshot.getAccount()) && this.snapshot != null &&
+                snapshot.equals(otherAccountSnapshot.getSnapshot());
     }
 
     @Override

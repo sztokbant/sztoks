@@ -53,7 +53,6 @@ class SnapshotAccountAmountUpdateSimpleAssetControllerTest extends AjaxSnapshotC
 
         snapshot.setUser(user);
         final SimpleAssetSnapshot accountSnapshot = new SimpleAssetSnapshot(account, CURRENT_BALANCE);
-        accountSnapshot.setId(108L);
         snapshot.addAccountSnapshot(accountSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));

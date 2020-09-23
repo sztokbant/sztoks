@@ -52,7 +52,6 @@ class SnapshotPayableAccountUpdateDueDateControllerTest extends AjaxSnapshotCont
 
         snapshot.setUser(user);
         final PayableSnapshot accountSnapshot = new PayableSnapshot(account, CURRENT_DUE_DATE, CURRENT_BALANCE);
-        accountSnapshot.setId(108L);
         snapshot.addAccountSnapshot(accountSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));

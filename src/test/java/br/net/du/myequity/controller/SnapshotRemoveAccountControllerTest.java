@@ -62,7 +62,6 @@ class SnapshotRemoveAccountControllerTest extends AjaxSnapshotControllerTestBase
 
         snapshot.setUser(user);
         final SimpleLiabilitySnapshot simpleLiabilitySnapshot = new SimpleLiabilitySnapshot(account, CURRENT_BALANCE);
-        simpleLiabilitySnapshot.setId(108L);
         snapshot.addAccountSnapshot(simpleLiabilitySnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));

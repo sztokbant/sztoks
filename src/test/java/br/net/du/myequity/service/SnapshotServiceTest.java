@@ -78,13 +78,9 @@ public class SnapshotServiceTest {
         snapshot.setId(108L);
         user.addSnapshot(snapshot);
 
-        SIMPLE_ASSET_SNAPSHOT.setId(1L);
         snapshot.addAccountSnapshot(SIMPLE_ASSET_SNAPSHOT);
-        SIMPLE_LIABILITY_SNAPSHOT.setId(2L);
         snapshot.addAccountSnapshot(SIMPLE_LIABILITY_SNAPSHOT);
-        CREDIT_CARD_SNAPSHOT.setId(3L);
         snapshot.addAccountSnapshot(CREDIT_CARD_SNAPSHOT);
-        INVESTMENT_SNAPSHOT.setId(4L);
         snapshot.addAccountSnapshot(INVESTMENT_SNAPSHOT);
 
         snapshotService = new SnapshotService(snapshotRepository, userRepository);

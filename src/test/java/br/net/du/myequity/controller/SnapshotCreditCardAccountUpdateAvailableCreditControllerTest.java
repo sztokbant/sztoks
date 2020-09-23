@@ -55,7 +55,6 @@ class SnapshotCreditCardAccountUpdateAvailableCreditControllerTest extends AjaxS
         snapshot.setUser(user);
         final CreditCardSnapshot creditCardSnapshot =
                 new CreditCardSnapshot(account, CURRENT_TOTAL_CREDIT, CURRENT_AVAILABLE_CREDIT);
-        creditCardSnapshot.setId(108L);
         snapshot.addAccountSnapshot(creditCardSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));

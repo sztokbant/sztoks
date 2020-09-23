@@ -58,7 +58,6 @@ class SnapshotInvestmentAccountUpdateCurrentShareValueControllerTest extends Aja
                                                                              CURRENT_SHARES,
                                                                              CURRENT_ORIGINAL_SHARE_VALUE,
                                                                              CURRENT_CURRENT_SHARE_VALUE);
-        investmentSnapshot.setId(108L);
         snapshot.addAccountSnapshot(investmentSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));

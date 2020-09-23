@@ -53,7 +53,6 @@ class SnapshotAccountAmountUpdateReceivableControllerTest extends AjaxSnapshotCo
 
         snapshot.setUser(user);
         final ReceivableSnapshot accountSnapshot = new ReceivableSnapshot(account, LocalDate.now(), CURRENT_BALANCE);
-        accountSnapshot.setId(108L);
         snapshot.addAccountSnapshot(accountSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
