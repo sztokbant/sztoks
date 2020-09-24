@@ -1,8 +1,8 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonResponse;
 import br.net.du.myequity.controller.model.DueDateUpdateJsonResponse;
-import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonRequest;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.DueDateUpdateable;
 import org.springframework.ui.Model;
@@ -18,9 +18,9 @@ public class SnapshotAccountDueDateUpdateController extends SnapshotAccountUpdat
 
     @PostMapping("/snapshot/updateAccountDueDate")
     public AccountSnapshotUpdateJsonResponse post(final Model model,
-                                                  @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
+                                                  @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
 
-        final BiFunction<SnapshotAccountUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
+        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
                 updateDueDateFunction = (jsonRequest, accountSnapshot) -> {
             final LocalDate dueDate = LocalDate.parse(jsonRequest.getNewValue());
             ((DueDateUpdateable) accountSnapshot).setDueDate(dueDate);
@@ -29,7 +29,7 @@ public class SnapshotAccountDueDateUpdateController extends SnapshotAccountUpdat
         };
 
         return updateAccountSnapshotField(model,
-                                          snapshotAccountUpdateJsonRequest,
+                                          accountSnapshotUpdateJsonRequest,
                                           DueDateUpdateable.class,
                                           updateDueDateFunction);
     }

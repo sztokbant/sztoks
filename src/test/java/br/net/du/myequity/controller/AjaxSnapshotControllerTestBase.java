@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonRequest;
+import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
@@ -65,13 +65,13 @@ abstract class AjaxSnapshotControllerTestBase extends AjaxControllerTestBase {
         snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
-        final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest =
-                SnapshotAccountUpdateJsonRequest.builder()
+        final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest =
+                AccountSnapshotUpdateJsonRequest.builder()
                                                 .snapshotId(SNAPSHOT_ID)
                                                 .accountId(ENTITY_ID)
                                                 .newValue(newValue)
                                                 .build();
-        requestContent = new ObjectMapper().writeValueAsString(snapshotAccountUpdateJsonRequest);
+        requestContent = new ObjectMapper().writeValueAsString(accountSnapshotUpdateJsonRequest);
     }
 
     @Test

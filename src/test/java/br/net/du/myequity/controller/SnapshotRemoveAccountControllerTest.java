@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonRequest;
+import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
@@ -44,9 +44,9 @@ class SnapshotRemoveAccountControllerTest extends AjaxSnapshotControllerTestBase
 
     @BeforeEach
     public void setUp() throws Exception {
-        final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest =
-                SnapshotAccountUpdateJsonRequest.builder().snapshotId(SNAPSHOT_ID).accountId(ENTITY_ID).build();
-        requestContent = new ObjectMapper().writeValueAsString(snapshotAccountUpdateJsonRequest);
+        final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest =
+                AccountSnapshotUpdateJsonRequest.builder().snapshotId(SNAPSHOT_ID).accountId(ENTITY_ID).build();
+        requestContent = new ObjectMapper().writeValueAsString(accountSnapshotUpdateJsonRequest);
     }
 
     @Override

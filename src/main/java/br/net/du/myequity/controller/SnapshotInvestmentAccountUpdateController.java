@@ -1,8 +1,8 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonResponse;
 import br.net.du.myequity.controller.model.InvestmentSnapshotUpdateJsonResponse;
-import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonRequest;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
 import org.springframework.ui.Model;
@@ -18,9 +18,9 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
 
     @PostMapping("/snapshot/updateInvestmentShares")
     public AccountSnapshotUpdateJsonResponse updateInvestmentShares(final Model model,
-                                                                    @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
+                                                                    @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
 
-        final BiFunction<SnapshotAccountUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
+        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
                 updateInvestmentSharesFunction = (jsonRequest, accountSnapshot) -> {
             final InvestmentSnapshot investmentSnapshot = (InvestmentSnapshot) accountSnapshot;
 
@@ -31,16 +31,16 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
         };
 
         return updateAccountSnapshotField(model,
-                                          snapshotAccountUpdateJsonRequest,
+                                          accountSnapshotUpdateJsonRequest,
                                           InvestmentSnapshot.class,
                                           updateInvestmentSharesFunction);
     }
 
     @PostMapping("/snapshot/updateInvestmentOriginalShareValue")
     public AccountSnapshotUpdateJsonResponse updateInvestmentOriginalShareValue(final Model model,
-                                                                                @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
+                                                                                @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
 
-        final BiFunction<SnapshotAccountUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
+        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
                 updateInvestmentOriginalShareValueFunction = (jsonRequest, accountSnapshot) -> {
             final InvestmentSnapshot investmentSnapshot = (InvestmentSnapshot) accountSnapshot;
 
@@ -51,15 +51,15 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
         };
 
         return updateAccountSnapshotField(model,
-                                          snapshotAccountUpdateJsonRequest,
+                                          accountSnapshotUpdateJsonRequest,
                                           InvestmentSnapshot.class,
                                           updateInvestmentOriginalShareValueFunction);
     }
 
     @PostMapping("/snapshot/updateInvestmentCurrentShareValue")
     public AccountSnapshotUpdateJsonResponse updateInvestmentCurrentShareValue(final Model model,
-                                                                               @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
-        final BiFunction<SnapshotAccountUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
+                                                                               @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
                 updateInvestmentCurrentShareValueFunction = (jsonRequest, accountSnapshot) -> {
             final InvestmentSnapshot investmentSnapshot = (InvestmentSnapshot) accountSnapshot;
 
@@ -70,7 +70,7 @@ public class SnapshotInvestmentAccountUpdateController extends SnapshotAccountUp
         };
 
         return updateAccountSnapshotField(model,
-                                          snapshotAccountUpdateJsonRequest,
+                                          accountSnapshotUpdateJsonRequest,
                                           InvestmentSnapshot.class,
                                           updateInvestmentCurrentShareValueFunction);
     }

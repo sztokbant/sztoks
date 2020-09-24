@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonRequest;
+import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.controller.model.SnapshotRemoveAccountJsonResponse;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
@@ -21,13 +21,13 @@ public class SnapshotRemoveAccountController extends SnapshotAccountUpdateContro
 
     @PostMapping("/snapshot/removeAccount")
     public SnapshotRemoveAccountJsonResponse post(final Model model,
-                                                  @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
-        final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
+                                                  @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+        final Snapshot snapshot = getSnapshot(model, accountSnapshotUpdateJsonRequest);
         assert snapshot != null;
 
         final Optional<AccountSnapshot> accountSnapshotOpt = accountSnapshotRepository.findBySnapshotIdAndAccountId(
                 snapshot.getId(),
-                snapshotAccountUpdateJsonRequest.getAccountId());
+                accountSnapshotUpdateJsonRequest.getAccountId());
         if (!accountSnapshotOpt.isPresent() || !snapshot.getAccountSnapshots().contains(accountSnapshotOpt.get())) {
             throw new IllegalArgumentException();
         }

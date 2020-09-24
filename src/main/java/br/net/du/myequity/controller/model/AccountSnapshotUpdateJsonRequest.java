@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class SnapshotAccountUpdateJsonRequest {
+public class AccountSnapshotUpdateJsonRequest {
     private Long snapshotId;
     private Long accountId;
     private String newValue;
