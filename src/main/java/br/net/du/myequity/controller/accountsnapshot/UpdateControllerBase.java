@@ -4,19 +4,16 @@ import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonResponse;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsToUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
 
@@ -36,10 +33,7 @@ public class UpdateControllerBase {
                                                                  final BiFunction<AccountSnapshotUpdateJsonRequest,
                                                                          AccountSnapshot,
                                                                          AccountSnapshotUpdateJsonResponse> function) {
-        final Snapshot snapshot = getSnapshot(model, accountSnapshotUpdateJsonRequest);
-        assert snapshot != null;
-
-        final AccountSnapshot accountSnapshot = getAccountSnapshot(accountSnapshotUpdateJsonRequest);
+        final AccountSnapshot accountSnapshot = getAccountSnapshot(model, accountSnapshotUpdateJsonRequest);
 
         if (!clazz.isInstance(accountSnapshot)) {
             throw new IllegalArgumentException("accountSnapshot not found");
@@ -53,7 +47,8 @@ public class UpdateControllerBase {
         return jsonResponse;
     }
 
-    Snapshot getSnapshot(final Model model, final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+    AccountSnapshot getAccountSnapshot(final Model model,
+                                       final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
         final User user = getLoggedUser(model);
 
         final Optional<Snapshot> snapshotOpt =
@@ -62,21 +57,6 @@ public class UpdateControllerBase {
             throw new IllegalArgumentException();
         }
 
-        final Snapshot snapshot = snapshotOpt.get();
-        final Optional<Account> accountOpt =
-                accountRepository.findById(accountSnapshotUpdateJsonRequest.getAccountId());
-        if (!accountBelongsToUser(user, accountOpt) || !accountBelongsInSnapshot(snapshot, accountOpt)) {
-            throw new IllegalArgumentException();
-        }
-
-        return snapshot;
-    }
-
-    private static boolean accountBelongsInSnapshot(final Snapshot snapshot, final Optional<Account> accountOpt) {
-        return accountOpt.isPresent() && snapshot.getAccountSnapshotFor(accountOpt.get()).isPresent();
-    }
-
-    private AccountSnapshot getAccountSnapshot(@RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
         final Optional<AccountSnapshot> accountSnapshotOpt = accountSnapshotRepository.findBySnapshotIdAndAccountId(
                 accountSnapshotUpdateJsonRequest.getSnapshotId(),
                 accountSnapshotUpdateJsonRequest.getAccountId());

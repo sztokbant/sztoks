@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
 
 @RestController
@@ -22,17 +20,9 @@ public class RemoveAccountController extends UpdateControllerBase {
     @PostMapping("/snapshot/removeAccount")
     public SnapshotRemoveAccountJsonResponse post(final Model model,
                                                   @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
-        final Snapshot snapshot = getSnapshot(model, accountSnapshotUpdateJsonRequest);
-        assert snapshot != null;
+        final AccountSnapshot accountSnapshot = getAccountSnapshot(model, accountSnapshotUpdateJsonRequest);
+        final Snapshot snapshot = accountSnapshot.getSnapshot();
 
-        final Optional<AccountSnapshot> accountSnapshotOpt = accountSnapshotRepository.findBySnapshotIdAndAccountId(
-                snapshot.getId(),
-                accountSnapshotUpdateJsonRequest.getAccountId());
-        if (!accountSnapshotOpt.isPresent() || !snapshot.getAccountSnapshots().contains(accountSnapshotOpt.get())) {
-            throw new IllegalArgumentException();
-        }
-
-        final AccountSnapshot accountSnapshot = accountSnapshotOpt.get();
         snapshot.removeAccountSnapshot(accountSnapshot);
         snapshotRepository.save(snapshot);
 
