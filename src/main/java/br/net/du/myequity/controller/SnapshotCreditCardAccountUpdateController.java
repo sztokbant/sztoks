@@ -1,7 +1,8 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonResponse;
+import br.net.du.myequity.controller.model.CreditCardSnapshotUpdateJsonResponse;
 import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonRequest;
-import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonResponse;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import org.springframework.ui.Model;
@@ -12,35 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
 
-import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
-import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
-
 @RestController
 public class SnapshotCreditCardAccountUpdateController extends SnapshotAccountUpdateControllerBase {
     @PostMapping("/snapshot/updateCreditCardTotalCredit")
-    public SnapshotAccountUpdateJsonResponse updateCreditCardTotalCredit(final Model model,
+    public AccountSnapshotUpdateJsonResponse updateCreditCardTotalCredit(final Model model,
                                                                          @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
 
-        final BiFunction<SnapshotAccountUpdateJsonRequest, AccountSnapshot, SnapshotAccountUpdateJsonResponse>
-                updateCreditCardTotalCreditFunction =
-                new BiFunction<SnapshotAccountUpdateJsonRequest, AccountSnapshot, SnapshotAccountUpdateJsonResponse>() {
-                    @Override
-                    public SnapshotAccountUpdateJsonResponse apply(final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest,
-                                                                   final AccountSnapshot accountSnapshot) {
-                        final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
+        final BiFunction<SnapshotAccountUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
+                updateCreditCardTotalCreditFunction = (jsonRequest, accountSnapshot) -> {
+            final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
 
-                        final BigDecimal newValue = new BigDecimal(snapshotAccountUpdateJsonRequest.getNewValue());
-                        creditCardSnapshot.setTotalCredit(newValue);
+            final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
+            creditCardSnapshot.setTotalCredit(newValue);
 
-                        final String totalCredit = formatAsDecimal(creditCardSnapshot.getTotalCredit());
-                        final String usedCreditPercentage =
-                                formatAsPercentage(creditCardSnapshot.getUsedCreditPercentage());
-
-                        return getDefaultResponseBuilder(creditCardSnapshot).totalCredit(totalCredit)
-                                                                            .usedCreditPercentage(usedCreditPercentage)
-                                                                            .build();
-                    }
-                };
+            return CreditCardSnapshotUpdateJsonResponse.of(creditCardSnapshot);
+        };
 
         return updateAccountSnapshotField(model,
                                           snapshotAccountUpdateJsonRequest,
@@ -49,28 +36,17 @@ public class SnapshotCreditCardAccountUpdateController extends SnapshotAccountUp
     }
 
     @PostMapping("/snapshot/updateCreditCardAvailableCredit")
-    public SnapshotAccountUpdateJsonResponse updateCreditCardAvailableCredit(final Model model,
+    public AccountSnapshotUpdateJsonResponse updateCreditCardAvailableCredit(final Model model,
                                                                              @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
-        final BiFunction<SnapshotAccountUpdateJsonRequest, AccountSnapshot, SnapshotAccountUpdateJsonResponse>
-                updateCreditCardAvailableCreditFunction =
-                new BiFunction<SnapshotAccountUpdateJsonRequest, AccountSnapshot, SnapshotAccountUpdateJsonResponse>() {
-                    @Override
-                    public SnapshotAccountUpdateJsonResponse apply(final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest,
-                                                                   final AccountSnapshot accountSnapshot) {
-                        final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
+        final BiFunction<SnapshotAccountUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
+                updateCreditCardAvailableCreditFunction = (jsonRequest, accountSnapshot) -> {
+            final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
 
-                        final BigDecimal newValue = new BigDecimal(snapshotAccountUpdateJsonRequest.getNewValue());
-                        creditCardSnapshot.setAvailableCredit(newValue);
+            final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
+            creditCardSnapshot.setAvailableCredit(newValue);
 
-                        final String availableCredit = formatAsDecimal(creditCardSnapshot.getAvailableCredit());
-                        final String usedCreditPercentage =
-                                formatAsPercentage(creditCardSnapshot.getUsedCreditPercentage());
-
-                        return getDefaultResponseBuilder(creditCardSnapshot).availableCredit(availableCredit)
-                                                                            .usedCreditPercentage(usedCreditPercentage)
-                                                                            .build();
-                    }
-                };
+            return CreditCardSnapshotUpdateJsonResponse.of(creditCardSnapshot);
+        };
 
         return updateAccountSnapshotField(model,
                                           snapshotAccountUpdateJsonRequest,

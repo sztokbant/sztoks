@@ -1,8 +1,7 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonResponse;
 import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonRequest;
-import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonResponse;
-import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
@@ -10,7 +9,6 @@ import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
-import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +17,6 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsToUser;
-import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
 
@@ -33,12 +30,12 @@ public class SnapshotAccountUpdateControllerBase {
     @Autowired
     AccountSnapshotRepository accountSnapshotRepository;
 
-    SnapshotAccountUpdateJsonResponse updateAccountSnapshotField(final Model model,
-                                                                 @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest,
+    AccountSnapshotUpdateJsonResponse updateAccountSnapshotField(final Model model,
+                                                                 final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest,
                                                                  final Class clazz,
                                                                  final BiFunction<SnapshotAccountUpdateJsonRequest,
                                                                          AccountSnapshot,
-                                                                         SnapshotAccountUpdateJsonResponse> function) {
+                                                                         AccountSnapshotUpdateJsonResponse> function) {
         final Snapshot snapshot = getSnapshot(model, snapshotAccountUpdateJsonRequest);
         assert snapshot != null;
 
@@ -48,7 +45,7 @@ public class SnapshotAccountUpdateControllerBase {
             throw new IllegalArgumentException("accountSnapshot not found");
         }
 
-        final SnapshotAccountUpdateJsonResponse jsonResponse =
+        final AccountSnapshotUpdateJsonResponse jsonResponse =
                 function.apply(snapshotAccountUpdateJsonRequest, accountSnapshot);
 
         accountSnapshotRepository.save(accountSnapshot);
@@ -89,21 +86,5 @@ public class SnapshotAccountUpdateControllerBase {
         }
 
         return accountSnapshotOpt.get();
-    }
-
-    // TODO Simplify use-cases that don't need all of these attributes
-    SnapshotAccountUpdateJsonResponse.SnapshotAccountUpdateJsonResponseBuilder getDefaultResponseBuilder(final AccountSnapshot accountSnapshot) {
-        final Snapshot snapshot = accountSnapshot.getSnapshot();
-        final CurrencyUnit currencyUnit = accountSnapshot.getAccount().getCurrencyUnit();
-        final AccountType accountType = accountSnapshot.getAccount().getAccountType();
-
-        return SnapshotAccountUpdateJsonResponse.builder()
-                                                .balance(formatAsDecimal(accountSnapshot.getTotal()))
-                                                .currencyUnit(currencyUnit.getCode())
-                                                .currencyUnitSymbol(currencyUnit.getSymbol())
-                                                .netWorth(formatAsDecimal(snapshot.getNetWorth().get(currencyUnit)))
-                                                .accountType(accountType.name())
-                                                .totalForAccountType(formatAsDecimal(snapshot.getTotalForAccountType(
-                                                        accountType).get(currencyUnit)));
     }
 }

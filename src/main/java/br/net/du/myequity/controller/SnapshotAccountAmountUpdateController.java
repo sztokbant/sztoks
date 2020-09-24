@@ -1,7 +1,7 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonResponse;
 import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonRequest;
-import br.net.du.myequity.controller.model.SnapshotAccountUpdateJsonResponse;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.AmountUpdateable;
 import org.springframework.ui.Model;
@@ -16,21 +16,16 @@ import java.util.function.BiFunction;
 public class SnapshotAccountAmountUpdateController extends SnapshotAccountUpdateControllerBase {
 
     @PostMapping("/snapshot/updateAccountBalance")
-    public SnapshotAccountUpdateJsonResponse post(final Model model,
+    public AccountSnapshotUpdateJsonResponse post(final Model model,
                                                   @RequestBody final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest) {
 
-        final BiFunction<SnapshotAccountUpdateJsonRequest, AccountSnapshot, SnapshotAccountUpdateJsonResponse>
-                updateAmountFunction =
-                new BiFunction<SnapshotAccountUpdateJsonRequest, AccountSnapshot, SnapshotAccountUpdateJsonResponse>() {
-                    @Override
-                    public SnapshotAccountUpdateJsonResponse apply(final SnapshotAccountUpdateJsonRequest snapshotAccountUpdateJsonRequest,
-                                                                   final AccountSnapshot accountSnapshot) {
-                        final BigDecimal newValue = new BigDecimal(snapshotAccountUpdateJsonRequest.getNewValue());
-                        ((AmountUpdateable) accountSnapshot).setAmount(newValue);
+        final BiFunction<SnapshotAccountUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
+                updateAmountFunction = (jsonRequest, accountSnapshot) -> {
+            final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
+            ((AmountUpdateable) accountSnapshot).setAmount(newValue);
 
-                        return getDefaultResponseBuilder(accountSnapshot).build();
-                    }
-                };
+            return AccountSnapshotUpdateJsonResponse.of(accountSnapshot);
+        };
 
         return updateAccountSnapshotField(model,
                                           snapshotAccountUpdateJsonRequest,
