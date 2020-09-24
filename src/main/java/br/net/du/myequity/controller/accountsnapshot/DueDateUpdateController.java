@@ -1,4 +1,4 @@
-package br.net.du.myequity.controller;
+package br.net.du.myequity.controller.accountsnapshot;
 
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonResponse;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.function.BiFunction;
 
 @RestController
-public class SnapshotAccountDueDateUpdateController extends SnapshotAccountUpdateControllerBase {
+public class DueDateUpdateController extends UpdateControllerBase {
 
     @PostMapping("/snapshot/updateAccountDueDate")
     public AccountSnapshotUpdateJsonResponse post(final Model model,

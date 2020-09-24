@@ -1,4 +1,4 @@
-package br.net.du.myequity.controller;
+package br.net.du.myequity.controller.accountsnapshot;
 
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.account.InvestmentAccount;
@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -23,12 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SnapshotInvestmentAccountUpdateSharesControllerTest extends AjaxSnapshotControllerTestBase {
+class InvestmentSnapshotSharesUpdateControllerTest extends AccountSnapshotAjaxControllerTestBase {
 
     private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
     private static final BigDecimal CURRENT_CURRENT_SHARE_VALUE = new BigDecimal("4200.00");
@@ -38,7 +38,7 @@ class SnapshotInvestmentAccountUpdateSharesControllerTest extends AjaxSnapshotCo
     @MockBean
     private AccountSnapshotRepository accountSnapshotRepository;
 
-    SnapshotInvestmentAccountUpdateSharesControllerTest() {
+    InvestmentSnapshotSharesUpdateControllerTest() {
         super("/snapshot/updateInvestmentShares", "75.00");
     }
 
@@ -72,7 +72,8 @@ class SnapshotInvestmentAccountUpdateSharesControllerTest extends AjaxSnapshotCo
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
                                                                               .with(csrf())
-                                                                              .with(user(user.getEmail()))
+                                                                              .with(SecurityMockMvcRequestPostProcessors
+                                                                                            .user(user.getEmail()))
                                                                               .contentType(MediaType.APPLICATION_JSON)
                                                                               .content(requestContent));
 

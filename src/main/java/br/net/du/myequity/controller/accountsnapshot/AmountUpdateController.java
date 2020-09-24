@@ -1,4 +1,4 @@
-package br.net.du.myequity.controller;
+package br.net.du.myequity.controller.accountsnapshot;
 
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonResponse;
@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.function.BiFunction;
 
 @RestController
-public class SnapshotAccountAmountUpdateController extends SnapshotAccountUpdateControllerBase {
+public class AmountUpdateController extends UpdateControllerBase {
 
     @PostMapping("/snapshot/updateAccountBalance")
     public AccountSnapshotUpdateJsonResponse post(final Model model,

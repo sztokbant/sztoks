@@ -19,22 +19,23 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-abstract class AjaxControllerTestBase {
-    static final Long ENTITY_ID = 1L;
+public abstract class AjaxControllerTestBase {
+    protected static final Long ENTITY_ID = 1L;
+    protected static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
+
     static final String ACCOUNT_NAME = "Mortgage";
-    static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
 
     @Autowired
-    MockMvc mvc;
+    protected MockMvc mvc;
 
     @MockBean
-    UserService userService;
+    protected UserService userService;
 
-    String requestContent;
+    protected String requestContent;
 
-    User user;
+    protected User user;
 
-    final String url;
+    protected final String url;
 
     public AjaxControllerTestBase(final String url) {
         this.url = url;
@@ -46,7 +47,7 @@ abstract class AjaxControllerTestBase {
         createEntity();
     }
 
-    abstract void createEntity();
+    protected abstract void createEntity();
 
     @Test
     public void post_noCsrfToken_forbidden() throws Exception {

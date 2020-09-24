@@ -1,5 +1,6 @@
-package br.net.du.myequity.controller;
+package br.net.du.myequity.controller.accountsnapshot;
 
+import br.net.du.myequity.controller.AjaxControllerTestBase;
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
@@ -23,7 +24,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-abstract class AjaxSnapshotControllerTestBase extends AjaxControllerTestBase {
+abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestBase {
 
     static final Long SNAPSHOT_ID = 99L;
     static final long SNAPSHOT_INDEX = 1L;
@@ -55,7 +56,7 @@ abstract class AjaxSnapshotControllerTestBase extends AjaxControllerTestBase {
 
     Account account;
 
-    AjaxSnapshotControllerTestBase(final String url, final String newValue) {
+    AccountSnapshotAjaxControllerTestBase(final String url, final String newValue) {
         super(url);
         this.newValue = newValue;
     }

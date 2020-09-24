@@ -1,4 +1,4 @@
-package br.net.du.myequity.controller;
+package br.net.du.myequity.controller.accountsnapshot;
 
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonResponse;
@@ -20,7 +20,7 @@ import static br.net.du.myequity.controller.util.ControllerUtils.accountBelongsT
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
 
-public class SnapshotAccountUpdateControllerBase {
+public class UpdateControllerBase {
     @Autowired
     SnapshotRepository snapshotRepository;
 

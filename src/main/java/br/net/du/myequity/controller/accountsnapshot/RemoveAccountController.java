@@ -1,4 +1,4 @@
-package br.net.du.myequity.controller;
+package br.net.du.myequity.controller.accountsnapshot;
 
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.controller.model.SnapshotRemoveAccountJsonResponse;
@@ -17,7 +17,7 @@ import java.util.Optional;
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
 
 @RestController
-public class SnapshotRemoveAccountController extends SnapshotAccountUpdateControllerBase {
+public class RemoveAccountController extends UpdateControllerBase {
 
     @PostMapping("/snapshot/removeAccount")
     public SnapshotRemoveAccountJsonResponse post(final Model model,
