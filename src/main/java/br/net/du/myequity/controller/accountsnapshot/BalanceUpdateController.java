@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.function.BiFunction;
 
 @RestController
-public class AmountUpdateController extends UpdateControllerBase {
+public class BalanceUpdateController extends UpdateControllerBase {
 
     @PostMapping("/snapshot/updateAccountBalance")
     public AccountSnapshotUpdateJsonResponse post(final Model model,

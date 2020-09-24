@@ -1,8 +1,10 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
 import br.net.du.myequity.model.AccountType;
-import br.net.du.myequity.model.account.SimpleLiabilityAccount;
-import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
+import br.net.du.myequity.model.account.CreditCardAccount;
+import br.net.du.myequity.model.account.SimpleAssetAccount;
+import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
+import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,26 +26,59 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SimpleLiabilitySnapshotAmountUpdateControllerTest extends AccountSnapshotAjaxControllerTestBase {
+class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjaxControllerTestBase {
 
-    private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
+    private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
 
     @MockBean
     private AccountSnapshotRepository accountSnapshotRepository;
 
-    SimpleLiabilitySnapshotAmountUpdateControllerTest() {
+    SimpleAssetSnapshotBalanceUpdateControllerTest() {
         super("/snapshot/updateAccountBalance", "108.00");
     }
 
     @Override
     public void createEntity() {
-        account = new SimpleLiabilityAccount("Mortgage", CURRENCY_UNIT, LocalDate.now());
+        account = new SimpleAssetAccount("Savings", CURRENCY_UNIT, LocalDate.now());
         account.setId(ENTITY_ID);
+    }
+
+    @Test
+    public void post_accountSnapshotClassMismatch_clientError() throws Exception {
+        // GIVEN
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        snapshot.setUser(user);
+
+        account = new CreditCardAccount("Citi Double Cash", CURRENCY_UNIT, LocalDate.now());
+        account.setId(ENTITY_ID);
+
+        final CreditCardSnapshot accountSnapshot = new CreditCardSnapshot(account, CURRENT_BALANCE, CURRENT_BALANCE);
+        snapshot.addAccountSnapshot(accountSnapshot);
+
+        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+
+        account.setUser(user);
+        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+
+        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
+                                                                    ENTITY_ID)).thenReturn(Optional.of(accountSnapshot));
+
+        // WHEN
+        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
+                                                                              .with(csrf())
+                                                                              .with(user(user.getEmail()))
+                                                                              .contentType(MediaType.APPLICATION_JSON)
+                                                                              .content(requestContent));
+
+        // THEN
+        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -52,7 +87,7 @@ class SimpleLiabilitySnapshotAmountUpdateControllerTest extends AccountSnapshotA
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final SimpleLiabilitySnapshot accountSnapshot = new SimpleLiabilitySnapshot(account, CURRENT_BALANCE);
+        final SimpleAssetSnapshot accountSnapshot = new SimpleAssetSnapshot(account, CURRENT_BALANCE);
         snapshot.addAccountSnapshot(accountSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
@@ -81,8 +116,8 @@ class SimpleLiabilitySnapshotAmountUpdateControllerTest extends AccountSnapshotA
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
         assertEquals(newValue, jsonNode.get(JSON_BALANCE).asText());
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
-        assertEquals(new BigDecimal(newValue).negate().toString(), jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals(new BigDecimal(newValue).toString(), jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals(new BigDecimal(newValue).negate().toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertEquals(new BigDecimal(newValue).toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
     }
 }
