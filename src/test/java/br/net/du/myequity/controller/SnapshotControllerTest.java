@@ -6,12 +6,12 @@ import br.net.du.myequity.model.snapshot.PayableSnapshot;
 import br.net.du.myequity.model.snapshot.ReceivableSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
-import br.net.du.myequity.viewmodel.CreditCardViewModelOutput;
-import br.net.du.myequity.viewmodel.InvestmentViewModelOutput;
-import br.net.du.myequity.viewmodel.PayableViewModelOutput;
-import br.net.du.myequity.viewmodel.ReceivableViewModelOutput;
-import br.net.du.myequity.viewmodel.SimpleAssetViewModelOutput;
-import br.net.du.myequity.viewmodel.SimpleLiabilityViewModelOutput;
+import br.net.du.myequity.viewmodel.accountsnapshot.CreditCardViewModelOutput;
+import br.net.du.myequity.viewmodel.accountsnapshot.InvestmentViewModelOutput;
+import br.net.du.myequity.viewmodel.accountsnapshot.PayableViewModelOutput;
+import br.net.du.myequity.viewmodel.accountsnapshot.ReceivableViewModelOutput;
+import br.net.du.myequity.viewmodel.accountsnapshot.SimpleAssetViewModelOutput;
+import br.net.du.myequity.viewmodel.accountsnapshot.SimpleLiabilityViewModelOutput;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

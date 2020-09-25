@@ -7,7 +7,7 @@ import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
-import br.net.du.myequity.viewmodel.AccountSnapshotViewModelOutput;
+import br.net.du.myequity.viewmodel.accountsnapshot.AccountSnapshotViewModelOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 

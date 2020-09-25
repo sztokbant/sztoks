@@ -1,4 +1,4 @@
-package br.net.du.myequity.viewmodel;
+package br.net.du.myequity.viewmodel.accountsnapshot;
 
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;

@@ -1,4 +1,4 @@
-package br.net.du.myequity.viewmodel;
+package br.net.du.myequity.viewmodel.accountsnapshot;
 
 public class SimpleAssetViewModelOutput extends AccountSnapshotViewModelOutput {
     public SimpleAssetViewModelOutput(final Long accountId,
