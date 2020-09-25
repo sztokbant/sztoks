@@ -27,7 +27,7 @@ public class InvestmentUpdateController extends UpdateControllerBase {
             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
             investmentSnapshot.setShares(newValue);
 
-            return InvestmentViewModelOutput.of(investmentSnapshot);
+            return InvestmentViewModelOutput.of(investmentSnapshot, true);
         };
 
         return updateAccountSnapshotField(model,
@@ -66,7 +66,7 @@ public class InvestmentUpdateController extends UpdateControllerBase {
             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
             investmentSnapshot.setCurrentShareValue(newValue);
 
-            return InvestmentViewModelOutput.of(investmentSnapshot);
+            return InvestmentViewModelOutput.of(investmentSnapshot, true);
         };
 
         return updateAccountSnapshotField(model,

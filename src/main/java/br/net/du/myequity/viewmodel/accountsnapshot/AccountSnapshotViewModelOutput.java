@@ -40,30 +40,34 @@ public class AccountSnapshotViewModelOutput implements Comparable<AccountSnapsho
         totalForAccountType = other.getTotalForAccountType();
     }
 
-    public static AccountSnapshotViewModelOutput of(final AccountSnapshot accountSnapshot) {
+    public static AccountSnapshotViewModelOutput of(final AccountSnapshot accountSnapshot,
+                                                    final boolean includeTotals) {
         final Account account = accountSnapshot.getAccount();
         final Snapshot snapshot = accountSnapshot.getSnapshot();
         final CurrencyUnit currencyUnit = accountSnapshot.getAccount().getCurrencyUnit();
 
-        // TODO These should probably be null unless it's an update operation
-        final String netWorth = formatAsDecimal(snapshot.getNetWorth().get(currencyUnit));
-        final AccountType accountType = accountSnapshot.getAccount().getAccountType();
-        final String totalForAccountType =
-                formatAsDecimal(snapshot.getTotalForAccountType(accountType).get(currencyUnit));
+        final AccountSnapshotViewModelOutputBuilder builder = AccountSnapshotViewModelOutput.builder()
+                                                                                            .accountId(account.getId())
+                                                                                            .name(account.getName())
+                                                                                            .balance(formatAsDecimal(
+                                                                                                    accountSnapshot.getTotal()))
+                                                                                            .currencyUnit(currencyUnit.getCode())
+                                                                                            .currencyUnitSymbol(
+                                                                                                    currencyUnit.getSymbol());
 
-        return AccountSnapshotViewModelOutput.builder()
-                                             .accountId(account.getId())
-                                             .name(account.getName())
+        if (includeTotals) {
+            final String netWorth = formatAsDecimal(snapshot.getNetWorth().get(currencyUnit));
+            final AccountType accountType = accountSnapshot.getAccount().getAccountType();
+            final String totalForAccountType =
+                    formatAsDecimal(snapshot.getTotalForAccountType(accountType).get(currencyUnit));
+            builder.netWorth(netWorth).accountType(accountType.name()).totalForAccountType(totalForAccountType);
+        }
 
-                                             .balance(formatAsDecimal(accountSnapshot.getTotal()))
-                                             .currencyUnit(currencyUnit.getCode())
-                                             .currencyUnitSymbol(currencyUnit.getSymbol())
+        return builder.build();
+    }
 
-                                             .netWorth(netWorth)
-                                             .accountType(accountType.name())
-                                             .totalForAccountType(totalForAccountType)
-
-                                             .build();
+    public static AccountSnapshotViewModelOutput of(final AccountSnapshot accountSnapshot) {
+        return of(accountSnapshot, false);
     }
 
     @Override

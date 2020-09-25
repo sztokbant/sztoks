@@ -26,7 +26,7 @@ public class CreditCardUpdateController extends UpdateControllerBase {
             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
             creditCardSnapshot.setTotalCredit(newValue);
 
-            return CreditCardViewModelOutput.of(creditCardSnapshot);
+            return CreditCardViewModelOutput.of(creditCardSnapshot, true);
         };
 
         return updateAccountSnapshotField(model,
@@ -45,7 +45,7 @@ public class CreditCardUpdateController extends UpdateControllerBase {
             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
             creditCardSnapshot.setAvailableCredit(newValue);
 
-            return CreditCardViewModelOutput.of(creditCardSnapshot);
+            return CreditCardViewModelOutput.of(creditCardSnapshot, true);
         };
 
         return updateAccountSnapshotField(model,

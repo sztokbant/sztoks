@@ -16,10 +16,14 @@ public class PayableViewModelOutput extends AccountSnapshotViewModelOutput {
         this.dueDate = dueDate;
     }
 
-    public static PayableViewModelOutput of(final AccountSnapshot accountSnapshot) {
+    public static PayableViewModelOutput of(final AccountSnapshot accountSnapshot, final boolean includeTotals) {
         final PayableSnapshot payableSnapshot = (PayableSnapshot) accountSnapshot;
-        return new PayableViewModelOutput(AccountSnapshotViewModelOutput.of(accountSnapshot),
+        return new PayableViewModelOutput(AccountSnapshotViewModelOutput.of(accountSnapshot, includeTotals),
                                           payableSnapshot.getDueDate());
+    }
+
+    public static PayableViewModelOutput of(final AccountSnapshot accountSnapshot) {
+        return of(accountSnapshot, false);
     }
 
     @Override

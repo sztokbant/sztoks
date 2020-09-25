@@ -23,16 +23,20 @@ public class CreditCardViewModelOutput extends AccountSnapshotViewModelOutput {
         this.usedCreditPercentage = usedCreditPercentage;
     }
 
-    public static CreditCardViewModelOutput of(final AccountSnapshot accountSnapshot) {
+    public static CreditCardViewModelOutput of(final AccountSnapshot accountSnapshot, final boolean includeTotals) {
         final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
 
         final String totalCredit = formatAsDecimal(creditCardSnapshot.getTotalCredit());
         final String availableCredit = formatAsDecimal(creditCardSnapshot.getAvailableCredit());
         final String usedCreditPercentage = formatAsPercentage(creditCardSnapshot.getUsedCreditPercentage());
 
-        return new CreditCardViewModelOutput(AccountSnapshotViewModelOutput.of(accountSnapshot),
+        return new CreditCardViewModelOutput(AccountSnapshotViewModelOutput.of(accountSnapshot, includeTotals),
                                              totalCredit,
                                              availableCredit,
                                              usedCreditPercentage);
+    }
+
+    public static CreditCardViewModelOutput of(final AccountSnapshot accountSnapshot) {
+        return of(accountSnapshot, false);
     }
 }

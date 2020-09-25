@@ -16,10 +16,14 @@ public class ReceivableViewModelOutput extends AccountSnapshotViewModelOutput {
         this.dueDate = dueDate;
     }
 
-    public static ReceivableViewModelOutput of(final AccountSnapshot accountSnapshot) {
+    public static ReceivableViewModelOutput of(final AccountSnapshot accountSnapshot, final boolean includeTotals) {
         final ReceivableSnapshot receivableSnapshot = (ReceivableSnapshot) accountSnapshot;
-        return new ReceivableViewModelOutput(AccountSnapshotViewModelOutput.of(accountSnapshot),
+        return new ReceivableViewModelOutput(AccountSnapshotViewModelOutput.of(accountSnapshot, includeTotals),
                                              receivableSnapshot.getDueDate());
+    }
+
+    public static ReceivableViewModelOutput of(final AccountSnapshot accountSnapshot) {
+        return of(accountSnapshot, false);
     }
 
     @Override

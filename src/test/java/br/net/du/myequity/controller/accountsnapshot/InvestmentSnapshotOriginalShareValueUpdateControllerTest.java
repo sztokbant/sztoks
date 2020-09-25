@@ -1,6 +1,5 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
-import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.account.InvestmentAccount;
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
@@ -22,6 +21,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class InvestmentSnapshotOriginalShareValueUpdateControllerTest extends AccountSnapshotAjaxControllerTestBase {
 
-    private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
     private static final BigDecimal CURRENT_CURRENT_SHARE_VALUE = new BigDecimal("4000.00");
     private static final BigDecimal CURRENT_ORIGINAL_SHARE_VALUE = new BigDecimal("2100.00");
     private static final BigDecimal CURRENT_SHARES = new BigDecimal("15.00");
@@ -96,8 +95,8 @@ class InvestmentSnapshotOriginalShareValueUpdateControllerTest extends AccountSn
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_NET_WORTH).asText());
-        assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertEquals("null", jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals("null", jsonNode.get(JSON_ACCOUNT_TYPE).asText());
+        assertEquals("null", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
     }
 }

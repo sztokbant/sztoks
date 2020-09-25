@@ -24,7 +24,7 @@ public class BalanceUpdateController extends UpdateControllerBase {
             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
             ((AmountUpdateable) accountSnapshot).setAmount(newValue);
 
-            return AccountSnapshotViewModelOutput.of(accountSnapshot);
+            return AccountSnapshotViewModelOutput.of(accountSnapshot, true);
         };
 
         return updateAccountSnapshotField(model,

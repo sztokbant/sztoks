@@ -28,7 +28,7 @@ public class InvestmentViewModelOutput extends AccountSnapshotViewModelOutput {
         this.profitPercentage = profitPercentage;
     }
 
-    public static InvestmentViewModelOutput of(final AccountSnapshot accountSnapshot) {
+    public static InvestmentViewModelOutput of(final AccountSnapshot accountSnapshot, final boolean includeTotals) {
         final InvestmentSnapshot investmentSnapshot = (InvestmentSnapshot) accountSnapshot;
 
         final String shares = new BigDecimal(formatAsDecimal(investmentSnapshot.getShares())).toString();
@@ -38,11 +38,14 @@ public class InvestmentViewModelOutput extends AccountSnapshotViewModelOutput {
                 new BigDecimal(formatAsDecimal(investmentSnapshot.getCurrentShareValue())).toString();
         final String profitPercentage = formatAsPercentage(investmentSnapshot.getProfitPercentage());
 
-        return new InvestmentViewModelOutput(AccountSnapshotViewModelOutput.of(accountSnapshot),
+        return new InvestmentViewModelOutput(AccountSnapshotViewModelOutput.of(accountSnapshot, includeTotals),
                                              shares,
                                              originalShareValue,
                                              currentShareValue,
                                              profitPercentage);
     }
 
+    public static InvestmentViewModelOutput of(final AccountSnapshot accountSnapshot) {
+        return of(accountSnapshot, false);
+    }
 }
