@@ -10,7 +10,6 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AccountTest {
@@ -31,8 +30,6 @@ class AccountTest {
         assertEquals(accountType, account.getAccountType());
         assertEquals(currencyUnit, account.getCurrencyUnit());
         assertEquals(now, account.getCreateDate());
-        assertFalse(account.isClosed());
-        assertNull(account.getClosedDate());
     }
 
     @Test
@@ -49,8 +46,6 @@ class AccountTest {
         assertEquals(accountName, account.getName());
         assertEquals(accountType, account.getAccountType());
         assertEquals(currencyUnit, account.getCurrencyUnit());
-        assertFalse(account.isClosed());
-        assertNull(account.getClosedDate());
     }
 
     @Test

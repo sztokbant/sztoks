@@ -9,7 +9,8 @@ import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.service.SnapshotService;
-import br.net.du.myequity.viewmodel.AccountViewModelOutputBase;
+import br.net.du.myequity.viewmodel.AccountSnapshotViewModelOutput;
+import br.net.du.myequity.viewmodel.AccountViewModelOutput;
 import br.net.du.myequity.viewmodel.AddAccountsToSnapshotViewModelInput;
 import br.net.du.myequity.viewmodel.CreditCardViewModelOutput;
 import br.net.du.myequity.viewmodel.InvestmentViewModelOutput;
@@ -126,47 +127,48 @@ public class SnapshotController {
     }
 
     private void addAccountsToModel(final Model model, final Snapshot snapshot) {
-        final Map<AccountType, List<AccountViewModelOutputBase>> accountViewModels =
-                getAccountViewModelOutputs(snapshot);
+        final Map<AccountType, List<AccountSnapshotViewModelOutput>> accountSnapshotViewModels =
+                getAccountSnapshotViewModelOutputs(snapshot);
 
-        final Map<String, List<AccountViewModelOutputBase>> assetsByType =
-                breakDownAccountsByType(accountViewModels.get(AccountType.ASSET));
+        final Map<String, List<AccountSnapshotViewModelOutput>> assetsByType =
+                breakDownAccountsByType(accountSnapshotViewModels.get(AccountType.ASSET));
         model.addAttribute(SIMPLE_ASSET_ACCOUNTS_KEY,
-                           assetsByType.get(AccountViewModelOutputBase.class.getSimpleName()));
+                           assetsByType.get(AccountSnapshotViewModelOutput.class.getSimpleName()));
         model.addAttribute(RECEIVABLE_ACCOUNTS_KEY, assetsByType.get(ReceivableViewModelOutput.class.getSimpleName()));
         model.addAttribute(INVESTMENT_ACCOUNTS_KEY, assetsByType.get(InvestmentViewModelOutput.class.getSimpleName()));
 
-        final Map<String, List<AccountViewModelOutputBase>> liabilitiesByType =
-                breakDownAccountsByType(accountViewModels.get(AccountType.LIABILITY));
+        final Map<String, List<AccountSnapshotViewModelOutput>> liabilitiesByType =
+                breakDownAccountsByType(accountSnapshotViewModels.get(AccountType.LIABILITY));
         model.addAttribute(SIMPLE_LIABILITY_ACCOUNTS_KEY,
-                           liabilitiesByType.get(AccountViewModelOutputBase.class.getSimpleName()));
+                           liabilitiesByType.get(AccountSnapshotViewModelOutput.class.getSimpleName()));
         model.addAttribute(PAYABLE_ACCOUNTS_KEY, liabilitiesByType.get(PayableViewModelOutput.class.getSimpleName()));
         model.addAttribute(CREDIT_CARD_ACCOUNTS_KEY,
                            liabilitiesByType.get(CreditCardViewModelOutput.class.getSimpleName()));
     }
 
-    private static Map<AccountType, List<AccountViewModelOutputBase>> getAccountViewModelOutputs(final Snapshot snapshot) {
-        final Map<AccountType, SortedSet<AccountSnapshot>> accountsByType = snapshot.getAccountSnapshotsByType();
+    private static Map<AccountType, List<AccountSnapshotViewModelOutput>> getAccountSnapshotViewModelOutputs(final Snapshot snapshot) {
+        final Map<AccountType, SortedSet<AccountSnapshot>> accountSnapshotsByType =
+                snapshot.getAccountSnapshotsByType();
 
-        final SortedSet<AccountSnapshot> assetAccounts = accountsByType.get(AccountType.ASSET);
-        final SortedSet<AccountSnapshot> liabilityAccounts = accountsByType.get(AccountType.LIABILITY);
+        final SortedSet<AccountSnapshot> assetAccountSnapshots = accountSnapshotsByType.get(AccountType.ASSET);
+        final SortedSet<AccountSnapshot> liabilityAccountSnapshots = accountSnapshotsByType.get(AccountType.LIABILITY);
 
         return ImmutableMap.of(AccountType.ASSET,
-                               assetAccounts == null ?
+                               assetAccountSnapshots == null ?
                                        ImmutableList.of() :
-                                       getViewModelOutputs(assetAccounts),
+                                       getViewModelOutputs(assetAccountSnapshots),
                                AccountType.LIABILITY,
-                               liabilityAccounts == null ?
+                               liabilityAccountSnapshots == null ?
                                        ImmutableList.of() :
-                                       getViewModelOutputs(liabilityAccounts));
+                                       getViewModelOutputs(liabilityAccountSnapshots));
     }
 
-    private static List<AccountViewModelOutputBase> getViewModelOutputs(final SortedSet<AccountSnapshot> accountSnapshots) {
+    private static List<AccountSnapshotViewModelOutput> getViewModelOutputs(final SortedSet<AccountSnapshot> accountSnapshots) {
         return accountSnapshots.stream().map(accountSnapshot -> {
             try {
                 final Method factoryMethod = getViewModelOutputFactoryMethod(accountSnapshot.getClass());
-                final AccountViewModelOutputBase accountViewModelOutputBase =
-                        (AccountViewModelOutputBase) factoryMethod.invoke(null, accountSnapshot);
+                final AccountSnapshotViewModelOutput accountViewModelOutputBase =
+                        (AccountSnapshotViewModelOutput) factoryMethod.invoke(null, accountSnapshot);
                 return accountViewModelOutputBase;
             } catch (final Exception e) {
                 throw new RuntimeException(e);
@@ -186,15 +188,15 @@ public class SnapshotController {
         final String prefix = className.split("Snapshot")[0];
 
         return Class.forName(String.format("%s.%s%s",
-                                           AccountViewModelOutputBase.class.getPackage().getName(),
+                                           AccountSnapshotViewModelOutput.class.getPackage().getName(),
                                            prefix,
                                            "ViewModelOutput"));
     }
 
-    private Map<String, List<AccountViewModelOutputBase>> breakDownAccountsByType(final List<AccountViewModelOutputBase> accounts) {
-        final Map<String, List<AccountViewModelOutputBase>> accountsByType = new HashMap<>();
+    private Map<String, List<AccountSnapshotViewModelOutput>> breakDownAccountsByType(final List<AccountSnapshotViewModelOutput> accounts) {
+        final Map<String, List<AccountSnapshotViewModelOutput>> accountsByType = new HashMap<>();
 
-        for (final AccountViewModelOutputBase account : accounts) {
+        for (final AccountSnapshotViewModelOutput account : accounts) {
             final String key = account.getClass().getSimpleName();
             if (!accountsByType.containsKey(key)) {
                 accountsByType.put(key, new ArrayList<>());
@@ -220,25 +222,23 @@ public class SnapshotController {
 
         final List<Account> allUserAccounts = accountRepository.findByUser(user);
 
-        final List<AccountViewModelOutputBase> availableAssets = allUserAccounts.stream()
-                                                                                .filter(account ->
-                                                                                                account.getAccountType()
-                                                                                                       .equals(AccountType.ASSET) &&
-                                                                                                        !snapshot.getAccountSnapshotFor(
-                                                                                                                account)
-                                                                                                                 .isPresent())
-                                                                                .map(AccountViewModelOutputBase::of)
-                                                                                .collect(Collectors.toList());
+        final List<AccountViewModelOutput> availableAssets = allUserAccounts.stream()
+                                                                            .filter(account -> account.getAccountType()
+                                                                                                      .equals(AccountType.ASSET) &&
+                                                                                    !snapshot.getAccountSnapshotFor(
+                                                                                            account).isPresent())
+                                                                            .map(AccountViewModelOutput::of)
+                                                                            .collect(Collectors.toList());
 
-        final List<AccountViewModelOutputBase> availableLiabilities = allUserAccounts.stream()
-                                                                                     .filter(account ->
-                                                                                                     account.getAccountType()
-                                                                                                            .equals(AccountType.LIABILITY) &&
-                                                                                                             !snapshot.getAccountSnapshotFor(
-                                                                                                                     account)
-                                                                                                                      .isPresent())
-                                                                                     .map(AccountViewModelOutputBase::of)
-                                                                                     .collect(Collectors.toList());
+        final List<AccountViewModelOutput> availableLiabilities = allUserAccounts.stream()
+                                                                                 .filter(account ->
+                                                                                                 account.getAccountType()
+                                                                                                        .equals(AccountType.LIABILITY) &&
+                                                                                                         !snapshot.getAccountSnapshotFor(
+                                                                                                                 account)
+                                                                                                                  .isPresent())
+                                                                                 .map(AccountViewModelOutput::of)
+                                                                                 .collect(Collectors.toList());
 
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_KEY, SnapshotViewModelOutput.of(snapshot));

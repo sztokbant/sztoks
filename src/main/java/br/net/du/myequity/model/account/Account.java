@@ -60,15 +60,6 @@ public abstract class Account implements Comparable<Account> {
     @Setter
     private LocalDate createDate;
 
-    @Column(nullable = false)
-    @Getter
-    @Setter
-    private boolean isClosed;
-
-    @Getter
-    @Setter
-    private LocalDate closedDate;
-
     Account(final String name,
             final AccountType accountType,
             final CurrencyUnit currencyUnit,
@@ -77,8 +68,6 @@ public abstract class Account implements Comparable<Account> {
         this.accountType = accountType;
         this.currency = currencyUnit.getCode();
         this.createDate = createDate;
-        this.isClosed = false;
-        this.closedDate = null;
     }
 
     Account(final String name, final AccountType accountType, final CurrencyUnit currencyUnit) {

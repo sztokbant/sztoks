@@ -1,14 +1,14 @@
 package br.net.du.myequity.viewmodel;
 
-import java.math.BigDecimal;
-
-public class SimpleAssetViewModelOutput extends AccountViewModelOutputBase {
-    public SimpleAssetViewModelOutput(final Long id,
+public class SimpleAssetViewModelOutput extends AccountSnapshotViewModelOutput {
+    public SimpleAssetViewModelOutput(final Long accountId,
                                       final String name,
-                                      final boolean isClosed,
                                       final String currencyUnit,
                                       final String currencyUnitSymbol,
-                                      final BigDecimal total) {
-        super(id, name, isClosed, currencyUnit, currencyUnitSymbol, total);
+                                      final String balance,
+                                      final String netWorth,
+                                      final String accountType,
+                                      final String totalForAccountType) {
+        super(accountId, name, balance, currencyUnit, currencyUnitSymbol, netWorth, accountType, totalForAccountType);
     }
 }

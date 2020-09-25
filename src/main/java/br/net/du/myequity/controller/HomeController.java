@@ -3,7 +3,7 @@ package br.net.du.myequity.controller;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.viewmodel.AccountViewModelOutputBase;
+import br.net.du.myequity.viewmodel.AccountViewModelOutput;
 import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
 import br.net.du.myequity.viewmodel.UserViewModelOutput;
 import com.google.common.collect.ImmutableList;
@@ -35,8 +35,7 @@ public class HomeController {
         final List<SnapshotViewModelOutput> snapshotViewModelOutputs =
                 user.getSnapshots().stream().map(SnapshotViewModelOutput::of).collect(toList());
 
-        final Map<AccountType, List<AccountViewModelOutputBase>> accountViewModelOutputs =
-                getAccountViewModelOutputs(user);
+        final Map<AccountType, List<AccountViewModelOutput>> accountViewModelOutputs = getAccountViewModelOutputs(user);
         model.addAttribute(ASSET_ACCOUNTS_KEY, accountViewModelOutputs.get(AccountType.ASSET));
         model.addAttribute(LIABILITY_ACCOUNTS_KEY, accountViewModelOutputs.get(AccountType.LIABILITY));
 
@@ -45,7 +44,7 @@ public class HomeController {
         return "home";
     }
 
-    private static Map<AccountType, List<AccountViewModelOutputBase>> getAccountViewModelOutputs(final User user) {
+    private static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(final User user) {
         final Map<AccountType, SortedSet<Account>> accountsByType = user.getAccounts();
 
         final SortedSet<Account> assetAccounts = accountsByType.get(AccountType.ASSET);
@@ -54,12 +53,10 @@ public class HomeController {
         return ImmutableMap.of(AccountType.ASSET,
                                assetAccounts == null ?
                                        ImmutableList.of() :
-                                       assetAccounts.stream().map(AccountViewModelOutputBase::of).collect(toList()),
+                                       assetAccounts.stream().map(AccountViewModelOutput::of).collect(toList()),
                                AccountType.LIABILITY,
                                liabilityAccounts == null ?
                                        ImmutableList.of() :
-                                       liabilityAccounts.stream()
-                                                        .map(AccountViewModelOutputBase::of)
-                                                        .collect(toList()));
+                                       liabilityAccounts.stream().map(AccountViewModelOutput::of).collect(toList()));
     }
 }

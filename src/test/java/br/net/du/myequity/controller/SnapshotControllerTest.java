@@ -33,7 +33,8 @@ public class SnapshotControllerTest {
         assertEquals(ReceivableViewModelOutput.class,
                      snapshotController.getViewModelOutputClass(ReceivableSnapshot.class));
 
-        assertEquals(PayableViewModelOutput.class, snapshotController.getViewModelOutputClass(PayableSnapshot.class));
+        assertEquals(PayableViewModelOutput.class,
+                     snapshotController.getViewModelOutputClass(PayableSnapshot.class));
 
         assertEquals(SimpleAssetViewModelOutput.class,
                      snapshotController.getViewModelOutputClass(SimpleAssetSnapshot.class));

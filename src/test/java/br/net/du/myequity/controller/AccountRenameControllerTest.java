@@ -1,12 +1,12 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.controller.model.EntityNameJsonRequest;
-import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.controller.model.EntityRenameJsonRequest;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.persistence.SnapshotRepository;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
+import br.net.du.myequity.persistence.AccountRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableSortedSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
@@ -32,27 +33,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SnapshotNameControllerTest extends AjaxControllerTestBase {
+class AccountRenameControllerTest extends AjaxControllerTestBase {
 
     private static final String JSON_NAME = "name";
 
-    private static final String NEW_SNAPSHOT_NAME_NOT_TRIMMED = "   My Best Snapshot   ";
-    private static final String NEW_SNAPSHOT_NAME_TRIMMED = "My Best Snapshot";
+    private static final String NEW_ACCOUNT_NAME_NOT_TRIMMED = "   Wells Fargo Mortgage   ";
+    private static final String NEW_ACCOUNT_NAME_TRIMMED = "Wells Fargo Mortgage";
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private SnapshotRepository snapshotRepository;
+    private AccountRepository accountRepository;
 
     private String requestContent;
 
     private User user;
 
-    private Snapshot snapshot;
+    private Account account;
 
-    public SnapshotNameControllerTest() {
-        super("/snapshot/updateName");
+    public AccountRenameControllerTest() {
+        super("/account/updateName");
     }
 
     @BeforeEach
@@ -60,15 +61,15 @@ class SnapshotNameControllerTest extends AjaxControllerTestBase {
         user = buildUser();
         createEntity();
 
-        final EntityNameJsonRequest entityNameJsonRequest =
-                EntityNameJsonRequest.builder().id(ENTITY_ID).newValue(NEW_SNAPSHOT_NAME_NOT_TRIMMED).build();
+        final EntityRenameJsonRequest entityNameJsonRequest =
+                EntityRenameJsonRequest.builder().id(ENTITY_ID).newValue(NEW_ACCOUNT_NAME_NOT_TRIMMED).build();
         requestContent = new ObjectMapper().writeValueAsString(entityNameJsonRequest);
     }
 
     @Override
     public void createEntity() {
-        snapshot = new Snapshot(2L, "Original Name", ImmutableSortedSet.of());
-        snapshot.setId(ENTITY_ID);
+        account = new SimpleLiabilityAccount(ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now());
+        account.setId(ENTITY_ID);
     }
 
     @Test
@@ -111,11 +112,11 @@ class SnapshotNameControllerTest extends AjaxControllerTestBase {
     }
 
     @Test
-    public void post_snapshotNotFound_clientError() throws Exception {
+    public void post_accountNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        when(snapshotRepository.findById(ENTITY_ID)).thenReturn(Optional.empty());
+        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.empty());
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
@@ -129,7 +130,7 @@ class SnapshotNameControllerTest extends AjaxControllerTestBase {
     }
 
     @Test
-    public void post_snapshotDoesNotBelongToUser_clientError() throws Exception {
+    public void post_accountDoesNotBelongToUser_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -137,8 +138,8 @@ class SnapshotNameControllerTest extends AjaxControllerTestBase {
         final Long anotherUserId = user.getId() * 7;
         anotherUser.setId(anotherUserId);
 
-        snapshot.setUser(anotherUser);
-        when(snapshotRepository.findById(ENTITY_ID)).thenReturn(Optional.of(snapshot));
+        account.setUser(anotherUser);
+        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
@@ -156,8 +157,8 @@ class SnapshotNameControllerTest extends AjaxControllerTestBase {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        snapshot.setUser(user);
-        when(snapshotRepository.findById(ENTITY_ID)).thenReturn(Optional.of(snapshot));
+        account.setUser(user);
+        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
@@ -174,6 +175,6 @@ class SnapshotNameControllerTest extends AjaxControllerTestBase {
         assertNotNull(resultContentAsString);
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertEquals(NEW_SNAPSHOT_NAME_TRIMMED, jsonNode.get(JSON_NAME).textValue());
+        assertEquals(NEW_ACCOUNT_NAME_TRIMMED, jsonNode.get(JSON_NAME).textValue());
     }
 }

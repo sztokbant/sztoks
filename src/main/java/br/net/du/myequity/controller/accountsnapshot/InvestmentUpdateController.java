@@ -1,10 +1,10 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
-import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonResponse;
-import br.net.du.myequity.controller.model.InvestmentSnapshotUpdateJsonResponse;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
+import br.net.du.myequity.viewmodel.AccountSnapshotViewModelOutput;
+import br.net.du.myequity.viewmodel.InvestmentViewModelOutput;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,17 +17,17 @@ import java.util.function.BiFunction;
 public class InvestmentUpdateController extends UpdateControllerBase {
 
     @PostMapping("/snapshot/updateInvestmentShares")
-    public AccountSnapshotUpdateJsonResponse updateInvestmentShares(final Model model,
-                                                                    @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+    public AccountSnapshotViewModelOutput updateInvestmentShares(final Model model,
+                                                                 @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
 
-        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
+        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateInvestmentSharesFunction = (jsonRequest, accountSnapshot) -> {
             final InvestmentSnapshot investmentSnapshot = (InvestmentSnapshot) accountSnapshot;
 
             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
             investmentSnapshot.setShares(newValue);
 
-            return InvestmentSnapshotUpdateJsonResponse.of(investmentSnapshot);
+            return InvestmentViewModelOutput.of(investmentSnapshot);
         };
 
         return updateAccountSnapshotField(model,
@@ -37,17 +37,17 @@ public class InvestmentUpdateController extends UpdateControllerBase {
     }
 
     @PostMapping("/snapshot/updateInvestmentOriginalShareValue")
-    public AccountSnapshotUpdateJsonResponse updateInvestmentOriginalShareValue(final Model model,
-                                                                                @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+    public AccountSnapshotViewModelOutput updateInvestmentOriginalShareValue(final Model model,
+                                                                             @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
 
-        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
+        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateInvestmentOriginalShareValueFunction = (jsonRequest, accountSnapshot) -> {
             final InvestmentSnapshot investmentSnapshot = (InvestmentSnapshot) accountSnapshot;
 
             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
             investmentSnapshot.setOriginalShareValue(newValue);
 
-            return InvestmentSnapshotUpdateJsonResponse.of(investmentSnapshot);
+            return InvestmentViewModelOutput.of(investmentSnapshot);
         };
 
         return updateAccountSnapshotField(model,
@@ -57,16 +57,16 @@ public class InvestmentUpdateController extends UpdateControllerBase {
     }
 
     @PostMapping("/snapshot/updateInvestmentCurrentShareValue")
-    public AccountSnapshotUpdateJsonResponse updateInvestmentCurrentShareValue(final Model model,
-                                                                               @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
-        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
+    public AccountSnapshotViewModelOutput updateInvestmentCurrentShareValue(final Model model,
+                                                                            @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateInvestmentCurrentShareValueFunction = (jsonRequest, accountSnapshot) -> {
             final InvestmentSnapshot investmentSnapshot = (InvestmentSnapshot) accountSnapshot;
 
             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
             investmentSnapshot.setCurrentShareValue(newValue);
 
-            return InvestmentSnapshotUpdateJsonResponse.of(investmentSnapshot);
+            return InvestmentViewModelOutput.of(investmentSnapshot);
         };
 
         return updateAccountSnapshotField(model,

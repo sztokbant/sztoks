@@ -1,13 +1,13 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
-import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonResponse;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
+import br.net.du.myequity.viewmodel.AccountSnapshotViewModelOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
@@ -27,19 +27,19 @@ public class UpdateControllerBase {
     @Autowired
     AccountSnapshotRepository accountSnapshotRepository;
 
-    AccountSnapshotUpdateJsonResponse updateAccountSnapshotField(final Model model,
-                                                                 final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest,
-                                                                 final Class clazz,
-                                                                 final BiFunction<AccountSnapshotUpdateJsonRequest,
-                                                                         AccountSnapshot,
-                                                                         AccountSnapshotUpdateJsonResponse> function) {
+    AccountSnapshotViewModelOutput updateAccountSnapshotField(final Model model,
+                                                              final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest,
+                                                              final Class clazz,
+                                                              final BiFunction<AccountSnapshotUpdateJsonRequest,
+                                                                      AccountSnapshot,
+                                                                      AccountSnapshotViewModelOutput> function) {
         final AccountSnapshot accountSnapshot = getAccountSnapshot(model, accountSnapshotUpdateJsonRequest);
 
         if (!clazz.isInstance(accountSnapshot)) {
             throw new IllegalArgumentException("accountSnapshot not found");
         }
 
-        final AccountSnapshotUpdateJsonResponse jsonResponse =
+        final AccountSnapshotViewModelOutput jsonResponse =
                 function.apply(accountSnapshotUpdateJsonRequest, accountSnapshot);
 
         accountSnapshotRepository.save(accountSnapshot);

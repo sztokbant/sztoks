@@ -1,10 +1,10 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
-import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonResponse;
-import br.net.du.myequity.controller.model.CreditCardSnapshotUpdateJsonResponse;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
+import br.net.du.myequity.viewmodel.AccountSnapshotViewModelOutput;
+import br.net.du.myequity.viewmodel.CreditCardViewModelOutput;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,17 +16,17 @@ import java.util.function.BiFunction;
 @RestController
 public class CreditCardUpdateController extends UpdateControllerBase {
     @PostMapping("/snapshot/updateCreditCardTotalCredit")
-    public AccountSnapshotUpdateJsonResponse updateCreditCardTotalCredit(final Model model,
-                                                                         @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+    public AccountSnapshotViewModelOutput updateCreditCardTotalCredit(final Model model,
+                                                                      @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
 
-        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
+        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateCreditCardTotalCreditFunction = (jsonRequest, accountSnapshot) -> {
             final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
 
             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
             creditCardSnapshot.setTotalCredit(newValue);
 
-            return CreditCardSnapshotUpdateJsonResponse.of(creditCardSnapshot);
+            return CreditCardViewModelOutput.of(creditCardSnapshot);
         };
 
         return updateAccountSnapshotField(model,
@@ -36,16 +36,16 @@ public class CreditCardUpdateController extends UpdateControllerBase {
     }
 
     @PostMapping("/snapshot/updateCreditCardAvailableCredit")
-    public AccountSnapshotUpdateJsonResponse updateCreditCardAvailableCredit(final Model model,
-                                                                             @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
-        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
+    public AccountSnapshotViewModelOutput updateCreditCardAvailableCredit(final Model model,
+                                                                          @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateCreditCardAvailableCreditFunction = (jsonRequest, accountSnapshot) -> {
             final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
 
             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
             creditCardSnapshot.setAvailableCredit(newValue);
 
-            return CreditCardSnapshotUpdateJsonResponse.of(creditCardSnapshot);
+            return CreditCardViewModelOutput.of(creditCardSnapshot);
         };
 
         return updateAccountSnapshotField(model,

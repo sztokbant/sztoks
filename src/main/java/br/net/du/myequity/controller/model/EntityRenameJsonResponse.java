@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 @Builder
-public class EntityNameJsonRequest {
-    private Long id;
-    private String newValue;
+public class EntityRenameJsonResponse {
+    private String name;
 }

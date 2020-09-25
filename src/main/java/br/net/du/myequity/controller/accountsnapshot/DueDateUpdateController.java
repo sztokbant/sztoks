@@ -1,10 +1,12 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
 import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
-import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonResponse;
-import br.net.du.myequity.controller.model.DueDateUpdateJsonResponse;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.DueDateUpdateable;
+import br.net.du.myequity.model.snapshot.PayableSnapshot;
+import br.net.du.myequity.viewmodel.AccountSnapshotViewModelOutput;
+import br.net.du.myequity.viewmodel.PayableViewModelOutput;
+import br.net.du.myequity.viewmodel.ReceivableViewModelOutput;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,15 +19,18 @@ import java.util.function.BiFunction;
 public class DueDateUpdateController extends UpdateControllerBase {
 
     @PostMapping("/snapshot/updateAccountDueDate")
-    public AccountSnapshotUpdateJsonResponse post(final Model model,
-                                                  @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+    public AccountSnapshotViewModelOutput post(final Model model,
+                                               @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
 
-        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotUpdateJsonResponse>
+        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateDueDateFunction = (jsonRequest, accountSnapshot) -> {
             final LocalDate dueDate = LocalDate.parse(jsonRequest.getNewValue());
             ((DueDateUpdateable) accountSnapshot).setDueDate(dueDate);
 
-            return DueDateUpdateJsonResponse.of(accountSnapshot);
+            if (accountSnapshot instanceof PayableSnapshot) {
+                return PayableViewModelOutput.of(accountSnapshot);
+            }
+            return ReceivableViewModelOutput.of(accountSnapshot);
         };
 
         return updateAccountSnapshotField(model,

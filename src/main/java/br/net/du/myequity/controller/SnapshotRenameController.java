@@ -1,7 +1,7 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.controller.model.EntityNameJsonRequest;
-import br.net.du.myequity.controller.model.EntityNameJsonResponse;
+import br.net.du.myequity.controller.model.EntityRenameJsonRequest;
+import br.net.du.myequity.controller.model.EntityRenameJsonResponse;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.SnapshotRepository;
@@ -17,19 +17,19 @@ import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
 
 @RestController
-public class SnapshotNameController extends AccountControllerBase {
+public class SnapshotRenameController extends AccountControllerBase {
     @Autowired
     SnapshotRepository snapshotRepository;
 
     @PostMapping("/snapshot/updateName")
-    public EntityNameJsonResponse post(final Model model,
-                                       @RequestBody final EntityNameJsonRequest entityNameJsonRequest) {
+    public EntityRenameJsonResponse post(final Model model,
+                                         @RequestBody final EntityRenameJsonRequest entityNameJsonRequest) {
         final Snapshot snapshot = getSnapshot(model, entityNameJsonRequest.getId());
 
         snapshot.setName(entityNameJsonRequest.getNewValue().trim());
         snapshotRepository.save(snapshot);
 
-        return EntityNameJsonResponse.builder().name(snapshot.getName()).build();
+        return EntityRenameJsonResponse.builder().name(snapshot.getName()).build();
     }
 
     Snapshot getSnapshot(final Model model, final Long snapshotId) {

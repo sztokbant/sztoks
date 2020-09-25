@@ -4,29 +4,35 @@ import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import lombok.Getter;
 
-import java.math.BigDecimal;
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
 
 @Getter
-public class CreditCardViewModelOutput extends AccountViewModelOutputBase {
-    private final BigDecimal totalCredit;
-    private final BigDecimal availableCredit;
-    private final BigDecimal usedCreditPercentage;
+public class CreditCardViewModelOutput extends AccountSnapshotViewModelOutput {
+    private final String totalCredit;
+    private final String availableCredit;
+    private final String usedCreditPercentage;
 
-    public static CreditCardViewModelOutput of(final AccountSnapshot accountSnapshot) {
-        final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
-        return new CreditCardViewModelOutput(AccountViewModelOutputBase.of(accountSnapshot),
-                                             creditCardSnapshot.getTotalCredit(),
-                                             creditCardSnapshot.getAvailableCredit(),
-                                             creditCardSnapshot.getUsedCreditPercentage());
-    }
-
-    public CreditCardViewModelOutput(final AccountViewModelOutputBase simpleAccountViewModelOutput,
-                                     final BigDecimal totalCredit,
-                                     final BigDecimal availableCredit,
-                                     final BigDecimal usedCreditPercentage) {
-        super(simpleAccountViewModelOutput);
+    public CreditCardViewModelOutput(final AccountSnapshotViewModelOutput accountSnapshotViewModelOutput,
+                                     final String totalCredit,
+                                     final String availableCredit,
+                                     final String usedCreditPercentage) {
+        super(accountSnapshotViewModelOutput);
         this.totalCredit = totalCredit;
         this.availableCredit = availableCredit;
         this.usedCreditPercentage = usedCreditPercentage;
+    }
+
+    public static CreditCardViewModelOutput of(final AccountSnapshot accountSnapshot) {
+        final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
+
+        final String totalCredit = formatAsDecimal(creditCardSnapshot.getTotalCredit());
+        final String availableCredit = formatAsDecimal(creditCardSnapshot.getAvailableCredit());
+        final String usedCreditPercentage = formatAsPercentage(creditCardSnapshot.getUsedCreditPercentage());
+
+        return new CreditCardViewModelOutput(AccountSnapshotViewModelOutput.of(accountSnapshot),
+                                             totalCredit,
+                                             availableCredit,
+                                             usedCreditPercentage);
     }
 }
