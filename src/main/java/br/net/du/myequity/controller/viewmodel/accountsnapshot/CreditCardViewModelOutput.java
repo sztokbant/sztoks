@@ -1,4 +1,4 @@
-package br.net.du.myequity.viewmodel.accountsnapshot;
+package br.net.du.myequity.controller.viewmodel.accountsnapshot;
 
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;

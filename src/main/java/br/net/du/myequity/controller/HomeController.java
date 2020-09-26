@@ -1,11 +1,11 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.controller.viewmodel.AccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.SnapshotViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.viewmodel.AccountViewModelOutput;
-import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
-import br.net.du.myequity.viewmodel.UserViewModelOutput;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.stereotype.Controller;

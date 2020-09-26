@@ -1,10 +1,10 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
+import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.UserRepository;
 import br.net.du.myequity.validator.AccountViewModelInputValidator;
-import br.net.du.myequity.viewmodel.AccountViewModelInput;
-import br.net.du.myequity.viewmodel.UserViewModelOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

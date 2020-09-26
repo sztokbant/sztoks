@@ -1,7 +1,7 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.controller.model.EntityRenameJsonRequest;
-import br.net.du.myequity.controller.model.EntityRenameJsonResponse;
+import br.net.du.myequity.controller.viewmodel.EntityRenameJsonRequest;
+import br.net.du.myequity.controller.viewmodel.EntityRenameJsonResponse;
 import br.net.du.myequity.model.account.Account;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;

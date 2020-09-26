@@ -1,13 +1,13 @@
 package br.net.du.myequity.controller;
 
+import br.net.du.myequity.controller.viewmodel.SnapshotViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.service.UserService;
-import br.net.du.myequity.viewmodel.SnapshotViewModelOutput;
-import br.net.du.myequity.viewmodel.UserViewModelOutput;
 import com.google.common.collect.ImmutableSortedSet;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;

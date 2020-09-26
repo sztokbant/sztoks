@@ -1,4 +1,4 @@
-package br.net.du.myequity.controller.model;
+package br.net.du.myequity.controller.viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Builder;

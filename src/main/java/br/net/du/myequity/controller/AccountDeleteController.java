@@ -1,7 +1,7 @@
 package br.net.du.myequity.controller;
 
-import br.net.du.myequity.controller.model.AccountDeleteJsonRequest;
-import br.net.du.myequity.controller.model.AccountDeleteJsonResponse;
+import br.net.du.myequity.controller.viewmodel.AccountDeleteJsonRequest;
+import br.net.du.myequity.controller.viewmodel.AccountDeleteJsonResponse;
 import br.net.du.myequity.model.account.Account;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;

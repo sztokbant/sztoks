@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
-import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
+import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;

@@ -1,7 +1,7 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
 import br.net.du.myequity.controller.AjaxControllerTestBase;
-import br.net.du.myequity.controller.model.AccountSnapshotUpdateJsonRequest;
+import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;

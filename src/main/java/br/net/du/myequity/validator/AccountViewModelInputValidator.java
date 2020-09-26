@@ -1,9 +1,9 @@
 package br.net.du.myequity.validator;
 
+import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.persistence.AccountRepository;
-import br.net.du.myequity.viewmodel.AccountViewModelInput;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.IllegalCurrencyException;
