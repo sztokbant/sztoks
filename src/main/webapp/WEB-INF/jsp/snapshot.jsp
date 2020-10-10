@@ -26,8 +26,8 @@
     <div class="center-w640">
         <table class="full-width margin-bottom">
             <tr class="border-1px bg-light-yellow">
-                <td class="align-left valign-top"><b>Net Worth</b></td>
-                <td class="align-right valign-top"><%@ include file="_snapshot_net_worth.jsp" %></td>
+                <td class="align-left-p7 valign-top"><b>Net Worth</b></td>
+                <td class="align-right-p7 valign-top"><%@ include file="_snapshot_net_worth.jsp" %></td>
             </tr>
         </table>
     </div>
@@ -48,7 +48,7 @@
                             <div class="col">&nbsp;</div>
                             <div class="col">&nbsp;</div>
                             <div class="col">&nbsp;</div>
-                            <div class="col col-value"><b><span id="total_ASSET_${entry.key}">${entry.value}</span></b></div>
+                            <div class="col align-right"><b><span id="total_ASSET_${entry.key}">${entry.value}</span></b></div>
                         </div>
                     </c:forEach>
                 </c:when>
@@ -59,7 +59,7 @@
                         <div class="col">&nbsp;</div>
                         <div class="col">&nbsp;</div>
                         <div class="col">&nbsp;</div>
-                        <div class="col col-value"><b>0.00</b></div>
+                        <div class="col align-right"><b>0.00</b></div>
                     </div>
                 </c:otherwise>
             </c:choose>
@@ -127,7 +127,7 @@
                             <div class="col">&nbsp;</div>
                             <div class="col">&nbsp;</div>
                             <div class="col">&nbsp;</div>
-                            <div class="col col-value"><b><span id="total_LIABILITY_${entry.key}">${entry.value}</span></b></div>
+                            <div class="col align-right"><b><span id="total_LIABILITY_${entry.key}">${entry.value}</span></b></div>
                         </div>
                     </c:forEach>
                 </c:when>
@@ -139,7 +139,7 @@
                         <div class="col">&nbsp;</div>
                         <div class="col">&nbsp;</div>
                         <div class="col">&nbsp;</div>
-                        <div class="col col-value"><b>0.00</b></div>
+                        <div class="col align-right"><b>0.00</b></div>
                     </div>
                 </c:otherwise>
             </c:choose>

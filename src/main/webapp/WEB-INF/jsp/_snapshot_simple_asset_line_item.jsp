@@ -35,7 +35,7 @@ $(document).ready(function() {
         &nbsp;
     </div>
 
-    <div class="col col-value editable-asset">
+    <div class="col align-right editable-asset">
         <form id="form_account_balance_${account.accountId}">
             <span id="account_balance_${account.accountId}">${account.currencyUnitSymbol}${account.balance}</span>
             <span><input id="new_account_balance_${account.accountId}" name="amount" type="number" min="0"

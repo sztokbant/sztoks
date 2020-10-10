@@ -13,10 +13,6 @@
     font-weight: bold;
 }
 
-.col-value {
-    text-align: right;
-}
-
 .editable-asset {
     background: coral;
 }
@@ -57,10 +53,14 @@
 
 .align-right {
     text-align: right;
+}
+
+.align-right-p7 {
+    text-align: right;
     padding: 0 7px 0 0;
 }
 
-.align-left {
+.align-left-p7 {
     text-align: left;
     padding: 0 0 0 7px;
 }

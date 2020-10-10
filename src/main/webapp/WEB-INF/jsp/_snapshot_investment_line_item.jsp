@@ -37,7 +37,7 @@ $(document).ready(function() {
 <div class="row" id="account_row_${account.accountId}">
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
-    <div class="col col-value editable-asset">
+    <div class="col align-right editable-asset">
         <form id="form_investment_shares_${account.accountId}">
             <span id="investment_shares_${account.accountId}">${account.shares}</span>
             <span><input id="new_investment_shares_${account.accountId}" name="amount" type="number" min="0"
@@ -46,7 +46,7 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-value editable-asset">
+    <div class="col align-right editable-asset">
         <form id="form_investment_original_share_value_${account.accountId}">
             <span id="investment_original_share_value_${account.accountId}">${account.currencyUnitSymbol}${account.originalShareValue}</span>
             <span><input id="new_investment_original_share_value_${account.accountId}" name="amount" type="number" min="0"
@@ -55,7 +55,7 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-value editable-asset">
+    <div class="col align-right editable-asset">
         <form id="form_investment_current_share_value_${account.accountId}">
             <span id="investment_current_share_value_${account.accountId}">${account.currencyUnitSymbol}${account.currentShareValue}</span>
             <span><input id="new_investment_current_share_value_${account.accountId}" name="amount" type="number" min="0"
@@ -64,11 +64,11 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-value">
+    <div class="col align-right">
         <span id="investment_profit_percentage_${account.accountId}">${account.profitPercentage}</span>
     </div>
 
-    <div class="col">
+    <div class="col align-right">
         <span id="investment_balance_${account.accountId}">${account.currencyUnitSymbol}${account.balance}</span>
     </div>
 </div>
