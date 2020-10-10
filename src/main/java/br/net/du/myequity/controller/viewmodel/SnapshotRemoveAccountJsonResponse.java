@@ -12,4 +12,5 @@ public class SnapshotRemoveAccountJsonResponse {
     private String netWorth;
     private String accountType;
     private String totalForAccountType;
+    private CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit;
 }

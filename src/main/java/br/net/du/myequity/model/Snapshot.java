@@ -2,6 +2,7 @@ package br.net.du.myequity.model;
 
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import br.net.du.myequity.util.NetWorthUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
@@ -26,6 +27,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SortedSet;
@@ -152,6 +154,66 @@ public class Snapshot implements Comparable<Snapshot> {
                                                                                     .getAccountType()
                                                                                     .equals(accountType))
                                                               .collect(Collectors.toSet()));
+    }
+
+    /**
+     * Create transient CreditCardSnapshot objects aggregated by currency unit.
+     */
+    public Map<CurrencyUnit, CreditCardSnapshot> getCreditCardTotals() {
+        final Map<CurrencyUnit, CreditCardSnapshot> creditCardTotals = new HashMap<>();
+
+        for (final AccountSnapshot accountSnapshot : accountSnapshots) {
+            if (!(accountSnapshot instanceof CreditCardSnapshot)) {
+                continue;
+            }
+
+            final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
+            final CurrencyUnit currencyUnit = creditCardSnapshot.getAccount().getCurrencyUnit();
+
+            if (!creditCardTotals.containsKey(currencyUnit)) {
+                creditCardTotals.put(currencyUnit, creditCardSnapshot.copy());
+            } else {
+                final CreditCardSnapshot creditCardSnapshotForCurrency = creditCardTotals.get(currencyUnit);
+                updateCreditCardSnapshotForCurrency(creditCardSnapshot, creditCardSnapshotForCurrency);
+                creditCardTotals.put(currencyUnit, creditCardSnapshotForCurrency);
+            }
+        }
+
+        return creditCardTotals;
+    }
+
+    /**
+     * Create transient CreditCardSnapshot object for specified currency unit.
+     */
+    public CreditCardSnapshot getCreditCardTotalsForCurrencyUnit(@NonNull final CurrencyUnit currencyUnit) {
+        CreditCardSnapshot creditCardTotalsForCurrencyUnit = null;
+
+        for (final AccountSnapshot accountSnapshot : accountSnapshots) {
+            if (!(accountSnapshot instanceof CreditCardSnapshot) ||
+                    !accountSnapshot.getAccount().getCurrencyUnit().equals(currencyUnit)) {
+                continue;
+            }
+
+            final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
+
+            if (creditCardTotalsForCurrencyUnit == null) {
+                creditCardTotalsForCurrencyUnit = creditCardSnapshot.copy();
+            } else {
+                updateCreditCardSnapshotForCurrency(creditCardSnapshot, creditCardTotalsForCurrencyUnit);
+            }
+        }
+
+        return creditCardTotalsForCurrencyUnit;
+    }
+
+    private void updateCreditCardSnapshotForCurrency(final CreditCardSnapshot creditCardSnapshot,
+                                                     final CreditCardSnapshot creditCardSnapshotForCurrency) {
+        creditCardSnapshotForCurrency.setAvailableCredit(creditCardSnapshotForCurrency.getAvailableCredit()
+                                                                                      .add(creditCardSnapshot.getAvailableCredit()));
+        creditCardSnapshotForCurrency.setTotalCredit(creditCardSnapshotForCurrency.getTotalCredit()
+                                                                                  .add(creditCardSnapshot.getTotalCredit()));
+        creditCardSnapshotForCurrency.setStatement(creditCardSnapshotForCurrency.getStatement()
+                                                                                .add(creditCardSnapshot.getStatement()));
     }
 
     @Override

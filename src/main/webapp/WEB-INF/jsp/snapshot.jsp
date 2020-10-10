@@ -11,6 +11,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
     <script src="${contextPath}/resources/js/ajax_field_update.js"></script>
+    <script src="${contextPath}/resources/js/update_snapshot_credit_card_totals.js"></script>
     <script src="${contextPath}/resources/js/success_callback_functions.js"></script>
     <script src="${contextPath}/resources/js/remove_account_from_snapshot.js"></script>
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
@@ -189,9 +190,16 @@
                         <div class="col col-title">Remaining Balance</div>
                         <div class="col col-title">Balance</div>
                     </div>
+
+                    <c:set var="currentCurrency" value="" />
                     <c:forEach var="account" items="${creditCardAccounts}">
+                        <c:if test="${currentCurrency ne '' && currentCurrency ne account.currencyUnit}">
+                            <%@ include file="_snapshot_credit_card_total_for_currency.jsp" %>
+                        </c:if>
+                        <c:set var="currentCurrency" value="${account.currencyUnit}" />
                         <%@ include file="_snapshot_credit_card_line_item.jsp" %>
                     </c:forEach>
+                    <%@ include file="_snapshot_credit_card_total_for_currency.jsp" %>
                 </c:when>
             </c:choose>
         </div>
