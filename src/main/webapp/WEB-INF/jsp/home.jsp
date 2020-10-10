@@ -34,13 +34,13 @@
 
     <div class="center-w640">
         <table class="full-width">
-            <tr class="snapshots-row">
+            <tr class="border-1px">
                 <th class="snapshots-title">Snapshot Name</th>
                 <th class="snapshots-title">Net Worth</th>
             </tr>
             <c:forEach var="snapshot" items="${snapshots}">
-                <tr class="snapshots-row">
-                    <td class="snapshots-cell">
+                <tr class="border-1px bg-light-yellow">
+                    <td class="valign-top">
                         <c:if test="${snapshots.size() gt 1}">
                             <div class="delete-icon">
                                 <form method="post" action="${contextPath}/snapshot/delete/${snapshot.id}"
@@ -52,7 +52,7 @@
                         </c:if>
                         <a href="/snapshot/${snapshot.id}">${snapshot.name}</a>
                     </td>
-                    <td class="net-worth-cell"><%@ include file="_snapshot_net_worth.jsp" %></td>
+                    <td class="align-right"><%@ include file="_snapshot_net_worth.jsp" %></td>
                 </tr>
             </c:forEach>
         </table>

@@ -50,3 +50,30 @@
 .btn-myequity {
     background: blanchedalmond;
 }
+
+.valign-top {
+    vertical-align: top;
+}
+
+.align-right {
+    text-align: right;
+    padding: 0 7px 0 0;
+}
+
+.align-left {
+    text-align: left;
+    padding: 0 0 0 7px;
+}
+
+.border-1px {
+    border: 1px;
+    border-style: solid;
+}
+
+.margin-bottom {
+    margin: 0 0 7px 0;
+}
+
+.bg-light-yellow {
+    background: #fff9a1;
+}

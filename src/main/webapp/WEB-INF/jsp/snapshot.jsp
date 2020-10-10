@@ -22,7 +22,15 @@
 
 <div class="text-center">
     <%@ include file="_snapshot_name.jsp" %>
-    <%@ include file="_snapshot_net_worth.jsp" %>
+
+    <div class="center-w640">
+        <table class="full-width margin-bottom">
+            <tr class="border-1px bg-light-yellow">
+                <td class="align-left valign-top"><b>Net Worth</b></td>
+                <td class="align-right valign-top"><%@ include file="_snapshot_net_worth.jsp" %></td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 <div class="full-width">
@@ -30,22 +38,31 @@
         <div class="col" style="background: lightpink;">
             <div class="text-center">
                 <h5>Assets</h5>
-                <b>Total</b>
-                <c:choose>
-                    <c:when test="${not empty snapshot.assetsBalance}">
-                        <c:forEach items="${snapshot.assetsBalance}" var="entry">
-                            <div>
-                                ${entry.key} <span id="total_ASSET_${entry.key}">${entry.value}</span><br>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        0.00
-                    </c:otherwise>
-                </c:choose>
             </div>
-
-            <br/>
+            <c:choose>
+                <c:when test="${not empty snapshot.assetsBalance}">
+                    <c:forEach items="${snapshot.assetsBalance}" var="entry">
+                        <div class="row bg-light-yellow">
+                            <div class="col col-account-name">TOTAL ${entry.key}</div>
+                            <div class="col">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                            <div class="col col-value"><b><span id="total_ASSET_${entry.key}">${entry.value}</span></b></div>
+                        </div>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <div class="row bg-light-yellow">
+                        <div class="col col-account-name">TOTAL</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col col-value"><b>0.00</b></div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
 
             <c:choose>
                 <c:when test="${not empty simpleAssetAccounts}">
@@ -98,22 +115,34 @@
         <div class="col" style="background: lightblue;">
             <div class="text-center">
                 <h5>Liabilities</h5>
-                <b>Total</b>
-                <c:choose>
-                    <c:when test="${not empty snapshot.liabilitiesBalance}">
-                        <c:forEach items="${snapshot.liabilitiesBalance}" var="entry">
-                            <div>
-                                ${entry.key} <span id="total_LIABILITY_${entry.key}">${entry.value}</span><br>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        0.00
-                    </c:otherwise>
-                </c:choose>
             </div>
 
-            <br/>
+            <c:choose>
+                <c:when test="${not empty snapshot.liabilitiesBalance}">
+                    <c:forEach items="${snapshot.liabilitiesBalance}" var="entry">
+                        <div class="row bg-light-yellow">
+                            <div class="col col-account-name">TOTAL ${entry.key}</div>
+                            <div class="col">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                            <div class="col col-value"><b><span id="total_LIABILITY_${entry.key}">${entry.value}</span></b></div>
+                        </div>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <div class="row bg-light-yellow">
+                        <div class="col col-account-name">TOTAL</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col col-value"><b>0.00</b></div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
 
             <c:choose>
                 <c:when test="${not empty simpleLiabilityAccounts}">
