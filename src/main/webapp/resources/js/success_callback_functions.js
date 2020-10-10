@@ -16,6 +16,7 @@ function creditCardTotalCreditUpdateSuccessCallback(data, result) {
   $("#credit_card_total_credit_" + data.accountId).html(result.currencyUnitSymbol + result.totalCredit);
   $("#credit_card_used_credit_percentage_" + data.accountId).html(result.usedCreditPercentage);
   $("#credit_card_balance_" + data.accountId).html(result.currencyUnitSymbol + result.balance);
+  $("#credit_card_remaining_balance_" + data.accountId).html(result.currencyUnitSymbol + result.remainingBalance);
   $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
   $("#total_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);
 }
@@ -23,9 +24,15 @@ function creditCardTotalCreditUpdateSuccessCallback(data, result) {
 function creditCardAvailableCreditUpdateSuccessCallback(data, result) {
   $("#credit_card_available_credit_" + data.accountId).html(result.currencyUnitSymbol + result.availableCredit);
   $("#credit_card_used_credit_percentage_" + data.accountId).html(result.usedCreditPercentage);
+  $("#credit_card_remaining_balance_" + data.accountId).html(result.currencyUnitSymbol + result.remainingBalance);
   $("#credit_card_balance_" + data.accountId).html(result.currencyUnitSymbol + result.balance);
   $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
   $("#total_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);
+}
+
+function creditCardStatementUpdateSuccessCallback(data, result) {
+  $("#credit_card_statement_" + data.accountId).html(result.currencyUnitSymbol + result.statement);
+  $("#credit_card_remaining_balance_" + data.accountId).html(result.currencyUnitSymbol + result.remainingBalance);
 }
 
 function investmentSharesUpdateSuccessCallback(data, result) {

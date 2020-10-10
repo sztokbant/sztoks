@@ -53,4 +53,23 @@ public class CreditCardUpdateController extends UpdateControllerBase {
                                           CreditCardSnapshot.class,
                                           updateCreditCardAvailableCreditFunction);
     }
+
+    @PostMapping("/snapshot/updateCreditCardStatement")
+    public AccountSnapshotViewModelOutput updateCreditCardStatement(final Model model,
+                                                                    @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+        final BiFunction<AccountSnapshotUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
+                updateCreditCardStatementFunction = (jsonRequest, accountSnapshot) -> {
+            final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
+
+            final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
+            creditCardSnapshot.setStatement(newValue);
+
+            return CreditCardViewModelOutput.of(creditCardSnapshot, true);
+        };
+
+        return updateAccountSnapshotField(model,
+                                          accountSnapshotUpdateJsonRequest,
+                                          CreditCardSnapshot.class,
+                                          updateCreditCardStatementFunction);
+    }
 }

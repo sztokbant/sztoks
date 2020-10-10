@@ -39,7 +39,9 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
     static final String JSON_NET_WORTH = "netWorth";
     static final String JSON_ORIGINAL_SHARE_VALUE = "originalShareValue";
     static final String JSON_PROFIT_PERCENTAGE = "profitPercentage";
+    static final String JSON_REMAINING_BALANCE = "remainingBalance";
     static final String JSON_SHARES = "shares";
+    static final String JSON_STATEMENT = "statement";
     static final String JSON_TOTAL_CREDIT = "totalCredit";
     static final String JSON_TOTAL_FOR_ACCOUNT_TYPE = "totalForAccountType";
     static final String JSON_USED_CREDIT_PERCENTAGE = "usedCreditPercentage";

@@ -122,6 +122,8 @@
                         <div class="col col-title">&nbsp;</div>
                         <div class="col col-title">&nbsp;</div>
                         <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">&nbsp;</div>
                         <div class="col col-title">Balance</div>
                     </div>
                     <c:forEach var="account" items="${simpleLiabilityAccounts}">
@@ -135,6 +137,8 @@
                     <div class="row">
                         <div class="col col-title"><i>Payables</i></div>
                         <div class="col col-title">Due Date</div>
+                        <div class="col col-title">&nbsp;</div>
+                        <div class="col col-title">&nbsp;</div>
                         <div class="col col-title">&nbsp;</div>
                         <div class="col col-title">&nbsp;</div>
                         <div class="col col-title">Balance</div>
@@ -152,6 +156,8 @@
                         <div class="col col-title">Total Credit</div>
                         <div class="col col-title">Available Credit</div>
                         <div class="col col-title">Used Credit</div>
+                        <div class="col col-title">Statement</div>
+                        <div class="col col-title">Remaining Balance</div>
                         <div class="col col-title">Balance</div>
                     </div>
                     <c:forEach var="account" items="${creditCardAccounts}">

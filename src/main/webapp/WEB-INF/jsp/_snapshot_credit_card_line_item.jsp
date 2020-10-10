@@ -22,6 +22,15 @@ $(document).ready(function() {
     data,
     creditCardAvailableCreditUpdateSuccessCallback,
   );
+
+  prepareUpdateForm($("#form_credit_card_statement_${account.accountId}"),
+    $("#credit_card_statement_${account.accountId}"),
+    $("#new_credit_card_statement_${account.accountId}"),
+    "snapshot/updateCreditCardStatement",
+    "${account.currencyUnitSymbol}",
+    data,
+    creditCardStatementUpdateSuccessCallback,
+  );
 })
 </script>
 
@@ -48,6 +57,19 @@ $(document).ready(function() {
 
     <div class="col col-value">
         <span id="credit_card_used_credit_percentage_${account.accountId}">${account.usedCreditPercentage}</span>
+    </div>
+
+    <div class="col col-value editable-liability">
+        <form id="form_credit_card_statement_${account.accountId}">
+            <span id="credit_card_statement_${account.accountId}">${account.currencyUnitSymbol}${account.statement}</span>
+            <span><input id="new_credit_card_statement_${account.accountId}" name="amount" type="number" min="0"
+                         step="0.01" style="display: none;"/></span>
+            <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </form>
+    </div>
+
+    <div class="col col-value">
+        <span id="credit_card_remaining_balance_${account.accountId}">${account.currencyUnitSymbol}${account.remainingBalance}</span>
     </div>
 
     <div class="col col-value">

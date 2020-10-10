@@ -29,6 +29,6 @@ public class CreditCardAccount extends Account {
 
     @Override
     public AccountSnapshot newEmptySnapshot() {
-        return new CreditCardSnapshot(this, BigDecimal.ZERO, BigDecimal.ZERO);
+        return new CreditCardSnapshot(this, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
     }
 }

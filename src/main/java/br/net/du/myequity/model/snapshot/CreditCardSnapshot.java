@@ -30,12 +30,19 @@ public class CreditCardSnapshot extends AccountSnapshot {
     @Setter
     private BigDecimal availableCredit;
 
+    @Column
+    @Getter
+    @Setter
+    private BigDecimal statement;
+
     public CreditCardSnapshot(@NonNull final Account account,
                               @NonNull final BigDecimal totalCredit,
-                              @NonNull final BigDecimal availableCredit) {
+                              @NonNull final BigDecimal availableCredit,
+                              @NonNull final BigDecimal statement) {
         super(account);
         this.totalCredit = totalCredit;
         this.availableCredit = availableCredit;
+        this.statement = statement;
     }
 
     @Override
@@ -45,7 +52,7 @@ public class CreditCardSnapshot extends AccountSnapshot {
 
     @Override
     public CreditCardSnapshot copy() {
-        return new CreditCardSnapshot(account, totalCredit, availableCredit);
+        return new CreditCardSnapshot(account, totalCredit, availableCredit, statement);
     }
 
     @Override
@@ -62,7 +69,8 @@ public class CreditCardSnapshot extends AccountSnapshot {
         final CreditCardSnapshot otherCreditCardSnapshot = (CreditCardSnapshot) other;
         return account.equals(otherCreditCardSnapshot.getAccount()) &&
                 totalCredit.compareTo(otherCreditCardSnapshot.getTotalCredit()) == 0 &&
-                availableCredit.compareTo(otherCreditCardSnapshot.getAvailableCredit()) == 0;
+                availableCredit.compareTo(otherCreditCardSnapshot.getAvailableCredit()) == 0 &&
+                statement.compareTo(otherCreditCardSnapshot.getStatement()) == 0;
     }
 
     public BigDecimal getUsedCreditPercentage() {
@@ -72,5 +80,9 @@ public class CreditCardSnapshot extends AccountSnapshot {
 
         final BigDecimal oneHundred = new BigDecimal("100.00");
         return (totalCredit.subtract(availableCredit)).multiply(oneHundred).divide(totalCredit, RoundingMode.HALF_UP);
+    }
+
+    public BigDecimal getRemainingBalance() {
+        return getTotal().subtract(statement);
     }
 }

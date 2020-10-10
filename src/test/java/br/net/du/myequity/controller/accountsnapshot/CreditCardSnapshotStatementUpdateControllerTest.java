@@ -2,9 +2,7 @@ package br.net.du.myequity.controller.accountsnapshot;
 
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.account.CreditCardAccount;
-import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
-import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,42 +24,39 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjaxControllerTestBase {
+class CreditCardSnapshotStatementUpdateControllerTest extends AccountSnapshotAjaxControllerTestBase {
 
-    private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
-    private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
+    private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
+    private static final BigDecimal CURRENT_AVAILABLE_CREDIT = new BigDecimal("2100.00");
+    private static final BigDecimal CURRENT_TOTAL_CREDIT = new BigDecimal("3000.00");
+    private static final BigDecimal CURRENT_STATEMENT = new BigDecimal("400.00");
 
     @MockBean
     private AccountSnapshotRepository accountSnapshotRepository;
 
-    SimpleAssetSnapshotBalanceUpdateControllerTest() {
-        super("/snapshot/updateAccountBalance", "108.00");
+    CreditCardSnapshotStatementUpdateControllerTest() {
+        super("/snapshot/updateCreditCardStatement", "1500.00");
     }
 
     @Override
     public void createEntity() {
-        account = new SimpleAssetAccount("Savings", CURRENCY_UNIT, LocalDate.now());
+        account = new CreditCardAccount("Chase Sapphire Reserve", CURRENCY_UNIT, LocalDate.now());
         account.setId(ENTITY_ID);
     }
 
     @Test
-    public void post_accountSnapshotClassMismatch_clientError() throws Exception {
+    public void updateCreditCardStatement_happy() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-
-        account = new CreditCardAccount("Citi Double Cash", CURRENCY_UNIT, LocalDate.now());
-        account.setId(ENTITY_ID);
-
-        final CreditCardSnapshot accountSnapshot =
-                new CreditCardSnapshot(account, CURRENT_BALANCE, CURRENT_BALANCE, CURRENT_BALANCE);
-        snapshot.addAccountSnapshot(accountSnapshot);
+        final CreditCardSnapshot creditCardSnapshot =
+                new CreditCardSnapshot(account, CURRENT_TOTAL_CREDIT, CURRENT_AVAILABLE_CREDIT, CURRENT_STATEMENT);
+        snapshot.addAccountSnapshot(creditCardSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
@@ -69,35 +64,8 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
         when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
-                                                                    ENTITY_ID)).thenReturn(Optional.of(accountSnapshot));
-
-        // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
-
-        // THEN
-        resultActions.andExpect(status().is4xxClientError());
-    }
-
-    @Test
-    public void post_happy() throws Exception {
-        // GIVEN
-        when(userService.findByEmail(user.getEmail())).thenReturn(user);
-
-        snapshot.setUser(user);
-        final SimpleAssetSnapshot accountSnapshot = new SimpleAssetSnapshot(account, CURRENT_BALANCE);
-        snapshot.addAccountSnapshot(accountSnapshot);
-
-        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
-
-        account.setUser(user);
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
-
-        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
-                                                                    ENTITY_ID)).thenReturn(Optional.of(accountSnapshot));
+                                                                    ENTITY_ID)).thenReturn(Optional.of(
+                creditCardSnapshot));
 
         // WHEN
         final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
@@ -115,10 +83,27 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
         assertNotNull(resultContentAsString);
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertEquals(newValue, jsonNode.get(JSON_BALANCE).asText());
+
+        assertEquals(CURRENT_TOTAL_CREDIT.toString(), jsonNode.get(JSON_TOTAL_CREDIT).asText());
+        assertEquals(CURRENT_AVAILABLE_CREDIT.toString(), jsonNode.get(JSON_AVAILABLE_CREDIT).asText());
+
+        final String expectedUsedCreditPercentage = "30.00%";
+        assertEquals(expectedUsedCreditPercentage, jsonNode.get(JSON_USED_CREDIT_PERCENTAGE).asText());
+
+        final BigDecimal expectedAccountBalance = CURRENT_TOTAL_CREDIT.subtract(CURRENT_AVAILABLE_CREDIT);
+        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_BALANCE).asText());
+
+        final BigDecimal expectedCurrentStatement = new BigDecimal(newValue);
+        assertEquals(expectedCurrentStatement.toString(), jsonNode.get(JSON_STATEMENT).asText());
+
+        final String expectedRemainingBalance =
+                CURRENT_TOTAL_CREDIT.subtract(CURRENT_AVAILABLE_CREDIT).subtract(expectedCurrentStatement).toString();
+        assertEquals(expectedRemainingBalance, jsonNode.get(JSON_REMAINING_BALANCE).asText());
+
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
-        assertEquals(new BigDecimal(newValue).toString(), jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
+        assertEquals(expectedAccountBalance.negate().toString(), jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals(new BigDecimal(newValue).toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertEquals(expectedAccountBalance.negate().toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
     }
 }

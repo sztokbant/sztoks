@@ -46,8 +46,10 @@ public class SnapshotServiceTest {
 
     private static final Account CREDIT_CARD_ACCOUNT =
             new CreditCardAccount("Chase Sapphire Reserve", CurrencyUnit.USD, LocalDate.now());
-    private static final AccountSnapshot CREDIT_CARD_SNAPSHOT =
-            new CreditCardSnapshot(CREDIT_CARD_ACCOUNT, new BigDecimal("10000.00"), new BigDecimal("9500.00"));
+    private static final AccountSnapshot CREDIT_CARD_SNAPSHOT = new CreditCardSnapshot(CREDIT_CARD_ACCOUNT,
+                                                                                       new BigDecimal("10000.00"),
+                                                                                       new BigDecimal("9500.00"),
+                                                                                       new BigDecimal("1000.00"));
 
     private static final Account INVESTMENT_ACCOUNT = new CreditCardAccount("AMZN", CurrencyUnit.USD, LocalDate.now());
     private static final AccountSnapshot INVESTMENT_SNAPSHOT = new InvestmentSnapshot(INVESTMENT_ACCOUNT,

@@ -33,6 +33,7 @@ class CreditCardSnapshotAvailableCreditUpdateControllerTest extends AccountSnaps
     private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
     private static final BigDecimal CURRENT_AVAILABLE_CREDIT = new BigDecimal("2100.00");
     private static final BigDecimal CURRENT_TOTAL_CREDIT = new BigDecimal("3000.00");
+    private static final BigDecimal CURRENT_STATEMENT = new BigDecimal("400.00");
 
     @MockBean
     private AccountSnapshotRepository accountSnapshotRepository;
@@ -54,7 +55,7 @@ class CreditCardSnapshotAvailableCreditUpdateControllerTest extends AccountSnaps
 
         snapshot.setUser(user);
         final CreditCardSnapshot creditCardSnapshot =
-                new CreditCardSnapshot(account, CURRENT_TOTAL_CREDIT, CURRENT_AVAILABLE_CREDIT);
+                new CreditCardSnapshot(account, CURRENT_TOTAL_CREDIT, CURRENT_AVAILABLE_CREDIT, CURRENT_STATEMENT);
         snapshot.addAccountSnapshot(creditCardSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
@@ -83,13 +84,20 @@ class CreditCardSnapshotAvailableCreditUpdateControllerTest extends AccountSnaps
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
+        assertEquals(CURRENT_TOTAL_CREDIT.toString(), jsonNode.get(JSON_TOTAL_CREDIT).asText());
         assertEquals(newValue, jsonNode.get(JSON_AVAILABLE_CREDIT).asText());
 
-        final String expectedCreditUsedPercentage = "3.33%";
-        assertEquals(expectedCreditUsedPercentage, jsonNode.get(JSON_USED_CREDIT_PERCENTAGE).asText());
+        final String expectedUsedCreditPercentage = "3.33%";
+        assertEquals(expectedUsedCreditPercentage, jsonNode.get(JSON_USED_CREDIT_PERCENTAGE).asText());
 
         final BigDecimal expectedAccountBalance = CURRENT_TOTAL_CREDIT.subtract(new BigDecimal(newValue));
         assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_BALANCE).asText());
+
+        assertEquals(CURRENT_STATEMENT.toString(), jsonNode.get(JSON_STATEMENT).asText());
+
+        final String remainingBalance =
+                CURRENT_TOTAL_CREDIT.subtract(new BigDecimal(newValue)).subtract(CURRENT_STATEMENT).toString();
+        assertEquals(remainingBalance, jsonNode.get(JSON_REMAINING_BALANCE).asText());
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
