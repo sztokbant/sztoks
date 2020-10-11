@@ -4,7 +4,6 @@ import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 import org.joda.money.CurrencyUnit;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
@@ -18,8 +17,6 @@ public class CreditCardTotalsViewModelOutput {
     private static final String ZERO = "0.00";
     private static final String ZERO_PERCENT = "0.00%";
 
-    private final String name;
-
     private final String balance;
     private final String currencyUnit;
     private final String currencyUnitSymbol;
@@ -31,8 +28,6 @@ public class CreditCardTotalsViewModelOutput {
     private final String usedCreditPercentage;
 
     public static CreditCardTotalsViewModelOutput of(final CreditCardSnapshot creditCardSnapshot) {
-        final String name = creditCardSnapshot.getAccount().getName();
-
         final String balance = formatAsDecimal(creditCardSnapshot.getTotal());
         final String currencyUnit = creditCardSnapshot.getAccount().getCurrencyUnit().getCode();
         final String currencyUnitSymbol = creditCardSnapshot.getAccount().getCurrencyUnit().getSymbol();
@@ -43,8 +38,7 @@ public class CreditCardTotalsViewModelOutput {
         final String remainingBalance = formatAsDecimal(creditCardSnapshot.getRemainingBalance());
         final String usedCreditPercentage = formatAsPercentage(creditCardSnapshot.getUsedCreditPercentage());
 
-        return new CreditCardTotalsViewModelOutput(name,
-                                                   balance,
+        return new CreditCardTotalsViewModelOutput(balance,
                                                    currencyUnit,
                                                    currencyUnitSymbol,
                                                    totalCredit,
@@ -56,7 +50,6 @@ public class CreditCardTotalsViewModelOutput {
 
     public static CreditCardTotalsViewModelOutput newEmptyInstance(final CurrencyUnit currencyUnit) {
         return CreditCardTotalsViewModelOutput.builder()
-                                              .name(StringUtils.EMPTY)
                                               .balance(ZERO)
                                               .currencyUnit(currencyUnit.getCode())
                                               .currencyUnitSymbol(currencyUnit.getSymbol())
