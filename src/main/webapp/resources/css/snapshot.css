@@ -2,3 +2,8 @@
     font-weight: bold;
     background: lightgray;
 }
+
+.border-1px-bottom {
+    border: 1px;
+    border-bottom-style: solid;
+}

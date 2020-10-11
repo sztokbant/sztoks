@@ -1,7 +1,7 @@
 <c:if test="${snapshot.nextId ne null || snapshot.previousId ne null}">
     <div class="navigation-buttons-padding-bottom">
         <c:if test="${snapshot.previousId ne null}">
-            <a class="btn btn-myequity" href="${contextPath}/snapshot/${snapshot.previousId}">&#x23EA;&nbsp;${snapshot.previousName}</a>
+            <a class="btn btn-myequity" href="${contextPath}/snapshot/${snapshot.previousId}">&#x23EA;&nbsp;&nbsp;${snapshot.previousName}</a>
         </c:if>
         <c:if test="${snapshot.nextId ne null}">
             <a class="btn btn-myequity"

@@ -34,10 +34,10 @@ $(document).ready(function() {
 })
 </script>
 
-<div class="row" id="account_row_${account.accountId}">
+<div class="row border-1px-bottom" id="account_row_${account.accountId}">
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
-    <div class="col align-right editable-liability">
+    <div class="col col-cell align-right editable-liability">
         <form id="form_credit_card_total_credit_${account.accountId}">
             <span id="credit_card_total_credit_${account.accountId}">${account.currencyUnitSymbol}${account.totalCredit}</span>
             <span><input id="new_credit_card_total_credit_${account.accountId}" name="amount" type="number" min="0"
@@ -46,7 +46,7 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col align-right editable-liability">
+    <div class="col col-cell align-right editable-liability">
         <form id="form_credit_card_available_credit_${account.accountId}">
             <span id="credit_card_available_credit_${account.accountId}">${account.currencyUnitSymbol}${account.availableCredit}</span>
             <span><input id="new_credit_card_available_credit_${account.accountId}" name="amount" type="number" min="0"
@@ -55,11 +55,11 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col align-right">
+    <div class="col col-cell align-right">
         <span id="credit_card_used_credit_percentage_${account.accountId}">${account.usedCreditPercentage}</span>
     </div>
 
-    <div class="col align-right editable-liability">
+    <div class="col col-cell align-right editable-liability">
         <form id="form_credit_card_statement_${account.accountId}">
             <span id="credit_card_statement_${account.accountId}">${account.currencyUnitSymbol}${account.statement}</span>
             <span><input id="new_credit_card_statement_${account.accountId}" name="amount" type="number" min="0"
@@ -68,11 +68,11 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col align-right">
+    <div class="col col-cell align-right">
         <span id="credit_card_remaining_balance_${account.accountId}">${account.currencyUnitSymbol}${account.remainingBalance}</span>
     </div>
 
-    <div class="col align-right">
+    <div class="col col-cell align-right">
         <span id="credit_card_balance_${account.accountId}">${account.currencyUnitSymbol}${account.balance}</span>
     </div>
 </div>

@@ -25,10 +25,10 @@ $(document).ready(function() {
 })
 </script>
 
-<div class="row" id="account_row_${account.accountId}">
+<div class="row border-1px-bottom" id="account_row_${account.accountId}">
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
-    <div class="col align-right editable-liability">
+    <div class="col col-cell align-right editable-liability">
         <form id="form_payable_due_date_${account.accountId}">
             <span id="payable_due_date_${account.accountId}">${account.dueDate}</span>
             <span><input id="new_payable_due_date_${account.accountId}" name="amount" type="text" style="display: none;"/></span>
@@ -36,23 +36,23 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col">
+    <div class="col col-cell">
         &nbsp;
     </div>
 
-    <div class="col">
+    <div class="col col-cell">
         &nbsp;
     </div>
 
-    <div class="col">
+    <div class="col col-cell">
         &nbsp;
     </div>
 
-    <div class="col">
+    <div class="col col-cell">
         &nbsp;
     </div>
 
-    <div class="col align-right editable-liability">
+    <div class="col col-cell align-right editable-liability">
         <form id="form_account_balance_${account.accountId}">
             <span id="account_balance_${account.accountId}">${account.currencyUnitSymbol}${account.balance}</span>
             <span><input id="new_account_balance_${account.accountId}" name="amount" type="number" min="0"

@@ -2,6 +2,10 @@
     font-size: 12px;
 }
 
+.col-cell {
+    padding: 2px 3px 2px 3px;
+}
+
 .col-title {
     background: #777;
     color: #ddd;
