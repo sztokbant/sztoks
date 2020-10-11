@@ -6,10 +6,10 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, c
   });
 
   newValueInput.focusout(function() {
-    var currentValue = currentValueSpan.text();
+    var currentValueNoCurrencySymbol = stripCurrencySymbol(currentValueSpan, currencyUnitSymbol);
     var newValue = newValueInput.val();
 
-    if (newValue && newValue.trim() != "" && newValue.trim() != currentValue) {
+    if (newValue && newValue.trim() != "" && newValue.trim() != currentValueNoCurrencySymbol) {
       data.newValue = newValue.trim();
       ajaxPost(endpoint, data, successCallback);
     }
@@ -19,11 +19,16 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, c
   });
 
   currentValueSpan.click(function() {
+    var currentValueNoCurrencySymbol = stripCurrencySymbol(currentValueSpan, currencyUnitSymbol);
     currentValueSpan.hide();
-    newValueInput.val(currentValueSpan.text().replace(currencyUnitSymbol, ''));
+    newValueInput.val(currentValueNoCurrencySymbol);
     newValueInput.show();
     newValueInput.focus();
   });
+}
+
+function stripCurrencySymbol(currentValueSpan, currencyUnitSymbol) {
+  return currentValueSpan.text().replace(currencyUnitSymbol, '').trim();
 }
 
 function ajaxPost(endpoint, data, successCallback) {
