@@ -27,8 +27,13 @@ public class SnapshotService {
         final Snapshot newSnapshot = new Snapshot(currentSnapshot.getIndex() + 1,
                                                   LocalDate.now().toString(),
                                                   currentSnapshot.getAccountSnapshots());
+
+        currentSnapshot.setNext(newSnapshot);
+        newSnapshot.setPrevious(currentSnapshot);
+
         user.addSnapshot(newSnapshot);
 
+        snapshotRepository.save(currentSnapshot);
         snapshotRepository.save(newSnapshot);
 
         return newSnapshot;
@@ -44,6 +49,22 @@ public class SnapshotService {
         for (final AccountSnapshot accountSnapshot : snapshot.getAccountSnapshots()) {
             snapshot.removeAccountSnapshot(accountSnapshot);
         }
+
+        final Snapshot next = snapshot.getNext();
+        final Snapshot previous = snapshot.getPrevious();
+
+        if (next != null) {
+            next.setPrevious(previous);
+            snapshotRepository.save(next);
+        }
+
+        if (previous != null) {
+            previous.setNext(next);
+            snapshotRepository.save(previous);
+        }
+
+        snapshot.setNext(null);
+        snapshot.setPrevious(null);
 
         user.removeSnapshot(snapshot);
 

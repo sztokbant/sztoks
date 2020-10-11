@@ -23,14 +23,12 @@
 <div class="full-width">
     <div class="text-center"><h4>Snapshots</h4></div>
 
-    <div class="text-center">
+    <div class="navigation-buttons-padding-bottom">
         <form method="post" action="${contextPath}/snapshot/new">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             <input type="submit" class="btn btn-myequity" value="&#x2795;  Snapshot"/>
         </form>
     </div>
-
-    <br/>
 
     <div class="center-w640">
         <table class="full-width">
@@ -62,11 +60,9 @@
 
     <h4 class="text-center">Accounts</h4>
 
-    <div class="text-center">
+    <div class="navigation-buttons-padding-bottom">
         <a class="btn btn-myequity" href="${contextPath}/newaccount">&#x2795;&nbsp; Account</a>
     </div>
-
-    <br/>
 
     <div class="center-w640">
         <div class="row">

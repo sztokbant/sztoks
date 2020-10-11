@@ -21,8 +21,30 @@ public class SnapshotViewModelOutput {
     private final Map<CurrencyUnit, BigDecimal> liabilitiesBalance;
     private final Map<String, CreditCardTotalsViewModelOutput> creditCardTotals;
 
+    private final Long previousId;
+    private final String previousName;
+
+    private final Long nextId;
+    private final String nextName;
+
     public static SnapshotViewModelOutput of(final Snapshot snapshot) {
         final Map<CurrencyUnit, CreditCardSnapshot> creditCardTotals = snapshot.getCreditCardTotals();
+
+        Long previousId = null;
+        String previousName = null;
+        final Snapshot previous = snapshot.getPrevious();
+        if (previous != null) {
+            previousId = previous.getId();
+            previousName = previous.getName();
+        }
+
+        Long nextId = null;
+        String nextName = null;
+        final Snapshot next = snapshot.getNext();
+        if (next != null) {
+            nextId = next.getId();
+            nextName = next.getName();
+        }
 
         return SnapshotViewModelOutput.builder()
                                       .id(snapshot.getId())
@@ -31,6 +53,10 @@ public class SnapshotViewModelOutput {
                                       .assetsBalance(snapshot.getTotalForAccountType(AccountType.ASSET))
                                       .liabilitiesBalance(snapshot.getTotalForAccountType(AccountType.LIABILITY))
                                       .creditCardTotals(getCurrencyUnitCreditCardViewModels(creditCardTotals))
+                                      .previousId(previousId)
+                                      .previousName(previousName)
+                                      .nextId(nextId)
+                                      .nextName(nextName)
                                       .build();
     }
 

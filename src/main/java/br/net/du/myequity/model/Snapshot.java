@@ -22,8 +22,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.math.BigDecimal;
@@ -61,6 +63,18 @@ public class Snapshot implements Comparable<Snapshot> {
     @Getter
     @Setter
     private Long index;
+
+    @OneToOne
+    @JoinColumn(name="previous_id", nullable = true)
+    @Getter
+    @Setter
+    private Snapshot previous;
+
+    @OneToOne
+    @JoinColumn(name="next_id", nullable = true)
+    @Getter
+    @Setter
+    private Snapshot next;
 
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural // Ref.: https://thorben-janssen.com/ordering-vs-sorting-hibernate-use/

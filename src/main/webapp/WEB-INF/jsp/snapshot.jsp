@@ -34,6 +34,8 @@
     </div>
 </div>
 
+<%@ include file="_snapshot_buttons.jsp" %>
+
 <div class="full-width">
     <div class="row">
         <div class="col" style="background: lightpink;">
@@ -205,9 +207,7 @@
         </div>
     </div>
 
-    <br/>
-
-    <div class="text-center">
+    <div class="navigation-buttons-padding-top">
         <a class="btn btn-myequity" href="${contextPath}/snapshot/addAccounts/${snapshot.id}">Add Accounts to Snapshot</a>
     </div>
 

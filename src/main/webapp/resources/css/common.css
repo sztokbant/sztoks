@@ -77,3 +77,13 @@
 .bg-light-yellow {
     background: #fff9a1;
 }
+
+.navigation-buttons-padding-bottom {
+    text-align: center;
+    padding: 0 0 7px 0;
+}
+
+.navigation-buttons-padding-top {
+    text-align: center;
+    padding: 7px 0 0 0;
+}
