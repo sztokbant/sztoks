@@ -11,8 +11,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 public class MoneyFormatUtils {
-    private static final MoneyFormatter BRL_FORMATTER = new MoneyFormatterBuilder().appendCurrencySymbolLocalized()
-                                                                                   .appendLiteral(" ")
+    private static final MoneyFormatter BRL_FORMATTER = new MoneyFormatterBuilder().appendLiteral("R$ ")
                                                                                    .appendAmount(MoneyAmountStyle.ASCII_DECIMAL_POINT_GROUP3_COMMA)
                                                                                    .toFormatter();
 
