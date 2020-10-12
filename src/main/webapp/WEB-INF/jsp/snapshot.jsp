@@ -21,20 +21,39 @@
 
 <%@ include file="_header.jsp" %>
 
-<div class="text-center">
-    <%@ include file="_snapshot_name.jsp" %>
+<div class="full-width">
+    <div class="row">
+        <div class="col">
+            <div class="left-button">
+                <c:if test="${snapshot.previousId ne null}">
+                    <a class="btn btn-myequity" href="${contextPath}/snapshot/${snapshot.previousId}">&#x23EA;&nbsp;&nbsp;${snapshot.previousName}</a>
+                </c:if>
+            </div>
+        </div>
 
-    <div class="center-w640">
-        <table class="full-width margin-bottom">
-            <tr class="border-1px bg-light-yellow">
-                <td class="align-left-p7 valign-top"><b>Net Worth</b></td>
-                <td class="align-right-p7 valign-top"><%@ include file="_snapshot_net_worth.jsp" %></td>
-            </tr>
-        </table>
+        <div class="col">
+            <div class="text-center snapshot-header">
+                <%@ include file="_snapshot_name.jsp" %>
+
+                <table class="full-width">
+                    <tr class="border-1px bg-light-yellow">
+                        <td class="align-left-p7 valign-top"><b>NET WORTH</b></td>
+                        <td class="align-right-p7 valign-top"><%@ include file="_snapshot_net_worth.jsp" %></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="right-button">
+                <c:if test="${snapshot.nextId ne null}">
+                    <a class="btn btn-myequity"
+                       href="${contextPath}/snapshot/${snapshot.nextId}">${snapshot.nextName}&nbsp;&#x23E9;</a>
+                </c:if>
+            </div>
+        </div>
     </div>
 </div>
-
-<%@ include file="_snapshot_buttons.jsp" %>
 
 <div class="full-width">
     <div class="row">

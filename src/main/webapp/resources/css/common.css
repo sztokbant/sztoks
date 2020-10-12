@@ -1,8 +1,5 @@
-.col {
-    font-size: 12px;
-}
-
 .col-cell {
+    font-size: 12px;
     padding: 2px 3px 2px 3px;
 }
 
@@ -72,10 +69,6 @@
 .border-1px {
     border: 1px;
     border-style: solid;
-}
-
-.margin-bottom {
-    margin: 0 0 7px 0;
 }
 
 .bg-light-yellow {

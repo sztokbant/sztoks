@@ -7,3 +7,17 @@
     border: 1px;
     border-bottom-style: solid;
 }
+
+.left-button {
+    float: left;
+    margin: -5px 0 5px -15px;
+}
+
+.right-button {
+    float: right;
+    margin: -5px -15px 5px 0;
+}
+
+.snapshot-header {
+    margin: -11px 0 5px 0;
+}
