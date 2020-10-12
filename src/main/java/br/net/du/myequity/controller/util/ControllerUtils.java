@@ -50,6 +50,10 @@ public class ControllerUtils {
         if (value == null) {
             value = BigDecimal.ZERO;
         }
-        return new BigDecimal(DECIMAL_FORMAT.format(value.setScale(2, RoundingMode.HALF_UP))).toString();
+        return toDecimal(value).toString();
+    }
+
+    public static BigDecimal toDecimal(final BigDecimal value) {
+        return new BigDecimal(DECIMAL_FORMAT.format(value.setScale(2, RoundingMode.HALF_UP)));
     }
 }

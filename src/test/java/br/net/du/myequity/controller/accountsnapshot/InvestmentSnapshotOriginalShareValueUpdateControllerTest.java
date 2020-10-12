@@ -84,13 +84,13 @@ class InvestmentSnapshotOriginalShareValueUpdateControllerTest extends AccountSn
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
-        assertEquals(newValue, jsonNode.get(JSON_ORIGINAL_SHARE_VALUE).asText());
+        assertEquals("R$ 2,000.00", jsonNode.get(JSON_ORIGINAL_SHARE_VALUE).asText());
 
         final String expectedProfitPercentage = "100.00%";
         assertEquals(expectedProfitPercentage, jsonNode.get(JSON_PROFIT_PERCENTAGE).asText());
 
         final BigDecimal expectedAccountBalance = CURRENT_SHARES.multiply(CURRENT_CURRENT_SHARE_VALUE).setScale(2);
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_BALANCE).asText());
+        assertEquals("R$ 60,000.00", jsonNode.get(JSON_BALANCE).asText());
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());

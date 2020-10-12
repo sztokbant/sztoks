@@ -1,13 +1,16 @@
 package br.net.du.myequity.controller.viewmodel.accountsnapshot;
 
+import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
 import lombok.Getter;
+import org.joda.money.CurrencyUnit;
 
 import java.math.BigDecimal;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
+import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 
 @Getter
 public class InvestmentViewModelOutput extends AccountSnapshotViewModelOutput {
@@ -32,10 +35,15 @@ public class InvestmentViewModelOutput extends AccountSnapshotViewModelOutput {
         final InvestmentSnapshot investmentSnapshot = (InvestmentSnapshot) accountSnapshot;
 
         final String shares = new BigDecimal(formatAsDecimal(investmentSnapshot.getShares())).toString();
+
+        final CurrencyUnit currencyUnit = accountSnapshot.getAccount().getCurrencyUnit();
+
         final String originalShareValue =
-                new BigDecimal(formatAsDecimal(investmentSnapshot.getOriginalShareValue())).toString();
+                MoneyFormatUtils.format(currencyUnit, toDecimal(investmentSnapshot.getOriginalShareValue()));
+
         final String currentShareValue =
-                new BigDecimal(formatAsDecimal(investmentSnapshot.getCurrentShareValue())).toString();
+                MoneyFormatUtils.format(currencyUnit, toDecimal((investmentSnapshot.getCurrentShareValue())));
+
         final String profitPercentage = formatAsPercentage(investmentSnapshot.getProfitPercentage());
 
         return new InvestmentViewModelOutput(AccountSnapshotViewModelOutput.of(accountSnapshot, includeTotals),

@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller.viewmodel;
 
+import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
@@ -16,9 +17,9 @@ import java.util.Map;
 public class SnapshotViewModelOutput {
     private final Long id;
     private final String name;
-    private final Map<CurrencyUnit, BigDecimal> netWorth;
-    private final Map<CurrencyUnit, BigDecimal> assetsBalance;
-    private final Map<CurrencyUnit, BigDecimal> liabilitiesBalance;
+    private final Map<CurrencyUnit, String> netWorth;
+    private final Map<CurrencyUnit, String> assetsBalance;
+    private final Map<CurrencyUnit, String> liabilitiesBalance;
     private final Map<String, CreditCardTotalsViewModelOutput> creditCardTotals;
 
     private final Long previousId;
@@ -49,15 +50,25 @@ public class SnapshotViewModelOutput {
         return SnapshotViewModelOutput.builder()
                                       .id(snapshot.getId())
                                       .name(snapshot.getName())
-                                      .netWorth(snapshot.getNetWorth())
-                                      .assetsBalance(snapshot.getTotalForAccountType(AccountType.ASSET))
-                                      .liabilitiesBalance(snapshot.getTotalForAccountType(AccountType.LIABILITY))
+                                      .netWorth(formatForCurrency(snapshot.getNetWorth()))
+                                      .assetsBalance(formatForCurrency(snapshot.getTotalForAccountType(AccountType.ASSET)))
+                                      .liabilitiesBalance(formatForCurrency(snapshot.getTotalForAccountType(AccountType.LIABILITY)))
                                       .creditCardTotals(getCurrencyUnitCreditCardViewModels(creditCardTotals))
                                       .previousId(previousId)
                                       .previousName(previousName)
                                       .nextId(nextId)
                                       .nextName(nextName)
                                       .build();
+    }
+
+    private static Map<CurrencyUnit, String> formatForCurrency(final Map<CurrencyUnit, BigDecimal> input) {
+        final Map<CurrencyUnit, String> formattedForCurrency = new HashMap<>();
+
+        for (final CurrencyUnit currencyUnit : input.keySet()) {
+            formattedForCurrency.put(currencyUnit, MoneyFormatUtils.format(currencyUnit, input.get(currencyUnit)));
+        }
+
+        return formattedForCurrency;
     }
 
     public static Map<String, CreditCardTotalsViewModelOutput> getCurrencyUnitCreditCardViewModels(final Map<CurrencyUnit, CreditCardSnapshot> creditCardTotals) {

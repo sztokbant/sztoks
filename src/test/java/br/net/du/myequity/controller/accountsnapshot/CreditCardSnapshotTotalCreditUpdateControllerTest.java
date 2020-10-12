@@ -84,25 +84,23 @@ class CreditCardSnapshotTotalCreditUpdateControllerTest extends AccountSnapshotA
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
-        assertEquals(newValue, jsonNode.get(JSON_TOTAL_CREDIT).asText());
-        assertEquals(CURRENT_AVAILABLE_CREDIT.toString(), jsonNode.get(JSON_AVAILABLE_CREDIT).asText());
+        assertEquals("R$ 7,000.00", jsonNode.get(JSON_TOTAL_CREDIT).asText());
+        assertEquals("R$ 2,100.00", jsonNode.get(JSON_AVAILABLE_CREDIT).asText());
 
         final String expectedUsedCreditPercentage = "70.00%";
         assertEquals(expectedUsedCreditPercentage, jsonNode.get(JSON_USED_CREDIT_PERCENTAGE).asText());
 
-        final BigDecimal expectedAccountBalance = new BigDecimal(newValue).subtract(CURRENT_AVAILABLE_CREDIT);
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_BALANCE).asText());
+        final String expectedAccountBalance = "R$ 4,900.00";
+        assertEquals(expectedAccountBalance, jsonNode.get(JSON_BALANCE).asText());
 
-        assertEquals(CURRENT_STATEMENT.toString(), jsonNode.get(JSON_STATEMENT).asText());
+        assertEquals("R$ 400.00", jsonNode.get(JSON_STATEMENT).asText());
 
-        final String remainingBalance =
-                (new BigDecimal(newValue)).subtract(CURRENT_AVAILABLE_CREDIT).subtract(CURRENT_STATEMENT).toString();
-        assertEquals(remainingBalance, jsonNode.get(JSON_REMAINING_BALANCE).asText());
+        assertEquals("R$ 4,500.00", jsonNode.get(JSON_REMAINING_BALANCE).asText());
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
-        assertEquals(expectedAccountBalance.negate().toString(), jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals("R$ -4,900.00", jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals(expectedAccountBalance.negate().toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertEquals("R$ -4,900.00", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
     }
 }

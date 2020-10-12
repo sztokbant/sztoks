@@ -48,7 +48,7 @@ $(document).ready(function() {
 
     <div class="col col-cell align-right editable-asset">
         <form id="form_investment_original_share_value_${account.accountId}">
-            <span id="investment_original_share_value_${account.accountId}">${account.currencyUnitSymbol}${account.originalShareValue}</span>
+            <span id="investment_original_share_value_${account.accountId}">${account.originalShareValue}</span>
             <span><input id="new_investment_original_share_value_${account.accountId}" name="amount" type="number" min="0"
                          step="0.01" style="display: none;"/></span>
             <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -57,7 +57,7 @@ $(document).ready(function() {
 
     <div class="col col-cell align-right editable-asset">
         <form id="form_investment_current_share_value_${account.accountId}">
-            <span id="investment_current_share_value_${account.accountId}">${account.currencyUnitSymbol}${account.currentShareValue}</span>
+            <span id="investment_current_share_value_${account.accountId}">${account.currentShareValue}</span>
             <span><input id="new_investment_current_share_value_${account.accountId}" name="amount" type="number" min="0"
                          step="0.01" style="display: none;"/></span>
             <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -69,6 +69,6 @@ $(document).ready(function() {
     </div>
 
     <div class="col col-cell align-right">
-        <span id="investment_balance_${account.accountId}">${account.currencyUnitSymbol}${account.balance}</span>
+        <span id="investment_balance_${account.accountId}">${account.balance}</span>
     </div>
 </div>

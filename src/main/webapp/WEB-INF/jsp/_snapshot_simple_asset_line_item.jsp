@@ -37,7 +37,7 @@ $(document).ready(function() {
 
     <div class="col col-cell align-right editable-asset">
         <form id="form_account_balance_${account.accountId}">
-            <span id="account_balance_${account.accountId}">${account.currencyUnitSymbol}${account.balance}</span>
+            <span id="account_balance_${account.accountId}">${account.balance}</span>
             <span><input id="new_account_balance_${account.accountId}" name="amount" type="number" min="0"
                          step="0.01" style="display: none;"/></span>
             <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>

@@ -39,7 +39,7 @@ $(document).ready(function() {
 
     <div class="col col-cell align-right editable-liability">
         <form id="form_credit_card_total_credit_${account.accountId}">
-            <span id="credit_card_total_credit_${account.accountId}">${account.currencyUnitSymbol}${account.totalCredit}</span>
+            <span id="credit_card_total_credit_${account.accountId}">${account.totalCredit}</span>
             <span><input id="new_credit_card_total_credit_${account.accountId}" name="amount" type="number" min="0"
                          step="0.01" style="display: none;"/></span>
             <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -48,7 +48,7 @@ $(document).ready(function() {
 
     <div class="col col-cell align-right editable-liability">
         <form id="form_credit_card_available_credit_${account.accountId}">
-            <span id="credit_card_available_credit_${account.accountId}">${account.currencyUnitSymbol}${account.availableCredit}</span>
+            <span id="credit_card_available_credit_${account.accountId}">${account.availableCredit}</span>
             <span><input id="new_credit_card_available_credit_${account.accountId}" name="amount" type="number" min="0"
                          step="0.01" style="display: none;"/></span>
             <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -61,7 +61,7 @@ $(document).ready(function() {
 
     <div class="col col-cell align-right editable-liability">
         <form id="form_credit_card_statement_${account.accountId}">
-            <span id="credit_card_statement_${account.accountId}">${account.currencyUnitSymbol}${account.statement}</span>
+            <span id="credit_card_statement_${account.accountId}">${account.statement}</span>
             <span><input id="new_credit_card_statement_${account.accountId}" name="amount" type="number" min="0"
                          step="0.01" style="display: none;"/></span>
             <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -69,10 +69,10 @@ $(document).ready(function() {
     </div>
 
     <div class="col col-cell align-right">
-        <span id="credit_card_remaining_balance_${account.accountId}">${account.currencyUnitSymbol}${account.remainingBalance}</span>
+        <span id="credit_card_remaining_balance_${account.accountId}">${account.remainingBalance}</span>
     </div>
 
     <div class="col col-cell align-right">
-        <span id="credit_card_balance_${account.accountId}">${account.currencyUnitSymbol}${account.balance}</span>
+        <span id="credit_card_balance_${account.accountId}">${account.balance}</span>
     </div>
 </div>

@@ -88,14 +88,13 @@ class InvestmentSnapshotSharesUpdateControllerTest extends AccountSnapshotAjaxCo
 
         assertEquals(newValue, jsonNode.get(JSON_SHARES).asText());
 
-        final BigDecimal expectedAccountBalance =
-                new BigDecimal(newValue).multiply(CURRENT_CURRENT_SHARE_VALUE).setScale(2);
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_BALANCE).asText());
+        final String expectedAccountBalance = "R$ 315,000.00";
+        assertEquals(expectedAccountBalance, jsonNode.get(JSON_BALANCE).asText());
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals(expectedAccountBalance, jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertEquals(expectedAccountBalance, jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
     }
 }

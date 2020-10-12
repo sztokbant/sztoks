@@ -86,18 +86,18 @@ class InvestmentSnapshotCurrentShareValueUpdateControllerTest extends AccountSna
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
-        assertEquals(newValue, jsonNode.get(JSON_CURRENT_SHARE_VALUE).asText());
+        assertEquals("R$ 4,500.00", jsonNode.get(JSON_CURRENT_SHARE_VALUE).asText());
 
         final String expectedProfitPercentage = "200.00%";
         assertEquals(expectedProfitPercentage, jsonNode.get(JSON_PROFIT_PERCENTAGE).asText());
 
-        final BigDecimal expectedAccountBalance = CURRENT_SHARES.multiply(new BigDecimal(newValue)).setScale(2);
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_BALANCE).asText());
+        final String expectedAccountBalance = "R$ 67,500.00";
+        assertEquals(expectedAccountBalance, jsonNode.get(JSON_BALANCE).asText());
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals(expectedAccountBalance, jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals(expectedAccountBalance.toString(), jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertEquals(expectedAccountBalance, jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
     }
 }

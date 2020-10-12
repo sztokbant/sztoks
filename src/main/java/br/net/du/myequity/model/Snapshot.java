@@ -65,13 +65,13 @@ public class Snapshot implements Comparable<Snapshot> {
     private Long index;
 
     @OneToOne
-    @JoinColumn(name="previous_id", nullable = true)
+    @JoinColumn(name = "previous_id", nullable = true)
     @Getter
     @Setter
     private Snapshot previous;
 
     @OneToOne
-    @JoinColumn(name="next_id", nullable = true)
+    @JoinColumn(name = "next_id", nullable = true)
     @Getter
     @Setter
     private Snapshot next;

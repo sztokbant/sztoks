@@ -1,17 +1,16 @@
 package br.net.du.myequity.controller.viewmodel.accountsnapshot;
 
-import br.net.du.myequity.controller.viewmodel.CreditCardTotalsViewModelOutput;
+import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.joda.money.CurrencyUnit;
 
-import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
+import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 
 @AllArgsConstructor
 @Data
@@ -48,20 +47,22 @@ public class AccountSnapshotViewModelOutput implements Comparable<AccountSnapsho
         final Snapshot snapshot = accountSnapshot.getSnapshot();
         final CurrencyUnit currencyUnit = accountSnapshot.getAccount().getCurrencyUnit();
 
+        final String balance = MoneyFormatUtils.format(currencyUnit, toDecimal(accountSnapshot.getTotal()));
         final AccountSnapshotViewModelOutputBuilder builder = AccountSnapshotViewModelOutput.builder()
                                                                                             .accountId(account.getId())
                                                                                             .name(account.getName())
-                                                                                            .balance(formatAsDecimal(
-                                                                                                    accountSnapshot.getTotal()))
+                                                                                            .balance(balance)
                                                                                             .currencyUnit(currencyUnit.getCode())
                                                                                             .currencyUnitSymbol(
                                                                                                     currencyUnit.getSymbol());
 
         if (includeTotals) {
-            final String netWorth = formatAsDecimal(snapshot.getNetWorth().get(currencyUnit));
+            final String netWorth =
+                    MoneyFormatUtils.format(currencyUnit, toDecimal(snapshot.getNetWorth().get(currencyUnit)));
             final AccountType accountType = accountSnapshot.getAccount().getAccountType();
-            final String totalForAccountType =
-                    formatAsDecimal(snapshot.getTotalForAccountType(accountType).get(currencyUnit));
+            final String totalForAccountType = MoneyFormatUtils.format(currencyUnit,
+                                                                       toDecimal(snapshot.getTotalForAccountType(
+                                                                               accountType).get(currencyUnit)));
             builder.netWorth(netWorth).accountType(accountType.name()).totalForAccountType(totalForAccountType);
         }
 
