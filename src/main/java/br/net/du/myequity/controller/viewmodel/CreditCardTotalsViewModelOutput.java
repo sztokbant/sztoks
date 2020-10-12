@@ -18,8 +18,6 @@ public class CreditCardTotalsViewModelOutput {
     private static final String ZERO_PERCENT = "0.00%";
 
     private final String balance;
-    private final String currencyUnit;
-    private final String currencyUnitSymbol;
 
     private final String totalCredit;
     private final String availableCredit;
@@ -29,8 +27,6 @@ public class CreditCardTotalsViewModelOutput {
 
     public static CreditCardTotalsViewModelOutput of(final CreditCardSnapshot creditCardSnapshot) {
         final String balance = formatAsDecimal(creditCardSnapshot.getTotal());
-        final String currencyUnit = creditCardSnapshot.getAccount().getCurrencyUnit().getCode();
-        final String currencyUnitSymbol = creditCardSnapshot.getAccount().getCurrencyUnit().getSymbol();
 
         final String totalCredit = formatAsDecimal(creditCardSnapshot.getTotalCredit());
         final String availableCredit = formatAsDecimal(creditCardSnapshot.getAvailableCredit());
@@ -39,8 +35,6 @@ public class CreditCardTotalsViewModelOutput {
         final String usedCreditPercentage = formatAsPercentage(creditCardSnapshot.getUsedCreditPercentage());
 
         return new CreditCardTotalsViewModelOutput(balance,
-                                                   currencyUnit,
-                                                   currencyUnitSymbol,
                                                    totalCredit,
                                                    availableCredit,
                                                    statement,
@@ -51,8 +45,6 @@ public class CreditCardTotalsViewModelOutput {
     public static CreditCardTotalsViewModelOutput newEmptyInstance(final CurrencyUnit currencyUnit) {
         return CreditCardTotalsViewModelOutput.builder()
                                               .balance(ZERO)
-                                              .currencyUnit(currencyUnit.getCode())
-                                              .currencyUnitSymbol(currencyUnit.getSymbol())
                                               .totalCredit(ZERO)
                                               .availableCredit(ZERO)
                                               .statement(ZERO)
