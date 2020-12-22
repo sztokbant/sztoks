@@ -1,5 +1,11 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
@@ -7,6 +13,9 @@ import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,16 +27,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class SnapshotRemoveAccountControllerTest extends AccountSnapshotAjaxControllerTestBase {
@@ -35,8 +34,7 @@ class SnapshotRemoveAccountControllerTest extends AccountSnapshotAjaxControllerT
     private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
 
-    @MockBean
-    private AccountSnapshotRepository accountSnapshotRepository;
+    @MockBean private AccountSnapshotRepository accountSnapshotRepository;
 
     SnapshotRemoveAccountControllerTest() {
         super("/snapshot/removeAccount", null);
@@ -45,7 +43,10 @@ class SnapshotRemoveAccountControllerTest extends AccountSnapshotAjaxControllerT
     @BeforeEach
     public void setUp() throws Exception {
         final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest =
-                AccountSnapshotUpdateJsonRequest.builder().snapshotId(SNAPSHOT_ID).accountId(ENTITY_ID).build();
+                AccountSnapshotUpdateJsonRequest.builder()
+                        .snapshotId(SNAPSHOT_ID)
+                        .accountId(ENTITY_ID)
+                        .build();
         requestContent = new ObjectMapper().writeValueAsString(accountSnapshotUpdateJsonRequest);
     }
 
@@ -61,7 +62,8 @@ class SnapshotRemoveAccountControllerTest extends AccountSnapshotAjaxControllerT
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final SimpleLiabilitySnapshot simpleLiabilitySnapshot = new SimpleLiabilitySnapshot(account, CURRENT_BALANCE);
+        final SimpleLiabilitySnapshot simpleLiabilitySnapshot =
+                new SimpleLiabilitySnapshot(account, CURRENT_BALANCE);
         snapshot.addAccountSnapshot(simpleLiabilitySnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
@@ -69,17 +71,17 @@ class SnapshotRemoveAccountControllerTest extends AccountSnapshotAjaxControllerT
         account.setUser(user);
         when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
-                                                                    ENTITY_ID)).thenReturn(Optional.of(
-                simpleLiabilitySnapshot));
+        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+                .thenReturn(Optional.of(simpleLiabilitySnapshot));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(SecurityMockMvcRequestPostProcessors
-                                                                                            .user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(SecurityMockMvcRequestPostProcessors.user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().isOk());

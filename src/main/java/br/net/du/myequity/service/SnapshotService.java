@@ -6,11 +6,10 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.persistence.UserRepository;
+import java.time.LocalDate;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +23,11 @@ public class SnapshotService {
 
         final Snapshot currentSnapshot = user.getSnapshots().first();
 
-        final Snapshot newSnapshot = new Snapshot(currentSnapshot.getIndex() + 1,
-                                                  LocalDate.now().toString(),
-                                                  currentSnapshot.getAccountSnapshots());
+        final Snapshot newSnapshot =
+                new Snapshot(
+                        currentSnapshot.getIndex() + 1,
+                        LocalDate.now().toString(),
+                        currentSnapshot.getAccountSnapshots());
 
         currentSnapshot.setNext(newSnapshot);
         newSnapshot.setPrevious(currentSnapshot);
@@ -43,7 +44,8 @@ public class SnapshotService {
         assert user.getSnapshots().contains(snapshot);
 
         if (user.getSnapshots().size() == 1) {
-            throw new MyEquityException("Snapshot cannot be deleted as it is the only remaining snapshot.");
+            throw new MyEquityException(
+                    "Snapshot cannot be deleted as it is the only remaining snapshot.");
         }
 
         for (final AccountSnapshot accountSnapshot : snapshot.getAccountSnapshots()) {

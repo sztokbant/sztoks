@@ -1,5 +1,11 @@
 package br.net.du.myequity.validator;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -9,18 +15,11 @@ import org.mockito.Mock;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-
 class UserValidatorTest {
 
     private static final String EMAIL = "example@example.com";
 
-    @Mock
-    private UserService userService;
+    @Mock private UserService userService;
 
     private UserValidator userValidator;
 

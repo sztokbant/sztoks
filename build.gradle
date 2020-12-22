@@ -7,6 +7,7 @@ plugins {
     id 'maven-publish'
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id "io.spring.dependency-management" version "1.0.10.RELEASE"
+    id "com.diffplug.spotless" version "5.8.2"
 }
 
 repositories {
@@ -53,6 +54,17 @@ publishing {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+}
+
+configurations.compile {
+    spotless {
+        java {
+            googleJavaFormat().aosp()
+        }
+    }
+    compileJava {
+        dependsOn spotlessApply
+    }
 }
 
 test {

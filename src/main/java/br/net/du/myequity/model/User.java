@@ -1,14 +1,15 @@
 package br.net.du.myequity.model;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toSet;
+
 import br.net.du.myequity.model.account.Account;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.SortNatural;
-import org.joda.money.CurrencyUnit;
-
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,13 +19,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toSet;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.SortNatural;
+import org.joda.money.CurrencyUnit;
 
 @Entity
 @Table(name = "users")
@@ -56,10 +55,7 @@ public class User {
     @Setter
     private String password;
 
-    @Transient
-    @Getter
-    @Setter
-    private String passwordConfirm;
+    @Transient @Getter @Setter private String passwordConfirm;
 
     @Column(nullable = true)
     private String defaultCurrency;
@@ -90,9 +86,12 @@ public class User {
      */
     public Map<AccountType, SortedSet<Account>> getAccounts() {
         return accounts.stream()
-                       .collect(collectingAndThen(groupingBy(Account::getAccountType,
-                                                             collectingAndThen(toSet(), ImmutableSortedSet::copyOf)),
-                                                  ImmutableMap::copyOf));
+                .collect(
+                        collectingAndThen(
+                                groupingBy(
+                                        Account::getAccountType,
+                                        collectingAndThen(toSet(), ImmutableSortedSet::copyOf)),
+                                ImmutableMap::copyOf));
     }
 
     public void addAccount(final Account account) {

@@ -13,9 +13,9 @@ public class UserViewModelOutput {
 
     public static UserViewModelOutput of(final User user) {
         return UserViewModelOutput.builder()
-                                  .id(user.getId())
-                                  .fullName(user.getFullName())
-                                  .email(user.getEmail())
-                                  .build();
+                .id(user.getId())
+                .fullName(user.getFullName())
+                .email(user.getEmail())
+                .build();
     }
 }

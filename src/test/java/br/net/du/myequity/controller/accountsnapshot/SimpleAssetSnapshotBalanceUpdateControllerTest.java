@@ -1,5 +1,12 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.account.CreditCardAccount;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
@@ -8,6 +15,9 @@ import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,17 +28,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjaxControllerTestBase {
@@ -36,8 +35,7 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
     private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
 
-    @MockBean
-    private AccountSnapshotRepository accountSnapshotRepository;
+    @MockBean private AccountSnapshotRepository accountSnapshotRepository;
 
     SimpleAssetSnapshotBalanceUpdateControllerTest() {
         super("/snapshot/updateAccountBalance", "108.00");
@@ -68,15 +66,17 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
         account.setUser(user);
         when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
-                                                                    ENTITY_ID)).thenReturn(Optional.of(accountSnapshot));
+        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+                .thenReturn(Optional.of(accountSnapshot));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
@@ -88,7 +88,8 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final SimpleAssetSnapshot accountSnapshot = new SimpleAssetSnapshot(account, CURRENT_BALANCE);
+        final SimpleAssetSnapshot accountSnapshot =
+                new SimpleAssetSnapshot(account, CURRENT_BALANCE);
         snapshot.addAccountSnapshot(accountSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
@@ -96,16 +97,17 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
         account.setUser(user);
         when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
-                                                                    ENTITY_ID)).thenReturn(Optional.of(accountSnapshot));
+        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+                .thenReturn(Optional.of(accountSnapshot));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(SecurityMockMvcRequestPostProcessors
-                                                                                            .user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(SecurityMockMvcRequestPostProcessors.user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().isOk());

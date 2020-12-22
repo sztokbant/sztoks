@@ -1,5 +1,14 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
+import static br.net.du.myequity.test.ModelTestUtil.buildUser;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import br.net.du.myequity.controller.viewmodel.AccountDeleteJsonRequest;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
@@ -7,6 +16,8 @@ import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.persistence.AccountRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,29 +30,15 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
-import static br.net.du.myequity.test.ModelTestUtil.buildUser;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class AccountDeleteControllerTest extends AjaxControllerTestBase {
 
     private static final String JSON_ACCOUNT_ID = "accountId";
 
-    @Autowired
-    private MockMvc mvc;
+    @Autowired private MockMvc mvc;
 
-    @MockBean
-    private AccountRepository accountRepository;
+    @MockBean private AccountRepository accountRepository;
 
     private String requestContent;
 
@@ -72,9 +69,11 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
     @Test
     public void post_noCsrfToken_forbidden() throws Exception {
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().isForbidden());
@@ -83,10 +82,12 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
     @Test
     public void post_withCsrfTokenUserNotLoggedIn_redirectToLogin() throws Exception {
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         verifyRedirect(resultActions, "/login");
@@ -98,11 +99,13 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
         when(userService.findByEmail(user.getEmail())).thenReturn(null);
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
@@ -116,11 +119,13 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
         when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.empty());
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
@@ -139,11 +144,13 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
         when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
@@ -158,11 +165,13 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
         when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().isOk());

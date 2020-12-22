@@ -3,11 +3,8 @@ package br.net.du.myequity.model.snapshot;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import com.google.common.annotations.VisibleForTesting;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-
+import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,8 +14,10 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.math.BigDecimal;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Entity
 @Table(name = "account_snapshots")
@@ -72,9 +71,7 @@ public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
     }
 
     private boolean sameAsFormer(final Snapshot newSnapshot) {
-        return snapshot == null ?
-                newSnapshot == null :
-                snapshot.equals(newSnapshot);
+        return snapshot == null ? newSnapshot == null : snapshot.equals(newSnapshot);
     }
 
     @Override
@@ -88,8 +85,10 @@ public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
         }
 
         final AccountSnapshot otherAccountSnapshot = (AccountSnapshot) other;
-        return this.account != null && account.equals(otherAccountSnapshot.getAccount()) && this.snapshot != null &&
-                snapshot.equals(otherAccountSnapshot.getSnapshot());
+        return this.account != null
+                && account.equals(otherAccountSnapshot.getAccount())
+                && this.snapshot != null
+                && snapshot.equals(otherAccountSnapshot.getSnapshot());
     }
 
     @Override

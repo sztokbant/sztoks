@@ -1,5 +1,14 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
+import static br.net.du.myequity.test.ModelTestUtil.buildUser;
+import static br.net.du.myequity.test.TestConstants.now;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import br.net.du.myequity.controller.viewmodel.SnapshotViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
@@ -9,6 +18,8 @@ import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.service.UserService;
 import com.google.common.collect.ImmutableSortedSet;
+import java.time.LocalDate;
+import java.util.Optional;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,18 +32,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
-import static br.net.du.myequity.test.ModelTestUtil.buildUser;
-import static br.net.du.myequity.test.TestConstants.now;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class SnapshotControllerEndpointsTest {
@@ -43,14 +42,11 @@ class SnapshotControllerEndpointsTest {
 
     private static final String ACCOUNT_ID_VALUE = "42";
 
-    @Autowired
-    private MockMvc mvc;
+    @Autowired private MockMvc mvc;
 
-    @MockBean
-    private SnapshotRepository snapshotRepository;
+    @MockBean private SnapshotRepository snapshotRepository;
 
-    @MockBean
-    private UserService userService;
+    @MockBean private UserService userService;
 
     private User user;
 
@@ -78,7 +74,9 @@ class SnapshotControllerEndpointsTest {
     public void get_userNotLoggedIn_redirectToLogin() throws Exception {
         // WHEN
         final ResultActions resultActions =
-                mvc.perform(MockMvcRequestBuilders.get(String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID)));
+                mvc.perform(
+                        MockMvcRequestBuilders.get(
+                                String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID)));
 
         // THEN
         verifyRedirect(resultActions, "/login");
@@ -91,8 +89,10 @@ class SnapshotControllerEndpointsTest {
 
         // WHEN
         final ResultActions resultActions =
-                mvc.perform(MockMvcRequestBuilders.get(String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID))
-                                                  .with(user(user.getEmail())));
+                mvc.perform(
+                        MockMvcRequestBuilders.get(
+                                        String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID))
+                                .with(user(user.getEmail())));
 
         // THEN
         verifyRedirect(resultActions, "/");
@@ -106,8 +106,10 @@ class SnapshotControllerEndpointsTest {
 
         // WHEN
         final ResultActions resultActions =
-                mvc.perform(MockMvcRequestBuilders.get(String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID))
-                                                  .with(user(user.getEmail())));
+                mvc.perform(
+                        MockMvcRequestBuilders.get(
+                                        String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID))
+                                .with(user(user.getEmail())));
 
         // THEN
         verifyRedirect(resultActions, "/");
@@ -123,8 +125,10 @@ class SnapshotControllerEndpointsTest {
 
         // WHEN
         final ResultActions resultActions =
-                mvc.perform(MockMvcRequestBuilders.get(String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID))
-                                                  .with(user(user.getEmail())));
+                mvc.perform(
+                        MockMvcRequestBuilders.get(
+                                        String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID))
+                                .with(user(user.getEmail())));
 
         // THEN
         verifyRedirect(resultActions, "/");
@@ -140,16 +144,21 @@ class SnapshotControllerEndpointsTest {
 
         // WHEN
         final ResultActions resultActions =
-                mvc.perform(MockMvcRequestBuilders.get(String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID))
-                                                  .with(user(user.getEmail())));
+                mvc.perform(
+                        MockMvcRequestBuilders.get(
+                                        String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID))
+                                .with(user(user.getEmail())));
 
         // THEN
         resultActions.andExpect(status().isOk());
 
         final MvcResult mvcResult = resultActions.andReturn();
         assertEquals("snapshot", mvcResult.getModelAndView().getViewName());
-        assertEquals(UserViewModelOutput.of(user), mvcResult.getModelAndView().getModel().get("user"));
+        assertEquals(
+                UserViewModelOutput.of(user), mvcResult.getModelAndView().getModel().get("user"));
 
-        assertEquals(SnapshotViewModelOutput.of(snapshot), mvcResult.getModelAndView().getModel().get("snapshot"));
+        assertEquals(
+                SnapshotViewModelOutput.of(snapshot),
+                mvcResult.getModelAndView().getModel().get("snapshot"));
     }
 }

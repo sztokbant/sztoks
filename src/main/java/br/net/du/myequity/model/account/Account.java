@@ -3,12 +3,7 @@ package br.net.du.myequity.model.account;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.joda.money.CurrencyUnit;
-
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -21,7 +16,11 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import java.time.LocalDate;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.joda.money.CurrencyUnit;
 
 @Entity
 @Table(name = "accounts", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "name"}))
@@ -60,7 +59,8 @@ public abstract class Account implements Comparable<Account> {
     @Setter
     private LocalDate createDate;
 
-    Account(final String name,
+    Account(
+            final String name,
             final AccountType accountType,
             final CurrencyUnit currencyUnit,
             final LocalDate createDate) {
@@ -103,9 +103,7 @@ public abstract class Account implements Comparable<Account> {
     }
 
     private boolean sameAsFormer(final User newUser) {
-        return user == null ?
-                newUser == null :
-                user.equals(newUser);
+        return user == null ? newUser == null : user.equals(newUser);
     }
 
     @Override

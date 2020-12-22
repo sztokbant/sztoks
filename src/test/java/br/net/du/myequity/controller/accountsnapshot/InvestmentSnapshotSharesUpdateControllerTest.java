@@ -1,11 +1,20 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.account.InvestmentAccount;
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,16 +25,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class InvestmentSnapshotSharesUpdateControllerTest extends AccountSnapshotAjaxControllerTestBase {
@@ -35,8 +34,7 @@ class InvestmentSnapshotSharesUpdateControllerTest extends AccountSnapshotAjaxCo
     private static final BigDecimal CURRENT_ORIGINAL_SHARE_VALUE = new BigDecimal("2100.00");
     private static final BigDecimal CURRENT_SHARES = new BigDecimal("50.00");
 
-    @MockBean
-    private AccountSnapshotRepository accountSnapshotRepository;
+    @MockBean private AccountSnapshotRepository accountSnapshotRepository;
 
     InvestmentSnapshotSharesUpdateControllerTest() {
         super("/snapshot/updateInvestmentShares", "75.00");
@@ -54,10 +52,12 @@ class InvestmentSnapshotSharesUpdateControllerTest extends AccountSnapshotAjaxCo
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final InvestmentSnapshot investmentSnapshot = new InvestmentSnapshot(account,
-                                                                             CURRENT_SHARES,
-                                                                             CURRENT_ORIGINAL_SHARE_VALUE,
-                                                                             CURRENT_CURRENT_SHARE_VALUE);
+        final InvestmentSnapshot investmentSnapshot =
+                new InvestmentSnapshot(
+                        account,
+                        CURRENT_SHARES,
+                        CURRENT_ORIGINAL_SHARE_VALUE,
+                        CURRENT_CURRENT_SHARE_VALUE);
         snapshot.addAccountSnapshot(investmentSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
@@ -65,17 +65,17 @@ class InvestmentSnapshotSharesUpdateControllerTest extends AccountSnapshotAjaxCo
         account.setUser(user);
         when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
-                                                                    ENTITY_ID)).thenReturn(Optional.of(
-                investmentSnapshot));
+        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+                .thenReturn(Optional.of(investmentSnapshot));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(SecurityMockMvcRequestPostProcessors
-                                                                                            .user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(SecurityMockMvcRequestPostProcessors.user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().isOk());

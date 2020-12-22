@@ -1,5 +1,14 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
+import static br.net.du.myequity.test.ModelTestUtil.buildUser;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import br.net.du.myequity.controller.viewmodel.EntityRenameJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
@@ -7,6 +16,7 @@ import br.net.du.myequity.persistence.SnapshotRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSortedSet;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +29,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Optional;
-
-import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
-import static br.net.du.myequity.test.ModelTestUtil.buildUser;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class SnapshotRenameControllerTest extends AjaxControllerTestBase {
@@ -39,11 +38,9 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
     private static final String NEW_SNAPSHOT_NAME_NOT_TRIMMED = "   My Best Snapshot   ";
     private static final String NEW_SNAPSHOT_NAME_TRIMMED = "My Best Snapshot";
 
-    @Autowired
-    private MockMvc mvc;
+    @Autowired private MockMvc mvc;
 
-    @MockBean
-    private SnapshotRepository snapshotRepository;
+    @MockBean private SnapshotRepository snapshotRepository;
 
     private String requestContent;
 
@@ -61,7 +58,10 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
         createEntity();
 
         final EntityRenameJsonRequest entityNameJsonRequest =
-                EntityRenameJsonRequest.builder().id(ENTITY_ID).newValue(NEW_SNAPSHOT_NAME_NOT_TRIMMED).build();
+                EntityRenameJsonRequest.builder()
+                        .id(ENTITY_ID)
+                        .newValue(NEW_SNAPSHOT_NAME_NOT_TRIMMED)
+                        .build();
         requestContent = new ObjectMapper().writeValueAsString(entityNameJsonRequest);
     }
 
@@ -74,9 +74,11 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
     @Test
     public void post_noCsrfToken_forbidden() throws Exception {
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().isForbidden());
@@ -85,10 +87,12 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
     @Test
     public void post_withCsrfTokenUserNotLoggedIn_redirectToLogin() throws Exception {
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         verifyRedirect(resultActions, "/login");
@@ -100,11 +104,13 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
         when(userService.findByEmail(user.getEmail())).thenReturn(null);
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
@@ -118,11 +124,13 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
         when(snapshotRepository.findById(ENTITY_ID)).thenReturn(Optional.empty());
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
@@ -141,11 +149,13 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
         when(snapshotRepository.findById(ENTITY_ID)).thenReturn(Optional.of(snapshot));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
@@ -160,11 +170,13 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
         when(snapshotRepository.findById(ENTITY_ID)).thenReturn(Optional.of(snapshot));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().isOk());

@@ -34,11 +34,12 @@
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <h5>Assets</h5>
                     <div>
-                        <form:radiobutton path="typeName" value="SimpleAssetAccount" id="simpleAssetRadio" checked="checked"/>
+                        <form:radiobutton path="typeName" value="SimpleAssetAccount" id="simpleAssetRadio"
+                                          checked="checked"/>
                         <label for="simpleAssetRadio">Simple Asset</label>
                     </div>
                     <div>
-                        <form:radiobutton path="typeName" value="ReceivableAccount" id="receivableRadio" />
+                        <form:radiobutton path="typeName" value="ReceivableAccount" id="receivableRadio"/>
                         <label for="receivableRadio">Receivable</label>
                     </div>
                     <div>
@@ -51,7 +52,7 @@
                         <label for="simpleLiabilityRadio">Simple Liability</label>
                     </div>
                     <div>
-                        <form:radiobutton path="typeName" value="PayableAccount" id="payableRadio" />
+                        <form:radiobutton path="typeName" value="PayableAccount" id="payableRadio"/>
                         <label for="payableRadio">Payable</label>
                     </div>
                     <div>

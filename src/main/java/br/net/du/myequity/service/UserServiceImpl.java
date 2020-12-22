@@ -12,11 +12,9 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private static final String FIRST_SNAPSHOT_NAME = "First Snapshot";
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // TODO This method should be flexible enough for new and existing users
     @Override

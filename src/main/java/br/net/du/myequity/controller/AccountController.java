@@ -1,5 +1,9 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
+import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
+import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
+
 import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
 import br.net.du.myequity.model.User;
@@ -13,21 +17,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
-import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
-import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
-
 @Controller
 public class AccountController {
     public static final String ACCOUNT_FORM = "accountForm";
     private static final String NEW_ACCOUNT_TEMPLATE = "new_account";
     private static final String NEWACCOUNT_MAPPING = "/newaccount";
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
-    @Autowired
-    private AccountViewModelInputValidator accountViewModelInputValidator;
+    @Autowired private AccountViewModelInputValidator accountViewModelInputValidator;
 
     @GetMapping(NEWACCOUNT_MAPPING)
     public String newAccount(final Model model) {
@@ -38,9 +36,10 @@ public class AccountController {
     }
 
     @PostMapping(NEWACCOUNT_MAPPING)
-    public String newAccount(final Model model,
-                             @ModelAttribute(ACCOUNT_FORM) final AccountViewModelInput accountViewModelInput,
-                             final BindingResult bindingResult) {
+    public String newAccount(
+            final Model model,
+            @ModelAttribute(ACCOUNT_FORM) final AccountViewModelInput accountViewModelInput,
+            final BindingResult bindingResult) {
         final User user = getLoggedUser(model);
         accountViewModelInputValidator.validate(accountViewModelInput, bindingResult, user);
 

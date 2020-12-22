@@ -2,14 +2,13 @@ package br.net.du.myequity.validator;
 
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.UserService;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-
-import java.util.regex.Pattern;
 
 @Component
 public class UserValidator implements Validator {
@@ -40,7 +39,8 @@ public class UserValidator implements Validator {
     }
 
     private void rejectIfInvalidOrExistingEmail(final Errors errors, final User user) {
-        if (StringUtils.isEmpty(user.getEmail()) || !EMAIL_PATTERN.matcher(user.getEmail()).matches()) {
+        if (StringUtils.isEmpty(user.getEmail())
+                || !EMAIL_PATTERN.matcher(user.getEmail()).matches()) {
             errors.rejectValue("email", "Invalid.userForm.email");
         } else if (userService.findByEmail(user.getEmail()) != null) {
             errors.rejectValue("email", "Duplicate.userForm.email");
@@ -48,8 +48,9 @@ public class UserValidator implements Validator {
     }
 
     private void rejectIfInvalidPassword(final Errors errors, final User user) {
-        if (StringUtils.isEmpty(user.getPassword()) || user.getPassword().length() < 8 ||
-                user.getPassword().length() > 32) {
+        if (StringUtils.isEmpty(user.getPassword())
+                || user.getPassword().length() < 8
+                || user.getPassword().length() > 32) {
             errors.rejectValue("password", "Size.userForm.password");
         } else if (!user.getPasswordConfirm().equals(user.getPassword())) {
             errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");

@@ -1,5 +1,7 @@
 package br.net.du.myequity.controller.viewmodel.accountsnapshot;
 
+import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
+
 import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
@@ -9,8 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.joda.money.CurrencyUnit;
-
-import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 
 @AllArgsConstructor
 @Data
@@ -41,29 +41,36 @@ public class AccountSnapshotViewModelOutput implements Comparable<AccountSnapsho
         totalForAccountType = other.getTotalForAccountType();
     }
 
-    public static AccountSnapshotViewModelOutput of(final AccountSnapshot accountSnapshot,
-                                                    final boolean includeTotals) {
+    public static AccountSnapshotViewModelOutput of(
+            final AccountSnapshot accountSnapshot, final boolean includeTotals) {
         final Account account = accountSnapshot.getAccount();
         final Snapshot snapshot = accountSnapshot.getSnapshot();
         final CurrencyUnit currencyUnit = accountSnapshot.getAccount().getCurrencyUnit();
 
-        final String balance = MoneyFormatUtils.format(currencyUnit, toDecimal(accountSnapshot.getTotal()));
-        final AccountSnapshotViewModelOutputBuilder builder = AccountSnapshotViewModelOutput.builder()
-                                                                                            .accountId(account.getId())
-                                                                                            .name(account.getName())
-                                                                                            .balance(balance)
-                                                                                            .currencyUnit(currencyUnit.getCode())
-                                                                                            .currencyUnitSymbol(
-                                                                                                    currencyUnit.getSymbol());
+        final String balance =
+                MoneyFormatUtils.format(currencyUnit, toDecimal(accountSnapshot.getTotal()));
+        final AccountSnapshotViewModelOutputBuilder builder =
+                AccountSnapshotViewModelOutput.builder()
+                        .accountId(account.getId())
+                        .name(account.getName())
+                        .balance(balance)
+                        .currencyUnit(currencyUnit.getCode())
+                        .currencyUnitSymbol(currencyUnit.getSymbol());
 
         if (includeTotals) {
             final String netWorth =
-                    MoneyFormatUtils.format(currencyUnit, toDecimal(snapshot.getNetWorth().get(currencyUnit)));
+                    MoneyFormatUtils.format(
+                            currencyUnit, toDecimal(snapshot.getNetWorth().get(currencyUnit)));
             final AccountType accountType = accountSnapshot.getAccount().getAccountType();
-            final String totalForAccountType = MoneyFormatUtils.format(currencyUnit,
-                                                                       toDecimal(snapshot.getTotalForAccountType(
-                                                                               accountType).get(currencyUnit)));
-            builder.netWorth(netWorth).accountType(accountType.name()).totalForAccountType(totalForAccountType);
+            final String totalForAccountType =
+                    MoneyFormatUtils.format(
+                            currencyUnit,
+                            toDecimal(
+                                    snapshot.getTotalForAccountType(accountType)
+                                            .get(currencyUnit)));
+            builder.netWorth(netWorth)
+                    .accountType(accountType.name())
+                    .totalForAccountType(totalForAccountType);
         }
 
         return builder.build();
@@ -75,8 +82,8 @@ public class AccountSnapshotViewModelOutput implements Comparable<AccountSnapsho
 
     @Override
     public int compareTo(final AccountSnapshotViewModelOutput other) {
-        return this.currencyUnit.equals(other.getCurrencyUnit()) ?
-                this.name.compareTo(other.name) :
-                this.currencyUnit.compareTo(other.getCurrencyUnit());
+        return this.currencyUnit.equals(other.getCurrencyUnit())
+                ? this.name.compareTo(other.name)
+                : this.currencyUnit.compareTo(other.getCurrencyUnit());
     }
 }

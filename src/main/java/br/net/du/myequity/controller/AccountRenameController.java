@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountRenameController extends AccountControllerBase {
 
     @PostMapping("/account/updateName")
-    public EntityRenameJsonResponse post(final Model model,
-                                         @RequestBody final EntityRenameJsonRequest entityNameJsonRequest) {
+    public EntityRenameJsonResponse post(
+            final Model model, @RequestBody final EntityRenameJsonRequest entityNameJsonRequest) {
         final Account account = getAccount(model, entityNameJsonRequest.getId());
 
         account.setName(entityNameJsonRequest.getNewValue().trim());

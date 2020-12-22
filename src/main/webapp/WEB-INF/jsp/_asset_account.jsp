@@ -12,6 +12,7 @@ $(document).ready(function() {
     accountNameUpdateSuccessCallback,
   );
 })
+
 </script>
 
 <%@ include file="_delete_account.jsp" %>

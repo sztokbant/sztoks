@@ -3,42 +3,33 @@ package br.net.du.myequity.model.snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.CreditCardAccount;
 import com.google.common.annotations.VisibleForTesting;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 @Entity
 @DiscriminatorValue(CreditCardAccount.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class CreditCardSnapshot extends AccountSnapshot {
 
-    @Column
-    @Getter
-    @Setter
-    private BigDecimal totalCredit;
+    @Column @Getter @Setter private BigDecimal totalCredit;
 
-    @Column
-    @Getter
-    @Setter
-    private BigDecimal availableCredit;
+    @Column @Getter @Setter private BigDecimal availableCredit;
 
-    @Column
-    @Getter
-    @Setter
-    private BigDecimal statement;
+    @Column @Getter @Setter private BigDecimal statement;
 
-    public CreditCardSnapshot(@NonNull final Account account,
-                              @NonNull final BigDecimal totalCredit,
-                              @NonNull final BigDecimal availableCredit,
-                              @NonNull final BigDecimal statement) {
+    public CreditCardSnapshot(
+            @NonNull final Account account,
+            @NonNull final BigDecimal totalCredit,
+            @NonNull final BigDecimal availableCredit,
+            @NonNull final BigDecimal statement) {
         super(account);
         this.totalCredit = totalCredit;
         this.availableCredit = availableCredit;
@@ -67,10 +58,10 @@ public class CreditCardSnapshot extends AccountSnapshot {
         }
 
         final CreditCardSnapshot otherCreditCardSnapshot = (CreditCardSnapshot) other;
-        return account.equals(otherCreditCardSnapshot.getAccount()) &&
-                totalCredit.compareTo(otherCreditCardSnapshot.getTotalCredit()) == 0 &&
-                availableCredit.compareTo(otherCreditCardSnapshot.getAvailableCredit()) == 0 &&
-                statement.compareTo(otherCreditCardSnapshot.getStatement()) == 0;
+        return account.equals(otherCreditCardSnapshot.getAccount())
+                && totalCredit.compareTo(otherCreditCardSnapshot.getTotalCredit()) == 0
+                && availableCredit.compareTo(otherCreditCardSnapshot.getAvailableCredit()) == 0
+                && statement.compareTo(otherCreditCardSnapshot.getStatement()) == 0;
     }
 
     public BigDecimal getUsedCreditPercentage() {
@@ -79,7 +70,9 @@ public class CreditCardSnapshot extends AccountSnapshot {
         }
 
         final BigDecimal oneHundred = new BigDecimal("100.00");
-        return (totalCredit.subtract(availableCredit)).multiply(oneHundred).divide(totalCredit, RoundingMode.HALF_UP);
+        return (totalCredit.subtract(availableCredit))
+                .multiply(oneHundred)
+                .divide(totalCredit, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getRemainingBalance() {

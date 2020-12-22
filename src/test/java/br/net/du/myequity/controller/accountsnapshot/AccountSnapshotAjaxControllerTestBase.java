@@ -1,5 +1,11 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
+import static br.net.du.myequity.test.TestConstants.now;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import br.net.du.myequity.controller.AjaxControllerTestBase;
 import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
@@ -9,20 +15,13 @@ import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSortedSet;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.Optional;
-
-import static br.net.du.myequity.test.TestConstants.now;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestBase {
 
@@ -48,11 +47,9 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
 
     final String newValue;
 
-    @MockBean
-    SnapshotRepository snapshotRepository;
+    @MockBean SnapshotRepository snapshotRepository;
 
-    @MockBean
-    AccountRepository accountRepository;
+    @MockBean AccountRepository accountRepository;
 
     Snapshot snapshot;
 
@@ -70,10 +67,10 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
 
         final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest =
                 AccountSnapshotUpdateJsonRequest.builder()
-                                                .snapshotId(SNAPSHOT_ID)
-                                                .accountId(ENTITY_ID)
-                                                .newValue(newValue)
-                                                .build();
+                        .snapshotId(SNAPSHOT_ID)
+                        .accountId(ENTITY_ID)
+                        .newValue(newValue)
+                        .build();
         requestContent = new ObjectMapper().writeValueAsString(accountSnapshotUpdateJsonRequest);
     }
 
@@ -88,11 +85,13 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
         when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.empty());
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
@@ -114,11 +113,13 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
         when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
@@ -131,11 +132,13 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.empty());
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
@@ -154,11 +157,13 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
@@ -176,11 +181,13 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
         when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());

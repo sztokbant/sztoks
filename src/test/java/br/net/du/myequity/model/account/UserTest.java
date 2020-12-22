@@ -1,24 +1,23 @@
 package br.net.du.myequity.model.account;
 
-import br.net.du.myequity.model.AccountType;
-import br.net.du.myequity.model.Snapshot;
-import br.net.du.myequity.model.User;
-import com.google.common.collect.ImmutableSortedSet;
-import org.joda.money.CurrencyUnit;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-
 import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.User;
+import com.google.common.collect.ImmutableSortedSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import org.joda.money.CurrencyUnit;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class UserTest {
 
@@ -67,14 +66,19 @@ class UserTest {
         final Map<AccountType, SortedSet<Account>> accounts = user.getAccounts();
 
         // THEN
-        assertThrows(UnsupportedOperationException.class, () -> {
-            accounts.remove(AccountType.ASSET);
-        });
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> {
+                    accounts.remove(AccountType.ASSET);
+                });
 
-        final Account newAccount = new SimpleAssetAccount("Another Asset Account", CurrencyUnit.USD);
-        assertThrows(UnsupportedOperationException.class, () -> {
-            accounts.get(AccountType.ASSET).add(newAccount);
-        });
+        final Account newAccount =
+                new SimpleAssetAccount("Another Asset Account", CurrencyUnit.USD);
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> {
+                    accounts.get(AccountType.ASSET).add(newAccount);
+                });
     }
 
     @Test

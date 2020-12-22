@@ -1,5 +1,12 @@
 package br.net.du.myequity.persistence;
 
+import static br.net.du.myequity.test.TestConstants.now;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
@@ -12,24 +19,16 @@ import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import br.net.du.myequity.service.UserService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-
-import static br.net.du.myequity.test.TestConstants.now;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class PersistenceTest {
@@ -39,14 +38,11 @@ class PersistenceTest {
     private static final String LAST_NAME = "Gates";
     private static final String PASSWORD = "password";
 
-    @Autowired
-    private UserService userService;
+    @Autowired private UserService userService;
 
-    @Autowired
-    private AccountRepository accountRepository;
+    @Autowired private AccountRepository accountRepository;
 
-    @Autowired
-    private SnapshotRepository snapshotRepository;
+    @Autowired private SnapshotRepository snapshotRepository;
 
     private User user;
 
@@ -146,7 +142,8 @@ class PersistenceTest {
         assertNotNull(simpleAssetAccount.getId());
         assertNotNull(simpleAssetAccount.getUser());
         assertEquals(user, simpleAssetAccount.getUser());
-        final BigDecimal actualAssetAmount = accountSnapshotsByType.get(AccountType.ASSET).iterator().next().getTotal();
+        final BigDecimal actualAssetAmount =
+                accountSnapshotsByType.get(AccountType.ASSET).iterator().next().getTotal();
         assertEquals(assetAmount, actualAssetAmount);
 
         assertNotNull(simpleLiabilityAccount.getId());
@@ -189,17 +186,23 @@ class PersistenceTest {
         final Snapshot savedSnapshot = snapshotRepository.findAll().get(1);
 
         assertEquals(2, savedSnapshot.getAccountSnapshots().size());
-        assertEquals(ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-319900.00")), savedSnapshot.getNetWorth());
+        assertEquals(
+                ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-319900.00")),
+                savedSnapshot.getNetWorth());
 
         // WHEN
         final SimpleLiabilitySnapshot simpleLiabilitySnapshot =
-                (SimpleLiabilitySnapshot) savedSnapshot.getAccountSnapshotFor(simpleLiabilityAccount).get();
-        simpleLiabilitySnapshot.setAmount(simpleLiabilitySnapshot.getAmount().add(new BigDecimal("100000.00")));
+                (SimpleLiabilitySnapshot)
+                        savedSnapshot.getAccountSnapshotFor(simpleLiabilityAccount).get();
+        simpleLiabilitySnapshot.setAmount(
+                simpleLiabilitySnapshot.getAmount().add(new BigDecimal("100000.00")));
 
         // THEN
         final Snapshot actualSnapshot = snapshotRepository.findAll().get(1);
         assertEquals(2, actualSnapshot.getAccountSnapshots().size());
-        assertEquals(ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-419900.00")), actualSnapshot.getNetWorth());
+        assertEquals(
+                ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-419900.00")),
+                actualSnapshot.getNetWorth());
     }
 
     @Test
@@ -251,11 +254,14 @@ class PersistenceTest {
     }
 
     private void initSnapshot() {
-        snapshot = new Snapshot(2L,
-                                now,
-                                ImmutableSortedSet.of(new SimpleAssetSnapshot(simpleAssetAccount, assetAmount),
-                                                      new SimpleLiabilitySnapshot(simpleLiabilityAccount,
-                                                                                  liabilityAmount)));
+        snapshot =
+                new Snapshot(
+                        2L,
+                        now,
+                        ImmutableSortedSet.of(
+                                new SimpleAssetSnapshot(simpleAssetAccount, assetAmount),
+                                new SimpleLiabilitySnapshot(
+                                        simpleLiabilityAccount, liabilityAmount)));
         assertNull(snapshot.getId());
     }
 }

@@ -1,14 +1,14 @@
 package br.net.du.myequity.controller.viewmodel;
 
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
+import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
+
 import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.joda.money.CurrencyUnit;
-
-import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
-import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 
 @AllArgsConstructor
 @Data
@@ -29,34 +29,42 @@ public class CreditCardTotalsViewModelOutput {
     public static CreditCardTotalsViewModelOutput of(final CreditCardSnapshot creditCardSnapshot) {
         final CurrencyUnit currencyUnit = creditCardSnapshot.getAccount().getCurrencyUnit();
 
-        final String balance = MoneyFormatUtils.format(currencyUnit, toDecimal(creditCardSnapshot.getTotal()));
+        final String balance =
+                MoneyFormatUtils.format(currencyUnit, toDecimal(creditCardSnapshot.getTotal()));
 
         final String totalCredit =
-                MoneyFormatUtils.format(currencyUnit, toDecimal(creditCardSnapshot.getTotalCredit()));
+                MoneyFormatUtils.format(
+                        currencyUnit, toDecimal(creditCardSnapshot.getTotalCredit()));
         final String availableCredit =
-                MoneyFormatUtils.format(currencyUnit, toDecimal(creditCardSnapshot.getAvailableCredit()));
-        final String statement = MoneyFormatUtils.format(currencyUnit, toDecimal(creditCardSnapshot.getStatement()));
+                MoneyFormatUtils.format(
+                        currencyUnit, toDecimal(creditCardSnapshot.getAvailableCredit()));
+        final String statement =
+                MoneyFormatUtils.format(currencyUnit, toDecimal(creditCardSnapshot.getStatement()));
         final String remainingBalance =
-                MoneyFormatUtils.format(currencyUnit, toDecimal(creditCardSnapshot.getRemainingBalance()));
-        final String usedCreditPercentage = formatAsPercentage(creditCardSnapshot.getUsedCreditPercentage());
+                MoneyFormatUtils.format(
+                        currencyUnit, toDecimal(creditCardSnapshot.getRemainingBalance()));
+        final String usedCreditPercentage =
+                formatAsPercentage(creditCardSnapshot.getUsedCreditPercentage());
 
-        return new CreditCardTotalsViewModelOutput(balance,
-                                                   totalCredit,
-                                                   availableCredit,
-                                                   statement,
-                                                   remainingBalance,
-                                                   usedCreditPercentage);
+        return new CreditCardTotalsViewModelOutput(
+                balance,
+                totalCredit,
+                availableCredit,
+                statement,
+                remainingBalance,
+                usedCreditPercentage);
     }
 
-    public static CreditCardTotalsViewModelOutput newEmptyInstance(final CurrencyUnit currencyUnit) {
+    public static CreditCardTotalsViewModelOutput newEmptyInstance(
+            final CurrencyUnit currencyUnit) {
         return CreditCardTotalsViewModelOutput.builder()
-                                              .balance(ZERO)
-                                              .totalCredit(ZERO)
-                                              .availableCredit(ZERO)
-                                              .statement(ZERO)
-                                              .remainingBalance(ZERO)
-                                              .usedCreditPercentage(ZERO_PERCENT)
-                                              .availableCredit(ZERO)
-                                              .build();
+                .balance(ZERO)
+                .totalCredit(ZERO)
+                .availableCredit(ZERO)
+                .statement(ZERO)
+                .remainingBalance(ZERO)
+                .usedCreditPercentage(ZERO_PERCENT)
+                .availableCredit(ZERO)
+                .build();
     }
 }

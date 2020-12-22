@@ -1,11 +1,18 @@
 package br.net.du.myequity.validator;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+
 import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.persistence.AccountRepository;
 import com.google.common.collect.ImmutableList;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,14 +21,6 @@ import org.mockito.Mock;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-
 class AccountViewModelInputValidatorTest {
 
     private static final String ACCOUNT_NAME = "My Account";
@@ -29,8 +28,7 @@ class AccountViewModelInputValidatorTest {
     private static final String ANOTHER_ACCOUNT_NAME = "Another Account";
     private static final String CURRENCY_UNIT = "USD";
 
-    @Mock
-    private AccountRepository accountRepository;
+    @Mock private AccountRepository accountRepository;
 
     private AccountViewModelInputValidator accountViewModelInputValidator;
 
@@ -81,7 +79,8 @@ class AccountViewModelInputValidatorTest {
     public void validate_happyExintingAccountWithDifferentName() {
         // GIVEN
         populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
-        defineExistingAccounts(ImmutableList.of(new SimpleAssetAccount(ANOTHER_ACCOUNT_NAME, CurrencyUnit.USD)));
+        defineExistingAccounts(
+                ImmutableList.of(new SimpleAssetAccount(ANOTHER_ACCOUNT_NAME, CurrencyUnit.USD)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
@@ -185,7 +184,8 @@ class AccountViewModelInputValidatorTest {
     public void validate_existingName_hasErrors() {
         // GIVEN
         populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
-        defineExistingAccounts(ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
+        defineExistingAccounts(
+                ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
@@ -198,7 +198,8 @@ class AccountViewModelInputValidatorTest {
     public void validate_existingNameExtraSpaces_hasErrors() {
         // GIVEN
         populateAccountForm(" " + ACCOUNT_NAME + " ", TYPE_NAME, CURRENCY_UNIT);
-        defineExistingAccounts(ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
+        defineExistingAccounts(
+                ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
@@ -213,9 +214,11 @@ class AccountViewModelInputValidatorTest {
         populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
 
         // WHEN/THEN
-        assertThrows(UnsupportedOperationException.class, () -> {
-            accountViewModelInputValidator.validate(accountViewModelInput, errors);
-        });
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> {
+                    accountViewModelInputValidator.validate(accountViewModelInput, errors);
+                });
     }
 
     @Test
@@ -224,9 +227,12 @@ class AccountViewModelInputValidatorTest {
         populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
 
         // WHEN/THEN
-        assertThrows(UnsupportedOperationException.class, () -> {
-            accountViewModelInputValidator.validate(accountViewModelInput, errors, new Object[]{});
-        });
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> {
+                    accountViewModelInputValidator.validate(
+                            accountViewModelInput, errors, new Object[] {});
+                });
     }
 
     @Test
@@ -235,9 +241,12 @@ class AccountViewModelInputValidatorTest {
         populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
 
         // WHEN/THEN
-        assertThrows(UnsupportedOperationException.class, () -> {
-            accountViewModelInputValidator.validate(accountViewModelInput, errors, "A String!");
-        });
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> {
+                    accountViewModelInputValidator.validate(
+                            accountViewModelInput, errors, "A String!");
+                });
     }
 
     private void populateAccountForm(final String name, final String type, final String currency) {

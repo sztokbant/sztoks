@@ -1,5 +1,12 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
+import static br.net.du.myequity.test.ModelTestUtil.buildUser;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.UserService;
 import org.joda.money.CurrencyUnit;
@@ -12,24 +19,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
-import static br.net.du.myequity.test.ModelTestUtil.buildUser;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 public abstract class AjaxControllerTestBase {
     protected static final Long ENTITY_ID = 1L;
     protected static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
 
     static final String ACCOUNT_NAME = "Mortgage";
 
-    @Autowired
-    protected MockMvc mvc;
+    @Autowired protected MockMvc mvc;
 
-    @MockBean
-    protected UserService userService;
+    @MockBean protected UserService userService;
 
     protected String requestContent;
 
@@ -52,9 +50,11 @@ public abstract class AjaxControllerTestBase {
     @Test
     public void post_noCsrfToken_forbidden() throws Exception {
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().isForbidden());
@@ -63,10 +63,12 @@ public abstract class AjaxControllerTestBase {
     @Test
     public void post_withCsrfTokenUserNotLoggedIn_redirectToLogin() throws Exception {
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         verifyRedirect(resultActions, "/login");
@@ -78,11 +80,13 @@ public abstract class AjaxControllerTestBase {
         when(userService.findByEmail(user.getEmail())).thenReturn(null);
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());

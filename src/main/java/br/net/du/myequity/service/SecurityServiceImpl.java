@@ -14,11 +14,9 @@ import org.springframework.stereotype.Service;
 public class SecurityServiceImpl implements SecurityService {
     private static final Logger log = LoggerFactory.getLogger(SecurityServiceImpl.class);
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    @Autowired private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    @Autowired private UserDetailsService userDetailsService;
 
     @Override
     public String findLoggedInEmail() {
@@ -34,12 +32,14 @@ public class SecurityServiceImpl implements SecurityService {
     public void autoLogin(final String email, final String password) {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+                new UsernamePasswordAuthenticationToken(
+                        userDetails, password, userDetails.getAuthorities());
 
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
         if (usernamePasswordAuthenticationToken.isAuthenticated()) {
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            SecurityContextHolder.getContext()
+                    .setAuthentication(usernamePasswordAuthenticationToken);
             log.debug(String.format("Auto login %s successfully!", email));
         }
     }

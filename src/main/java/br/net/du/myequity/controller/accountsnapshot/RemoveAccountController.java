@@ -1,5 +1,7 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
+
 import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.CreditCardTotalsViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.SnapshotRemoveAccountJsonResponse;
@@ -14,15 +16,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
-
 @RestController
 public class RemoveAccountController extends UpdateControllerBase {
 
     @PostMapping("/snapshot/removeAccount")
-    public SnapshotRemoveAccountJsonResponse post(final Model model,
-                                                  @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
-        final AccountSnapshot accountSnapshot = getAccountSnapshot(model, accountSnapshotUpdateJsonRequest);
+    public SnapshotRemoveAccountJsonResponse post(
+            final Model model,
+            @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+        final AccountSnapshot accountSnapshot =
+                getAccountSnapshot(model, accountSnapshotUpdateJsonRequest);
         final Snapshot snapshot = accountSnapshot.getSnapshot();
 
         snapshot.removeAccountSnapshot(accountSnapshot);
@@ -36,29 +38,33 @@ public class RemoveAccountController extends UpdateControllerBase {
                 getCreditCardTotalsViewModelOutput(accountSnapshot, snapshot, currencyUnit);
 
         return SnapshotRemoveAccountJsonResponse.builder()
-                                                .accountId(account.getId())
-                                                .currencyUnit(currencyUnit.getCode())
-                                                .currencyUnitSymbol(currencyUnit.getSymbol())
-                                                .netWorth(formatAsDecimal(snapshot.getNetWorth().get(currencyUnit)))
-                                                .accountType(accountType.name())
-                                                .totalForAccountType(formatAsDecimal(snapshot.getTotalForAccountType(
-                                                        accountType).get(currencyUnit)))
-                                                .creditCardTotalsForCurrencyUnit(creditCardTotalsForCurrencyUnit)
-                                                .build();
+                .accountId(account.getId())
+                .currencyUnit(currencyUnit.getCode())
+                .currencyUnitSymbol(currencyUnit.getSymbol())
+                .netWorth(formatAsDecimal(snapshot.getNetWorth().get(currencyUnit)))
+                .accountType(accountType.name())
+                .totalForAccountType(
+                        formatAsDecimal(
+                                snapshot.getTotalForAccountType(accountType).get(currencyUnit)))
+                .creditCardTotalsForCurrencyUnit(creditCardTotalsForCurrencyUnit)
+                .build();
     }
 
-    public CreditCardTotalsViewModelOutput getCreditCardTotalsViewModelOutput(final AccountSnapshot accountSnapshot,
-                                                                              final Snapshot snapshot,
-                                                                              final CurrencyUnit currencyUnit) {
+    public CreditCardTotalsViewModelOutput getCreditCardTotalsViewModelOutput(
+            final AccountSnapshot accountSnapshot,
+            final Snapshot snapshot,
+            final CurrencyUnit currencyUnit) {
         final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit;
         if (accountSnapshot instanceof CreditCardSnapshot) {
             final CreditCardSnapshot creditCardTotalsSnapshot =
                     snapshot.getCreditCardTotalsForCurrencyUnit(currencyUnit);
 
             if (creditCardTotalsSnapshot != null) {
-                creditCardTotalsForCurrencyUnit = CreditCardTotalsViewModelOutput.of(creditCardTotalsSnapshot);
+                creditCardTotalsForCurrencyUnit =
+                        CreditCardTotalsViewModelOutput.of(creditCardTotalsSnapshot);
             } else {
-                creditCardTotalsForCurrencyUnit = CreditCardTotalsViewModelOutput.newEmptyInstance(currencyUnit);
+                creditCardTotalsForCurrencyUnit =
+                        CreditCardTotalsViewModelOutput.newEmptyInstance(currencyUnit);
             }
         } else {
             creditCardTotalsForCurrencyUnit = null;

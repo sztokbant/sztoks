@@ -35,7 +35,8 @@
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
-                <div class="text-center">Don't have an account? <a href="${contextPath}/signup">Sign up for My Equity</a>.
+                <div class="text-center">Don't have an account? <a href="${contextPath}/signup">Sign up for My
+                    Equity</a>.
                 </div>
             </div>
         </form>

@@ -1,5 +1,13 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
+import static br.net.du.myequity.test.ModelTestUtil.buildUser;
+import static br.net.du.myequity.test.TestConstants.now;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import br.net.du.myequity.controller.viewmodel.SnapshotViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
@@ -18,14 +26,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
-import static br.net.du.myequity.test.ModelTestUtil.buildUser;
-import static br.net.du.myequity.test.TestConstants.now;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class HomeControllerTest {
@@ -35,11 +35,9 @@ class HomeControllerTest {
     private static final Long SNAPSHOT_ID = 99L;
     private static final long SNAPSHOT_INDEX = 1L;
 
-    @Autowired
-    private MockMvc mvc;
+    @Autowired private MockMvc mvc;
 
-    @MockBean
-    private UserService userService;
+    @MockBean private UserService userService;
 
     private User user;
 
@@ -76,8 +74,10 @@ class HomeControllerTest {
 
         final MvcResult mvcResult = resultActions.andReturn();
         assertEquals("home", mvcResult.getModelAndView().getViewName());
-        assertEquals(UserViewModelOutput.of(user), mvcResult.getModelAndView().getModel().get("user"));
-        assertEquals(ImmutableList.of(SnapshotViewModelOutput.of(snapshot)),
-                     mvcResult.getModelAndView().getModel().get("snapshots"));
+        assertEquals(
+                UserViewModelOutput.of(user), mvcResult.getModelAndView().getModel().get("user"));
+        assertEquals(
+                ImmutableList.of(SnapshotViewModelOutput.of(snapshot)),
+                mvcResult.getModelAndView().getModel().get("snapshots"));
     }
 }

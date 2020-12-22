@@ -1,5 +1,8 @@
 package br.net.du.myequity.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
@@ -7,15 +10,11 @@ import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import com.google.common.collect.ImmutableSortedSet;
+import java.math.BigDecimal;
+import java.util.Map;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NetWorthUtilTest {
 
@@ -38,11 +37,13 @@ class NetWorthUtilTest {
     public void computeByCurrency_fromAccountSet_singleCurrency() {
         // GIVEN
         final ImmutableSortedSet<AccountSnapshot> accountSnapshots =
-                ImmutableSortedSet.of(new SimpleAssetSnapshot(simpleAssetAccount, assetAmount),
-                                      new SimpleLiabilitySnapshot(simpleLiabilityAccount, liabilityAmount));
+                ImmutableSortedSet.of(
+                        new SimpleAssetSnapshot(simpleAssetAccount, assetAmount),
+                        new SimpleLiabilitySnapshot(simpleLiabilityAccount, liabilityAmount));
 
         // WHEN
-        final Map<CurrencyUnit, BigDecimal> netWorthByCurrency = NetWorthUtil.computeByCurrency(accountSnapshots);
+        final Map<CurrencyUnit, BigDecimal> netWorthByCurrency =
+                NetWorthUtil.computeByCurrency(accountSnapshots);
 
         // THEN
         assertEquals(1, netWorthByCurrency.size());
@@ -61,13 +62,15 @@ class NetWorthUtilTest {
         final BigDecimal brlLiabilityAmount = new BigDecimal("150000.00");
 
         final ImmutableSortedSet<AccountSnapshot> accountSnapshots =
-                ImmutableSortedSet.of(new SimpleAssetSnapshot(simpleAssetAccount, assetAmount),
-                                      new SimpleLiabilitySnapshot(simpleLiabilityAccount, liabilityAmount),
-                                      new SimpleAssetSnapshot(brlAsset, brlAssetAmount),
-                                      new SimpleLiabilitySnapshot(brlLiability, brlLiabilityAmount));
+                ImmutableSortedSet.of(
+                        new SimpleAssetSnapshot(simpleAssetAccount, assetAmount),
+                        new SimpleLiabilitySnapshot(simpleLiabilityAccount, liabilityAmount),
+                        new SimpleAssetSnapshot(brlAsset, brlAssetAmount),
+                        new SimpleLiabilitySnapshot(brlLiability, brlLiabilityAmount));
 
         // WHEN
-        final Map<CurrencyUnit, BigDecimal> netWorthByCurrency = NetWorthUtil.computeByCurrency(accountSnapshots);
+        final Map<CurrencyUnit, BigDecimal> netWorthByCurrency =
+                NetWorthUtil.computeByCurrency(accountSnapshots);
 
         // THEN
         assertEquals(2, netWorthByCurrency.size());

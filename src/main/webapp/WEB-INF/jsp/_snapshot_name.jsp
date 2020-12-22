@@ -12,6 +12,7 @@ $(document).ready(function() {
     snapshotNameUpdateSuccessCallback,
   );
 })
+
 </script>
 
 <form id="form_snapshot_name_${snapshot.id}">

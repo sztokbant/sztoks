@@ -32,6 +32,7 @@ $(document).ready(function() {
     investmentCurrentShareValueUpdateSuccessCallback,
   );
 })
+
 </script>
 
 <div class="row border-1px-bottom" id="account_row_${account.accountId}">
@@ -49,7 +50,8 @@ $(document).ready(function() {
     <div class="col col-cell align-right editable-asset">
         <form id="form_investment_original_share_value_${account.accountId}">
             <span id="investment_original_share_value_${account.accountId}">${account.originalShareValue}</span>
-            <span><input id="new_investment_original_share_value_${account.accountId}" name="amount" type="number" min="0"
+            <span><input id="new_investment_original_share_value_${account.accountId}" name="amount" type="number"
+                         min="0"
                          step="0.01" style="display: none;"/></span>
             <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
@@ -58,7 +60,8 @@ $(document).ready(function() {
     <div class="col col-cell align-right editable-asset">
         <form id="form_investment_current_share_value_${account.accountId}">
             <span id="investment_current_share_value_${account.accountId}">${account.currentShareValue}</span>
-            <span><input id="new_investment_current_share_value_${account.accountId}" name="amount" type="number" min="0"
+            <span><input id="new_investment_current_share_value_${account.accountId}" name="amount" type="number"
+                         min="0"
                          step="0.01" style="display: none;"/></span>
             <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>

@@ -1,5 +1,7 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
+
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.SecurityService;
 import br.net.du.myequity.service.UserService;
@@ -12,22 +14,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
-
 @Controller
 public class UserController {
     private static final String SIGNUP_MAPPING = "/signup";
     private static final String SIGNUP_TEMPLATE = "signup";
     private static final String USER_FORM = "userForm";
 
-    @Autowired
-    private UserService userService;
+    @Autowired private UserService userService;
 
-    @Autowired
-    private SecurityService securityService;
+    @Autowired private SecurityService securityService;
 
-    @Autowired
-    private UserValidator userValidator;
+    @Autowired private UserValidator userValidator;
 
     @GetMapping(SIGNUP_MAPPING)
     public String signup(final Model model) {
@@ -37,7 +34,8 @@ public class UserController {
     }
 
     @PostMapping(SIGNUP_MAPPING)
-    public String signup(@ModelAttribute(USER_FORM) final User userForm, final BindingResult bindingResult) {
+    public String signup(
+            @ModelAttribute(USER_FORM) final User userForm, final BindingResult bindingResult) {
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {

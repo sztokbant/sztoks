@@ -1,16 +1,15 @@
 package br.net.du.myequity.controller.util;
 
+import static br.net.du.myequity.controller.interceptor.GlobalModelAttributes.LOGGED_USER;
+
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
-import org.springframework.ui.Model;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Optional;
-
-import static br.net.du.myequity.controller.interceptor.GlobalModelAttributes.LOGGED_USER;
+import org.springframework.ui.Model;
 
 public class ControllerUtils {
 
@@ -31,11 +30,13 @@ public class ControllerUtils {
         return (Optional<User>) model.getAttribute(LOGGED_USER);
     }
 
-    public static boolean accountBelongsToUser(final User user, final Optional<Account> accountOpt) {
+    public static boolean accountBelongsToUser(
+            final User user, final Optional<Account> accountOpt) {
         return accountOpt.isPresent() && accountOpt.get().getUser().equals(user);
     }
 
-    public static boolean snapshotBelongsToUser(final User user, final Optional<Snapshot> snapshotOpt) {
+    public static boolean snapshotBelongsToUser(
+            final User user, final Optional<Snapshot> snapshotOpt) {
         return snapshotOpt.isPresent() && snapshotOpt.get().getUser().equals(user);
     }
 

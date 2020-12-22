@@ -3,42 +3,33 @@ package br.net.du.myequity.model.snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.InvestmentAccount;
 import com.google.common.annotations.VisibleForTesting;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 @Entity
 @DiscriminatorValue(InvestmentAccount.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class InvestmentSnapshot extends AccountSnapshot {
 
-    @Column
-    @Getter
-    @Setter
-    private BigDecimal shares;
+    @Column @Getter @Setter private BigDecimal shares;
 
-    @Column
-    @Getter
-    @Setter
-    private BigDecimal originalShareValue;
+    @Column @Getter @Setter private BigDecimal originalShareValue;
 
-    @Column
-    @Getter
-    @Setter
-    private BigDecimal currentShareValue;
+    @Column @Getter @Setter private BigDecimal currentShareValue;
 
-    public InvestmentSnapshot(@NonNull final Account account,
-                              @NonNull final BigDecimal shares,
-                              @NonNull final BigDecimal originalShareValue,
-                              @NonNull final BigDecimal currentShareValue) {
+    public InvestmentSnapshot(
+            @NonNull final Account account,
+            @NonNull final BigDecimal shares,
+            @NonNull final BigDecimal originalShareValue,
+            @NonNull final BigDecimal currentShareValue) {
         super(account);
         this.shares = shares;
         this.originalShareValue = originalShareValue;
@@ -67,10 +58,11 @@ public class InvestmentSnapshot extends AccountSnapshot {
         }
 
         final InvestmentSnapshot otherInvestmentSnapshot = (InvestmentSnapshot) other;
-        return account.equals(otherInvestmentSnapshot.getAccount()) &&
-                shares.compareTo(otherInvestmentSnapshot.getShares()) == 0 &&
-                originalShareValue.compareTo(otherInvestmentSnapshot.getOriginalShareValue()) == 0 &&
-                currentShareValue.compareTo(otherInvestmentSnapshot.getCurrentShareValue()) == 0;
+        return account.equals(otherInvestmentSnapshot.getAccount())
+                && shares.compareTo(otherInvestmentSnapshot.getShares()) == 0
+                && originalShareValue.compareTo(otherInvestmentSnapshot.getOriginalShareValue())
+                        == 0
+                && currentShareValue.compareTo(otherInvestmentSnapshot.getCurrentShareValue()) == 0;
     }
 
     public BigDecimal getProfitPercentage() {
@@ -78,7 +70,9 @@ public class InvestmentSnapshot extends AccountSnapshot {
             return BigDecimal.ZERO;
         }
         final BigDecimal oneHundred = new BigDecimal("100.00");
-        return (currentShareValue.multiply(oneHundred).divide(originalShareValue, RoundingMode.HALF_UP)).subtract(
-                oneHundred);
+        return (currentShareValue
+                        .multiply(oneHundred)
+                        .divide(originalShareValue, RoundingMode.HALF_UP))
+                .subtract(oneHundred);
     }
 }

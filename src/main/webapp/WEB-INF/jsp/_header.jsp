@@ -11,7 +11,8 @@
                     <form id="logoutForm" method="POST" action="${contextPath}/logout">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     </form>
-                    ${user.fullName} &ndash; <a href="#" onclick="document.forms['logoutForm'].submit()"><b>Logout</b></a>
+                    ${user.fullName} &ndash; <a href="#"
+                                                onclick="document.forms['logoutForm'].submit()"><b>Logout</b></a>
                 </li>
             </ul>
         </c:if>

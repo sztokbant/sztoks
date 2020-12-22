@@ -32,6 +32,7 @@ $(document).ready(function() {
     creditCardStatementUpdateSuccessCallback,
   );
 })
+
 </script>
 
 <div class="row border-1px-bottom" id="account_row_${account.accountId}">

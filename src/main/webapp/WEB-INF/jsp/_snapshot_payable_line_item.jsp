@@ -23,6 +23,7 @@ $(document).ready(function() {
     accountBalanceUpdateSuccessCallback,
   );
 })
+
 </script>
 
 <div class="row border-1px-bottom" id="account_row_${account.accountId}">
@@ -31,7 +32,8 @@ $(document).ready(function() {
     <div class="col col-cell align-right editable-liability">
         <form id="form_payable_due_date_${account.accountId}">
             <span id="payable_due_date_${account.accountId}">${account.dueDate}</span>
-            <span><input id="new_payable_due_date_${account.accountId}" name="amount" type="text" style="display: none;"/></span>
+            <span><input id="new_payable_due_date_${account.accountId}" name="amount" type="text"
+                         style="display: none;"/></span>
             <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>

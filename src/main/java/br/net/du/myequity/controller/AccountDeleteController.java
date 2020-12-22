@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountDeleteController extends AccountControllerBase {
 
     @PostMapping("/account/delete")
-    public AccountDeleteJsonResponse post(final Model model,
-                                          @RequestBody final AccountDeleteJsonRequest accountDeleteJsonRequest) {
+    public AccountDeleteJsonResponse post(
+            final Model model,
+            @RequestBody final AccountDeleteJsonRequest accountDeleteJsonRequest) {
         final Account account = getAccount(model, accountDeleteJsonRequest.getAccountId());
 
         accountService.deleteAccount(account);
 
-        return AccountDeleteJsonResponse.builder().accountId(accountDeleteJsonRequest.getAccountId()).build();
+        return AccountDeleteJsonResponse.builder()
+                .accountId(accountDeleteJsonRequest.getAccountId())
+                .build();
     }
 }

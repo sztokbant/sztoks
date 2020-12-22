@@ -1,11 +1,20 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.account.CreditCardAccount;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,27 +25,17 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
 @AutoConfigureMockMvc
-class CreditCardSnapshotTotalCreditUpdateControllerTest extends AccountSnapshotAjaxControllerTestBase {
+class CreditCardSnapshotTotalCreditUpdateControllerTest
+        extends AccountSnapshotAjaxControllerTestBase {
 
     private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
     private static final BigDecimal CURRENT_AVAILABLE_CREDIT = new BigDecimal("2100.00");
     private static final BigDecimal CURRENT_TOTAL_CREDIT = new BigDecimal("3000.00");
     private static final BigDecimal CURRENT_STATEMENT = new BigDecimal("400.00");
 
-    @MockBean
-    private AccountSnapshotRepository accountSnapshotRepository;
+    @MockBean private AccountSnapshotRepository accountSnapshotRepository;
 
     CreditCardSnapshotTotalCreditUpdateControllerTest() {
         super("/snapshot/updateCreditCardTotalCredit", "7000.00");
@@ -55,7 +54,8 @@ class CreditCardSnapshotTotalCreditUpdateControllerTest extends AccountSnapshotA
 
         snapshot.setUser(user);
         final CreditCardSnapshot creditCardSnapshot =
-                new CreditCardSnapshot(account, CURRENT_TOTAL_CREDIT, CURRENT_AVAILABLE_CREDIT, CURRENT_STATEMENT);
+                new CreditCardSnapshot(
+                        account, CURRENT_TOTAL_CREDIT, CURRENT_AVAILABLE_CREDIT, CURRENT_STATEMENT);
         snapshot.addAccountSnapshot(creditCardSnapshot);
 
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
@@ -63,17 +63,17 @@ class CreditCardSnapshotTotalCreditUpdateControllerTest extends AccountSnapshotA
         account.setUser(user);
         when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(),
-                                                                    ENTITY_ID)).thenReturn(Optional.of(
-                creditCardSnapshot));
+        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+                .thenReturn(Optional.of(creditCardSnapshot));
 
         // WHEN
-        final ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post(url)
-                                                                              .with(csrf())
-                                                                              .with(SecurityMockMvcRequestPostProcessors
-                                                                                            .user(user.getEmail()))
-                                                                              .contentType(MediaType.APPLICATION_JSON)
-                                                                              .content(requestContent));
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(SecurityMockMvcRequestPostProcessors.user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
 
         // THEN
         resultActions.andExpect(status().isOk());
@@ -88,7 +88,8 @@ class CreditCardSnapshotTotalCreditUpdateControllerTest extends AccountSnapshotA
         assertEquals("R$ 2,100.00", jsonNode.get(JSON_AVAILABLE_CREDIT).asText());
 
         final String expectedUsedCreditPercentage = "70.00%";
-        assertEquals(expectedUsedCreditPercentage, jsonNode.get(JSON_USED_CREDIT_PERCENTAGE).asText());
+        assertEquals(
+                expectedUsedCreditPercentage, jsonNode.get(JSON_USED_CREDIT_PERCENTAGE).asText());
 
         final String expectedAccountBalance = "R$ 4,900.00";
         assertEquals(expectedAccountBalance, jsonNode.get(JSON_BALANCE).asText());

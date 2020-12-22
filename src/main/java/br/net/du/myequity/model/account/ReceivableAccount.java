@@ -3,14 +3,13 @@ package br.net.du.myequity.model.account;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.ReceivableSnapshot;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.joda.money.CurrencyUnit;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity
 @DiscriminatorValue(ReceivableAccount.ACCOUNT_SUB_TYPE)
@@ -19,7 +18,8 @@ public class ReceivableAccount extends Account {
 
     public static final String ACCOUNT_SUB_TYPE = "RECEIVABLE";
 
-    public ReceivableAccount(final String name, final CurrencyUnit currencyUnit, final LocalDate createDate) {
+    public ReceivableAccount(
+            final String name, final CurrencyUnit currencyUnit, final LocalDate createDate) {
         super(name, AccountType.ASSET, currencyUnit, createDate);
     }
 

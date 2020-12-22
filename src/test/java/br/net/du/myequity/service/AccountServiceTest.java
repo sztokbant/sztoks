@@ -1,5 +1,13 @@
 package br.net.du.myequity.service;
 
+import static br.net.du.myequity.test.TestConstants.now;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+
 import br.net.du.myequity.exception.MyEquityException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
@@ -11,21 +19,12 @@ import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
-import static br.net.du.myequity.test.TestConstants.now;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 public class AccountServiceTest {
 
@@ -41,11 +40,9 @@ public class AccountServiceTest {
 
     private AccountService accountService;
 
-    @Mock
-    private AccountRepository accountRepository;
+    @Mock private AccountRepository accountRepository;
 
-    @Mock
-    private AccountSnapshotRepository accountSnapshotRepository;
+    @Mock private AccountSnapshotRepository accountSnapshotRepository;
 
     private Snapshot snapshot;
 
@@ -61,7 +58,8 @@ public class AccountServiceTest {
     @Test
     public void deleteAccount_happy() {
         // GIVEN
-        when(accountSnapshotRepository.findAllByAccount(eq(SIMPLE_ASSET_ACCOUNT))).thenReturn(ImmutableList.of());
+        when(accountSnapshotRepository.findAllByAccount(eq(SIMPLE_ASSET_ACCOUNT)))
+                .thenReturn(ImmutableList.of());
 
         // WHEN
         accountService.deleteAccount(SIMPLE_LIABILITY_ACCOUNT);
@@ -73,13 +71,15 @@ public class AccountServiceTest {
     @Test
     public void deleteAccount_accountInUse_error() {
         // GIVEN
-        when(accountSnapshotRepository.findAllByAccount(eq(SIMPLE_ASSET_ACCOUNT))).thenReturn(ImmutableList.of(
-                SIMPLE_ASSET_SNAPSHOT));
+        when(accountSnapshotRepository.findAllByAccount(eq(SIMPLE_ASSET_ACCOUNT)))
+                .thenReturn(ImmutableList.of(SIMPLE_ASSET_SNAPSHOT));
 
         // THEN
-        assertThrows(MyEquityException.class, () -> {
-            accountService.deleteAccount(SIMPLE_ASSET_ACCOUNT);
-        });
+        assertThrows(
+                MyEquityException.class,
+                () -> {
+                    accountService.deleteAccount(SIMPLE_ASSET_ACCOUNT);
+                });
 
         verify(accountRepository, never()).delete(SIMPLE_ASSET_ACCOUNT);
     }

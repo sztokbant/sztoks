@@ -22,8 +22,7 @@ public class RestControllerExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void handleException() {
-    }
+    public void handleException() {}
 
     @Builder
     @Data

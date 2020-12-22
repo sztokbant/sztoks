@@ -1,5 +1,8 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
+import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
+import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
+
 import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.AccountSnapshotViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
@@ -8,32 +11,29 @@ import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
+import java.util.Optional;
+import java.util.function.BiFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
-import java.util.Optional;
-import java.util.function.BiFunction;
-
-import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
-import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
-
 public class UpdateControllerBase {
-    @Autowired
-    SnapshotRepository snapshotRepository;
+    @Autowired SnapshotRepository snapshotRepository;
 
-    @Autowired
-    AccountRepository accountRepository;
+    @Autowired AccountRepository accountRepository;
 
-    @Autowired
-    AccountSnapshotRepository accountSnapshotRepository;
+    @Autowired AccountSnapshotRepository accountSnapshotRepository;
 
-    AccountSnapshotViewModelOutput updateAccountSnapshotField(final Model model,
-                                                              final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest,
-                                                              final Class clazz,
-                                                              final BiFunction<AccountSnapshotUpdateJsonRequest,
-                                                                      AccountSnapshot,
-                                                                      AccountSnapshotViewModelOutput> function) {
-        final AccountSnapshot accountSnapshot = getAccountSnapshot(model, accountSnapshotUpdateJsonRequest);
+    AccountSnapshotViewModelOutput updateAccountSnapshotField(
+            final Model model,
+            final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest,
+            final Class clazz,
+            final BiFunction<
+                            AccountSnapshotUpdateJsonRequest,
+                            AccountSnapshot,
+                            AccountSnapshotViewModelOutput>
+                    function) {
+        final AccountSnapshot accountSnapshot =
+                getAccountSnapshot(model, accountSnapshotUpdateJsonRequest);
 
         if (!clazz.isInstance(accountSnapshot)) {
             throw new IllegalArgumentException("accountSnapshot not found");
@@ -47,8 +47,9 @@ public class UpdateControllerBase {
         return jsonResponse;
     }
 
-    AccountSnapshot getAccountSnapshot(final Model model,
-                                       final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+    AccountSnapshot getAccountSnapshot(
+            final Model model,
+            final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
         final User user = getLoggedUser(model);
 
         final Optional<Snapshot> snapshotOpt =
@@ -57,9 +58,10 @@ public class UpdateControllerBase {
             throw new IllegalArgumentException();
         }
 
-        final Optional<AccountSnapshot> accountSnapshotOpt = accountSnapshotRepository.findBySnapshotIdAndAccountId(
-                accountSnapshotUpdateJsonRequest.getSnapshotId(),
-                accountSnapshotUpdateJsonRequest.getAccountId());
+        final Optional<AccountSnapshot> accountSnapshotOpt =
+                accountSnapshotRepository.findBySnapshotIdAndAccountId(
+                        accountSnapshotUpdateJsonRequest.getSnapshotId(),
+                        accountSnapshotUpdateJsonRequest.getAccountId());
 
         if (!accountSnapshotOpt.isPresent()) {
             throw new IllegalArgumentException("accountSnapshot not found");

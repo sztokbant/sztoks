@@ -19,7 +19,8 @@
 
 <div class="full-width">
     <div class="center-w640">
-        <form:form method="POST" action="${contextPath}/snapshot/addAccounts/${snapshot.id}" modelAttribute="addAccountsForm"
+        <form:form method="POST" action="${contextPath}/snapshot/addAccounts/${snapshot.id}"
+                   modelAttribute="addAccountsForm"
                    class="form-signin">
             <h4 class="form-signin-heading">Add Accounts to Snapshot</h4>
 
@@ -40,7 +41,8 @@
                             <ul>
                                 <c:forEach var="account" items="${assets}">
                                     <div>
-                                        <form:checkbox path="accounts" value="${account.id}" id="checkbox_${account.id}"/>
+                                        <form:checkbox path="accounts" value="${account.id}"
+                                                       id="checkbox_${account.id}"/>
                                         <label for="checkbox_${account.id}">${account.name}</label>
                                     </div>
                                 </c:forEach>
@@ -58,7 +60,8 @@
                             <ul>
                                 <c:forEach var="account" items="${liabilities}">
                                     <div>
-                                        <form:checkbox path="accounts" value="${account.id}" id="checkbox_${account.id}"/>
+                                        <form:checkbox path="accounts" value="${account.id}"
+                                                       id="checkbox_${account.id}"/>
                                         <label for="checkbox_${account.id}">${account.name}</label>
                                     </div>
                                 </c:forEach>

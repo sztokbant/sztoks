@@ -4,13 +4,12 @@ import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
-import lombok.Builder;
-import lombok.Data;
-import org.joda.money.CurrencyUnit;
-
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Builder;
+import lombok.Data;
+import org.joda.money.CurrencyUnit;
 
 @Data
 @Builder
@@ -29,7 +28,8 @@ public class SnapshotViewModelOutput {
     private final String nextName;
 
     public static SnapshotViewModelOutput of(final Snapshot snapshot) {
-        final Map<CurrencyUnit, CreditCardSnapshot> creditCardTotals = snapshot.getCreditCardTotals();
+        final Map<CurrencyUnit, CreditCardSnapshot> creditCardTotals =
+                snapshot.getCreditCardTotals();
 
         Long previousId = null;
         String previousName = null;
@@ -48,35 +48,42 @@ public class SnapshotViewModelOutput {
         }
 
         return SnapshotViewModelOutput.builder()
-                                      .id(snapshot.getId())
-                                      .name(snapshot.getName())
-                                      .netWorth(formatForCurrency(snapshot.getNetWorth()))
-                                      .assetsBalance(formatForCurrency(snapshot.getTotalForAccountType(AccountType.ASSET)))
-                                      .liabilitiesBalance(formatForCurrency(snapshot.getTotalForAccountType(AccountType.LIABILITY)))
-                                      .creditCardTotals(getCurrencyUnitCreditCardViewModels(creditCardTotals))
-                                      .previousId(previousId)
-                                      .previousName(previousName)
-                                      .nextId(nextId)
-                                      .nextName(nextName)
-                                      .build();
+                .id(snapshot.getId())
+                .name(snapshot.getName())
+                .netWorth(formatForCurrency(snapshot.getNetWorth()))
+                .assetsBalance(
+                        formatForCurrency(snapshot.getTotalForAccountType(AccountType.ASSET)))
+                .liabilitiesBalance(
+                        formatForCurrency(snapshot.getTotalForAccountType(AccountType.LIABILITY)))
+                .creditCardTotals(getCurrencyUnitCreditCardViewModels(creditCardTotals))
+                .previousId(previousId)
+                .previousName(previousName)
+                .nextId(nextId)
+                .nextName(nextName)
+                .build();
     }
 
-    private static Map<CurrencyUnit, String> formatForCurrency(final Map<CurrencyUnit, BigDecimal> input) {
+    private static Map<CurrencyUnit, String> formatForCurrency(
+            final Map<CurrencyUnit, BigDecimal> input) {
         final Map<CurrencyUnit, String> formattedForCurrency = new HashMap<>();
 
         for (final CurrencyUnit currencyUnit : input.keySet()) {
-            formattedForCurrency.put(currencyUnit, MoneyFormatUtils.format(currencyUnit, input.get(currencyUnit)));
+            formattedForCurrency.put(
+                    currencyUnit, MoneyFormatUtils.format(currencyUnit, input.get(currencyUnit)));
         }
 
         return formattedForCurrency;
     }
 
-    public static Map<String, CreditCardTotalsViewModelOutput> getCurrencyUnitCreditCardViewModels(final Map<CurrencyUnit, CreditCardSnapshot> creditCardTotals) {
-        final Map<String, CreditCardTotalsViewModelOutput> creditCardTotalsViewModel = new HashMap<>();
+    public static Map<String, CreditCardTotalsViewModelOutput> getCurrencyUnitCreditCardViewModels(
+            final Map<CurrencyUnit, CreditCardSnapshot> creditCardTotals) {
+        final Map<String, CreditCardTotalsViewModelOutput> creditCardTotalsViewModel =
+                new HashMap<>();
 
         for (final CurrencyUnit currencyUnit : creditCardTotals.keySet()) {
-            creditCardTotalsViewModel.put(currencyUnit.getCode(),
-                                          CreditCardTotalsViewModelOutput.of(creditCardTotals.get(currencyUnit)));
+            creditCardTotalsViewModel.put(
+                    currencyUnit.getCode(),
+                    CreditCardTotalsViewModelOutput.of(creditCardTotals.get(currencyUnit)));
         }
 
         return creditCardTotalsViewModel;

@@ -70,7 +70,8 @@
                             <div class="col col-cell">&nbsp;</div>
                             <div class="col col-cell">&nbsp;</div>
                             <div class="col col-cell">&nbsp;</div>
-                            <div class="col col-cell align-right"><b><span id="total_ASSET_${entry.key}">${entry.value}</span></b></div>
+                            <div class="col col-cell align-right"><b><span
+                                    id="total_ASSET_${entry.key}">${entry.value}</span></b></div>
                         </div>
                     </c:forEach>
                 </c:when>
@@ -149,7 +150,8 @@
                             <div class="col col-cell">&nbsp;</div>
                             <div class="col col-cell">&nbsp;</div>
                             <div class="col col-cell">&nbsp;</div>
-                            <div class="col col-cell align-right"><b><span id="total_LIABILITY_${entry.key}">${entry.value}</span></b></div>
+                            <div class="col col-cell align-right"><b><span id="total_LIABILITY_${entry.key}">${entry.value}</span></b>
+                            </div>
                         </div>
                     </c:forEach>
                 </c:when>
@@ -212,12 +214,12 @@
                         <div class="col col-cell col-title">Balance</div>
                     </div>
 
-                    <c:set var="currentCurrency" value="" />
+                    <c:set var="currentCurrency" value=""/>
                     <c:forEach var="account" items="${creditCardAccounts}">
                         <c:if test="${currentCurrency ne '' && currentCurrency ne account.currencyUnit}">
                             <%@ include file="_snapshot_credit_card_total_for_currency.jsp" %>
                         </c:if>
-                        <c:set var="currentCurrency" value="${account.currencyUnit}" />
+                        <c:set var="currentCurrency" value="${account.currencyUnit}"/>
                         <%@ include file="_snapshot_credit_card_line_item.jsp" %>
                     </c:forEach>
                     <%@ include file="_snapshot_credit_card_total_for_currency.jsp" %>
@@ -227,7 +229,8 @@
     </div>
 
     <div class="navigation-buttons-padding-top">
-        <a class="btn btn-myequity" href="${contextPath}/snapshot/addAccounts/${snapshot.id}">Add Accounts to Snapshot</a>
+        <a class="btn btn-myequity" href="${contextPath}/snapshot/addAccounts/${snapshot.id}">Add Accounts to
+            Snapshot</a>
     </div>
 
     <div class="text-center"><a href="/">Back</a></div>
