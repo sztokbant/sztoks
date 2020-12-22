@@ -17,7 +17,6 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.3.1.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.3.1.RELEASE'
-    implementation 'org.projectlombok:lombok:1.18.12'
     implementation 'org.springframework.boot:spring-boot-starter-tomcat:2.3.1.RELEASE'
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.36'
     implementation 'javax.servlet:jstl:1.2'
@@ -29,6 +28,12 @@ dependencies {
     testImplementation 'com.h2database:h2:1.4.200'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.3.1.RELEASE'
     testImplementation 'org.springframework.security:spring-security-test:5.3.3.RELEASE'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
 
 group = 'com.example'
