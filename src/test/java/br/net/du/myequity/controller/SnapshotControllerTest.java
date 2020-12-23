@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.controller.SnapshotController.getViewModelOutputClass;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.CreditCardViewModelOutput;
@@ -18,34 +19,25 @@ import org.junit.jupiter.api.Test;
 
 public class SnapshotControllerTest {
 
-    private SnapshotController snapshotController;
-
     @Test
     public void getViewModelOutputClass_happy() throws Exception {
-        snapshotController = new SnapshotController();
+        assertEquals(
+                CreditCardViewModelOutput.class, getViewModelOutputClass(CreditCardSnapshot.class));
 
         assertEquals(
-                CreditCardViewModelOutput.class,
-                snapshotController.getViewModelOutputClass(CreditCardSnapshot.class));
+                InvestmentViewModelOutput.class, getViewModelOutputClass(InvestmentSnapshot.class));
 
         assertEquals(
-                InvestmentViewModelOutput.class,
-                snapshotController.getViewModelOutputClass(InvestmentSnapshot.class));
+                ReceivableViewModelOutput.class, getViewModelOutputClass(ReceivableSnapshot.class));
 
-        assertEquals(
-                ReceivableViewModelOutput.class,
-                snapshotController.getViewModelOutputClass(ReceivableSnapshot.class));
-
-        assertEquals(
-                PayableViewModelOutput.class,
-                snapshotController.getViewModelOutputClass(PayableSnapshot.class));
+        assertEquals(PayableViewModelOutput.class, getViewModelOutputClass(PayableSnapshot.class));
 
         assertEquals(
                 SimpleAssetViewModelOutput.class,
-                snapshotController.getViewModelOutputClass(SimpleAssetSnapshot.class));
+                getViewModelOutputClass(SimpleAssetSnapshot.class));
 
         assertEquals(
                 SimpleLiabilityViewModelOutput.class,
-                snapshotController.getViewModelOutputClass(SimpleLiabilitySnapshot.class));
+                getViewModelOutputClass(SimpleLiabilitySnapshot.class));
     }
 }
