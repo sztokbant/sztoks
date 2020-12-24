@@ -23,16 +23,16 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
+import javax.transaction.Transactional;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
+@Transactional
 class PersistenceTest {
-
     private static final String EMAIL = "example@example.com";
     private static final String FIRST_NAME = "Bill";
     private static final String LAST_NAME = "Gates";
@@ -63,36 +63,13 @@ class PersistenceTest {
         assetAmount = new BigDecimal("100.00");
         simpleLiabilityAccount = new SimpleLiabilityAccount("Liability Account", CurrencyUnit.USD);
         liabilityAmount = new BigDecimal("320000.00");
+
+        saveNewUserAndAddAccounts();
+        initSnapshot();
     }
 
     @Test
-    @Transactional
-    public void persistUser() {
-        // GIVEN
-        assertNull(user.getId());
-
-        // WHEN
-        userService.save(user);
-
-        // THEN
-        final User actual = userService.findByEmail(EMAIL);
-        assertNotNull(actual.getId());
-        assertEquals(user, actual);
-
-        final List<Snapshot> snapshots = snapshotRepository.findAllByUser(user);
-        assertEquals(1, snapshots.size());
-    }
-
-    @Test
-    @Transactional
-    public void addEmptySnapshotToPersistedUser() {
-        // GIVEN
-        assertNull(user.getId());
-        userService.save(user);
-
-        snapshot = new Snapshot(2L, now, ImmutableSortedSet.of());
-        assertNull(snapshot.getId());
-
+    public void addSnapshotToPersistedUser() {
         // WHEN
         user.addSnapshot(snapshot);
 
@@ -102,31 +79,6 @@ class PersistenceTest {
         assertEquals(user, actualUser);
         assertEquals(2, actualUser.getSnapshots().size());
         assertEquals(snapshot, user.getSnapshots().first());
-
-        final Snapshot actualSnapshot = snapshotRepository.findAll().get(0);
-        assertNotNull(actualSnapshot.getId());
-        assertNotNull(actualSnapshot.getUser());
-        assertEquals(user, actualSnapshot.getUser());
-
-        final SortedSet<AccountSnapshot> accountSnapshots = actualSnapshot.getAccountSnapshots();
-        assertTrue(accountSnapshots.isEmpty());
-    }
-
-    @Test
-    @Transactional
-    public void addPopulatedSnapshotToPersistedUser() {
-        // GIVEN
-        saveNewUserWithAccounts();
-        initSnapshot();
-
-        // WHEN
-        user.addSnapshot(snapshot);
-
-        // THEN
-        final User actualUser = userService.findByEmail(EMAIL);
-        assertNotNull(actualUser.getId());
-        assertEquals(user, actualUser);
-        assertEquals(2, actualUser.getSnapshots().size());
 
         final Snapshot actualSnapshot = snapshotRepository.findAllByUser(user).get(1);
         assertNotNull(actualSnapshot.getId());
@@ -155,12 +107,8 @@ class PersistenceTest {
     }
 
     @Test
-    @Transactional
     public void removeAccountFromSnapshot() {
         // GIVEN
-        saveNewUserWithAccounts();
-        initSnapshot();
-
         user.addSnapshot(snapshot);
 
         final Snapshot savedSnapshot = snapshotRepository.findAll().get(1);
@@ -175,12 +123,8 @@ class PersistenceTest {
     }
 
     @Test
-    @Transactional
     public void updateAccountInSnapshot() {
         // GIVEN
-        saveNewUserWithAccounts();
-        initSnapshot();
-
         user.addSnapshot(snapshot);
 
         final Snapshot savedSnapshot = snapshotRepository.findAll().get(1);
@@ -206,15 +150,9 @@ class PersistenceTest {
     }
 
     @Test
-    @Transactional
     public void removeSnapshotFromPersistedUser() {
         // GIVEN
-        saveNewUserWithAccounts();
-        initSnapshot();
-
         user.addSnapshot(snapshot);
-
-        userService.save(user);
 
         assertFalse(accountRepository.findAll().isEmpty());
         assertFalse(accountRepository.findByUser(user).isEmpty());
@@ -234,12 +172,12 @@ class PersistenceTest {
         assertEquals(1, snapshotRepository.findAll().size());
     }
 
-    private void saveNewUserWithAccounts() {
+    private void saveNewUserAndAddAccounts() {
         assertNull(user.getId());
+        userService.save(user);
 
         user.addAccount(simpleAssetAccount);
         user.addAccount(simpleLiabilityAccount);
-        userService.save(user);
 
         final List<Account> allAccounts = accountRepository.findAll();
         final List<Account> userAccounts = accountRepository.findByUser(user);
