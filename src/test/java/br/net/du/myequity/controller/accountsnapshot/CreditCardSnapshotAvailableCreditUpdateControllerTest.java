@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.account.CreditCardAccount;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
-import br.net.du.myequity.persistence.AccountSnapshotRepository;
+import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -35,7 +35,7 @@ class CreditCardSnapshotAvailableCreditUpdateControllerTest
     private static final BigDecimal CURRENT_TOTAL_CREDIT = new BigDecimal("3000.00");
     private static final BigDecimal CURRENT_STATEMENT = new BigDecimal("400.00");
 
-    @MockBean private AccountSnapshotRepository accountSnapshotRepository;
+    @MockBean private AccountSnapshotService accountSnapshotService;
 
     CreditCardSnapshotAvailableCreditUpdateControllerTest() {
         super("/snapshot/updateCreditCardAvailableCredit", "2900.00");
@@ -63,7 +63,7 @@ class CreditCardSnapshotAvailableCreditUpdateControllerTest
         account.setUser(user);
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
                 .thenReturn(Optional.of(creditCardSnapshot));
 
         // WHEN

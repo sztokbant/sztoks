@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.account.InvestmentAccount;
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
-import br.net.du.myequity.persistence.AccountSnapshotRepository;
+import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -35,7 +35,7 @@ class InvestmentSnapshotCurrentShareValueUpdateControllerTest
     private static final BigDecimal CURRENT_ORIGINAL_SHARE_VALUE = new BigDecimal("1500.00");
     private static final BigDecimal CURRENT_SHARES = new BigDecimal("15.00");
 
-    @MockBean private AccountSnapshotRepository accountSnapshotRepository;
+    @MockBean private AccountSnapshotService accountSnapshotService;
 
     InvestmentSnapshotCurrentShareValueUpdateControllerTest() {
         super("/snapshot/updateInvestmentCurrentShareValue", "4500.00");
@@ -66,7 +66,7 @@ class InvestmentSnapshotCurrentShareValueUpdateControllerTest
         account.setUser(user);
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
                 .thenReturn(Optional.of(investmentSnapshot));
 
         // WHEN

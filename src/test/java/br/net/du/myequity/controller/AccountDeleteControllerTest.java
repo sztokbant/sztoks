@@ -13,8 +13,8 @@ import br.net.du.myequity.controller.viewmodel.AccountDeleteJsonRequest;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
-import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.service.AccountService;
+import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
@@ -41,7 +41,7 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
 
     @MockBean private AccountService accountService;
 
-    @MockBean private AccountSnapshotRepository accountSnapshotRepository;
+    @MockBean private AccountSnapshotService accountSnapshotService;
 
     private String requestContent;
 

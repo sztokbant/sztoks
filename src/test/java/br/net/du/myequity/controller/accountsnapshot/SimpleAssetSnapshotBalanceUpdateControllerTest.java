@@ -12,7 +12,7 @@ import br.net.du.myequity.model.account.CreditCardAccount;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
-import br.net.du.myequity.persistence.AccountSnapshotRepository;
+import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -35,7 +35,7 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
     private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
 
-    @MockBean private AccountSnapshotRepository accountSnapshotRepository;
+    @MockBean private AccountSnapshotService accountSnapshotService;
 
     SimpleAssetSnapshotBalanceUpdateControllerTest() {
         super("/snapshot/updateAccountBalance", "108.00");
@@ -66,7 +66,7 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
         account.setUser(user);
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
                 .thenReturn(Optional.of(accountSnapshot));
 
         // WHEN
@@ -97,7 +97,7 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
         account.setUser(user);
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
                 .thenReturn(Optional.of(accountSnapshot));
 
         // WHEN

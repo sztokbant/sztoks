@@ -16,7 +16,6 @@ import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
-import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
@@ -42,7 +41,7 @@ public class AccountServiceTest {
 
     @Mock private AccountRepository accountRepository;
 
-    @Mock private AccountSnapshotRepository accountSnapshotRepository;
+    @Mock private AccountSnapshotService accountSnapshotService;
 
     private Snapshot snapshot;
 
@@ -52,13 +51,13 @@ public class AccountServiceTest {
 
         snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of());
 
-        accountService = new AccountService(accountRepository, accountSnapshotRepository);
+        accountService = new AccountService(accountRepository, accountSnapshotService);
     }
 
     @Test
     public void deleteAccount_happy() {
         // GIVEN
-        when(accountSnapshotRepository.findAllByAccount(eq(SIMPLE_ASSET_ACCOUNT)))
+        when(accountSnapshotService.findAllByAccount(eq(SIMPLE_ASSET_ACCOUNT)))
                 .thenReturn(ImmutableList.of());
 
         // WHEN
@@ -71,7 +70,7 @@ public class AccountServiceTest {
     @Test
     public void deleteAccount_accountInUse_error() {
         // GIVEN
-        when(accountSnapshotRepository.findAllByAccount(eq(SIMPLE_ASSET_ACCOUNT)))
+        when(accountSnapshotService.findAllByAccount(eq(SIMPLE_ASSET_ACCOUNT)))
                 .thenReturn(ImmutableList.of(SIMPLE_ASSET_SNAPSHOT));
 
         // THEN

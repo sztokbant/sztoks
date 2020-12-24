@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.account.ReceivableAccount;
 import br.net.du.myequity.model.snapshot.ReceivableSnapshot;
-import br.net.du.myequity.persistence.AccountSnapshotRepository;
+import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -32,7 +32,7 @@ class ReceivableSnapshotAmountUpdateControllerTest extends AccountSnapshotAjaxCo
     private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
 
-    @MockBean private AccountSnapshotRepository accountSnapshotRepository;
+    @MockBean private AccountSnapshotService accountSnapshotService;
 
     ReceivableSnapshotAmountUpdateControllerTest() {
         super("/snapshot/updateAccountBalance", "108.00");
@@ -59,7 +59,7 @@ class ReceivableSnapshotAmountUpdateControllerTest extends AccountSnapshotAjaxCo
         account.setUser(user);
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
                 .thenReturn(Optional.of(accountSnapshot));
 
         // WHEN

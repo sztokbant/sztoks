@@ -8,8 +8,8 @@ import br.net.du.myequity.controller.viewmodel.accountsnapshot.AccountSnapshotVi
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.service.AccountService;
+import br.net.du.myequity.service.AccountSnapshotService;
 import br.net.du.myequity.service.SnapshotService;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -21,7 +21,7 @@ public class UpdateControllerBase {
 
     @Autowired AccountService accountService;
 
-    @Autowired AccountSnapshotRepository accountSnapshotRepository;
+    @Autowired AccountSnapshotService accountSnapshotService;
 
     AccountSnapshotViewModelOutput updateAccountSnapshotField(
             final Model model,
@@ -42,7 +42,7 @@ public class UpdateControllerBase {
         final AccountSnapshotViewModelOutput jsonResponse =
                 function.apply(accountSnapshotUpdateJsonRequest, accountSnapshot);
 
-        accountSnapshotRepository.save(accountSnapshot);
+        accountSnapshotService.save(accountSnapshot);
 
         return jsonResponse;
     }
@@ -59,7 +59,7 @@ public class UpdateControllerBase {
         }
 
         final Optional<AccountSnapshot> accountSnapshotOpt =
-                accountSnapshotRepository.findBySnapshotIdAndAccountId(
+                accountSnapshotService.findBySnapshotIdAndAccountId(
                         accountSnapshotUpdateJsonRequest.getSnapshotId(),
                         accountSnapshotUpdateJsonRequest.getAccountId());
 

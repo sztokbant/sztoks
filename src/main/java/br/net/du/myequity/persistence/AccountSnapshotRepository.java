@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-// TODO Create a Service
 public interface AccountSnapshotRepository
         extends JpaRepository<AccountSnapshot, AccountSnapshot.PK> {
     Optional<AccountSnapshot> findBySnapshotIdAndAccountId(Long snapshotId, Long accountId);

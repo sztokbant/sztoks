@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import br.net.du.myequity.model.account.ReceivableAccount;
 import br.net.du.myequity.model.snapshot.ReceivableSnapshot;
-import br.net.du.myequity.persistence.AccountSnapshotRepository;
+import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -31,7 +31,7 @@ class ReceivableSnapshotDueDateUpdateControllerTest extends AccountSnapshotAjaxC
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("4200.00");
     private static final LocalDate CURRENT_DUE_DATE = LocalDate.parse("2020-12-31");
 
-    @MockBean private AccountSnapshotRepository accountSnapshotRepository;
+    @MockBean private AccountSnapshotService accountSnapshotService;
 
     ReceivableSnapshotDueDateUpdateControllerTest() {
         super("/snapshot/updateAccountDueDate", "2020-09-16");
@@ -58,7 +58,7 @@ class ReceivableSnapshotDueDateUpdateControllerTest extends AccountSnapshotAjaxC
         account.setUser(user);
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
                 .thenReturn(Optional.of(accountSnapshot));
 
         // WHEN
