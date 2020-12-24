@@ -30,7 +30,7 @@ public class AccountViewModelInputValidator implements SmartValidator {
 
     @Override
     public void validate(final Object o, final Errors errors) {
-        validate(o, errors, null);
+        validate(o, errors, new Object[0]);
     }
 
     @Override
