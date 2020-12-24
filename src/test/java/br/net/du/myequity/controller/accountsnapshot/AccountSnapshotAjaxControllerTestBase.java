@@ -11,8 +11,8 @@ import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
+import br.net.du.myequity.service.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Optional;
@@ -49,7 +49,7 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
 
     @MockBean SnapshotRepository snapshotRepository;
 
-    @MockBean AccountRepository accountRepository;
+    @MockBean AccountService accountService;
 
     Snapshot snapshot;
 
@@ -82,7 +82,7 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
         snapshot.setUser(user);
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.empty());
+        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.empty());
 
         // WHEN
         final ResultActions resultActions =
@@ -110,7 +110,7 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
         anotherUser.setId(anotherUserId);
 
         account.setUser(anotherUser);
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions =
@@ -178,7 +178,7 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions =

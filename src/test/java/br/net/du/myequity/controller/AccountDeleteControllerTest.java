@@ -13,8 +13,8 @@ import br.net.du.myequity.controller.viewmodel.AccountDeleteJsonRequest;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
-import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
+import br.net.du.myequity.service.AccountService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
@@ -39,7 +39,7 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
 
     @Autowired private MockMvc mvc;
 
-    @MockBean private AccountRepository accountRepository;
+    @MockBean private AccountService accountService;
 
     @MockBean private AccountSnapshotRepository accountSnapshotRepository;
 
@@ -119,7 +119,7 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.empty());
+        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.empty());
 
         // WHEN
         final ResultActions resultActions =
@@ -144,7 +144,7 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
         anotherUser.setId(anotherUserId);
 
         account.setUser(anotherUser);
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions =
@@ -165,7 +165,7 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         account.setUser(user);
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions =

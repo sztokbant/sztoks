@@ -3,7 +3,7 @@ package br.net.du.myequity.validator;
 import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.persistence.AccountRepository;
+import br.net.du.myequity.service.AccountService;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.money.CurrencyUnit;
@@ -16,11 +16,11 @@ import org.springframework.validation.ValidationUtils;
 
 @Component
 public class AccountViewModelInputValidator implements SmartValidator {
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     @Autowired
-    public AccountViewModelInputValidator(final AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
+    public AccountViewModelInputValidator(final AccountService accountService) {
+        this.accountService = accountService;
     }
 
     @Override
@@ -72,8 +72,7 @@ public class AccountViewModelInputValidator implements SmartValidator {
                     || !(validationHints[0] instanceof User)) {
                 throw new UnsupportedOperationException();
             } else {
-                final List<Account> accounts =
-                        accountRepository.findByUser((User) validationHints[0]);
+                final List<Account> accounts = accountService.findByUser((User) validationHints[0]);
                 final boolean isDuplicateName =
                         accounts.stream()
                                         .filter(

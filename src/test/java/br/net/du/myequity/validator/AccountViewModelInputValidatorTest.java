@@ -10,7 +10,7 @@ import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
-import br.net.du.myequity.persistence.AccountRepository;
+import br.net.du.myequity.service.AccountService;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +28,7 @@ class AccountViewModelInputValidatorTest {
     private static final String ANOTHER_ACCOUNT_NAME = "Another Account";
     private static final String CURRENCY_UNIT = "USD";
 
-    @Mock private AccountRepository accountRepository;
+    @Mock private AccountService accountService;
 
     private AccountViewModelInputValidator accountViewModelInputValidator;
 
@@ -45,7 +45,7 @@ class AccountViewModelInputValidatorTest {
         user = new User();
         user.setId(42L);
 
-        accountViewModelInputValidator = new AccountViewModelInputValidator(accountRepository);
+        accountViewModelInputValidator = new AccountViewModelInputValidator(accountService);
 
         accountViewModelInput = new AccountViewModelInput();
 
@@ -256,6 +256,6 @@ class AccountViewModelInputValidatorTest {
     }
 
     private void defineExistingAccounts(final List<Account> accounts) {
-        when(accountRepository.findByUser(user)).thenReturn(accounts);
+        when(accountService.findByUser(user)).thenReturn(accounts);
     }
 }

@@ -17,7 +17,7 @@ public class AccountRenameController extends AccountControllerBase {
         final Account account = getAccount(model, entityNameJsonRequest.getId());
 
         account.setName(entityNameJsonRequest.getNewValue().trim());
-        accountRepository.save(account);
+        accountService.save(account);
 
         return EntityRenameJsonResponse.builder().name(account.getName()).build();
     }

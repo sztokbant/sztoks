@@ -20,6 +20,7 @@ import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
+import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.UserService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
@@ -39,7 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class PersistenceTest {
     @Autowired private UserService userService;
 
-    @Autowired private AccountRepository accountRepository;
+    @Autowired private AccountService accountService;
 
     @Autowired private SnapshotRepository snapshotRepository;
 
@@ -149,8 +150,7 @@ class PersistenceTest {
         // GIVEN
         user.addSnapshot(snapshot);
 
-        assertFalse(accountRepository.findAll().isEmpty());
-        assertFalse(accountRepository.findByUser(user).isEmpty());
+        assertFalse(accountService.findByUser(user).isEmpty());
         assertFalse(snapshotRepository.findAll().isEmpty());
 
         // WHEN
@@ -162,8 +162,7 @@ class PersistenceTest {
         final User actualUser = userService.findByEmail(EMAIL);
         assertEquals(1, actualUser.getSnapshots().size());
 
-        assertFalse(accountRepository.findAll().isEmpty());
-        assertFalse(accountRepository.findByUser(actualUser).isEmpty());
+        assertFalse(accountService.findByUser(actualUser).isEmpty());
         assertEquals(1, snapshotRepository.findAll().size());
     }
 
@@ -174,12 +173,7 @@ class PersistenceTest {
         user.addAccount(simpleAssetAccount);
         user.addAccount(simpleLiabilityAccount);
 
-        final List<Account> allAccounts = accountRepository.findAll();
-        final List<Account> userAccounts = accountRepository.findByUser(user);
-
-        assertFalse(allAccounts.isEmpty());
-        assertTrue(allAccounts.contains(simpleAssetAccount));
-        assertTrue(allAccounts.contains(simpleLiabilityAccount));
+        final List<Account> userAccounts = accountService.findByUser(user);
 
         assertFalse(userAccounts.isEmpty());
         assertTrue(userAccounts.contains(simpleAssetAccount));

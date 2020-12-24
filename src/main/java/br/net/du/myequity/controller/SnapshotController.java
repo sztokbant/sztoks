@@ -27,9 +27,9 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
+import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
@@ -62,7 +62,7 @@ public class SnapshotController {
 
     @Autowired private SnapshotRepository snapshotRepository;
 
-    @Autowired private AccountRepository accountRepository;
+    @Autowired private AccountService accountService;
 
     @Autowired private AccountSnapshotRepository accountSnapshotRepository;
 
@@ -240,7 +240,7 @@ public class SnapshotController {
         final User user = userOpt.get();
         final Snapshot snapshot = snapshotOpt.get();
 
-        final List<Account> allUserAccounts = accountRepository.findByUser(user);
+        final List<Account> allUserAccounts = accountService.findByUser(user);
 
         final List<AccountViewModelOutput> availableAssets =
                 allUserAccounts.stream()
@@ -290,7 +290,7 @@ public class SnapshotController {
             final User user = userOpt.get();
             final Snapshot snapshot = snapshotOpt.get();
 
-            final List<Account> allUserAccounts = accountRepository.findByUser(user);
+            final List<Account> allUserAccounts = accountService.findByUser(user);
             allUserAccounts.stream()
                     .filter(
                             account ->

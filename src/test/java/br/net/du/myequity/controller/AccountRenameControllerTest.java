@@ -13,7 +13,7 @@ import br.net.du.myequity.controller.viewmodel.EntityRenameJsonRequest;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
-import br.net.du.myequity.persistence.AccountRepository;
+import br.net.du.myequity.service.AccountService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
@@ -41,7 +41,7 @@ class AccountRenameControllerTest extends AjaxControllerTestBase {
 
     @Autowired private MockMvc mvc;
 
-    @MockBean private AccountRepository accountRepository;
+    @MockBean private AccountService accountService;
 
     private String requestContent;
 
@@ -122,7 +122,7 @@ class AccountRenameControllerTest extends AjaxControllerTestBase {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.empty());
+        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.empty());
 
         // WHEN
         final ResultActions resultActions =
@@ -147,7 +147,7 @@ class AccountRenameControllerTest extends AjaxControllerTestBase {
         anotherUser.setId(anotherUserId);
 
         account.setUser(anotherUser);
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions =
@@ -168,7 +168,7 @@ class AccountRenameControllerTest extends AjaxControllerTestBase {
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         account.setUser(user);
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions =

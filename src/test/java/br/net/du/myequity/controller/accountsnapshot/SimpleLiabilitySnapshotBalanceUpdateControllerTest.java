@@ -58,7 +58,7 @@ class SimpleLiabilitySnapshotBalanceUpdateControllerTest
         when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
-        when(accountRepository.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
 
         when(accountSnapshotRepository.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
                 .thenReturn(Optional.of(accountSnapshot));

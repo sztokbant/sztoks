@@ -8,9 +8,9 @@ import br.net.du.myequity.controller.viewmodel.accountsnapshot.AccountSnapshotVi
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.persistence.AccountRepository;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import br.net.du.myequity.persistence.SnapshotRepository;
+import br.net.du.myequity.service.AccountService;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import org.springframework.ui.Model;
 public class UpdateControllerBase {
     @Autowired SnapshotRepository snapshotRepository;
 
-    @Autowired AccountRepository accountRepository;
+    @Autowired AccountService accountService;
 
     @Autowired AccountSnapshotRepository accountSnapshotRepository;
 
