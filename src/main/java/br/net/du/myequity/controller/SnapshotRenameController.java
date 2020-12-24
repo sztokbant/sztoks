@@ -7,7 +7,7 @@ import br.net.du.myequity.controller.viewmodel.EntityRenameJsonRequest;
 import br.net.du.myequity.controller.viewmodel.EntityRenameJsonResponse;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.persistence.SnapshotRepository;
+import br.net.du.myequity.service.SnapshotService;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SnapshotRenameController extends AccountControllerBase {
-    @Autowired SnapshotRepository snapshotRepository;
+    @Autowired SnapshotService snapshotService;
 
     @PostMapping("/snapshot/updateName")
     public EntityRenameJsonResponse post(
@@ -25,7 +25,7 @@ public class SnapshotRenameController extends AccountControllerBase {
         final Snapshot snapshot = getSnapshot(model, entityNameJsonRequest.getId());
 
         snapshot.setName(entityNameJsonRequest.getNewValue().trim());
-        snapshotRepository.save(snapshot);
+        snapshotService.save(snapshot);
 
         return EntityRenameJsonResponse.builder().name(snapshot.getName()).build();
     }
@@ -33,7 +33,7 @@ public class SnapshotRenameController extends AccountControllerBase {
     Snapshot getSnapshot(final Model model, final Long snapshotId) {
         final User user = getLoggedUser(model);
 
-        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
+        final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
         if (!snapshotBelongsToUser(user, snapshotOpt)) {
             throw new IllegalArgumentException();
         }

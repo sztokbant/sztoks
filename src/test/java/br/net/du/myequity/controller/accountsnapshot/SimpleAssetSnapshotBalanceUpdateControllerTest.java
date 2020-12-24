@@ -61,7 +61,7 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
                 new CreditCardSnapshot(account, CURRENT_BALANCE, CURRENT_BALANCE, CURRENT_BALANCE);
         snapshot.addAccountSnapshot(accountSnapshot);
 
-        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
@@ -92,7 +92,7 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
                 new SimpleAssetSnapshot(account, CURRENT_BALANCE);
         snapshot.addAccountSnapshot(accountSnapshot);
 
-        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));

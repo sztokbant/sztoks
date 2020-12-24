@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.net.du.myequity.controller.viewmodel.EntityRenameJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.persistence.SnapshotRepository;
+import br.net.du.myequity.service.SnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSortedSet;
@@ -40,7 +40,7 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
 
     @Autowired private MockMvc mvc;
 
-    @MockBean private SnapshotRepository snapshotRepository;
+    @MockBean private SnapshotService snapshotService;
 
     private String requestContent;
 
@@ -121,7 +121,7 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        when(snapshotRepository.findById(ENTITY_ID)).thenReturn(Optional.empty());
+        when(snapshotService.findById(ENTITY_ID)).thenReturn(Optional.empty());
 
         // WHEN
         final ResultActions resultActions =
@@ -146,7 +146,7 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
         anotherUser.setId(anotherUserId);
 
         snapshot.setUser(anotherUser);
-        when(snapshotRepository.findById(ENTITY_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(ENTITY_ID)).thenReturn(Optional.of(snapshot));
 
         // WHEN
         final ResultActions resultActions =
@@ -167,7 +167,7 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        when(snapshotRepository.findById(ENTITY_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(ENTITY_ID)).thenReturn(Optional.of(snapshot));
 
         // WHEN
         final ResultActions resultActions =

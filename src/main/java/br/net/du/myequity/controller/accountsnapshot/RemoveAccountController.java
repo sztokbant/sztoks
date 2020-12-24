@@ -28,7 +28,7 @@ public class RemoveAccountController extends UpdateControllerBase {
         final Snapshot snapshot = accountSnapshot.getSnapshot();
 
         snapshot.removeAccountSnapshot(accountSnapshot);
-        snapshotRepository.save(snapshot);
+        snapshotService.save(snapshot);
 
         final Account account = accountSnapshot.getAccount();
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();

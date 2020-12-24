@@ -21,6 +21,7 @@ import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import br.net.du.myequity.service.AccountService;
+import br.net.du.myequity.service.SnapshotService;
 import br.net.du.myequity.service.UserService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
@@ -42,7 +43,7 @@ class PersistenceTest {
 
     @Autowired private AccountService accountService;
 
-    @Autowired private SnapshotRepository snapshotRepository;
+    @Autowired private SnapshotService snapshotService;
 
     private User user;
 
@@ -76,7 +77,7 @@ class PersistenceTest {
         assertEquals(2, actualUser.getSnapshots().size());
         assertEquals(snapshot, user.getSnapshots().first());
 
-        final Snapshot actualSnapshot = snapshotRepository.findAllByUser(user).get(1);
+        final Snapshot actualSnapshot = snapshotService.findAllByUser(user).get(1);
         assertNotNull(actualSnapshot.getId());
         assertNotNull(actualSnapshot.getUser());
         assertEquals(user, actualSnapshot.getUser());
@@ -107,14 +108,14 @@ class PersistenceTest {
         // GIVEN
         user.addSnapshot(snapshot);
 
-        final Snapshot savedSnapshot = snapshotRepository.findAll().get(1);
+        final Snapshot savedSnapshot = snapshotService.findAllByUser(user).get(1);
         assertEquals(2, savedSnapshot.getAccountSnapshots().size());
 
         // WHEN
         savedSnapshot.removeAccountSnapshotFor(simpleLiabilityAccount);
 
         // THEN
-        final Snapshot actualSnapshot = snapshotRepository.findAll().get(1);
+        final Snapshot actualSnapshot = snapshotService.findAllByUser(user).get(1);
         assertEquals(1, actualSnapshot.getAccountSnapshots().size());
     }
 
@@ -123,7 +124,7 @@ class PersistenceTest {
         // GIVEN
         user.addSnapshot(snapshot);
 
-        final Snapshot savedSnapshot = snapshotRepository.findAll().get(1);
+        final Snapshot savedSnapshot = snapshotService.findAllByUser(user).get(1);
 
         assertEquals(2, savedSnapshot.getAccountSnapshots().size());
         assertEquals(
@@ -138,7 +139,7 @@ class PersistenceTest {
                 simpleLiabilitySnapshot.getAmount().add(new BigDecimal("100000.00")));
 
         // THEN
-        final Snapshot actualSnapshot = snapshotRepository.findAll().get(1);
+        final Snapshot actualSnapshot = snapshotService.findAllByUser(user).get(1);
         assertEquals(2, actualSnapshot.getAccountSnapshots().size());
         assertEquals(
                 ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-419900.00")),
@@ -151,7 +152,7 @@ class PersistenceTest {
         user.addSnapshot(snapshot);
 
         assertFalse(accountService.findByUser(user).isEmpty());
-        assertFalse(snapshotRepository.findAll().isEmpty());
+        assertFalse(snapshotService.findAllByUser(user).isEmpty());
 
         // WHEN
         final User persistedUser = userService.findByEmail(EMAIL);
@@ -163,7 +164,7 @@ class PersistenceTest {
         assertEquals(1, actualUser.getSnapshots().size());
 
         assertFalse(accountService.findByUser(actualUser).isEmpty());
-        assertEquals(1, snapshotRepository.findAll().size());
+        assertEquals(1, snapshotService.findAllByUser(user).size());
     }
 
     private void saveNewUserAndAddAccounts() {

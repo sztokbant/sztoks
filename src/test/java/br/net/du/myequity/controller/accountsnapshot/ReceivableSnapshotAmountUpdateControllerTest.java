@@ -54,7 +54,7 @@ class ReceivableSnapshotAmountUpdateControllerTest extends AccountSnapshotAjaxCo
                 new ReceivableSnapshot(account, LocalDate.now(), CURRENT_BALANCE);
         snapshot.addAccountSnapshot(accountSnapshot);
 
-        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));

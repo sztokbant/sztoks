@@ -9,15 +9,15 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
-import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.service.AccountService;
+import br.net.du.myequity.service.SnapshotService;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
 public class UpdateControllerBase {
-    @Autowired SnapshotRepository snapshotRepository;
+    @Autowired SnapshotService snapshotService;
 
     @Autowired AccountService accountService;
 
@@ -53,7 +53,7 @@ public class UpdateControllerBase {
         final User user = getLoggedUser(model);
 
         final Optional<Snapshot> snapshotOpt =
-                snapshotRepository.findById(accountSnapshotUpdateJsonRequest.getSnapshotId());
+                snapshotService.findById(accountSnapshotUpdateJsonRequest.getSnapshotId());
         if (!snapshotBelongsToUser(user, snapshotOpt)) {
             throw new IllegalArgumentException();
         }

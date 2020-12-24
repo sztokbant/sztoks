@@ -11,8 +11,8 @@ import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.service.AccountService;
+import br.net.du.myequity.service.SnapshotService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Optional;
@@ -47,7 +47,7 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
 
     final String newValue;
 
-    @MockBean SnapshotRepository snapshotRepository;
+    @MockBean SnapshotService snapshotService;
 
     @MockBean AccountService accountService;
 
@@ -80,7 +80,7 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.empty());
 
@@ -103,7 +103,7 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         final User anotherUser = new User(user.getEmail(), user.getFirstName(), user.getLastName());
         final Long anotherUserId = user.getId() * 7;
@@ -129,7 +129,7 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
     public void post_snapshotNotFound_clientError() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
-        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.empty());
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.empty());
 
         // WHEN
         final ResultActions resultActions =
@@ -154,7 +154,7 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
         anotherUser.setId(anotherUserId);
 
         snapshot.setUser(anotherUser);
-        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         // WHEN
         final ResultActions resultActions =
@@ -175,7 +175,7 @@ abstract class AccountSnapshotAjaxControllerTestBase extends AjaxControllerTestB
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));

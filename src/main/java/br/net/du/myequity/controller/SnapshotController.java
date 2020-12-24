@@ -28,7 +28,6 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.persistence.AccountSnapshotRepository;
-import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import com.google.common.annotations.VisibleForTesting;
@@ -60,8 +59,6 @@ public class SnapshotController {
 
     @Autowired private SnapshotService snapshotService;
 
-    @Autowired private SnapshotRepository snapshotRepository;
-
     @Autowired private AccountService accountService;
 
     @Autowired private AccountSnapshotRepository accountSnapshotRepository;
@@ -70,7 +67,7 @@ public class SnapshotController {
     public String get(@PathVariable(value = "id") final Long snapshotId, final Model model) {
         final Optional<User> userOpt = getLoggedUserOpt(model);
 
-        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
+        final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
         if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
             return REDIRECT_TO_HOME;
@@ -107,7 +104,7 @@ public class SnapshotController {
     public String delete(@PathVariable(value = "id") final Long snapshotId, final Model model) {
         final Optional<User> userOpt = getLoggedUserOpt(model);
 
-        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
+        final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
         if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
             return REDIRECT_TO_HOME;
@@ -231,7 +228,7 @@ public class SnapshotController {
             @PathVariable(value = "id") final Long snapshotId, final Model model) {
         final Optional<User> userOpt = getLoggedUserOpt(model);
 
-        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
+        final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
         if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
             return REDIRECT_TO_HOME;
@@ -280,7 +277,7 @@ public class SnapshotController {
             final BindingResult bindingResult) {
         final Optional<User> userOpt = getLoggedUserOpt(model);
 
-        final Optional<Snapshot> snapshotOpt = snapshotRepository.findById(snapshotId);
+        final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
         if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
             return REDIRECT_TO_HOME;
@@ -299,7 +296,7 @@ public class SnapshotController {
                                             .contains(account.getId()))
                     .forEach(account -> snapshot.addAccountSnapshot(account.newEmptySnapshot()));
 
-            snapshotRepository.save(snapshot);
+            snapshotService.save(snapshot);
         }
 
         return String.format(REDIRECT_SNAPSHOT_TEMPLATE, snapshotId);

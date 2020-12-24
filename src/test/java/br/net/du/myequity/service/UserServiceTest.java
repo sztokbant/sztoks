@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.persistence.SnapshotRepository;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class UserServiceTest {
     @Autowired private UserService userService;
 
-    @Autowired private SnapshotRepository snapshotRepository;
+    @Autowired private SnapshotService snapshotService;
 
     @Test
     public void signUpAndFindByEmail_newUser_idIsSetAndSnapshotsAreInitialized() {
@@ -45,7 +44,7 @@ class UserServiceTest {
         assertEquals(FIRST_NAME, user.getFirstName());
         assertEquals(LAST_NAME, user.getLastName());
 
-        final List<Snapshot> snapshots = snapshotRepository.findAllByUser(user);
+        final List<Snapshot> snapshots = snapshotService.findAllByUser(user);
         assertEquals(1, snapshots.size());
     }
 

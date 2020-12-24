@@ -58,7 +58,7 @@ class CreditCardSnapshotAvailableCreditUpdateControllerTest
                         account, CURRENT_TOTAL_CREDIT, CURRENT_AVAILABLE_CREDIT, CURRENT_STATEMENT);
         snapshot.addAccountSnapshot(creditCardSnapshot);
 
-        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));

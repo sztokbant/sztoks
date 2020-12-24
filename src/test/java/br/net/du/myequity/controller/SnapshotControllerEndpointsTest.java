@@ -15,7 +15,7 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
-import br.net.du.myequity.persistence.SnapshotRepository;
+import br.net.du.myequity.service.SnapshotService;
 import br.net.du.myequity.service.UserService;
 import com.google.common.collect.ImmutableSortedSet;
 import java.time.LocalDate;
@@ -44,7 +44,7 @@ class SnapshotControllerEndpointsTest {
 
     @Autowired private MockMvc mvc;
 
-    @MockBean private SnapshotRepository snapshotRepository;
+    @MockBean private SnapshotService snapshotService;
 
     @MockBean private UserService userService;
 
@@ -102,7 +102,7 @@ class SnapshotControllerEndpointsTest {
     public void get_snapshotNotFound_redirect() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
-        when(snapshotRepository.findById(eq(SNAPSHOT_ID))).thenReturn(Optional.empty());
+        when(snapshotService.findById(eq(SNAPSHOT_ID))).thenReturn(Optional.empty());
 
         // WHEN
         final ResultActions resultActions =
@@ -121,7 +121,7 @@ class SnapshotControllerEndpointsTest {
         snapshot.setUser(anotherUser);
 
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
-        when(snapshotRepository.findById(eq(SNAPSHOT_ID))).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(eq(SNAPSHOT_ID))).thenReturn(Optional.of(snapshot));
 
         // WHEN
         final ResultActions resultActions =
@@ -140,7 +140,7 @@ class SnapshotControllerEndpointsTest {
         snapshot.setUser(user);
 
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
-        when(snapshotRepository.findById(eq(SNAPSHOT_ID))).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(eq(SNAPSHOT_ID))).thenReturn(Optional.of(snapshot));
 
         // WHEN
         final ResultActions resultActions =

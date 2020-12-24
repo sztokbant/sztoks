@@ -53,7 +53,7 @@ class ReceivableSnapshotDueDateUpdateControllerTest extends AccountSnapshotAjaxC
                 new ReceivableSnapshot(account, CURRENT_DUE_DATE, CURRENT_BALANCE);
         snapshot.addAccountSnapshot(accountSnapshot);
 
-        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));

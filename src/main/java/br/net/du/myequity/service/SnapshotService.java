@@ -6,6 +6,8 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,18 @@ public class SnapshotService {
         snapshotRepository.save(newSnapshot);
 
         return newSnapshot;
+    }
+
+    public Snapshot save(@NonNull final Snapshot snapshot) {
+        return snapshotRepository.save(snapshot);
+    }
+
+    public Optional<Snapshot> findById(@NonNull final Long snapshotId) {
+        return snapshotRepository.findById(snapshotId);
+    }
+
+    public List<Snapshot> findAllByUser(@NonNull final User user) {
+        return snapshotRepository.findAllByUser(user);
     }
 
     public void deleteSnapshot(@NonNull final User user, @NonNull final Snapshot snapshot) {

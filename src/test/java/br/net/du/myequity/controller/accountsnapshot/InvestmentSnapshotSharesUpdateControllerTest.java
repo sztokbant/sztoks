@@ -60,7 +60,7 @@ class InvestmentSnapshotSharesUpdateControllerTest extends AccountSnapshotAjaxCo
                         CURRENT_CURRENT_SHARE_VALUE);
         snapshot.addAccountSnapshot(investmentSnapshot);
 
-        when(snapshotRepository.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
         when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
