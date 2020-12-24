@@ -6,7 +6,7 @@ import br.net.du.myequity.persistence.UserRepository;
 import com.google.common.collect.ImmutableSortedSet;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired private UserRepository userRepository;
 
-    @Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired private PasswordEncoder passwordEncoder;
 
     @Override
     public void signUp(
@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
             @NonNull final String lastName,
             @NonNull final String password) {
         final User user = new User(email.trim(), firstName.trim(), lastName.trim());
-        user.setPassword(bCryptPasswordEncoder.encode(password));
+        user.setPassword(passwordEncoder.encode(password));
 
         user.addSnapshot(new Snapshot(1L, FIRST_SNAPSHOT_NAME, ImmutableSortedSet.of()));
 
