@@ -1,5 +1,8 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.test.TestConstants.EMAIL;
+import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
+import static br.net.du.myequity.test.TestConstants.LAST_NAME;
 import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -30,7 +33,7 @@ class UserTest {
 
     @BeforeEach
     public void setUp() {
-        user = new User("example@example.com", "Bill", "Gates");
+        user = new User(EMAIL, FIRST_NAME, LAST_NAME);
         user.setId(1L);
 
         simpleAssetAccount = new SimpleAssetAccount("Asset Account", CurrencyUnit.USD);
@@ -46,9 +49,9 @@ class UserTest {
     @Test
     public void constructor() {
         // THEN
-        assertEquals("example@example.com", user.getEmail());
-        assertEquals("Bill", user.getFirstName());
-        assertEquals("Gates", user.getLastName());
+        assertEquals(EMAIL, user.getEmail());
+        assertEquals(FIRST_NAME, user.getFirstName());
+        assertEquals(LAST_NAME, user.getLastName());
     }
 
     @Test

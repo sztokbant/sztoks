@@ -1,11 +1,15 @@
 package br.net.du.myequity.validator;
 
+import static br.net.du.myequity.test.TestConstants.EMAIL;
+import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
+import static br.net.du.myequity.test.TestConstants.LAST_NAME;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import br.net.du.myequity.controller.viewmodel.UserViewModelInput;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -15,15 +19,13 @@ import org.mockito.Mock;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
-class UserValidatorTest {
-
-    private static final String EMAIL = "example@example.com";
+class UserViewModelInputValidatorTest {
 
     @Mock private UserService userService;
 
-    private UserValidator userValidator;
+    private UserViewModelInputValidator validator;
 
-    private User user;
+    private UserViewModelInput userViewModelInput;
 
     private Errors errors;
 
@@ -31,32 +33,29 @@ class UserValidatorTest {
     public void setUp() {
         initMocks(this);
 
-        userValidator = new UserValidator(userService);
+        validator = new UserViewModelInputValidator(userService);
 
         when(userService.findByEmail(eq(EMAIL))).thenReturn(null);
 
-        user = new User();
+        populateUserViewModelInput();
 
-        errors = new BeanPropertyBindingResult(user, "user");
+        errors = new BeanPropertyBindingResult(userViewModelInput, "user");
     }
 
     @Test
     public void supports_happy() {
-        assertTrue(userValidator.supports(User.class));
+        assertTrue(validator.supports(UserViewModelInput.class));
     }
 
     @Test
     public void supports_anotherClass_false() {
-        assertFalse(userValidator.supports(String.class));
+        assertFalse(validator.supports(String.class));
     }
 
     @Test
     public void validate_happy() {
-        // GIVEN
-        populateUser();
-
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertFalse(errors.hasErrors());
@@ -64,8 +63,11 @@ class UserValidatorTest {
 
     @Test
     public void validate_emptyObject_hasErrors() {
+        // GIVEN
+        userViewModelInput = new UserViewModelInput();
+
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -74,11 +76,10 @@ class UserValidatorTest {
     @Test
     public void validate_invalidEmail_hasErrors() {
         // GIVEN
-        populateUser();
-        user.setEmail("not_an_email");
+        userViewModelInput.setEmail("not_an_email");
 
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -87,11 +88,10 @@ class UserValidatorTest {
     @Test
     public void validate_nullEmail_hasErrors() {
         // GIVEN
-        populateUser();
-        user.setEmail(null);
+        userViewModelInput.setEmail(null);
 
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -100,11 +100,11 @@ class UserValidatorTest {
     @Test
     public void validate_duplicateEmail_hasErrors() {
         // GIVEN
-        populateUser();
-        when(userService.findByEmail(eq(EMAIL))).thenReturn(user);
+        final User existingUser = new User(EMAIL, FIRST_NAME, LAST_NAME);
+        when(userService.findByEmail(eq(EMAIL))).thenReturn(existingUser);
 
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -113,11 +113,10 @@ class UserValidatorTest {
     @Test
     public void validate_nullFirstName_hasErrors() {
         // GIVEN
-        populateUser();
-        user.setFirstName(null);
+        userViewModelInput.setFirstName(null);
 
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -126,11 +125,10 @@ class UserValidatorTest {
     @Test
     public void validate_emptyFirstName_hasErrors() {
         // GIVEN
-        populateUser();
-        user.setFirstName(StringUtils.EMPTY);
+        userViewModelInput.setFirstName(StringUtils.EMPTY);
 
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -139,11 +137,10 @@ class UserValidatorTest {
     @Test
     public void validate_nullLastName_hasErrors() {
         // GIVEN
-        populateUser();
-        user.setLastName(null);
+        userViewModelInput.setLastName(null);
 
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -152,11 +149,10 @@ class UserValidatorTest {
     @Test
     public void validate_emptyLastName_hasErrors() {
         // GIVEN
-        populateUser();
-        user.setLastName(StringUtils.EMPTY);
+        userViewModelInput.setLastName(StringUtils.EMPTY);
 
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -165,11 +161,10 @@ class UserValidatorTest {
     @Test
     public void validate_emptyPassword_hasErrors() {
         // GIVEN
-        populateUser();
-        user.setPassword(StringUtils.EMPTY);
+        userViewModelInput.setPassword(StringUtils.EMPTY);
 
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -178,11 +173,10 @@ class UserValidatorTest {
     @Test
     public void validate_nullPassword_hasErrors() {
         // GIVEN
-        populateUser();
-        user.setPassword(null);
+        userViewModelInput.setPassword(null);
 
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -191,11 +185,10 @@ class UserValidatorTest {
     @Test
     public void validate_shortPassword_hasErrors() {
         // GIVEN
-        populateUser();
-        user.setPassword("1234567");
+        userViewModelInput.setPassword("1234567");
 
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -204,11 +197,10 @@ class UserValidatorTest {
     @Test
     public void validate_longPassword_hasErrors() {
         // GIVEN
-        populateUser();
-        user.setPassword("123456789012345678901234567890123");
+        userViewModelInput.setPassword("123456789012345678901234567890123");
 
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -217,21 +209,22 @@ class UserValidatorTest {
     @Test
     public void validate_passwordMismatch_hasErrors() {
         // GIVEN
-        populateUser();
-        user.setPasswordConfirm("something-else");
+        userViewModelInput.setPasswordConfirm("something-else");
 
         // WHEN
-        userValidator.validate(user, errors);
+        validator.validate(userViewModelInput, errors);
 
         // THEN
         assertTrue(errors.hasErrors());
     }
 
-    private void populateUser() {
-        user.setFirstName("Bill");
-        user.setLastName("Gates");
-        user.setEmail(EMAIL);
-        user.setPassword("password");
-        user.setPasswordConfirm("password");
+    private void populateUserViewModelInput() {
+        userViewModelInput = new UserViewModelInput();
+
+        userViewModelInput.setFirstName(FIRST_NAME);
+        userViewModelInput.setLastName(LAST_NAME);
+        userViewModelInput.setEmail(EMAIL);
+        userViewModelInput.setPassword("password");
+        userViewModelInput.setPasswordConfirm("password");
     }
 }

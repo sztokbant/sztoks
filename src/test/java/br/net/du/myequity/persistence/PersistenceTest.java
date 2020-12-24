@@ -1,5 +1,9 @@
 package br.net.du.myequity.persistence;
 
+import static br.net.du.myequity.test.TestConstants.EMAIL;
+import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
+import static br.net.du.myequity.test.TestConstants.LAST_NAME;
+import static br.net.du.myequity.test.TestConstants.PASSWORD;
 import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -33,11 +37,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 @Transactional
 class PersistenceTest {
-    private static final String EMAIL = "example@example.com";
-    private static final String FIRST_NAME = "Bill";
-    private static final String LAST_NAME = "Gates";
-    private static final String PASSWORD = "password";
-
     @Autowired private UserService userService;
 
     @Autowired private AccountRepository accountRepository;
@@ -55,10 +54,6 @@ class PersistenceTest {
 
     @BeforeEach
     public void setUp() {
-        user = new User(EMAIL, FIRST_NAME, LAST_NAME);
-        user.setPassword(PASSWORD);
-        user.setPasswordConfirm(PASSWORD);
-
         simpleAssetAccount = new SimpleAssetAccount("Asset Account", CurrencyUnit.USD);
         assetAmount = new BigDecimal("100.00");
         simpleLiabilityAccount = new SimpleLiabilityAccount("Liability Account", CurrencyUnit.USD);
@@ -173,8 +168,8 @@ class PersistenceTest {
     }
 
     private void saveNewUserAndAddAccounts() {
-        assertNull(user.getId());
-        userService.save(user);
+        userService.signUp(EMAIL, FIRST_NAME, LAST_NAME, PASSWORD);
+        user = userService.findByEmail(EMAIL);
 
         user.addAccount(simpleAssetAccount);
         user.addAccount(simpleLiabilityAccount);

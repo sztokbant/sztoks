@@ -1,20 +1,23 @@
 package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
-import static br.net.du.myequity.test.ModelTestUtil.buildUser;
+import static br.net.du.myequity.test.TestConstants.EMAIL;
+import static br.net.du.myequity.test.TestConstants.EXTRA_SPACES;
+import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
+import static br.net.du.myequity.test.TestConstants.LAST_NAME;
+import static br.net.du.myequity.test.TestConstants.PASSWORD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.myequity.model.User;
+import br.net.du.myequity.controller.viewmodel.UserViewModelInput;
 import br.net.du.myequity.service.SecurityService;
 import br.net.du.myequity.service.UserService;
-import br.net.du.myequity.validator.UserValidator;
+import br.net.du.myequity.validator.UserViewModelInputValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +43,6 @@ class UserControllerTest {
     private static final String PASSWORD_KEY = "password";
     private static final String PASSWORD_CONFIRM_KEY = "passwordConfirm";
 
-    private static final String PASSWORD_VALUE = "password";
-
     private static final String LOGOUT_PARAM = "logout";
     private static final String ERROR_PARAM = "error";
 
@@ -50,7 +51,7 @@ class UserControllerTest {
 
     @Autowired private MockMvc mvc;
 
-    @Autowired private UserValidator userValidator;
+    @Autowired private UserViewModelInputValidator userValidator;
 
     @MockBean private UserService userService;
 
@@ -66,9 +67,16 @@ class UserControllerTest {
 
         final MvcResult mvcResult = resultActions.andReturn();
         assertEquals("signup", mvcResult.getModelAndView().getViewName());
-        final User user = (User) mvcResult.getModelAndView().getModel().get("userForm");
-        assertTrue(user instanceof User);
-        assertNull(user.getId());
+
+        final UserViewModelInput userViewModelInput =
+                (UserViewModelInput) mvcResult.getModelAndView().getModel().get("userForm");
+        assertTrue(userViewModelInput instanceof UserViewModelInput);
+
+        assertNull(userViewModelInput.getEmail());
+        assertNull(userViewModelInput.getFirstName());
+        assertNull(userViewModelInput.getLastName());
+        assertNull(userViewModelInput.getPassword());
+        assertNull(userViewModelInput.getPasswordConfirm());
     }
 
     @Test
@@ -95,26 +103,23 @@ class UserControllerTest {
 
     @Test
     public void post_signup_happy() throws Exception {
-        // GIVEN
-        final User user = buildUser();
-
         // WHEN
         final ResultActions resultActions =
                 mvc.perform(
                         MockMvcRequestBuilders.post(SIGNUP_URL)
                                 .with(csrf())
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                                .param(EMAIL_KEY, user.getEmail())
-                                .param(FIRST_NAME_KEY, user.getFirstName())
-                                .param(LAST_NAME_KEY, user.getLastName())
-                                .param(PASSWORD_KEY, PASSWORD_VALUE)
-                                .param(PASSWORD_CONFIRM_KEY, PASSWORD_VALUE));
+                                .param(EMAIL_KEY, EMAIL + EXTRA_SPACES)
+                                .param(FIRST_NAME_KEY, FIRST_NAME + EXTRA_SPACES)
+                                .param(LAST_NAME_KEY, LAST_NAME + EXTRA_SPACES)
+                                .param(PASSWORD_KEY, PASSWORD)
+                                .param(PASSWORD_CONFIRM_KEY, PASSWORD));
 
         // THEN
         verifyRedirect(resultActions, "/");
 
-        verify(userService).save(any(User.class));
-        verify(securityService).autoLogin(eq(user.getEmail()), eq(PASSWORD_VALUE));
+        verify(userService).signUp(eq(EMAIL), eq(FIRST_NAME), eq(LAST_NAME), eq(PASSWORD));
+        verify(securityService).autoLogin(eq(EMAIL), eq(PASSWORD));
     }
 
     @Test

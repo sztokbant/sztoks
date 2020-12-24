@@ -2,10 +2,10 @@ package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
 
-import br.net.du.myequity.model.User;
+import br.net.du.myequity.controller.viewmodel.UserViewModelInput;
 import br.net.du.myequity.service.SecurityService;
 import br.net.du.myequity.service.UserService;
-import br.net.du.myequity.validator.UserValidator;
+import br.net.du.myequity.validator.UserViewModelInputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,26 +24,32 @@ public class UserController {
 
     @Autowired private SecurityService securityService;
 
-    @Autowired private UserValidator userValidator;
+    @Autowired private UserViewModelInputValidator validator;
 
     @GetMapping(SIGNUP_MAPPING)
     public String signup(final Model model) {
-        model.addAttribute(USER_FORM, new User());
+        model.addAttribute(USER_FORM, new UserViewModelInput());
 
         return SIGNUP_TEMPLATE;
     }
 
     @PostMapping(SIGNUP_MAPPING)
     public String signup(
-            @ModelAttribute(USER_FORM) final User userForm, final BindingResult bindingResult) {
-        userValidator.validate(userForm, bindingResult);
+            @ModelAttribute(USER_FORM) final UserViewModelInput userViewModelInput,
+            final BindingResult bindingResult) {
+        validator.validate(userViewModelInput, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return SIGNUP_TEMPLATE;
         }
 
-        userService.save(userForm);
-        securityService.autoLogin(userForm.getEmail(), userForm.getPasswordConfirm());
+        final String email = userViewModelInput.getEmail().trim();
+        final String firstName = userViewModelInput.getFirstName().trim();
+        final String lastName = userViewModelInput.getLastName().trim();
+        final String password = userViewModelInput.getPassword();
+
+        userService.signUp(email, firstName, lastName, password);
+        securityService.autoLogin(email, password);
 
         return REDIRECT_TO_HOME;
     }
