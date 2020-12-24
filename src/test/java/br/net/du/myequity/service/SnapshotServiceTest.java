@@ -21,7 +21,6 @@ import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import br.net.du.myequity.persistence.SnapshotRepository;
-import br.net.du.myequity.persistence.UserRepository;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -66,7 +65,7 @@ public class SnapshotServiceTest {
 
     @Mock private SnapshotRepository snapshotRepository;
 
-    @Mock private UserRepository userRepository;
+    @Mock private UserService userService;
 
     private User user;
 
@@ -87,7 +86,7 @@ public class SnapshotServiceTest {
         snapshot.addAccountSnapshot(CREDIT_CARD_SNAPSHOT);
         snapshot.addAccountSnapshot(INVESTMENT_SNAPSHOT);
 
-        snapshotService = new SnapshotService(snapshotRepository, userRepository);
+        snapshotService = new SnapshotService(snapshotRepository, userService);
     }
 
     @Test

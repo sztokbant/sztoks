@@ -1,7 +1,6 @@
 package br.net.du.myequity.service;
 
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.persistence.UserRepository;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    @Autowired private UserRepository userRepository;
+    @Autowired private UserService userService;
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-        final User user = userRepository.findByEmail(email);
+        final User user = userService.findByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException(email);
         }

@@ -5,7 +5,6 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.persistence.SnapshotRepository;
-import br.net.du.myequity.persistence.UserRepository;
 import java.time.LocalDate;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class SnapshotService {
     private final SnapshotRepository snapshotRepository;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     public Snapshot newSnapshot(@NonNull final User user) {
         assert !user.getSnapshots().isEmpty();
@@ -70,6 +69,6 @@ public class SnapshotService {
 
         user.removeSnapshot(snapshot);
 
-        userRepository.save(user);
+        userService.save(user);
     }
 }

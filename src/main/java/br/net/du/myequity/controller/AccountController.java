@@ -7,7 +7,7 @@ import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.persistence.UserRepository;
+import br.net.du.myequity.service.UserService;
 import br.net.du.myequity.validator.AccountViewModelInputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +23,7 @@ public class AccountController {
     private static final String NEW_ACCOUNT_TEMPLATE = "new_account";
     private static final String NEWACCOUNT_MAPPING = "/newaccount";
 
-    @Autowired private UserRepository userRepository;
+    @Autowired private UserService userService;
 
     @Autowired private AccountViewModelInputValidator accountViewModelInputValidator;
 
@@ -48,7 +48,7 @@ public class AccountController {
         }
 
         user.addAccount(accountViewModelInput.toAccount());
-        userRepository.save(user);
+        userService.save(user);
 
         return REDIRECT_TO_HOME;
     }
