@@ -14,6 +14,7 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.persistence.AccountRepository;
+import br.net.du.myequity.persistence.AccountSnapshotRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
@@ -39,6 +40,8 @@ class AccountDeleteControllerTest extends AjaxControllerTestBase {
     @Autowired private MockMvc mvc;
 
     @MockBean private AccountRepository accountRepository;
+
+    @MockBean private AccountSnapshotRepository accountSnapshotRepository;
 
     private String requestContent;
 
