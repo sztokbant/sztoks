@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller.util;
 
 public class ControllerConstants {
+    public static final String REDIRECT_SNAPSHOT_TEMPLATE = "redirect:/snapshot/%d";
     public static final String REDIRECT_TO_HOME = "redirect:/";
     public static final String REDIRECT_TO_LOGIN = "redirect:/login";
 

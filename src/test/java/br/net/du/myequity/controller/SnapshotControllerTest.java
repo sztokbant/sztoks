@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SnapshotControllerEndpointsTest extends GetControllerTestBase {
+class SnapshotControllerTest extends GetControllerTestBase {
 
     private static final long SNAPSHOT_ID = 99L;
     private static final long SNAPSHOT_INDEX = 1L;
@@ -45,7 +45,7 @@ class SnapshotControllerEndpointsTest extends GetControllerTestBase {
 
     private Account account;
 
-    public SnapshotControllerEndpointsTest() {
+    public SnapshotControllerTest() {
         super(String.format("/snapshot/%d", SNAPSHOT_ID));
     }
 
