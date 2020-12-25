@@ -51,8 +51,6 @@ class SnapshotControllerTest extends GetControllerTestBase {
 
     @BeforeEach
     public void setUp() throws Exception {
-        user = buildUser();
-
         anotherUser = buildUser();
         anotherUser.setId(user.getId() * 7);
 

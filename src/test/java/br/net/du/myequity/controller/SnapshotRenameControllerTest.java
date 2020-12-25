@@ -1,6 +1,5 @@
 package br.net.du.myequity.controller;
 
-import static br.net.du.myequity.test.ModelTestUtils.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -45,9 +44,6 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
 
     @BeforeEach
     public void setUp() throws Exception {
-        user = buildUser();
-        createEntity();
-
         final EntityRenameJsonRequest entityNameJsonRequest =
                 EntityRenameJsonRequest.builder()
                         .id(ENTITY_ID)
