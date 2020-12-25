@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SnapshotControllerTest extends AccountSnapshotControllerGetTestBase {
+class SnapshotControllerTest extends SnapshotControllerGetTestBase {
 
     public SnapshotControllerTest() {
         super(String.format("/snapshot/%d", SNAPSHOT_ID));

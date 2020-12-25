@@ -5,9 +5,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AccountSnapshotControllerGetTest extends AccountSnapshotControllerGetTestBase {
+class SnapshotAddAccountControllerPostTest extends SnapshotControllerPostTestBase {
 
-    public AccountSnapshotControllerGetTest() {
+    public SnapshotAddAccountControllerPostTest() {
         super(String.format("/snapshot/addAccounts/%d", SNAPSHOT_ID));
     }
 }

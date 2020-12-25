@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @WebController
-public class AccountSnapshotController {
+public class SnapshotAddAccountController {
     private static final String ADD_ACCOUNTS_FORM = "addAccountsForm";
 
     @Autowired private SnapshotService snapshotService;
