@@ -5,16 +5,16 @@ import static br.net.du.myequity.controller.util.ControllerConstants.INVESTMENT_
 import static br.net.du.myequity.controller.util.ControllerConstants.PAYABLE_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.RECEIVABLE_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
-import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_LOGIN;
 import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_ASSET_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_LIABILITY_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
-import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUserOpt;
+import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
 import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getViewModelOutputFactoryMethod;
 import static java.util.stream.Collectors.toList;
 
+import br.net.du.myequity.controller.interceptor.WebController;
 import br.net.du.myequity.controller.viewmodel.AccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.AddAccountsToSnapshotViewModelInput;
 import br.net.du.myequity.controller.viewmodel.SnapshotViewModelOutput;
@@ -52,6 +52,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
+@WebController
 public class SnapshotController {
     private static final String ADD_ACCOUNTS_FORM = "addAccountsForm";
     private static final String REDIRECT_SNAPSHOT_TEMPLATE = "redirect:/snapshot/%d";
@@ -65,19 +66,13 @@ public class SnapshotController {
 
     @GetMapping("/snapshot/{id}")
     public String get(@PathVariable(value = "id") final Long snapshotId, final Model model) {
-        final Optional<User> userOpt = getLoggedUserOpt(model);
-        if (!userOpt.isPresent()) {
-            // TODO Error message
-            return REDIRECT_TO_LOGIN;
-        }
-
+        final User user = getLoggedUser(model);
         final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
-        if (!snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
+        if (!snapshotBelongsToUser(user, snapshotOpt)) {
             // TODO Error message
             return REDIRECT_TO_HOME;
         }
 
-        final User user = userOpt.get();
         final Snapshot snapshot = snapshotOpt.get();
 
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
@@ -90,14 +85,7 @@ public class SnapshotController {
 
     @PostMapping("/snapshot/new")
     public String copy(final Model model) {
-        final Optional<User> userOpt = getLoggedUserOpt(model);
-        if (!userOpt.isPresent()) {
-            // TODO Error message
-            return REDIRECT_TO_LOGIN;
-        }
-
-        final User user = userOpt.get();
-
+        final User user = getLoggedUser(model);
         final Snapshot newSnapshot = snapshotService.newSnapshot(user);
 
         return String.format(REDIRECT_SNAPSHOT_TEMPLATE, newSnapshot.getId());
@@ -105,19 +93,13 @@ public class SnapshotController {
 
     @PostMapping("/snapshot/delete/{id}")
     public String delete(@PathVariable(value = "id") final Long snapshotId, final Model model) {
-        final Optional<User> userOpt = getLoggedUserOpt(model);
-        if (!userOpt.isPresent()) {
-            // TODO Error message
-            return REDIRECT_TO_LOGIN;
-        }
-
+        final User user = getLoggedUser(model);
         final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
-        if (!snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
+        if (!snapshotBelongsToUser(user, snapshotOpt)) {
             // TODO Error message
             return REDIRECT_TO_HOME;
         }
 
-        final User user = userOpt.get();
         final Snapshot snapshot = snapshotOpt.get();
 
         snapshotService.deleteSnapshot(user, snapshot);
@@ -213,19 +195,13 @@ public class SnapshotController {
     @GetMapping("/snapshot/addAccounts/{id}")
     public String addAccounts(
             @PathVariable(value = "id") final Long snapshotId, final Model model) {
-        final Optional<User> userOpt = getLoggedUserOpt(model);
-        if (!userOpt.isPresent()) {
-            // TODO Error message
-            return REDIRECT_TO_LOGIN;
-        }
-
+        final User user = getLoggedUser(model);
         final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
-        if (!snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
+        if (!snapshotBelongsToUser(user, snapshotOpt)) {
             // TODO Error message
             return REDIRECT_TO_HOME;
         }
 
-        final User user = userOpt.get();
         final Snapshot snapshot = snapshotOpt.get();
 
         final List<Account> allUserAccounts = accountService.findByUser(user);
@@ -266,20 +242,14 @@ public class SnapshotController {
             @ModelAttribute(ADD_ACCOUNTS_FORM)
                     final AddAccountsToSnapshotViewModelInput addAccountsViewModelInput,
             final BindingResult bindingResult) {
-        final Optional<User> userOpt = getLoggedUserOpt(model);
-        if (!userOpt.isPresent()) {
-            // TODO Error message
-            return REDIRECT_TO_LOGIN;
-        }
-
+        final User user = getLoggedUser(model);
         final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
-        if (!snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
+        if (!snapshotBelongsToUser(user, snapshotOpt)) {
             // TODO Error message
             return REDIRECT_TO_HOME;
         }
 
         if (!addAccountsViewModelInput.getAccounts().isEmpty()) {
-            final User user = userOpt.get();
             final Snapshot snapshot = snapshotOpt.get();
 
             final List<Account> allUserAccounts = accountService.findByUser(user);

@@ -2,6 +2,7 @@ package br.net.du.myequity.controller.util;
 
 import static br.net.du.myequity.controller.interceptor.GlobalModelAttributes.LOGGED_USER;
 
+import br.net.du.myequity.exception.UserNotFoundException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
@@ -17,17 +18,16 @@ public class ControllerUtils {
     private static final String PERCENTAGE_TEMPLATE = "%s%%";
 
     public static User getLoggedUser(final Model model) {
-        final Optional<User> loggedUserOpt = getLoggedUserOpt(model);
-        if (!loggedUserOpt.isPresent()) {
-            throw new RuntimeException();
+        if (!model.containsAttribute(LOGGED_USER)) {
+            throw new UserNotFoundException();
         }
+
+        final Optional<User> loggedUserOpt = (Optional<User>) model.getAttribute(LOGGED_USER);
+        if (!loggedUserOpt.isPresent()) {
+            throw new UserNotFoundException();
+        }
+
         return loggedUserOpt.get();
-    }
-
-    public static Optional<User> getLoggedUserOpt(final Model model) {
-        assert model.containsAttribute(LOGGED_USER);
-
-        return (Optional<User>) model.getAttribute(LOGGED_USER);
     }
 
     public static boolean accountBelongsToUser(

@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller.interceptor;
 
 import br.net.du.myequity.exception.MyEquityException;
+import br.net.du.myequity.exception.UserNotFoundException;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @ControllerAdvice(annotations = RestController.class)
 public class RestControllerExceptionHandler {
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void handleUserNotFoundException() {}
 
     @ExceptionHandler(MyEquityException.class)
     @ResponseStatus(HttpStatus.OK)
