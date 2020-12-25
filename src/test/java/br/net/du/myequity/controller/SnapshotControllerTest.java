@@ -61,6 +61,8 @@ class SnapshotControllerTest extends GetControllerTestBase {
 
         account = new SimpleAssetAccount("Checking Account", CurrencyUnit.USD, LocalDate.now());
         account.setId(Long.parseLong(ACCOUNT_ID_VALUE));
+
+        snapshot.addAccountSnapshot(account.newEmptySnapshot());
     }
 
     @Test
