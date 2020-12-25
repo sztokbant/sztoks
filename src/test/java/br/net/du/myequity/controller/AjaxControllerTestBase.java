@@ -23,7 +23,7 @@ public abstract class AjaxControllerTestBase {
     protected static final Long ENTITY_ID = 1L;
     protected static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
 
-    static final String ACCOUNT_NAME = "Mortgage";
+    protected static final String ACCOUNT_NAME = "Mortgage";
 
     @Autowired protected MockMvc mvc;
 

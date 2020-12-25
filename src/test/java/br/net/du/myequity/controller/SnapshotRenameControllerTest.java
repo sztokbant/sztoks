@@ -1,6 +1,5 @@
 package br.net.du.myequity.controller;
 
-import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
 import static br.net.du.myequity.test.ModelTestUtil.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -19,12 +18,10 @@ import com.google.common.collect.ImmutableSortedSet;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -38,13 +35,7 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
     private static final String NEW_SNAPSHOT_NAME_NOT_TRIMMED = "   My Best Snapshot   ";
     private static final String NEW_SNAPSHOT_NAME_TRIMMED = "My Best Snapshot";
 
-    @Autowired private MockMvc mvc;
-
     @MockBean private SnapshotService snapshotService;
-
-    private String requestContent;
-
-    private User user;
 
     private Snapshot snapshot;
 
@@ -69,51 +60,6 @@ class SnapshotRenameControllerTest extends AjaxControllerTestBase {
     public void createEntity() {
         snapshot = new Snapshot(2L, "Original Name", ImmutableSortedSet.of());
         snapshot.setId(ENTITY_ID);
-    }
-
-    @Test
-    public void post_noCsrfToken_forbidden() throws Exception {
-        // WHEN
-        final ResultActions resultActions =
-                mvc.perform(
-                        MockMvcRequestBuilders.post(url)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(requestContent));
-
-        // THEN
-        resultActions.andExpect(status().isForbidden());
-    }
-
-    @Test
-    public void post_withCsrfTokenUserNotLoggedIn_redirectToLogin() throws Exception {
-        // WHEN
-        final ResultActions resultActions =
-                mvc.perform(
-                        MockMvcRequestBuilders.post(url)
-                                .with(csrf())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(requestContent));
-
-        // THEN
-        verifyRedirect(resultActions, "/login");
-    }
-
-    @Test
-    public void post_userNotFound_clientError() throws Exception {
-        // GIVEN
-        when(userService.findByEmail(user.getEmail())).thenReturn(null);
-
-        // WHEN
-        final ResultActions resultActions =
-                mvc.perform(
-                        MockMvcRequestBuilders.post(url)
-                                .with(csrf())
-                                .with(user(user.getEmail()))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(requestContent));
-
-        // THEN
-        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
