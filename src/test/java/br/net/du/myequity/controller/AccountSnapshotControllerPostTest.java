@@ -1,17 +1,13 @@
 package br.net.du.myequity.controller;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AccountSnapshotControllerPostTest extends PostControllerTestBase {
+class AccountSnapshotControllerPostTest extends AccountSnapshotControllerPostTestBase {
 
     public AccountSnapshotControllerPostTest() {
-        super("/snapshot/addAccounts/42");
+        super(String.format("/snapshot/addAccounts/%d", SNAPSHOT_ID));
     }
-
-    @BeforeEach
-    public void setUp() {}
 }

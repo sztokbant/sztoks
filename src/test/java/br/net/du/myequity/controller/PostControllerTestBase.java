@@ -74,7 +74,7 @@ public abstract class PostControllerTestBase {
     }
 
     @Test
-    public void post_userNotFound_clientError() throws Exception {
+    public void post_userNotFound_redirectToLogin() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(null);
 
