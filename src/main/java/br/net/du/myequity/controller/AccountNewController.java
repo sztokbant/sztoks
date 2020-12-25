@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @WebController
-public class AccountController {
+public class AccountNewController {
     public static final String ACCOUNT_FORM = "accountForm";
     private static final String NEW_ACCOUNT_TEMPLATE = "new_account";
     private static final String NEWACCOUNT_MAPPING = "/newaccount";

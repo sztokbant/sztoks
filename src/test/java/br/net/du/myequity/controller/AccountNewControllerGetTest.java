@@ -17,9 +17,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AccountControllerGetTest extends GetControllerTestBase {
+class AccountNewControllerGetTest extends GetControllerTestBase {
 
-    public AccountControllerGetTest() {
+    public AccountNewControllerGetTest() {
         super("/newaccount");
     }
 

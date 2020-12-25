@@ -6,9 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AccountControllerPostTest extends PostControllerTestBase {
+class AccountNewControllerPostTest extends PostControllerTestBase {
 
-    public AccountControllerPostTest() {
+    public AccountNewControllerPostTest() {
         super("/newaccount");
     }
 
