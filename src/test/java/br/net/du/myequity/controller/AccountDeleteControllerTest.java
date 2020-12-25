@@ -1,6 +1,5 @@
 package br.net.du.myequity.controller;
 
-import static br.net.du.myequity.test.ModelTestUtils.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -9,7 +8,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.controller.viewmodel.AccountDeleteJsonRequest;
-import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,17 +32,12 @@ class AccountDeleteControllerTest extends AccountControllerTestBase {
 
     @MockBean private AccountSnapshotService accountSnapshotService;
 
-    private User user;
-
     public AccountDeleteControllerTest() {
         super("/account/delete");
     }
 
     @BeforeEach
     public void setUp() throws Exception {
-        user = buildUser();
-        createEntity();
-
         final AccountDeleteJsonRequest accountDeleteJsonRequest =
                 AccountDeleteJsonRequest.builder().accountId(ENTITY_ID).build();
         requestContent = new ObjectMapper().writeValueAsString(accountDeleteJsonRequest);

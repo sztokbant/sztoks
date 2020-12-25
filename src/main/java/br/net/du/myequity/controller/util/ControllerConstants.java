@@ -2,6 +2,7 @@ package br.net.du.myequity.controller.util;
 
 public class ControllerConstants {
     public static final String REDIRECT_TO_HOME = "redirect:/";
+    public static final String REDIRECT_TO_LOGIN = "redirect:/login";
 
     public static final String ASSET_ACCOUNTS_KEY = "assetAccounts";
     public static final String CREDIT_CARD_ACCOUNTS_KEY = "creditCardAccounts";

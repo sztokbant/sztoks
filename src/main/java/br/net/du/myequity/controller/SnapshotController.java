@@ -5,6 +5,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.INVESTMENT_
 import static br.net.du.myequity.controller.util.ControllerConstants.PAYABLE_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.RECEIVABLE_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
+import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_LOGIN;
 import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_ASSET_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SIMPLE_LIABILITY_ACCOUNTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KEY;
@@ -65,9 +66,13 @@ public class SnapshotController {
     @GetMapping("/snapshot/{id}")
     public String get(@PathVariable(value = "id") final Long snapshotId, final Model model) {
         final Optional<User> userOpt = getLoggedUserOpt(model);
+        if (!userOpt.isPresent()) {
+            // TODO Error message
+            return REDIRECT_TO_LOGIN;
+        }
 
         final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
-        if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
+        if (!snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
             return REDIRECT_TO_HOME;
         }
@@ -86,10 +91,9 @@ public class SnapshotController {
     @PostMapping("/snapshot/new")
     public String copy(final Model model) {
         final Optional<User> userOpt = getLoggedUserOpt(model);
-
         if (!userOpt.isPresent()) {
             // TODO Error message
-            return REDIRECT_TO_HOME;
+            return REDIRECT_TO_LOGIN;
         }
 
         final User user = userOpt.get();
@@ -102,9 +106,13 @@ public class SnapshotController {
     @PostMapping("/snapshot/delete/{id}")
     public String delete(@PathVariable(value = "id") final Long snapshotId, final Model model) {
         final Optional<User> userOpt = getLoggedUserOpt(model);
+        if (!userOpt.isPresent()) {
+            // TODO Error message
+            return REDIRECT_TO_LOGIN;
+        }
 
         final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
-        if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
+        if (!snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
             return REDIRECT_TO_HOME;
         }
@@ -206,9 +214,13 @@ public class SnapshotController {
     public String addAccounts(
             @PathVariable(value = "id") final Long snapshotId, final Model model) {
         final Optional<User> userOpt = getLoggedUserOpt(model);
+        if (!userOpt.isPresent()) {
+            // TODO Error message
+            return REDIRECT_TO_LOGIN;
+        }
 
         final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
-        if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
+        if (!snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
             return REDIRECT_TO_HOME;
         }
@@ -255,9 +267,13 @@ public class SnapshotController {
                     final AddAccountsToSnapshotViewModelInput addAccountsViewModelInput,
             final BindingResult bindingResult) {
         final Optional<User> userOpt = getLoggedUserOpt(model);
+        if (!userOpt.isPresent()) {
+            // TODO Error message
+            return REDIRECT_TO_LOGIN;
+        }
 
         final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
-        if (!userOpt.isPresent() || !snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
+        if (!snapshotBelongsToUser(userOpt.get(), snapshotOpt)) {
             // TODO Error message
             return REDIRECT_TO_HOME;
         }

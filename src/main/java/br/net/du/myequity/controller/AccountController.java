@@ -1,8 +1,8 @@
 package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
+import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_LOGIN;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
-import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUserOpt;
 
 import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
@@ -32,10 +32,9 @@ public class AccountController {
     @GetMapping(NEWACCOUNT_MAPPING)
     public String newAccount(final Model model) {
         final Optional<User> userOpt = getLoggedUserOpt(model);
-
         if (!userOpt.isPresent()) {
             // TODO Error message
-            return REDIRECT_TO_HOME;
+            return REDIRECT_TO_LOGIN;
         }
 
         final User user = userOpt.get();
@@ -51,7 +50,14 @@ public class AccountController {
             final Model model,
             @ModelAttribute(ACCOUNT_FORM) final AccountViewModelInput accountViewModelInput,
             final BindingResult bindingResult) {
-        final User user = getLoggedUser(model);
+        final Optional<User> userOpt = getLoggedUserOpt(model);
+        if (!userOpt.isPresent()) {
+            // TODO Error message
+            return REDIRECT_TO_LOGIN;
+        }
+
+        final User user = userOpt.get();
+
         accountViewModelInputValidator.validate(accountViewModelInput, bindingResult, user);
 
         if (bindingResult.hasErrors()) {

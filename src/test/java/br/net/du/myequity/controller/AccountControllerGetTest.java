@@ -1,6 +1,5 @@
 package br.net.du.myequity.controller;
 
-import static br.net.du.myequity.test.ModelTestUtils.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,7 +8,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,15 +17,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AccountControllerTest extends WebControlerTestBase {
+class AccountControllerGetTest extends GetControllerTestBase {
 
-    public AccountControllerTest() {
+    public AccountControllerGetTest() {
         super("/newaccount");
-    }
-
-    @BeforeEach
-    public void setUp() {
-        user = buildUser();
     }
 
     @Test

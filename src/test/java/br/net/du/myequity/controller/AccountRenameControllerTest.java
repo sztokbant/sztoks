@@ -1,6 +1,5 @@
 package br.net.du.myequity.controller;
 
-import static br.net.du.myequity.test.ModelTestUtils.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -9,7 +8,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.controller.viewmodel.EntityRenameJsonRequest;
-import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,17 +31,12 @@ class AccountRenameControllerTest extends AccountControllerTestBase {
     private static final String NEW_ACCOUNT_NAME_NOT_TRIMMED = "   Wells Fargo Mortgage   ";
     private static final String NEW_ACCOUNT_NAME_TRIMMED = "Wells Fargo Mortgage";
 
-    private User user;
-
     public AccountRenameControllerTest() {
         super("/account/updateName");
     }
 
     @BeforeEach
     public void setUp() throws Exception {
-        user = buildUser();
-        createEntity();
-
         final EntityRenameJsonRequest entityNameJsonRequest =
                 EntityRenameJsonRequest.builder()
                         .id(ENTITY_ID)
