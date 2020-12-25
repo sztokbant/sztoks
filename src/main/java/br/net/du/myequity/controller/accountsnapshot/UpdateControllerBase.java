@@ -1,12 +1,8 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
-import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
-import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
-
+import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.AccountSnapshotViewModelOutput;
-import br.net.du.myequity.model.Snapshot;
-import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.AccountSnapshotService;
@@ -17,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
 public class UpdateControllerBase {
-    @Autowired SnapshotService snapshotService;
+    @Autowired protected SnapshotService snapshotService;
 
-    @Autowired AccountService accountService;
+    @Autowired private AccountService accountService;
 
-    @Autowired AccountSnapshotService accountSnapshotService;
+    @Autowired private AccountSnapshotService accountSnapshotService;
+
+    @Autowired private SnapshotUtils snapshotUtils;
 
     AccountSnapshotViewModelOutput updateAccountSnapshotField(
             final Model model,
@@ -50,13 +48,8 @@ public class UpdateControllerBase {
     AccountSnapshot getAccountSnapshot(
             final Model model,
             final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
-        final User user = getLoggedUser(model);
-
-        final Optional<Snapshot> snapshotOpt =
-                snapshotService.findById(accountSnapshotUpdateJsonRequest.getSnapshotId());
-        if (!snapshotBelongsToUser(user, snapshotOpt)) {
-            throw new IllegalArgumentException();
-        }
+        // Ensure snapshot belongs to logged user
+        snapshotUtils.getSnapshot(model, accountSnapshotUpdateJsonRequest.getSnapshotId());
 
         final Optional<AccountSnapshot> accountSnapshotOpt =
                 accountSnapshotService.findBySnapshotIdAndAccountId(

@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller.interceptor;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_LOGIN;
 
 import br.net.du.myequity.exception.UserNotFoundException;
@@ -13,5 +14,11 @@ public class WebControllerExceptionHandler {
     public String handleUserNotFoundException() {
         // TODO Error message
         return REDIRECT_TO_LOGIN;
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String handleException() {
+        // TODO Error message
+        return REDIRECT_TO_HOME;
     }
 }
