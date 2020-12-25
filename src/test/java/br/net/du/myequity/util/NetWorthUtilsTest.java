@@ -16,7 +16,7 @@ import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class NetWorthUtilTest {
+class NetWorthUtilsTest {
 
     private SimpleAssetAccount simpleAssetAccount;
     private BigDecimal assetAmount;
@@ -43,7 +43,7 @@ class NetWorthUtilTest {
 
         // WHEN
         final Map<CurrencyUnit, BigDecimal> netWorthByCurrency =
-                NetWorthUtil.computeByCurrency(accountSnapshots);
+                NetWorthUtils.computeByCurrency(accountSnapshots);
 
         // THEN
         assertEquals(1, netWorthByCurrency.size());
@@ -70,7 +70,7 @@ class NetWorthUtilTest {
 
         // WHEN
         final Map<CurrencyUnit, BigDecimal> netWorthByCurrency =
-                NetWorthUtil.computeByCurrency(accountSnapshots);
+                NetWorthUtils.computeByCurrency(accountSnapshots);
 
         // THEN
         assertEquals(2, netWorthByCurrency.size());

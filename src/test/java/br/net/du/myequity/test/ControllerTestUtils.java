@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
-public class ControllerTestUtil {
+public class ControllerTestUtils {
     public static void verifyRedirect(final ResultActions resultActions, final String location)
             throws Exception {
         resultActions.andExpect(status().is3xxRedirection());

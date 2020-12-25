@@ -1,6 +1,6 @@
 package br.net.du.myequity.service;
 
-import static br.net.du.myequity.test.ModelTestUtil.buildUser;
+import static br.net.du.myequity.test.ModelTestUtils.buildUser;
 import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

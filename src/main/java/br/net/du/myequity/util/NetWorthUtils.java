@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 
-public class NetWorthUtil {
+public class NetWorthUtils {
 
     public static Map<CurrencyUnit, BigDecimal> computeByCurrency(
             final Set<AccountSnapshot> accountBalances) {

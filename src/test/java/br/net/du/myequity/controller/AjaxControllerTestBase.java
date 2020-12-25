@@ -1,7 +1,7 @@
 package br.net.du.myequity.controller;
 
-import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
-import static br.net.du.myequity.test.ModelTestUtil.buildUser;
+import static br.net.du.myequity.test.ControllerTestUtils.verifyRedirect;
+import static br.net.du.myequity.test.ModelTestUtils.buildUser;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;

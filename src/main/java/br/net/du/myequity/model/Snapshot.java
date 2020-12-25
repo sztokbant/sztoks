@@ -7,7 +7,7 @@ import static java.util.stream.Collectors.toSet;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
-import br.net.du.myequity.util.NetWorthUtil;
+import br.net.du.myequity.util.NetWorthUtils;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.sun.istack.NotNull;
@@ -165,12 +165,12 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     public Map<CurrencyUnit, BigDecimal> getNetWorth() {
-        return NetWorthUtil.computeByCurrency(accountSnapshots);
+        return NetWorthUtils.computeByCurrency(accountSnapshots);
     }
 
     public Map<CurrencyUnit, BigDecimal> getTotalForAccountType(
             @NonNull final AccountType accountType) {
-        return NetWorthUtil.computeByCurrency(
+        return NetWorthUtils.computeByCurrency(
                 accountSnapshots.stream()
                         .filter(entry -> entry.getAccount().getAccountType().equals(accountType))
                         .collect(Collectors.toSet()));

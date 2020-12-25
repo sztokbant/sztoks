@@ -1,6 +1,6 @@
-package br.net.du.myequity.controller;
+package br.net.du.myequity.controller.util;
 
-import static br.net.du.myequity.controller.SnapshotController.getViewModelOutputClass;
+import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getViewModelOutputClass;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.CreditCardViewModelOutput;
@@ -17,7 +17,7 @@ import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import org.junit.jupiter.api.Test;
 
-public class SnapshotControllerTest {
+public class ViewModelOutputUtilsTest {
 
     @Test
     public void getViewModelOutputClass_happy() throws Exception {

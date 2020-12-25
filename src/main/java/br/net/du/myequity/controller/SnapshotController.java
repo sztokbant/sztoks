@@ -11,6 +11,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KE
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUserOpt;
 import static br.net.du.myequity.controller.util.ControllerUtils.snapshotBelongsToUser;
+import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getViewModelOutputFactoryMethod;
 import static java.util.stream.Collectors.toList;
 
 import br.net.du.myequity.controller.viewmodel.AccountViewModelOutput;
@@ -30,7 +31,6 @@ import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.AccountSnapshotService;
 import br.net.du.myequity.service.SnapshotService;
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.lang.reflect.Method;
@@ -41,7 +41,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -186,26 +185,6 @@ public class SnapshotController {
                         })
                 .sorted()
                 .collect(toList());
-    }
-
-    private static Method getViewModelOutputFactoryMethod(
-            @NonNull final Class<? extends AccountSnapshot> clazz)
-            throws ClassNotFoundException, NoSuchMethodException {
-        return getViewModelOutputClass(clazz).getMethod("of", AccountSnapshot.class);
-    }
-
-    @VisibleForTesting
-    static Class getViewModelOutputClass(@NonNull final Class<? extends AccountSnapshot> clazz)
-            throws ClassNotFoundException {
-        final String className = clazz.getSimpleName();
-        final String prefix = className.split("Snapshot")[0];
-
-        return Class.forName(
-                String.format(
-                        "%s.%s%s",
-                        AccountSnapshotViewModelOutput.class.getPackage().getName(),
-                        prefix,
-                        "ViewModelOutput"));
     }
 
     private Map<String, List<AccountSnapshotViewModelOutput>> breakDownAccountsByType(

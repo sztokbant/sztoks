@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller;
 
-import static br.net.du.myequity.test.ControllerTestUtil.verifyRedirect;
+import static br.net.du.myequity.test.ControllerTestUtils.verifyRedirect;
 import static br.net.du.myequity.test.TestConstants.EMAIL;
 import static br.net.du.myequity.test.TestConstants.EXTRA_SPACES;
 import static br.net.du.myequity.test.TestConstants.FIRST_NAME;

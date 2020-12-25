@@ -2,7 +2,7 @@ package br.net.du.myequity.test;
 
 import br.net.du.myequity.model.User;
 
-public class ModelTestUtil {
+public class ModelTestUtils {
 
     public static User buildUser() {
         final String email = TestConstants.EMAIL;
