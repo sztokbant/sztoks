@@ -16,45 +16,38 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.service.SnapshotService;
-import br.net.du.myequity.service.UserService;
 import com.google.common.collect.ImmutableSortedSet;
 import java.time.LocalDate;
 import java.util.Optional;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SnapshotControllerEndpointsTest {
+class SnapshotControllerEndpointsTest extends WebControlerTestBase {
 
-    private static final String SNAPSHOT_URL_TEMPLATE = "/snapshot/%d";
     private static final long SNAPSHOT_ID = 99L;
     private static final long SNAPSHOT_INDEX = 1L;
-
     private static final String ACCOUNT_ID_VALUE = "42";
 
-    @Autowired private MockMvc mvc;
-
     @MockBean private SnapshotService snapshotService;
-
-    @MockBean private UserService userService;
-
-    private User user;
 
     private User anotherUser;
 
     private Snapshot snapshot;
 
     private Account account;
+
+    public SnapshotControllerEndpointsTest() {
+        super(String.format("/snapshot/%d", SNAPSHOT_ID));
+    }
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -71,34 +64,6 @@ class SnapshotControllerEndpointsTest {
     }
 
     @Test
-    public void get_userNotLoggedIn_redirectToLogin() throws Exception {
-        // WHEN
-        final ResultActions resultActions =
-                mvc.perform(
-                        MockMvcRequestBuilders.get(
-                                String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID)));
-
-        // THEN
-        verifyRedirect(resultActions, "/login");
-    }
-
-    @Test
-    public void get_userNotFound_redirect() throws Exception {
-        // GIVEN
-        when(userService.findByEmail(user.getEmail())).thenReturn(null);
-
-        // WHEN
-        final ResultActions resultActions =
-                mvc.perform(
-                        MockMvcRequestBuilders.get(
-                                        String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID))
-                                .with(user(user.getEmail())));
-
-        // THEN
-        verifyRedirect(resultActions, "/");
-    }
-
-    @Test
     public void get_snapshotNotFound_redirect() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
@@ -106,10 +71,7 @@ class SnapshotControllerEndpointsTest {
 
         // WHEN
         final ResultActions resultActions =
-                mvc.perform(
-                        MockMvcRequestBuilders.get(
-                                        String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID))
-                                .with(user(user.getEmail())));
+                mvc.perform(MockMvcRequestBuilders.get(url).with(user(user.getEmail())));
 
         // THEN
         verifyRedirect(resultActions, "/");
@@ -125,10 +87,7 @@ class SnapshotControllerEndpointsTest {
 
         // WHEN
         final ResultActions resultActions =
-                mvc.perform(
-                        MockMvcRequestBuilders.get(
-                                        String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID))
-                                .with(user(user.getEmail())));
+                mvc.perform(MockMvcRequestBuilders.get(url).with(user(user.getEmail())));
 
         // THEN
         verifyRedirect(resultActions, "/");
@@ -144,10 +103,7 @@ class SnapshotControllerEndpointsTest {
 
         // WHEN
         final ResultActions resultActions =
-                mvc.perform(
-                        MockMvcRequestBuilders.get(
-                                        String.format(SNAPSHOT_URL_TEMPLATE, SNAPSHOT_ID))
-                                .with(user(user.getEmail())));
+                mvc.perform(MockMvcRequestBuilders.get(url).with(user(user.getEmail())));
 
         // THEN
         resultActions.andExpect(status().isOk());
