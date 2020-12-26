@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public abstract class AccountControllerTestBase extends AjaxControllerTestBase {
+    static final Long ACCOUNT_ID = 1L;
+
     @MockBean protected AccountService accountService;
 
     protected Account account;
@@ -29,7 +31,7 @@ public abstract class AccountControllerTestBase extends AjaxControllerTestBase {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.empty());
+        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.empty());
 
         // WHEN
         final ResultActions resultActions =
@@ -54,7 +56,7 @@ public abstract class AccountControllerTestBase extends AjaxControllerTestBase {
         anotherUser.setId(anotherUserId);
 
         account.setUser(anotherUser);
-        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions =

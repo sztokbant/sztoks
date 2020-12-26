@@ -7,9 +7,11 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import br.net.du.myequity.controller.viewmodel.EntityRenameJsonRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,8 +24,23 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 class SnapshotRenameControllerTest extends SnapshotControllerAjaxTestBase {
 
+    protected static final String NEW_SNAPSHOT_NAME_NOT_TRIMMED = "   My Best Snapshot   ";
+    protected static final String NEW_SNAPSHOT_NAME_TRIMMED = "My Best Snapshot";
+
+    protected static final String JSON_NAME = "name";
+
     public SnapshotRenameControllerTest() {
         super("/snapshot/updateName");
+    }
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        final EntityRenameJsonRequest entityNameJsonRequest =
+                EntityRenameJsonRequest.builder()
+                        .id(SNAPSHOT_ID)
+                        .newValue(NEW_SNAPSHOT_NAME_NOT_TRIMMED)
+                        .build();
+        requestContent = new ObjectMapper().writeValueAsString(entityNameJsonRequest);
     }
 
     @Test
@@ -32,7 +49,7 @@ class SnapshotRenameControllerTest extends SnapshotControllerAjaxTestBase {
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        when(snapshotService.findById(ENTITY_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         // WHEN
         final ResultActions resultActions =

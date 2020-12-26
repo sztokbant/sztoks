@@ -22,7 +22,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 public abstract class PostControllerTestBase {
-    protected static final Long ENTITY_ID = 1L;
     protected static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
 
     protected static final String ACCOUNT_NAME = "Mortgage";

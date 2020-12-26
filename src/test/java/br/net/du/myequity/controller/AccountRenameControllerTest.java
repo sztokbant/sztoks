@@ -39,7 +39,7 @@ class AccountRenameControllerTest extends AccountControllerTestBase {
     public void setUp() throws Exception {
         final EntityRenameJsonRequest entityNameJsonRequest =
                 EntityRenameJsonRequest.builder()
-                        .id(ENTITY_ID)
+                        .id(ACCOUNT_ID)
                         .newValue(NEW_ACCOUNT_NAME_NOT_TRIMMED)
                         .build();
         requestContent = new ObjectMapper().writeValueAsString(entityNameJsonRequest);
@@ -48,7 +48,7 @@ class AccountRenameControllerTest extends AccountControllerTestBase {
     @Override
     public void createEntity() {
         account = new SimpleLiabilityAccount(ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now());
-        account.setId(ENTITY_ID);
+        account.setId(ACCOUNT_ID);
     }
 
     @Test
@@ -57,7 +57,7 @@ class AccountRenameControllerTest extends AccountControllerTestBase {
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         account.setUser(user);
-        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions =

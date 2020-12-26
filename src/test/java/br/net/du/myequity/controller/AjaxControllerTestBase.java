@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public abstract class AjaxControllerTestBase {
-    protected static final Long ENTITY_ID = 1L;
     protected static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
 
     protected static final String ACCOUNT_NAME = "Mortgage";

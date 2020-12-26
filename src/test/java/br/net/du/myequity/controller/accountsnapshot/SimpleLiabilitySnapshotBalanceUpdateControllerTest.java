@@ -42,7 +42,7 @@ class SimpleLiabilitySnapshotBalanceUpdateControllerTest
     @Override
     public void createEntity() {
         account = new SimpleLiabilityAccount("Mortgage", CURRENCY_UNIT, LocalDate.now());
-        account.setId(ENTITY_ID);
+        account.setId(ACCOUNT_ID);
     }
 
     @Test
@@ -58,9 +58,9 @@ class SimpleLiabilitySnapshotBalanceUpdateControllerTest
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
-        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ACCOUNT_ID))
                 .thenReturn(Optional.of(accountSnapshot));
 
         // WHEN

@@ -1,34 +1,24 @@
 package br.net.du.myequity.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.myequity.controller.viewmodel.EntityRenameJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.SnapshotService;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-abstract class SnapshotControllerAjaxTestBase extends AjaxControllerTestBase {
+public abstract class SnapshotControllerAjaxTestBase extends AjaxControllerTestBase {
 
-    protected static final String JSON_NAME = "name";
-
-    protected static final String NEW_SNAPSHOT_NAME_NOT_TRIMMED = "   My Best Snapshot   ";
-    protected static final String NEW_SNAPSHOT_NAME_TRIMMED = "My Best Snapshot";
+    protected static final Long SNAPSHOT_ID = 1L;
 
     @MockBean protected SnapshotService snapshotService;
 
@@ -38,20 +28,10 @@ abstract class SnapshotControllerAjaxTestBase extends AjaxControllerTestBase {
         super(url);
     }
 
-    @BeforeEach
-    public void setUp() throws Exception {
-        final EntityRenameJsonRequest entityNameJsonRequest =
-                EntityRenameJsonRequest.builder()
-                        .id(ENTITY_ID)
-                        .newValue(NEW_SNAPSHOT_NAME_NOT_TRIMMED)
-                        .build();
-        requestContent = new ObjectMapper().writeValueAsString(entityNameJsonRequest);
-    }
-
     @Override
     public void createEntity() {
-        snapshot = new Snapshot(2L, "Original Name", ImmutableSortedSet.of());
-        snapshot.setId(ENTITY_ID);
+        snapshot = new Snapshot(SNAPSHOT_ID, "Original Name", ImmutableSortedSet.of());
+        snapshot.setId(SNAPSHOT_ID);
     }
 
     @Test
@@ -59,7 +39,7 @@ abstract class SnapshotControllerAjaxTestBase extends AjaxControllerTestBase {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        when(snapshotService.findById(ENTITY_ID)).thenReturn(Optional.empty());
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.empty());
 
         // WHEN
         final ResultActions resultActions =
@@ -84,7 +64,7 @@ abstract class SnapshotControllerAjaxTestBase extends AjaxControllerTestBase {
         anotherUser.setId(anotherUserId);
 
         snapshot.setUser(anotherUser);
-        when(snapshotService.findById(ENTITY_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         // WHEN
         final ResultActions resultActions =
@@ -97,33 +77,5 @@ abstract class SnapshotControllerAjaxTestBase extends AjaxControllerTestBase {
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
-    }
-
-    @Test
-    public void post_happy() throws Exception {
-        // GIVEN
-        when(userService.findByEmail(user.getEmail())).thenReturn(user);
-
-        snapshot.setUser(user);
-        when(snapshotService.findById(ENTITY_ID)).thenReturn(Optional.of(snapshot));
-
-        // WHEN
-        final ResultActions resultActions =
-                mvc.perform(
-                        MockMvcRequestBuilders.post(url)
-                                .with(csrf())
-                                .with(user(user.getEmail()))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(requestContent));
-
-        // THEN
-        resultActions.andExpect(status().isOk());
-
-        final MvcResult mvcResult = resultActions.andReturn();
-        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
-        assertNotNull(resultContentAsString);
-
-        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertEquals(NEW_SNAPSHOT_NAME_TRIMMED, jsonNode.get(JSON_NAME).textValue());
     }
 }

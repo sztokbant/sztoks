@@ -45,7 +45,7 @@ class SnapshotRemoveAccountControllerTest extends AccountSnapshotAjaxControllerT
         final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest =
                 AccountSnapshotUpdateJsonRequest.builder()
                         .snapshotId(SNAPSHOT_ID)
-                        .accountId(ENTITY_ID)
+                        .accountId(ACCOUNT_ID)
                         .build();
         requestContent = new ObjectMapper().writeValueAsString(accountSnapshotUpdateJsonRequest);
     }
@@ -53,7 +53,7 @@ class SnapshotRemoveAccountControllerTest extends AccountSnapshotAjaxControllerT
     @Override
     public void createEntity() {
         account = new SimpleLiabilityAccount("Mortgage", CURRENCY_UNIT, LocalDate.now());
-        account.setId(ENTITY_ID);
+        account.setId(ACCOUNT_ID);
     }
 
     @Test
@@ -69,9 +69,9 @@ class SnapshotRemoveAccountControllerTest extends AccountSnapshotAjaxControllerT
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
-        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ACCOUNT_ID))
                 .thenReturn(Optional.of(simpleLiabilitySnapshot));
 
         // WHEN

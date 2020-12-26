@@ -44,7 +44,7 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
     @Override
     public void createEntity() {
         account = new SimpleAssetAccount("Savings", CURRENCY_UNIT, LocalDate.now());
-        account.setId(ENTITY_ID);
+        account.setId(ACCOUNT_ID);
     }
 
     @Test
@@ -55,7 +55,7 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
         snapshot.setUser(user);
 
         account = new CreditCardAccount("Citi Double Cash", CURRENCY_UNIT, LocalDate.now());
-        account.setId(ENTITY_ID);
+        account.setId(ACCOUNT_ID);
 
         final CreditCardSnapshot accountSnapshot =
                 new CreditCardSnapshot(account, CURRENT_BALANCE, CURRENT_BALANCE, CURRENT_BALANCE);
@@ -64,9 +64,9 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
-        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ACCOUNT_ID))
                 .thenReturn(Optional.of(accountSnapshot));
 
         // WHEN
@@ -95,9 +95,9 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         account.setUser(user);
-        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
-        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ENTITY_ID))
+        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ACCOUNT_ID))
                 .thenReturn(Optional.of(accountSnapshot));
 
         // WHEN

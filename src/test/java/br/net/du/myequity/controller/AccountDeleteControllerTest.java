@@ -39,14 +39,14 @@ class AccountDeleteControllerTest extends AccountControllerTestBase {
     @BeforeEach
     public void setUp() throws Exception {
         final AccountDeleteJsonRequest accountDeleteJsonRequest =
-                AccountDeleteJsonRequest.builder().accountId(ENTITY_ID).build();
+                AccountDeleteJsonRequest.builder().accountId(ACCOUNT_ID).build();
         requestContent = new ObjectMapper().writeValueAsString(accountDeleteJsonRequest);
     }
 
     @Override
     public void createEntity() {
         account = new SimpleLiabilityAccount(ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now());
-        account.setId(ENTITY_ID);
+        account.setId(ACCOUNT_ID);
     }
 
     @Test
@@ -55,7 +55,7 @@ class AccountDeleteControllerTest extends AccountControllerTestBase {
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         account.setUser(user);
-        when(accountService.findById(ENTITY_ID)).thenReturn(Optional.of(account));
+        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions =
@@ -74,6 +74,6 @@ class AccountDeleteControllerTest extends AccountControllerTestBase {
         assertNotNull(resultContentAsString);
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertEquals(ENTITY_ID, jsonNode.get(JSON_ACCOUNT_ID).numberValue().longValue());
+        assertEquals(ACCOUNT_ID, jsonNode.get(JSON_ACCOUNT_ID).numberValue().longValue());
     }
 }
