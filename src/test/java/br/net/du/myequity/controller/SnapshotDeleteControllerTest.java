@@ -5,7 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SnapshotDeleteControllerTest extends PostControllerTestBase {
+class SnapshotDeleteControllerTest extends SnapshotControllerPostTestBase {
 
     public SnapshotDeleteControllerTest() {
         super("/snapshot/delete/42");
