@@ -35,7 +35,9 @@ public class RemoveAccountController extends UpdateControllerBase {
         final AccountType accountType = account.getAccountType();
 
         final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit =
-                getCreditCardTotalsViewModelOutput(accountSnapshot, snapshot, currencyUnit);
+                accountSnapshot instanceof CreditCardSnapshot
+                        ? getCreditCardTotalsViewModelOutput(snapshot, currencyUnit)
+                        : null;
 
         return SnapshotRemoveAccountJsonResponse.builder()
                 .accountId(account.getId())
@@ -50,25 +52,13 @@ public class RemoveAccountController extends UpdateControllerBase {
                 .build();
     }
 
-    public CreditCardTotalsViewModelOutput getCreditCardTotalsViewModelOutput(
-            final AccountSnapshot accountSnapshot,
-            final Snapshot snapshot,
-            final CurrencyUnit currencyUnit) {
-        final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit;
-        if (accountSnapshot instanceof CreditCardSnapshot) {
-            final CreditCardSnapshot creditCardTotalsSnapshot =
-                    snapshot.getCreditCardTotalsForCurrencyUnit(currencyUnit);
+    private CreditCardTotalsViewModelOutput getCreditCardTotalsViewModelOutput(
+            final Snapshot snapshot, final CurrencyUnit currencyUnit) {
+        final CreditCardSnapshot creditCardTotalsSnapshot =
+                snapshot.getCreditCardTotalsForCurrencyUnit(currencyUnit);
 
-            if (creditCardTotalsSnapshot != null) {
-                creditCardTotalsForCurrencyUnit =
-                        CreditCardTotalsViewModelOutput.of(creditCardTotalsSnapshot);
-            } else {
-                creditCardTotalsForCurrencyUnit =
-                        CreditCardTotalsViewModelOutput.newEmptyInstance(currencyUnit);
-            }
-        } else {
-            creditCardTotalsForCurrencyUnit = null;
-        }
-        return creditCardTotalsForCurrencyUnit;
+        return creditCardTotalsSnapshot != null
+                ? CreditCardTotalsViewModelOutput.of(creditCardTotalsSnapshot)
+                : CreditCardTotalsViewModelOutput.newEmptyInstance(currencyUnit);
     }
 }
