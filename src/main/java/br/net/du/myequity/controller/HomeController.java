@@ -54,11 +54,11 @@ public class HomeController {
 
         return ImmutableMap.of(
                 AccountType.ASSET,
-                assetAccounts == null
+                (assetAccounts == null)
                         ? ImmutableList.of()
                         : assetAccounts.stream().map(AccountViewModelOutput::of).collect(toList()),
                 AccountType.LIABILITY,
-                liabilityAccounts == null
+                (liabilityAccounts == null)
                         ? ImmutableList.of()
                         : liabilityAccounts.stream()
                                 .map(AccountViewModelOutput::of)
