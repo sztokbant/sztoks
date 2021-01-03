@@ -70,12 +70,12 @@ public class SnapshotService {
 
         if (next != null) {
             next.setPrevious(previous);
-            snapshotRepository.save(next);
+            save(next);
         }
 
         if (previous != null) {
             previous.setNext(next);
-            snapshotRepository.save(previous);
+            save(previous);
         }
 
         snapshot.setNext(null);
