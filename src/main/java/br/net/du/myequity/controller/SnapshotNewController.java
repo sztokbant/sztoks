@@ -19,7 +19,7 @@ public class SnapshotNewController {
     @Autowired private SnapshotService snapshotService;
 
     @PostMapping("/snapshot/new")
-    public String copy(final Model model) {
+    public String newSnapshot(final Model model) {
         final User user = getLoggedUser(model);
 
         final Snapshot newSnapshot = snapshotService.newSnapshot(user);

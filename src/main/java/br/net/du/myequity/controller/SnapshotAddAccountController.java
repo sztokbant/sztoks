@@ -89,17 +89,29 @@ public class SnapshotAddAccountController {
         final User user = getLoggedUser(model);
         final Snapshot snapshot = snapshotUtils.getSnapshot(model, snapshotId);
 
-        if (!addAccountsViewModelInput.getAccounts().isEmpty()) {
+        if (addAccountsViewModelInput.getAccounts() != null
+                && !addAccountsViewModelInput.getAccounts().isEmpty()) {
             final List<Account> allUserAccounts = accountService.findByUser(user);
-            allUserAccounts.stream()
-                    .filter(
-                            account ->
-                                    addAccountsViewModelInput
-                                            .getAccounts()
-                                            .contains(account.getId()))
-                    .forEach(account -> snapshot.addAccountSnapshot(account.newEmptySnapshot()));
 
-            snapshotService.save(snapshot);
+            final List<Account> accountsToBeAdded =
+                    allUserAccounts.stream()
+                            .filter(
+                                    account ->
+                                            // Input account actually belongs to user
+                                            addAccountsViewModelInput
+                                                            .getAccounts()
+                                                            .contains(account.getId())
+                                                    &&
+                                                    // Account not yet in snapshot
+                                                    !snapshot.getAccountSnapshotFor(account)
+                                                            .isPresent())
+                            .collect(Collectors.toList());
+
+            if (!accountsToBeAdded.isEmpty()) {
+                accountsToBeAdded.forEach(
+                        account -> snapshot.addAccountSnapshot(account.newEmptySnapshot()));
+                snapshotService.save(snapshot);
+            }
         }
 
         return String.format(REDIRECT_SNAPSHOT_TEMPLATE, snapshotId);

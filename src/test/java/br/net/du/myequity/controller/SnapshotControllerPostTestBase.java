@@ -10,13 +10,10 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.SimpleAssetAccount;
+import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import com.google.common.collect.ImmutableSortedSet;
-import java.time.LocalDate;
 import java.util.Optional;
-import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,15 +25,14 @@ abstract class SnapshotControllerPostTestBase extends PostControllerTestBase {
 
     protected static final long SNAPSHOT_ID = 99L;
     protected static final long SNAPSHOT_INDEX = 1L;
-    protected static final String ACCOUNT_ID_VALUE = "42";
 
     @MockBean protected SnapshotService snapshotService;
+
+    @MockBean protected AccountService accountService;
 
     protected User anotherUser;
 
     protected Snapshot snapshot;
-
-    protected Account account;
 
     public SnapshotControllerPostTestBase(final String url) {
         super(url);
@@ -49,11 +45,6 @@ abstract class SnapshotControllerPostTestBase extends PostControllerTestBase {
 
         snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
-
-        account = new SimpleAssetAccount("Checking Account", CurrencyUnit.USD, LocalDate.now());
-        account.setId(Long.parseLong(ACCOUNT_ID_VALUE));
-
-        snapshot.addAccountSnapshot(account.newEmptySnapshot());
     }
 
     @Test

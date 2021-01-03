@@ -18,8 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 public abstract class PostControllerTestBase {
     protected static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
@@ -29,8 +27,6 @@ public abstract class PostControllerTestBase {
     @Autowired protected MockMvc mvc;
 
     @MockBean protected UserService userService;
-
-    protected MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
     protected User user;
 
@@ -51,8 +47,7 @@ public abstract class PostControllerTestBase {
         final ResultActions resultActions =
                 mvc.perform(
                         MockMvcRequestBuilders.post(url)
-                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                                .params(params));
+                                .contentType(MediaType.APPLICATION_FORM_URLENCODED));
 
         // THEN
         resultActions.andExpect(status().isForbidden());
@@ -65,8 +60,7 @@ public abstract class PostControllerTestBase {
                 mvc.perform(
                         MockMvcRequestBuilders.post(url)
                                 .with(csrf())
-                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                                .params(params));
+                                .contentType(MediaType.APPLICATION_FORM_URLENCODED));
 
         // THEN
         verifyRedirect(resultActions, "/login");
@@ -83,8 +77,7 @@ public abstract class PostControllerTestBase {
                         MockMvcRequestBuilders.post(url)
                                 .with(csrf())
                                 .with(user(user.getEmail()))
-                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                                .params(params));
+                                .contentType(MediaType.APPLICATION_FORM_URLENCODED));
 
         // THEN
         verifyRedirect(resultActions, "/login");

@@ -9,15 +9,10 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.SimpleAssetAccount;
-import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import com.google.common.collect.ImmutableSortedSet;
-import java.time.LocalDate;
 import java.util.Optional;
-import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,8 +23,6 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
 
     protected static final long SNAPSHOT_ID = 99L;
     protected static final long SNAPSHOT_INDEX = 1L;
-    protected static final String ASSET_ACCOUNT_ID_VALUE = "42";
-    protected static final String LIABILITY_ACCOUNT_ID_VALUE = "72";
 
     @MockBean protected SnapshotService snapshotService;
 
@@ -38,10 +31,6 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
     protected User anotherUser;
 
     protected Snapshot snapshot;
-
-    protected Account assetAccount;
-
-    protected Account liabilityAccount;
 
     public SnapshotControllerGetTestBase(final String url) {
         super(url);
@@ -54,14 +43,6 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
 
         snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
-
-        assetAccount =
-                new SimpleAssetAccount("Checking Account", CurrencyUnit.USD, LocalDate.now());
-        assetAccount.setId(Long.parseLong(ASSET_ACCOUNT_ID_VALUE));
-
-        liabilityAccount =
-                new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, LocalDate.now());
-        liabilityAccount.setId(Long.parseLong(LIABILITY_ACCOUNT_ID_VALUE));
     }
 
     @Test
