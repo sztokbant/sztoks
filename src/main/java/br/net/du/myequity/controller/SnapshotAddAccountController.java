@@ -96,15 +96,17 @@ public class SnapshotAddAccountController {
             final List<Account> accountsToBeAdded =
                     allUserAccounts.stream()
                             .filter(
-                                    account ->
-                                            // Input account actually belongs to user
-                                            addAccountsViewModelInput
-                                                            .getAccounts()
-                                                            .contains(account.getId())
-                                                    &&
-                                                    // Account not yet in snapshot
-                                                    !snapshot.getAccountSnapshotFor(account)
-                                                            .isPresent())
+                                    account -> {
+                                        return
+                                        // Input account actually belongs to user
+                                        addAccountsViewModelInput
+                                                        .getAccounts()
+                                                        .contains(account.getId())
+                                                &&
+                                                // Account not yet in snapshot
+                                                !snapshot.getAccountSnapshotFor(account)
+                                                        .isPresent();
+                                    })
                             .collect(Collectors.toList());
 
             if (!accountsToBeAdded.isEmpty()) {

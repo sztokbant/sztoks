@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.net.du.myequity.controller.viewmodel.SnapshotViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,12 @@ class SnapshotControllerTest extends SnapshotControllerGetTestBase {
 
     public SnapshotControllerTest() {
         super(String.format("/snapshot/%d", SNAPSHOT_ID));
+    }
+
+    @BeforeEach
+    public void setUp() {
+        snapshot.addAccountSnapshot(assetAccount.newEmptySnapshot());
+        snapshot.addAccountSnapshot(liabilityAccount.newEmptySnapshot());
     }
 
     @Test

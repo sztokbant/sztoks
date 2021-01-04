@@ -7,14 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import br.net.du.myequity.controller.viewmodel.AccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.SimpleAssetAccount;
-import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import com.google.common.collect.ImmutableList;
-import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
-import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,17 +22,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 class SnapshotAddAccountControllerGetTest extends SnapshotControllerGetTestBase {
 
-    private static final long ASSET_ACCOUNT_ID = 42L;
     private static final String ASSETS = "assets";
     private static final String LIABILITIES = "liabilities";
-    private static final long LIABILITY_ACCOUNT_ID = 72L;
     private static final String URL = String.format("/snapshot/addAccounts/%d", SNAPSHOT_ID);
     private static final String USER = "user";
     private static final String VIEW_NAME = "add_accounts";
-
-    protected Account assetAccount;
-
-    protected Account liabilityAccount;
 
     public SnapshotAddAccountControllerGetTest() {
         super(URL);
@@ -48,14 +37,6 @@ class SnapshotAddAccountControllerGetTest extends SnapshotControllerGetTestBase 
         user.addSnapshot(snapshot);
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
-
-        assetAccount =
-                new SimpleAssetAccount("Checking Account", CurrencyUnit.USD, LocalDate.now());
-        assetAccount.setId(ASSET_ACCOUNT_ID);
-
-        liabilityAccount =
-                new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, LocalDate.now());
-        liabilityAccount.setId(LIABILITY_ACCOUNT_ID);
 
         when(accountService.findByUser(user))
                 .thenReturn(ImmutableList.of(assetAccount, liabilityAccount));

@@ -9,10 +9,15 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.SimpleAssetAccount;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import com.google.common.collect.ImmutableSortedSet;
+import java.time.LocalDate;
 import java.util.Optional;
+import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,6 +26,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
 
+    protected static final long ASSET_ACCOUNT_ID = 42L;
+    protected static final long LIABILITY_ACCOUNT_ID = 72L;
     protected static final long SNAPSHOT_ID = 99L;
     protected static final long SNAPSHOT_INDEX = 1L;
 
@@ -31,6 +38,10 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
     protected User anotherUser;
 
     protected Snapshot snapshot;
+
+    protected Account assetAccount;
+
+    protected Account liabilityAccount;
 
     public SnapshotControllerGetTestBase(final String url) {
         super(url);
@@ -43,6 +54,16 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
 
         snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
+
+        assetAccount =
+                new SimpleAssetAccount("Checking Account", CurrencyUnit.USD, LocalDate.now());
+        assetAccount.setId(ASSET_ACCOUNT_ID);
+        user.addAccount(assetAccount);
+
+        liabilityAccount =
+                new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, LocalDate.now());
+        liabilityAccount.setId(LIABILITY_ACCOUNT_ID);
+        user.addAccount(liabilityAccount);
     }
 
     @Test
