@@ -28,17 +28,13 @@ public class ControllerUtils {
         return loggedUserOpt.get();
     }
 
-    public static String formatAsPercentage(BigDecimal value) {
-        if (value == null) {
-            value = BigDecimal.ZERO;
-        }
+    public static String formatAsPercentage(final BigDecimal input) {
+        final BigDecimal value = input == null ? BigDecimal.ZERO : input;
         return String.format(PERCENTAGE_TEMPLATE, formatAsDecimal(value));
     }
 
-    public static String formatAsDecimal(BigDecimal value) {
-        if (value == null) {
-            value = BigDecimal.ZERO;
-        }
+    public static String formatAsDecimal(final BigDecimal input) {
+        final BigDecimal value = input == null ? BigDecimal.ZERO : input;
         return toDecimal(value).toString();
     }
 
