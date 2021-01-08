@@ -21,9 +21,9 @@ public class MoneyFormatUtils {
                     .appendCurrencySymbolLocalized()
                     .appendAmount(MoneyAmountStyle.ASCII_DECIMAL_POINT_GROUP3_COMMA)
                     .toFormatter();
+
     private static final Map<CurrencyUnit, MoneyFormatter> MONEY_FORMATTERS =
-            ImmutableMap.of(
-                    CurrencyUnit.of("BRL"), BRL_FORMATTER, CurrencyUnit.USD, DEFAULT_FORMATTER);
+            ImmutableMap.of(CurrencyUnit.of("BRL"), BRL_FORMATTER);
 
     public static String format(final CurrencyUnit currencyUnit, final BigDecimal amount) {
         final MoneyFormatter moneyFormatter =
