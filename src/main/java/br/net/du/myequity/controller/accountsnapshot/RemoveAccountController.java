@@ -35,7 +35,7 @@ public class RemoveAccountController extends UpdateControllerBase {
         final AccountType accountType = account.getAccountType();
 
         final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit =
-                accountSnapshot instanceof CreditCardSnapshot
+                (accountSnapshot instanceof CreditCardSnapshot)
                         ? getCreditCardTotalsViewModelOutput(snapshot, currencyUnit)
                         : null;
 
@@ -57,8 +57,8 @@ public class RemoveAccountController extends UpdateControllerBase {
         final CreditCardSnapshot creditCardTotalsSnapshot =
                 snapshot.getCreditCardTotalsForCurrencyUnit(currencyUnit);
 
-        return creditCardTotalsSnapshot != null
+        return (creditCardTotalsSnapshot != null)
                 ? CreditCardTotalsViewModelOutput.of(creditCardTotalsSnapshot)
-                : CreditCardTotalsViewModelOutput.newEmptyInstance(currencyUnit);
+                : CreditCardTotalsViewModelOutput.newEmptyInstance();
     }
 }

@@ -161,7 +161,7 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     private boolean sameAsFormer(final User newUser) {
-        return user == null ? newUser == null : user.equals(newUser);
+        return (user == null) ? (newUser == null) : user.equals(newUser);
     }
 
     public Map<CurrencyUnit, BigDecimal> getNetWorth() {
@@ -253,7 +253,7 @@ public class Snapshot implements Comparable<Snapshot> {
             return false;
         }
 
-        return id != null && id.equals(((Snapshot) other).getId());
+        return (id != null) && id.equals(((Snapshot) other).id);
     }
 
     @Override
@@ -263,6 +263,6 @@ public class Snapshot implements Comparable<Snapshot> {
 
     @Override
     public int compareTo(final Snapshot other) {
-        return other.getIndex().compareTo(this.index);
+        return other.index.compareTo(index);
     }
 }

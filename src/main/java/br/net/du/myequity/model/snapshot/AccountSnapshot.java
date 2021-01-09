@@ -71,7 +71,7 @@ public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
     }
 
     private boolean sameAsFormer(final Snapshot newSnapshot) {
-        return snapshot == null ? newSnapshot == null : snapshot.equals(newSnapshot);
+        return (snapshot == null) ? (newSnapshot == null) : snapshot.equals(newSnapshot);
     }
 
     @Override
@@ -85,10 +85,10 @@ public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
         }
 
         final AccountSnapshot otherAccountSnapshot = (AccountSnapshot) other;
-        return this.account != null
-                && account.equals(otherAccountSnapshot.getAccount())
-                && this.snapshot != null
-                && snapshot.equals(otherAccountSnapshot.getSnapshot());
+        return (account != null)
+                && account.equals(otherAccountSnapshot.account)
+                && (snapshot != null)
+                && snapshot.equals(otherAccountSnapshot.snapshot);
     }
 
     @Override
@@ -98,6 +98,6 @@ public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
 
     @Override
     public int compareTo(final AccountSnapshot other) {
-        return this.getAccount().compareTo(other.getAccount());
+        return account.compareTo(other.account);
     }
 }

@@ -103,7 +103,7 @@ public abstract class Account implements Comparable<Account> {
     }
 
     private boolean sameAsFormer(final User newUser) {
-        return user == null ? newUser == null : user.equals(newUser);
+        return (user == null) ? (newUser == null) : user.equals(newUser);
     }
 
     @Override
@@ -116,7 +116,7 @@ public abstract class Account implements Comparable<Account> {
             return false;
         }
 
-        return id != null && id.equals(((Account) other).getId());
+        return (id != null) && id.equals(((Account) other).getId());
     }
 
     @Override
@@ -126,6 +126,6 @@ public abstract class Account implements Comparable<Account> {
 
     @Override
     public int compareTo(final Account other) {
-        return this.name.compareTo(other.getName());
+        return name.compareTo(other.name);
     }
 }

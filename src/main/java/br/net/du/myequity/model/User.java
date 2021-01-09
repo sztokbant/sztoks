@@ -155,7 +155,7 @@ public class User {
             return false;
         }
 
-        return id != null && id.equals(((User) other).getId());
+        return (id != null) && id.equals(((User) other).id);
     }
 
     @Override

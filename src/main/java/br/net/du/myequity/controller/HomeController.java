@@ -52,16 +52,19 @@ public class HomeController {
         final SortedSet<Account> assetAccounts = accountsByType.get(AccountType.ASSET);
         final SortedSet<Account> liabilityAccounts = accountsByType.get(AccountType.LIABILITY);
 
-        return ImmutableMap.of(
-                AccountType.ASSET,
+        final List<AccountViewModelOutput> assetsList =
                 (assetAccounts == null)
                         ? ImmutableList.of()
-                        : assetAccounts.stream().map(AccountViewModelOutput::of).collect(toList()),
-                AccountType.LIABILITY,
+                        : assetAccounts.stream().map(AccountViewModelOutput::of).collect(toList());
+
+        final List<AccountViewModelOutput> liabilitiesList =
                 (liabilityAccounts == null)
                         ? ImmutableList.of()
                         : liabilityAccounts.stream()
                                 .map(AccountViewModelOutput::of)
-                                .collect(toList()));
+                                .collect(toList());
+
+        return ImmutableMap.of(
+                AccountType.ASSET, assetsList, AccountType.LIABILITY, liabilitiesList);
     }
 }

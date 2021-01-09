@@ -55,7 +55,7 @@ public class ReceivableSnapshot extends AccountSnapshot
         }
 
         final ReceivableSnapshot otherReceivableSnapshot = (ReceivableSnapshot) other;
-        return account.equals(otherReceivableSnapshot.getAccount())
-                && amount.compareTo(otherReceivableSnapshot.getAmount()) == 0;
+        return account.equals(otherReceivableSnapshot.account)
+                && (amount.compareTo(otherReceivableSnapshot.amount) == 0);
     }
 }

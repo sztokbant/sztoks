@@ -52,8 +52,8 @@ public class UserViewModelInputValidator implements Validator {
     private void rejectIfInvalidPassword(
             final Errors errors, final UserViewModelInput userViewModelInput) {
         if (StringUtils.isEmpty(userViewModelInput.getPassword())
-                || userViewModelInput.getPassword().length() < 8
-                || userViewModelInput.getPassword().length() > 32) {
+                || (userViewModelInput.getPassword().length() < 8)
+                || (userViewModelInput.getPassword().length() > 32)) {
             errors.rejectValue("password", "Size.userForm.password");
         } else if (!userViewModelInput
                 .getPasswordConfirm()

@@ -59,9 +59,9 @@ public class CreditCardSnapshot extends AccountSnapshot {
 
         final CreditCardSnapshot otherCreditCardSnapshot = (CreditCardSnapshot) other;
         return account.equals(otherCreditCardSnapshot.getAccount())
-                && totalCredit.compareTo(otherCreditCardSnapshot.getTotalCredit()) == 0
-                && availableCredit.compareTo(otherCreditCardSnapshot.getAvailableCredit()) == 0
-                && statement.compareTo(otherCreditCardSnapshot.getStatement()) == 0;
+                && (totalCredit.compareTo(otherCreditCardSnapshot.totalCredit) == 0)
+                && (availableCredit.compareTo(otherCreditCardSnapshot.availableCredit) == 0)
+                && (statement.compareTo(otherCreditCardSnapshot.statement) == 0);
     }
 
     public BigDecimal getUsedCreditPercentage() {

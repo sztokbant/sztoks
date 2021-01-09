@@ -67,23 +67,21 @@ public class AccountViewModelInputValidator implements SmartValidator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty");
 
         if (StringUtils.isNotBlank(accountViewModelInput.getName())) {
-            if (validationHints == null
-                    || validationHints.length != 1
+            if ((validationHints == null)
+                    || (validationHints.length != 1)
                     || !(validationHints[0] instanceof User)) {
                 throw new UnsupportedOperationException();
             } else {
                 final List<Account> accounts = accountService.findByUser((User) validationHints[0]);
                 final boolean isDuplicateName =
                         accounts.stream()
-                                        .filter(
-                                                a ->
-                                                        a.getName()
-                                                                .equals(
-                                                                        accountViewModelInput
-                                                                                .getName()
-                                                                                .trim()))
-                                        .count()
-                                > 0;
+                                .anyMatch(
+                                        a ->
+                                                a.getName()
+                                                        .equals(
+                                                                accountViewModelInput
+                                                                        .getName()
+                                                                        .trim()));
                 if (isDuplicateName) {
                     errors.rejectValue("name", "Duplicate.accountForm.name");
                 }

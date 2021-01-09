@@ -55,8 +55,7 @@ public class CreditCardTotalsViewModelOutput {
                 usedCreditPercentage);
     }
 
-    public static CreditCardTotalsViewModelOutput newEmptyInstance(
-            final CurrencyUnit currencyUnit) {
+    public static CreditCardTotalsViewModelOutput newEmptyInstance() {
         return CreditCardTotalsViewModelOutput.builder()
                 .balance(ZERO)
                 .totalCredit(ZERO)

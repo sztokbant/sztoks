@@ -100,11 +100,11 @@ public class SnapshotController {
 
         return ImmutableMap.of(
                 AccountType.ASSET,
-                assetAccountSnapshots == null
+                (assetAccountSnapshots == null)
                         ? ImmutableList.of()
                         : getViewModelOutputs(assetAccountSnapshots),
                 AccountType.LIABILITY,
-                liabilityAccountSnapshots == null
+                (liabilityAccountSnapshots == null)
                         ? ImmutableList.of()
                         : getViewModelOutputs(liabilityAccountSnapshots));
     }
@@ -117,10 +117,8 @@ public class SnapshotController {
                             try {
                                 final Method factoryMethod =
                                         getViewModelOutputFactoryMethod(accountSnapshot.getClass());
-                                final AccountSnapshotViewModelOutput accountViewModelOutputBase =
-                                        (AccountSnapshotViewModelOutput)
-                                                factoryMethod.invoke(null, accountSnapshot);
-                                return accountViewModelOutputBase;
+                                return (AccountSnapshotViewModelOutput)
+                                        factoryMethod.invoke(null, accountSnapshot);
                             } catch (final Exception e) {
                                 throw new RuntimeException(e);
                             }
