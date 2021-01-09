@@ -32,6 +32,7 @@ dependencies {
     testImplementation 'com.h2database:h2:1.4.200'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test:5.3.3.RELEASE'
+    testImplementation 'org.mockito:mockito-inline:3.7.0'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.16'
