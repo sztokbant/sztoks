@@ -3,7 +3,6 @@ package br.net.du.myequity.service;
 import br.net.du.myequity.exception.MyEquityException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import java.time.LocalDate;
 import java.util.List;
@@ -28,7 +27,9 @@ public class SnapshotService {
                 new Snapshot(
                         currentSnapshot.getIndex() + 1,
                         LocalDate.now().toString(),
-                        currentSnapshot.getAccountSnapshots());
+                        currentSnapshot.getAccountSnapshots(),
+                        currentSnapshot.getRecurringIncomes(),
+                        currentSnapshot.getRecurringDonations());
 
         currentSnapshot.setNext(newSnapshot);
         newSnapshot.setPrevious(currentSnapshot);
@@ -61,9 +62,12 @@ public class SnapshotService {
                     "Snapshot cannot be deleted as it is the only remaining snapshot.");
         }
 
-        for (final AccountSnapshot accountSnapshot : snapshot.getAccountSnapshots()) {
-            snapshot.removeAccountSnapshot(accountSnapshot);
-        }
+        snapshot.getAccountSnapshots()
+                .forEach(accountSnapshot -> snapshot.removeAccountSnapshot(accountSnapshot));
+
+        snapshot.getIncomes().forEach(income -> snapshot.removeIncome(income));
+
+        snapshot.getDonations().forEach(donation -> snapshot.removeDonation(donation));
 
         final Snapshot next = snapshot.getNext();
         final Snapshot previous = snapshot.getPrevious();

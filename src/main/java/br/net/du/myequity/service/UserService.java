@@ -25,7 +25,13 @@ public class UserService {
         final User user = new User(email.trim(), firstName.trim(), lastName.trim());
         user.setPassword(passwordEncoder.encode(password));
 
-        user.addSnapshot(new Snapshot(1L, FIRST_SNAPSHOT_NAME, ImmutableSortedSet.of()));
+        user.addSnapshot(
+                new Snapshot(
+                        1L,
+                        FIRST_SNAPSHOT_NAME,
+                        ImmutableSortedSet.of(),
+                        ImmutableSortedSet.of(),
+                        ImmutableSortedSet.of()));
 
         save(user);
     }

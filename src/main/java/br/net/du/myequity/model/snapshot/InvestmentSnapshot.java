@@ -58,7 +58,7 @@ public class InvestmentSnapshot extends AccountSnapshot {
         }
 
         final InvestmentSnapshot otherInvestmentSnapshot = (InvestmentSnapshot) other;
-        return account.equals(otherInvestmentSnapshot.getAccount())
+        return account.equals(otherInvestmentSnapshot.account)
                 && (shares.compareTo(otherInvestmentSnapshot.shares) == 0)
                 && (originalShareValue.compareTo(otherInvestmentSnapshot.originalShareValue) == 0)
                 && (currentShareValue.compareTo(otherInvestmentSnapshot.currentShareValue) == 0);

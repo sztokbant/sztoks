@@ -41,7 +41,13 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
 
     @BeforeEach
     public void setUp() {
-        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of());
+        snapshot =
+                new Snapshot(
+                        SNAPSHOT_INDEX,
+                        now,
+                        ImmutableSortedSet.of(),
+                        ImmutableSortedSet.of(),
+                        ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
         user.addSnapshot(snapshot);
@@ -50,7 +56,12 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         final Snapshot newSnapshot =
-                new Snapshot(snapshot.getIndex() + 1, "New Snapshot", ImmutableSortedSet.of());
+                new Snapshot(
+                        snapshot.getIndex() + 1,
+                        "New Snapshot",
+                        ImmutableSortedSet.of(),
+                        ImmutableSortedSet.of(),
+                        ImmutableSortedSet.of());
         newSnapshot.setId(snapshot.getId() + 1);
         when(snapshotService.newSnapshot(eq(user))).thenReturn(newSnapshot);
     }

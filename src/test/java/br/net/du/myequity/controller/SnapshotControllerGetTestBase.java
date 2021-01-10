@@ -52,7 +52,13 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
         anotherUser = buildUser();
         anotherUser.setId(user.getId() * 7);
 
-        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of());
+        snapshot =
+                new Snapshot(
+                        SNAPSHOT_INDEX,
+                        now,
+                        ImmutableSortedSet.of(),
+                        ImmutableSortedSet.of(),
+                        ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
         assetAccount =

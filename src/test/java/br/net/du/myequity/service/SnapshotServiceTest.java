@@ -1,6 +1,14 @@
 package br.net.du.myequity.service;
 
 import static br.net.du.myequity.test.ModelTestUtils.buildUser;
+import static br.net.du.myequity.test.TestConstants.BEGGAR_DONATION;
+import static br.net.du.myequity.test.TestConstants.CHARITY_DONATION;
+import static br.net.du.myequity.test.TestConstants.CREDIT_CARD_SNAPSHOT;
+import static br.net.du.myequity.test.TestConstants.INVESTMENT_SNAPSHOT;
+import static br.net.du.myequity.test.TestConstants.SALARY_INCOME;
+import static br.net.du.myequity.test.TestConstants.SIDE_GIG_INCOME;
+import static br.net.du.myequity.test.TestConstants.SIMPLE_ASSET_SNAPSHOT;
+import static br.net.du.myequity.test.TestConstants.SIMPLE_LIABILITY_SNAPSHOT;
 import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -12,56 +20,20 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import br.net.du.myequity.exception.MyEquityException;
+import br.net.du.myequity.model.Donation;
+import br.net.du.myequity.model.Income;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.CreditCardAccount;
-import br.net.du.myequity.model.account.SimpleAssetAccount;
-import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
-import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
-import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
-import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import com.google.common.collect.ImmutableSortedSet;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.SortedSet;
-import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 public class SnapshotServiceTest {
 
-    private static final Account SIMPLE_ASSET_ACCOUNT =
-            new SimpleAssetAccount("Savings", CurrencyUnit.USD, LocalDate.now());
-    private static final AccountSnapshot SIMPLE_ASSET_SNAPSHOT =
-            new SimpleAssetSnapshot(SIMPLE_ASSET_ACCOUNT, new BigDecimal("10000.00"));
-
-    private static final Account SIMPLE_LIABILITY_ACCOUNT =
-            new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, LocalDate.now());
-    private static final AccountSnapshot SIMPLE_LIABILITY_SNAPSHOT =
-            new SimpleLiabilitySnapshot(SIMPLE_LIABILITY_ACCOUNT, new BigDecimal("2500.00"));
-
-    private static final Account CREDIT_CARD_ACCOUNT =
-            new CreditCardAccount("Chase Sapphire Reserve", CurrencyUnit.USD, LocalDate.now());
-    private static final AccountSnapshot CREDIT_CARD_SNAPSHOT =
-            new CreditCardSnapshot(
-                    CREDIT_CARD_ACCOUNT,
-                    new BigDecimal("10000.00"),
-                    new BigDecimal("9500.00"),
-                    new BigDecimal("1000.00"));
-
-    private static final Account INVESTMENT_ACCOUNT =
-            new CreditCardAccount("AMZN", CurrencyUnit.USD, LocalDate.now());
-    private static final AccountSnapshot INVESTMENT_SNAPSHOT =
-            new InvestmentSnapshot(
-                    INVESTMENT_ACCOUNT,
-                    new BigDecimal("175.00"),
-                    new BigDecimal("1100.00"),
-                    new BigDecimal("3500.00"));
     private static final long SNAPSHOT_INDEX = 1L;
 
     private SnapshotService snapshotService;
@@ -80,7 +52,7 @@ public class SnapshotServiceTest {
 
         user = buildUser();
 
-        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of());
+        snapshot = newEmptySnapshot(SNAPSHOT_INDEX);
         snapshot.setId(108L);
         user.addSnapshot(snapshot);
 
@@ -88,6 +60,12 @@ public class SnapshotServiceTest {
         snapshot.addAccountSnapshot(SIMPLE_LIABILITY_SNAPSHOT);
         snapshot.addAccountSnapshot(CREDIT_CARD_SNAPSHOT);
         snapshot.addAccountSnapshot(INVESTMENT_SNAPSHOT);
+
+        snapshot.addIncome(SALARY_INCOME);
+        snapshot.addIncome(SIDE_GIG_INCOME);
+
+        snapshot.addDonation(CHARITY_DONATION);
+        snapshot.addDonation(BEGGAR_DONATION);
 
         snapshotService = new SnapshotService(snapshotRepository, userService);
     }
@@ -112,6 +90,23 @@ public class SnapshotServiceTest {
             }
             assertTrue(found);
         }
+
+        // Only recurring Incomes and Donations are copied
+        final SortedSet<Income> originalIncomes = snapshot.getIncomes();
+        final SortedSet<Income> newIncomes = newSnapshot.getIncomes();
+
+        assertEquals(2, originalIncomes.size());
+        assertEquals(1, newIncomes.size());
+
+        assertTrue(SALARY_INCOME.equalsIgnoreId(newIncomes.iterator().next()));
+
+        final SortedSet<Donation> originalDonations = snapshot.getDonations();
+        final SortedSet<Donation> newDonations = newSnapshot.getDonations();
+
+        assertTrue(CHARITY_DONATION.equalsIgnoreId(newDonations.iterator().next()));
+
+        assertEquals(2, originalDonations.size());
+        assertEquals(1, newDonations.size());
 
         verify(snapshotRepository).save(snapshot);
         verify(snapshotRepository).save(newSnapshot);
@@ -147,8 +142,7 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_first_happy() {
         // GIVEN
-        final Snapshot secondSnapshot =
-                new Snapshot(SNAPSHOT_INDEX + 1, now, ImmutableSortedSet.of());
+        final Snapshot secondSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 1);
         secondSnapshot.setId(99L);
         secondSnapshot.setPrevious(snapshot);
         snapshot.setNext(secondSnapshot);
@@ -172,8 +166,7 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_last_happy() {
         // GIVEN
-        final Snapshot secondSnapshot =
-                new Snapshot(SNAPSHOT_INDEX + 1, now, ImmutableSortedSet.of());
+        final Snapshot secondSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 1);
         secondSnapshot.setId(99L);
         secondSnapshot.setPrevious(snapshot);
         snapshot.setNext(secondSnapshot);
@@ -197,18 +190,15 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_middle_happy() {
         // GIVEN
-        final Snapshot secondSnapshot =
-                new Snapshot(SNAPSHOT_INDEX + 1, now, ImmutableSortedSet.of());
+        final Snapshot secondSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 1);
         secondSnapshot.setId(99L);
         user.addSnapshot(secondSnapshot);
 
-        final Snapshot thirdSnapshot =
-                new Snapshot(SNAPSHOT_INDEX + 2, now, ImmutableSortedSet.of());
+        final Snapshot thirdSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 2);
         thirdSnapshot.setId(108L);
         user.addSnapshot(thirdSnapshot);
 
-        final Snapshot fourthSnapshot =
-                new Snapshot(SNAPSHOT_INDEX + 3, now, ImmutableSortedSet.of());
+        final Snapshot fourthSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 3);
         fourthSnapshot.setId(144L);
         user.addSnapshot(fourthSnapshot);
 
@@ -246,5 +236,14 @@ public class SnapshotServiceTest {
                 });
 
         assertEquals(1, user.getSnapshots().size());
+    }
+
+    private Snapshot newEmptySnapshot(final long snapshotIndex) {
+        return new Snapshot(
+                snapshotIndex,
+                now,
+                ImmutableSortedSet.of(),
+                ImmutableSortedSet.of(),
+                ImmutableSortedSet.of());
     }
 }

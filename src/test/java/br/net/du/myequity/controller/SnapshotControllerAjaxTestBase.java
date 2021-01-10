@@ -30,7 +30,13 @@ public abstract class SnapshotControllerAjaxTestBase extends AjaxControllerTestB
 
     @Override
     public void createEntity() {
-        snapshot = new Snapshot(SNAPSHOT_ID, "Original Name", ImmutableSortedSet.of());
+        snapshot =
+                new Snapshot(
+                        SNAPSHOT_ID,
+                        "Original Name",
+                        ImmutableSortedSet.of(),
+                        ImmutableSortedSet.of(),
+                        ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
     }
 
