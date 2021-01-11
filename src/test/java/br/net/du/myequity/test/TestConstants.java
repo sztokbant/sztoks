@@ -1,7 +1,5 @@
 package br.net.du.myequity.test;
 
-import br.net.du.myequity.model.Donation;
-import br.net.du.myequity.model.Income;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.CreditCardAccount;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
@@ -11,6 +9,8 @@ import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
+import br.net.du.myequity.model.transaction.Donation;
+import br.net.du.myequity.model.transaction.Income;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.joda.money.CurrencyUnit;

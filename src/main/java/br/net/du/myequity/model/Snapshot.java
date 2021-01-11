@@ -5,8 +5,11 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
 
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
+import br.net.du.myequity.model.transaction.Donation;
+import br.net.du.myequity.model.transaction.Income;
 import br.net.du.myequity.util.NetWorthUtils;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;

@@ -1,6 +1,5 @@
 package br.net.du.myequity.model.account;
 
-import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.ReceivableSnapshot;
 import java.math.BigDecimal;

@@ -1,8 +1,8 @@
 package br.net.du.myequity.controller.viewmodel;
 
 import br.net.du.myequity.controller.util.MoneyFormatUtils;
-import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import java.math.BigDecimal;
 import java.util.HashMap;

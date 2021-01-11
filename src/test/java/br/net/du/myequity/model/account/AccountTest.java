@@ -1,12 +1,9 @@
-package br.net.du.myequity.model;
+package br.net.du.myequity.model.account;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.SimpleAssetAccount;
-import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import java.time.LocalDate;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.Test;

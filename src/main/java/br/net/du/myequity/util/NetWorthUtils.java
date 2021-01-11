@@ -1,6 +1,6 @@
 package br.net.du.myequity.util;
 
-import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import java.math.BigDecimal;
 import java.math.RoundingMode;

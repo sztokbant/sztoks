@@ -1,5 +1,6 @@
-package br.net.du.myequity.model;
+package br.net.du.myequity.model.transaction;
 
+import br.net.du.myequity.model.Snapshot;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;

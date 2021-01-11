@@ -21,9 +21,9 @@ import br.net.du.myequity.controller.viewmodel.accountsnapshot.CreditCardViewMod
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.InvestmentViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.PayableViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.ReceivableViewModelOutput;
-import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;

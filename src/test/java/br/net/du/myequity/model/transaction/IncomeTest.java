@@ -1,19 +1,19 @@
-package br.net.du.myequity.model;
+package br.net.du.myequity.model.transaction;
 
-import static br.net.du.myequity.test.TestConstants.CHARITY_DONATION;
+import static br.net.du.myequity.test.TestConstants.SALARY_INCOME;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-class DonationTest {
+class IncomeTest {
 
     @Test
     public void equals_differentIds() {
         // GIVEN`
-        final Donation first = CHARITY_DONATION.copy();
+        final Income first = SALARY_INCOME.copy();
         first.setId(42L);
-        final Donation second = CHARITY_DONATION.copy();
+        final Income second = SALARY_INCOME.copy();
         second.setId(77L);
 
         // THEN
@@ -23,9 +23,9 @@ class DonationTest {
     @Test
     public void equals_sameIds() {
         // GIVEN`
-        final Donation first = CHARITY_DONATION.copy();
+        final Income first = SALARY_INCOME.copy();
         first.setId(42L);
-        final Donation second = CHARITY_DONATION.copy();
+        final Income second = SALARY_INCOME.copy();
         second.setId(42L);
 
         // THEN

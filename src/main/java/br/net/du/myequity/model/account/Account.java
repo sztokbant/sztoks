@@ -1,6 +1,5 @@
 package br.net.du.myequity.model.account;
 
-import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import java.time.LocalDate;

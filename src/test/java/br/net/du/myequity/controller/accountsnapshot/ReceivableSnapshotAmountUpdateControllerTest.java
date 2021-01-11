@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.myequity.model.AccountType;
+import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.account.ReceivableAccount;
 import br.net.du.myequity.model.snapshot.ReceivableSnapshot;
 import br.net.du.myequity.service.AccountSnapshotService;

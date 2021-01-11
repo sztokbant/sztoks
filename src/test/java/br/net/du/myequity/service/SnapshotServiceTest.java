@@ -20,11 +20,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import br.net.du.myequity.exception.MyEquityException;
-import br.net.du.myequity.model.Donation;
-import br.net.du.myequity.model.Income;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.transaction.Donation;
+import br.net.du.myequity.model.transaction.Income;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.SortedSet;

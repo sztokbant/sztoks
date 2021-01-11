@@ -5,9 +5,9 @@ import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal
 import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.CreditCardTotalsViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.SnapshotRemoveAccountJsonResponse;
-import br.net.du.myequity.model.AccountType;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import org.joda.money.CurrencyUnit;
