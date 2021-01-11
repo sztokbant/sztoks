@@ -49,7 +49,8 @@ public class SimpleLiabilitySnapshot extends AccountSnapshot implements AmountUp
 
         final SimpleLiabilitySnapshot otherSimpleLiabilitySnapshot =
                 (SimpleLiabilitySnapshot) other;
-        return account.equals(otherSimpleLiabilitySnapshot.account)
-                && (amount.compareTo(otherSimpleLiabilitySnapshot.amount) == 0);
+
+        return account.equals(otherSimpleLiabilitySnapshot.getAccount())
+                && (amount.compareTo(otherSimpleLiabilitySnapshot.getAmount()) == 0);
     }
 }

@@ -34,6 +34,7 @@ public class Income implements Comparable<Income> {
     @Column @Getter @Setter private LocalDate date;
 
     @Column(nullable = false)
+    @Getter
     private String currency;
 
     @Column(nullable = false)
@@ -66,13 +67,13 @@ public class Income implements Comparable<Income> {
 
     @Override
     public int compareTo(final Income other) {
-        if (currency.equals(other.currency)) {
-            if (date.equals(other.date)) {
-                return description.compareTo(other.description);
+        if (currency.equals(other.getCurrency())) {
+            if (date.equals(other.getDate())) {
+                return description.compareTo(other.getDescription());
             }
-            return date.compareTo(other.date);
+            return date.compareTo(other.getDate());
         }
-        return currency.compareTo(other.currency);
+        return currency.compareTo(other.getCurrency());
     }
 
     public boolean equalsIgnoreId(final Object other) {
@@ -85,11 +86,12 @@ public class Income implements Comparable<Income> {
         }
 
         final Income otherIncome = (Income) other;
-        return description.equals(otherIncome.description)
-                && date.equals(otherIncome.date)
-                && currency.equals(otherIncome.currency)
-                && amount.equals(otherIncome.amount)
-                && isRecurring == otherIncome.isRecurring
-                && donationRatio.equals(otherIncome.donationRatio);
+
+        return description.equals(otherIncome.getDescription())
+                && date.equals(otherIncome.getDate())
+                && currency.equals(otherIncome.getCurrency())
+                && amount.equals(otherIncome.getAmount())
+                && isRecurring == otherIncome.isRecurring()
+                && donationRatio.equals(otherIncome.getDonationRatio());
     }
 }

@@ -47,7 +47,8 @@ public class SimpleAssetSnapshot extends AccountSnapshot implements AmountUpdate
         }
 
         final SimpleAssetSnapshot otherSimpleAssetSnapshot = (SimpleAssetSnapshot) other;
-        return account.equals(otherSimpleAssetSnapshot.account)
-                && (amount.compareTo(otherSimpleAssetSnapshot.amount) == 0);
+
+        return account.equals(otherSimpleAssetSnapshot.getAccount())
+                && (amount.compareTo(otherSimpleAssetSnapshot.getAmount()) == 0);
     }
 }

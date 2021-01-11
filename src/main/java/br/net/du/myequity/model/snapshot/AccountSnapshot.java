@@ -85,10 +85,11 @@ public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
         }
 
         final AccountSnapshot otherAccountSnapshot = (AccountSnapshot) other;
+
         return (account != null)
-                && account.equals(otherAccountSnapshot.account)
+                && account.equals(otherAccountSnapshot.getAccount())
                 && (snapshot != null)
-                && snapshot.equals(otherAccountSnapshot.snapshot);
+                && snapshot.equals(otherAccountSnapshot.getSnapshot());
     }
 
     @Override
@@ -98,6 +99,6 @@ public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
 
     @Override
     public int compareTo(final AccountSnapshot other) {
-        return account.compareTo(other.account);
+        return account.compareTo(other.getAccount());
     }
 }

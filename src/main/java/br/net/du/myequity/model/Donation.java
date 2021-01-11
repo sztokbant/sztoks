@@ -34,6 +34,7 @@ public class Donation implements Comparable<Donation> {
     @Column @Getter @Setter private LocalDate date;
 
     @Column(nullable = false)
+    @Getter
     private String currency;
 
     @Column(nullable = false)
@@ -66,13 +67,13 @@ public class Donation implements Comparable<Donation> {
 
     @Override
     public int compareTo(final Donation other) {
-        if (currency.equals(other.currency)) {
-            if (date.equals(other.date)) {
-                return description.compareTo(other.description);
+        if (currency.equals(other.getCurrency())) {
+            if (date.equals(other.getDate())) {
+                return description.compareTo(other.getDescription());
             }
-            return date.compareTo(other.date);
+            return date.compareTo(other.getDate());
         }
-        return currency.compareTo(other.currency);
+        return currency.compareTo(other.getCurrency());
     }
 
     public boolean equalsIgnoreId(final Object other) {
@@ -85,11 +86,12 @@ public class Donation implements Comparable<Donation> {
         }
 
         final Donation otherDonation = (Donation) other;
-        return description.equals(otherDonation.description)
-                && date.equals(otherDonation.date)
-                && currency.equals(otherDonation.currency)
-                && amount.equals(otherDonation.amount)
-                && isRecurring == otherDonation.isRecurring
-                && isTaxDeductible == otherDonation.isTaxDeductible;
+
+        return description.equals(otherDonation.getDescription())
+                && date.equals(otherDonation.getDate())
+                && currency.equals(otherDonation.getCurrency())
+                && amount.equals(otherDonation.getAmount())
+                && isRecurring == otherDonation.isRecurring()
+                && isTaxDeductible == otherDonation.isTaxDeductible();
     }
 }

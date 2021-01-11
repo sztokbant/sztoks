@@ -83,7 +83,7 @@ public class AccountSnapshotViewModelOutput implements Comparable<AccountSnapsho
     @Override
     public int compareTo(final AccountSnapshotViewModelOutput other) {
         return currencyUnit.equals(other.getCurrencyUnit())
-                ? name.compareTo(other.name)
+                ? name.compareTo(other.getName())
                 : currencyUnit.compareTo(other.getCurrencyUnit());
     }
 }

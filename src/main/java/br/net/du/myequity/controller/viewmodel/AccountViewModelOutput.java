@@ -18,6 +18,6 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
 
     @Override
     public int compareTo(final AccountViewModelOutput other) {
-        return name.compareTo(other.name);
+        return name.compareTo(other.getName());
     }
 }

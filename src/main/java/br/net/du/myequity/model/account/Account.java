@@ -116,7 +116,13 @@ public abstract class Account implements Comparable<Account> {
             return false;
         }
 
-        return (id != null) && id.equals(((Account) other).getId());
+        if (id == null) {
+            return false;
+        }
+
+        final Account otherAccount = (Account) other;
+
+        return id.equals(otherAccount.getId());
     }
 
     @Override
@@ -126,6 +132,6 @@ public abstract class Account implements Comparable<Account> {
 
     @Override
     public int compareTo(final Account other) {
-        return name.compareTo(other.name);
+        return name.compareTo(other.getName());
     }
 }

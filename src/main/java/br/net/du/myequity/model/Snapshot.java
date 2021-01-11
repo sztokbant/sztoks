@@ -324,7 +324,13 @@ public class Snapshot implements Comparable<Snapshot> {
             return false;
         }
 
-        return (id != null) && id.equals(((Snapshot) other).id);
+        if (id == null) {
+            return false;
+        }
+
+        final Snapshot otherSnapshot = (Snapshot) other;
+
+        return id.equals(otherSnapshot.getId());
     }
 
     @Override
@@ -334,6 +340,6 @@ public class Snapshot implements Comparable<Snapshot> {
 
     @Override
     public int compareTo(final Snapshot other) {
-        return other.index.compareTo(index);
+        return other.getIndex().compareTo(index);
     }
 }

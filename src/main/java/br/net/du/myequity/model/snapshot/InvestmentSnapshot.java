@@ -58,10 +58,13 @@ public class InvestmentSnapshot extends AccountSnapshot {
         }
 
         final InvestmentSnapshot otherInvestmentSnapshot = (InvestmentSnapshot) other;
-        return account.equals(otherInvestmentSnapshot.account)
-                && (shares.compareTo(otherInvestmentSnapshot.shares) == 0)
-                && (originalShareValue.compareTo(otherInvestmentSnapshot.originalShareValue) == 0)
-                && (currentShareValue.compareTo(otherInvestmentSnapshot.currentShareValue) == 0);
+
+        return account.equals(otherInvestmentSnapshot.getAccount())
+                && (shares.compareTo(otherInvestmentSnapshot.getShares()) == 0)
+                && (originalShareValue.compareTo(otherInvestmentSnapshot.getOriginalShareValue())
+                        == 0)
+                && (currentShareValue.compareTo(otherInvestmentSnapshot.getCurrentShareValue())
+                        == 0);
     }
 
     public BigDecimal getProfitPercentage() {

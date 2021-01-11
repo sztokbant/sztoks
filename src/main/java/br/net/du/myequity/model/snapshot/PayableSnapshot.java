@@ -55,7 +55,8 @@ public class PayableSnapshot extends AccountSnapshot
         }
 
         final PayableSnapshot otherPayableSnapshot = (PayableSnapshot) other;
+
         return account.equals(otherPayableSnapshot.getAccount())
-                && (amount.compareTo(otherPayableSnapshot.amount) == 0);
+                && (amount.compareTo(otherPayableSnapshot.getAmount()) == 0);
     }
 }

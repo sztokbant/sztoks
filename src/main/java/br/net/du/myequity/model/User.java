@@ -155,7 +155,13 @@ public class User {
             return false;
         }
 
-        return (id != null) && id.equals(((User) other).id);
+        if (id == null) {
+            return false;
+        }
+
+        final User otherUser = (User) other;
+
+        return id.equals(otherUser.getId());
     }
 
     @Override
