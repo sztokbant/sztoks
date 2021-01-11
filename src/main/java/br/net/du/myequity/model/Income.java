@@ -19,6 +19,8 @@ public class Income implements Comparable<Income> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -93,5 +95,25 @@ public class Income implements Comparable<Income> {
                 && amount.equals(otherIncome.getAmount())
                 && isRecurring == otherIncome.isRecurring()
                 && donationRatio.equals(otherIncome.getDonationRatio());
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (!(other instanceof Income)) {
+            return false;
+        }
+
+        final Income otherIncome = (Income) other;
+
+        return (id != null) && id.equals(otherIncome.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return 61;
     }
 }

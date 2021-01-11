@@ -19,6 +19,8 @@ public class Donation implements Comparable<Donation> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -93,5 +95,25 @@ public class Donation implements Comparable<Donation> {
                 && amount.equals(otherDonation.getAmount())
                 && isRecurring == otherDonation.isRecurring()
                 && isTaxDeductible == otherDonation.isTaxDeductible();
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (!(other instanceof Donation)) {
+            return false;
+        }
+
+        final Donation otherDonation = (Donation) other;
+
+        return (id != null) && id.equals(otherDonation.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return 67;
     }
 }
