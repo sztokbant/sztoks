@@ -23,10 +23,10 @@ import br.net.du.myequity.exception.MyEquityException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.model.transaction.Donation;
-import br.net.du.myequity.model.transaction.Income;
+import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import com.google.common.collect.ImmutableSortedSet;
+import java.util.Iterator;
 import java.util.SortedSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,11 +61,10 @@ public class SnapshotServiceTest {
         snapshot.addAccountSnapshot(CREDIT_CARD_SNAPSHOT);
         snapshot.addAccountSnapshot(INVESTMENT_SNAPSHOT);
 
-        snapshot.addIncome(SALARY_INCOME);
-        snapshot.addIncome(SIDE_GIG_INCOME);
-
-        snapshot.addDonation(CHARITY_DONATION);
-        snapshot.addDonation(BEGGAR_DONATION);
+        snapshot.addTransaction(SALARY_INCOME);
+        snapshot.addTransaction(SIDE_GIG_INCOME);
+        snapshot.addTransaction(CHARITY_DONATION);
+        snapshot.addTransaction(BEGGAR_DONATION);
 
         snapshotService = new SnapshotService(snapshotRepository, userService);
     }
@@ -91,22 +90,16 @@ public class SnapshotServiceTest {
             assertTrue(found);
         }
 
-        // Only recurring Incomes and Donations are copied
-        final SortedSet<Income> originalIncomes = snapshot.getIncomes();
-        final SortedSet<Income> newIncomes = newSnapshot.getIncomes();
+        // Only recurring Transactions are copied
+        final SortedSet<Transaction> originalTransactions = snapshot.getTransactions();
+        final SortedSet<Transaction> newTransactions = newSnapshot.getTransactions();
 
-        assertEquals(2, originalIncomes.size());
-        assertEquals(1, newIncomes.size());
+        assertEquals(4, originalTransactions.size());
+        assertEquals(2, newTransactions.size());
 
-        assertTrue(SALARY_INCOME.equalsIgnoreId(newIncomes.iterator().next()));
-
-        final SortedSet<Donation> originalDonations = snapshot.getDonations();
-        final SortedSet<Donation> newDonations = newSnapshot.getDonations();
-
-        assertTrue(CHARITY_DONATION.equalsIgnoreId(newDonations.iterator().next()));
-
-        assertEquals(2, originalDonations.size());
-        assertEquals(1, newDonations.size());
+        final Iterator<Transaction> iterator = newTransactions.iterator();
+        assertTrue(CHARITY_DONATION.equalsIgnoreId(iterator.next()));
+        assertTrue(SALARY_INCOME.equalsIgnoreId(iterator.next()));
 
         verify(snapshotRepository).save(snapshot);
         verify(snapshotRepository).save(newSnapshot);
@@ -239,11 +232,6 @@ public class SnapshotServiceTest {
     }
 
     private Snapshot newEmptySnapshot(final long snapshotIndex) {
-        return new Snapshot(
-                snapshotIndex,
-                now,
-                ImmutableSortedSet.of(),
-                ImmutableSortedSet.of(),
-                ImmutableSortedSet.of());
+        return new Snapshot(snapshotIndex, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
     }
 }

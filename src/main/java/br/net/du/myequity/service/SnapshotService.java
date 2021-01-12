@@ -28,8 +28,7 @@ public class SnapshotService {
                         currentSnapshot.getIndex() + 1,
                         LocalDate.now().toString(),
                         currentSnapshot.getAccountSnapshots(),
-                        currentSnapshot.getRecurringIncomes(),
-                        currentSnapshot.getRecurringDonations());
+                        currentSnapshot.getRecurringTransactions());
 
         currentSnapshot.setNext(newSnapshot);
         newSnapshot.setPrevious(currentSnapshot);
@@ -65,9 +64,7 @@ public class SnapshotService {
         snapshot.getAccountSnapshots()
                 .forEach(accountSnapshot -> snapshot.removeAccountSnapshot(accountSnapshot));
 
-        snapshot.getIncomes().forEach(income -> snapshot.removeIncome(income));
-
-        snapshot.getDonations().forEach(donation -> snapshot.removeDonation(donation));
+        snapshot.getTransactions().forEach(transaction -> snapshot.removeTransaction(transaction));
 
         final Snapshot next = snapshot.getNext();
         final Snapshot previous = snapshot.getPrevious();

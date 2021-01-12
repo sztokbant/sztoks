@@ -35,7 +35,6 @@ public abstract class SnapshotControllerAjaxTestBase extends AjaxControllerTestB
                         SNAPSHOT_ID,
                         "Original Name",
                         ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
                         ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
     }

@@ -42,12 +42,7 @@ class UserTest {
         simpleLiabilityAccount.setId(7L);
 
         snapshot =
-                new Snapshot(
-                        SNAPSHOT_INDEX,
-                        now,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of());
+                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
         snapshot.setId(42L);
     }
 
@@ -240,55 +235,13 @@ class UserTest {
     @Test
     public void compareTo_snapshotsAreOrderedByIndexDescending() {
         // GIVEN
-        user.addSnapshot(
-                new Snapshot(
-                        5L,
-                        now,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of()));
-        user.addSnapshot(
-                new Snapshot(
-                        3L,
-                        now,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of()));
-        user.addSnapshot(
-                new Snapshot(
-                        6L,
-                        now,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of()));
-        user.addSnapshot(
-                new Snapshot(
-                        7L,
-                        now,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of()));
-        user.addSnapshot(
-                new Snapshot(
-                        1L,
-                        now,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of()));
-        user.addSnapshot(
-                new Snapshot(
-                        2L,
-                        now,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of()));
-        user.addSnapshot(
-                new Snapshot(
-                        4L,
-                        now,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(5L, now, ImmutableSortedSet.of(), ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(3L, now, ImmutableSortedSet.of(), ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(6L, now, ImmutableSortedSet.of(), ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(7L, now, ImmutableSortedSet.of(), ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(1L, now, ImmutableSortedSet.of(), ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(2L, now, ImmutableSortedSet.of(), ImmutableSortedSet.of()));
+        user.addSnapshot(new Snapshot(4L, now, ImmutableSortedSet.of(), ImmutableSortedSet.of()));
 
         // WHEN
         final Iterator<Snapshot> iterator = user.getSnapshots().iterator();

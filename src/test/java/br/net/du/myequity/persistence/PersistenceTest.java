@@ -190,7 +190,6 @@ class PersistenceTest {
                                 new SimpleAssetSnapshot(simpleAssetAccount, assetAmount),
                                 new SimpleLiabilitySnapshot(
                                         simpleLiabilityAccount, liabilityAmount)),
-                        ImmutableSortedSet.of(),
                         ImmutableSortedSet.of());
         assertNull(snapshot.getId());
     }

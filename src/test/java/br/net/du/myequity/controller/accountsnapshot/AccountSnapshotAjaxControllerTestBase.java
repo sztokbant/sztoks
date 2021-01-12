@@ -59,12 +59,7 @@ abstract class AccountSnapshotAjaxControllerTestBase extends SnapshotControllerA
     @BeforeEach
     public void ajaxSnapshotControllerTestBaseSetUp() throws Exception {
         snapshot =
-                new Snapshot(
-                        SNAPSHOT_INDEX,
-                        now,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of());
+                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
         final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest =

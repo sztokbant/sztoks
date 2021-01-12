@@ -27,11 +27,7 @@ public class UserService {
 
         user.addSnapshot(
                 new Snapshot(
-                        1L,
-                        FIRST_SNAPSHOT_NAME,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of()));
+                        1L, FIRST_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableSortedSet.of()));
 
         save(user);
     }

@@ -50,12 +50,7 @@ public class AccountServiceTest {
         initMocks(this);
 
         snapshot =
-                new Snapshot(
-                        SNAPSHOT_INDEX,
-                        now,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of());
+                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
 
         accountService = new AccountService(accountRepository, accountSnapshotService);
     }

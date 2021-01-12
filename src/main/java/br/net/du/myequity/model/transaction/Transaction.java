@@ -34,7 +34,6 @@ public abstract class Transaction implements Comparable<Transaction> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Getter
-    @Setter
     private Snapshot snapshot;
 
     @Column @Getter @Setter protected LocalDate date;
@@ -86,6 +85,28 @@ public abstract class Transaction implements Comparable<Transaction> {
                 && currency.equals(otherTransaction.getCurrency())
                 && amount.equals(otherTransaction.getAmount())
                 && isRecurring == otherTransaction.isRecurring();
+    }
+
+    public void setSnapshot(final Snapshot snapshot) {
+        // Prevents infinite loop
+        if (sameAsFormer(snapshot)) {
+            return;
+        }
+
+        final Snapshot oldSnapshot = this.snapshot;
+        this.snapshot = snapshot;
+
+        if (oldSnapshot != null) {
+            oldSnapshot.removeTransaction(this);
+        }
+
+        if (snapshot != null) {
+            snapshot.addTransaction(this);
+        }
+    }
+
+    private boolean sameAsFormer(final Snapshot newSnapshot) {
+        return (snapshot == null) ? (newSnapshot == null) : snapshot.equals(newSnapshot);
     }
 
     @Override

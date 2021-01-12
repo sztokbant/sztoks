@@ -44,12 +44,7 @@ abstract class SnapshotControllerPostTestBase extends PostControllerTestBase {
         anotherUser.setId(user.getId() * 7);
 
         snapshot =
-                new Snapshot(
-                        SNAPSHOT_INDEX,
-                        now,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of());
+                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
     }
 

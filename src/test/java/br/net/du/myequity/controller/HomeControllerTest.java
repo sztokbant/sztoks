@@ -64,12 +64,7 @@ class HomeControllerTest {
     public void setUp() throws Exception {
         user = buildUser();
         snapshot =
-                new Snapshot(
-                        SNAPSHOT_INDEX,
-                        now,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of());
+                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
         user.addSnapshot(snapshot);
 

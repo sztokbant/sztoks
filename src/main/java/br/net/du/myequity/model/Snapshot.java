@@ -8,8 +8,7 @@ import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
-import br.net.du.myequity.model.transaction.Donation;
-import br.net.du.myequity.model.transaction.Income;
+import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.util.NetWorthUtils;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
@@ -86,18 +85,13 @@ public class Snapshot implements Comparable<Snapshot> {
 
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural // Ref.: https://thorben-janssen.com/ordering-vs-sorting-hibernate-use/
-    private final SortedSet<Income> incomes = new TreeSet<>();
-
-    @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, orphanRemoval = true)
-    @SortNatural // Ref.: https://thorben-janssen.com/ordering-vs-sorting-hibernate-use/
-    private final SortedSet<Donation> donations = new TreeSet<>();
+    private final SortedSet<Transaction> transactions = new TreeSet<>();
 
     public Snapshot(
             final Long index,
             final String name,
             @NotNull final SortedSet<AccountSnapshot> accountSnapshots,
-            @NonNull final SortedSet<Income> incomes,
-            @NonNull final SortedSet<Donation> donations) {
+            @NonNull final SortedSet<Transaction> transactions) {
         this.index = index;
 
         this.name = name;
@@ -105,9 +99,7 @@ public class Snapshot implements Comparable<Snapshot> {
         accountSnapshots.stream()
                 .forEach(accountSnapshot -> addAccountSnapshot(accountSnapshot.copy()));
 
-        incomes.stream().forEach(income -> addIncome(income.copy()));
-
-        donations.stream().forEach(donation -> addDonation(donation.copy()));
+        transactions.stream().forEach(transaction -> addTransaction(transaction.copy()));
     }
 
     public SortedSet<AccountSnapshot> getAccountSnapshots() {
@@ -158,62 +150,33 @@ public class Snapshot implements Comparable<Snapshot> {
         accountSnapshot.setSnapshot(null);
     }
 
-    public SortedSet<Income> getIncomes() {
-        return ImmutableSortedSet.copyOf(incomes);
+    public SortedSet<Transaction> getTransactions() {
+        return ImmutableSortedSet.copyOf(transactions);
     }
 
-    public SortedSet<Income> getRecurringIncomes() {
+    public SortedSet<Transaction> getRecurringTransactions() {
         return ImmutableSortedSet.copyOf(
-                incomes.stream()
-                        .filter(Income::isRecurring)
+                transactions.stream()
+                        .filter(Transaction::isRecurring)
                         .collect(Collectors.toCollection(() -> new TreeSet<>())));
     }
 
-    public void addIncome(@NonNull final Income income) {
+    public void addTransaction(@NonNull final Transaction transaction) {
         // Prevents infinite loop
-        if (incomes.contains(income)) {
+        if (transactions.contains(transaction)) {
             return;
         }
-        incomes.add(income);
-        income.setSnapshot(this);
+        transactions.add(transaction);
+        transaction.setSnapshot(this);
     }
 
-    public void removeIncome(@NonNull final Income income) {
+    public void removeTransaction(@NonNull final Transaction transaction) {
         // Prevents infinite loop
-        if (!incomes.contains(income)) {
+        if (!transactions.contains(transaction)) {
             return;
         }
-        incomes.remove(income);
-        income.setSnapshot(null);
-    }
-
-    public SortedSet<Donation> getDonations() {
-        return ImmutableSortedSet.copyOf(donations);
-    }
-
-    public SortedSet<Donation> getRecurringDonations() {
-        return ImmutableSortedSet.copyOf(
-                donations.stream()
-                        .filter(Donation::isRecurring)
-                        .collect(Collectors.toCollection(() -> new TreeSet<>())));
-    }
-
-    public void addDonation(@NonNull final Donation donation) {
-        // Prevents infinite loop
-        if (donations.contains(donation)) {
-            return;
-        }
-        donations.add(donation);
-        donation.setSnapshot(this);
-    }
-
-    public void removeDonation(@NonNull final Donation donation) {
-        // Prevents infinite loop
-        if (!donations.contains(donation)) {
-            return;
-        }
-        donations.remove(donation);
-        donation.setSnapshot(null);
+        transactions.remove(transaction);
+        transaction.setSnapshot(null);
     }
 
     public void setUser(final User user) {

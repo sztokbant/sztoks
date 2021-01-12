@@ -30,12 +30,7 @@ class SnapshotDeleteControllerTest extends SnapshotControllerPostTestBase {
     @BeforeEach
     public void setUp() {
         snapshot =
-                new Snapshot(
-                        SNAPSHOT_INDEX,
-                        now,
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of());
+                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
         user.addSnapshot(snapshot);
