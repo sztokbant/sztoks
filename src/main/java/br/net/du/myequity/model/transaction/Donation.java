@@ -1,120 +1,43 @@
 package br.net.du.myequity.model.transaction;
 
-import br.net.du.myequity.model.Snapshot;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "donations")
-public class Donation implements Comparable<Donation> {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
-    private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Getter
-    @Setter
-    private Snapshot snapshot;
-
-    @Column(nullable = false)
-    @Getter
-    @Setter
-    private String description;
-
-    @Column @Getter @Setter private LocalDate date;
-
-    @Column(nullable = false)
-    @Getter
-    private String currency;
-
-    @Column(nullable = false)
-    @Getter
-    @Setter
-    private BigDecimal amount;
-
-    @Column @Getter @Setter private boolean isRecurring;
+@DiscriminatorValue(Donation.TRANSACTION_TYPE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+public class Donation extends Transaction {
+    static final String TRANSACTION_TYPE = "DONATION";
 
     @Column @Getter @Setter private boolean isTaxDeductible;
 
     public Donation(
-            final String description,
             final LocalDate date,
             final String currency,
             final BigDecimal amount,
+            final String description,
             final boolean isRecurring,
             final boolean isTaxDeductible) {
-        this.description = description;
-        this.date = date;
-        this.currency = currency;
-        this.amount = amount;
-        this.isRecurring = isRecurring;
+        super(date, currency, amount, description, isRecurring);
         this.isTaxDeductible = isTaxDeductible;
     }
 
+    @Override
     public Donation copy() {
-        return new Donation(description, date, currency, amount, isRecurring, isTaxDeductible);
+        return new Donation(date, currency, amount, description, isRecurring, isTaxDeductible);
     }
 
     @Override
-    public int compareTo(final Donation other) {
-        if (currency.equals(other.getCurrency())) {
-            if (date.equals(other.getDate())) {
-                return description.compareTo(other.getDescription());
-            }
-            return date.compareTo(other.getDate());
-        }
-        return currency.compareTo(other.getCurrency());
-    }
-
     public boolean equalsIgnoreId(final Object other) {
-        if (this == other) {
-            return true;
-        }
-
-        if (!(other instanceof Donation)) {
-            return false;
-        }
-
-        final Donation otherDonation = (Donation) other;
-
-        return description.equals(otherDonation.getDescription())
-                && date.equals(otherDonation.getDate())
-                && currency.equals(otherDonation.getCurrency())
-                && amount.equals(otherDonation.getAmount())
-                && isRecurring == otherDonation.isRecurring()
-                && isTaxDeductible == otherDonation.isTaxDeductible();
-    }
-
-    @Override
-    public boolean equals(final Object other) {
-        if (this == other) {
-            return true;
-        }
-
-        if (!(other instanceof Donation)) {
-            return false;
-        }
-
-        final Donation otherDonation = (Donation) other;
-
-        return (id != null) && id.equals(otherDonation.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return 67;
+        return super.equalsIgnoreId(other)
+                && (other instanceof Donation)
+                && isTaxDeductible == ((Donation) other).isTaxDeductible();
     }
 }

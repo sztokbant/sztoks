@@ -56,37 +56,37 @@ public class TestConstants {
 
     public static final Income SALARY_INCOME =
             new Income(
-                    "Salary",
                     LocalDate.of(2020, 12, 31),
                     CurrencyUnit.USD.getCode(),
                     new BigDecimal("12000.00"),
+                    "Salary",
                     true,
                     new BigDecimal("20.00"));
 
     public static final Income SIDE_GIG_INCOME =
             new Income(
-                    "Side Gig",
                     LocalDate.of(2020, 12, 15),
                     CurrencyUnit.USD.getCode(),
                     new BigDecimal("1700.00"),
+                    "Side Gig",
                     false,
                     new BigDecimal("20.00"));
 
     public static final Donation CHARITY_DONATION =
             new Donation(
-                    "Charity",
                     LocalDate.of(2020, 12, 15),
                     CurrencyUnit.USD.getCode(),
                     new BigDecimal("108.00"),
+                    "Charity",
                     true,
                     true);
 
     public static final Donation BEGGAR_DONATION =
             new Donation(
-                    "Beggar",
                     LocalDate.of(2020, 12, 31),
                     CurrencyUnit.USD.getCode(),
                     new BigDecimal("10.00"),
+                    "Beggar",
                     false,
                     true);
 }
