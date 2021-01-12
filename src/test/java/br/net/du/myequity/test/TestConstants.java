@@ -11,6 +11,8 @@ import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import br.net.du.myequity.model.transaction.Donation;
 import br.net.du.myequity.model.transaction.Income;
+import br.net.du.myequity.model.transaction.Investment;
+import br.net.du.myequity.model.transaction.InvestmentCategory;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.joda.money.CurrencyUnit;
@@ -74,7 +76,7 @@ public class TestConstants {
 
     public static final Donation CHARITY_DONATION =
             new Donation(
-                    LocalDate.of(2020, 12, 15),
+                    LocalDate.of(2020, 12, 31),
                     CurrencyUnit.USD.getCode(),
                     new BigDecimal("108.00"),
                     "Charity",
@@ -83,10 +85,28 @@ public class TestConstants {
 
     public static final Donation BEGGAR_DONATION =
             new Donation(
-                    LocalDate.of(2020, 12, 31),
+                    LocalDate.of(2020, 12, 15),
                     CurrencyUnit.USD.getCode(),
                     new BigDecimal("10.00"),
                     "Beggar",
                     false,
                     true);
+
+    public static final Investment RETIREMENT_FUND_INVESTMENT =
+            new Investment(
+                    LocalDate.of(2020, 12, 31),
+                    CurrencyUnit.USD.getCode(),
+                    new BigDecimal("1500.00"),
+                    "Retirement Fund",
+                    true,
+                    InvestmentCategory.LONG_TERM);
+
+    public static final Investment SAVINGS_INVESTMENT =
+            new Investment(
+                    LocalDate.of(2020, 12, 15),
+                    CurrencyUnit.USD.getCode(),
+                    new BigDecimal("200.00"),
+                    "Savings",
+                    false,
+                    InvestmentCategory.SHORT_TERM);
 }
