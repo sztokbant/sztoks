@@ -2,6 +2,7 @@ package br.net.du.myequity.model.snapshot;
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.util.SnapshotUtils;
 import com.google.common.annotations.VisibleForTesting;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -52,26 +53,22 @@ public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
     @VisibleForTesting
     public abstract boolean equalsIgnoreId(final Object other);
 
-    public void setSnapshot(final Snapshot snapshot) {
+    public void setSnapshot(final Snapshot newSnapshot) {
         // Prevents infinite loop
-        if (sameAsFormer(snapshot)) {
+        if (SnapshotUtils.equals(snapshot, newSnapshot)) {
             return;
         }
 
-        final Snapshot oldSnapshot = this.snapshot;
-        this.snapshot = snapshot;
+        final Snapshot oldSnapshot = snapshot;
+        snapshot = newSnapshot;
 
         if (oldSnapshot != null) {
             oldSnapshot.removeAccountSnapshot(this);
         }
 
-        if (snapshot != null) {
-            snapshot.addAccountSnapshot(this);
+        if (newSnapshot != null) {
+            newSnapshot.addAccountSnapshot(this);
         }
-    }
-
-    private boolean sameAsFormer(final Snapshot newSnapshot) {
-        return (snapshot == null) ? (newSnapshot == null) : snapshot.equals(newSnapshot);
     }
 
     @Override

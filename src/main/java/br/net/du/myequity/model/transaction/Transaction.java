@@ -2,6 +2,7 @@ package br.net.du.myequity.model.transaction;
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.util.SnapshotUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -87,26 +88,22 @@ public abstract class Transaction implements Comparable<Transaction> {
                 && isRecurring == otherTransaction.isRecurring();
     }
 
-    public void setSnapshot(final Snapshot snapshot) {
+    public void setSnapshot(final Snapshot newSnapshot) {
         // Prevents infinite loop
-        if (sameAsFormer(snapshot)) {
+        if (SnapshotUtils.equals(snapshot, newSnapshot)) {
             return;
         }
 
-        final Snapshot oldSnapshot = this.snapshot;
-        this.snapshot = snapshot;
+        final Snapshot oldSnapshot = snapshot;
+        snapshot = newSnapshot;
 
         if (oldSnapshot != null) {
             oldSnapshot.removeTransaction(this);
         }
 
-        if (snapshot != null) {
-            snapshot.addTransaction(this);
+        if (newSnapshot != null) {
+            newSnapshot.addTransaction(this);
         }
-    }
-
-    private boolean sameAsFormer(final Snapshot newSnapshot) {
-        return (snapshot == null) ? (newSnapshot == null) : snapshot.equals(newSnapshot);
     }
 
     @Override

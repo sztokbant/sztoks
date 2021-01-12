@@ -2,6 +2,7 @@ package br.net.du.myequity.model.account;
 
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.util.UserUtils;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -83,26 +84,22 @@ public abstract class Account implements Comparable<Account> {
         this.currency = currencyUnit.getCode();
     }
 
-    public void setUser(final User user) {
+    public void setUser(final User newUser) {
         // Prevents infinite loop
-        if (sameAsFormer(user)) {
+        if (UserUtils.equals(user, newUser)) {
             return;
         }
 
-        final User oldUser = this.user;
-        this.user = user;
+        final User oldUser = user;
+        user = newUser;
 
         if (oldUser != null) {
             oldUser.removeAccount(this);
         }
 
-        if (user != null) {
-            user.addAccount(this);
+        if (newUser != null) {
+            newUser.addAccount(this);
         }
-    }
-
-    private boolean sameAsFormer(final User newUser) {
-        return (user == null) ? (newUser == null) : user.equals(newUser);
     }
 
     @Override

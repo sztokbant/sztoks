@@ -9,6 +9,7 @@ import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import br.net.du.myequity.model.transaction.Transaction;
+import br.net.du.myequity.model.util.UserUtils;
 import br.net.du.myequity.util.NetWorthUtils;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
@@ -179,26 +180,22 @@ public class Snapshot implements Comparable<Snapshot> {
         transaction.setSnapshot(null);
     }
 
-    public void setUser(final User user) {
+    public void setUser(final User newUser) {
         // Prevents infinite loop
-        if (sameAsFormer(user)) {
+        if (UserUtils.equals(user, newUser)) {
             return;
         }
 
-        final User oldUser = this.user;
-        this.user = user;
+        final User oldUser = user;
+        user = newUser;
 
         if (oldUser != null) {
             oldUser.removeSnapshot(this);
         }
 
-        if (user != null) {
-            user.addSnapshot(this);
+        if (newUser != null) {
+            newUser.addSnapshot(this);
         }
-    }
-
-    private boolean sameAsFormer(final User newUser) {
-        return (user == null) ? (newUser == null) : user.equals(newUser);
     }
 
     public Map<CurrencyUnit, BigDecimal> getNetWorth() {
