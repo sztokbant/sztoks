@@ -2,7 +2,9 @@ package br.net.du.myequity.model;
 
 import static br.net.du.myequity.test.TestConstants.BEGGAR_DONATION;
 import static br.net.du.myequity.test.TestConstants.CHARITY_DONATION;
+import static br.net.du.myequity.test.TestConstants.RETIREMENT_FUND_INVESTMENT;
 import static br.net.du.myequity.test.TestConstants.SALARY_INCOME;
+import static br.net.du.myequity.test.TestConstants.SAVINGS_INVESTMENT;
 import static br.net.du.myequity.test.TestConstants.SIDE_GIG_INCOME;
 import static br.net.du.myequity.test.TestConstants.SIMPLE_ASSET_ACCOUNT;
 import static br.net.du.myequity.test.TestConstants.SIMPLE_ASSET_SNAPSHOT;
@@ -21,9 +23,11 @@ import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.model.transaction.Transaction;
+import br.net.du.myequity.model.transaction.TransactionType;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
 import org.joda.money.CurrencyUnit;
@@ -343,6 +347,64 @@ class SnapshotTest {
         assertEquals(3, snapshot.getTransactions().size());
         assertFalse(snapshot.getTransactions().contains(SALARY_INCOME));
         assertNull(SALARY_INCOME.getSnapshot());
+    }
+
+    @Test
+    public void getTransactionsByType() {
+        // GIVEN
+        final Snapshot snapshot =
+                new Snapshot(
+                        SNAPSHOT_INDEX,
+                        now,
+                        ImmutableSortedSet.of(),
+                        ImmutableSortedSet.of(
+                                SALARY_INCOME,
+                                SIDE_GIG_INCOME,
+                                CHARITY_DONATION,
+                                BEGGAR_DONATION,
+                                RETIREMENT_FUND_INVESTMENT,
+                                SAVINGS_INVESTMENT));
+
+        // WHEN
+        final Map<TransactionType, SortedSet<Transaction>> transactionsByType =
+                snapshot.getTransactionsByType();
+
+        // THEN
+        assertEquals(3, transactionsByType.size());
+
+        assertTrue(transactionsByType.containsKey(TransactionType.INCOME));
+        final SortedSet<Transaction> incomes = transactionsByType.get(TransactionType.INCOME);
+        assertEquals(2, incomes.size());
+        final Iterator<Transaction> incomeIterator = incomes.iterator();
+        assertTrue(SIDE_GIG_INCOME.equalsIgnoreId(incomeIterator.next()));
+        assertTrue(SALARY_INCOME.equalsIgnoreId(incomeIterator.next()));
+
+        assertTrue(transactionsByType.containsKey(TransactionType.INVESTMENT));
+        final SortedSet<Transaction> investments =
+                transactionsByType.get(TransactionType.INVESTMENT);
+        assertEquals(2, investments.size());
+        final Iterator<Transaction> investmentIterator = investments.iterator();
+        assertTrue(SAVINGS_INVESTMENT.equalsIgnoreId(investmentIterator.next()));
+        assertTrue(RETIREMENT_FUND_INVESTMENT.equalsIgnoreId(investmentIterator.next()));
+
+        assertTrue(transactionsByType.containsKey(TransactionType.DONATION));
+        final SortedSet<Transaction> donations = transactionsByType.get(TransactionType.DONATION);
+        assertEquals(2, donations.size());
+        final Iterator<Transaction> donationIterator = donations.iterator();
+        assertTrue(BEGGAR_DONATION.equalsIgnoreId(donationIterator.next()));
+        assertTrue(CHARITY_DONATION.equalsIgnoreId(donationIterator.next()));
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> {
+                    transactionsByType.remove(TransactionType.INCOME);
+                });
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> {
+                    transactionsByType.get(TransactionType.DONATION).remove(CHARITY_DONATION);
+                });
     }
 
     @Test

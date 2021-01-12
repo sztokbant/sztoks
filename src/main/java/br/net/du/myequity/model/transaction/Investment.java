@@ -7,6 +7,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,9 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Investment extends Transaction {
     static final String TRANSACTION_TYPE = "INVESTMENT";
+
+    @Transient @Getter
+    private final TransactionType transactionType = TransactionType.valueOf(TRANSACTION_TYPE);
 
     @Column
     @Enumerated(EnumType.STRING)

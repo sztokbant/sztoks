@@ -1,7 +1,6 @@
 package br.net.du.myequity.model.transaction;
 
 import br.net.du.myequity.model.Snapshot;
-import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.util.SnapshotUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,9 +23,11 @@ import lombok.Setter;
 @Entity
 @Table(name = "transactions")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = Account.DISCRIMINATOR_COLUMN)
+@DiscriminatorColumn(name = Transaction.DISCRIMINATOR_COLUMN)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public abstract class Transaction implements Comparable<Transaction> {
+    static final String DISCRIMINATOR_COLUMN = "transaction_type";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -69,6 +70,8 @@ public abstract class Transaction implements Comparable<Transaction> {
     }
 
     public abstract Transaction copy();
+
+    public abstract TransactionType getTransactionType();
 
     public boolean equalsIgnoreId(final Object other) {
         if (this == other) {

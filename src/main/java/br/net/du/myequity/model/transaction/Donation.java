@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,9 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Donation extends Transaction {
     static final String TRANSACTION_TYPE = "DONATION";
+
+    @Transient @Getter
+    private final TransactionType transactionType = TransactionType.valueOf(TRANSACTION_TYPE);
 
     @Column @Getter @Setter private boolean isTaxDeductible;
 

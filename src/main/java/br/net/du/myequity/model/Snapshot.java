@@ -9,6 +9,7 @@ import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import br.net.du.myequity.model.transaction.Transaction;
+import br.net.du.myequity.model.transaction.TransactionType;
 import br.net.du.myequity.model.util.UserUtils;
 import br.net.du.myequity.util.NetWorthUtils;
 import com.google.common.collect.ImmutableMap;
@@ -153,6 +154,16 @@ public class Snapshot implements Comparable<Snapshot> {
 
     public SortedSet<Transaction> getTransactions() {
         return ImmutableSortedSet.copyOf(transactions);
+    }
+
+    public Map<TransactionType, SortedSet<Transaction>> getTransactionsByType() {
+        return transactions.stream()
+                .collect(
+                        collectingAndThen(
+                                groupingBy(
+                                        transaction -> transaction.getTransactionType(),
+                                        collectingAndThen(toSet(), ImmutableSortedSet::copyOf)),
+                                ImmutableMap::copyOf));
     }
 
     public SortedSet<Transaction> getRecurringTransactions() {
