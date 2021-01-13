@@ -65,3 +65,7 @@ function payableDueDateUpdateSuccessCallback(data, result) {
 function receivableDueDateUpdateSuccessCallback(data, result) {
   $("#receivable_due_date_" + data.accountId).html(result.dueDate);
 }
+
+// TODO
+function txnAmountUpdateSuccessCallback(data, result) {
+}

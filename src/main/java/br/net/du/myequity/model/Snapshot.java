@@ -210,14 +210,22 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     public Map<CurrencyUnit, BigDecimal> getNetWorth() {
-        return NetWorthUtils.computeByCurrency(accountSnapshots);
+        return NetWorthUtils.breakDownAccountSnapshotsByCurrency(accountSnapshots);
     }
 
     public Map<CurrencyUnit, BigDecimal> getTotalForAccountType(
             @NonNull final AccountType accountType) {
-        return NetWorthUtils.computeByCurrency(
+        return NetWorthUtils.breakDownAccountSnapshotsByCurrency(
                 accountSnapshots.stream()
                         .filter(entry -> entry.getAccount().getAccountType().equals(accountType))
+                        .collect(Collectors.toSet()));
+    }
+
+    public Map<CurrencyUnit, BigDecimal> getTotalForTransactionType(
+            @NonNull final TransactionType transactionType) {
+        return NetWorthUtils.breakDownTransactionsByCurrency(
+                transactions.stream()
+                        .filter(entry -> entry.getTransactionType().equals(transactionType))
                         .collect(Collectors.toSet()));
     }
 

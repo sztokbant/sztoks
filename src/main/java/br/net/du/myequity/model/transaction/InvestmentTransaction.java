@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,36 +14,42 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@DiscriminatorValue(Income.TRANSACTION_TYPE)
+@DiscriminatorValue(InvestmentTransaction.TRANSACTION_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class Income extends Transaction {
-    static final String TRANSACTION_TYPE = "INCOME";
+public class InvestmentTransaction extends Transaction {
+    static final String TRANSACTION_TYPE = "INVESTMENT";
 
     @Transient @Getter
     private final TransactionType transactionType = TransactionType.valueOf(TRANSACTION_TYPE);
 
-    @Column @Getter @Setter private BigDecimal donationRatio;
+    @Column
+    @Enumerated(EnumType.STRING)
+    @Getter
+    @Setter
+    private InvestmentCategory investmentCategory;
 
-    public Income(
+    public InvestmentTransaction(
             final LocalDate date,
             final String currency,
             final BigDecimal amount,
             final String description,
             final boolean isRecurring,
-            final BigDecimal donationRatio) {
+            final InvestmentCategory investmentCategory) {
         super(date, currency, amount, description, isRecurring);
-        this.donationRatio = donationRatio;
+        this.investmentCategory = investmentCategory;
     }
 
     @Override
-    public Income copy() {
-        return new Income(date, currency, amount, description, isRecurring, donationRatio);
+    public InvestmentTransaction copy() {
+        return new InvestmentTransaction(
+                date, currency, amount, description, isRecurring, investmentCategory);
     }
 
     @Override
     public boolean equalsIgnoreId(final Object other) {
         return super.equalsIgnoreId(other)
-                && (other instanceof Income)
-                && donationRatio.equals(((Income) other).getDonationRatio());
+                && (other instanceof InvestmentTransaction)
+                && investmentCategory.equals(
+                        ((InvestmentTransaction) other).getInvestmentCategory());
     }
 }

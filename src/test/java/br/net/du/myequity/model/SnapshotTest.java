@@ -22,9 +22,9 @@ import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
-import br.net.du.myequity.model.transaction.Donation;
-import br.net.du.myequity.model.transaction.Income;
-import br.net.du.myequity.model.transaction.Investment;
+import br.net.du.myequity.model.transaction.DonationTransaction;
+import br.net.du.myequity.model.transaction.IncomeTransaction;
+import br.net.du.myequity.model.transaction.InvestmentTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import com.google.common.collect.ImmutableMap;
@@ -46,10 +46,10 @@ class SnapshotTest {
     @Test
     public void constructor() {
         // WHEN
-        final Income recurringIncome = newRecurringIncome();
-        final Income singleIncome = newSingleIncome();
-        final Donation recurringDonation = newRecurringDonation();
-        final Donation singleDonation = newSingleDonation();
+        final IncomeTransaction recurringIncome = newRecurringIncome();
+        final IncomeTransaction singleIncome = newSingleIncome();
+        final DonationTransaction recurringDonation = newRecurringDonation();
+        final DonationTransaction singleDonation = newSingleDonation();
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
@@ -293,7 +293,7 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
-        final Income transaction = newRecurringIncome();
+        final IncomeTransaction transaction = newRecurringIncome();
 
         // WHEN
         snapshot.addTransaction(transaction);
@@ -314,7 +314,7 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
-        final Income transaction = newSingleIncome();
+        final IncomeTransaction transaction = newSingleIncome();
 
         // WHEN
         snapshot.addTransaction(transaction);
@@ -332,7 +332,7 @@ class SnapshotTest {
     @Test
     public void removeTransaction_existing() {
         // GIVEN
-        final Income recurringIncome = newRecurringIncome();
+        final IncomeTransaction recurringIncome = newRecurringIncome();
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
@@ -356,12 +356,12 @@ class SnapshotTest {
     @Test
     public void getTransactionsByType() {
         // GIVEN
-        final Income recurringIncome = newRecurringIncome();
-        final Income singleIncome = newSingleIncome();
-        final Investment recurringInvestment = newRecurringInvestment();
-        final Investment singleInvestment = newSingleInvestment();
-        final Donation recurringDonation = newRecurringDonation();
-        final Donation singleDonation = newSingleDonation();
+        final IncomeTransaction recurringIncome = newRecurringIncome();
+        final IncomeTransaction singleIncome = newSingleIncome();
+        final InvestmentTransaction recurringInvestment = newRecurringInvestment();
+        final InvestmentTransaction singleInvestment = newSingleInvestment();
+        final DonationTransaction recurringDonation = newRecurringDonation();
+        final DonationTransaction singleDonation = newSingleDonation();
 
         final Snapshot snapshot =
                 new Snapshot(

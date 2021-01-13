@@ -19,12 +19,12 @@ public class InvestmentViewModelOutput extends AccountSnapshotViewModelOutput {
     private final String profitPercentage;
 
     public InvestmentViewModelOutput(
-            final AccountSnapshotViewModelOutput accountSnapshotViewModelOutput,
+            final AccountSnapshotViewModelOutput other,
             final String shares,
             final String originalShareValue,
             final String currentShareValue,
             final String profitPercentage) {
-        super(accountSnapshotViewModelOutput);
+        super(other);
         this.shares = shares;
         this.originalShareValue = originalShareValue;
         this.currentShareValue = currentShareValue;

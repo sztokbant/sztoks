@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,40 +12,37 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@DiscriminatorValue(Investment.TRANSACTION_TYPE)
+@DiscriminatorValue(DonationTransaction.TRANSACTION_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class Investment extends Transaction {
-    static final String TRANSACTION_TYPE = "INVESTMENT";
+public class DonationTransaction extends Transaction {
+    static final String TRANSACTION_TYPE = "DONATION";
 
     @Transient @Getter
     private final TransactionType transactionType = TransactionType.valueOf(TRANSACTION_TYPE);
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    @Getter
-    @Setter
-    private InvestmentCategory investmentCategory;
+    @Column @Getter @Setter private boolean isTaxDeductible;
 
-    public Investment(
+    public DonationTransaction(
             final LocalDate date,
             final String currency,
             final BigDecimal amount,
             final String description,
             final boolean isRecurring,
-            final InvestmentCategory investmentCategory) {
+            final boolean isTaxDeductible) {
         super(date, currency, amount, description, isRecurring);
-        this.investmentCategory = investmentCategory;
+        this.isTaxDeductible = isTaxDeductible;
     }
 
     @Override
-    public Investment copy() {
-        return new Investment(date, currency, amount, description, isRecurring, investmentCategory);
+    public DonationTransaction copy() {
+        return new DonationTransaction(
+                date, currency, amount, description, isRecurring, isTaxDeductible);
     }
 
     @Override
     public boolean equalsIgnoreId(final Object other) {
         return super.equalsIgnoreId(other)
-                && (other instanceof Investment)
-                && investmentCategory.equals(((Investment) other).getInvestmentCategory());
+                && (other instanceof DonationTransaction)
+                && isTaxDeductible == ((DonationTransaction) other).isTaxDeductible();
     }
 }

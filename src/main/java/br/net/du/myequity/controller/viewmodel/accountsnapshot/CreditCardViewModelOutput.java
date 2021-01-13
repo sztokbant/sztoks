@@ -22,14 +22,14 @@ public class CreditCardViewModelOutput extends AccountSnapshotViewModelOutput {
     private final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit;
 
     public CreditCardViewModelOutput(
-            final AccountSnapshotViewModelOutput accountSnapshotViewModelOutput,
+            final AccountSnapshotViewModelOutput other,
             final String totalCredit,
             final String availableCredit,
             final String statement,
             final String remainingBalance,
             final String usedCreditPercentage,
             final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit) {
-        super(accountSnapshotViewModelOutput);
+        super(other);
         this.totalCredit = totalCredit;
         this.availableCredit = availableCredit;
         this.statement = statement;

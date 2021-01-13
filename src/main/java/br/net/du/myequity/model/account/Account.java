@@ -81,7 +81,7 @@ public abstract class Account implements Comparable<Account> {
     }
 
     public void setCurrencyUnit(final CurrencyUnit currencyUnit) {
-        this.currency = currencyUnit.getCode();
+        currency = currencyUnit.getCode();
     }
 
     public void setUser(final User newUser) {

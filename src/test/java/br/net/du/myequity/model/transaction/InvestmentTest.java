@@ -11,9 +11,9 @@ class InvestmentTest {
     @Test
     public void equals_differentIds() {
         // GIVEN`
-        final Investment first = newRecurringInvestment();
+        final InvestmentTransaction first = newRecurringInvestment();
         first.setId(42L);
-        final Investment second = newRecurringInvestment();
+        final InvestmentTransaction second = newRecurringInvestment();
         second.setId(77L);
 
         // THEN
@@ -23,9 +23,9 @@ class InvestmentTest {
     @Test
     public void equals_sameIds() {
         // GIVEN`
-        final Investment first = newRecurringInvestment();
+        final InvestmentTransaction first = newRecurringInvestment();
         first.setId(42L);
-        final Investment second = newRecurringInvestment();
+        final InvestmentTransaction second = newRecurringInvestment();
         second.setId(42L);
 
         // THEN

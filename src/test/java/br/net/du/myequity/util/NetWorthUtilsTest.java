@@ -43,7 +43,7 @@ class NetWorthUtilsTest {
 
         // WHEN
         final Map<CurrencyUnit, BigDecimal> netWorthByCurrency =
-                NetWorthUtils.computeByCurrency(accountSnapshots);
+                NetWorthUtils.breakDownAccountSnapshotsByCurrency(accountSnapshots);
 
         // THEN
         assertEquals(1, netWorthByCurrency.size());
@@ -70,7 +70,7 @@ class NetWorthUtilsTest {
 
         // WHEN
         final Map<CurrencyUnit, BigDecimal> netWorthByCurrency =
-                NetWorthUtils.computeByCurrency(accountSnapshots);
+                NetWorthUtils.breakDownAccountSnapshotsByCurrency(accountSnapshots);
 
         // THEN
         assertEquals(2, netWorthByCurrency.size());

@@ -9,10 +9,10 @@ import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
-import br.net.du.myequity.model.transaction.Donation;
-import br.net.du.myequity.model.transaction.Income;
-import br.net.du.myequity.model.transaction.Investment;
+import br.net.du.myequity.model.transaction.DonationTransaction;
+import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.InvestmentCategory;
+import br.net.du.myequity.model.transaction.InvestmentTransaction;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.joda.money.CurrencyUnit;
@@ -56,8 +56,8 @@ public class TestConstants {
                     new BigDecimal("1100.00"),
                     new BigDecimal("3500.00"));
 
-    public static final Income newRecurringIncome() {
-        return new Income(
+    public static final IncomeTransaction newRecurringIncome() {
+        return new IncomeTransaction(
                 LocalDate.of(2020, 12, 31),
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("12000.00"),
@@ -66,8 +66,8 @@ public class TestConstants {
                 new BigDecimal("20.00"));
     }
 
-    public static final Income newSingleIncome() {
-        return new Income(
+    public static final IncomeTransaction newSingleIncome() {
+        return new IncomeTransaction(
                 LocalDate.of(2020, 12, 15),
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("1700.00"),
@@ -76,8 +76,8 @@ public class TestConstants {
                 new BigDecimal("20.00"));
     }
 
-    public static final Donation newRecurringDonation() {
-        return new Donation(
+    public static final DonationTransaction newRecurringDonation() {
+        return new DonationTransaction(
                 LocalDate.of(2020, 12, 31),
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("108.00"),
@@ -86,8 +86,8 @@ public class TestConstants {
                 true);
     }
 
-    public static final Donation newSingleDonation() {
-        return new Donation(
+    public static final DonationTransaction newSingleDonation() {
+        return new DonationTransaction(
                 LocalDate.of(2020, 12, 15),
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("10.00"),
@@ -96,8 +96,8 @@ public class TestConstants {
                 true);
     }
 
-    public static final Investment newRecurringInvestment() {
-        return new Investment(
+    public static final InvestmentTransaction newRecurringInvestment() {
+        return new InvestmentTransaction(
                 LocalDate.of(2020, 12, 31),
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("1500.00"),
@@ -106,8 +106,8 @@ public class TestConstants {
                 InvestmentCategory.LONG_TERM);
     }
 
-    public static final Investment newSingleInvestment() {
-        return new Investment(
+    public static final InvestmentTransaction newSingleInvestment() {
+        return new InvestmentTransaction(
                 LocalDate.of(2020, 12, 15),
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("200.00"),

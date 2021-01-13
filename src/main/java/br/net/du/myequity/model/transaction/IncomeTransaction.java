@@ -12,36 +12,37 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@DiscriminatorValue(Donation.TRANSACTION_TYPE)
+@DiscriminatorValue(IncomeTransaction.TRANSACTION_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class Donation extends Transaction {
-    static final String TRANSACTION_TYPE = "DONATION";
+public class IncomeTransaction extends Transaction {
+    static final String TRANSACTION_TYPE = "INCOME";
 
     @Transient @Getter
     private final TransactionType transactionType = TransactionType.valueOf(TRANSACTION_TYPE);
 
-    @Column @Getter @Setter private boolean isTaxDeductible;
+    @Column @Getter @Setter private BigDecimal donationRatio;
 
-    public Donation(
+    public IncomeTransaction(
             final LocalDate date,
             final String currency,
             final BigDecimal amount,
             final String description,
             final boolean isRecurring,
-            final boolean isTaxDeductible) {
+            final BigDecimal donationRatio) {
         super(date, currency, amount, description, isRecurring);
-        this.isTaxDeductible = isTaxDeductible;
+        this.donationRatio = donationRatio;
     }
 
     @Override
-    public Donation copy() {
-        return new Donation(date, currency, amount, description, isRecurring, isTaxDeductible);
+    public IncomeTransaction copy() {
+        return new IncomeTransaction(
+                date, currency, amount, description, isRecurring, donationRatio);
     }
 
     @Override
     public boolean equalsIgnoreId(final Object other) {
         return super.equalsIgnoreId(other)
-                && (other instanceof Donation)
-                && isTaxDeductible == ((Donation) other).isTaxDeductible();
+                && (other instanceof IncomeTransaction)
+                && donationRatio.equals(((IncomeTransaction) other).getDonationRatio());
     }
 }

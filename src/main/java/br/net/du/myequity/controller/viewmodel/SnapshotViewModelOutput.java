@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller.viewmodel;
 
-import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getViewModelOutputFactoryMethod;
+import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getAccountSnapshotViewModelOutputFactoryMethod;
+import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getTransactionViewModelOutputFactoryMethod;
 import static java.util.stream.Collectors.toList;
 
 import br.net.du.myequity.controller.util.MoneyFormatUtils;
@@ -9,10 +10,13 @@ import br.net.du.myequity.controller.viewmodel.accountsnapshot.CreditCardViewMod
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.InvestmentViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.PayableViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.ReceivableViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
+import br.net.du.myequity.model.transaction.Transaction;
+import br.net.du.myequity.model.transaction.TransactionType;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.lang.reflect.Method;
@@ -36,6 +40,10 @@ public class SnapshotViewModelOutput {
     private final Map<CurrencyUnit, String> liabilitiesBalance;
     private final Map<String, CreditCardTotalsViewModelOutput> creditCardTotals;
 
+    private final Map<CurrencyUnit, String> incomeTransactionsTotal;
+    private final Map<CurrencyUnit, String> investmentTransactionsTotal;
+    private final Map<CurrencyUnit, String> donationTransactionsTotal;
+
     private final Long previousId;
     private final String previousName;
 
@@ -48,6 +56,10 @@ public class SnapshotViewModelOutput {
     private final List<AccountSnapshotViewModelOutput> simpleLiabilityAccounts;
     private final List<AccountSnapshotViewModelOutput> payableAccounts;
     private final List<AccountSnapshotViewModelOutput> creditCardAccounts;
+
+    private final List<TransactionViewModelOutput> incomes;
+    private final List<TransactionViewModelOutput> investments;
+    private final List<TransactionViewModelOutput> donations;
 
     public static SnapshotViewModelOutput of(final Snapshot snapshot) {
         final Map<CurrencyUnit, CreditCardSnapshot> creditCardTotals =
@@ -81,12 +93,25 @@ public class SnapshotViewModelOutput {
                                 formatForCurrency(
                                         snapshot.getTotalForAccountType(AccountType.LIABILITY)))
                         .creditCardTotals(getCurrencyUnitCreditCardViewModels(creditCardTotals))
+                        .incomeTransactionsTotal(
+                                formatForCurrency(
+                                        snapshot.getTotalForTransactionType(
+                                                TransactionType.INCOME)))
+                        .investmentTransactionsTotal(
+                                formatForCurrency(
+                                        snapshot.getTotalForTransactionType(
+                                                TransactionType.INVESTMENT)))
+                        .donationTransactionsTotal(
+                                formatForCurrency(
+                                        snapshot.getTotalForTransactionType(
+                                                TransactionType.DONATION)))
                         .previousId(previousId)
                         .previousName(previousName)
                         .nextId(nextId)
                         .nextName(nextName);
 
         addAccounts(builder, snapshot);
+        addTransactions(builder, snapshot);
 
         return builder.build();
     }
@@ -151,21 +176,22 @@ public class SnapshotViewModelOutput {
                 AccountType.ASSET,
                 (assetAccountSnapshots == null)
                         ? ImmutableList.of()
-                        : getViewModelOutputs(assetAccountSnapshots),
+                        : getAccountSnapshotViewModelOutputs(assetAccountSnapshots),
                 AccountType.LIABILITY,
                 (liabilityAccountSnapshots == null)
                         ? ImmutableList.of()
-                        : getViewModelOutputs(liabilityAccountSnapshots));
+                        : getAccountSnapshotViewModelOutputs(liabilityAccountSnapshots));
     }
 
-    private static List<AccountSnapshotViewModelOutput> getViewModelOutputs(
+    private static List<AccountSnapshotViewModelOutput> getAccountSnapshotViewModelOutputs(
             final SortedSet<AccountSnapshot> accountSnapshots) {
         return accountSnapshots.stream()
                 .map(
                         accountSnapshot -> {
                             try {
                                 final Method factoryMethod =
-                                        getViewModelOutputFactoryMethod(accountSnapshot.getClass());
+                                        getAccountSnapshotViewModelOutputFactoryMethod(
+                                                accountSnapshot.getClass());
                                 return (AccountSnapshotViewModelOutput)
                                         factoryMethod.invoke(null, accountSnapshot);
                             } catch (final Exception e) {
@@ -189,5 +215,58 @@ public class SnapshotViewModelOutput {
         }
 
         return accountsByType;
+    }
+
+    private static void addTransactions(
+            final SnapshotViewModelOutputBuilder builder, final Snapshot snapshot) {
+        final Map<TransactionType, List<TransactionViewModelOutput>> transactionViewModels =
+                getTransactionViewModelOutputs(snapshot);
+
+        builder.incomes(transactionViewModels.get(TransactionType.INCOME));
+        builder.investments(transactionViewModels.get(TransactionType.INVESTMENT));
+        builder.donations(transactionViewModels.get(TransactionType.DONATION));
+    }
+
+    private static Map<TransactionType, List<TransactionViewModelOutput>>
+            getTransactionViewModelOutputs(final Snapshot snapshot) {
+        final Map<TransactionType, SortedSet<Transaction>> transactionsByType =
+                snapshot.getTransactionsByType();
+
+        final SortedSet<Transaction> incomes = transactionsByType.get(TransactionType.INCOME);
+        final SortedSet<Transaction> investments =
+                transactionsByType.get(TransactionType.INVESTMENT);
+        final SortedSet<Transaction> donations = transactionsByType.get(TransactionType.DONATION);
+
+        return ImmutableMap.of(
+                TransactionType.INCOME,
+                (incomes == null) ? ImmutableList.of() : getTransactionViewModelOutputs(incomes),
+                TransactionType.INVESTMENT,
+                (investments == null)
+                        ? ImmutableList.of()
+                        : getTransactionViewModelOutputs(investments),
+                TransactionType.DONATION,
+                (donations == null)
+                        ? ImmutableList.of()
+                        : getTransactionViewModelOutputs(donations));
+    }
+
+    private static List<TransactionViewModelOutput> getTransactionViewModelOutputs(
+            final SortedSet<Transaction> transactions) {
+
+        return transactions.stream()
+                .map(
+                        transaction -> {
+                            try {
+                                final Method factoryMethod =
+                                        getTransactionViewModelOutputFactoryMethod(
+                                                transaction.getClass());
+                                return (TransactionViewModelOutput)
+                                        factoryMethod.invoke(null, transaction);
+                            } catch (final Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
+                .sorted()
+                .collect(toList());
     }
 }

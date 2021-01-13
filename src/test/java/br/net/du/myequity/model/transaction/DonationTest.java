@@ -11,9 +11,9 @@ class DonationTest {
     @Test
     public void equals_differentIds() {
         // GIVEN`
-        final Donation first = newRecurringDonation();
+        final DonationTransaction first = newRecurringDonation();
         first.setId(42L);
-        final Donation second = newRecurringDonation();
+        final DonationTransaction second = newRecurringDonation();
         second.setId(77L);
 
         // THEN
@@ -23,9 +23,9 @@ class DonationTest {
     @Test
     public void equals_sameIds() {
         // GIVEN`
-        final Donation first = newRecurringDonation();
+        final DonationTransaction first = newRecurringDonation();
         first.setId(42L);
-        final Donation second = newRecurringDonation();
+        final DonationTransaction second = newRecurringDonation();
         second.setId(42L);
 
         // THEN

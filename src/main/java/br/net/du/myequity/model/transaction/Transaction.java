@@ -19,6 +19,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.joda.money.CurrencyUnit;
 
 @Entity
 @Table(name = "transactions")
@@ -72,6 +73,10 @@ public abstract class Transaction implements Comparable<Transaction> {
     public abstract Transaction copy();
 
     public abstract TransactionType getTransactionType();
+
+    public CurrencyUnit getCurrencyUnit() {
+        return CurrencyUnit.of(currency);
+    }
 
     public boolean equalsIgnoreId(final Object other) {
         if (this == other) {

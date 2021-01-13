@@ -11,9 +11,9 @@ class IncomeTest {
     @Test
     public void equals_differentIds() {
         // GIVEN`
-        final Income first = newRecurringIncome();
+        final IncomeTransaction first = newRecurringIncome();
         first.setId(42L);
-        final Income second = newRecurringIncome();
+        final IncomeTransaction second = newRecurringIncome();
         second.setId(77L);
 
         // THEN
@@ -23,9 +23,9 @@ class IncomeTest {
     @Test
     public void equals_sameIds() {
         // GIVEN`
-        final Income first = newRecurringIncome();
+        final IncomeTransaction first = newRecurringIncome();
         first.setId(42L);
-        final Income second = newRecurringIncome();
+        final IncomeTransaction second = newRecurringIncome();
         second.setId(42L);
 
         // THEN

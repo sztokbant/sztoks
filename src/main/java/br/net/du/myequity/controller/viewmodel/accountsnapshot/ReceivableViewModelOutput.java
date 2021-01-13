@@ -10,9 +10,8 @@ public class ReceivableViewModelOutput extends AccountSnapshotViewModelOutput {
     private final LocalDate dueDate;
 
     public ReceivableViewModelOutput(
-            final AccountSnapshotViewModelOutput accountSnapshotViewModelOutput,
-            final LocalDate dueDate) {
-        super(accountSnapshotViewModelOutput);
+            final AccountSnapshotViewModelOutput other, final LocalDate dueDate) {
+        super(other);
         this.dueDate = dueDate;
     }
 
