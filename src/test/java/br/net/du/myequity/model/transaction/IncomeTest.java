@@ -1,6 +1,6 @@
 package br.net.du.myequity.model.transaction;
 
-import static br.net.du.myequity.test.TestConstants.SALARY_INCOME;
+import static br.net.du.myequity.test.TestConstants.newRecurringIncome;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -11,9 +11,9 @@ class IncomeTest {
     @Test
     public void equals_differentIds() {
         // GIVEN`
-        final Income first = SALARY_INCOME.copy();
+        final Income first = newRecurringIncome();
         first.setId(42L);
-        final Income second = SALARY_INCOME.copy();
+        final Income second = newRecurringIncome();
         second.setId(77L);
 
         // THEN
@@ -23,9 +23,9 @@ class IncomeTest {
     @Test
     public void equals_sameIds() {
         // GIVEN`
-        final Income first = SALARY_INCOME.copy();
+        final Income first = newRecurringIncome();
         first.setId(42L);
-        final Income second = SALARY_INCOME.copy();
+        final Income second = newRecurringIncome();
         second.setId(42L);
 
         // THEN

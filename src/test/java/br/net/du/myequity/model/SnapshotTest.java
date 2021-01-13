@@ -1,15 +1,15 @@
 package br.net.du.myequity.model;
 
-import static br.net.du.myequity.test.TestConstants.BEGGAR_DONATION;
-import static br.net.du.myequity.test.TestConstants.CHARITY_DONATION;
-import static br.net.du.myequity.test.TestConstants.RETIREMENT_FUND_INVESTMENT;
-import static br.net.du.myequity.test.TestConstants.SALARY_INCOME;
-import static br.net.du.myequity.test.TestConstants.SAVINGS_INVESTMENT;
-import static br.net.du.myequity.test.TestConstants.SIDE_GIG_INCOME;
 import static br.net.du.myequity.test.TestConstants.SIMPLE_ASSET_ACCOUNT;
 import static br.net.du.myequity.test.TestConstants.SIMPLE_ASSET_SNAPSHOT;
 import static br.net.du.myequity.test.TestConstants.SIMPLE_LIABILITY_ACCOUNT;
 import static br.net.du.myequity.test.TestConstants.SIMPLE_LIABILITY_SNAPSHOT;
+import static br.net.du.myequity.test.TestConstants.newRecurringDonation;
+import static br.net.du.myequity.test.TestConstants.newRecurringIncome;
+import static br.net.du.myequity.test.TestConstants.newRecurringInvestment;
+import static br.net.du.myequity.test.TestConstants.newSingleDonation;
+import static br.net.du.myequity.test.TestConstants.newSingleIncome;
+import static br.net.du.myequity.test.TestConstants.newSingleInvestment;
 import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -22,6 +22,9 @@ import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
+import br.net.du.myequity.model.transaction.Donation;
+import br.net.du.myequity.model.transaction.Income;
+import br.net.du.myequity.model.transaction.Investment;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import com.google.common.collect.ImmutableMap;
@@ -31,7 +34,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
 import org.joda.money.CurrencyUnit;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class SnapshotTest {
@@ -41,24 +43,20 @@ class SnapshotTest {
     private Map<CurrencyUnit, BigDecimal> EXPECTED_NET_WORTH =
             ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("7500.00"));
 
-    @BeforeEach
-    public void setUp() {
-        SALARY_INCOME.setSnapshot(null);
-        SIDE_GIG_INCOME.setSnapshot(null);
-        CHARITY_DONATION.setSnapshot(null);
-        BEGGAR_DONATION.setSnapshot(null);
-    }
-
     @Test
     public void constructor() {
         // WHEN
+        final Income recurringIncome = newRecurringIncome();
+        final Income singleIncome = newSingleIncome();
+        final Donation recurringDonation = newRecurringDonation();
+        final Donation singleDonation = newSingleDonation();
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
                         now,
                         ImmutableSortedSet.of(SIMPLE_ASSET_SNAPSHOT, SIMPLE_LIABILITY_SNAPSHOT),
                         ImmutableSortedSet.of(
-                                SALARY_INCOME, SIDE_GIG_INCOME, CHARITY_DONATION, BEGGAR_DONATION));
+                                recurringIncome, singleIncome, recurringDonation, singleDonation));
         snapshot.setId(42L);
 
         // THEN
@@ -75,10 +73,10 @@ class SnapshotTest {
 
         assertEquals(EXPECTED_NET_WORTH, snapshot.getNetWorth());
 
-        assertNull(SALARY_INCOME.getSnapshot());
-        assertNull(SIDE_GIG_INCOME.getSnapshot());
-        assertNull(CHARITY_DONATION.getSnapshot());
-        assertNull(BEGGAR_DONATION.getSnapshot());
+        assertNull(recurringIncome.getSnapshot());
+        assertNull(singleIncome.getSnapshot());
+        assertNull(recurringDonation.getSnapshot());
+        assertNull(singleDonation.getSnapshot());
 
         assertEquals(4, snapshot.getTransactions().size());
         for (final Transaction transaction : snapshot.getTransactions()) {
@@ -295,19 +293,20 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
+        final Income transaction = newRecurringIncome();
 
         // WHEN
-        snapshot.addTransaction(SALARY_INCOME);
+        snapshot.addTransaction(transaction);
 
         // THEN
         final SortedSet<Transaction> transactions = snapshot.getTransactions();
         assertEquals(1, transactions.size());
-        assertEquals(SALARY_INCOME, transactions.iterator().next());
-        assertEquals(snapshot, SALARY_INCOME.getSnapshot());
+        assertEquals(transaction, transactions.iterator().next());
+        assertEquals(snapshot, transaction.getSnapshot());
 
         final SortedSet<Transaction> recurringTransactions = snapshot.getRecurringTransactions();
         assertEquals(1, recurringTransactions.size());
-        assertEquals(SALARY_INCOME, recurringTransactions.iterator().next());
+        assertEquals(transaction, recurringTransactions.iterator().next());
     }
 
     @Test
@@ -315,15 +314,16 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
+        final Income transaction = newSingleIncome();
 
         // WHEN
-        snapshot.addTransaction(SIDE_GIG_INCOME);
+        snapshot.addTransaction(transaction);
 
         // THEN
         final SortedSet<Transaction> transactions = snapshot.getTransactions();
         assertEquals(1, transactions.size());
-        assertEquals(SIDE_GIG_INCOME, transactions.iterator().next());
-        assertEquals(snapshot, SIDE_GIG_INCOME.getSnapshot());
+        assertEquals(transaction, transactions.iterator().next());
+        assertEquals(snapshot, transaction.getSnapshot());
 
         final SortedSet<Transaction> recurringTransactions = snapshot.getRecurringTransactions();
         assertTrue(recurringTransactions.isEmpty());
@@ -332,38 +332,49 @@ class SnapshotTest {
     @Test
     public void removeTransaction_existing() {
         // GIVEN
+        final Income recurringIncome = newRecurringIncome();
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
                         now,
                         ImmutableSortedSet.of(),
                         ImmutableSortedSet.of(
-                                SALARY_INCOME, SIDE_GIG_INCOME, CHARITY_DONATION, BEGGAR_DONATION));
+                                recurringIncome,
+                                newSingleIncome(),
+                                newRecurringDonation(),
+                                newSingleDonation()));
 
         // WHEN
-        snapshot.removeTransaction(SALARY_INCOME);
+        snapshot.removeTransaction(recurringIncome);
 
         // THEN
         assertEquals(3, snapshot.getTransactions().size());
-        assertFalse(snapshot.getTransactions().contains(SALARY_INCOME));
-        assertNull(SALARY_INCOME.getSnapshot());
+        assertFalse(snapshot.getTransactions().contains(recurringIncome));
+        assertNull(recurringIncome.getSnapshot());
     }
 
     @Test
     public void getTransactionsByType() {
         // GIVEN
+        final Income recurringIncome = newRecurringIncome();
+        final Income singleIncome = newSingleIncome();
+        final Investment recurringInvestment = newRecurringInvestment();
+        final Investment singleInvestment = newSingleInvestment();
+        final Donation recurringDonation = newRecurringDonation();
+        final Donation singleDonation = newSingleDonation();
+
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
                         now,
                         ImmutableSortedSet.of(),
                         ImmutableSortedSet.of(
-                                SALARY_INCOME,
-                                SIDE_GIG_INCOME,
-                                CHARITY_DONATION,
-                                BEGGAR_DONATION,
-                                RETIREMENT_FUND_INVESTMENT,
-                                SAVINGS_INVESTMENT));
+                                recurringIncome,
+                                singleIncome,
+                                recurringDonation,
+                                singleDonation,
+                                recurringInvestment,
+                                singleInvestment));
 
         // WHEN
         final Map<TransactionType, SortedSet<Transaction>> transactionsByType =
@@ -376,23 +387,23 @@ class SnapshotTest {
         final SortedSet<Transaction> incomes = transactionsByType.get(TransactionType.INCOME);
         assertEquals(2, incomes.size());
         final Iterator<Transaction> incomeIterator = incomes.iterator();
-        assertTrue(SIDE_GIG_INCOME.equalsIgnoreId(incomeIterator.next()));
-        assertTrue(SALARY_INCOME.equalsIgnoreId(incomeIterator.next()));
+        assertTrue(singleIncome.equalsIgnoreId(incomeIterator.next()));
+        assertTrue(recurringIncome.equalsIgnoreId(incomeIterator.next()));
 
         assertTrue(transactionsByType.containsKey(TransactionType.INVESTMENT));
         final SortedSet<Transaction> investments =
                 transactionsByType.get(TransactionType.INVESTMENT);
         assertEquals(2, investments.size());
         final Iterator<Transaction> investmentIterator = investments.iterator();
-        assertTrue(SAVINGS_INVESTMENT.equalsIgnoreId(investmentIterator.next()));
-        assertTrue(RETIREMENT_FUND_INVESTMENT.equalsIgnoreId(investmentIterator.next()));
+        assertTrue(singleInvestment.equalsIgnoreId(investmentIterator.next()));
+        assertTrue(recurringInvestment.equalsIgnoreId(investmentIterator.next()));
 
         assertTrue(transactionsByType.containsKey(TransactionType.DONATION));
         final SortedSet<Transaction> donations = transactionsByType.get(TransactionType.DONATION);
         assertEquals(2, donations.size());
         final Iterator<Transaction> donationIterator = donations.iterator();
-        assertTrue(BEGGAR_DONATION.equalsIgnoreId(donationIterator.next()));
-        assertTrue(CHARITY_DONATION.equalsIgnoreId(donationIterator.next()));
+        assertTrue(singleDonation.equalsIgnoreId(donationIterator.next()));
+        assertTrue(recurringDonation.equalsIgnoreId(donationIterator.next()));
 
         assertThrows(
                 UnsupportedOperationException.class,
@@ -403,7 +414,7 @@ class SnapshotTest {
         assertThrows(
                 UnsupportedOperationException.class,
                 () -> {
-                    transactionsByType.get(TransactionType.DONATION).remove(CHARITY_DONATION);
+                    transactionsByType.get(TransactionType.DONATION).remove(recurringDonation);
                 });
     }
 

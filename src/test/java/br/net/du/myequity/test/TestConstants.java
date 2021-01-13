@@ -56,57 +56,63 @@ public class TestConstants {
                     new BigDecimal("1100.00"),
                     new BigDecimal("3500.00"));
 
-    public static final Income SALARY_INCOME =
-            new Income(
-                    LocalDate.of(2020, 12, 31),
-                    CurrencyUnit.USD.getCode(),
-                    new BigDecimal("12000.00"),
-                    "Salary",
-                    true,
-                    new BigDecimal("20.00"));
+    public static final Income newRecurringIncome() {
+        return new Income(
+                LocalDate.of(2020, 12, 31),
+                CurrencyUnit.USD.getCode(),
+                new BigDecimal("12000.00"),
+                "Salary",
+                true,
+                new BigDecimal("20.00"));
+    }
 
-    public static final Income SIDE_GIG_INCOME =
-            new Income(
-                    LocalDate.of(2020, 12, 15),
-                    CurrencyUnit.USD.getCode(),
-                    new BigDecimal("1700.00"),
-                    "Side Gig",
-                    false,
-                    new BigDecimal("20.00"));
+    public static final Income newSingleIncome() {
+        return new Income(
+                LocalDate.of(2020, 12, 15),
+                CurrencyUnit.USD.getCode(),
+                new BigDecimal("1700.00"),
+                "Side Gig",
+                false,
+                new BigDecimal("20.00"));
+    }
 
-    public static final Donation CHARITY_DONATION =
-            new Donation(
-                    LocalDate.of(2020, 12, 31),
-                    CurrencyUnit.USD.getCode(),
-                    new BigDecimal("108.00"),
-                    "Charity",
-                    true,
-                    true);
+    public static final Donation newRecurringDonation() {
+        return new Donation(
+                LocalDate.of(2020, 12, 31),
+                CurrencyUnit.USD.getCode(),
+                new BigDecimal("108.00"),
+                "Charity",
+                true,
+                true);
+    }
 
-    public static final Donation BEGGAR_DONATION =
-            new Donation(
-                    LocalDate.of(2020, 12, 15),
-                    CurrencyUnit.USD.getCode(),
-                    new BigDecimal("10.00"),
-                    "Beggar",
-                    false,
-                    true);
+    public static final Donation newSingleDonation() {
+        return new Donation(
+                LocalDate.of(2020, 12, 15),
+                CurrencyUnit.USD.getCode(),
+                new BigDecimal("10.00"),
+                "Beggar",
+                false,
+                true);
+    }
 
-    public static final Investment RETIREMENT_FUND_INVESTMENT =
-            new Investment(
-                    LocalDate.of(2020, 12, 31),
-                    CurrencyUnit.USD.getCode(),
-                    new BigDecimal("1500.00"),
-                    "Retirement Fund",
-                    true,
-                    InvestmentCategory.LONG_TERM);
+    public static final Investment newRecurringInvestment() {
+        return new Investment(
+                LocalDate.of(2020, 12, 31),
+                CurrencyUnit.USD.getCode(),
+                new BigDecimal("1500.00"),
+                "Retirement Fund",
+                true,
+                InvestmentCategory.LONG_TERM);
+    }
 
-    public static final Investment SAVINGS_INVESTMENT =
-            new Investment(
-                    LocalDate.of(2020, 12, 15),
-                    CurrencyUnit.USD.getCode(),
-                    new BigDecimal("200.00"),
-                    "Savings",
-                    false,
-                    InvestmentCategory.SHORT_TERM);
+    public static final Investment newSingleInvestment() {
+        return new Investment(
+                LocalDate.of(2020, 12, 15),
+                CurrencyUnit.USD.getCode(),
+                new BigDecimal("200.00"),
+                "Savings",
+                false,
+                InvestmentCategory.SHORT_TERM);
+    }
 }

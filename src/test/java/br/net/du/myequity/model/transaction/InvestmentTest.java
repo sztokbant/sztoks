@@ -1,6 +1,6 @@
 package br.net.du.myequity.model.transaction;
 
-import static br.net.du.myequity.test.TestConstants.RETIREMENT_FUND_INVESTMENT;
+import static br.net.du.myequity.test.TestConstants.newRecurringInvestment;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -11,9 +11,9 @@ class InvestmentTest {
     @Test
     public void equals_differentIds() {
         // GIVEN`
-        final Investment first = RETIREMENT_FUND_INVESTMENT.copy();
+        final Investment first = newRecurringInvestment();
         first.setId(42L);
-        final Investment second = RETIREMENT_FUND_INVESTMENT.copy();
+        final Investment second = newRecurringInvestment();
         second.setId(77L);
 
         // THEN
@@ -23,9 +23,9 @@ class InvestmentTest {
     @Test
     public void equals_sameIds() {
         // GIVEN`
-        final Investment first = RETIREMENT_FUND_INVESTMENT.copy();
+        final Investment first = newRecurringInvestment();
         first.setId(42L);
-        final Investment second = RETIREMENT_FUND_INVESTMENT.copy();
+        final Investment second = newRecurringInvestment();
         second.setId(42L);
 
         // THEN

@@ -1,14 +1,14 @@
 package br.net.du.myequity.service;
 
 import static br.net.du.myequity.test.ModelTestUtils.buildUser;
-import static br.net.du.myequity.test.TestConstants.BEGGAR_DONATION;
-import static br.net.du.myequity.test.TestConstants.CHARITY_DONATION;
 import static br.net.du.myequity.test.TestConstants.CREDIT_CARD_SNAPSHOT;
 import static br.net.du.myequity.test.TestConstants.INVESTMENT_SNAPSHOT;
-import static br.net.du.myequity.test.TestConstants.SALARY_INCOME;
-import static br.net.du.myequity.test.TestConstants.SIDE_GIG_INCOME;
 import static br.net.du.myequity.test.TestConstants.SIMPLE_ASSET_SNAPSHOT;
 import static br.net.du.myequity.test.TestConstants.SIMPLE_LIABILITY_SNAPSHOT;
+import static br.net.du.myequity.test.TestConstants.newRecurringDonation;
+import static br.net.du.myequity.test.TestConstants.newRecurringIncome;
+import static br.net.du.myequity.test.TestConstants.newSingleDonation;
+import static br.net.du.myequity.test.TestConstants.newSingleIncome;
 import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -61,10 +61,10 @@ public class SnapshotServiceTest {
         snapshot.addAccountSnapshot(CREDIT_CARD_SNAPSHOT);
         snapshot.addAccountSnapshot(INVESTMENT_SNAPSHOT);
 
-        snapshot.addTransaction(SALARY_INCOME);
-        snapshot.addTransaction(SIDE_GIG_INCOME);
-        snapshot.addTransaction(CHARITY_DONATION);
-        snapshot.addTransaction(BEGGAR_DONATION);
+        snapshot.addTransaction(newRecurringIncome());
+        snapshot.addTransaction(newSingleIncome());
+        snapshot.addTransaction(newRecurringDonation());
+        snapshot.addTransaction(newSingleDonation());
 
         snapshotService = new SnapshotService(snapshotRepository, userService);
     }
@@ -98,8 +98,8 @@ public class SnapshotServiceTest {
         assertEquals(2, newTransactions.size());
 
         final Iterator<Transaction> iterator = newTransactions.iterator();
-        assertTrue(CHARITY_DONATION.equalsIgnoreId(iterator.next()));
-        assertTrue(SALARY_INCOME.equalsIgnoreId(iterator.next()));
+        assertTrue(newRecurringDonation().equalsIgnoreId(iterator.next()));
+        assertTrue(newRecurringIncome().equalsIgnoreId(iterator.next()));
 
         verify(snapshotRepository).save(snapshot);
         verify(snapshotRepository).save(newSnapshot);
