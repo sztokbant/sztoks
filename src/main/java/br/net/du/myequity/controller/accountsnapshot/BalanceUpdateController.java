@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
-import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
+import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.AccountSnapshotViewModelOutput;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.AmountUpdateable;
@@ -16,13 +16,9 @@ public class BalanceUpdateController extends UpdateControllerBase {
 
     @PostMapping("/snapshot/updateAccountBalance")
     public AccountSnapshotViewModelOutput post(
-            final Model model,
-            @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+            final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<
-                        AccountSnapshotUpdateJsonRequest,
-                        AccountSnapshot,
-                        AccountSnapshotViewModelOutput>
+        final BiFunction<ValueUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateAmountFunction =
                         (jsonRequest, accountSnapshot) -> {
                             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
@@ -32,9 +28,6 @@ public class BalanceUpdateController extends UpdateControllerBase {
                         };
 
         return updateAccountSnapshotField(
-                model,
-                accountSnapshotUpdateJsonRequest,
-                AmountUpdateable.class,
-                updateAmountFunction);
+                model, valueUpdateJsonRequest, AmountUpdateable.class, updateAmountFunction);
     }
 }

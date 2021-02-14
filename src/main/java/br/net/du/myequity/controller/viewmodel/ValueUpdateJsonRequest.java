@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AccountSnapshotUpdateJsonRequest {
+public class ValueUpdateJsonRequest {
     private Long snapshotId;
-    private Long accountId;
+    private Long entityId;
     private String newValue;
 }

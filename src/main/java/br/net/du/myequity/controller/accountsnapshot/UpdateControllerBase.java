@@ -1,7 +1,7 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
 import br.net.du.myequity.controller.util.SnapshotUtils;
-import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
+import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.AccountSnapshotViewModelOutput;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.service.AccountService;
@@ -23,22 +23,19 @@ public class UpdateControllerBase {
 
     AccountSnapshotViewModelOutput updateAccountSnapshotField(
             final Model model,
-            final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest,
+            final ValueUpdateJsonRequest valueUpdateJsonRequest,
             final Class clazz,
             final BiFunction<
-                            AccountSnapshotUpdateJsonRequest,
-                            AccountSnapshot,
-                            AccountSnapshotViewModelOutput>
+                            ValueUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                     function) {
-        final AccountSnapshot accountSnapshot =
-                getAccountSnapshot(model, accountSnapshotUpdateJsonRequest);
+        final AccountSnapshot accountSnapshot = getAccountSnapshot(model, valueUpdateJsonRequest);
 
         if (!clazz.isInstance(accountSnapshot)) {
             throw new IllegalArgumentException("accountSnapshot not found");
         }
 
         final AccountSnapshotViewModelOutput jsonResponse =
-                function.apply(accountSnapshotUpdateJsonRequest, accountSnapshot);
+                function.apply(valueUpdateJsonRequest, accountSnapshot);
 
         accountSnapshotService.save(accountSnapshot);
 
@@ -46,15 +43,14 @@ public class UpdateControllerBase {
     }
 
     AccountSnapshot getAccountSnapshot(
-            final Model model,
-            final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+            final Model model, final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         // Ensure snapshot belongs to logged user
-        snapshotUtils.getSnapshot(model, accountSnapshotUpdateJsonRequest.getSnapshotId());
+        snapshotUtils.getSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
 
         final Optional<AccountSnapshot> accountSnapshotOpt =
                 accountSnapshotService.findBySnapshotIdAndAccountId(
-                        accountSnapshotUpdateJsonRequest.getSnapshotId(),
-                        accountSnapshotUpdateJsonRequest.getAccountId());
+                        valueUpdateJsonRequest.getSnapshotId(),
+                        valueUpdateJsonRequest.getEntityId());
 
         if (!accountSnapshotOpt.isPresent()) {
             throw new IllegalArgumentException("accountSnapshot not found");

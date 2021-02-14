@@ -2,7 +2,7 @@
 $(document).ready(function() {
   var data = {
     snapshotId: ${snapshot.id},
-    accountId: ${account.accountId},
+    entityId: ${account.accountId},
   };
 
   prepareUpdateForm($("#form_investment_shares_${account.accountId}"),

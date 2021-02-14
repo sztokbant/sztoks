@@ -1,9 +1,9 @@
-function deleteAccount(accountName, accountId) {
+function deleteAccount(accountName, entityId) {
     var doRemove = confirm('Are you sure you want to delete "' + accountName + '"?');
 
     if (doRemove) {
       var data = {
-        accountId: accountId,
+        entityId: entityId,
       };
 
       ajaxPost('account/delete', data, deleteAccountSuccessCallback);

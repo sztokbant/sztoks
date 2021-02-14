@@ -6,12 +6,12 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AccountDeleteJsonRequest {
-    private Long accountId;
+public class EntityDeleteJsonRequest {
+    private Long entityId;
 
     // This seems to be needed because this class has only one field
     @JsonCreator
-    public AccountDeleteJsonRequest(final Long accountId) {
-        this.accountId = accountId;
+    public EntityDeleteJsonRequest(final Long entityId) {
+        this.entityId = entityId;
     }
 }

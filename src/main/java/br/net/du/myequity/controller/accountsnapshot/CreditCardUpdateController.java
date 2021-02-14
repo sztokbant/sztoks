@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
-import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
+import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.AccountSnapshotViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.CreditCardViewModelOutput;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
@@ -16,13 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class CreditCardUpdateController extends UpdateControllerBase {
     @PostMapping("/snapshot/updateCreditCardTotalCredit")
     public AccountSnapshotViewModelOutput updateCreditCardTotalCredit(
-            final Model model,
-            @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+            final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<
-                        AccountSnapshotUpdateJsonRequest,
-                        AccountSnapshot,
-                        AccountSnapshotViewModelOutput>
+        final BiFunction<ValueUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateCreditCardTotalCreditFunction =
                         (jsonRequest, accountSnapshot) -> {
                             final CreditCardSnapshot creditCardSnapshot =
@@ -36,19 +32,15 @@ public class CreditCardUpdateController extends UpdateControllerBase {
 
         return updateAccountSnapshotField(
                 model,
-                accountSnapshotUpdateJsonRequest,
+                valueUpdateJsonRequest,
                 CreditCardSnapshot.class,
                 updateCreditCardTotalCreditFunction);
     }
 
     @PostMapping("/snapshot/updateCreditCardAvailableCredit")
     public AccountSnapshotViewModelOutput updateCreditCardAvailableCredit(
-            final Model model,
-            @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
-        final BiFunction<
-                        AccountSnapshotUpdateJsonRequest,
-                        AccountSnapshot,
-                        AccountSnapshotViewModelOutput>
+            final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
+        final BiFunction<ValueUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateCreditCardAvailableCreditFunction =
                         (jsonRequest, accountSnapshot) -> {
                             final CreditCardSnapshot creditCardSnapshot =
@@ -62,19 +54,15 @@ public class CreditCardUpdateController extends UpdateControllerBase {
 
         return updateAccountSnapshotField(
                 model,
-                accountSnapshotUpdateJsonRequest,
+                valueUpdateJsonRequest,
                 CreditCardSnapshot.class,
                 updateCreditCardAvailableCreditFunction);
     }
 
     @PostMapping("/snapshot/updateCreditCardStatement")
     public AccountSnapshotViewModelOutput updateCreditCardStatement(
-            final Model model,
-            @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
-        final BiFunction<
-                        AccountSnapshotUpdateJsonRequest,
-                        AccountSnapshot,
-                        AccountSnapshotViewModelOutput>
+            final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
+        final BiFunction<ValueUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateCreditCardStatementFunction =
                         (jsonRequest, accountSnapshot) -> {
                             final CreditCardSnapshot creditCardSnapshot =
@@ -88,7 +76,7 @@ public class CreditCardUpdateController extends UpdateControllerBase {
 
         return updateAccountSnapshotField(
                 model,
-                accountSnapshotUpdateJsonRequest,
+                valueUpdateJsonRequest,
                 CreditCardSnapshot.class,
                 updateCreditCardStatementFunction);
     }

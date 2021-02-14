@@ -7,7 +7,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.myequity.controller.viewmodel.AccountDeleteJsonRequest;
+import br.net.du.myequity.controller.viewmodel.EntityDeleteJsonRequest;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -38,8 +38,8 @@ class AccountDeleteControllerTest extends AccountControllerTestBase {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final AccountDeleteJsonRequest accountDeleteJsonRequest =
-                AccountDeleteJsonRequest.builder().accountId(ACCOUNT_ID).build();
+        final EntityDeleteJsonRequest accountDeleteJsonRequest =
+                EntityDeleteJsonRequest.builder().entityId(ACCOUNT_ID).build();
         requestContent = new ObjectMapper().writeValueAsString(accountDeleteJsonRequest);
     }
 

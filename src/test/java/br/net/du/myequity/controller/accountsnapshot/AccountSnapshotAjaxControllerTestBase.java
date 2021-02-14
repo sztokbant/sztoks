@@ -7,7 +7,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.controller.SnapshotControllerAjaxTestBase;
-import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
+import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
@@ -62,13 +62,13 @@ abstract class AccountSnapshotAjaxControllerTestBase extends SnapshotControllerA
                 new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
         snapshot.setId(SNAPSHOT_ID);
 
-        final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest =
-                AccountSnapshotUpdateJsonRequest.builder()
+        final ValueUpdateJsonRequest valueUpdateJsonRequest =
+                ValueUpdateJsonRequest.builder()
                         .snapshotId(SNAPSHOT_ID)
-                        .accountId(ACCOUNT_ID)
+                        .entityId(ACCOUNT_ID)
                         .newValue(newValue)
                         .build();
-        requestContent = new ObjectMapper().writeValueAsString(accountSnapshotUpdateJsonRequest);
+        requestContent = new ObjectMapper().writeValueAsString(valueUpdateJsonRequest);
     }
 
     @Test

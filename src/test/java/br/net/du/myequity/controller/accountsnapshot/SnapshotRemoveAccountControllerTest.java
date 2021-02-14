@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
+import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
@@ -42,12 +42,12 @@ class SnapshotRemoveAccountControllerTest extends AccountSnapshotAjaxControllerT
 
     @BeforeEach
     public void setUp() throws Exception {
-        final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest =
-                AccountSnapshotUpdateJsonRequest.builder()
+        final ValueUpdateJsonRequest valueUpdateJsonRequest =
+                ValueUpdateJsonRequest.builder()
                         .snapshotId(SNAPSHOT_ID)
-                        .accountId(ACCOUNT_ID)
+                        .entityId(ACCOUNT_ID)
                         .build();
-        requestContent = new ObjectMapper().writeValueAsString(accountSnapshotUpdateJsonRequest);
+        requestContent = new ObjectMapper().writeValueAsString(valueUpdateJsonRequest);
     }
 
     @Override

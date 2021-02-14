@@ -15,11 +15,16 @@ public class IncomeTransactionViewModelOutput extends TransactionViewModelOutput
         this.donationRatio = donationRatio;
     }
 
-    public static IncomeTransactionViewModelOutput of(final Transaction transaction) {
+    public static IncomeTransactionViewModelOutput of(
+            final Transaction transaction, final boolean includeTotals) {
         final IncomeTransaction income = (IncomeTransaction) transaction;
 
         return new IncomeTransactionViewModelOutput(
-                TransactionViewModelOutput.of(transaction),
+                TransactionViewModelOutput.of(transaction, includeTotals),
                 formatAsPercentage(income.getDonationRatio()));
+    }
+
+    public static IncomeTransactionViewModelOutput of(final Transaction transaction) {
+        return of(transaction, false);
     }
 }

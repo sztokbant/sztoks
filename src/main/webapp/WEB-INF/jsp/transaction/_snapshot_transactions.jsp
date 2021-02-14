@@ -40,7 +40,7 @@
                     <div class="col col-cell col-title">Amount</div>
                 </div>
                 <c:forEach var="txn" items="${snapshot.incomes}">
-                    <%@ include file="_snapshot_income_txn_line_item.jsp" %>
+                    <%@ include file="_snapshot_income_transaction_line_item.jsp" %>
                 </c:forEach>
             </c:when>
         </c:choose>
@@ -88,7 +88,7 @@
                     <div class="col col-cell col-title">Amount</div>
                 </div>
                 <c:forEach var="txn" items="${snapshot.investments}">
-                    <%@ include file="_snapshot_investment_txn_line_item.jsp" %>
+                    <%@ include file="_snapshot_investment_transaction_line_item.jsp" %>
                 </c:forEach>
             </c:when>
         </c:choose>
@@ -136,7 +136,7 @@
                     <div class="col col-cell col-title">Amount</div>
                 </div>
                 <c:forEach var="txn" items="${snapshot.donations}">
-                    <%@ include file="_snapshot_donation_txn_line_item.jsp" %>
+                    <%@ include file="_snapshot_donation_transaction_line_item.jsp" %>
                 </c:forEach>
             </c:when>
         </c:choose>

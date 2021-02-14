@@ -1,7 +1,7 @@
-<%@ include file="_txn_amount_update_callback.jsp" %>
+<%@ include file="_transaction_amount_update_callback.jsp" %>
 
 <div class="row border-1px-bottom" id="txn_row_${txn.id}">
-    <%@ include file="_remove_txn.jsp" %>
+    <%@ include file="_remove_transaction.jsp" %>
 
     <div class="col col-cell">
         ${txn.recurring}
@@ -16,7 +16,7 @@
     </div>
 
     <div class="col col-cell">
-        ${txn.taxDeductible}
+        ${txn.category}
     </div>
 
     <div class="col col-cell align-right editable-asset">

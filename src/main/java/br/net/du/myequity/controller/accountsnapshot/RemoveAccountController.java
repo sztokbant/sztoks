@@ -2,9 +2,9 @@ package br.net.du.myequity.controller.accountsnapshot;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
 
-import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.CreditCardTotalsViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.SnapshotRemoveAccountJsonResponse;
+import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
@@ -21,10 +21,8 @@ public class RemoveAccountController extends UpdateControllerBase {
 
     @PostMapping("/snapshot/removeAccount")
     public SnapshotRemoveAccountJsonResponse post(
-            final Model model,
-            @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
-        final AccountSnapshot accountSnapshot =
-                getAccountSnapshot(model, accountSnapshotUpdateJsonRequest);
+            final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
+        final AccountSnapshot accountSnapshot = getAccountSnapshot(model, valueUpdateJsonRequest);
         final Snapshot snapshot = accountSnapshot.getSnapshot();
 
         snapshot.removeAccountSnapshot(accountSnapshot);

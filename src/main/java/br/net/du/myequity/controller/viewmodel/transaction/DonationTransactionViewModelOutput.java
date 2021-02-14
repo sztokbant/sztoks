@@ -13,10 +13,16 @@ public class DonationTransactionViewModelOutput extends TransactionViewModelOutp
         this.isTaxDeductible = isTaxDeductible;
     }
 
-    public static DonationTransactionViewModelOutput of(final Transaction transaction) {
+    public static DonationTransactionViewModelOutput of(
+            final Transaction transaction, final boolean includeTotals) {
         final DonationTransaction donation = (DonationTransaction) transaction;
 
         return new DonationTransactionViewModelOutput(
-                TransactionViewModelOutput.of(transaction), donation.isTaxDeductible());
+                TransactionViewModelOutput.of(transaction, includeTotals),
+                donation.isTaxDeductible());
+    }
+
+    public static DonationTransactionViewModelOutput of(final Transaction transaction) {
+        return of(transaction, false);
     }
 }

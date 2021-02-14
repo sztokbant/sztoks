@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
-import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
+import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.AccountSnapshotViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.PayableViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.ReceivableViewModelOutput;
@@ -19,13 +19,9 @@ public class DueDateUpdateController extends UpdateControllerBase {
 
     @PostMapping("/snapshot/updateAccountDueDate")
     public AccountSnapshotViewModelOutput post(
-            final Model model,
-            @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+            final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<
-                        AccountSnapshotUpdateJsonRequest,
-                        AccountSnapshot,
-                        AccountSnapshotViewModelOutput>
+        final BiFunction<ValueUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateDueDateFunction =
                         (jsonRequest, accountSnapshot) -> {
                             final LocalDate dueDate = LocalDate.parse(jsonRequest.getNewValue());
@@ -38,9 +34,6 @@ public class DueDateUpdateController extends UpdateControllerBase {
                         };
 
         return updateAccountSnapshotField(
-                model,
-                accountSnapshotUpdateJsonRequest,
-                DueDateUpdateable.class,
-                updateDueDateFunction);
+                model, valueUpdateJsonRequest, DueDateUpdateable.class, updateDueDateFunction);
     }
 }

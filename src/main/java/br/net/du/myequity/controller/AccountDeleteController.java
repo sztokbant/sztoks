@@ -1,8 +1,8 @@
 package br.net.du.myequity.controller;
 
 import br.net.du.myequity.controller.util.AccountUtils;
-import br.net.du.myequity.controller.viewmodel.AccountDeleteJsonRequest;
 import br.net.du.myequity.controller.viewmodel.AccountDeleteJsonResponse;
+import br.net.du.myequity.controller.viewmodel.EntityDeleteJsonRequest;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +21,14 @@ public class AccountDeleteController {
     @PostMapping("/account/delete")
     public AccountDeleteJsonResponse post(
             final Model model,
-            @RequestBody final AccountDeleteJsonRequest accountDeleteJsonRequest) {
+            @RequestBody final EntityDeleteJsonRequest accountDeleteJsonRequest) {
         final Account account =
-                accountUtils.getAccount(model, accountDeleteJsonRequest.getAccountId());
+                accountUtils.getAccount(model, accountDeleteJsonRequest.getEntityId());
 
         accountService.deleteAccount(account);
 
         return AccountDeleteJsonResponse.builder()
-                .accountId(accountDeleteJsonRequest.getAccountId())
+                .accountId(accountDeleteJsonRequest.getEntityId())
                 .build();
     }
 }

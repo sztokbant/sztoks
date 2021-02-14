@@ -13,11 +13,16 @@ public class InvestmentTransactionViewModelOutput extends TransactionViewModelOu
         this.category = category;
     }
 
-    public static InvestmentTransactionViewModelOutput of(final Transaction transaction) {
+    public static InvestmentTransactionViewModelOutput of(
+            final Transaction transaction, final boolean includeTotals) {
         final InvestmentTransaction investment = (InvestmentTransaction) transaction;
 
         return new InvestmentTransactionViewModelOutput(
-                TransactionViewModelOutput.of(transaction),
+                TransactionViewModelOutput.of(transaction, includeTotals),
                 investment.getInvestmentCategory().name());
+    }
+
+    public static InvestmentTransactionViewModelOutput of(final Transaction transaction) {
+        return of(transaction, false);
     }
 }

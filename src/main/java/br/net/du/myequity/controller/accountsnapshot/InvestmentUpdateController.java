@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller.accountsnapshot;
 
-import br.net.du.myequity.controller.viewmodel.AccountSnapshotUpdateJsonRequest;
+import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.AccountSnapshotViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.InvestmentViewModelOutput;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
@@ -17,13 +17,9 @@ public class InvestmentUpdateController extends UpdateControllerBase {
 
     @PostMapping("/snapshot/updateInvestmentShares")
     public AccountSnapshotViewModelOutput updateInvestmentShares(
-            final Model model,
-            @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+            final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<
-                        AccountSnapshotUpdateJsonRequest,
-                        AccountSnapshot,
-                        AccountSnapshotViewModelOutput>
+        final BiFunction<ValueUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateInvestmentSharesFunction =
                         (jsonRequest, accountSnapshot) -> {
                             final InvestmentSnapshot investmentSnapshot =
@@ -37,20 +33,16 @@ public class InvestmentUpdateController extends UpdateControllerBase {
 
         return updateAccountSnapshotField(
                 model,
-                accountSnapshotUpdateJsonRequest,
+                valueUpdateJsonRequest,
                 InvestmentSnapshot.class,
                 updateInvestmentSharesFunction);
     }
 
     @PostMapping("/snapshot/updateInvestmentOriginalShareValue")
     public AccountSnapshotViewModelOutput updateInvestmentOriginalShareValue(
-            final Model model,
-            @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
+            final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<
-                        AccountSnapshotUpdateJsonRequest,
-                        AccountSnapshot,
-                        AccountSnapshotViewModelOutput>
+        final BiFunction<ValueUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateInvestmentOriginalShareValueFunction =
                         (jsonRequest, accountSnapshot) -> {
                             final InvestmentSnapshot investmentSnapshot =
@@ -64,19 +56,15 @@ public class InvestmentUpdateController extends UpdateControllerBase {
 
         return updateAccountSnapshotField(
                 model,
-                accountSnapshotUpdateJsonRequest,
+                valueUpdateJsonRequest,
                 InvestmentSnapshot.class,
                 updateInvestmentOriginalShareValueFunction);
     }
 
     @PostMapping("/snapshot/updateInvestmentCurrentShareValue")
     public AccountSnapshotViewModelOutput updateInvestmentCurrentShareValue(
-            final Model model,
-            @RequestBody final AccountSnapshotUpdateJsonRequest accountSnapshotUpdateJsonRequest) {
-        final BiFunction<
-                        AccountSnapshotUpdateJsonRequest,
-                        AccountSnapshot,
-                        AccountSnapshotViewModelOutput>
+            final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
+        final BiFunction<ValueUpdateJsonRequest, AccountSnapshot, AccountSnapshotViewModelOutput>
                 updateInvestmentCurrentShareValueFunction =
                         (jsonRequest, accountSnapshot) -> {
                             final InvestmentSnapshot investmentSnapshot =
@@ -90,7 +78,7 @@ public class InvestmentUpdateController extends UpdateControllerBase {
 
         return updateAccountSnapshotField(
                 model,
-                accountSnapshotUpdateJsonRequest,
+                valueUpdateJsonRequest,
                 InvestmentSnapshot.class,
                 updateInvestmentCurrentShareValueFunction);
     }
