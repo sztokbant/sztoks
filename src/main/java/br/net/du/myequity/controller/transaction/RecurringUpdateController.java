@@ -3,7 +3,6 @@ package br.net.du.myequity.controller.transaction;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
 import br.net.du.myequity.model.transaction.Transaction;
-import java.math.BigDecimal;
 import java.util.function.BiFunction;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,22 +10,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class AmountUpdateController extends TransactionUpdateControllerBase {
+public class RecurringUpdateController extends TransactionUpdateControllerBase {
 
-    @PostMapping("/transaction/updateAmount")
+    @PostMapping("/transaction/setRecurring")
     public TransactionViewModelOutput post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
         final BiFunction<ValueUpdateJsonRequest, Transaction, TransactionViewModelOutput>
-                updateAmountFunction =
+                updateRecurringFunction =
                         (jsonRequest, transaction) -> {
-                            final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            transaction.setAmount(newValue);
+                            final boolean newValue = Boolean.valueOf(jsonRequest.getNewValue());
+                            transaction.setRecurring(newValue);
 
-                            return TransactionViewModelOutput.of(transaction, true);
+                            return TransactionViewModelOutput.of(transaction, false);
                         };
 
         return updateTransactionField(
-                model, valueUpdateJsonRequest, Transaction.class, updateAmountFunction);
+                model, valueUpdateJsonRequest, Transaction.class, updateRecurringFunction);
     }
 }

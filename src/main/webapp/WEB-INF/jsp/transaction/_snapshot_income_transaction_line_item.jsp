@@ -3,9 +3,7 @@
 <div class="row border-1px-bottom" id="txn_row_${txn.id}">
     <%@ include file="_remove_transaction.jsp" %>
 
-    <div class="col col-cell">
-        ${txn.recurring}
-    </div>
+    <%@ include file="/WEB-INF/jsp/_recurring_checkbox.jsp" %>
 
     <div class="col col-cell">
         ${txn.date}

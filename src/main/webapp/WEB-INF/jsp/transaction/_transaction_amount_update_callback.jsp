@@ -8,7 +8,7 @@ $(document).ready(function() {
   prepareUpdateForm($("#form_txn_amount_${txn.id}"),
     $("#txn_amount_${txn.id}"),
     $("#new_txn_amount_${txn.id}"),
-    "snapshot/updateTransactionAmount",
+    "transaction/updateAmount",
     "${txn.currencyUnitSymbol}",
     data,
     transactionAmountUpdateSuccessCallback,

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RemoveTransactionController extends TransactionUpdateControllerBase {
 
-    @PostMapping("/snapshot/removeTransaction")
+    @PostMapping("/transaction/remove")
     public SnapshotRemoveTransactionJsonResponse post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         final Transaction transaction = getTransaction(model, valueUpdateJsonRequest);

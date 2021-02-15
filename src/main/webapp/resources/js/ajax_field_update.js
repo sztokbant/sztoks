@@ -59,3 +59,26 @@ function ajaxPost(endpoint, data, successCallback) {
     }
   });
 }
+
+function prepareCheckbox(elementId, snapshotId, entityId, isRecurring, endpoint) {
+  const checkbox = document.getElementById(elementId);
+
+  if (isRecurring) {
+    checkbox.setAttribute('checked', true);
+  }
+
+  checkbox.addEventListener('change', (event) => {
+    var data = {
+      snapshotId: snapshotId,
+      entityId: entityId,
+    };
+
+    if (event.currentTarget.checked) {
+      data['newValue'] = true;
+    } else {
+      data['newValue'] = false;
+    }
+
+    ajaxPost(endpoint, data, function(data, result){});
+  })
+}

@@ -7,7 +7,7 @@ function removeTransaction(snapshotId, entityId, type, description) {
         entityId: entityId,
       };
 
-      ajaxPost('snapshot/removeTransaction', data, removeTransactionSuccessCallback);
+      ajaxPost('transaction/remove', data, removeTransactionSuccessCallback);
     }
 }
 
