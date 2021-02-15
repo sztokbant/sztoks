@@ -2,14 +2,14 @@
 $(document).ready(function() {
   var data = {
     snapshotId: ${snapshot.id},
-    entityId: ${txn.id},
+    entityId: ${entity.id},
   };
 
-  prepareUpdateForm($("#form_txn_amount_${txn.id}"),
-    $("#txn_amount_${txn.id}"),
-    $("#new_txn_amount_${txn.id}"),
+  prepareUpdateForm($("#form_txn_amount_${entity.id}"),
+    $("#txn_amount_${entity.id}"),
+    $("#new_txn_amount_${entity.id}"),
     "transaction/updateAmount",
-    "${txn.currencyUnitSymbol}",
+    "${entity.currencyUnitSymbol}",
     data,
     transactionAmountUpdateSuccessCallback,
   );

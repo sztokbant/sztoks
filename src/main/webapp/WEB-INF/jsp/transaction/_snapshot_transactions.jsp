@@ -39,7 +39,7 @@
                     <div class="col col-cell col-title">Donation Ratio</div>
                     <div class="col col-cell col-title">Amount</div>
                 </div>
-                <c:forEach var="txn" items="${snapshot.incomes}">
+                <c:forEach var="entity" items="${snapshot.incomes}">
                     <%@ include file="_snapshot_income_transaction_line_item.jsp" %>
                 </c:forEach>
             </c:when>
@@ -87,7 +87,7 @@
                     <div class="col col-cell col-title">Category</div>
                     <div class="col col-cell col-title">Amount</div>
                 </div>
-                <c:forEach var="txn" items="${snapshot.investments}">
+                <c:forEach var="entity" items="${snapshot.investments}">
                     <%@ include file="_snapshot_investment_transaction_line_item.jsp" %>
                 </c:forEach>
             </c:when>
@@ -135,7 +135,7 @@
                     <div class="col col-cell col-title">Tax deductible?</div>
                     <div class="col col-cell col-title">Amount</div>
                 </div>
-                <c:forEach var="txn" items="${snapshot.donations}">
+                <c:forEach var="entity" items="${snapshot.donations}">
                     <%@ include file="_snapshot_donation_transaction_line_item.jsp" %>
                 </c:forEach>
             </c:when>
