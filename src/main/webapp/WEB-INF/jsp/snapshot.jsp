@@ -57,7 +57,7 @@
 </div>
 
 <div class="full-width">
-    <%@ include file="_snapshot_accounts.jsp" %>
+    <%@ include file="accountsnapshot/_snapshot_accounts.jsp" %>
 
     <br/>
 

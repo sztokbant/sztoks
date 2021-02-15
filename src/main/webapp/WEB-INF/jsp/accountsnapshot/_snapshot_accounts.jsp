@@ -39,7 +39,7 @@
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">Balance</div>
                 </div>
-                <c:forEach var="account" items="${snapshot.simpleAssetAccounts}">
+                <c:forEach var="entity" items="${snapshot.simpleAssetAccounts}">
                     <%@ include file="_snapshot_simple_asset_line_item.jsp" %>
                 </c:forEach>
             </c:when>
@@ -55,7 +55,7 @@
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">Balance</div>
                 </div>
-                <c:forEach var="account" items="${snapshot.receivableAccounts}">
+                <c:forEach var="entity" items="${snapshot.receivableAccounts}">
                     <%@ include file="_snapshot_receivable_line_item.jsp" %>
                 </c:forEach>
             </c:when>
@@ -71,7 +71,7 @@
                     <div class="col col-cell col-title">Profit</div>
                     <div class="col col-cell col-title">Balance</div>
                 </div>
-                <c:forEach var="account" items="${snapshot.investmentAccounts}">
+                <c:forEach var="entity" items="${snapshot.investmentAccounts}">
                     <%@ include file="_snapshot_investment_line_item.jsp" %>
                 </c:forEach>
             </c:when>
@@ -122,7 +122,7 @@
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">Balance</div>
                 </div>
-                <c:forEach var="account" items="${snapshot.simpleLiabilityAccounts}">
+                <c:forEach var="entity" items="${snapshot.simpleLiabilityAccounts}">
                     <%@ include file="_snapshot_simple_liability_line_item.jsp" %>
                 </c:forEach>
             </c:when>
@@ -139,7 +139,7 @@
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">Balance</div>
                 </div>
-                <c:forEach var="account" items="${snapshot.payableAccounts}">
+                <c:forEach var="entity" items="${snapshot.payableAccounts}">
                     <%@ include file="_snapshot_payable_line_item.jsp" %>
                 </c:forEach>
             </c:when>
@@ -158,11 +158,11 @@
                 </div>
 
                 <c:set var="currentCurrency" value=""/>
-                <c:forEach var="account" items="${snapshot.creditCardAccounts}">
-                    <c:if test="${currentCurrency ne '' && currentCurrency ne account.currencyUnit}">
+                <c:forEach var="entity" items="${snapshot.creditCardAccounts}">
+                    <c:if test="${currentCurrency ne '' && currentCurrency ne entity.currencyUnit}">
                         <%@ include file="_snapshot_credit_card_total_for_currency.jsp" %>
                     </c:if>
-                    <c:set var="currentCurrency" value="${account.currencyUnit}"/>
+                    <c:set var="currentCurrency" value="${entity.currencyUnit}"/>
                     <%@ include file="_snapshot_credit_card_line_item.jsp" %>
                 </c:forEach>
                 <%@ include file="_snapshot_credit_card_total_for_currency.jsp" %>
