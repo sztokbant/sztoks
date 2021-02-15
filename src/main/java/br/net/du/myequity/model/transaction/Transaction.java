@@ -138,6 +138,9 @@ public abstract class Transaction implements Comparable<Transaction> {
     public int compareTo(final Transaction other) {
         if (currency.equals(other.getCurrency())) {
             if (date.equals(other.getDate())) {
+                if (description.equals(other.getDescription())) {
+                    return id.compareTo(other.getId());
+                }
                 return description.compareTo(other.getDescription());
             }
             return date.compareTo(other.getDate());
