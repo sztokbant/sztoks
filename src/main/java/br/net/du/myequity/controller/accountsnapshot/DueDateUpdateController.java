@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class DueDateUpdateController extends UpdateControllerBase {
+public class DueDateUpdateController extends AccountSnapshotUpdateControllerBase {
 
     @PostMapping("/snapshot/updateAccountDueDate")
     public AccountSnapshotViewModelOutput post(

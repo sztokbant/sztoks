@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class RemoveAccountController extends UpdateControllerBase {
+public class RemoveAccountController extends AccountSnapshotUpdateControllerBase {
 
     @PostMapping("/snapshot/removeAccount")
     public SnapshotRemoveAccountJsonResponse post(

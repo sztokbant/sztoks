@@ -12,7 +12,7 @@ import java.util.function.BiFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
-public class UpdateControllerBase {
+public class AccountSnapshotUpdateControllerBase {
     @Autowired protected SnapshotService snapshotService;
 
     @Autowired private AccountService accountService;

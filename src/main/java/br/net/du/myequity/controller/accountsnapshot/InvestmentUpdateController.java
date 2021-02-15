@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class InvestmentUpdateController extends UpdateControllerBase {
+public class InvestmentUpdateController extends AccountSnapshotUpdateControllerBase {
 
     @PostMapping("/snapshot/updateInvestmentShares")
     public AccountSnapshotViewModelOutput updateInvestmentShares(

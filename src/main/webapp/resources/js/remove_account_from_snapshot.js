@@ -1,4 +1,4 @@
-function removeAccountFromSnapshot(accountName, entityId, snapshotId) {
+function removeAccountFromSnapshot(snapshotId, entityId, accountName) {
     var doRemove = confirm('Are you sure you want to remove "' + accountName + '" from this snapshot?');
 
     if (doRemove) {
