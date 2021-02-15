@@ -1,3 +1,14 @@
+<script type="text/javascript">
+$(document).ready(function() {
+  prepareCheckbox(
+    "TRANSACTION_${txn.id}_taxDeductible",
+    ${snapshot.id},
+    ${txn.id},
+    ${txn.taxDeductible} == true,
+    "transaction/setTaxDeductible");
+})
+</script>
+
 <%@ include file="_transaction_amount_update_callback.jsp" %>
 
 <div class="row border-1px-bottom" id="txn_row_${txn.id}">
@@ -14,7 +25,7 @@
     </div>
 
     <div class="col col-cell">
-        ${txn.taxDeductible}
+        <input id="TRANSACTION_${txn.id}_taxDeductible" type="checkbox"/>
     </div>
 
     <div class="col col-cell align-right editable-asset">
