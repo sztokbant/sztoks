@@ -1,19 +1,4 @@
-<script type="text/javascript">
-$(document).ready(function() {
-  var data = {
-    id: ${account.id},
-  }
-  prepareUpdateForm($("#form_account_name_${account.id}"),
-    $("#account_name_${account.id}"),
-    $("#new_account_name_${account.id}"),
-    "account/updateName",
-    "",
-    data,
-    accountNameUpdateSuccessCallback,
-  );
-})
-
-</script>
+<%@ include file="_account_name_update.jsp" %>
 
 <%@ include file="_delete_account.jsp" %>
 <form id="form_account_name_${account.id}">
