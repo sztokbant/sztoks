@@ -13,6 +13,7 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.service.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,8 +59,7 @@ abstract class AccountSnapshotAjaxControllerTestBase extends SnapshotControllerA
 
     @BeforeEach
     public void ajaxSnapshotControllerTestBaseSetUp() throws Exception {
-        snapshot =
-                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
+        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
         snapshot.setId(SNAPSHOT_ID);
 
         final ValueUpdateJsonRequest valueUpdateJsonRequest =

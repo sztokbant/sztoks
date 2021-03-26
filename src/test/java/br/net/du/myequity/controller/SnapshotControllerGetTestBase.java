@@ -14,6 +14,7 @@ import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -52,8 +53,7 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
         anotherUser = buildUser();
         anotherUser.setId(user.getId() * 7);
 
-        snapshot =
-                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
+        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
         snapshot.setId(SNAPSHOT_ID);
 
         assetAccount =

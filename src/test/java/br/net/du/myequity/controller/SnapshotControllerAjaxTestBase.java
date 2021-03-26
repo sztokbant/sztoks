@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.SnapshotService;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -32,10 +33,7 @@ public abstract class SnapshotControllerAjaxTestBase extends AjaxControllerTestB
     public void createEntity() {
         snapshot =
                 new Snapshot(
-                        SNAPSHOT_ID,
-                        "Original Name",
-                        ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of());
+                        SNAPSHOT_ID, "Original Name", ImmutableSortedSet.of(), ImmutableList.of());
         snapshot.setId(SNAPSHOT_ID);
     }
 

@@ -3,6 +3,7 @@ package br.net.du.myequity.service;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.UserRepository;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(password));
 
         user.addSnapshot(
-                new Snapshot(
-                        1L, FIRST_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableSortedSet.of()));
+                new Snapshot(1L, FIRST_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
 
         save(user);
     }

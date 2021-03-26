@@ -25,6 +25,7 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.persistence.SnapshotRepository;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -232,6 +233,6 @@ public class SnapshotServiceTest {
     }
 
     private Snapshot newEmptySnapshot(final long snapshotIndex) {
-        return new Snapshot(snapshotIndex, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
+        return new Snapshot(snapshotIndex, now, ImmutableSortedSet.of(), ImmutableList.of());
     }
 }

@@ -12,11 +12,14 @@ import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import br.net.du.myequity.model.util.UserUtils;
 import br.net.du.myequity.util.NetWorthUtils;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.sun.istack.NotNull;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SortedSet;
@@ -33,6 +36,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.AccessLevel;
@@ -86,14 +90,15 @@ public class Snapshot implements Comparable<Snapshot> {
     private final SortedSet<AccountSnapshot> accountSnapshots = new TreeSet<>();
 
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, orphanRemoval = true)
-    @SortNatural // Ref.: https://thorben-janssen.com/ordering-vs-sorting-hibernate-use/
-    private final SortedSet<Transaction> transactions = new TreeSet<>();
+    // this should match Transaction::compareTo()
+    @OrderBy("currency ASC, date ASC, description ASC, id ASC")
+    private final List<Transaction> transactions = new ArrayList<>();
 
     public Snapshot(
             final Long index,
             final String name,
             @NotNull final SortedSet<AccountSnapshot> accountSnapshots,
-            @NonNull final SortedSet<Transaction> transactions) {
+            @NonNull final List<Transaction> transactions) {
         this.index = index;
 
         this.name = name;
@@ -166,11 +171,11 @@ public class Snapshot implements Comparable<Snapshot> {
                                 ImmutableMap::copyOf));
     }
 
-    public SortedSet<Transaction> getRecurringTransactions() {
-        return ImmutableSortedSet.copyOf(
+    public List<Transaction> getRecurringTransactions() {
+        return ImmutableList.copyOf(
                 transactions.stream()
                         .filter(Transaction::isRecurring)
-                        .collect(Collectors.toCollection(() -> new TreeSet<>())));
+                        .collect(Collectors.toCollection(() -> new ArrayList<>())));
     }
 
     public void addTransaction(@NonNull final Transaction transaction) {

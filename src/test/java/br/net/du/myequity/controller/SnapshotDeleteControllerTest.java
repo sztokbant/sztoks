@@ -8,6 +8,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 import br.net.du.myequity.model.Snapshot;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,8 +30,7 @@ class SnapshotDeleteControllerTest extends SnapshotControllerPostTestBase {
 
     @BeforeEach
     public void setUp() {
-        snapshot =
-                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
+        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
         snapshot.setId(SNAPSHOT_ID);
 
         user.addSnapshot(snapshot);

@@ -56,6 +56,12 @@ public class TestConstants {
                     new BigDecimal("1100.00"),
                     new BigDecimal("3500.00"));
 
+    public static final IncomeTransaction newRecurringIncome(final long id) {
+        final IncomeTransaction incomeTransaction = newRecurringIncome();
+        incomeTransaction.setId(id);
+        return incomeTransaction;
+    }
+
     public static final IncomeTransaction newRecurringIncome() {
         return new IncomeTransaction(
                 LocalDate.of(2020, 12, 31),
@@ -64,6 +70,12 @@ public class TestConstants {
                 "Salary",
                 true,
                 new BigDecimal("20.00"));
+    }
+
+    public static final IncomeTransaction newSingleIncome(final long id) {
+        final IncomeTransaction incomeTransaction = newSingleIncome();
+        incomeTransaction.setId(id);
+        return incomeTransaction;
     }
 
     public static final IncomeTransaction newSingleIncome() {
@@ -76,6 +88,12 @@ public class TestConstants {
                 new BigDecimal("20.00"));
     }
 
+    public static final DonationTransaction newRecurringDonation(final long id) {
+        final DonationTransaction donationTransaction = newRecurringDonation();
+        donationTransaction.setId(id);
+        return donationTransaction;
+    }
+
     public static final DonationTransaction newRecurringDonation() {
         return new DonationTransaction(
                 LocalDate.of(2020, 12, 31),
@@ -84,6 +102,12 @@ public class TestConstants {
                 "Charity",
                 true,
                 true);
+    }
+
+    public static final DonationTransaction newSingleDonation(final long id) {
+        final DonationTransaction donationTransaction = newSingleDonation();
+        donationTransaction.setId(id);
+        return donationTransaction;
     }
 
     public static final DonationTransaction newSingleDonation() {
@@ -96,6 +120,12 @@ public class TestConstants {
                 true);
     }
 
+    public static final InvestmentTransaction newRecurringInvestment(final long id) {
+        final InvestmentTransaction investmentTransaction = newRecurringInvestment();
+        investmentTransaction.setId(id);
+        return investmentTransaction;
+    }
+
     public static final InvestmentTransaction newRecurringInvestment() {
         return new InvestmentTransaction(
                 LocalDate.of(2020, 12, 31),
@@ -104,6 +134,12 @@ public class TestConstants {
                 "Retirement Fund",
                 true,
                 InvestmentCategory.LONG_TERM);
+    }
+
+    public static final InvestmentTransaction newSingleInvestment(final long id) {
+        final InvestmentTransaction investmentTransaction = newSingleInvestment();
+        investmentTransaction.setId(id);
+        return investmentTransaction;
     }
 
     public static final InvestmentTransaction newSingleInvestment() {

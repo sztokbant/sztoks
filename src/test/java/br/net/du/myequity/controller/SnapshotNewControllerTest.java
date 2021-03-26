@@ -10,6 +10,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.service.SnapshotService;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,8 +42,7 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
 
     @BeforeEach
     public void setUp() {
-        snapshot =
-                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
+        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
         snapshot.setId(SNAPSHOT_ID);
 
         user.addSnapshot(snapshot);
@@ -55,7 +55,7 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
                         snapshot.getIndex() + 1,
                         "New Snapshot",
                         ImmutableSortedSet.of(),
-                        ImmutableSortedSet.of());
+                        ImmutableList.of());
         newSnapshot.setId(snapshot.getId() + 1);
         when(snapshotService.newSnapshot(eq(user))).thenReturn(newSnapshot);
     }

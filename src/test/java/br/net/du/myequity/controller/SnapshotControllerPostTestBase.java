@@ -12,6 +12,7 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +44,7 @@ abstract class SnapshotControllerPostTestBase extends PostControllerTestBase {
         anotherUser = buildUser();
         anotherUser.setId(user.getId() * 7);
 
-        snapshot =
-                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableSortedSet.of());
+        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
         snapshot.setId(SNAPSHOT_ID);
     }
 

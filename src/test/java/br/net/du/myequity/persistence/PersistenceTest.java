@@ -23,6 +23,7 @@ import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import br.net.du.myequity.service.UserService;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
@@ -190,7 +191,7 @@ class PersistenceTest {
                                 new SimpleAssetSnapshot(simpleAssetAccount, assetAmount),
                                 new SimpleLiabilitySnapshot(
                                         simpleLiabilityAccount, liabilityAmount)),
-                        ImmutableSortedSet.of());
+                        ImmutableList.of());
         assertNull(snapshot.getId());
     }
 }
