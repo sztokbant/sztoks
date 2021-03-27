@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.ID;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
@@ -24,9 +25,9 @@ public class SnapshotController {
     @Autowired private SnapshotUtils snapshotUtils;
 
     @GetMapping("/snapshot/{id}")
-    public String get(@PathVariable(value = "id") final Long snapshotId, final Model model) {
+    public String get(@PathVariable(value = ID) final Long snapshotId, final Model model) {
         final User user = getLoggedUser(model);
-        final Snapshot snapshot = snapshotUtils.getSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
 
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_KEY, SnapshotViewModelOutput.of(snapshot));

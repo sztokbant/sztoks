@@ -45,7 +45,7 @@ public class AccountSnapshotUpdateControllerBase {
     AccountSnapshot getAccountSnapshot(
             final Model model, final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         // Ensure snapshot belongs to logged user
-        snapshotUtils.getSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
+        snapshotUtils.validateSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
 
         final Optional<AccountSnapshot> accountSnapshotOpt =
                 accountSnapshotService.findBySnapshotIdAndAccountId(

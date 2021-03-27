@@ -44,7 +44,7 @@ public class TransactionUpdateControllerBase {
     Transaction getTransaction(
             final Model model, final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         // Ensure snapshot belongs to logged user
-        snapshotUtils.getSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
+        snapshotUtils.validateSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
 
         final Optional<Transaction> transactionOpt =
                 transactionService.findByIdAndSnapshotId(

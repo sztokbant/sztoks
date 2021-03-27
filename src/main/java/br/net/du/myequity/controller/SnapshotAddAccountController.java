@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.ID;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
@@ -43,10 +44,9 @@ public class SnapshotAddAccountController {
     @Autowired private SnapshotUtils snapshotUtils;
 
     @GetMapping("/snapshot/addAccounts/{id}")
-    public String addAccounts(
-            @PathVariable(value = "id") final Long snapshotId, final Model model) {
+    public String addAccounts(@PathVariable(value = ID) final Long snapshotId, final Model model) {
         final User user = getLoggedUser(model);
-        final Snapshot snapshot = snapshotUtils.getSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
 
         final List<Account> allUserAccounts = accountService.findByUser(user);
 
@@ -81,13 +81,13 @@ public class SnapshotAddAccountController {
 
     @PostMapping("/snapshot/addAccounts/{id}")
     public String addAccounts(
-            @PathVariable(value = "id") final Long snapshotId,
+            @PathVariable(value = ID) final Long snapshotId,
             final Model model,
             @ModelAttribute(ADD_ACCOUNTS_FORM)
                     final AddAccountsToSnapshotViewModelInput addAccountsViewModelInput,
             final BindingResult bindingResult) {
         final User user = getLoggedUser(model);
-        final Snapshot snapshot = snapshotUtils.getSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
 
         if (addAccountsViewModelInput.getAccounts() != null
                 && !addAccountsViewModelInput.getAccounts().isEmpty()) {

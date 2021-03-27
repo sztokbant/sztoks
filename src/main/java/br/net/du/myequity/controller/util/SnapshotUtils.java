@@ -14,7 +14,7 @@ import org.springframework.ui.Model;
 public class SnapshotUtils {
     @Autowired private SnapshotService snapshotService;
 
-    public Snapshot getSnapshot(final Model model, final Long snapshotId) {
+    public Snapshot validateSnapshot(final Model model, final Long snapshotId) {
         final User user = getLoggedUser(model);
 
         final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);

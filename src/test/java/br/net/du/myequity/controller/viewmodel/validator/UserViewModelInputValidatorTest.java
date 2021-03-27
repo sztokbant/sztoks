@@ -1,4 +1,4 @@
-package br.net.du.myequity.validator;
+package br.net.du.myequity.controller.viewmodel.validator;
 
 import static br.net.du.myequity.test.TestConstants.EMAIL;
 import static br.net.du.myequity.test.TestConstants.FIRST_NAME;

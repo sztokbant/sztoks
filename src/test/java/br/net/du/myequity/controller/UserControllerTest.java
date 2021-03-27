@@ -15,9 +15,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.controller.viewmodel.UserViewModelInput;
+import br.net.du.myequity.controller.viewmodel.validator.UserViewModelInputValidator;
 import br.net.du.myequity.service.SecurityService;
 import br.net.du.myequity.service.UserService;
-import br.net.du.myequity.validator.UserViewModelInputValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

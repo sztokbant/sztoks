@@ -1,4 +1,4 @@
-package br.net.du.myequity.validator;
+package br.net.du.myequity.controller.viewmodel.validator;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;

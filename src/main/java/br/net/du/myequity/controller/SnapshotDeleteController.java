@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.ID;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 
@@ -22,9 +23,9 @@ public class SnapshotDeleteController {
     @Autowired private SnapshotUtils snapshotUtils;
 
     @PostMapping("/snapshot/delete/{id}")
-    public String delete(@PathVariable(value = "id") final Long snapshotId, final Model model) {
+    public String delete(@PathVariable(value = ID) final Long snapshotId, final Model model) {
         final User user = getLoggedUser(model);
-        final Snapshot snapshot = snapshotUtils.getSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
 
         snapshotService.deleteSnapshot(user, snapshot);
 

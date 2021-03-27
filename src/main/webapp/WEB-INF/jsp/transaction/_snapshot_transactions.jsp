@@ -1,7 +1,9 @@
 <div class="row">
     <div class="col" style="background: lightpink;">
         <div class="row border-1px-bottom">
-            <div class="col col-cell text-center"><b>INCOME</b></div>
+            <div class="col col-cell text-center"><b>INCOME</b>
+                <a href="/snapshot/${snapshot.id}/newIncomeTransaction" style="text-decoration: none;">&#x271A;</a>
+            </div>
         </div>
         <c:choose>
             <c:when test="${not empty snapshot.incomeTransactionsTotal}">
@@ -49,7 +51,9 @@
 
     <div class="col" style="background: lightpink;">
         <div class="row border-1px-bottom">
-            <div class="col col-cell text-center"><b>INVESTMENTS</b></div>
+            <div class="col col-cell text-center"><b>INVESTMENTS</b>
+                <a href="/snapshot/${snapshot.id}/newInvestmentTransaction" style="text-decoration: none;">&#x271A;</a>
+            </div>
         </div>
         <c:choose>
             <c:when test="${not empty snapshot.investmentTransactionsTotal}">
@@ -97,7 +101,9 @@
 
     <div class="col" style="background: lightpink;">
         <div class="row border-1px-bottom">
-            <div class="col col-cell text-center"><b>DONATIONS</b></div>
+            <div class="col col-cell text-center"><b>DONATIONS</b>
+                <a href="/snapshot/${snapshot.id}/newDonationTransaction" style="text-decoration: none;">&#x271A;</a>
+            </div>
         </div>
         <c:choose>
             <c:when test="${not empty snapshot.donationTransactionsTotal}">

@@ -1,4 +1,4 @@
-package br.net.du.myequity.validator;
+package br.net.du.myequity.controller.viewmodel.validator;
 
 import br.net.du.myequity.controller.viewmodel.UserViewModelInput;
 import br.net.du.myequity.service.UserService;

@@ -1,4 +1,8 @@
-package br.net.du.myequity.validator;
+package br.net.du.myequity.controller.viewmodel.validator;
+
+import static br.net.du.myequity.controller.util.ControllerConstants.CURRENCY_UNIT;
+import static br.net.du.myequity.controller.util.ControllerConstants.NAME;
+import static br.net.du.myequity.controller.util.ControllerConstants.NOT_EMPTY;
 
 import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
 import br.net.du.myequity.model.User;
@@ -44,18 +48,18 @@ public class AccountViewModelInputValidator implements SmartValidator {
 
     private void rejectIfInvalidAccountType(
             final AccountViewModelInput accountViewModelInput, final Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "typeName", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "typeName", NOT_EMPTY);
     }
 
     private void rejectIfInvalidCurrencyUnit(
             final AccountViewModelInput accountViewModelInput, final Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "currencyUnit", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, CURRENCY_UNIT, NOT_EMPTY);
 
         if (StringUtils.isNotBlank(accountViewModelInput.getCurrencyUnit())) {
             try {
                 CurrencyUnit.of(accountViewModelInput.getCurrencyUnit());
             } catch (final NullPointerException | IllegalCurrencyException e) {
-                errors.rejectValue("currencyUnit", "Invalid.accountForm.currency");
+                errors.rejectValue(CURRENCY_UNIT, "Invalid.currency");
             }
         }
     }
@@ -64,7 +68,7 @@ public class AccountViewModelInputValidator implements SmartValidator {
             final AccountViewModelInput accountViewModelInput,
             final Errors errors,
             final Object[] validationHints) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, NAME, NOT_EMPTY);
 
         if (StringUtils.isNotBlank(accountViewModelInput.getName())) {
             if ((validationHints == null)
@@ -83,7 +87,7 @@ public class AccountViewModelInputValidator implements SmartValidator {
                                                                         .getName()
                                                                         .trim()));
                 if (isDuplicateName) {
-                    errors.rejectValue("name", "Duplicate.accountForm.name");
+                    errors.rejectValue(NAME, "Duplicate.accountForm.name");
                 }
             }
         }

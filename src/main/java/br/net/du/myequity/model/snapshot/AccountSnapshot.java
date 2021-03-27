@@ -96,6 +96,11 @@ public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
 
     @Override
     public int compareTo(final AccountSnapshot other) {
+        if (snapshot != null
+                && other.getSnapshot() != null
+                && !snapshot.equals(other.getSnapshot())) {
+            return snapshot.compareTo(other.getSnapshot());
+        }
         return account.compareTo(other.getAccount());
     }
 }

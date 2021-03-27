@@ -57,16 +57,18 @@
 </div>
 
 <div class="full-width">
+    <div class="navigation-buttons-padding-top">
+        <a class="btn btn-myequity" href="${contextPath}/snapshot/addAccounts/${snapshot.id}">Add Accounts to
+            Snapshot</a>
+    </div>
+
+    <br/>
+
     <%@ include file="accountsnapshot/_snapshot_accounts.jsp" %>
 
     <br/>
 
     <%@ include file="transaction/_snapshot_transactions.jsp" %>
-
-    <div class="navigation-buttons-padding-top">
-        <a class="btn btn-myequity" href="${contextPath}/snapshot/addAccounts/${snapshot.id}">Add Accounts to
-            Snapshot</a>
-    </div>
 
     <div class="text-center"><a href="/">Back</a></div>
 </div>

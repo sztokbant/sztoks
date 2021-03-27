@@ -20,7 +20,8 @@ public class SnapshotRenameController {
     @PostMapping("/snapshot/updateName")
     public EntityRenameJsonResponse post(
             final Model model, @RequestBody final EntityRenameJsonRequest entityNameJsonRequest) {
-        final Snapshot snapshot = snapshotUtils.getSnapshot(model, entityNameJsonRequest.getId());
+        final Snapshot snapshot =
+                snapshotUtils.validateSnapshot(model, entityNameJsonRequest.getId());
 
         snapshot.setName(entityNameJsonRequest.getNewValue().trim());
         snapshotService.save(snapshot);

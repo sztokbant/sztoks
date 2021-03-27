@@ -3,9 +3,9 @@ package br.net.du.myequity.controller;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
 
 import br.net.du.myequity.controller.viewmodel.UserViewModelInput;
+import br.net.du.myequity.controller.viewmodel.validator.UserViewModelInputValidator;
 import br.net.du.myequity.service.SecurityService;
 import br.net.du.myequity.service.UserService;
-import br.net.du.myequity.validator.UserViewModelInputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
