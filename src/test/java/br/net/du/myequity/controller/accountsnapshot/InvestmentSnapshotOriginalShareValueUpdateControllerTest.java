@@ -6,18 +6,14 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.myequity.model.account.InvestmentAccount;
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
-import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MvcResult;
@@ -33,15 +29,19 @@ class InvestmentSnapshotOriginalShareValueUpdateControllerTest
     private static final BigDecimal CURRENT_ORIGINAL_SHARE_VALUE = new BigDecimal("2100.00");
     private static final BigDecimal CURRENT_SHARES = new BigDecimal("15.00");
 
-    @MockBean private AccountSnapshotService accountSnapshotService;
-
     InvestmentSnapshotOriginalShareValueUpdateControllerTest() {
         super("/snapshot/updateInvestmentOriginalShareValue", "2000.00");
     }
 
     @Override
     public void createEntity() {
-        account = new InvestmentAccount("AMZN", CURRENCY_UNIT, LocalDate.now());
+        account =
+                new InvestmentSnapshot(
+                        "AMZN",
+                        CURRENCY_UNIT,
+                        CURRENT_SHARES,
+                        CURRENT_ORIGINAL_SHARE_VALUE,
+                        CURRENT_CURRENT_SHARE_VALUE);
         account.setId(ACCOUNT_ID);
     }
 
@@ -51,21 +51,11 @@ class InvestmentSnapshotOriginalShareValueUpdateControllerTest
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final InvestmentSnapshot investmentSnapshot =
-                new InvestmentSnapshot(
-                        account,
-                        CURRENT_SHARES,
-                        CURRENT_ORIGINAL_SHARE_VALUE,
-                        CURRENT_CURRENT_SHARE_VALUE);
-        snapshot.addAccountSnapshot(investmentSnapshot);
+        snapshot.addAccountSnapshot(account);
 
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
-        account.setUser(user);
         when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
-
-        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ACCOUNT_ID))
-                .thenReturn(Optional.of(investmentSnapshot));
 
         // WHEN
         final ResultActions resultActions =

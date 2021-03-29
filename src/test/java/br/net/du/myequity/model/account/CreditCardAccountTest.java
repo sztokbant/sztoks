@@ -1,5 +1,7 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.test.TestConstants.ACCOUNT_NAME;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
@@ -8,16 +10,19 @@ import org.junit.jupiter.api.Test;
 
 class CreditCardAccountTest {
 
-    final Account account = new CreditCardAccount();
-
     @Test
     public void newEmptySnapshot_happy() {
         // WHEN
-        final CreditCardSnapshot actual = (CreditCardSnapshot) account.newEmptySnapshot();
+        final CreditCardSnapshot actual = new CreditCardSnapshot(ACCOUNT_NAME, CURRENCY_UNIT);
 
         // THEN
         final CreditCardSnapshot expected =
-                new CreditCardSnapshot(account, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+                new CreditCardSnapshot(
+                        ACCOUNT_NAME,
+                        CURRENCY_UNIT,
+                        BigDecimal.ZERO,
+                        BigDecimal.ZERO,
+                        BigDecimal.ZERO);
 
         assertTrue(actual.equalsIgnoreId(expected));
     }

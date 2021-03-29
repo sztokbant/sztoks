@@ -6,7 +6,6 @@ import br.net.du.myequity.controller.viewmodel.CreditCardTotalsViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.SnapshotRemoveAccountJsonResponse;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
-import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
@@ -28,9 +27,8 @@ public class RemoveAccountController extends AccountSnapshotUpdateControllerBase
         snapshot.removeAccountSnapshot(accountSnapshot);
         snapshotService.save(snapshot);
 
-        final Account account = accountSnapshot.getAccount();
-        final CurrencyUnit currencyUnit = account.getCurrencyUnit();
-        final AccountType accountType = account.getAccountType();
+        final CurrencyUnit currencyUnit = accountSnapshot.getCurrencyUnit();
+        final AccountType accountType = accountSnapshot.getAccountType();
 
         final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit =
                 (accountSnapshot instanceof CreditCardSnapshot)
@@ -38,7 +36,7 @@ public class RemoveAccountController extends AccountSnapshotUpdateControllerBase
                         : null;
 
         return SnapshotRemoveAccountJsonResponse.builder()
-                .accountId(account.getId())
+                .accountId(accountSnapshot.getId())
                 .currencyUnit(currencyUnit.getCode())
                 .currencyUnitSymbol(currencyUnit.getSymbol())
                 .netWorth(formatAsDecimal(snapshot.getNetWorth().get(currencyUnit)))

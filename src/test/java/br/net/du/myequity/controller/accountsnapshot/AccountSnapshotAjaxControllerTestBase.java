@@ -10,8 +10,8 @@ import br.net.du.myequity.controller.SnapshotControllerAjaxTestBase;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.service.AccountService;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
@@ -48,9 +48,9 @@ abstract class AccountSnapshotAjaxControllerTestBase extends SnapshotControllerA
 
     final String newValue;
 
-    @MockBean AccountService accountService;
+    @MockBean AccountSnapshotService accountService;
 
-    Account account;
+    AccountSnapshot account;
 
     AccountSnapshotAjaxControllerTestBase(final String url, final String newValue) {
         super(url);
@@ -106,7 +106,6 @@ abstract class AccountSnapshotAjaxControllerTestBase extends SnapshotControllerA
         final Long anotherUserId = user.getId() * 7;
         anotherUser.setId(anotherUserId);
 
-        account.setUser(anotherUser);
         when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN
@@ -130,7 +129,6 @@ abstract class AccountSnapshotAjaxControllerTestBase extends SnapshotControllerA
         snapshot.setUser(user);
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
-        account.setUser(user);
         when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN

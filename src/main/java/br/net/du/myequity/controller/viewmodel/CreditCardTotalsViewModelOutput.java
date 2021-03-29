@@ -27,7 +27,7 @@ public class CreditCardTotalsViewModelOutput {
     private final String usedCreditPercentage;
 
     public static CreditCardTotalsViewModelOutput of(final CreditCardSnapshot creditCardSnapshot) {
-        final CurrencyUnit currencyUnit = creditCardSnapshot.getAccount().getCurrencyUnit();
+        final CurrencyUnit currencyUnit = creditCardSnapshot.getCurrencyUnit();
 
         final String balance =
                 MoneyFormatUtils.format(currencyUnit, toDecimal(creditCardSnapshot.getTotal()));

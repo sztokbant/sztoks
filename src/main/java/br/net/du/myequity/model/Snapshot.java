@@ -4,7 +4,6 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
 
-import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
@@ -118,16 +117,13 @@ public class Snapshot implements Comparable<Snapshot> {
                 .collect(
                         collectingAndThen(
                                 groupingBy(
-                                        accountSnapshotData ->
-                                                accountSnapshotData.getAccount().getAccountType(),
+                                        accountSnapshotData -> accountSnapshotData.getAccountType(),
                                         collectingAndThen(toSet(), ImmutableSortedSet::copyOf)),
                                 ImmutableMap::copyOf));
     }
 
-    public Optional<AccountSnapshot> getAccountSnapshotFor(@NonNull final Account account) {
-        return accountSnapshots.stream()
-                .filter(entry -> account.equals(entry.getAccount()))
-                .findFirst();
+    public Optional<AccountSnapshot> getAccountSnapshotById(@NonNull final Long id) {
+        return accountSnapshots.stream().filter(entry -> id.equals(entry.getId())).findFirst();
     }
 
     public void addAccountSnapshot(@NonNull final AccountSnapshot accountSnapshot) {
@@ -137,15 +133,6 @@ public class Snapshot implements Comparable<Snapshot> {
         }
         accountSnapshots.add(accountSnapshot);
         accountSnapshot.setSnapshot(this);
-    }
-
-    public void removeAccountSnapshotFor(@NonNull final Account account) {
-        // Prevents infinite loop
-        final Optional<AccountSnapshot> accountSnapshotOpt = getAccountSnapshotFor(account);
-        if (!accountSnapshotOpt.isPresent()) {
-            return;
-        }
-        removeAccountSnapshot(accountSnapshotOpt.get());
     }
 
     public void removeAccountSnapshot(@NonNull final AccountSnapshot accountSnapshot) {
@@ -222,7 +209,7 @@ public class Snapshot implements Comparable<Snapshot> {
             @NonNull final AccountType accountType) {
         return NetWorthUtils.breakDownAccountSnapshotsByCurrency(
                 accountSnapshots.stream()
-                        .filter(entry -> entry.getAccount().getAccountType().equals(accountType))
+                        .filter(entry -> entry.getAccountType().equals(accountType))
                         .collect(Collectors.toSet()));
     }
 
@@ -244,7 +231,7 @@ public class Snapshot implements Comparable<Snapshot> {
             }
 
             final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
-            final CurrencyUnit currencyUnit = creditCardSnapshot.getAccount().getCurrencyUnit();
+            final CurrencyUnit currencyUnit = creditCardSnapshot.getCurrencyUnit();
 
             if (!creditCardTotals.containsKey(currencyUnit)) {
                 creditCardTotals.put(currencyUnit, creditCardSnapshot.copy());
@@ -267,7 +254,7 @@ public class Snapshot implements Comparable<Snapshot> {
 
         for (final AccountSnapshot accountSnapshot : accountSnapshots) {
             if (!(accountSnapshot instanceof CreditCardSnapshot)
-                    || !accountSnapshot.getAccount().getCurrencyUnit().equals(currencyUnit)) {
+                    || !accountSnapshot.getCurrencyUnit().equals(currencyUnit)) {
                 continue;
             }
 

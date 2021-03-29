@@ -4,7 +4,6 @@ import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 
 import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.model.Snapshot;
-import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import lombok.AllArgsConstructor;
@@ -43,16 +42,15 @@ public class AccountSnapshotViewModelOutput implements Comparable<AccountSnapsho
 
     public static AccountSnapshotViewModelOutput of(
             final AccountSnapshot accountSnapshot, final boolean includeTotals) {
-        final Account account = accountSnapshot.getAccount();
         final Snapshot snapshot = accountSnapshot.getSnapshot();
-        final CurrencyUnit currencyUnit = accountSnapshot.getAccount().getCurrencyUnit();
+        final CurrencyUnit currencyUnit = accountSnapshot.getCurrencyUnit();
 
         final String balance =
                 MoneyFormatUtils.format(currencyUnit, toDecimal(accountSnapshot.getTotal()));
         final AccountSnapshotViewModelOutputBuilder builder =
                 AccountSnapshotViewModelOutput.builder()
-                        .accountId(account.getId())
-                        .name(account.getName())
+                        .accountId(accountSnapshot.getId())
+                        .name(accountSnapshot.getName())
                         .balance(balance)
                         .currencyUnit(currencyUnit.getCode())
                         .currencyUnitSymbol(currencyUnit.getSymbol());
@@ -61,7 +59,7 @@ public class AccountSnapshotViewModelOutput implements Comparable<AccountSnapsho
             final String netWorth =
                     MoneyFormatUtils.format(
                             currencyUnit, toDecimal(snapshot.getNetWorth().get(currencyUnit)));
-            final AccountType accountType = accountSnapshot.getAccount().getAccountType();
+            final AccountType accountType = accountSnapshot.getAccountType();
             final String totalForAccountType =
                     MoneyFormatUtils.format(
                             currencyUnit,

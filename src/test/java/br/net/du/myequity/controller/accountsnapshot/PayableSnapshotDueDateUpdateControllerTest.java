@@ -6,9 +6,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.myequity.model.account.PayableAccount;
 import br.net.du.myequity.model.snapshot.PayableSnapshot;
-import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -17,7 +15,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,15 +28,13 @@ class PayableSnapshotDueDateUpdateControllerTest extends AccountSnapshotAjaxCont
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("4200.00");
     private static final LocalDate CURRENT_DUE_DATE = LocalDate.parse("2020-12-31");
 
-    @MockBean private AccountSnapshotService accountSnapshotService;
-
     PayableSnapshotDueDateUpdateControllerTest() {
         super("/snapshot/updateAccountDueDate", "2020-09-16");
     }
 
     @Override
     public void createEntity() {
-        account = new PayableAccount("Friend", CURRENCY_UNIT, LocalDate.now());
+        account = new PayableSnapshot("Friend", CURRENCY_UNIT, CURRENT_DUE_DATE, CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
     }
 
@@ -49,17 +44,11 @@ class PayableSnapshotDueDateUpdateControllerTest extends AccountSnapshotAjaxCont
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final PayableSnapshot accountSnapshot =
-                new PayableSnapshot(account, CURRENT_DUE_DATE, CURRENT_BALANCE);
-        snapshot.addAccountSnapshot(accountSnapshot);
+        snapshot.addAccountSnapshot(account);
 
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
-        account.setUser(user);
         when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
-
-        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ACCOUNT_ID))
-                .thenReturn(Optional.of(accountSnapshot));
 
         // WHEN
         final ResultActions resultActions =

@@ -1,7 +1,6 @@
 package br.net.du.myequity.model.snapshot;
 
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.ReceivableAccount;
+import br.net.du.myequity.model.account.AccountType;
 import com.google.common.annotations.VisibleForTesting;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,22 +12,49 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import org.joda.money.CurrencyUnit;
 
 @Entity
-@DiscriminatorValue(ReceivableAccount.ACCOUNT_SUB_TYPE)
+@DiscriminatorValue(ReceivableSnapshot.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class ReceivableSnapshot extends AccountSnapshot
         implements AmountUpdateable, DueDateUpdateable {
+
+    public static final String ACCOUNT_SUB_TYPE = "RECEIVABLE";
 
     @Column @Getter @Setter private BigDecimal amount;
 
     @Column @Getter @Setter private LocalDate dueDate;
 
     public ReceivableSnapshot(
-            @NonNull final Account account,
+            @NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
+        this(name, currencyUnit, LocalDate.now());
+    }
+
+    public ReceivableSnapshot(
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final LocalDate createDate) {
+        this(name, currencyUnit, createDate, LocalDate.now(), BigDecimal.ZERO);
+    }
+
+    public ReceivableSnapshot(
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate dueDate,
             @NonNull final BigDecimal amount) {
-        super(account);
+        this(name, currencyUnit, LocalDate.now(), dueDate, amount);
+        this.dueDate = dueDate;
+        this.amount = amount;
+    }
+
+    public ReceivableSnapshot(
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final LocalDate createDate,
+            @NonNull final LocalDate dueDate,
+            @NonNull final BigDecimal amount) {
+        super(name, AccountType.ASSET, currencyUnit, createDate);
         this.dueDate = dueDate;
         this.amount = amount;
     }
@@ -40,7 +66,7 @@ public class ReceivableSnapshot extends AccountSnapshot
 
     @Override
     public ReceivableSnapshot copy() {
-        return new ReceivableSnapshot(account, dueDate, amount);
+        return new ReceivableSnapshot(name, CurrencyUnit.of(currency), dueDate, amount);
     }
 
     @Override
@@ -56,7 +82,6 @@ public class ReceivableSnapshot extends AccountSnapshot
 
         final ReceivableSnapshot otherReceivableSnapshot = (ReceivableSnapshot) other;
 
-        return account.equals(otherReceivableSnapshot.getAccount())
-                && (amount.compareTo(otherReceivableSnapshot.getAmount()) == 0);
+        return (amount.compareTo(otherReceivableSnapshot.getAmount()) == 0);
     }
 }

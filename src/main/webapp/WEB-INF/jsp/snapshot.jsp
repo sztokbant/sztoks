@@ -57,13 +57,6 @@
 </div>
 
 <div class="full-width">
-    <div class="navigation-buttons-padding-top">
-        <a class="btn btn-myequity" href="${contextPath}/snapshot/addAccounts/${snapshot.id}">Add Accounts to
-            Snapshot</a>
-    </div>
-
-    <br/>
-
     <%@ include file="accountsnapshot/_snapshot_accounts.jsp" %>
 
     <br/>

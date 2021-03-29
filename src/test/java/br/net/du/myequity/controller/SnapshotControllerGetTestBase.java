@@ -9,10 +9,10 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.SimpleAssetAccount;
-import br.net.du.myequity.model.account.SimpleLiabilityAccount;
-import br.net.du.myequity.service.AccountService;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
+import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
+import br.net.du.myequity.service.AccountSnapshotService;
 import br.net.du.myequity.service.SnapshotService;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
@@ -34,15 +34,15 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
 
     @MockBean protected SnapshotService snapshotService;
 
-    @MockBean protected AccountService accountService;
+    @MockBean protected AccountSnapshotService accountService;
 
     protected User anotherUser;
 
     protected Snapshot snapshot;
 
-    protected Account assetAccount;
+    protected AccountSnapshot assetAccount;
 
-    protected Account liabilityAccount;
+    protected AccountSnapshot liabilityAccount;
 
     public SnapshotControllerGetTestBase(final String url) {
         super(url);
@@ -57,14 +57,12 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
         snapshot.setId(SNAPSHOT_ID);
 
         assetAccount =
-                new SimpleAssetAccount("Checking Account", CurrencyUnit.USD, LocalDate.now());
+                new SimpleAssetSnapshot("Checking Account", CurrencyUnit.USD, LocalDate.now());
         assetAccount.setId(ASSET_ACCOUNT_ID);
-        user.addAccount(assetAccount);
 
         liabilityAccount =
-                new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, LocalDate.now());
+                new SimpleLiabilitySnapshot("Mortgage", CurrencyUnit.USD, LocalDate.now());
         liabilityAccount.setId(LIABILITY_ACCOUNT_ID);
-        user.addAccount(liabilityAccount);
     }
 
     @Test

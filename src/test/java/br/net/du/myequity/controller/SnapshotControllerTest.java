@@ -27,8 +27,8 @@ class SnapshotControllerTest extends SnapshotControllerGetTestBase {
 
     @BeforeEach
     public void setUp() {
-        snapshot.addAccountSnapshot(assetAccount.newEmptySnapshot());
-        snapshot.addAccountSnapshot(liabilityAccount.newEmptySnapshot());
+        snapshot.addAccountSnapshot(assetAccount);
+        snapshot.addAccountSnapshot(liabilityAccount);
     }
 
     @Test

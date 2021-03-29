@@ -3,8 +3,8 @@ package br.net.du.myequity.controller.accountsnapshot;
 import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.accountsnapshot.AccountSnapshotViewModelOutput;
+import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.AccountSnapshotService;
 import br.net.du.myequity.service.SnapshotService;
 import java.util.Optional;
@@ -14,8 +14,6 @@ import org.springframework.ui.Model;
 
 public class AccountSnapshotUpdateControllerBase {
     @Autowired protected SnapshotService snapshotService;
-
-    @Autowired private AccountService accountService;
 
     @Autowired private AccountSnapshotService accountSnapshotService;
 
@@ -44,13 +42,10 @@ public class AccountSnapshotUpdateControllerBase {
 
     AccountSnapshot getAccountSnapshot(
             final Model model, final ValueUpdateJsonRequest valueUpdateJsonRequest) {
-        // Ensure snapshot belongs to logged user
-        snapshotUtils.validateSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
-
+        final Snapshot snapshot =
+                snapshotUtils.validateSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
         final Optional<AccountSnapshot> accountSnapshotOpt =
-                accountSnapshotService.findBySnapshotIdAndAccountId(
-                        valueUpdateJsonRequest.getSnapshotId(),
-                        valueUpdateJsonRequest.getEntityId());
+                snapshot.getAccountSnapshotById(valueUpdateJsonRequest.getEntityId());
 
         if (!accountSnapshotOpt.isPresent()) {
             throw new IllegalArgumentException("accountSnapshot not found");

@@ -38,7 +38,7 @@ public class InvestmentViewModelOutput extends AccountSnapshotViewModelOutput {
         final String shares =
                 new BigDecimal(formatAsDecimal(investmentSnapshot.getShares())).toString();
 
-        final CurrencyUnit currencyUnit = accountSnapshot.getAccount().getCurrencyUnit();
+        final CurrencyUnit currencyUnit = accountSnapshot.getCurrencyUnit();
 
         final String originalShareValue =
                 MoneyFormatUtils.format(

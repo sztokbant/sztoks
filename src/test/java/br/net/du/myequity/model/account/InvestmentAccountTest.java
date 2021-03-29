@@ -1,5 +1,7 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.test.TestConstants.ACCOUNT_NAME;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
@@ -8,16 +10,19 @@ import org.junit.jupiter.api.Test;
 
 class InvestmentAccountTest {
 
-    final Account account = new InvestmentAccount();
-
     @Test
     public void newEmptySnapshot_happy() {
         // WHEN
-        final InvestmentSnapshot actual = (InvestmentSnapshot) account.newEmptySnapshot();
+        final InvestmentSnapshot actual = new InvestmentSnapshot(ACCOUNT_NAME, CURRENCY_UNIT);
 
         // THEN
         final InvestmentSnapshot expected =
-                new InvestmentSnapshot(account, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+                new InvestmentSnapshot(
+                        ACCOUNT_NAME,
+                        CURRENCY_UNIT,
+                        BigDecimal.ZERO,
+                        BigDecimal.ZERO,
+                        BigDecimal.ZERO);
 
         assertTrue(actual.equalsIgnoreId(expected));
     }

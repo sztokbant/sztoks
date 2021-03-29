@@ -1,10 +1,10 @@
 package br.net.du.myequity.model.snapshot;
 
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.CreditCardAccount;
+import br.net.du.myequity.model.account.AccountType;
 import com.google.common.annotations.VisibleForTesting;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -13,11 +13,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import org.joda.money.CurrencyUnit;
 
 @Entity
-@DiscriminatorValue(CreditCardAccount.ACCOUNT_SUB_TYPE)
+@DiscriminatorValue(CreditCardSnapshot.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class CreditCardSnapshot extends AccountSnapshot {
+
+    public static final String ACCOUNT_SUB_TYPE = "CREDIT_CARD";
 
     @Column @Getter @Setter private BigDecimal totalCredit;
 
@@ -26,11 +29,34 @@ public class CreditCardSnapshot extends AccountSnapshot {
     @Column @Getter @Setter private BigDecimal statement;
 
     public CreditCardSnapshot(
-            @NonNull final Account account,
+            @NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
+        this(name, currencyUnit, LocalDate.now());
+    }
+
+    public CreditCardSnapshot(
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final LocalDate createDate) {
+        this(name, currencyUnit, createDate, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+    }
+
+    public CreditCardSnapshot(
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
             @NonNull final BigDecimal totalCredit,
             @NonNull final BigDecimal availableCredit,
             @NonNull final BigDecimal statement) {
-        super(account);
+        this(name, currencyUnit, LocalDate.now(), totalCredit, availableCredit, statement);
+    }
+
+    public CreditCardSnapshot(
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final LocalDate createDate,
+            @NonNull final BigDecimal totalCredit,
+            @NonNull final BigDecimal availableCredit,
+            @NonNull final BigDecimal statement) {
+        super(name, AccountType.LIABILITY, currencyUnit, createDate);
         this.totalCredit = totalCredit;
         this.availableCredit = availableCredit;
         this.statement = statement;
@@ -43,7 +69,8 @@ public class CreditCardSnapshot extends AccountSnapshot {
 
     @Override
     public CreditCardSnapshot copy() {
-        return new CreditCardSnapshot(account, totalCredit, availableCredit, statement);
+        return new CreditCardSnapshot(
+                name, CurrencyUnit.of(currency), totalCredit, availableCredit, statement);
     }
 
     @Override
@@ -59,8 +86,7 @@ public class CreditCardSnapshot extends AccountSnapshot {
 
         final CreditCardSnapshot otherCreditCardSnapshot = (CreditCardSnapshot) other;
 
-        return account.equals(otherCreditCardSnapshot.getAccount())
-                && (totalCredit.compareTo(otherCreditCardSnapshot.getTotalCredit()) == 0)
+        return (totalCredit.compareTo(otherCreditCardSnapshot.getTotalCredit()) == 0)
                 && (availableCredit.compareTo(otherCreditCardSnapshot.getAvailableCredit()) == 0)
                 && (statement.compareTo(otherCreditCardSnapshot.getStatement()) == 0);
     }

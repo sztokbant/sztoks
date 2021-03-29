@@ -8,20 +8,15 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.account.CreditCardAccount;
-import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
-import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MvcResult;
@@ -35,15 +30,13 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
     private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
 
-    @MockBean private AccountSnapshotService accountSnapshotService;
-
     SimpleAssetSnapshotBalanceUpdateControllerTest() {
         super("/snapshot/updateAccountBalance", "108.00");
     }
 
     @Override
     public void createEntity() {
-        account = new SimpleAssetAccount("Savings", CURRENCY_UNIT, LocalDate.now());
+        account = new SimpleAssetSnapshot("Savings", CURRENCY_UNIT, CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
     }
 
@@ -54,20 +47,19 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
 
         snapshot.setUser(user);
 
-        account = new CreditCardAccount("Citi Double Cash", CURRENCY_UNIT, LocalDate.now());
+        account =
+                new CreditCardSnapshot(
+                        "Citi Double Cash",
+                        CURRENCY_UNIT,
+                        CURRENT_BALANCE,
+                        CURRENT_BALANCE,
+                        CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
-
-        final CreditCardSnapshot accountSnapshot =
-                new CreditCardSnapshot(account, CURRENT_BALANCE, CURRENT_BALANCE, CURRENT_BALANCE);
-        snapshot.addAccountSnapshot(accountSnapshot);
+        snapshot.addAccountSnapshot(account);
 
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
-        account.setUser(user);
         when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
-
-        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ACCOUNT_ID))
-                .thenReturn(Optional.of(accountSnapshot));
 
         // WHEN
         final ResultActions resultActions =
@@ -88,17 +80,12 @@ class SimpleAssetSnapshotBalanceUpdateControllerTest extends AccountSnapshotAjax
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final SimpleAssetSnapshot accountSnapshot =
-                new SimpleAssetSnapshot(account, CURRENT_BALANCE);
-        snapshot.addAccountSnapshot(accountSnapshot);
+
+        snapshot.addAccountSnapshot(account);
 
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
-        account.setUser(user);
         when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
-
-        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ACCOUNT_ID))
-                .thenReturn(Optional.of(accountSnapshot));
 
         // WHEN
         final ResultActions resultActions =

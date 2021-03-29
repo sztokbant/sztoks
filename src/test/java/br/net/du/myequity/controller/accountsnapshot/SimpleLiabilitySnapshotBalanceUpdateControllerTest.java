@@ -7,18 +7,14 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
-import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MvcResult;
@@ -33,15 +29,13 @@ class SimpleLiabilitySnapshotBalanceUpdateControllerTest
     private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
 
-    @MockBean private AccountSnapshotService accountSnapshotService;
-
     SimpleLiabilitySnapshotBalanceUpdateControllerTest() {
         super("/snapshot/updateAccountBalance", "108.00");
     }
 
     @Override
     public void createEntity() {
-        account = new SimpleLiabilityAccount("Mortgage", CURRENCY_UNIT, LocalDate.now());
+        account = new SimpleLiabilitySnapshot("Mortgage", CURRENCY_UNIT, CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
     }
 
@@ -51,17 +45,11 @@ class SimpleLiabilitySnapshotBalanceUpdateControllerTest
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final SimpleLiabilitySnapshot accountSnapshot =
-                new SimpleLiabilitySnapshot(account, CURRENT_BALANCE);
-        snapshot.addAccountSnapshot(accountSnapshot);
+        snapshot.addAccountSnapshot(account);
 
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
-        account.setUser(user);
         when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
-
-        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ACCOUNT_ID))
-                .thenReturn(Optional.of(accountSnapshot));
 
         // WHEN
         final ResultActions resultActions =

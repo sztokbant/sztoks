@@ -5,9 +5,9 @@ import static br.net.du.myequity.controller.util.ControllerConstants.NAME;
 import static br.net.du.myequity.controller.util.ControllerConstants.NOT_EMPTY;
 
 import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
-import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.service.AccountService;
+import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.service.AccountSnapshotService;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.money.CurrencyUnit;
@@ -20,10 +20,10 @@ import org.springframework.validation.ValidationUtils;
 
 @Component
 public class AccountViewModelInputValidator implements SmartValidator {
-    private final AccountService accountService;
+    private final AccountSnapshotService accountService;
 
     @Autowired
-    public AccountViewModelInputValidator(final AccountService accountService) {
+    public AccountViewModelInputValidator(final AccountSnapshotService accountService) {
         this.accountService = accountService;
     }
 
@@ -43,7 +43,7 @@ public class AccountViewModelInputValidator implements SmartValidator {
 
         rejectIfInvalidAccountType(accountViewModelInput, errors);
         rejectIfInvalidCurrencyUnit(accountViewModelInput, errors);
-        rejectIfNoUserOrExistingName(accountViewModelInput, errors, validationHints);
+        rejectIfExistingName(accountViewModelInput, errors, validationHints);
     }
 
     private void rejectIfInvalidAccountType(
@@ -64,7 +64,7 @@ public class AccountViewModelInputValidator implements SmartValidator {
         }
     }
 
-    private void rejectIfNoUserOrExistingName(
+    private void rejectIfExistingName(
             final AccountViewModelInput accountViewModelInput,
             final Errors errors,
             final Object[] validationHints) {
@@ -73,10 +73,11 @@ public class AccountViewModelInputValidator implements SmartValidator {
         if (StringUtils.isNotBlank(accountViewModelInput.getName())) {
             if ((validationHints == null)
                     || (validationHints.length != 1)
-                    || !(validationHints[0] instanceof User)) {
+                    || !(validationHints[0] instanceof Snapshot)) {
                 throw new UnsupportedOperationException();
             } else {
-                final List<Account> accounts = accountService.findByUser((User) validationHints[0]);
+                final List<AccountSnapshot> accounts =
+                        accountService.findBySnapshot((Snapshot) validationHints[0]);
                 final boolean isDuplicateName =
                         accounts.stream()
                                 .anyMatch(

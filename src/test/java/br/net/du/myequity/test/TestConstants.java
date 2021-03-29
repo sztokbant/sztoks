@@ -1,9 +1,5 @@
 package br.net.du.myequity.test;
 
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.CreditCardAccount;
-import br.net.du.myequity.model.account.SimpleAssetAccount;
-import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
 import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
@@ -28,30 +24,27 @@ public class TestConstants {
 
     public static final String EXTRA_SPACES = "  ";
 
-    public static final Account SIMPLE_ASSET_ACCOUNT =
-            new SimpleAssetAccount("Savings", CurrencyUnit.USD, LocalDate.now());
+    public static final String ACCOUNT_NAME = "Account Name";
+    public static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.USD;
+
     public static final AccountSnapshot SIMPLE_ASSET_SNAPSHOT =
-            new SimpleAssetSnapshot(SIMPLE_ASSET_ACCOUNT, new BigDecimal("10000.00"));
+            new SimpleAssetSnapshot("Savings", CurrencyUnit.USD, new BigDecimal("10000.00"));
 
-    public static final Account SIMPLE_LIABILITY_ACCOUNT =
-            new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, LocalDate.now());
     public static final AccountSnapshot SIMPLE_LIABILITY_SNAPSHOT =
-            new SimpleLiabilitySnapshot(SIMPLE_LIABILITY_ACCOUNT, new BigDecimal("2500.00"));
+            new SimpleLiabilitySnapshot("Mortgage", CurrencyUnit.USD, new BigDecimal("2500.00"));
 
-    public static final Account CREDIT_CARD_ACCOUNT =
-            new CreditCardAccount("Chase Sapphire Reserve", CurrencyUnit.USD, LocalDate.now());
     public static final AccountSnapshot CREDIT_CARD_SNAPSHOT =
             new CreditCardSnapshot(
-                    CREDIT_CARD_ACCOUNT,
+                    "Chase Sapphire Reserve",
+                    CurrencyUnit.USD,
                     new BigDecimal("10000.00"),
                     new BigDecimal("9500.00"),
                     new BigDecimal("1000.00"));
 
-    public static final Account INVESTMENT_ACCOUNT =
-            new CreditCardAccount("AMZN", CurrencyUnit.USD, LocalDate.now());
     public static final AccountSnapshot INVESTMENT_SNAPSHOT =
             new InvestmentSnapshot(
-                    INVESTMENT_ACCOUNT,
+                    "AMZN",
+                    CurrencyUnit.USD,
                     new BigDecimal("175.00"),
                     new BigDecimal("1100.00"),
                     new BigDecimal("3500.00"));

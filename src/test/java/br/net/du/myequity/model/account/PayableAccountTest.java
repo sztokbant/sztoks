@@ -1,5 +1,7 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.test.TestConstants.ACCOUNT_NAME;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mockStatic;
 
@@ -10,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
 class PayableAccountTest {
-    final Account account = new PayableAccount();
 
     @Test
     public void newEmptySnapshot_happy() {
@@ -21,11 +22,12 @@ class PayableAccountTest {
         final PayableSnapshot actual;
         try (MockedStatic<LocalDate> localDateStaticMock = mockStatic(LocalDate.class)) {
             localDateStaticMock.when(LocalDate::now).thenReturn(now);
-            actual = (PayableSnapshot) account.newEmptySnapshot();
+            actual = new PayableSnapshot(ACCOUNT_NAME, CURRENCY_UNIT);
         }
 
         // THEN
-        final PayableSnapshot expected = new PayableSnapshot(account, now, BigDecimal.ZERO);
+        final PayableSnapshot expected =
+                new PayableSnapshot(ACCOUNT_NAME, CURRENCY_UNIT, now, BigDecimal.ZERO);
 
         assertTrue(actual.equalsIgnoreId(expected));
     }

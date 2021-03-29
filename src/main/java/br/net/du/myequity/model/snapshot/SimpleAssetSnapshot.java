@@ -1,9 +1,9 @@
 package br.net.du.myequity.model.snapshot;
 
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.SimpleAssetAccount;
+import br.net.du.myequity.model.account.AccountType;
 import com.google.common.annotations.VisibleForTesting;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -12,16 +12,42 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import org.joda.money.CurrencyUnit;
 
 @Entity
-@DiscriminatorValue(SimpleAssetAccount.ACCOUNT_SUB_TYPE)
+@DiscriminatorValue(SimpleAssetSnapshot.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class SimpleAssetSnapshot extends AccountSnapshot implements AmountUpdateable {
 
+    public static final String ACCOUNT_SUB_TYPE = "SIMPLE_ASSET";
+
     @Column @Getter @Setter private BigDecimal amount;
 
-    public SimpleAssetSnapshot(@NonNull final Account account, @NonNull final BigDecimal amount) {
-        super(account);
+    public SimpleAssetSnapshot(
+            @NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
+        this(name, currencyUnit, LocalDate.now());
+    }
+
+    public SimpleAssetSnapshot(
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final LocalDate createDate) {
+        this(name, currencyUnit, createDate, BigDecimal.ZERO);
+    }
+
+    public SimpleAssetSnapshot(
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final BigDecimal amount) {
+        this(name, currencyUnit, LocalDate.now(), amount);
+    }
+
+    public SimpleAssetSnapshot(
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final LocalDate createDate,
+            @NonNull final BigDecimal amount) {
+        super(name, AccountType.ASSET, currencyUnit, createDate);
         this.amount = amount;
     }
 
@@ -32,7 +58,7 @@ public class SimpleAssetSnapshot extends AccountSnapshot implements AmountUpdate
 
     @Override
     public SimpleAssetSnapshot copy() {
-        return new SimpleAssetSnapshot(account, amount);
+        return new SimpleAssetSnapshot(name, CurrencyUnit.of(currency), amount);
     }
 
     @Override
@@ -48,7 +74,6 @@ public class SimpleAssetSnapshot extends AccountSnapshot implements AmountUpdate
 
         final SimpleAssetSnapshot otherSimpleAssetSnapshot = (SimpleAssetSnapshot) other;
 
-        return account.equals(otherSimpleAssetSnapshot.getAccount())
-                && (amount.compareTo(otherSimpleAssetSnapshot.getAmount()) == 0);
+        return (amount.compareTo(otherSimpleAssetSnapshot.getAmount()) == 0);
     }
 }

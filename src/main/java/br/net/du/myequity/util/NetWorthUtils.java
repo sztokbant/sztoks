@@ -20,13 +20,10 @@ public class NetWorthUtils {
                 .map(
                         entry -> {
                             final BigDecimal amount =
-                                    entry.getAccount().getAccountType().equals(AccountType.ASSET)
+                                    entry.getAccountType().equals(AccountType.ASSET)
                                             ? entry.getTotal()
                                             : entry.getTotal().negate();
-                            return Money.of(
-                                    entry.getAccount().getCurrencyUnit(),
-                                    amount,
-                                    RoundingMode.HALF_UP);
+                            return Money.of(entry.getCurrencyUnit(), amount, RoundingMode.HALF_UP);
                         })
                 .collect(getAmountByCurrencyCollector());
     }

@@ -1,14 +1,6 @@
 package br.net.du.myequity.model;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toSet;
-
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.AccountType;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
-import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.persistence.CascadeType;
@@ -60,10 +52,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural // Ref.: https://thorben-janssen.com/ordering-vs-sorting-hibernate-use/
-    private final SortedSet<Account> accounts = new TreeSet<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @SortNatural // Ref.: https://thorben-janssen.com/ordering-vs-sorting-hibernate-use/
     private final SortedSet<Snapshot> snapshots = new TreeSet<>();
 
     public User(final String email, final String firstName, final String lastName) {
@@ -74,40 +62,6 @@ public class User {
 
     public String getFullName() {
         return String.format("%s %s", firstName, lastName);
-    }
-
-    /**
-     * Ref.: https://meri-stuff.blogspot.com/2012/03/jpa-tutorial
-     * .html#RelationshipsBidirectionalOneToManyManyToOneConsistency
-     *
-     * @return Immutable copy to prevent it from being modified from the outside.
-     */
-    public Map<AccountType, SortedSet<Account>> getAccounts() {
-        return accounts.stream()
-                .collect(
-                        collectingAndThen(
-                                groupingBy(
-                                        Account::getAccountType,
-                                        collectingAndThen(toSet(), ImmutableSortedSet::copyOf)),
-                                ImmutableMap::copyOf));
-    }
-
-    public void addAccount(final Account account) {
-        // Prevents infinite loop
-        if (accounts.contains(account)) {
-            return;
-        }
-        accounts.add(account);
-        account.setUser(this);
-    }
-
-    public void removeAccount(final Account account) {
-        // Prevents infinite loop
-        if (!accounts.contains(account)) {
-            return;
-        }
-        accounts.remove(account);
-        account.setUser(null);
     }
 
     /**

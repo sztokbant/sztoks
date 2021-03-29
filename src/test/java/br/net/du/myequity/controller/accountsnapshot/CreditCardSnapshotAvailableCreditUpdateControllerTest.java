@@ -7,18 +7,14 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.account.CreditCardAccount;
 import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
-import br.net.du.myequity.service.AccountSnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MvcResult;
@@ -35,15 +31,19 @@ class CreditCardSnapshotAvailableCreditUpdateControllerTest
     private static final BigDecimal CURRENT_TOTAL_CREDIT = new BigDecimal("3000.00");
     private static final BigDecimal CURRENT_STATEMENT = new BigDecimal("400.00");
 
-    @MockBean private AccountSnapshotService accountSnapshotService;
-
     CreditCardSnapshotAvailableCreditUpdateControllerTest() {
         super("/snapshot/updateCreditCardAvailableCredit", "2900.00");
     }
 
     @Override
     public void createEntity() {
-        account = new CreditCardAccount("Chase Sapphire Reserve", CURRENCY_UNIT, LocalDate.now());
+        account =
+                new CreditCardSnapshot(
+                        "Chase Sapphire Reserve",
+                        CURRENCY_UNIT,
+                        CURRENT_TOTAL_CREDIT,
+                        CURRENT_AVAILABLE_CREDIT,
+                        CURRENT_STATEMENT);
         account.setId(ACCOUNT_ID);
     }
 
@@ -53,18 +53,11 @@ class CreditCardSnapshotAvailableCreditUpdateControllerTest
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-        final CreditCardSnapshot creditCardSnapshot =
-                new CreditCardSnapshot(
-                        account, CURRENT_TOTAL_CREDIT, CURRENT_AVAILABLE_CREDIT, CURRENT_STATEMENT);
-        snapshot.addAccountSnapshot(creditCardSnapshot);
+        snapshot.addAccountSnapshot(account);
 
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
-        account.setUser(user);
         when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
-
-        when(accountSnapshotService.findBySnapshotIdAndAccountId(snapshot.getId(), ACCOUNT_ID))
-                .thenReturn(Optional.of(creditCardSnapshot));
 
         // WHEN
         final ResultActions resultActions =

@@ -35,8 +35,6 @@ import org.mockito.Mock;
 
 public class SnapshotServiceTest {
 
-    private static final long SNAPSHOT_INDEX = 1L;
-
     private SnapshotService snapshotService;
 
     @Mock private SnapshotRepository snapshotRepository;
@@ -53,9 +51,7 @@ public class SnapshotServiceTest {
 
         user = buildUser();
 
-        snapshot = newEmptySnapshot(SNAPSHOT_INDEX);
-        snapshot.setId(108L);
-        user.addSnapshot(snapshot);
+        snapshot = user.getSnapshots().first();
 
         snapshot.addAccountSnapshot(SIMPLE_ASSET_SNAPSHOT);
         snapshot.addAccountSnapshot(SIMPLE_LIABILITY_SNAPSHOT);
@@ -136,7 +132,7 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_first_happy() {
         // GIVEN
-        final Snapshot secondSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 1);
+        final Snapshot secondSnapshot = newEmptySnapshot(snapshot.getIndex() + 1);
         secondSnapshot.setId(99L);
         secondSnapshot.setPrevious(snapshot);
         snapshot.setNext(secondSnapshot);
@@ -151,7 +147,7 @@ public class SnapshotServiceTest {
         verify(snapshotRepository).save(eq(secondSnapshot));
 
         assertEquals(1, user.getSnapshots().size());
-        assertEquals(secondSnapshot, user.getSnapshots().iterator().next());
+        assertEquals(secondSnapshot, user.getSnapshots().first());
 
         assertNull(secondSnapshot.getPrevious());
         assertNull(secondSnapshot.getNext());
@@ -160,7 +156,7 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_last_happy() {
         // GIVEN
-        final Snapshot secondSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 1);
+        final Snapshot secondSnapshot = newEmptySnapshot(snapshot.getIndex() + 1);
         secondSnapshot.setId(99L);
         secondSnapshot.setPrevious(snapshot);
         snapshot.setNext(secondSnapshot);
@@ -175,7 +171,7 @@ public class SnapshotServiceTest {
         verify(snapshotRepository).save(eq(snapshot));
 
         assertEquals(1, user.getSnapshots().size());
-        assertEquals(snapshot, user.getSnapshots().iterator().next());
+        assertEquals(snapshot, user.getSnapshots().first());
 
         assertNull(snapshot.getPrevious());
         assertNull(snapshot.getNext());
@@ -184,15 +180,15 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_middle_happy() {
         // GIVEN
-        final Snapshot secondSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 1);
+        final Snapshot secondSnapshot = newEmptySnapshot(snapshot.getIndex() + 1);
         secondSnapshot.setId(99L);
         user.addSnapshot(secondSnapshot);
 
-        final Snapshot thirdSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 2);
+        final Snapshot thirdSnapshot = newEmptySnapshot(snapshot.getIndex() + 2);
         thirdSnapshot.setId(108L);
         user.addSnapshot(thirdSnapshot);
 
-        final Snapshot fourthSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 3);
+        final Snapshot fourthSnapshot = newEmptySnapshot(snapshot.getIndex() + 3);
         fourthSnapshot.setId(144L);
         user.addSnapshot(fourthSnapshot);
 

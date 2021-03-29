@@ -1,16 +1,18 @@
 package br.net.du.myequity.model.snapshot;
 
 import br.net.du.myequity.model.Snapshot;
-import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.util.SnapshotUtils;
 import com.google.common.annotations.VisibleForTesting;
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
@@ -18,32 +20,67 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.Setter;
+import org.joda.money.CurrencyUnit;
 
 @Entity
 @Table(name = "account_snapshots")
-@IdClass(AccountSnapshot.PK.class)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = Account.DISCRIMINATOR_COLUMN)
+@DiscriminatorColumn(name = AccountSnapshot.DISCRIMINATOR_COLUMN)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
-    public static class PK implements Serializable {
-        private Long account;
-        private Long snapshot;
-    }
+    public static final String DISCRIMINATOR_COLUMN = "account_sub_type";
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
-    Account account;
+    @Setter // for testing
+    protected Long id;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @Getter
     private Snapshot snapshot;
 
-    public AccountSnapshot(@NonNull final Account account) {
-        this.account = account;
+    @Column(nullable = false)
+    @Getter
+    @Setter
+    protected String name;
+
+    @Column(nullable = false)
+    @Getter
+    @Setter
+    private AccountType accountType;
+
+    @Column(nullable = false)
+    protected String currency;
+
+    @Column(nullable = false)
+    @Getter
+    @Setter
+    private LocalDate createDate;
+
+    AccountSnapshot(
+            final String name,
+            final AccountType accountType,
+            final CurrencyUnit currencyUnit,
+            final LocalDate createDate) {
+        this.name = name;
+        this.accountType = accountType;
+        this.currency = currencyUnit.getCode();
+        this.createDate = createDate;
+    }
+
+    AccountSnapshot(
+            final String name, final AccountType accountType, final CurrencyUnit currencyUnit) {
+        this(name, accountType, currencyUnit, LocalDate.now());
+    }
+
+    public CurrencyUnit getCurrencyUnit() {
+        return CurrencyUnit.of(currency);
+    }
+
+    public void setCurrencyUnit(final CurrencyUnit currencyUnit) {
+        currency = currencyUnit.getCode();
     }
 
     public abstract BigDecimal getTotal();
@@ -81,12 +118,13 @@ public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
             return false;
         }
 
+        if (id == null) {
+            return false;
+        }
+
         final AccountSnapshot otherAccountSnapshot = (AccountSnapshot) other;
 
-        return (account != null)
-                && account.equals(otherAccountSnapshot.getAccount())
-                && (snapshot != null)
-                && snapshot.equals(otherAccountSnapshot.getSnapshot());
+        return id.equals(otherAccountSnapshot.getId());
     }
 
     @Override
@@ -96,11 +134,6 @@ public abstract class AccountSnapshot implements Comparable<AccountSnapshot> {
 
     @Override
     public int compareTo(final AccountSnapshot other) {
-        if (snapshot != null
-                && other.getSnapshot() != null
-                && !snapshot.equals(other.getSnapshot())) {
-            return snapshot.compareTo(other.getSnapshot());
-        }
-        return account.compareTo(other.getAccount());
+        return name.compareTo(other.getName());
     }
 }

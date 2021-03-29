@@ -7,11 +7,12 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
-import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.SimpleAssetAccount;
-import br.net.du.myequity.service.AccountService;
+import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
+import br.net.du.myequity.service.AccountSnapshotService;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSortedSet;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.money.CurrencyUnit;
@@ -28,13 +29,13 @@ class AccountViewModelInputValidatorTest {
     private static final String ANOTHER_ACCOUNT_NAME = "Another Account";
     private static final String CURRENCY_UNIT = "USD";
 
-    @Mock private AccountService accountService;
+    @Mock private AccountSnapshotService accountService;
 
     private AccountViewModelInputValidator accountViewModelInputValidator;
 
     private AccountViewModelInput accountViewModelInput;
 
-    private User user;
+    private Snapshot snapshot;
 
     private Errors errors;
 
@@ -42,8 +43,8 @@ class AccountViewModelInputValidatorTest {
     public void setUp() {
         initMocks(this);
 
-        user = new User();
-        user.setId(42L);
+        snapshot = new Snapshot(1L, "Snapshot Name", ImmutableSortedSet.of(), ImmutableList.of());
+        snapshot.setId(42L);
 
         accountViewModelInputValidator = new AccountViewModelInputValidator(accountService);
 
@@ -69,7 +70,7 @@ class AccountViewModelInputValidatorTest {
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
-        accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
         assertFalse(errors.hasErrors());
@@ -80,10 +81,10 @@ class AccountViewModelInputValidatorTest {
         // GIVEN
         populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(
-                ImmutableList.of(new SimpleAssetAccount(ANOTHER_ACCOUNT_NAME, CurrencyUnit.USD)));
+                ImmutableList.of(new SimpleAssetSnapshot(ANOTHER_ACCOUNT_NAME, CurrencyUnit.USD)));
 
         // WHEN
-        accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
         assertFalse(errors.hasErrors());
@@ -96,7 +97,7 @@ class AccountViewModelInputValidatorTest {
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
-        accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -109,7 +110,7 @@ class AccountViewModelInputValidatorTest {
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
-        accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -122,7 +123,7 @@ class AccountViewModelInputValidatorTest {
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
-        accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -135,7 +136,7 @@ class AccountViewModelInputValidatorTest {
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
-        accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -148,7 +149,7 @@ class AccountViewModelInputValidatorTest {
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
-        accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -161,7 +162,7 @@ class AccountViewModelInputValidatorTest {
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
-        accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -174,7 +175,7 @@ class AccountViewModelInputValidatorTest {
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
-        accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -185,10 +186,10 @@ class AccountViewModelInputValidatorTest {
         // GIVEN
         populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(
-                ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
+                ImmutableList.of(new SimpleAssetSnapshot(ACCOUNT_NAME, CurrencyUnit.USD)));
 
         // WHEN
-        accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -199,10 +200,10 @@ class AccountViewModelInputValidatorTest {
         // GIVEN
         populateAccountForm(" " + ACCOUNT_NAME + " ", TYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(
-                ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
+                ImmutableList.of(new SimpleAssetSnapshot(ACCOUNT_NAME, CurrencyUnit.USD)));
 
         // WHEN
-        accountViewModelInputValidator.validate(accountViewModelInput, errors, user);
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -255,7 +256,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInput.setCurrencyUnit(currency);
     }
 
-    private void defineExistingAccounts(final List<Account> accounts) {
-        when(accountService.findByUser(user)).thenReturn(accounts);
+    private void defineExistingAccounts(final List<AccountSnapshot> accounts) {
+        when(accountService.findBySnapshot(snapshot)).thenReturn(accounts);
     }
 }

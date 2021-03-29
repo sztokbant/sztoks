@@ -8,7 +8,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.controller.viewmodel.EntityRenameJsonRequest;
-import br.net.du.myequity.model.account.SimpleLiabilityAccount;
+import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
@@ -47,7 +47,7 @@ class AccountRenameControllerTest extends AccountControllerTestBase {
 
     @Override
     public void createEntity() {
-        account = new SimpleLiabilityAccount(ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now());
+        account = new SimpleLiabilitySnapshot(ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now());
         account.setId(ACCOUNT_ID);
     }
 
@@ -56,7 +56,8 @@ class AccountRenameControllerTest extends AccountControllerTestBase {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        account.setUser(user);
+        user.getSnapshots().first().addAccountSnapshot(account);
+
         when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN

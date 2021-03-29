@@ -42,7 +42,7 @@ public class CreditCardViewModelOutput extends AccountSnapshotViewModelOutput {
             final AccountSnapshot accountSnapshot, final boolean includeTotals) {
         final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
 
-        final CurrencyUnit currencyUnit = accountSnapshot.getAccount().getCurrencyUnit();
+        final CurrencyUnit currencyUnit = accountSnapshot.getCurrencyUnit();
 
         final String totalCredit =
                 MoneyFormatUtils.format(

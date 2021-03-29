@@ -6,8 +6,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.service.AccountService;
+import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.service.AccountSnapshotService;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,9 +18,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 public abstract class AccountControllerTestBase extends AjaxControllerTestBase {
     static final Long ACCOUNT_ID = 1L;
 
-    @MockBean protected AccountService accountService;
+    @MockBean protected AccountSnapshotService accountService;
 
-    protected Account account;
+    protected AccountSnapshot account;
 
     public AccountControllerTestBase(final String url) {
         super(url);
@@ -55,7 +55,6 @@ public abstract class AccountControllerTestBase extends AjaxControllerTestBase {
         final Long anotherUserId = user.getId() * 7;
         anotherUser.setId(anotherUserId);
 
-        account.setUser(anotherUser);
         when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN

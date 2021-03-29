@@ -1,10 +1,10 @@
 package br.net.du.myequity.model.snapshot;
 
-import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.InvestmentAccount;
+import br.net.du.myequity.model.account.AccountType;
 import com.google.common.annotations.VisibleForTesting;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -13,11 +13,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import org.joda.money.CurrencyUnit;
 
 @Entity
-@DiscriminatorValue(InvestmentAccount.ACCOUNT_SUB_TYPE)
+@DiscriminatorValue(InvestmentSnapshot.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class InvestmentSnapshot extends AccountSnapshot {
+
+    public static final String ACCOUNT_SUB_TYPE = "INVESTMENT";
 
     @Column @Getter @Setter private BigDecimal shares;
 
@@ -26,11 +29,34 @@ public class InvestmentSnapshot extends AccountSnapshot {
     @Column @Getter @Setter private BigDecimal currentShareValue;
 
     public InvestmentSnapshot(
-            @NonNull final Account account,
+            @NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
+        this(name, currencyUnit, LocalDate.now());
+    }
+
+    public InvestmentSnapshot(
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final LocalDate createDate) {
+        this(name, currencyUnit, createDate, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+    }
+
+    public InvestmentSnapshot(
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
             @NonNull final BigDecimal shares,
             @NonNull final BigDecimal originalShareValue,
             @NonNull final BigDecimal currentShareValue) {
-        super(account);
+        this(name, currencyUnit, LocalDate.now(), shares, originalShareValue, currentShareValue);
+    }
+
+    public InvestmentSnapshot(
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final LocalDate createDate,
+            @NonNull final BigDecimal shares,
+            @NonNull final BigDecimal originalShareValue,
+            @NonNull final BigDecimal currentShareValue) {
+        super(name, AccountType.ASSET, currencyUnit, createDate);
         this.shares = shares;
         this.originalShareValue = originalShareValue;
         this.currentShareValue = currentShareValue;
@@ -43,7 +69,8 @@ public class InvestmentSnapshot extends AccountSnapshot {
 
     @Override
     public InvestmentSnapshot copy() {
-        return new InvestmentSnapshot(account, shares, originalShareValue, currentShareValue);
+        return new InvestmentSnapshot(
+                name, CurrencyUnit.of(currency), shares, originalShareValue, currentShareValue);
     }
 
     @Override
@@ -59,8 +86,7 @@ public class InvestmentSnapshot extends AccountSnapshot {
 
         final InvestmentSnapshot otherInvestmentSnapshot = (InvestmentSnapshot) other;
 
-        return account.equals(otherInvestmentSnapshot.getAccount())
-                && (shares.compareTo(otherInvestmentSnapshot.getShares()) == 0)
+        return (shares.compareTo(otherInvestmentSnapshot.getShares()) == 0)
                 && (originalShareValue.compareTo(otherInvestmentSnapshot.getOriginalShareValue())
                         == 0)
                 && (currentShareValue.compareTo(otherInvestmentSnapshot.getCurrentShareValue())
