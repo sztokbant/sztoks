@@ -7,6 +7,7 @@ import org.joda.money.CurrencyUnit;
 @Data
 public class AccountViewModelInput {
     private String name;
+    private String accountType;
     private String typeName;
     private String currencyUnit;
 
