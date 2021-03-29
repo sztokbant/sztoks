@@ -4,9 +4,9 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
 
+import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
+import br.net.du.myequity.model.account.CreditCardAccount;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import br.net.du.myequity.model.util.UserUtils;
@@ -86,7 +86,7 @@ public class Snapshot implements Comparable<Snapshot> {
 
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural // Ref.: https://thorben-janssen.com/ordering-vs-sorting-hibernate-use/
-    private final SortedSet<AccountSnapshot> accountSnapshots = new TreeSet<>();
+    private final SortedSet<Account> accounts = new TreeSet<>();
 
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, orphanRemoval = true)
     // this should match Transaction::compareTo()
@@ -96,52 +96,51 @@ public class Snapshot implements Comparable<Snapshot> {
     public Snapshot(
             final Long index,
             final String name,
-            @NotNull final SortedSet<AccountSnapshot> accountSnapshots,
+            @NotNull final SortedSet<Account> accounts,
             @NonNull final List<Transaction> transactions) {
         this.index = index;
 
         this.name = name;
 
-        accountSnapshots.stream()
-                .forEach(accountSnapshot -> addAccountSnapshot(accountSnapshot.copy()));
+        accounts.stream().forEach(account -> addAccount(account.copy()));
 
         transactions.stream().forEach(transaction -> addTransaction(transaction.copy()));
     }
 
-    public SortedSet<AccountSnapshot> getAccountSnapshots() {
-        return ImmutableSortedSet.copyOf(accountSnapshots);
+    public SortedSet<Account> getAccounts() {
+        return ImmutableSortedSet.copyOf(accounts);
     }
 
-    public Map<AccountType, SortedSet<AccountSnapshot>> getAccountSnapshotsByType() {
-        return accountSnapshots.stream()
+    public Map<AccountType, SortedSet<Account>> getAccountsByType() {
+        return accounts.stream()
                 .collect(
                         collectingAndThen(
                                 groupingBy(
-                                        accountSnapshotData -> accountSnapshotData.getAccountType(),
+                                        accountData -> accountData.getAccountType(),
                                         collectingAndThen(toSet(), ImmutableSortedSet::copyOf)),
                                 ImmutableMap::copyOf));
     }
 
-    public Optional<AccountSnapshot> getAccountSnapshotById(@NonNull final Long id) {
-        return accountSnapshots.stream().filter(entry -> id.equals(entry.getId())).findFirst();
+    public Optional<Account> getAccountById(@NonNull final Long id) {
+        return accounts.stream().filter(entry -> id.equals(entry.getId())).findFirst();
     }
 
-    public void addAccountSnapshot(@NonNull final AccountSnapshot accountSnapshot) {
+    public void addAccount(@NonNull final Account account) {
         // Prevents infinite loop
-        if (accountSnapshots.contains(accountSnapshot)) {
+        if (accounts.contains(account)) {
             return;
         }
-        accountSnapshots.add(accountSnapshot);
-        accountSnapshot.setSnapshot(this);
+        accounts.add(account);
+        account.setSnapshot(this);
     }
 
-    public void removeAccountSnapshot(@NonNull final AccountSnapshot accountSnapshot) {
+    public void removeAccount(@NonNull final Account account) {
         // Prevents infinite loop
-        if (!accountSnapshots.contains(accountSnapshot)) {
+        if (!accounts.contains(account)) {
             return;
         }
-        accountSnapshots.remove(accountSnapshot);
-        accountSnapshot.setSnapshot(null);
+        accounts.remove(account);
+        account.setSnapshot(null);
     }
 
     public SortedSet<Transaction> getTransactions() {
@@ -202,13 +201,13 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     public Map<CurrencyUnit, BigDecimal> getNetWorth() {
-        return NetWorthUtils.breakDownAccountSnapshotsByCurrency(accountSnapshots);
+        return NetWorthUtils.breakDownAccountsByCurrency(accounts);
     }
 
     public Map<CurrencyUnit, BigDecimal> getTotalForAccountType(
             @NonNull final AccountType accountType) {
-        return NetWorthUtils.breakDownAccountSnapshotsByCurrency(
-                accountSnapshots.stream()
+        return NetWorthUtils.breakDownAccountsByCurrency(
+                accounts.stream()
                         .filter(entry -> entry.getAccountType().equals(accountType))
                         .collect(Collectors.toSet()));
     }
@@ -222,21 +221,21 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     /** Create transient CreditCardSnapshot objects aggregated by currency unit. */
-    public Map<CurrencyUnit, CreditCardSnapshot> getCreditCardTotals() {
-        final Map<CurrencyUnit, CreditCardSnapshot> creditCardTotals = new HashMap<>();
+    public Map<CurrencyUnit, CreditCardAccount> getCreditCardTotals() {
+        final Map<CurrencyUnit, CreditCardAccount> creditCardTotals = new HashMap<>();
 
-        for (final AccountSnapshot accountSnapshot : accountSnapshots) {
-            if (!(accountSnapshot instanceof CreditCardSnapshot)) {
+        for (final Account account : accounts) {
+            if (!(account instanceof CreditCardAccount)) {
                 continue;
             }
 
-            final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
+            final CreditCardAccount creditCardSnapshot = (CreditCardAccount) account;
             final CurrencyUnit currencyUnit = creditCardSnapshot.getCurrencyUnit();
 
             if (!creditCardTotals.containsKey(currencyUnit)) {
                 creditCardTotals.put(currencyUnit, creditCardSnapshot.copy());
             } else {
-                final CreditCardSnapshot creditCardSnapshotForCurrency =
+                final CreditCardAccount creditCardSnapshotForCurrency =
                         creditCardTotals.get(currencyUnit);
                 updateCreditCardSnapshotForCurrency(
                         creditCardSnapshot, creditCardSnapshotForCurrency);
@@ -248,17 +247,17 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     /** Create transient CreditCardSnapshot object for specified currency unit. */
-    public CreditCardSnapshot getCreditCardTotalsForCurrencyUnit(
+    public CreditCardAccount getCreditCardTotalsForCurrencyUnit(
             @NonNull final CurrencyUnit currencyUnit) {
-        CreditCardSnapshot creditCardTotalsForCurrencyUnit = null;
+        CreditCardAccount creditCardTotalsForCurrencyUnit = null;
 
-        for (final AccountSnapshot accountSnapshot : accountSnapshots) {
-            if (!(accountSnapshot instanceof CreditCardSnapshot)
-                    || !accountSnapshot.getCurrencyUnit().equals(currencyUnit)) {
+        for (final Account account : accounts) {
+            if (!(account instanceof CreditCardAccount)
+                    || !account.getCurrencyUnit().equals(currencyUnit)) {
                 continue;
             }
 
-            final CreditCardSnapshot creditCardSnapshot = (CreditCardSnapshot) accountSnapshot;
+            final CreditCardAccount creditCardSnapshot = (CreditCardAccount) account;
 
             if (creditCardTotalsForCurrencyUnit == null) {
                 creditCardTotalsForCurrencyUnit = creditCardSnapshot.copy();
@@ -272,8 +271,8 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     private void updateCreditCardSnapshotForCurrency(
-            final CreditCardSnapshot creditCardSnapshot,
-            final CreditCardSnapshot creditCardSnapshotForCurrency) {
+            final CreditCardAccount creditCardSnapshot,
+            final CreditCardAccount creditCardSnapshotForCurrency) {
         creditCardSnapshotForCurrency.setAvailableCredit(
                 creditCardSnapshotForCurrency
                         .getAvailableCredit()

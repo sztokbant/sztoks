@@ -1,12 +1,12 @@
 package br.net.du.myequity.service;
 
 import static br.net.du.myequity.test.ModelTestUtils.buildUser;
-import static br.net.du.myequity.test.TestConstants.CREDIT_CARD_SNAPSHOT;
-import static br.net.du.myequity.test.TestConstants.INVESTMENT_SNAPSHOT;
-import static br.net.du.myequity.test.TestConstants.SIMPLE_ASSET_SNAPSHOT;
-import static br.net.du.myequity.test.TestConstants.SIMPLE_LIABILITY_SNAPSHOT;
+import static br.net.du.myequity.test.TestConstants.newCreditCardAccount;
+import static br.net.du.myequity.test.TestConstants.newInvestmentAccount;
 import static br.net.du.myequity.test.TestConstants.newRecurringDonation;
 import static br.net.du.myequity.test.TestConstants.newRecurringIncome;
+import static br.net.du.myequity.test.TestConstants.newSimpleAssetAccount;
+import static br.net.du.myequity.test.TestConstants.newSimpleLiabilityAccount;
 import static br.net.du.myequity.test.TestConstants.newSingleDonation;
 import static br.net.du.myequity.test.TestConstants.newSingleIncome;
 import static br.net.du.myequity.test.TestConstants.now;
@@ -22,7 +22,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import br.net.du.myequity.exception.MyEquityException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import com.google.common.collect.ImmutableList;
@@ -53,10 +53,10 @@ public class SnapshotServiceTest {
 
         snapshot = user.getSnapshots().first();
 
-        snapshot.addAccountSnapshot(SIMPLE_ASSET_SNAPSHOT);
-        snapshot.addAccountSnapshot(SIMPLE_LIABILITY_SNAPSHOT);
-        snapshot.addAccountSnapshot(CREDIT_CARD_SNAPSHOT);
-        snapshot.addAccountSnapshot(INVESTMENT_SNAPSHOT);
+        snapshot.addAccount(newSimpleAssetAccount());
+        snapshot.addAccount(newSimpleLiabilityAccount());
+        snapshot.addAccount(newCreditCardAccount());
+        snapshot.addAccount(newInvestmentAccount());
 
         snapshot.addTransaction(newRecurringIncome());
         snapshot.addTransaction(newSingleIncome());
@@ -72,15 +72,15 @@ public class SnapshotServiceTest {
         final Snapshot newSnapshot = snapshotService.newSnapshot(user);
 
         // THEN
-        final SortedSet<AccountSnapshot> originalAccountSnapshots = snapshot.getAccountSnapshots();
-        final SortedSet<AccountSnapshot> newAccountSnapshots = newSnapshot.getAccountSnapshots();
-        assertEquals(originalAccountSnapshots.size(), newAccountSnapshots.size());
+        final SortedSet<Account> originalAccounts = snapshot.getAccounts();
+        final SortedSet<Account> newAccounts = newSnapshot.getAccounts();
+        assertEquals(originalAccounts.size(), newAccounts.size());
 
-        for (final AccountSnapshot originalAccountSnapshot : originalAccountSnapshots) {
+        for (final Account originalAccount : originalAccounts) {
             boolean found = false;
-            for (final AccountSnapshot newAccountSnapshot : newAccountSnapshots) {
-                if (newAccountSnapshot.getClass().isInstance(originalAccountSnapshot)) {
-                    found = newAccountSnapshot.equalsIgnoreId(originalAccountSnapshot);
+            for (final Account newAccount : newAccounts) {
+                if (newAccount.getClass().isInstance(originalAccount)) {
+                    found = newAccount.equalsIgnoreId(originalAccount);
                     break;
                 }
             }

@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller.viewmodel;
 
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.account.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +12,7 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
     private final Long id;
     private final String name;
 
-    public static AccountViewModelOutput of(final AccountSnapshot account) {
+    public static AccountViewModelOutput of(final Account account) {
         return AccountViewModelOutput.builder().id(account.getId()).name(account.getName()).build();
     }
 

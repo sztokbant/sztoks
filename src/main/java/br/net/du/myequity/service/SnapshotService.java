@@ -27,7 +27,7 @@ public class SnapshotService {
                 new Snapshot(
                         currentSnapshot.getIndex() + 1,
                         LocalDate.now().toString(),
-                        currentSnapshot.getAccountSnapshots(),
+                        currentSnapshot.getAccounts(),
                         currentSnapshot.getRecurringTransactions());
 
         currentSnapshot.setNext(newSnapshot);
@@ -61,8 +61,7 @@ public class SnapshotService {
                     "Snapshot cannot be deleted as it is the only remaining snapshot.");
         }
 
-        snapshot.getAccountSnapshots()
-                .forEach(accountSnapshot -> snapshot.removeAccountSnapshot(accountSnapshot));
+        snapshot.getAccounts().forEach(account -> snapshot.removeAccount(account));
 
         snapshot.getTransactions().forEach(transaction -> snapshot.removeTransaction(transaction));
 

@@ -35,15 +35,15 @@
             <spring:bind path="typeName">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <div>
-                        <form:radiobutton path="typeName" value="SimpleLiabilitySnapshot" id="simpleLiabilityRadio"/>
+                        <form:radiobutton path="typeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"/>
                         <label for="simpleLiabilityRadio">Simple Liability</label>
                     </div>
                     <div>
-                        <form:radiobutton path="typeName" value="PayableSnapshot" id="payableRadio"/>
+                        <form:radiobutton path="typeName" value="PayableAccount" id="payableRadio"/>
                         <label for="payableRadio">Payable</label>
                     </div>
                     <div>
-                        <form:radiobutton path="typeName" value="CreditCardSnapshot" id="creditCardRadio"/>
+                        <form:radiobutton path="typeName" value="CreditCardAccount" id="creditCardRadio"/>
                         <label for="creditCardRadio">Credit Card</label>
                     </div>
                     <form:errors path="typeName"/>

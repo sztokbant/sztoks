@@ -1,0 +1,10 @@
+package br.net.du.myequity.persistence;
+
+import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.account.Account;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AccountRepository extends JpaRepository<Account, Long> {
+    List<Account> findBySnapshot(Snapshot snapshot);
+}

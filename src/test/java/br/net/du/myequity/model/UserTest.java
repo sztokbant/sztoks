@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
-import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
+import br.net.du.myequity.model.account.SimpleAssetAccount;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Iterator;
@@ -24,8 +24,8 @@ class UserTest {
     private static final long SNAPSHOT_INDEX = 1L;
 
     private User user;
-    private SimpleAssetSnapshot simpleAssetAccount;
-    private SimpleLiabilitySnapshot simpleLiabilityAccount;
+    private SimpleAssetAccount simpleAssetAccount;
+    private SimpleLiabilityAccount simpleLiabilityAccount;
     private Snapshot snapshot;
 
     @BeforeEach
@@ -33,10 +33,10 @@ class UserTest {
         user = new User(EMAIL, FIRST_NAME, LAST_NAME);
         user.setId(1L);
 
-        simpleAssetAccount = new SimpleAssetSnapshot("Asset Account", CurrencyUnit.USD);
+        simpleAssetAccount = new SimpleAssetAccount("Asset Account", CurrencyUnit.USD);
         simpleAssetAccount.setId(99L);
 
-        simpleLiabilityAccount = new SimpleLiabilitySnapshot("Liability Account", CurrencyUnit.USD);
+        simpleLiabilityAccount = new SimpleLiabilityAccount("Liability Account", CurrencyUnit.USD);
         simpleLiabilityAccount.setId(7L);
 
         snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());

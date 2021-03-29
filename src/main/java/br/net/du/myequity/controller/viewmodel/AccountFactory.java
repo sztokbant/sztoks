@@ -1,20 +1,20 @@
 package br.net.du.myequity.controller.viewmodel;
 
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.account.Account;
 import java.lang.reflect.Constructor;
 import org.joda.money.CurrencyUnit;
 
 public class AccountFactory {
-    static AccountSnapshot newInstance(
+    static Account newInstance(
             final String typeName, final String name, final CurrencyUnit currencyUnit) {
-        final String packageName = AccountSnapshot.class.getPackage().getName();
+        final String packageName = Account.class.getPackage().getName();
         try {
-            final Class<? extends AccountSnapshot> clazz =
+            final Class<? extends Account> clazz =
                     Class.forName(String.format("%s.%s", packageName, typeName))
-                            .asSubclass(AccountSnapshot.class);
+                            .asSubclass(Account.class);
             final Constructor constructor =
                     clazz.getDeclaredConstructor(String.class, CurrencyUnit.class);
-            return (AccountSnapshot) constructor.newInstance(name, currencyUnit);
+            return (Account) constructor.newInstance(name, currencyUnit);
         } catch (final Exception e) {
             throw new RuntimeException("Account creation error", e);
         }

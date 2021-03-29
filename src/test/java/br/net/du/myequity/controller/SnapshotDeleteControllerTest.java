@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

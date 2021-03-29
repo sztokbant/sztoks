@@ -1,7 +1,7 @@
 package br.net.du.myequity.util;
 
+import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.model.transaction.Transaction;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -14,8 +14,8 @@ import org.joda.money.Money;
 
 public class NetWorthUtils {
 
-    public static Map<CurrencyUnit, BigDecimal> breakDownAccountSnapshotsByCurrency(
-            final Set<AccountSnapshot> accountBalances) {
+    public static Map<CurrencyUnit, BigDecimal> breakDownAccountsByCurrency(
+            final Set<Account> accountBalances) {
         return accountBalances.stream()
                 .map(
                         entry -> {

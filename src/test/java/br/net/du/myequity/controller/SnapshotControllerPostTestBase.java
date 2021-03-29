@@ -9,7 +9,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.service.AccountSnapshotService;
+import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,11 +21,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 abstract class SnapshotControllerPostTestBase extends PostControllerTestBase {
 
-    protected static final long SNAPSHOT_ID = 1L;
-
     @MockBean protected SnapshotService snapshotService;
 
-    @MockBean protected AccountSnapshotService accountService;
+    @MockBean protected AccountService accountService;
 
     protected User anotherUser;
 

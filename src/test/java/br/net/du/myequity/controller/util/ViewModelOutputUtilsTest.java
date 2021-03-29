@@ -3,13 +3,13 @@ package br.net.du.myequity.controller.util;
 import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getViewModelOutputClass;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import br.net.du.myequity.controller.viewmodel.accountsnapshot.AccountSnapshotViewModelOutput;
-import br.net.du.myequity.controller.viewmodel.accountsnapshot.CreditCardViewModelOutput;
-import br.net.du.myequity.controller.viewmodel.accountsnapshot.InvestmentViewModelOutput;
-import br.net.du.myequity.controller.viewmodel.accountsnapshot.PayableViewModelOutput;
-import br.net.du.myequity.controller.viewmodel.accountsnapshot.ReceivableViewModelOutput;
-import br.net.du.myequity.controller.viewmodel.accountsnapshot.SimpleAssetViewModelOutput;
-import br.net.du.myequity.controller.viewmodel.accountsnapshot.SimpleLiabilityViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.CreditCardAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.InvestmentAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.PayableAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.ReceivableAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.SimpleAssetAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.SimpleLiabilityAccountViewModelOutput;
 import org.junit.jupiter.api.Test;
 
 public class ViewModelOutputUtilsTest {
@@ -17,27 +17,27 @@ public class ViewModelOutputUtilsTest {
     @Test
     public void getViewModelOutputClass_happy() throws Exception {
         assertEquals(
-                CreditCardViewModelOutput.class,
-                getViewModelOutputClass("CreditCard", AccountSnapshotViewModelOutput.class));
+                CreditCardAccountViewModelOutput.class,
+                getViewModelOutputClass("CreditCardAccount", AccountViewModelOutput.class));
 
         assertEquals(
-                InvestmentViewModelOutput.class,
-                getViewModelOutputClass("Investment", AccountSnapshotViewModelOutput.class));
+                InvestmentAccountViewModelOutput.class,
+                getViewModelOutputClass("InvestmentAccount", AccountViewModelOutput.class));
 
         assertEquals(
-                ReceivableViewModelOutput.class,
-                getViewModelOutputClass("Receivable", AccountSnapshotViewModelOutput.class));
+                ReceivableAccountViewModelOutput.class,
+                getViewModelOutputClass("ReceivableAccount", AccountViewModelOutput.class));
 
         assertEquals(
-                PayableViewModelOutput.class,
-                getViewModelOutputClass("Payable", AccountSnapshotViewModelOutput.class));
+                PayableAccountViewModelOutput.class,
+                getViewModelOutputClass("PayableAccount", AccountViewModelOutput.class));
 
         assertEquals(
-                SimpleAssetViewModelOutput.class,
-                getViewModelOutputClass("SimpleAsset", AccountSnapshotViewModelOutput.class));
+                SimpleAssetAccountViewModelOutput.class,
+                getViewModelOutputClass("SimpleAssetAccount", AccountViewModelOutput.class));
 
         assertEquals(
-                SimpleLiabilityViewModelOutput.class,
-                getViewModelOutputClass("SimpleLiability", AccountSnapshotViewModelOutput.class));
+                SimpleLiabilityAccountViewModelOutput.class,
+                getViewModelOutputClass("SimpleLiabilityAccount", AccountViewModelOutput.class));
     }
 }

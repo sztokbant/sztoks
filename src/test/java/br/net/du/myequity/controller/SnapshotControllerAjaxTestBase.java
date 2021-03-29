@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -18,8 +19,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public abstract class SnapshotControllerAjaxTestBase extends AjaxControllerTestBase {
-
-    protected static final Long SNAPSHOT_ID = 1L;
 
     @MockBean protected SnapshotService snapshotService;
 

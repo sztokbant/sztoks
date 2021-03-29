@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.test.ControllerTestUtils.verifyRedirect;
+import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.myequity.test.ModelTestUtils.buildUser;
 import static br.net.du.myequity.test.TestConstants.now;
 import static org.mockito.ArgumentMatchers.eq;
@@ -9,10 +10,10 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
-import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
-import br.net.du.myequity.service.AccountSnapshotService;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.SimpleAssetAccount;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
+import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
@@ -29,20 +30,19 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
 
     protected static final long ASSET_ACCOUNT_ID = 42L;
     protected static final long LIABILITY_ACCOUNT_ID = 72L;
-    protected static final long SNAPSHOT_ID = 99L;
     protected static final long SNAPSHOT_INDEX = 1L;
 
     @MockBean protected SnapshotService snapshotService;
 
-    @MockBean protected AccountSnapshotService accountService;
+    @MockBean protected AccountService accountService;
 
     protected User anotherUser;
 
     protected Snapshot snapshot;
 
-    protected AccountSnapshot assetAccount;
+    protected Account assetAccount;
 
-    protected AccountSnapshot liabilityAccount;
+    protected Account liabilityAccount;
 
     public SnapshotControllerGetTestBase(final String url) {
         super(url);
@@ -57,11 +57,11 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
         snapshot.setId(SNAPSHOT_ID);
 
         assetAccount =
-                new SimpleAssetSnapshot("Checking Account", CurrencyUnit.USD, LocalDate.now());
+                new SimpleAssetAccount("Checking Account", CurrencyUnit.USD, LocalDate.now());
         assetAccount.setId(ASSET_ACCOUNT_ID);
 
         liabilityAccount =
-                new SimpleLiabilitySnapshot("Mortgage", CurrencyUnit.USD, LocalDate.now());
+                new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, LocalDate.now());
         liabilityAccount.setId(LIABILITY_ACCOUNT_ID);
     }
 

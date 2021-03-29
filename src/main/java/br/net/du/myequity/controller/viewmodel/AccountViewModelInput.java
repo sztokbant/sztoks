@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller.viewmodel;
 
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.account.Account;
 import lombok.Data;
 import org.joda.money.CurrencyUnit;
 
@@ -11,7 +11,7 @@ public class AccountViewModelInput {
     private String typeName;
     private String currencyUnit;
 
-    public AccountSnapshot toAccount() {
+    public Account toAccount() {
         return AccountFactory.newInstance(typeName, name, CurrencyUnit.of(currencyUnit));
     }
 }

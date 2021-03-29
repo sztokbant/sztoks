@@ -1,20 +1,20 @@
 package br.net.du.myequity.controller.viewmodel;
 
-import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getAccountSnapshotViewModelOutputFactoryMethod;
+import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getAccountViewModelOutputFactoryMethod;
 import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getTransactionViewModelOutputFactoryMethod;
 import static java.util.stream.Collectors.toList;
 
 import br.net.du.myequity.controller.util.MoneyFormatUtils;
-import br.net.du.myequity.controller.viewmodel.accountsnapshot.AccountSnapshotViewModelOutput;
-import br.net.du.myequity.controller.viewmodel.accountsnapshot.CreditCardViewModelOutput;
-import br.net.du.myequity.controller.viewmodel.accountsnapshot.InvestmentViewModelOutput;
-import br.net.du.myequity.controller.viewmodel.accountsnapshot.PayableViewModelOutput;
-import br.net.du.myequity.controller.viewmodel.accountsnapshot.ReceivableViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.CreditCardAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.InvestmentAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.PayableAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.ReceivableAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
+import br.net.du.myequity.model.account.CreditCardAccount;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import com.google.common.collect.ImmutableList;
@@ -50,19 +50,19 @@ public class SnapshotViewModelOutput {
     private final Long nextId;
     private final String nextName;
 
-    private final List<AccountSnapshotViewModelOutput> simpleAssetAccounts;
-    private final List<AccountSnapshotViewModelOutput> receivableAccounts;
-    private final List<AccountSnapshotViewModelOutput> investmentAccounts;
-    private final List<AccountSnapshotViewModelOutput> simpleLiabilityAccounts;
-    private final List<AccountSnapshotViewModelOutput> payableAccounts;
-    private final List<AccountSnapshotViewModelOutput> creditCardAccounts;
+    private final List<AccountViewModelOutput> simpleAssetAccounts;
+    private final List<AccountViewModelOutput> receivableAccounts;
+    private final List<AccountViewModelOutput> investmentAccounts;
+    private final List<AccountViewModelOutput> simpleLiabilityAccounts;
+    private final List<AccountViewModelOutput> payableAccounts;
+    private final List<AccountViewModelOutput> creditCardAccounts;
 
     private final List<TransactionViewModelOutput> incomes;
     private final List<TransactionViewModelOutput> investments;
     private final List<TransactionViewModelOutput> donations;
 
     public static SnapshotViewModelOutput of(final Snapshot snapshot) {
-        final Map<CurrencyUnit, CreditCardSnapshot> creditCardTotals =
+        final Map<CurrencyUnit, CreditCardAccount> creditCardTotals =
                 snapshot.getCreditCardTotals();
 
         Long previousId = null;
@@ -129,7 +129,7 @@ public class SnapshotViewModelOutput {
     }
 
     public static Map<String, CreditCardTotalsViewModelOutput> getCurrencyUnitCreditCardViewModels(
-            final Map<CurrencyUnit, CreditCardSnapshot> creditCardTotals) {
+            final Map<CurrencyUnit, CreditCardAccount> creditCardTotals) {
         final Map<String, CreditCardTotalsViewModelOutput> creditCardTotalsViewModel =
                 new HashMap<>();
 
@@ -144,56 +144,50 @@ public class SnapshotViewModelOutput {
 
     private static void addAccounts(
             final SnapshotViewModelOutputBuilder builder, final Snapshot snapshot) {
-        final Map<AccountType, List<AccountSnapshotViewModelOutput>> accountSnapshotViewModels =
-                getAccountSnapshotViewModelOutputs(snapshot);
+        final Map<AccountType, List<AccountViewModelOutput>> accountViewModels =
+                getAccountViewModelOutputs(snapshot);
 
-        final Map<Class, List<AccountSnapshotViewModelOutput>> assetsByType =
-                breakDownAccountsByType(accountSnapshotViewModels.get(AccountType.ASSET));
+        final Map<Class, List<AccountViewModelOutput>> assetsByType =
+                breakDownAccountsByType(accountViewModels.get(AccountType.ASSET));
 
-        builder.simpleAssetAccounts(assetsByType.get(AccountSnapshotViewModelOutput.class));
-        builder.receivableAccounts(assetsByType.get(ReceivableViewModelOutput.class));
-        builder.investmentAccounts(assetsByType.get(InvestmentViewModelOutput.class));
+        builder.simpleAssetAccounts(assetsByType.get(AccountViewModelOutput.class));
+        builder.receivableAccounts(assetsByType.get(ReceivableAccountViewModelOutput.class));
+        builder.investmentAccounts(assetsByType.get(InvestmentAccountViewModelOutput.class));
 
-        final Map<Class, List<AccountSnapshotViewModelOutput>> liabilitiesByType =
-                breakDownAccountsByType(accountSnapshotViewModels.get(AccountType.LIABILITY));
-        builder.simpleLiabilityAccounts(
-                liabilitiesByType.get(AccountSnapshotViewModelOutput.class));
-        builder.payableAccounts(liabilitiesByType.get(PayableViewModelOutput.class));
-        builder.creditCardAccounts(liabilitiesByType.get(CreditCardViewModelOutput.class));
+        final Map<Class, List<AccountViewModelOutput>> liabilitiesByType =
+                breakDownAccountsByType(accountViewModels.get(AccountType.LIABILITY));
+        builder.simpleLiabilityAccounts(liabilitiesByType.get(AccountViewModelOutput.class));
+        builder.payableAccounts(liabilitiesByType.get(PayableAccountViewModelOutput.class));
+        builder.creditCardAccounts(liabilitiesByType.get(CreditCardAccountViewModelOutput.class));
     }
 
-    private static Map<AccountType, List<AccountSnapshotViewModelOutput>>
-            getAccountSnapshotViewModelOutputs(final Snapshot snapshot) {
-        final Map<AccountType, SortedSet<AccountSnapshot>> accountSnapshotsByType =
-                snapshot.getAccountSnapshotsByType();
+    private static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(
+            final Snapshot snapshot) {
+        final Map<AccountType, SortedSet<Account>> accountsByType = snapshot.getAccountsByType();
 
-        final SortedSet<AccountSnapshot> assetAccountSnapshots =
-                accountSnapshotsByType.get(AccountType.ASSET);
-        final SortedSet<AccountSnapshot> liabilityAccountSnapshots =
-                accountSnapshotsByType.get(AccountType.LIABILITY);
+        final SortedSet<Account> assetAccounts = accountsByType.get(AccountType.ASSET);
+        final SortedSet<Account> liabilityAccounts = accountsByType.get(AccountType.LIABILITY);
 
         return ImmutableMap.of(
                 AccountType.ASSET,
-                (assetAccountSnapshots == null)
+                (assetAccounts == null)
                         ? ImmutableList.of()
-                        : getAccountSnapshotViewModelOutputs(assetAccountSnapshots),
+                        : getAccountViewModelOutputs(assetAccounts),
                 AccountType.LIABILITY,
-                (liabilityAccountSnapshots == null)
+                (liabilityAccounts == null)
                         ? ImmutableList.of()
-                        : getAccountSnapshotViewModelOutputs(liabilityAccountSnapshots));
+                        : getAccountViewModelOutputs(liabilityAccounts));
     }
 
-    private static List<AccountSnapshotViewModelOutput> getAccountSnapshotViewModelOutputs(
-            final SortedSet<AccountSnapshot> accountSnapshots) {
-        return accountSnapshots.stream()
+    private static List<AccountViewModelOutput> getAccountViewModelOutputs(
+            final SortedSet<Account> accounts) {
+        return accounts.stream()
                 .map(
-                        accountSnapshot -> {
+                        account -> {
                             try {
                                 final Method factoryMethod =
-                                        getAccountSnapshotViewModelOutputFactoryMethod(
-                                                accountSnapshot.getClass());
-                                return (AccountSnapshotViewModelOutput)
-                                        factoryMethod.invoke(null, accountSnapshot);
+                                        getAccountViewModelOutputFactoryMethod(account.getClass());
+                                return (AccountViewModelOutput) factoryMethod.invoke(null, account);
                             } catch (final Exception e) {
                                 throw new RuntimeException(e);
                             }
@@ -202,11 +196,11 @@ public class SnapshotViewModelOutput {
                 .collect(toList());
     }
 
-    private static Map<Class, List<AccountSnapshotViewModelOutput>> breakDownAccountsByType(
-            final List<AccountSnapshotViewModelOutput> accounts) {
-        final Map<Class, List<AccountSnapshotViewModelOutput>> accountsByType = new HashMap<>();
+    private static Map<Class, List<AccountViewModelOutput>> breakDownAccountsByType(
+            final List<AccountViewModelOutput> accounts) {
+        final Map<Class, List<AccountViewModelOutput>> accountsByType = new HashMap<>();
 
-        for (final AccountSnapshotViewModelOutput account : accounts) {
+        for (final AccountViewModelOutput account : accounts) {
             final Class key = account.getClass();
             if (!accountsByType.containsKey(key)) {
                 accountsByType.put(key, new ArrayList<>());

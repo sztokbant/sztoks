@@ -3,9 +3,9 @@ package br.net.du.myequity.service;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
-import br.net.du.myequity.persistence.AccountSnapshotRepository;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
+import br.net.du.myequity.persistence.AccountRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.joda.money.CurrencyUnit;
@@ -15,26 +15,26 @@ import org.mockito.Mock;
 
 public class AccountServiceTest {
 
-    private static final AccountSnapshot SIMPLE_LIABILITY_SNAPSHOT =
-            new SimpleLiabilitySnapshot(
+    private static final Account SIMPLE_LIABILITY_SNAPSHOT =
+            new SimpleLiabilityAccount(
                     "Mortgage", CurrencyUnit.USD, LocalDate.now(), new BigDecimal("10000.00"));
 
-    @Mock private AccountSnapshotRepository accountSnapshotRepository;
+    @Mock private AccountRepository accountRepository;
 
-    private AccountSnapshotService accountSnapshotService;
+    private AccountService accountService;
 
     @BeforeEach
     public void setUp() {
         initMocks(this);
-        accountSnapshotService = new AccountSnapshotService(accountSnapshotRepository);
+        accountService = new AccountService(accountRepository);
     }
 
     @Test
     public void deleteAccount_happy() {
         // WHEN
-        accountSnapshotService.delete(SIMPLE_LIABILITY_SNAPSHOT);
+        accountService.delete(SIMPLE_LIABILITY_SNAPSHOT);
 
         // THEN
-        verify(accountSnapshotRepository).delete(SIMPLE_LIABILITY_SNAPSHOT);
+        verify(accountRepository).delete(SIMPLE_LIABILITY_SNAPSHOT);
     }
 }

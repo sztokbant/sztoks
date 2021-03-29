@@ -6,8 +6,8 @@ import static br.net.du.myequity.controller.util.ControllerConstants.NOT_EMPTY;
 
 import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
 import br.net.du.myequity.model.Snapshot;
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.service.AccountSnapshotService;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.service.AccountService;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.money.CurrencyUnit;
@@ -20,10 +20,10 @@ import org.springframework.validation.ValidationUtils;
 
 @Component
 public class AccountViewModelInputValidator implements SmartValidator {
-    private final AccountSnapshotService accountService;
+    private final AccountService accountService;
 
     @Autowired
-    public AccountViewModelInputValidator(final AccountSnapshotService accountService) {
+    public AccountViewModelInputValidator(final AccountService accountService) {
         this.accountService = accountService;
     }
 
@@ -76,7 +76,7 @@ public class AccountViewModelInputValidator implements SmartValidator {
                     || !(validationHints[0] instanceof Snapshot)) {
                 throw new UnsupportedOperationException();
             } else {
-                final List<AccountSnapshot> accounts =
+                final List<Account> accounts =
                         accountService.findBySnapshot((Snapshot) validationHints[0]);
                 final boolean isDuplicateName =
                         accounts.stream()

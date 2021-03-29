@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -27,8 +28,8 @@ class SnapshotControllerTest extends SnapshotControllerGetTestBase {
 
     @BeforeEach
     public void setUp() {
-        snapshot.addAccountSnapshot(assetAccount);
-        snapshot.addAccountSnapshot(liabilityAccount);
+        snapshot.addAccount(assetAccount);
+        snapshot.addAccount(liabilityAccount);
     }
 
     @Test
