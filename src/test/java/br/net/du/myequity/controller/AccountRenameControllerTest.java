@@ -56,7 +56,8 @@ class AccountRenameControllerTest extends AccountControllerTestBase {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        account.setUser(user);
+        user.getSnapshots().first().addAccount(account);
+
         when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN

@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.test.ControllerTestUtils.verifyRedirect;
+import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.myequity.test.TestConstants.now;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -27,7 +28,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 class SnapshotNewControllerTest extends PostControllerTestBase {
 
     private static final long SNAPSHOT_INDEX = 1L;
-    private static final long SNAPSHOT_ID = 99L;
 
     private static final String NEW_SNAPSHOT_URL = String.format("/snapshot/%d", SNAPSHOT_ID + 1);
     private static final String URL = "/snapshot/new";

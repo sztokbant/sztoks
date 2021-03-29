@@ -1,14 +1,9 @@
 package br.net.du.myequity.test;
 
-import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.CreditCardAccount;
+import br.net.du.myequity.model.account.InvestmentAccount;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
-import br.net.du.myequity.model.snapshot.CreditCardSnapshot;
-import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
-import br.net.du.myequity.model.snapshot.SimpleAssetSnapshot;
-import br.net.du.myequity.model.snapshot.SimpleLiabilitySnapshot;
 import br.net.du.myequity.model.transaction.DonationTransaction;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.InvestmentCategory;
@@ -28,41 +23,42 @@ public class TestConstants {
 
     public static final String EXTRA_SPACES = "  ";
 
-    public static final Account SIMPLE_ASSET_ACCOUNT =
-            new SimpleAssetAccount("Savings", CurrencyUnit.USD, LocalDate.now());
-    public static final AccountSnapshot SIMPLE_ASSET_SNAPSHOT =
-            new SimpleAssetSnapshot(SIMPLE_ASSET_ACCOUNT, new BigDecimal("10000.00"));
+    public static final String ACCOUNT_NAME = "Account Name";
+    public static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.USD;
 
-    public static final Account SIMPLE_LIABILITY_ACCOUNT =
-            new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, LocalDate.now());
-    public static final AccountSnapshot SIMPLE_LIABILITY_SNAPSHOT =
-            new SimpleLiabilitySnapshot(SIMPLE_LIABILITY_ACCOUNT, new BigDecimal("2500.00"));
+    public static SimpleAssetAccount newSimpleAssetAccount() {
+        return new SimpleAssetAccount("Savings", CurrencyUnit.USD, new BigDecimal("10000.00"));
+    }
 
-    public static final Account CREDIT_CARD_ACCOUNT =
-            new CreditCardAccount("Chase Sapphire Reserve", CurrencyUnit.USD, LocalDate.now());
-    public static final AccountSnapshot CREDIT_CARD_SNAPSHOT =
-            new CreditCardSnapshot(
-                    CREDIT_CARD_ACCOUNT,
-                    new BigDecimal("10000.00"),
-                    new BigDecimal("9500.00"),
-                    new BigDecimal("1000.00"));
+    public static SimpleLiabilityAccount newSimpleLiabilityAccount() {
+        return new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, new BigDecimal("2500.00"));
+    }
 
-    public static final Account INVESTMENT_ACCOUNT =
-            new CreditCardAccount("AMZN", CurrencyUnit.USD, LocalDate.now());
-    public static final AccountSnapshot INVESTMENT_SNAPSHOT =
-            new InvestmentSnapshot(
-                    INVESTMENT_ACCOUNT,
-                    new BigDecimal("175.00"),
-                    new BigDecimal("1100.00"),
-                    new BigDecimal("3500.00"));
+    public static CreditCardAccount newCreditCardAccount() {
+        return new CreditCardAccount(
+                "Chase Sapphire Reserve",
+                CurrencyUnit.USD,
+                new BigDecimal("10000.00"),
+                new BigDecimal("9500.00"),
+                new BigDecimal("1000.00"));
+    }
 
-    public static final IncomeTransaction newRecurringIncome(final long id) {
+    public static InvestmentAccount newInvestmentAccount() {
+        return new InvestmentAccount(
+                "AMZN",
+                CurrencyUnit.USD,
+                new BigDecimal("175.00"),
+                new BigDecimal("1100.00"),
+                new BigDecimal("3500.00"));
+    }
+
+    public static IncomeTransaction newRecurringIncome(final long id) {
         final IncomeTransaction incomeTransaction = newRecurringIncome();
         incomeTransaction.setId(id);
         return incomeTransaction;
     }
 
-    public static final IncomeTransaction newRecurringIncome() {
+    public static IncomeTransaction newRecurringIncome() {
         return new IncomeTransaction(
                 LocalDate.of(2020, 12, 31),
                 CurrencyUnit.USD.getCode(),
@@ -72,13 +68,13 @@ public class TestConstants {
                 new BigDecimal("20.00"));
     }
 
-    public static final IncomeTransaction newSingleIncome(final long id) {
+    public static IncomeTransaction newSingleIncome(final long id) {
         final IncomeTransaction incomeTransaction = newSingleIncome();
         incomeTransaction.setId(id);
         return incomeTransaction;
     }
 
-    public static final IncomeTransaction newSingleIncome() {
+    public static IncomeTransaction newSingleIncome() {
         return new IncomeTransaction(
                 LocalDate.of(2020, 12, 15),
                 CurrencyUnit.USD.getCode(),
@@ -88,13 +84,13 @@ public class TestConstants {
                 new BigDecimal("20.00"));
     }
 
-    public static final DonationTransaction newRecurringDonation(final long id) {
+    public static DonationTransaction newRecurringDonation(final long id) {
         final DonationTransaction donationTransaction = newRecurringDonation();
         donationTransaction.setId(id);
         return donationTransaction;
     }
 
-    public static final DonationTransaction newRecurringDonation() {
+    public static DonationTransaction newRecurringDonation() {
         return new DonationTransaction(
                 LocalDate.of(2020, 12, 31),
                 CurrencyUnit.USD.getCode(),
@@ -104,13 +100,13 @@ public class TestConstants {
                 true);
     }
 
-    public static final DonationTransaction newSingleDonation(final long id) {
+    public static DonationTransaction newSingleDonation(final long id) {
         final DonationTransaction donationTransaction = newSingleDonation();
         donationTransaction.setId(id);
         return donationTransaction;
     }
 
-    public static final DonationTransaction newSingleDonation() {
+    public static DonationTransaction newSingleDonation() {
         return new DonationTransaction(
                 LocalDate.of(2020, 12, 15),
                 CurrencyUnit.USD.getCode(),
@@ -120,13 +116,13 @@ public class TestConstants {
                 true);
     }
 
-    public static final InvestmentTransaction newRecurringInvestment(final long id) {
+    public static InvestmentTransaction newRecurringInvestment(final long id) {
         final InvestmentTransaction investmentTransaction = newRecurringInvestment();
         investmentTransaction.setId(id);
         return investmentTransaction;
     }
 
-    public static final InvestmentTransaction newRecurringInvestment() {
+    public static InvestmentTransaction newRecurringInvestment() {
         return new InvestmentTransaction(
                 LocalDate.of(2020, 12, 31),
                 CurrencyUnit.USD.getCode(),
@@ -136,13 +132,13 @@ public class TestConstants {
                 InvestmentCategory.LONG_TERM);
     }
 
-    public static final InvestmentTransaction newSingleInvestment(final long id) {
+    public static InvestmentTransaction newSingleInvestment(final long id) {
         final InvestmentTransaction investmentTransaction = newSingleInvestment();
         investmentTransaction.setId(id);
         return investmentTransaction;
     }
 
-    public static final InvestmentTransaction newSingleInvestment() {
+    public static InvestmentTransaction newSingleInvestment() {
         return new InvestmentTransaction(
                 LocalDate.of(2020, 12, 15),
                 CurrencyUnit.USD.getCode(),

@@ -5,9 +5,8 @@ public class ControllerConstants {
     public static final String REDIRECT_TO_HOME = "redirect:/";
     public static final String REDIRECT_TO_LOGIN = "redirect:/login";
 
-    public static final String ASSET_ACCOUNTS_KEY = "assetAccounts";
+    public static final String ACCOUNT_TYPE_KEY = "accountType";
     public static final String ID = "id";
-    public static final String LIABILITY_ACCOUNTS_KEY = "liabilityAccounts";
     public static final String SNAPSHOT_ID_KEY = "snapshotId";
     public static final String SNAPSHOT_KEY = "snapshot";
     public static final String SNAPSHOTS_KEY = "snapshots";

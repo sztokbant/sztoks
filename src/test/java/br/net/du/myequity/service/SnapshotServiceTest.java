@@ -1,12 +1,12 @@
 package br.net.du.myequity.service;
 
 import static br.net.du.myequity.test.ModelTestUtils.buildUser;
-import static br.net.du.myequity.test.TestConstants.CREDIT_CARD_SNAPSHOT;
-import static br.net.du.myequity.test.TestConstants.INVESTMENT_SNAPSHOT;
-import static br.net.du.myequity.test.TestConstants.SIMPLE_ASSET_SNAPSHOT;
-import static br.net.du.myequity.test.TestConstants.SIMPLE_LIABILITY_SNAPSHOT;
+import static br.net.du.myequity.test.TestConstants.newCreditCardAccount;
+import static br.net.du.myequity.test.TestConstants.newInvestmentAccount;
 import static br.net.du.myequity.test.TestConstants.newRecurringDonation;
 import static br.net.du.myequity.test.TestConstants.newRecurringIncome;
+import static br.net.du.myequity.test.TestConstants.newSimpleAssetAccount;
+import static br.net.du.myequity.test.TestConstants.newSimpleLiabilityAccount;
 import static br.net.du.myequity.test.TestConstants.newSingleDonation;
 import static br.net.du.myequity.test.TestConstants.newSingleIncome;
 import static br.net.du.myequity.test.TestConstants.now;
@@ -22,7 +22,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import br.net.du.myequity.exception.MyEquityException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
+import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import com.google.common.collect.ImmutableList;
@@ -34,8 +34,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 public class SnapshotServiceTest {
-
-    private static final long SNAPSHOT_INDEX = 1L;
 
     private SnapshotService snapshotService;
 
@@ -53,14 +51,12 @@ public class SnapshotServiceTest {
 
         user = buildUser();
 
-        snapshot = newEmptySnapshot(SNAPSHOT_INDEX);
-        snapshot.setId(108L);
-        user.addSnapshot(snapshot);
+        snapshot = user.getSnapshots().first();
 
-        snapshot.addAccountSnapshot(SIMPLE_ASSET_SNAPSHOT);
-        snapshot.addAccountSnapshot(SIMPLE_LIABILITY_SNAPSHOT);
-        snapshot.addAccountSnapshot(CREDIT_CARD_SNAPSHOT);
-        snapshot.addAccountSnapshot(INVESTMENT_SNAPSHOT);
+        snapshot.addAccount(newSimpleAssetAccount());
+        snapshot.addAccount(newSimpleLiabilityAccount());
+        snapshot.addAccount(newCreditCardAccount());
+        snapshot.addAccount(newInvestmentAccount());
 
         snapshot.addTransaction(newRecurringIncome());
         snapshot.addTransaction(newSingleIncome());
@@ -76,15 +72,15 @@ public class SnapshotServiceTest {
         final Snapshot newSnapshot = snapshotService.newSnapshot(user);
 
         // THEN
-        final SortedSet<AccountSnapshot> originalAccountSnapshots = snapshot.getAccountSnapshots();
-        final SortedSet<AccountSnapshot> newAccountSnapshots = newSnapshot.getAccountSnapshots();
-        assertEquals(originalAccountSnapshots.size(), newAccountSnapshots.size());
+        final SortedSet<Account> originalAccounts = snapshot.getAccounts();
+        final SortedSet<Account> newAccounts = newSnapshot.getAccounts();
+        assertEquals(originalAccounts.size(), newAccounts.size());
 
-        for (final AccountSnapshot originalAccountSnapshot : originalAccountSnapshots) {
+        for (final Account originalAccount : originalAccounts) {
             boolean found = false;
-            for (final AccountSnapshot newAccountSnapshot : newAccountSnapshots) {
-                if (newAccountSnapshot.getClass().isInstance(originalAccountSnapshot)) {
-                    found = newAccountSnapshot.equalsIgnoreId(originalAccountSnapshot);
+            for (final Account newAccount : newAccounts) {
+                if (newAccount.getClass().isInstance(originalAccount)) {
+                    found = newAccount.equalsIgnoreId(originalAccount);
                     break;
                 }
             }
@@ -136,7 +132,7 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_first_happy() {
         // GIVEN
-        final Snapshot secondSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 1);
+        final Snapshot secondSnapshot = newEmptySnapshot(snapshot.getIndex() + 1);
         secondSnapshot.setId(99L);
         secondSnapshot.setPrevious(snapshot);
         snapshot.setNext(secondSnapshot);
@@ -151,7 +147,7 @@ public class SnapshotServiceTest {
         verify(snapshotRepository).save(eq(secondSnapshot));
 
         assertEquals(1, user.getSnapshots().size());
-        assertEquals(secondSnapshot, user.getSnapshots().iterator().next());
+        assertEquals(secondSnapshot, user.getSnapshots().first());
 
         assertNull(secondSnapshot.getPrevious());
         assertNull(secondSnapshot.getNext());
@@ -160,7 +156,7 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_last_happy() {
         // GIVEN
-        final Snapshot secondSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 1);
+        final Snapshot secondSnapshot = newEmptySnapshot(snapshot.getIndex() + 1);
         secondSnapshot.setId(99L);
         secondSnapshot.setPrevious(snapshot);
         snapshot.setNext(secondSnapshot);
@@ -175,7 +171,7 @@ public class SnapshotServiceTest {
         verify(snapshotRepository).save(eq(snapshot));
 
         assertEquals(1, user.getSnapshots().size());
-        assertEquals(snapshot, user.getSnapshots().iterator().next());
+        assertEquals(snapshot, user.getSnapshots().first());
 
         assertNull(snapshot.getPrevious());
         assertNull(snapshot.getNext());
@@ -184,15 +180,15 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_middle_happy() {
         // GIVEN
-        final Snapshot secondSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 1);
+        final Snapshot secondSnapshot = newEmptySnapshot(snapshot.getIndex() + 1);
         secondSnapshot.setId(99L);
         user.addSnapshot(secondSnapshot);
 
-        final Snapshot thirdSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 2);
+        final Snapshot thirdSnapshot = newEmptySnapshot(snapshot.getIndex() + 2);
         thirdSnapshot.setId(108L);
         user.addSnapshot(thirdSnapshot);
 
-        final Snapshot fourthSnapshot = newEmptySnapshot(SNAPSHOT_INDEX + 3);
+        final Snapshot fourthSnapshot = newEmptySnapshot(snapshot.getIndex() + 3);
         fourthSnapshot.setId(144L);
         user.addSnapshot(fourthSnapshot);
 

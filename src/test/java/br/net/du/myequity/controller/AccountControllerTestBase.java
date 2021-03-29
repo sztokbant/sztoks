@@ -55,7 +55,6 @@ public abstract class AccountControllerTestBase extends AjaxControllerTestBase {
         final Long anotherUserId = user.getId() * 7;
         anotherUser.setId(anotherUserId);
 
-        account.setUser(anotherUser);
         when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         // WHEN

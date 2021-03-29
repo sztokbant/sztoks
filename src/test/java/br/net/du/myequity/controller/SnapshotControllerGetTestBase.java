@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.test.ControllerTestUtils.verifyRedirect;
+import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.myequity.test.ModelTestUtils.buildUser;
 import static br.net.du.myequity.test.TestConstants.now;
 import static org.mockito.ArgumentMatchers.eq;
@@ -29,7 +30,6 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
 
     protected static final long ASSET_ACCOUNT_ID = 42L;
     protected static final long LIABILITY_ACCOUNT_ID = 72L;
-    protected static final long SNAPSHOT_ID = 99L;
     protected static final long SNAPSHOT_INDEX = 1L;
 
     @MockBean protected SnapshotService snapshotService;
@@ -59,12 +59,10 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
         assetAccount =
                 new SimpleAssetAccount("Checking Account", CurrencyUnit.USD, LocalDate.now());
         assetAccount.setId(ASSET_ACCOUNT_ID);
-        user.addAccount(assetAccount);
 
         liabilityAccount =
                 new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, LocalDate.now());
         liabilityAccount.setId(LIABILITY_ACCOUNT_ID);
-        user.addAccount(liabilityAccount);
     }
 
     @Test

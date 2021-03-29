@@ -1,9 +1,7 @@
 package br.net.du.myequity.service;
 
-import br.net.du.myequity.exception.MyEquityException;
-import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.snapshot.AccountSnapshot;
 import br.net.du.myequity.persistence.AccountRepository;
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +14,6 @@ import org.springframework.stereotype.Service;
 public class AccountService {
     private final AccountRepository accountRepository;
 
-    private final AccountSnapshotService accountSnapshotService;
-
     public Account save(@NonNull final Account account) {
         return accountRepository.save(account);
     }
@@ -26,16 +22,11 @@ public class AccountService {
         return accountRepository.findById(accountId);
     }
 
-    public List<Account> findByUser(@NonNull final User user) {
-        return accountRepository.findByUser(user);
+    public List<Account> findBySnapshot(@NonNull final Snapshot snapshot) {
+        return accountRepository.findBySnapshot(snapshot);
     }
 
-    public void deleteAccount(@NonNull final Account account) {
-        final List<AccountSnapshot> snapshots = accountSnapshotService.findAllByAccount(account);
-        if (!snapshots.isEmpty()) {
-            throw new MyEquityException(
-                    "Account cannot be deleted as it is referred by at least one snapshot.");
-        }
+    public void delete(@NonNull final Account account) {
         accountRepository.delete(account);
     }
 }

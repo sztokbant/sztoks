@@ -25,6 +25,6 @@ public class AccountUtils {
     }
 
     private boolean accountBelongsToUser(final User user, final Optional<Account> accountOpt) {
-        return accountOpt.isPresent() && accountOpt.get().getUser().equals(user);
+        return accountOpt.isPresent() && accountOpt.get().getSnapshot().getUser().equals(user);
     }
 }

@@ -4,7 +4,7 @@ import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
 import br.net.du.myequity.model.transaction.Transaction;
-import br.net.du.myequity.service.AccountSnapshotService;
+import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import br.net.du.myequity.service.TransactionService;
 import java.util.Optional;
@@ -17,7 +17,7 @@ public class TransactionUpdateControllerBase {
 
     @Autowired private TransactionService transactionService;
 
-    @Autowired private AccountSnapshotService accountSnapshotService;
+    @Autowired private AccountService accountService;
 
     @Autowired private SnapshotUtils snapshotUtils;
 

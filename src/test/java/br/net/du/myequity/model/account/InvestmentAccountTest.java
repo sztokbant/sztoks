@@ -1,23 +1,27 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.test.TestConstants.ACCOUNT_NAME;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import br.net.du.myequity.model.snapshot.InvestmentSnapshot;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 
 class InvestmentAccountTest {
 
-    final Account account = new InvestmentAccount();
-
     @Test
     public void newEmptySnapshot_happy() {
         // WHEN
-        final InvestmentSnapshot actual = (InvestmentSnapshot) account.newEmptySnapshot();
+        final InvestmentAccount actual = new InvestmentAccount(ACCOUNT_NAME, CURRENCY_UNIT);
 
         // THEN
-        final InvestmentSnapshot expected =
-                new InvestmentSnapshot(account, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+        final InvestmentAccount expected =
+                new InvestmentAccount(
+                        ACCOUNT_NAME,
+                        CURRENCY_UNIT,
+                        BigDecimal.ZERO,
+                        BigDecimal.ZERO,
+                        BigDecimal.ZERO);
 
         assertTrue(actual.equalsIgnoreId(expected));
     }

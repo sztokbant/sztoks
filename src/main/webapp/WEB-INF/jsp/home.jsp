@@ -55,51 +55,6 @@
             </c:forEach>
         </table>
     </div>
-
-    <hr/>
-
-    <h4 class="text-center">Accounts</h4>
-
-    <div class="navigation-buttons-padding-bottom">
-        <a class="btn btn-myequity" href="${contextPath}/newaccount">&#x2795;&nbsp; Account</a>
-    </div>
-
-    <div class="center-w640">
-        <div class="row">
-            <div class="col" style="background: lightpink;">
-                <h5 class="text-center">Assets</h5>
-                <c:choose>
-                    <c:when test="${empty assetAccounts}">
-                        <div>No assets.</div>
-                    </c:when>
-                    <c:otherwise>
-                        <c:forEach var="account" items="${assetAccounts}">
-                            <div id="account_row_${account.id}">
-                                <%@ include file="_asset_account.jsp" %>
-                            </div>
-                        </c:forEach>
-                    </c:otherwise>
-                </c:choose>
-                <br/>
-            </div>
-            <div class="col" style="background: lightblue;">
-                <h5 class="text-center">Liabilities</h5>
-                <c:choose>
-                    <c:when test="${empty liabilityAccounts}">
-                        <div>No liabilities.</div>
-                    </c:when>
-                    <c:otherwise>
-                        <c:forEach var="account" items="${liabilityAccounts}">
-                            <div id="account_row_${account.id}">
-                                <%@ include file="_liability_account.jsp" %>
-                            </div>
-                        </c:forEach>
-                    </c:otherwise>
-                </c:choose>
-                <br/>
-            </div>
-        </div>
-    </div>
 </div>
 
 </body>
