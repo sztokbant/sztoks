@@ -21,7 +21,10 @@ public class InvestmentAccount extends Account {
 
     public static final String ACCOUNT_SUB_TYPE = "INVESTMENT";
 
-    @Column @Getter @Setter private BigDecimal shares;
+    @Column(precision = 19, scale = 8) // Allow Satoshi scale
+    @Getter
+    @Setter
+    private BigDecimal shares;
 
     @Column @Getter @Setter private BigDecimal originalShareValue;
 
