@@ -28,7 +28,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title short">&#128260;</div>
-                    <div class="col col-cell col-title">Description</div>
+                    <div class="col col-cell col-title col-account-name">Description</div>
                     <div class="col col-cell col-title">Date</div>
                     <div class="col col-cell col-title">Donation Ratio</div>
                     <div class="col col-cell col-title">Amount</div>
@@ -70,7 +70,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title short">&#128260;</div>
-                    <div class="col col-cell col-title">Description</div>
+                    <div class="col col-cell col-title col-account-name">Description</div>
                     <div class="col col-cell col-title">Date</div>
                     <div class="col col-cell col-title">Category</div>
                     <div class="col col-cell col-title">Amount</div>
@@ -112,7 +112,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title short">&#128260;</div>
-                    <div class="col col-cell col-title">Description</div>
+                    <div class="col col-cell col-title col-account-name">Description</div>
                     <div class="col col-cell col-title">Date</div>
                     <div class="col col-cell col-title">Tax deductible?</div>
                     <div class="col col-cell col-title">Amount</div>
