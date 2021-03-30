@@ -26,3 +26,13 @@
     margin: 1px;
     border: outset 1px;
 }
+
+.cell-green {
+    font-weight: bold;
+    color: green;
+}
+
+.cell-red {
+    font-weight: bold;
+    color: red;
+}

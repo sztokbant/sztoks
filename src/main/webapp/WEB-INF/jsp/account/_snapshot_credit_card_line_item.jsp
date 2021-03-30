@@ -56,7 +56,17 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell align-right">
+    <fmt:parseNumber var="ccUsageValue" value="${entity.usedCreditPercentage}" integerOnly="false"/>
+    <c:choose>
+        <c:when test="${ccUsageValue ge 30}">
+            <c:set var="ccUsageStyle" value="cell-red"/>
+        </c:when>
+        <c:otherwise>
+            <c:set var="ccUsageStyle" value=""/>
+        </c:otherwise>
+    </c:choose>
+
+    <div class="col col-cell align-right ${ccUsageStyle}">
         <span id="credit_card_used_credit_percentage_${entity.accountId}">${entity.usedCreditPercentage}</span>
     </div>
 

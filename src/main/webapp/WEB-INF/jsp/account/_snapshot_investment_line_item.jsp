@@ -67,7 +67,20 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell align-right">
+    <fmt:parseNumber var="profitValue" value="${entity.profitPercentage}" integerOnly="false" />
+    <c:choose>
+        <c:when test="${profitValue gt 0}">
+            <c:set var="profitStyle" value="cell-green" />
+        </c:when>
+        <c:when test="${profitValue lt 0}">
+            <c:set var="profitStyle" value="cell-red" />
+        </c:when>
+        <c:otherwise>
+            <c:set var="profitStyle" value="" />
+        </c:otherwise>
+    </c:choose>
+
+    <div class="col col-cell align-right ${profitStyle}">
         <span id="investment_profit_percentage_${entity.accountId}">${entity.profitPercentage}</span>
     </div>
 
