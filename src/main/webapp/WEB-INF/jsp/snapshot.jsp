@@ -59,8 +59,6 @@
 <div class="full-width">
     <%@ include file="account/_snapshot_accounts.jsp" %>
 
-    <br/>
-
     <%@ include file="transaction/_snapshot_transactions.jsp" %>
 
     <div class="text-center"><a href="/">Back</a></div>

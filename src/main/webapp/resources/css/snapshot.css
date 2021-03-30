@@ -21,3 +21,8 @@
 .snapshot-header {
     margin: -11px 0 5px 0;
 }
+
+.col-section {
+    margin: 1px;
+    border: outset 1px;
+}
