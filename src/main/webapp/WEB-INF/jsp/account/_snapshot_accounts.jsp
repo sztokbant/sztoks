@@ -10,10 +10,6 @@
                 <c:forEach items="${snapshot.assetsBalance}" var="entry">
                     <div class="row border-1px-bottom bg-light-yellow">
                         <div class="col col-cell col-account-name">TOTAL ${entry.key}</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
                         <div class="col col-cell align-right"><b><span
                                 id="total_ASSET_${entry.key}">${entry.value}</span></b></div>
                     </div>
@@ -22,10 +18,6 @@
             <c:otherwise>
                 <div class="row border-1px-bottom bg-light-yellow">
                     <div class="col col-cell col-account-name">TOTAL</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
                     <div class="col col-cell align-right"><b>0.00</b></div>
                 </div>
             </c:otherwise>
@@ -34,7 +26,8 @@
         <c:choose>
             <c:when test="${not empty snapshot.simpleAssetAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title"><i>Simple Assets</i></div>
+                    <div class="col col-cell col-title short">&nbsp;</div>
+                    <div class="col col-cell col-title col-account-name"><i>Simple Assets</i></div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
@@ -50,7 +43,8 @@
         <c:choose>
             <c:when test="${not empty snapshot.receivableAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title"><i>Receivables</i></div>
+                    <div class="col col-cell col-title short">&nbsp;</div>
+                    <div class="col col-cell col-title col-account-name"><i>Receivables</i></div>
                     <div class="col col-cell col-title">Due Date</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
@@ -66,7 +60,8 @@
         <c:choose>
             <c:when test="${not empty snapshot.investmentAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title"><i>Investments</i></div>
+                    <div class="col col-cell col-title short">&nbsp;</div>
+                    <div class="col col-cell col-title col-account-name"><i>Investments</i></div>
                     <div class="col col-cell col-title">Shares</div>
                     <div class="col col-cell col-title">Original Share Value</div>
                     <div class="col col-cell col-title">Current Share Value</div>
@@ -91,11 +86,6 @@
                 <c:forEach items="${snapshot.liabilitiesBalance}" var="entry">
                     <div class="row border-1px-bottom bg-light-yellow">
                         <div class="col col-cell col-account-name">TOTAL ${entry.key}</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
                         <div class="col col-cell align-right"><b><span
                                 id="total_LIABILITY_${entry.key}">${entry.value}</span></b>
                         </div>
@@ -105,11 +95,6 @@
             <c:otherwise>
                 <div class="row border-1px-bottom bg-light-yellow">
                     <div class="col col-cell col-account-name">TOTAL</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
                     <div class="col col-cell align-right"><b>0.00</b></div>
                 </div>
             </c:otherwise>
@@ -118,7 +103,8 @@
         <c:choose>
             <c:when test="${not empty snapshot.simpleLiabilityAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title"><i>Simple Liabilities</i></div>
+                    <div class="col col-cell col-title short">&nbsp;</div>
+                    <div class="col col-cell col-title col-account-name"><i>Simple Liabilities</i></div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
@@ -135,7 +121,8 @@
         <c:choose>
             <c:when test="${not empty snapshot.payableAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title"><i>Payables</i></div>
+                    <div class="col col-cell col-title short">&nbsp;</div>
+                    <div class="col col-cell col-title col-account-name"><i>Payables</i></div>
                     <div class="col col-cell col-title">Due Date</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
@@ -152,7 +139,8 @@
         <c:choose>
             <c:when test="${not empty snapshot.creditCardAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title"><i>Credit Cards</i></div>
+                    <div class="col col-cell col-title short">&nbsp;</div>
+                    <div class="col col-cell col-title col-account-name"><i>Credit Cards</i></div>
                     <div class="col col-cell col-title">Total Credit</div>
                     <div class="col col-cell col-title">Available Credit</div>
                     <div class="col col-cell col-title">Used Credit</div>

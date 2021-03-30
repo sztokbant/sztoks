@@ -1,6 +1,7 @@
 <c:set var="ccTotals" value="${snapshot.creditCardTotals[currentCurrency]}"/>
 <div class="row border-1px-bottom bg-light-yellow">
     <div class="col col-cell col-account-name">Credit Card TOTAL ${currentCurrency}</div>
+    <div class="col col-cell short"></div>
     <div class="col col-cell align-right"><b><span id="snapshot_credit_card_total_credit_${currentCurrency}">${ccTotals.totalCredit}</span></b>
     </div>
     <div class="col col-cell align-right"><b><span id="snapshot_credit_card_available_credit_${currentCurrency}">${ccTotals.availableCredit}</span></b>

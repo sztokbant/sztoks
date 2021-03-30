@@ -14,17 +14,18 @@ $(document).ready(function() {
 <div class="row border-1px-bottom" id="txn_row_${entity.id}">
     <%@ include file="_remove_transaction.jsp" %>
 
-    <%@ include file="/WEB-INF/jsp/_recurring_checkbox.jsp" %>
+    <%@ include file="_recurring_checkbox.jsp" %>
 
-    <div class="col col-cell">
-        ${entity.date}
-    </div>
-
-    <div class="col col-cell">
+    <div class="col col-cell col-account-name">
         ${entity.description}
     </div>
 
-    <div class="col col-cell">
+
+    <div class="col col-cell align-center">
+        ${entity.date}
+    </div>
+
+    <div class="col col-cell align-center">
         <input id="TRANSACTION_${entity.id}_taxDeductible" type="checkbox"/>
     </div>
 

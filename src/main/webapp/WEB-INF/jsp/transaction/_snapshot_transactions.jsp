@@ -9,11 +9,7 @@
             <c:when test="${not empty snapshot.incomeTransactionsTotal}">
                 <c:forEach items="${snapshot.incomeTransactionsTotal}" var="entry">
                     <div class="row border-1px-bottom bg-light-yellow">
-                        <div class="col col-cell col-txn-name">TOTAL ${entry.key}</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
+                        <div class="col col-cell col-account-name">TOTAL ${entry.key}</div>
                         <div class="col col-cell align-right"><b><span
                                 id="total_INCOME_${entry.key}">${entry.value}</span></b></div>
                     </div>
@@ -21,11 +17,7 @@
             </c:when>
             <c:otherwise>
                 <div class="row border-1px-bottom bg-light-yellow">
-                    <div class="col col-cell col-txn-name">TOTAL</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
+                    <div class="col col-cell col-account-name">TOTAL</div>
                     <div class="col col-cell align-right"><b>0.00</b></div>
                 </div>
             </c:otherwise>
@@ -34,10 +26,10 @@
         <c:choose>
             <c:when test="${not empty snapshot.incomes}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title"></div>
-                    <div class="col col-cell col-title">Recurring?</div>
-                    <div class="col col-cell col-title">Date</div>
+                    <div class="col col-cell col-title short">&nbsp;</div>
+                    <div class="col col-cell col-title short">&#128260;</div>
                     <div class="col col-cell col-title">Description</div>
+                    <div class="col col-cell col-title">Date</div>
                     <div class="col col-cell col-title">Donation Ratio</div>
                     <div class="col col-cell col-title">Amount</div>
                 </div>
@@ -59,11 +51,7 @@
             <c:when test="${not empty snapshot.investmentTransactionsTotal}">
                 <c:forEach items="${snapshot.investmentTransactionsTotal}" var="entry">
                     <div class="row border-1px-bottom bg-light-yellow">
-                        <div class="col col-cell col-txn-name">TOTAL ${entry.key}</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
+                        <div class="col col-cell col-account-name">TOTAL ${entry.key}</div>
                         <div class="col col-cell align-right"><b><span
                                 id="total_INVESTMENT_${entry.key}">${entry.value}</span></b></div>
                     </div>
@@ -71,11 +59,7 @@
             </c:when>
             <c:otherwise>
                 <div class="row border-1px-bottom bg-light-yellow">
-                    <div class="col col-cell col-txn-name">TOTAL</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
+                    <div class="col col-cell col-account-name">TOTAL</div>
                     <div class="col col-cell align-right"><b>0.00</b></div>
                 </div>
             </c:otherwise>
@@ -84,10 +68,10 @@
         <c:choose>
             <c:when test="${not empty snapshot.investments}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title"></div>
-                    <div class="col col-cell col-title">Recurring?</div>
-                    <div class="col col-cell col-title">Date</div>
+                    <div class="col col-cell col-title short">&nbsp;</div>
+                    <div class="col col-cell col-title short">&#128260;</div>
                     <div class="col col-cell col-title">Description</div>
+                    <div class="col col-cell col-title">Date</div>
                     <div class="col col-cell col-title">Category</div>
                     <div class="col col-cell col-title">Amount</div>
                 </div>
@@ -109,11 +93,7 @@
             <c:when test="${not empty snapshot.donationTransactionsTotal}">
                 <c:forEach items="${snapshot.donationTransactionsTotal}" var="entry">
                     <div class="row border-1px-bottom bg-light-yellow">
-                        <div class="col col-cell col-txn-name">TOTAL ${entry.key}</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
-                        <div class="col col-cell">&nbsp;</div>
+                        <div class="col col-cell col-account-name">TOTAL ${entry.key}</div>
                         <div class="col col-cell align-right"><b><span
                                 id="total_DONATION_${entry.key}">${entry.value}</span></b></div>
                     </div>
@@ -121,11 +101,7 @@
             </c:when>
             <c:otherwise>
                 <div class="row border-1px-bottom bg-light-yellow">
-                    <div class="col col-cell col-txn-name">TOTAL</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
-                    <div class="col col-cell">&nbsp;</div>
+                    <div class="col col-cell col-account-name">TOTAL</div>
                     <div class="col col-cell align-right"><b>0.00</b></div>
                 </div>
             </c:otherwise>
@@ -134,10 +110,10 @@
         <c:choose>
             <c:when test="${not empty snapshot.donations}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title"></div>
-                    <div class="col col-cell col-title">Recurring?</div>
-                    <div class="col col-cell col-title">Date</div>
+                    <div class="col col-cell col-title short">&nbsp;</div>
+                    <div class="col col-cell col-title short">&#128260;</div>
                     <div class="col col-cell col-title">Description</div>
+                    <div class="col col-cell col-title">Date</div>
                     <div class="col col-cell col-title">Tax deductible?</div>
                     <div class="col col-cell col-title">Amount</div>
                 </div>

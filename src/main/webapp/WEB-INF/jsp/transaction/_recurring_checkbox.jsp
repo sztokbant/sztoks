@@ -9,6 +9,6 @@ $(document).ready(function() {
 })
 </script>
 
-<div class="col col-cell">
+<div class="col col-cell align-center short">
     <input id="TRANSACTION_${entity.id}_recurring" type="checkbox"/>
 </div>
