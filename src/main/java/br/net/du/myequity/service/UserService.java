@@ -5,6 +5,7 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.UserRepository;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
+import java.time.LocalDate;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    private static final String FIRST_SNAPSHOT_NAME = "First Snapshot";
-
     @Autowired private UserRepository userRepository;
 
     @Autowired private PasswordEncoder passwordEncoder;
@@ -26,8 +25,11 @@ public class UserService {
         final User user = new User(email.trim(), firstName.trim(), lastName.trim());
         user.setPassword(passwordEncoder.encode(password));
 
+        final LocalDate now = LocalDate.now();
+        final String firstSnapshotName =
+                String.format("%04d-%02d", now.getYear(), now.getMonth().getValue());
         user.addSnapshot(
-                new Snapshot(1L, FIRST_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+                new Snapshot(1L, firstSnapshotName, ImmutableSortedSet.of(), ImmutableList.of()));
 
         save(user);
     }

@@ -14,7 +14,7 @@ import org.joda.money.CurrencyUnit;
 
 public class TestConstants {
 
-    public static final String now = LocalDate.now().toString();
+    public static final String SNAPSHOT_NAME = "2021-03";
 
     public static final String EMAIL = "example@example.com";
     public static final String FIRST_NAME = "Bill";

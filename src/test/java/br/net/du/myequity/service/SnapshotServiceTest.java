@@ -1,6 +1,7 @@
 package br.net.du.myequity.service;
 
 import static br.net.du.myequity.test.ModelTestUtils.buildUser;
+import static br.net.du.myequity.test.TestConstants.SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.newCreditCardAccount;
 import static br.net.du.myequity.test.TestConstants.newInvestmentAccount;
 import static br.net.du.myequity.test.TestConstants.newRecurringDonation;
@@ -9,7 +10,6 @@ import static br.net.du.myequity.test.TestConstants.newSimpleAssetAccount;
 import static br.net.du.myequity.test.TestConstants.newSimpleLiabilityAccount;
 import static br.net.du.myequity.test.TestConstants.newSingleDonation;
 import static br.net.du.myequity.test.TestConstants.newSingleIncome;
-import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -69,7 +69,7 @@ public class SnapshotServiceTest {
     @Test
     public void newSnapshot_happy() {
         // WHEN
-        final Snapshot newSnapshot = snapshotService.newSnapshot(user);
+        final Snapshot newSnapshot = snapshotService.newSnapshot(user, SNAPSHOT_NAME);
 
         // THEN
         final SortedSet<Account> originalAccounts = snapshot.getAccounts();
@@ -111,8 +111,8 @@ public class SnapshotServiceTest {
     @Test
     public void newSnapshot_twice_properlySetsNextAndPrevious() {
         // WHEN
-        final Snapshot secondSnapshot = snapshotService.newSnapshot(user);
-        final Snapshot thirdSnapshot = snapshotService.newSnapshot(user);
+        final Snapshot secondSnapshot = snapshotService.newSnapshot(user, SNAPSHOT_NAME);
+        final Snapshot thirdSnapshot = snapshotService.newSnapshot(user, SNAPSHOT_NAME);
 
         // THEN
         verify(snapshotRepository, times(1)).save(eq(snapshot));
@@ -229,6 +229,7 @@ public class SnapshotServiceTest {
     }
 
     private Snapshot newEmptySnapshot(final long snapshotIndex) {
-        return new Snapshot(snapshotIndex, now, ImmutableSortedSet.of(), ImmutableList.of());
+        return new Snapshot(
+                snapshotIndex, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
     }
 }

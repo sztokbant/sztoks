@@ -4,7 +4,7 @@ import static br.net.du.myequity.test.TestConstants.EMAIL;
 import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
 import static br.net.du.myequity.test.TestConstants.LAST_NAME;
 import static br.net.du.myequity.test.TestConstants.PASSWORD;
-import static br.net.du.myequity.test.TestConstants.now;
+import static br.net.du.myequity.test.TestConstants.SNAPSHOT_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -61,7 +61,8 @@ class PersistenceTest {
         userService.signUp(EMAIL, FIRST_NAME, LAST_NAME, PASSWORD);
         user = userService.findByEmail(EMAIL);
 
-        secondSnapshot = new Snapshot(2L, now, ImmutableSortedSet.of(), ImmutableList.of());
+        secondSnapshot =
+                new Snapshot(2L, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
     }
 
     @Test

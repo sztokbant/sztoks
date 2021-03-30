@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller.viewmodel.validator;
 
+import static br.net.du.myequity.test.TestConstants.SNAPSHOT_NAME;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,7 +44,7 @@ class AccountViewModelInputValidatorTest {
     public void setUp() {
         initMocks(this);
 
-        snapshot = new Snapshot(1L, "Snapshot Name", ImmutableSortedSet.of(), ImmutableList.of());
+        snapshot = new Snapshot(1L, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
         snapshot.setId(42L);
 
         accountViewModelInputValidator = new AccountViewModelInputValidator(accountService);

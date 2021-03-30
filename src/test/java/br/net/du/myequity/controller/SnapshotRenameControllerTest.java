@@ -25,8 +25,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 class SnapshotRenameControllerTest extends SnapshotControllerAjaxTestBase {
 
-    protected static final String NEW_SNAPSHOT_NAME_NOT_TRIMMED = "   My Best Snapshot   ";
-    protected static final String NEW_SNAPSHOT_NAME_TRIMMED = "My Best Snapshot";
+    protected static final String NEW_SNAPSHOT_NAME_NOT_TRIMMED = "   2021-04   ";
+    protected static final String NEW_SNAPSHOT_NAME_TRIMMED = "2021-04";
 
     protected static final String JSON_NAME = "name";
 

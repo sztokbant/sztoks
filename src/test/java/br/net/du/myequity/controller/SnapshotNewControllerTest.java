@@ -2,7 +2,7 @@ package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.test.ControllerTestUtils.verifyRedirect;
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
-import static br.net.du.myequity.test.TestConstants.now;
+import static br.net.du.myequity.test.TestConstants.SNAPSHOT_NAME;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -42,7 +42,9 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
 
     @BeforeEach
     public void setUp() {
-        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
+        snapshot =
+                new Snapshot(
+                        SNAPSHOT_INDEX, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
         snapshot.setId(SNAPSHOT_ID);
 
         user.addSnapshot(snapshot);
@@ -53,11 +55,11 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
         final Snapshot newSnapshot =
                 new Snapshot(
                         snapshot.getIndex() + 1,
-                        "New Snapshot",
+                        SNAPSHOT_NAME,
                         ImmutableSortedSet.of(),
                         ImmutableList.of());
         newSnapshot.setId(snapshot.getId() + 1);
-        when(snapshotService.newSnapshot(eq(user))).thenReturn(newSnapshot);
+        when(snapshotService.newSnapshot(eq(user), eq(SNAPSHOT_NAME))).thenReturn(newSnapshot);
     }
 
     @Test
@@ -71,7 +73,8 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED));
 
         // THEN
-        verify(snapshotService).newSnapshot(eq(user));
+        // TODO Pass snapshotName as input
+        verify(snapshotService).newSnapshot(eq(user), eq(SNAPSHOT_NAME));
         verifyRedirect(resultActions, NEW_SNAPSHOT_URL);
     }
 }

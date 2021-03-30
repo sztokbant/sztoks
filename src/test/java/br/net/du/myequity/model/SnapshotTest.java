@@ -1,5 +1,6 @@
 package br.net.du.myequity.model;
 
+import static br.net.du.myequity.test.TestConstants.SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.newRecurringDonation;
 import static br.net.du.myequity.test.TestConstants.newRecurringIncome;
 import static br.net.du.myequity.test.TestConstants.newRecurringInvestment;
@@ -8,7 +9,6 @@ import static br.net.du.myequity.test.TestConstants.newSimpleLiabilityAccount;
 import static br.net.du.myequity.test.TestConstants.newSingleDonation;
 import static br.net.du.myequity.test.TestConstants.newSingleIncome;
 import static br.net.du.myequity.test.TestConstants.newSingleInvestment;
-import static br.net.du.myequity.test.TestConstants.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -63,7 +63,7 @@ class SnapshotTest {
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
-                        now,
+                        SNAPSHOT_NAME,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
                         ImmutableList.of(
                                 recurringIncome, singleIncome, recurringDonation, singleDonation));
@@ -71,7 +71,7 @@ class SnapshotTest {
 
         // THEN
         assertEquals(SNAPSHOT_INDEX, snapshot.getIndex());
-        assertEquals(now, snapshot.getName());
+        assertEquals(SNAPSHOT_NAME, snapshot.getName());
 
         assertNull(simpleAssetAccount.getSnapshot());
         assertNull(simpleLiabilityAccount.getSnapshot());
@@ -100,7 +100,7 @@ class SnapshotTest {
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
-                        now,
+                        SNAPSHOT_NAME,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
                         ImmutableList.of());
 
@@ -114,7 +114,7 @@ class SnapshotTest {
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
-                        now,
+                        SNAPSHOT_NAME,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
                         ImmutableList.of());
 
@@ -130,7 +130,7 @@ class SnapshotTest {
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
-                        now,
+                        SNAPSHOT_NAME,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
                         ImmutableList.of());
 
@@ -146,7 +146,8 @@ class SnapshotTest {
     public void addAccount_addNew() {
         // GIVEN
         final Snapshot snapshot =
-                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
+                new Snapshot(
+                        SNAPSHOT_INDEX, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
 
         // WHEN
         snapshot.addAccount(simpleLiabilityAccount);
@@ -168,7 +169,7 @@ class SnapshotTest {
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
-                        now,
+                        SNAPSHOT_NAME,
                         ImmutableSortedSet.of(simpleLiabilityAccount, simpleAssetAccount),
                         ImmutableList.of());
 
@@ -192,7 +193,7 @@ class SnapshotTest {
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
-                        now,
+                        SNAPSHOT_NAME,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
                         ImmutableList.of());
 
@@ -209,7 +210,8 @@ class SnapshotTest {
     public void getAccount_existing() {
         // GIVEN
         final Snapshot snapshot =
-                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
+                new Snapshot(
+                        SNAPSHOT_INDEX, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
         simpleAssetAccount.setId(42L);
         snapshot.addAccount(simpleAssetAccount);
 
@@ -221,7 +223,8 @@ class SnapshotTest {
     public void getAccount_nonexisting() {
         // GIVEN
         final Snapshot snapshot =
-                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
+                new Snapshot(
+                        SNAPSHOT_INDEX, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
         simpleAssetAccount.setId(42L);
         snapshot.addAccount(simpleAssetAccount);
 
@@ -235,7 +238,7 @@ class SnapshotTest {
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
-                        now,
+                        SNAPSHOT_NAME,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
                         ImmutableList.of());
 
@@ -264,7 +267,7 @@ class SnapshotTest {
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
-                        now,
+                        SNAPSHOT_NAME,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
                         ImmutableList.of());
 
@@ -300,7 +303,8 @@ class SnapshotTest {
     public void addTransaction_addRecurring() {
         // GIVEN
         final Snapshot snapshot =
-                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
+                new Snapshot(
+                        SNAPSHOT_INDEX, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
         final IncomeTransaction transaction = newRecurringIncome();
 
         // WHEN
@@ -321,7 +325,8 @@ class SnapshotTest {
     public void addTransaction_addNonRecurring() {
         // GIVEN
         final Snapshot snapshot =
-                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
+                new Snapshot(
+                        SNAPSHOT_INDEX, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
         final IncomeTransaction transaction = newSingleIncome();
 
         // WHEN
@@ -342,7 +347,8 @@ class SnapshotTest {
         // GIVEN
         final IncomeTransaction recurringIncome = newRecurringIncome(42L);
         final Snapshot snapshot =
-                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
+                new Snapshot(
+                        SNAPSHOT_INDEX, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
 
         snapshot.addTransaction(recurringIncome);
         snapshot.addTransaction(newSingleIncome());
@@ -371,7 +377,7 @@ class SnapshotTest {
         final Snapshot snapshot =
                 new Snapshot(
                         SNAPSHOT_INDEX,
-                        now,
+                        SNAPSHOT_NAME,
                         ImmutableSortedSet.of(),
                         ImmutableList.of(
                                 recurringIncome,
@@ -426,7 +432,8 @@ class SnapshotTest {
     @Test
     public void equals() {
         final Snapshot snapshot =
-                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
+                new Snapshot(
+                        SNAPSHOT_INDEX, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
 
         // Itself
         assertTrue(snapshot.equals(snapshot));
@@ -437,7 +444,8 @@ class SnapshotTest {
 
         // Same Id null
         final Snapshot anotherSnapshot =
-                new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
+                new Snapshot(
+                        SNAPSHOT_INDEX, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
         snapshot.setId(null);
         anotherSnapshot.setId(null);
         assertFalse(snapshot.equals(anotherSnapshot));

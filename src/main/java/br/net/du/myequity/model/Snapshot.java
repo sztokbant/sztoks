@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -52,6 +54,8 @@ import org.joda.money.CurrencyUnit;
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "[index]"}))
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Snapshot implements Comparable<Snapshot> {
+    private static final Pattern VALID_NAME_PATTERN = Pattern.compile("^[0-9]{4}-[0-9]{2}$");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -64,7 +68,6 @@ public class Snapshot implements Comparable<Snapshot> {
 
     @Column(nullable = false)
     @Getter
-    @Setter
     private String name;
 
     @Column(name = "[index]", nullable = false)
@@ -94,17 +97,29 @@ public class Snapshot implements Comparable<Snapshot> {
     private final List<Transaction> transactions = new ArrayList<>();
 
     public Snapshot(
-            final Long index,
-            final String name,
+            @NonNull final Long index,
+            @NonNull final String name,
             @NotNull final SortedSet<Account> accounts,
             @NonNull final List<Transaction> transactions) {
         this.index = index;
 
-        this.name = name;
+        setName(name);
 
         accounts.stream().forEach(account -> addAccount(account.copy()));
 
         transactions.stream().forEach(transaction -> addTransaction(transaction.copy()));
+    }
+
+    public void setName(@NonNull final String name) {
+        this.name = validateName(name.trim());
+    }
+
+    private String validateName(@NonNull final String name) {
+        final Matcher matcher = VALID_NAME_PATTERN.matcher(name);
+        if (!matcher.find()) {
+            throw new IllegalArgumentException(String.format("Invalid Snapshot name: %s", name));
+        }
+        return name;
     }
 
     public SortedSet<Account> getAccounts() {

@@ -3,7 +3,7 @@ package br.net.du.myequity.model;
 import static br.net.du.myequity.test.TestConstants.EMAIL;
 import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
 import static br.net.du.myequity.test.TestConstants.LAST_NAME;
-import static br.net.du.myequity.test.TestConstants.now;
+import static br.net.du.myequity.test.TestConstants.SNAPSHOT_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -39,7 +39,9 @@ class UserTest {
         simpleLiabilityAccount = new SimpleLiabilityAccount("Liability Account", CurrencyUnit.USD);
         simpleLiabilityAccount.setId(7L);
 
-        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
+        snapshot =
+                new Snapshot(
+                        SNAPSHOT_INDEX, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
         snapshot.setId(42L);
     }
 
@@ -122,13 +124,20 @@ class UserTest {
     @Test
     public void compareTo_snapshotsAreOrderedByIndexDescending() {
         // GIVEN
-        user.addSnapshot(new Snapshot(5L, now, ImmutableSortedSet.of(), ImmutableList.of()));
-        user.addSnapshot(new Snapshot(3L, now, ImmutableSortedSet.of(), ImmutableList.of()));
-        user.addSnapshot(new Snapshot(6L, now, ImmutableSortedSet.of(), ImmutableList.of()));
-        user.addSnapshot(new Snapshot(7L, now, ImmutableSortedSet.of(), ImmutableList.of()));
-        user.addSnapshot(new Snapshot(1L, now, ImmutableSortedSet.of(), ImmutableList.of()));
-        user.addSnapshot(new Snapshot(2L, now, ImmutableSortedSet.of(), ImmutableList.of()));
-        user.addSnapshot(new Snapshot(4L, now, ImmutableSortedSet.of(), ImmutableList.of()));
+        user.addSnapshot(
+                new Snapshot(5L, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+        user.addSnapshot(
+                new Snapshot(3L, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+        user.addSnapshot(
+                new Snapshot(6L, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+        user.addSnapshot(
+                new Snapshot(7L, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+        user.addSnapshot(
+                new Snapshot(1L, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+        user.addSnapshot(
+                new Snapshot(2L, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+        user.addSnapshot(
+                new Snapshot(4L, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
 
         // WHEN
         final Iterator<Snapshot> iterator = user.getSnapshots().iterator();

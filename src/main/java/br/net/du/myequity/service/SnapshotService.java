@@ -4,7 +4,6 @@ import br.net.du.myequity.exception.MyEquityException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.SnapshotRepository;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import lombok.NonNull;
@@ -18,7 +17,7 @@ public class SnapshotService {
 
     private final UserService userService;
 
-    public Snapshot newSnapshot(@NonNull final User user) {
+    public Snapshot newSnapshot(@NonNull final User user, @NonNull final String snapshotName) {
         assert !user.getSnapshots().isEmpty();
 
         final Snapshot currentSnapshot = user.getSnapshots().first();
@@ -26,7 +25,7 @@ public class SnapshotService {
         final Snapshot newSnapshot =
                 new Snapshot(
                         currentSnapshot.getIndex() + 1,
-                        LocalDate.now().toString(),
+                        snapshotName,
                         currentSnapshot.getAccounts(),
                         currentSnapshot.getRecurringTransactions());
 

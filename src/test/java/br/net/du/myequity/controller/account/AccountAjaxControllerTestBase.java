@@ -1,7 +1,6 @@
 package br.net.du.myequity.controller.account;
 
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
-import static br.net.du.myequity.test.TestConstants.now;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -13,6 +12,7 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.service.AccountService;
+import br.net.du.myequity.test.TestConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
@@ -59,7 +59,12 @@ abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestB
 
     @BeforeEach
     public void ajaxSnapshotControllerTestBaseSetUp() throws Exception {
-        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
+        snapshot =
+                new Snapshot(
+                        SNAPSHOT_INDEX,
+                        TestConstants.SNAPSHOT_NAME,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of());
         snapshot.setId(SNAPSHOT_ID);
 
         final ValueUpdateJsonRequest valueUpdateJsonRequest =

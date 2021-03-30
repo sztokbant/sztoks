@@ -3,7 +3,7 @@ package br.net.du.myequity.controller;
 import static br.net.du.myequity.test.ControllerTestUtils.verifyRedirect;
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.myequity.test.ModelTestUtils.buildUser;
-import static br.net.du.myequity.test.TestConstants.now;
+import static br.net.du.myequity.test.TestConstants.SNAPSHOT_NAME;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -53,7 +53,9 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
         anotherUser = buildUser();
         anotherUser.setId(user.getId() * 7);
 
-        snapshot = new Snapshot(SNAPSHOT_INDEX, now, ImmutableSortedSet.of(), ImmutableList.of());
+        snapshot =
+                new Snapshot(
+                        SNAPSHOT_INDEX, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
         snapshot.setId(SNAPSHOT_ID);
 
         assetAccount =
