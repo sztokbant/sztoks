@@ -4,11 +4,12 @@ import static br.net.du.myequity.test.TestConstants.EMAIL;
 import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
 import static br.net.du.myequity.test.TestConstants.LAST_NAME;
 import static br.net.du.myequity.test.TestConstants.PASSWORD;
-import static br.net.du.myequity.test.TestConstants.SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mockStatic;
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
@@ -23,12 +24,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.SortedSet;
 import javax.transaction.Transactional;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -54,15 +57,21 @@ class PersistenceTest {
     public void setUp() {
         assetAmount = new BigDecimal("100.00");
         simpleAssetAccount = new SimpleAssetAccount("Asset Account", CurrencyUnit.USD, assetAmount);
+
         liabilityAmount = new BigDecimal("320000.00");
         simpleLiabilityAccount =
                 new SimpleLiabilityAccount("Liability Account", CurrencyUnit.USD, liabilityAmount);
 
-        userService.signUp(EMAIL, FIRST_NAME, LAST_NAME, PASSWORD);
+        final LocalDate now = LocalDate.of(2021, 03, 01);
+        try (MockedStatic<LocalDate> localDateStaticMock = mockStatic(LocalDate.class)) {
+            localDateStaticMock.when(LocalDate::now).thenReturn(now);
+            userService.signUp(EMAIL, FIRST_NAME, LAST_NAME, PASSWORD);
+        }
+
         user = userService.findByEmail(EMAIL);
 
         secondSnapshot =
-                new Snapshot(2L, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
+                new Snapshot(SECOND_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
     }
 
     @Test

@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
+import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -25,8 +26,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 class SnapshotRenameControllerTest extends SnapshotControllerAjaxTestBase {
 
-    protected static final String NEW_SNAPSHOT_NAME_NOT_TRIMMED = "   2021-04   ";
-    protected static final String NEW_SNAPSHOT_NAME_TRIMMED = "2021-04";
+    protected static final String SECOND_SNAPSHOT_NAME_NOT_TRIMMED =
+            "   " + SECOND_SNAPSHOT_NAME + "   ";
 
     protected static final String JSON_NAME = "name";
 
@@ -39,7 +40,7 @@ class SnapshotRenameControllerTest extends SnapshotControllerAjaxTestBase {
         final EntityRenameJsonRequest entityNameJsonRequest =
                 EntityRenameJsonRequest.builder()
                         .id(SNAPSHOT_ID)
-                        .newValue(NEW_SNAPSHOT_NAME_NOT_TRIMMED)
+                        .newValue(SECOND_SNAPSHOT_NAME_NOT_TRIMMED)
                         .build();
         requestContent = new ObjectMapper().writeValueAsString(entityNameJsonRequest);
     }
@@ -69,6 +70,6 @@ class SnapshotRenameControllerTest extends SnapshotControllerAjaxTestBase {
         assertNotNull(resultContentAsString);
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertEquals(NEW_SNAPSHOT_NAME_TRIMMED, jsonNode.get(JSON_NAME).textValue());
+        assertEquals(SECOND_SNAPSHOT_NAME, jsonNode.get(JSON_NAME).textValue());
     }
 }

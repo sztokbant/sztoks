@@ -29,7 +29,7 @@ public class UserService {
         final String firstSnapshotName =
                 String.format("%04d-%02d", now.getYear(), now.getMonth().getValue());
         user.addSnapshot(
-                new Snapshot(1L, firstSnapshotName, ImmutableSortedSet.of(), ImmutableList.of()));
+                new Snapshot(firstSnapshotName, ImmutableSortedSet.of(), ImmutableList.of()));
 
         save(user);
     }

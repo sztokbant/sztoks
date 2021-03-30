@@ -14,7 +14,13 @@ import org.joda.money.CurrencyUnit;
 
 public class TestConstants {
 
-    public static final String SNAPSHOT_NAME = "2021-03";
+    public static final String FIRST_SNAPSHOT_NAME = "2021-03";
+    public static final String SECOND_SNAPSHOT_NAME = "2021-04";
+    public static final String THIRD_SNAPSHOT_NAME = "2021-05";
+    public static final String FOURTH_SNAPSHOT_NAME = "2021-06";
+    public static final String FIFTH_SNAPSHOT_NAME = "2021-07";
+    public static final String SIXTH_SNAPSHOT_NAME = "2021-08";
+    public static final String SEVENTH_SNAPSHOT_NAME = "2021-09";
 
     public static final String EMAIL = "example@example.com";
     public static final String FIRST_NAME = "Bill";

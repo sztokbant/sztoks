@@ -24,17 +24,12 @@ public class SnapshotService {
 
         final Snapshot newSnapshot =
                 new Snapshot(
-                        currentSnapshot.getIndex() + 1,
                         snapshotName,
                         currentSnapshot.getAccounts(),
                         currentSnapshot.getRecurringTransactions());
 
-        currentSnapshot.setNext(newSnapshot);
-        newSnapshot.setPrevious(currentSnapshot);
-
         user.addSnapshot(newSnapshot);
 
-        snapshotRepository.save(currentSnapshot);
         snapshotRepository.save(newSnapshot);
 
         return newSnapshot;
@@ -63,22 +58,6 @@ public class SnapshotService {
         snapshot.getAccounts().forEach(account -> snapshot.removeAccount(account));
 
         snapshot.getTransactions().forEach(transaction -> snapshot.removeTransaction(transaction));
-
-        final Snapshot next = snapshot.getNext();
-        final Snapshot previous = snapshot.getPrevious();
-
-        if (next != null) {
-            next.setPrevious(previous);
-            save(next);
-        }
-
-        if (previous != null) {
-            previous.setNext(next);
-            save(previous);
-        }
-
-        snapshot.setNext(null);
-        snapshot.setPrevious(null);
 
         user.removeSnapshot(snapshot);
 

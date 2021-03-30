@@ -2,7 +2,8 @@ package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.test.ControllerTestUtils.verifyRedirect;
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
-import static br.net.du.myequity.test.TestConstants.SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_NAME;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,8 +28,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 class SnapshotNewControllerTest extends PostControllerTestBase {
 
-    private static final long SNAPSHOT_INDEX = 1L;
-
     private static final String NEW_SNAPSHOT_URL = String.format("/snapshot/%d", SNAPSHOT_ID + 1);
     private static final String URL = "/snapshot/new";
 
@@ -42,9 +41,7 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
 
     @BeforeEach
     public void setUp() {
-        snapshot =
-                new Snapshot(
-                        SNAPSHOT_INDEX, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
+        snapshot = new Snapshot(FIRST_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
         snapshot.setId(SNAPSHOT_ID);
 
         user.addSnapshot(snapshot);
@@ -53,13 +50,11 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         final Snapshot newSnapshot =
-                new Snapshot(
-                        snapshot.getIndex() + 1,
-                        SNAPSHOT_NAME,
-                        ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                new Snapshot(SECOND_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
         newSnapshot.setId(snapshot.getId() + 1);
-        when(snapshotService.newSnapshot(eq(user), eq(SNAPSHOT_NAME))).thenReturn(newSnapshot);
+
+        when(snapshotService.newSnapshot(eq(user), eq(SECOND_SNAPSHOT_NAME)))
+                .thenReturn(newSnapshot);
     }
 
     @Test
@@ -73,8 +68,7 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED));
 
         // THEN
-        // TODO Pass snapshotName as input
-        verify(snapshotService).newSnapshot(eq(user), eq(SNAPSHOT_NAME));
+        verify(snapshotService).newSnapshot(eq(user), eq(SECOND_SNAPSHOT_NAME));
         verifyRedirect(resultActions, NEW_SNAPSHOT_URL);
     }
 }

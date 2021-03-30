@@ -23,13 +23,31 @@ public class SnapshotNewController {
     public String newSnapshot(final Model model) {
         final User user = getLoggedUser(model);
 
-        // TODO Receive as input
-        final LocalDate now = LocalDate.now();
-        final String snapshotName =
-                String.format("%04d-%02d", now.getYear(), now.getMonth().getValue());
+        // TODO Receive snapshotName as input
+        final String snapshotName = getNextSnapshotName(user);
 
         final Snapshot newSnapshot = snapshotService.newSnapshot(user, snapshotName);
 
         return String.format(REDIRECT_SNAPSHOT_TEMPLATE, newSnapshot.getId());
+    }
+
+    private String getNextSnapshotName(final User user) {
+        final Snapshot latestSnapshot = user.getSnapshots().first();
+
+        final String[] latestSnapshotNameParts = latestSnapshot.getName().split("-");
+        final int latestSnapshotYear = Integer.valueOf(latestSnapshotNameParts[0]);
+        final int latestSnapshotMonth = Integer.valueOf(latestSnapshotNameParts[1]);
+
+        final LocalDate latestSnapshotDate =
+                LocalDate.of(latestSnapshotYear, latestSnapshotMonth, 1);
+
+        final LocalDate newSnapshotDate = latestSnapshotDate.plusMonths(1);
+
+        final String snapshotName =
+                String.format(
+                        "%04d-%02d",
+                        newSnapshotDate.getYear(), newSnapshotDate.getMonth().getValue());
+
+        return snapshotName;
     }
 }

@@ -1,7 +1,9 @@
 package br.net.du.myequity.service;
 
 import static br.net.du.myequity.test.ModelTestUtils.buildUser;
-import static br.net.du.myequity.test.TestConstants.SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.FOURTH_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.THIRD_SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.newCreditCardAccount;
 import static br.net.du.myequity.test.TestConstants.newInvestmentAccount;
 import static br.net.du.myequity.test.TestConstants.newRecurringDonation;
@@ -69,7 +71,7 @@ public class SnapshotServiceTest {
     @Test
     public void newSnapshot_happy() {
         // WHEN
-        final Snapshot newSnapshot = snapshotService.newSnapshot(user, SNAPSHOT_NAME);
+        final Snapshot newSnapshot = snapshotService.newSnapshot(user, SECOND_SNAPSHOT_NAME);
 
         // THEN
         final SortedSet<Account> originalAccounts = snapshot.getAccounts();
@@ -98,7 +100,6 @@ public class SnapshotServiceTest {
         assertTrue(newRecurringDonation().equalsIgnoreId(iterator.next()));
         assertTrue(newRecurringIncome().equalsIgnoreId(iterator.next()));
 
-        verify(snapshotRepository).save(snapshot);
         verify(snapshotRepository).save(newSnapshot);
 
         assertNull(snapshot.getPrevious());
@@ -111,12 +112,11 @@ public class SnapshotServiceTest {
     @Test
     public void newSnapshot_twice_properlySetsNextAndPrevious() {
         // WHEN
-        final Snapshot secondSnapshot = snapshotService.newSnapshot(user, SNAPSHOT_NAME);
-        final Snapshot thirdSnapshot = snapshotService.newSnapshot(user, SNAPSHOT_NAME);
+        final Snapshot secondSnapshot = snapshotService.newSnapshot(user, SECOND_SNAPSHOT_NAME);
+        final Snapshot thirdSnapshot = snapshotService.newSnapshot(user, THIRD_SNAPSHOT_NAME);
 
         // THEN
-        verify(snapshotRepository, times(1)).save(eq(snapshot));
-        verify(snapshotRepository, times(2)).save(eq(secondSnapshot));
+        verify(snapshotRepository, times(1)).save(eq(secondSnapshot));
         verify(snapshotRepository, times(1)).save(eq(thirdSnapshot));
 
         assertNull(snapshot.getPrevious());
@@ -132,10 +132,8 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_first_happy() {
         // GIVEN
-        final Snapshot secondSnapshot = newEmptySnapshot(snapshot.getIndex() + 1);
-        secondSnapshot.setId(99L);
-        secondSnapshot.setPrevious(snapshot);
-        snapshot.setNext(secondSnapshot);
+        final Snapshot secondSnapshot = newEmptySnapshot(SECOND_SNAPSHOT_NAME);
+        secondSnapshot.setId(snapshot.getId() + 1);
         user.addSnapshot(secondSnapshot);
 
         assertEquals(2, user.getSnapshots().size());
@@ -144,8 +142,6 @@ public class SnapshotServiceTest {
         snapshotService.deleteSnapshot(user, snapshot);
 
         // THEN
-        verify(snapshotRepository).save(eq(secondSnapshot));
-
         assertEquals(1, user.getSnapshots().size());
         assertEquals(secondSnapshot, user.getSnapshots().first());
 
@@ -156,10 +152,8 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_last_happy() {
         // GIVEN
-        final Snapshot secondSnapshot = newEmptySnapshot(snapshot.getIndex() + 1);
-        secondSnapshot.setId(99L);
-        secondSnapshot.setPrevious(snapshot);
-        snapshot.setNext(secondSnapshot);
+        final Snapshot secondSnapshot = newEmptySnapshot(SECOND_SNAPSHOT_NAME);
+        secondSnapshot.setId(snapshot.getId() + 1);
         user.addSnapshot(secondSnapshot);
 
         assertEquals(2, user.getSnapshots().size());
@@ -168,8 +162,6 @@ public class SnapshotServiceTest {
         snapshotService.deleteSnapshot(user, secondSnapshot);
 
         // THEN
-        verify(snapshotRepository).save(eq(snapshot));
-
         assertEquals(1, user.getSnapshots().size());
         assertEquals(snapshot, user.getSnapshots().first());
 
@@ -180,24 +172,17 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_middle_happy() {
         // GIVEN
-        final Snapshot secondSnapshot = newEmptySnapshot(snapshot.getIndex() + 1);
-        secondSnapshot.setId(99L);
+        final Snapshot secondSnapshot = newEmptySnapshot(SECOND_SNAPSHOT_NAME);
+        secondSnapshot.setId(snapshot.getId() + 1);
         user.addSnapshot(secondSnapshot);
 
-        final Snapshot thirdSnapshot = newEmptySnapshot(snapshot.getIndex() + 2);
-        thirdSnapshot.setId(108L);
+        final Snapshot thirdSnapshot = newEmptySnapshot(THIRD_SNAPSHOT_NAME);
+        thirdSnapshot.setId(secondSnapshot.getId() + 1);
         user.addSnapshot(thirdSnapshot);
 
-        final Snapshot fourthSnapshot = newEmptySnapshot(snapshot.getIndex() + 3);
-        fourthSnapshot.setId(144L);
+        final Snapshot fourthSnapshot = newEmptySnapshot(FOURTH_SNAPSHOT_NAME);
+        fourthSnapshot.setId(thirdSnapshot.getId() + 1);
         user.addSnapshot(fourthSnapshot);
-
-        snapshot.setNext(secondSnapshot);
-        secondSnapshot.setPrevious(snapshot);
-        secondSnapshot.setNext(thirdSnapshot);
-        thirdSnapshot.setPrevious(secondSnapshot);
-        thirdSnapshot.setNext(fourthSnapshot);
-        fourthSnapshot.setPrevious(thirdSnapshot);
 
         assertEquals(4, user.getSnapshots().size());
 
@@ -205,9 +190,6 @@ public class SnapshotServiceTest {
         snapshotService.deleteSnapshot(user, thirdSnapshot);
 
         // THEN
-        verify(snapshotRepository).save(eq(secondSnapshot));
-        verify(snapshotRepository).save(eq(fourthSnapshot));
-
         assertEquals(3, user.getSnapshots().size());
         assertEquals(fourthSnapshot, secondSnapshot.getNext());
         assertEquals(secondSnapshot, fourthSnapshot.getPrevious());
@@ -228,8 +210,7 @@ public class SnapshotServiceTest {
         assertEquals(1, user.getSnapshots().size());
     }
 
-    private Snapshot newEmptySnapshot(final long snapshotIndex) {
-        return new Snapshot(
-                snapshotIndex, SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
+    private Snapshot newEmptySnapshot(final String snapshotName) {
+        return new Snapshot(snapshotName, ImmutableSortedSet.of(), ImmutableList.of());
     }
 }
