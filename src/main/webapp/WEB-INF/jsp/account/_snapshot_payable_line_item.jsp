@@ -29,7 +29,7 @@ $(document).ready(function() {
 <div class="row border-1px-bottom" id="account_row_${entity.accountId}">
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
-    <div class="col col-cell align-right editable-liability">
+    <div class="col col-cell align-center editable-liability">
         <form id="form_payable_due_date_${entity.accountId}">
             <span id="payable_due_date_${entity.accountId}">${entity.dueDate}</span>
             <span><input id="new_payable_due_date_${entity.accountId}" name="amount" type="text"
