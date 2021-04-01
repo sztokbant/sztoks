@@ -38,18 +38,18 @@ public class InvestmentUpdateController extends AccountUpdateControllerBase {
                 updateInvestmentSharesFunction);
     }
 
-    @PostMapping("/snapshot/updateInvestmentOriginalShareValue")
-    public AccountViewModelOutput updateInvestmentOriginalShareValue(
+    @PostMapping("/snapshot/updateInvestmentAmountInvested")
+    public AccountViewModelOutput updateInvestmentAmountInvested(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
         final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
-                updateInvestmentOriginalShareValueFunction =
+                updateInvestmentAmountInvestedFunction =
                         (jsonRequest, account) -> {
                             final InvestmentAccount investmentSnapshot =
                                     (InvestmentAccount) account;
 
                             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            investmentSnapshot.setOriginalShareValue(newValue);
+                            investmentSnapshot.setAmountInvested(newValue);
 
                             return InvestmentAccountViewModelOutput.of(investmentSnapshot);
                         };
@@ -58,7 +58,7 @@ public class InvestmentUpdateController extends AccountUpdateControllerBase {
                 model,
                 valueUpdateJsonRequest,
                 InvestmentAccount.class,
-                updateInvestmentOriginalShareValueFunction);
+                updateInvestmentAmountInvestedFunction);
     }
 
     @PostMapping("/snapshot/updateInvestmentCurrentShareValue")

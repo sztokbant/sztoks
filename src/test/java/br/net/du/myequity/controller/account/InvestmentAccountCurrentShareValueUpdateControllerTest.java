@@ -27,12 +27,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 class InvestmentAccountCurrentShareValueUpdateControllerTest extends AccountAjaxControllerTestBase {
 
     private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
-    private static final BigDecimal CURRENT_CURRENT_SHARE_VALUE = new BigDecimal("2000.00");
-    private static final BigDecimal CURRENT_ORIGINAL_SHARE_VALUE = new BigDecimal("1500.00");
-    private static final BigDecimal CURRENT_SHARES = new BigDecimal("15.00");
+    private static final BigDecimal CURRENT_CURRENT_SHARE_VALUE = new BigDecimal("123.00");
+    private static final BigDecimal CURRENT_AMOUNT_INVESTED = new BigDecimal("4696.97");
+    private static final BigDecimal CURRENT_SHARES = new BigDecimal("36.00");
 
     InvestmentAccountCurrentShareValueUpdateControllerTest() {
-        super("/snapshot/updateInvestmentCurrentShareValue", "4500.00");
+        super("/snapshot/updateInvestmentCurrentShareValue", "180.99");
     }
 
     @Override
@@ -42,13 +42,13 @@ class InvestmentAccountCurrentShareValueUpdateControllerTest extends AccountAjax
                         "AMZN",
                         CURRENCY_UNIT,
                         CURRENT_SHARES,
-                        CURRENT_ORIGINAL_SHARE_VALUE,
+                        CURRENT_AMOUNT_INVESTED,
                         CURRENT_CURRENT_SHARE_VALUE);
         account.setId(ACCOUNT_ID);
     }
 
     @Test
-    public void updateInvestmentOriginalShareValue_happy() throws Exception {
+    public void updateInvestmentAmountInvested_happy() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -77,12 +77,13 @@ class InvestmentAccountCurrentShareValueUpdateControllerTest extends AccountAjax
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
-        assertEquals("R$ 4,500.00", jsonNode.get(JSON_CURRENT_SHARE_VALUE).asText());
+        assertEquals("R$ 180.99", jsonNode.get(JSON_CURRENT_SHARE_VALUE).asText());
+        assertEquals("R$ 130.47", jsonNode.get(JSON_AVERAGE_PURCHASE_PRICE).asText());
 
-        final String expectedProfitPercentage = "200.00%";
+        final String expectedProfitPercentage = "38.72%";
         assertEquals(expectedProfitPercentage, jsonNode.get(JSON_PROFIT_PERCENTAGE).asText());
 
-        final String expectedAccountBalance = "R$ 67,500.00";
+        final String expectedAccountBalance = "R$ 6,515.64";
         assertEquals(expectedAccountBalance, jsonNode.get(JSON_BALANCE).asText());
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());

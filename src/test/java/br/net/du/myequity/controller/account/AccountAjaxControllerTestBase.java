@@ -37,7 +37,8 @@ abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestB
     static final String JSON_CURRENT_SHARE_VALUE = "currentShareValue";
     static final String JSON_DUE_DATE = "dueDate";
     static final String JSON_NET_WORTH = "netWorth";
-    static final String JSON_ORIGINAL_SHARE_VALUE = "originalShareValue";
+    static final String JSON_AMOUNT_INVESTED = "amountInvested";
+    static final String JSON_AVERAGE_PURCHASE_PRICE = "averagePurchasePrice";
     static final String JSON_PROFIT_PERCENTAGE = "profitPercentage";
     static final String JSON_REMAINING_BALANCE = "remainingBalance";
     static final String JSON_SHARES = "shares";

@@ -28,7 +28,7 @@ class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerT
 
     private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
     private static final BigDecimal CURRENT_CURRENT_SHARE_VALUE = new BigDecimal("4200.00");
-    private static final BigDecimal CURRENT_ORIGINAL_SHARE_VALUE = new BigDecimal("2100.00");
+    private static final BigDecimal CURRENT_AMOUNT_INVESTED = new BigDecimal("2100.00");
     private static final BigDecimal CURRENT_SHARES = new BigDecimal("50.00");
 
     InvestmentAccountSharesUpdateControllerTest() {
@@ -42,7 +42,7 @@ class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerT
                         "AMZN",
                         CURRENCY_UNIT,
                         CURRENT_SHARES,
-                        CURRENT_ORIGINAL_SHARE_VALUE,
+                        CURRENT_AMOUNT_INVESTED,
                         CURRENT_CURRENT_SHARE_VALUE);
         account.setId(ACCOUNT_ID);
     }
@@ -78,6 +78,8 @@ class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerT
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
         assertEquals(newValue, jsonNode.get(JSON_SHARES).asText());
+
+        assertEquals("R$ 28.00", jsonNode.get(JSON_AVERAGE_PURCHASE_PRICE).asText());
 
         final String expectedAccountBalance = "R$ 315,000.00";
         assertEquals(expectedAccountBalance, jsonNode.get(JSON_BALANCE).asText());

@@ -50,6 +50,10 @@ $(document).ready(function() {
         &nbsp;
     </div>
 
+    <div class="col col-cell">
+        &nbsp;
+    </div>
+
     <div class="col col-cell align-right editable-asset">
         <form id="form_account_balance_${entity.accountId}">
             <span id="account_balance_${entity.accountId}">${entity.balance}</span>

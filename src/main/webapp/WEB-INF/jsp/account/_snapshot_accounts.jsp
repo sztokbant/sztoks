@@ -32,6 +32,7 @@
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.simpleAssetAccounts}">
@@ -49,6 +50,7 @@
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.receivableAccounts}">
@@ -63,7 +65,8 @@
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title col-account-name"><i>Investments</i></div>
                     <div class="col col-cell col-title">Shares</div>
-                    <div class="col col-cell col-title">Original Share Value</div>
+                    <div class="col col-cell col-title">Amount Invested</div>
+                    <div class="col col-cell col-title">Average Purchase Price</div>
                     <div class="col col-cell col-title">Current Share Value</div>
                     <div class="col col-cell col-title">Profit</div>
                     <div class="col col-cell col-title">Balance</div>

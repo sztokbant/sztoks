@@ -26,7 +26,7 @@ public class InvestmentAccount extends Account {
     @Setter
     private BigDecimal shares;
 
-    @Column @Getter @Setter private BigDecimal originalShareValue;
+    @Column @Getter @Setter private BigDecimal amountInvested;
 
     @Column @Getter @Setter private BigDecimal currentShareValue;
 
@@ -45,9 +45,9 @@ public class InvestmentAccount extends Account {
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final BigDecimal shares,
-            @NonNull final BigDecimal originalShareValue,
+            @NonNull final BigDecimal amountInvested,
             @NonNull final BigDecimal currentShareValue) {
-        this(name, currencyUnit, LocalDate.now(), shares, originalShareValue, currentShareValue);
+        this(name, currencyUnit, LocalDate.now(), shares, amountInvested, currentShareValue);
     }
 
     public InvestmentAccount(
@@ -55,11 +55,11 @@ public class InvestmentAccount extends Account {
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate createDate,
             @NonNull final BigDecimal shares,
-            @NonNull final BigDecimal originalShareValue,
+            @NonNull final BigDecimal amountInvested,
             @NonNull final BigDecimal currentShareValue) {
         super(name, AccountType.ASSET, currencyUnit, createDate);
         this.shares = shares;
-        this.originalShareValue = originalShareValue;
+        this.amountInvested = amountInvested;
         this.currentShareValue = currentShareValue;
     }
 
@@ -71,7 +71,7 @@ public class InvestmentAccount extends Account {
     @Override
     public InvestmentAccount copy() {
         return new InvestmentAccount(
-                name, CurrencyUnit.of(currency), shares, originalShareValue, currentShareValue);
+                name, CurrencyUnit.of(currency), shares, amountInvested, currentShareValue);
     }
 
     @Override
@@ -88,20 +88,28 @@ public class InvestmentAccount extends Account {
         final InvestmentAccount otherInvestmentSnapshot = (InvestmentAccount) other;
 
         return (shares.compareTo(otherInvestmentSnapshot.getShares()) == 0)
-                && (originalShareValue.compareTo(otherInvestmentSnapshot.getOriginalShareValue())
-                        == 0)
+                && (amountInvested.compareTo(otherInvestmentSnapshot.getAmountInvested()) == 0)
                 && (currentShareValue.compareTo(otherInvestmentSnapshot.getCurrentShareValue())
                         == 0);
     }
 
     public BigDecimal getProfitPercentage() {
-        if (originalShareValue.compareTo(BigDecimal.ZERO) == 0) {
+        final BigDecimal averagePurchasePrice = getAveragePurchasePrice();
+
+        if (averagePurchasePrice.compareTo(BigDecimal.ZERO) == 0) {
             return BigDecimal.ZERO;
         }
         final BigDecimal oneHundred = new BigDecimal("100.00");
         return (currentShareValue
                         .multiply(oneHundred)
-                        .divide(originalShareValue, RoundingMode.HALF_UP))
+                        .divide(averagePurchasePrice, RoundingMode.HALF_UP))
                 .subtract(oneHundred);
+    }
+
+    public BigDecimal getAveragePurchasePrice() {
+        if (shares.compareTo(BigDecimal.ZERO) == 0) {
+            return BigDecimal.ZERO;
+        }
+        return amountInvested.divide(shares, RoundingMode.HALF_UP);
     }
 }

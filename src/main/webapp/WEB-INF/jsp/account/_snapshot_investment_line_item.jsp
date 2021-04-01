@@ -14,13 +14,13 @@ $(document).ready(function() {
     investmentSharesUpdateSuccessCallback,
   );
 
-  prepareUpdateForm($("#form_investment_original_share_value_${entity.accountId}"),
-    $("#investment_original_share_value_${entity.accountId}"),
-    $("#new_investment_original_share_value_${entity.accountId}"),
-    "snapshot/updateInvestmentOriginalShareValue",
+  prepareUpdateForm($("#form_investment_amount_invested_${entity.accountId}"),
+    $("#investment_amount_invested_${entity.accountId}"),
+    $("#new_investment_amount_invested_${entity.accountId}"),
+    "snapshot/updateInvestmentAmountInvested",
     "${entity.currencyUnitSymbol}",
     data,
-    investmentOriginalShareValueUpdateSuccessCallback,
+    investmentAmountInvestedUpdateSuccessCallback,
   );
 
   prepareUpdateForm($("#form_investment_current_share_value_${entity.accountId}"),
@@ -48,13 +48,18 @@ $(document).ready(function() {
     </div>
 
     <div class="col col-cell align-right editable-asset">
-        <form id="form_investment_original_share_value_${entity.accountId}">
-            <span id="investment_original_share_value_${entity.accountId}">${entity.originalShareValue}</span>
-            <span><input id="new_investment_original_share_value_${entity.accountId}" name="amount" type="number"
+        <form id="form_investment_amount_invested_${entity.accountId}">
+            <span id="investment_amount_invested_${entity.accountId}">${entity.amountInvested}</span>
+            <span><input id="new_investment_amount_invested_${entity.accountId}" name="amount" type="number"
                          min="0"
                          step="0.01" style="display: none;"/></span>
             <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
+    </div>
+
+
+    <div class="col col-cell align-right">
+        <span id="investment_average_purchase_price_${entity.accountId}">${entity.averagePurchasePrice}</span>
     </div>
 
     <div class="col col-cell align-right editable-asset">

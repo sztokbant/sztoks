@@ -14,19 +14,22 @@ import org.joda.money.CurrencyUnit;
 @Getter
 public class InvestmentAccountViewModelOutput extends AccountViewModelOutput {
     private final String shares;
-    private final String originalShareValue;
+    private final String amountInvested;
+    private final String averagePurchasePrice;
     private final String currentShareValue;
     private final String profitPercentage;
 
     public InvestmentAccountViewModelOutput(
             final AccountViewModelOutput other,
             final String shares,
-            final String originalShareValue,
+            final String amountInvested,
+            final String averagePurchasePrice,
             final String currentShareValue,
             final String profitPercentage) {
         super(other);
         this.shares = shares;
-        this.originalShareValue = originalShareValue;
+        this.amountInvested = amountInvested;
+        this.averagePurchasePrice = averagePurchasePrice;
         this.currentShareValue = currentShareValue;
         this.profitPercentage = profitPercentage;
     }
@@ -40,9 +43,13 @@ public class InvestmentAccountViewModelOutput extends AccountViewModelOutput {
 
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
 
-        final String originalShareValue =
+        final String amountIvested =
                 MoneyFormatUtils.format(
-                        currencyUnit, toDecimal(investmentSnapshot.getOriginalShareValue()));
+                        currencyUnit, toDecimal(investmentSnapshot.getAmountInvested()));
+
+        final String averagePurchasePrice =
+                MoneyFormatUtils.format(
+                        currencyUnit, toDecimal(investmentSnapshot.getAveragePurchasePrice()));
 
         final String currentShareValue =
                 MoneyFormatUtils.format(
@@ -54,7 +61,8 @@ public class InvestmentAccountViewModelOutput extends AccountViewModelOutput {
         return new InvestmentAccountViewModelOutput(
                 AccountViewModelOutput.of(account, includeTotals),
                 shares,
-                originalShareValue,
+                amountIvested,
+                averagePurchasePrice,
                 currentShareValue,
                 profitPercentage);
     }
