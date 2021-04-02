@@ -36,27 +36,26 @@ public class InvestmentAccountViewModelOutput extends AccountViewModelOutput {
 
     public static InvestmentAccountViewModelOutput of(
             final Account account, final boolean includeTotals) {
-        final InvestmentAccount investmentSnapshot = (InvestmentAccount) account;
+        final InvestmentAccount investmentAccount = (InvestmentAccount) account;
 
         final String shares =
-                new BigDecimal(formatAsDecimal(investmentSnapshot.getShares())).toString();
+                new BigDecimal(formatAsDecimal(investmentAccount.getShares())).toString();
 
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
 
         final String amountIvested =
                 MoneyFormatUtils.format(
-                        currencyUnit, toDecimal(investmentSnapshot.getAmountInvested()));
+                        currencyUnit, toDecimal(investmentAccount.getAmountInvested()));
 
         final String averagePurchasePrice =
                 MoneyFormatUtils.format(
-                        currencyUnit, toDecimal(investmentSnapshot.getAveragePurchasePrice()));
+                        currencyUnit, toDecimal(investmentAccount.getAveragePurchasePrice()));
 
         final String currentShareValue =
                 MoneyFormatUtils.format(
-                        currencyUnit, toDecimal((investmentSnapshot.getCurrentShareValue())));
+                        currencyUnit, toDecimal((investmentAccount.getCurrentShareValue())));
 
-        final String profitPercentage =
-                formatAsPercentage(investmentSnapshot.getProfitPercentage());
+        final String profitPercentage = formatAsPercentage(investmentAccount.getProfitPercentage());
 
         return new InvestmentAccountViewModelOutput(
                 AccountViewModelOutput.of(account, includeTotals),

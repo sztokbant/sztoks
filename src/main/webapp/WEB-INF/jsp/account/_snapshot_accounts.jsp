@@ -104,6 +104,24 @@
         </c:choose>
 
         <c:choose>
+            <c:when test="${not empty snapshot.tithingAccounts}">
+                <div class="row border-1px-bottom">
+                    <div class="col col-cell col-title short">&nbsp;</div>
+                    <div class="col col-cell col-title col-account-name"><i>Tithing</i></div>
+                    <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">Balance</div>
+                </div>
+                <c:forEach var="entity" items="${snapshot.tithingAccounts}">
+                    <%@ include file="_snapshot_tithing_line_item.jsp" %>
+                </c:forEach>
+            </c:when>
+        </c:choose>
+
+        <c:choose>
             <c:when test="${not empty snapshot.simpleLiabilityAccounts}">
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>

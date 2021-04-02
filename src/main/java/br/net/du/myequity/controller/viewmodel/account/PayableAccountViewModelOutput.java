@@ -17,9 +17,9 @@ public class PayableAccountViewModelOutput extends AccountViewModelOutput {
 
     public static PayableAccountViewModelOutput of(
             final Account account, final boolean includeTotals) {
-        final PayableAccount payableSnapshot = (PayableAccount) account;
+        final PayableAccount payableAccount = (PayableAccount) account;
         return new PayableAccountViewModelOutput(
-                AccountViewModelOutput.of(account, includeTotals), payableSnapshot.getDueDate());
+                AccountViewModelOutput.of(account, includeTotals), payableAccount.getDueDate());
     }
 
     public static PayableAccountViewModelOutput of(final Account account) {

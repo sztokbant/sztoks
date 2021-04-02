@@ -17,9 +17,9 @@ public class ReceivableAccountViewModelOutput extends AccountViewModelOutput {
 
     public static ReceivableAccountViewModelOutput of(
             final Account account, final boolean includeTotals) {
-        final ReceivableAccount receivableSnapshot = (ReceivableAccount) account;
+        final ReceivableAccount receivableAccount = (ReceivableAccount) account;
         return new ReceivableAccountViewModelOutput(
-                AccountViewModelOutput.of(account, includeTotals), receivableSnapshot.getDueDate());
+                AccountViewModelOutput.of(account, includeTotals), receivableAccount.getDueDate());
     }
 
     public static ReceivableAccountViewModelOutput of(final Account account) {

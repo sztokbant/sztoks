@@ -40,23 +40,23 @@ public class CreditCardAccountViewModelOutput extends AccountViewModelOutput {
 
     public static CreditCardAccountViewModelOutput of(
             final Account account, final boolean includeTotals) {
-        final CreditCardAccount creditCardSnapshot = (CreditCardAccount) account;
+        final CreditCardAccount creditCardAccount = (CreditCardAccount) account;
 
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
 
         final String totalCredit =
                 MoneyFormatUtils.format(
-                        currencyUnit, toDecimal(creditCardSnapshot.getTotalCredit()));
+                        currencyUnit, toDecimal(creditCardAccount.getTotalCredit()));
         final String availableCredit =
                 MoneyFormatUtils.format(
-                        currencyUnit, toDecimal(creditCardSnapshot.getAvailableCredit()));
+                        currencyUnit, toDecimal(creditCardAccount.getAvailableCredit()));
         final String statement =
-                MoneyFormatUtils.format(currencyUnit, toDecimal(creditCardSnapshot.getStatement()));
+                MoneyFormatUtils.format(currencyUnit, toDecimal(creditCardAccount.getStatement()));
         final String remainingBalance =
                 MoneyFormatUtils.format(
-                        currencyUnit, toDecimal(creditCardSnapshot.getRemainingBalance()));
+                        currencyUnit, toDecimal(creditCardAccount.getRemainingBalance()));
         final String usedCreditPercentage =
-                formatAsPercentage(creditCardSnapshot.getUsedCreditPercentage());
+                formatAsPercentage(creditCardAccount.getUsedCreditPercentage());
 
         final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit;
         if (includeTotals) {

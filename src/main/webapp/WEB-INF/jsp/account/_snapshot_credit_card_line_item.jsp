@@ -36,6 +36,8 @@ $(document).ready(function() {
 </script>
 
 <div class="row border-1px-bottom" id="account_row_${entity.accountId}">
+    <%@ include file="_snapshot_col_remove_account.jsp" %>
+
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
     <div class="col col-cell align-right editable-liability">
