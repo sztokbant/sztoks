@@ -14,9 +14,8 @@ import org.joda.money.Money;
 
 public class NetWorthUtils {
 
-    public static Map<CurrencyUnit, BigDecimal> breakDownAccountsByCurrency(
-            final Set<Account> accountBalances) {
-        return accountBalances.stream()
+    public static Map<CurrencyUnit, BigDecimal> getNetWorthByCurrency(final Set<Account> accounts) {
+        return accounts.stream()
                 .map(
                         entry -> {
                             final BigDecimal amount =
@@ -25,6 +24,18 @@ public class NetWorthUtils {
                                             : entry.getTotal().negate();
                             return Money.of(entry.getCurrencyUnit(), amount, RoundingMode.HALF_UP);
                         })
+                .collect(getAmountByCurrencyCollector());
+    }
+
+    public static Map<CurrencyUnit, BigDecimal> breakDownAccountsByCurrency(
+            final Set<Account> accounts) {
+        return accounts.stream()
+                .map(
+                        entry ->
+                                Money.of(
+                                        entry.getCurrencyUnit(),
+                                        entry.getTotal(),
+                                        RoundingMode.HALF_UP))
                 .collect(getAmountByCurrencyCollector());
     }
 

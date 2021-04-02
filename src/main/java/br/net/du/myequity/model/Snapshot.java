@@ -7,6 +7,9 @@ import static java.util.stream.Collectors.toSet;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.account.CreditCardAccount;
+import br.net.du.myequity.model.account.TithingAccount;
+import br.net.du.myequity.model.transaction.DonationTransaction;
+import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import br.net.du.myequity.model.util.UserUtils;
@@ -189,6 +192,15 @@ public class Snapshot implements Comparable<Snapshot> {
         if (transactions.contains(transaction)) {
             return;
         }
+
+        if (transaction instanceof IncomeTransaction) {
+            final IncomeTransaction incomeTransaction = (IncomeTransaction) transaction;
+            updateTithingAmount(
+                    incomeTransaction.getCurrencyUnit(), incomeTransaction.getTithingAmount());
+        } else if (transaction instanceof DonationTransaction) {
+            updateTithingAmount(transaction.getCurrencyUnit(), transaction.getAmount().negate());
+        }
+
         transactions.add(transaction);
         transaction.setSnapshot(this);
     }
@@ -198,8 +210,45 @@ public class Snapshot implements Comparable<Snapshot> {
         if (!transactions.contains(transaction)) {
             return;
         }
+
+        if (transaction instanceof IncomeTransaction) {
+            final IncomeTransaction incomeTransaction = (IncomeTransaction) transaction;
+            updateTithingAmount(
+                    incomeTransaction.getCurrencyUnit(),
+                    incomeTransaction.getTithingAmount().negate());
+        } else if (transaction instanceof DonationTransaction) {
+            updateTithingAmount(transaction.getCurrencyUnit(), transaction.getAmount());
+        }
+
         transactions.remove(transaction);
         transaction.setSnapshot(null);
+    }
+
+    public void updateTithingAmount(final CurrencyUnit currencyUnit, final BigDecimal plusAmount) {
+        final TithingAccount tithingAccount = getTithingAccountFor(currencyUnit);
+        tithingAccount.setAmount(tithingAccount.getAmount().add(plusAmount));
+
+        if (next != null) {
+            next.updateTithingAmount(currencyUnit, plusAmount);
+        }
+    }
+
+    public TithingAccount getTithingAccountFor(final CurrencyUnit currencyUnit) {
+        final Optional<Account> tithingAccountOpt =
+                accounts.stream()
+                        .filter(
+                                account ->
+                                        (account instanceof TithingAccount)
+                                                && account.getCurrencyUnit().equals(currencyUnit))
+                        .findFirst();
+        if (tithingAccountOpt.isPresent()) {
+            return (TithingAccount) tithingAccountOpt.get();
+        }
+
+        final TithingAccount tithingAccount = new TithingAccount(currencyUnit);
+        addAccount(tithingAccount);
+
+        return tithingAccount;
     }
 
     public void setUser(final User newUser) {
@@ -221,7 +270,7 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     public Map<CurrencyUnit, BigDecimal> getNetWorth() {
-        return NetWorthUtils.breakDownAccountsByCurrency(accounts);
+        return NetWorthUtils.getNetWorthByCurrency(accounts);
     }
 
     public Map<CurrencyUnit, BigDecimal> getTotalForAccountType(

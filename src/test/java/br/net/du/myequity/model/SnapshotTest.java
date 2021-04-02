@@ -43,6 +43,9 @@ class SnapshotTest {
     private Map<CurrencyUnit, BigDecimal> EXPECTED_NET_WORTH =
             ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("7500.00"));
 
+    private Map<CurrencyUnit, BigDecimal> EXPECTED_NET_WORTH_WITH_TRANSACTIONS =
+            ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("4878.00"));
+
     private SimpleLiabilityAccount simpleLiabilityAccount;
     private SimpleAssetAccount simpleAssetAccount;
 
@@ -74,12 +77,12 @@ class SnapshotTest {
         assertNull(simpleAssetAccount.getSnapshot());
         assertNull(simpleLiabilityAccount.getSnapshot());
 
-        assertEquals(2, snapshot.getAccounts().size());
+        assertEquals(3, snapshot.getAccounts().size());
         for (final Account account : snapshot.getAccounts()) {
             assertEquals(snapshot, account.getSnapshot());
         }
 
-        assertEquals(EXPECTED_NET_WORTH, snapshot.getNetWorth());
+        assertEquals(EXPECTED_NET_WORTH_WITH_TRANSACTIONS, snapshot.getNetWorth());
 
         assertNull(recurringIncome.getSnapshot());
         assertNull(singleIncome.getSnapshot());
@@ -134,8 +137,7 @@ class SnapshotTest {
         // THEN
         assertEquals(
                 ImmutableMap.of(
-                        simpleLiabilityAccount.getCurrencyUnit(),
-                        new BigDecimal("2500.00").negate()),
+                        simpleLiabilityAccount.getCurrencyUnit(), new BigDecimal("2500.00")),
                 snapshot.getTotalForAccountType(AccountType.LIABILITY));
     }
 

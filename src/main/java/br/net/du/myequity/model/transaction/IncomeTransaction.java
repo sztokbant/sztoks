@@ -1,6 +1,7 @@
 package br.net.du.myequity.model.transaction;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -31,6 +32,11 @@ public class IncomeTransaction extends Transaction {
             final BigDecimal donationRatio) {
         super(date, currency, amount, description, isRecurring);
         this.donationRatio = donationRatio;
+    }
+
+    public BigDecimal getTithingAmount() {
+        final BigDecimal oneHundred = new BigDecimal("100.00");
+        return getDonationRatio().multiply(amount).divide(oneHundred, RoundingMode.HALF_UP);
     }
 
     @Override

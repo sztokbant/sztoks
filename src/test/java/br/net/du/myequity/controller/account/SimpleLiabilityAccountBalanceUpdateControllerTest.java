@@ -72,6 +72,6 @@ class SimpleLiabilityAccountBalanceUpdateControllerTest extends AccountAjaxContr
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals("R$ -108.00", jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals("R$ -108.00", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertEquals("R$ 108.00", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
     }
 }
