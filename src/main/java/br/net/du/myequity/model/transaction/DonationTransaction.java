@@ -38,11 +38,4 @@ public class DonationTransaction extends Transaction {
         return new DonationTransaction(
                 date, currency, amount, description, isRecurring, isTaxDeductible);
     }
-
-    @Override
-    public boolean equalsIgnoreId(final Object other) {
-        return super.equalsIgnoreId(other)
-                && (other instanceof DonationTransaction)
-                && isTaxDeductible == ((DonationTransaction) other).isTaxDeductible();
-    }
 }

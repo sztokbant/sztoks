@@ -2,7 +2,6 @@ package br.net.du.myequity.model.account;
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.util.SnapshotUtils;
-import com.google.common.annotations.VisibleForTesting;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -84,9 +83,6 @@ public abstract class Account implements Comparable<Account> {
     public abstract BigDecimal getTotal();
 
     public abstract Account copy();
-
-    @VisibleForTesting
-    public abstract boolean equalsIgnoreId(final Object other);
 
     public void setSnapshot(final Snapshot newSnapshot) {
         // Prevents infinite loop

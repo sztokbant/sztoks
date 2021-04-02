@@ -1,5 +1,6 @@
 package br.net.du.myequity.persistence;
 
+import static br.net.du.myequity.test.ModelTestUtils.equalsIgnoreId;
 import static br.net.du.myequity.test.TestConstants.EMAIL;
 import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
 import static br.net.du.myequity.test.TestConstants.LAST_NAME;
@@ -147,7 +148,9 @@ class PersistenceTest {
         final Snapshot actualSnapshot = snapshotService.findAllByUser(user).get(1);
         final SortedSet<Account> actualAccounts = actualSnapshot.getAccounts();
         assertEquals(1, actualAccounts.size());
-        assertTrue(simpleAssetAccount.equalsIgnoreId(actualAccounts.iterator().next()));
+        assertTrue(
+                equalsIgnoreId(
+                        simpleAssetAccount, (SimpleAssetAccount) actualAccounts.iterator().next()));
     }
 
     @Test

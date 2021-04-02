@@ -78,24 +78,6 @@ public abstract class Transaction implements Comparable<Transaction> {
         return CurrencyUnit.of(currency);
     }
 
-    public boolean equalsIgnoreId(final Object other) {
-        if (this == other) {
-            return true;
-        }
-
-        if (!(other instanceof Transaction)) {
-            return false;
-        }
-
-        final Transaction otherTransaction = (Transaction) other;
-
-        return description.equals(otherTransaction.getDescription())
-                && date.equals(otherTransaction.getDate())
-                && currency.equals(otherTransaction.getCurrency())
-                && amount.equals(otherTransaction.getAmount())
-                && isRecurring == otherTransaction.isRecurring();
-    }
-
     public void setSnapshot(final Snapshot newSnapshot) {
         // Prevents infinite loop
         if (SnapshotUtils.equals(snapshot, newSnapshot)) {

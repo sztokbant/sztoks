@@ -1,6 +1,5 @@
 package br.net.du.myequity.model.account;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -64,21 +63,5 @@ public class ReceivableAccount extends Account implements AmountUpdateable, DueD
     @Override
     public ReceivableAccount copy() {
         return new ReceivableAccount(name, CurrencyUnit.of(currency), dueDate, amount);
-    }
-
-    @Override
-    @VisibleForTesting
-    public boolean equalsIgnoreId(final Object other) {
-        if (this == other) {
-            return true;
-        }
-
-        if (!(other instanceof ReceivableAccount)) {
-            return false;
-        }
-
-        final ReceivableAccount otherReceivableSnapshot = (ReceivableAccount) other;
-
-        return (amount.compareTo(otherReceivableSnapshot.getAmount()) == 0);
     }
 }

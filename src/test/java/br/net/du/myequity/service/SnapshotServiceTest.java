@@ -1,6 +1,7 @@
 package br.net.du.myequity.service;
 
 import static br.net.du.myequity.test.ModelTestUtils.buildUser;
+import static br.net.du.myequity.test.ModelTestUtils.equalsIgnoreIdAndDate;
 import static br.net.du.myequity.test.TestConstants.FOURTH_SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.THIRD_SNAPSHOT_NAME;
@@ -27,8 +28,10 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.persistence.SnapshotRepository;
+import br.net.du.myequity.test.ModelTestUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.SortedSet;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,7 +72,7 @@ public class SnapshotServiceTest {
     }
 
     @Test
-    public void newSnapshot_happy() {
+    public void newSnapshot_happy() throws Exception {
         // WHEN
         final Snapshot newSnapshot = snapshotService.newSnapshot(user, SECOND_SNAPSHOT_NAME);
 
@@ -81,8 +84,12 @@ public class SnapshotServiceTest {
         for (final Account originalAccount : originalAccounts) {
             boolean found = false;
             for (final Account newAccount : newAccounts) {
-                if (newAccount.getClass().isInstance(originalAccount)) {
-                    found = newAccount.equalsIgnoreId(originalAccount);
+                final Class<? extends Account> newAccountClass = newAccount.getClass();
+                if (newAccountClass.isInstance(originalAccount)) {
+                    final Method equalsIgnoreId =
+                            ModelTestUtils.class.getMethod(
+                                    "equalsIgnoreId", newAccountClass, newAccountClass);
+                    found = (Boolean) equalsIgnoreId.invoke(null, newAccount, originalAccount);
                     break;
                 }
             }
@@ -97,8 +104,8 @@ public class SnapshotServiceTest {
         assertEquals(2, newTransactions.size());
 
         final Iterator<Transaction> iterator = newTransactions.iterator();
-        assertTrue(newRecurringDonation().equalsIgnoreId(iterator.next()));
-        assertTrue(newRecurringIncome().equalsIgnoreId(iterator.next()));
+        assertTrue(equalsIgnoreIdAndDate(newRecurringDonation(), iterator.next()));
+        assertTrue(equalsIgnoreIdAndDate(newRecurringIncome(), iterator.next()));
 
         verify(snapshotRepository).save(newSnapshot);
 

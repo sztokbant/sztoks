@@ -16,6 +16,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.sun.istack.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +98,21 @@ public class Snapshot implements Comparable<Snapshot> {
 
         accounts.stream().forEach(account -> addAccount(account.copy()));
 
-        transactions.stream().forEach(transaction -> addTransaction(transaction.copy()));
+        final String[] nameParts = name.split("-");
+        final int year = Integer.parseInt(nameParts[0]);
+        final int month = Integer.parseInt(nameParts[1]);
+
+        transactions.stream()
+                .forEach(
+                        transaction -> {
+                            final Transaction transactionCopy = transaction.copy();
+
+                            final LocalDate newDate =
+                                    transactionCopy.getDate().withYear(year).withMonth(month);
+                            transactionCopy.setDate(newDate);
+
+                            addTransaction(transactionCopy);
+                        });
     }
 
     public void setName(@NonNull final String name) {

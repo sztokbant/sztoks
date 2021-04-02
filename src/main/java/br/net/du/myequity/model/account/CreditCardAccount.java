@@ -1,6 +1,5 @@
 package br.net.du.myequity.model.account;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -69,24 +68,6 @@ public class CreditCardAccount extends Account {
     public CreditCardAccount copy() {
         return new CreditCardAccount(
                 name, CurrencyUnit.of(currency), totalCredit, availableCredit, statement);
-    }
-
-    @Override
-    @VisibleForTesting
-    public boolean equalsIgnoreId(final Object other) {
-        if (this == other) {
-            return true;
-        }
-
-        if (!(other instanceof CreditCardAccount)) {
-            return false;
-        }
-
-        final CreditCardAccount otherCreditCardSnapshot = (CreditCardAccount) other;
-
-        return (totalCredit.compareTo(otherCreditCardSnapshot.getTotalCredit()) == 0)
-                && (availableCredit.compareTo(otherCreditCardSnapshot.getAvailableCredit()) == 0)
-                && (statement.compareTo(otherCreditCardSnapshot.getStatement()) == 0);
     }
 
     public BigDecimal getUsedCreditPercentage() {

@@ -1,5 +1,7 @@
 package br.net.du.myequity.model;
 
+import static br.net.du.myequity.test.ModelTestUtils.equalsIgnoreId;
+import static br.net.du.myequity.test.ModelTestUtils.equalsIgnoreIdAndDate;
 import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.newRecurringDonation;
 import static br.net.du.myequity.test.TestConstants.newRecurringIncome;
@@ -87,6 +89,8 @@ class SnapshotTest {
         assertEquals(4, snapshot.getTransactions().size());
         for (final Transaction transaction : snapshot.getTransactions()) {
             assertEquals(snapshot, transaction.getSnapshot());
+            assertEquals(2021, transaction.getDate().getYear());
+            assertEquals(3, transaction.getDate().getMonthValue());
         }
     }
 
@@ -171,7 +175,9 @@ class SnapshotTest {
         assertEquals(1, snapshot.getAccounts().size());
 
         final SortedSet<Account> accounts = snapshot.getAccounts();
-        assertTrue(simpleAssetAccount.equalsIgnoreId(accounts.iterator().next()));
+        assertTrue(
+                equalsIgnoreId(
+                        simpleAssetAccount, (SimpleAssetAccount) accounts.iterator().next()));
 
         assertEquals(
                 ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("10000.00")),
@@ -265,12 +271,17 @@ class SnapshotTest {
         assertTrue(accountsByType.containsKey(AccountType.ASSET));
         final SortedSet<Account> assetAccounts = accountsByType.get(AccountType.ASSET);
         assertEquals(1, assetAccounts.size());
-        assertTrue(simpleAssetAccount.equalsIgnoreId(assetAccounts.iterator().next()));
+        assertTrue(
+                equalsIgnoreId(
+                        simpleAssetAccount, (SimpleAssetAccount) assetAccounts.iterator().next()));
 
         assertTrue(accountsByType.containsKey(AccountType.LIABILITY));
         final SortedSet<Account> liabilityAccounts = accountsByType.get(AccountType.LIABILITY);
         assertEquals(1, liabilityAccounts.size());
-        assertTrue(simpleLiabilityAccount.equalsIgnoreId(liabilityAccounts.iterator().next()));
+        assertTrue(
+                equalsIgnoreId(
+                        simpleLiabilityAccount,
+                        (SimpleLiabilityAccount) liabilityAccounts.iterator().next()));
 
         assertThrows(
                 UnsupportedOperationException.class,
@@ -380,23 +391,23 @@ class SnapshotTest {
         final SortedSet<Transaction> incomes = transactionsByType.get(TransactionType.INCOME);
         assertEquals(2, incomes.size());
         final Iterator<Transaction> incomeIterator = incomes.iterator();
-        assertTrue(singleIncome.equalsIgnoreId(incomeIterator.next()));
-        assertTrue(recurringIncome.equalsIgnoreId(incomeIterator.next()));
+        assertTrue(equalsIgnoreIdAndDate(singleIncome, incomeIterator.next()));
+        assertTrue(equalsIgnoreIdAndDate(recurringIncome, incomeIterator.next()));
 
         assertTrue(transactionsByType.containsKey(TransactionType.INVESTMENT));
         final SortedSet<Transaction> investments =
                 transactionsByType.get(TransactionType.INVESTMENT);
         assertEquals(2, investments.size());
         final Iterator<Transaction> investmentIterator = investments.iterator();
-        assertTrue(singleInvestment.equalsIgnoreId(investmentIterator.next()));
-        assertTrue(recurringInvestment.equalsIgnoreId(investmentIterator.next()));
+        assertTrue(equalsIgnoreIdAndDate(singleInvestment, investmentIterator.next()));
+        assertTrue(equalsIgnoreIdAndDate(recurringInvestment, investmentIterator.next()));
 
         assertTrue(transactionsByType.containsKey(TransactionType.DONATION));
         final SortedSet<Transaction> donations = transactionsByType.get(TransactionType.DONATION);
         assertEquals(2, donations.size());
         final Iterator<Transaction> donationIterator = donations.iterator();
-        assertTrue(singleDonation.equalsIgnoreId(donationIterator.next()));
-        assertTrue(recurringDonation.equalsIgnoreId(donationIterator.next()));
+        assertTrue(equalsIgnoreIdAndDate(singleDonation, donationIterator.next()));
+        assertTrue(equalsIgnoreIdAndDate(recurringDonation, donationIterator.next()));
 
         assertThrows(
                 UnsupportedOperationException.class,

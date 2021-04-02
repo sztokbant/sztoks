@@ -1,6 +1,5 @@
 package br.net.du.myequity.model.account;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -62,21 +61,5 @@ public class PayableAccount extends Account implements AmountUpdateable, DueDate
     @Override
     public PayableAccount copy() {
         return new PayableAccount(name, CurrencyUnit.of(currency), dueDate, amount);
-    }
-
-    @Override
-    @VisibleForTesting
-    public boolean equalsIgnoreId(final Object other) {
-        if (this == other) {
-            return true;
-        }
-
-        if (!(other instanceof PayableAccount)) {
-            return false;
-        }
-
-        final PayableAccount otherPayableSnapshot = (PayableAccount) other;
-
-        return (amount.compareTo(otherPayableSnapshot.getAmount()) == 0);
     }
 }

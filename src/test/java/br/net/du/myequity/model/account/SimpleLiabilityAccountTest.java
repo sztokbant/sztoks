@@ -1,5 +1,6 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.test.ModelTestUtils.equalsIgnoreId;
 import static br.net.du.myequity.test.TestConstants.ACCOUNT_NAME;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -19,6 +20,6 @@ class SimpleLiabilityAccountTest {
         final SimpleLiabilityAccount expected =
                 new SimpleLiabilityAccount(ACCOUNT_NAME, CURRENCY_UNIT, BigDecimal.ZERO);
 
-        assertTrue(actual.equalsIgnoreId(expected));
+        assertTrue(equalsIgnoreId(actual, expected));
     }
 }

@@ -38,11 +38,4 @@ public class IncomeTransaction extends Transaction {
         return new IncomeTransaction(
                 date, currency, amount, description, isRecurring, donationRatio);
     }
-
-    @Override
-    public boolean equalsIgnoreId(final Object other) {
-        return super.equalsIgnoreId(other)
-                && (other instanceof IncomeTransaction)
-                && donationRatio.equals(((IncomeTransaction) other).getDonationRatio());
-    }
 }

@@ -1,6 +1,5 @@
 package br.net.du.myequity.model.account;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -58,21 +57,5 @@ public class SimpleLiabilityAccount extends Account implements AmountUpdateable 
     @Override
     public SimpleLiabilityAccount copy() {
         return new SimpleLiabilityAccount(name, CurrencyUnit.of(currency), amount);
-    }
-
-    @Override
-    @VisibleForTesting
-    public boolean equalsIgnoreId(final Object other) {
-        if (this == other) {
-            return true;
-        }
-
-        if (!(other instanceof SimpleLiabilityAccount)) {
-            return false;
-        }
-
-        final SimpleLiabilityAccount otherSimpleLiabilitySnapshot = (SimpleLiabilityAccount) other;
-
-        return (amount.compareTo(otherSimpleLiabilitySnapshot.getAmount()) == 0);
     }
 }

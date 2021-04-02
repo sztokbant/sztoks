@@ -44,12 +44,4 @@ public class InvestmentTransaction extends Transaction {
         return new InvestmentTransaction(
                 date, currency, amount, description, isRecurring, investmentCategory);
     }
-
-    @Override
-    public boolean equalsIgnoreId(final Object other) {
-        return super.equalsIgnoreId(other)
-                && (other instanceof InvestmentTransaction)
-                && investmentCategory.equals(
-                        ((InvestmentTransaction) other).getInvestmentCategory());
-    }
 }

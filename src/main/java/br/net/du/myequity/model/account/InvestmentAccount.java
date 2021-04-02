@@ -1,6 +1,5 @@
 package br.net.du.myequity.model.account;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -72,25 +71,6 @@ public class InvestmentAccount extends Account {
     public InvestmentAccount copy() {
         return new InvestmentAccount(
                 name, CurrencyUnit.of(currency), shares, amountInvested, currentShareValue);
-    }
-
-    @Override
-    @VisibleForTesting
-    public boolean equalsIgnoreId(final Object other) {
-        if (this == other) {
-            return true;
-        }
-
-        if (!(other instanceof InvestmentAccount)) {
-            return false;
-        }
-
-        final InvestmentAccount otherInvestmentSnapshot = (InvestmentAccount) other;
-
-        return (shares.compareTo(otherInvestmentSnapshot.getShares()) == 0)
-                && (amountInvested.compareTo(otherInvestmentSnapshot.getAmountInvested()) == 0)
-                && (currentShareValue.compareTo(otherInvestmentSnapshot.getCurrentShareValue())
-                        == 0);
     }
 
     public BigDecimal getProfitPercentage() {
