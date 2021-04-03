@@ -26,6 +26,6 @@
     </div>
 
     <div class="col col-cell align-right">
-        <span id="tithing_balance_${entity.accountId}">${entity.balance}</span>
+        <span id="tithing_balance_${entity.currencyUnit}">${entity.balance}</span>
     </div>
 </div>

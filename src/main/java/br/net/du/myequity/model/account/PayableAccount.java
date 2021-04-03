@@ -19,7 +19,7 @@ public class PayableAccount extends Account implements AmountUpdateable, DueDate
 
     public static final String ACCOUNT_SUB_TYPE = "PAYABLE";
 
-    @Column @Getter @Setter private BigDecimal amount;
+    @Column @Getter @Setter private BigDecimal balance;
 
     @Column @Getter @Setter private LocalDate dueDate;
 
@@ -38,8 +38,8 @@ public class PayableAccount extends Account implements AmountUpdateable, DueDate
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate dueDate,
-            @NonNull final BigDecimal amount) {
-        this(name, currencyUnit, LocalDate.now(), dueDate, amount);
+            @NonNull final BigDecimal balance) {
+        this(name, currencyUnit, LocalDate.now(), dueDate, balance);
     }
 
     public PayableAccount(
@@ -47,19 +47,14 @@ public class PayableAccount extends Account implements AmountUpdateable, DueDate
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate createDate,
             @NonNull final LocalDate dueDate,
-            @NonNull final BigDecimal amount) {
+            @NonNull final BigDecimal balance) {
         super(name, AccountType.LIABILITY, currencyUnit, createDate);
         this.dueDate = dueDate;
-        this.amount = amount;
-    }
-
-    @Override
-    public BigDecimal getTotal() {
-        return amount;
+        this.balance = balance;
     }
 
     @Override
     public PayableAccount copy() {
-        return new PayableAccount(name, CurrencyUnit.of(currency), dueDate, amount);
+        return new PayableAccount(name, CurrencyUnit.of(currency), dueDate, balance);
     }
 }

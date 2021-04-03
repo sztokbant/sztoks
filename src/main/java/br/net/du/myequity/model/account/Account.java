@@ -80,7 +80,7 @@ public abstract class Account implements Comparable<Account> {
         currency = currencyUnit.getCode();
     }
 
-    public abstract BigDecimal getTotal();
+    public abstract BigDecimal getBalance();
 
     public abstract Account copy();
 

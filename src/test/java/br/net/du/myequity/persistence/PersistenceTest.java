@@ -120,12 +120,12 @@ class PersistenceTest {
 
         assertNotNull(simpleAssetAccount.getId());
         final BigDecimal actualAssetAmount =
-                accountsByType.get(AccountType.ASSET).iterator().next().getTotal();
+                accountsByType.get(AccountType.ASSET).iterator().next().getBalance();
         assertEquals(assetAmount, actualAssetAmount);
 
         assertNotNull(simpleLiabilityAccount.getId());
         final BigDecimal actualLiabilityAmount =
-                accountsByType.get(AccountType.LIABILITY).iterator().next().getTotal();
+                accountsByType.get(AccountType.LIABILITY).iterator().next().getBalance();
         assertEquals(liabilityAmount, actualLiabilityAmount);
     }
 
@@ -173,8 +173,8 @@ class PersistenceTest {
         final SimpleLiabilityAccount persistedSimpleLiabilityAccount =
                 (SimpleLiabilityAccount)
                         persistedSnapshot.getAccountById(simpleLiabilityAccount.getId()).get();
-        persistedSimpleLiabilityAccount.setAmount(
-                persistedSimpleLiabilityAccount.getAmount().add(new BigDecimal("100000.00")));
+        persistedSimpleLiabilityAccount.setBalance(
+                persistedSimpleLiabilityAccount.getBalance().add(new BigDecimal("100000.00")));
 
         // THEN
         final Snapshot actualSnapshot = snapshotService.findAllByUser(user).get(1);

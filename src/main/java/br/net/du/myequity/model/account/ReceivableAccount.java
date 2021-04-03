@@ -19,7 +19,7 @@ public class ReceivableAccount extends Account implements AmountUpdateable, DueD
 
     public static final String ACCOUNT_SUB_TYPE = "RECEIVABLE";
 
-    @Column @Getter @Setter private BigDecimal amount;
+    @Column @Getter @Setter private BigDecimal balance;
 
     @Column @Getter @Setter private LocalDate dueDate;
 
@@ -38,10 +38,10 @@ public class ReceivableAccount extends Account implements AmountUpdateable, DueD
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate dueDate,
-            @NonNull final BigDecimal amount) {
-        this(name, currencyUnit, LocalDate.now(), dueDate, amount);
+            @NonNull final BigDecimal balance) {
+        this(name, currencyUnit, LocalDate.now(), dueDate, balance);
         this.dueDate = dueDate;
-        this.amount = amount;
+        this.balance = balance;
     }
 
     public ReceivableAccount(
@@ -49,19 +49,14 @@ public class ReceivableAccount extends Account implements AmountUpdateable, DueD
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate createDate,
             @NonNull final LocalDate dueDate,
-            @NonNull final BigDecimal amount) {
+            @NonNull final BigDecimal balance) {
         super(name, AccountType.ASSET, currencyUnit, createDate);
         this.dueDate = dueDate;
-        this.amount = amount;
-    }
-
-    @Override
-    public BigDecimal getTotal() {
-        return amount;
+        this.balance = balance;
     }
 
     @Override
     public ReceivableAccount copy() {
-        return new ReceivableAccount(name, CurrencyUnit.of(currency), dueDate, amount);
+        return new ReceivableAccount(name, CurrencyUnit.of(currency), dueDate, balance);
     }
 }

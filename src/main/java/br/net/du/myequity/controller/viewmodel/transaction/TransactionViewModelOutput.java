@@ -4,6 +4,7 @@ import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 
 import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import java.time.LocalDate;
@@ -28,6 +29,9 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
 
     // fields only used on updates
     private final String totalForTransactionType;
+    private final String tithingBalance;
+    private final String netWorth;
+    private final String totalLiability;
 
     public TransactionViewModelOutput(final TransactionViewModelOutput other) {
         id = other.getId();
@@ -41,6 +45,9 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
         isRecurring = other.isRecurring();
 
         totalForTransactionType = other.getTotalForTransactionType();
+        tithingBalance = other.getTithingBalance();
+        netWorth = other.getNetWorth();
+        totalLiability = other.getTotalLiability();
     }
 
     public static TransactionViewModelOutput of(
@@ -74,6 +81,30 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
                                             .get(currencyUnit)));
 
             builder.totalForTransactionType(totalForTransactionType);
+
+            if (transactionType.equals(TransactionType.INCOME)
+                    || transactionType.equals(TransactionType.DONATION)) {
+                final String tithingBalance =
+                        MoneyFormatUtils.format(
+                                currencyUnit,
+                                toDecimal(
+                                        snapshot.getTithingAccountFor(currencyUnit).getBalance()));
+
+                final String netWorth =
+                        MoneyFormatUtils.format(
+                                currencyUnit, toDecimal(snapshot.getNetWorth().get(currencyUnit)));
+
+                final String totalLiability =
+                        MoneyFormatUtils.format(
+                                currencyUnit,
+                                toDecimal(
+                                        snapshot.getTotalForAccountType(AccountType.LIABILITY)
+                                                .get(currencyUnit)));
+
+                builder.tithingBalance(tithingBalance)
+                        .netWorth(netWorth)
+                        .totalLiability(totalLiability);
+            }
         }
 
         return builder.build();

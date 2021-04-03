@@ -44,7 +44,8 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
         final Snapshot snapshot = account.getSnapshot();
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
 
-        final String balance = MoneyFormatUtils.format(currencyUnit, toDecimal(account.getTotal()));
+        final String balance =
+                MoneyFormatUtils.format(currencyUnit, toDecimal(account.getBalance()));
         final AccountViewModelOutputBuilder builder =
                 AccountViewModelOutput.builder()
                         .accountId(account.getId())

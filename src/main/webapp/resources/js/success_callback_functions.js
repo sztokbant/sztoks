@@ -71,4 +71,10 @@ function receivableDueDateUpdateSuccessCallback(data, result) {
 function transactionAmountUpdateSuccessCallback(data, result) {
   $("#txn_amount_" + data.entityId).html(result.amount);
   $("#total_" + result.type + "_" + result.currencyUnit).html(result.totalForTransactionType);
+
+  if (result.type == "INCOME" || result.type == "DONATION") {
+    $("#tithing_balance_" + result.currencyUnit).html(result.tithingBalance);
+    $("#total_LIABILITY_" + result.currencyUnit).html(result.totalLiability);
+    $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
+  }
 }

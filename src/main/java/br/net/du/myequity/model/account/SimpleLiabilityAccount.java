@@ -19,7 +19,7 @@ public class SimpleLiabilityAccount extends Account implements AmountUpdateable 
 
     public static final String ACCOUNT_SUB_TYPE = "SIMPLE_LIABILITY";
 
-    @Column @Getter @Setter private BigDecimal amount;
+    @Column @Getter @Setter private BigDecimal balance;
 
     public SimpleLiabilityAccount(
             @NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
@@ -36,26 +36,21 @@ public class SimpleLiabilityAccount extends Account implements AmountUpdateable 
     public SimpleLiabilityAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final BigDecimal amount) {
-        this(name, currencyUnit, LocalDate.now(), amount);
+            @NonNull final BigDecimal balance) {
+        this(name, currencyUnit, LocalDate.now(), balance);
     }
 
     public SimpleLiabilityAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate createDate,
-            @NonNull final BigDecimal amount) {
+            @NonNull final BigDecimal balance) {
         super(name, AccountType.LIABILITY, currencyUnit, createDate);
-        this.amount = amount;
-    }
-
-    @Override
-    public BigDecimal getTotal() {
-        return amount;
+        this.balance = balance;
     }
 
     @Override
     public SimpleLiabilityAccount copy() {
-        return new SimpleLiabilityAccount(name, CurrencyUnit.of(currency), amount);
+        return new SimpleLiabilityAccount(name, CurrencyUnit.of(currency), balance);
     }
 }

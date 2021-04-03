@@ -22,7 +22,7 @@ public class BalanceUpdateController extends AccountUpdateControllerBase {
                 updateAmountFunction =
                         (jsonRequest, account) -> {
                             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            ((AmountUpdateable) account).setAmount(newValue);
+                            ((AmountUpdateable) account).setBalance(newValue);
 
                             return AccountViewModelOutput.of(account, true);
                         };

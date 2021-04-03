@@ -60,7 +60,7 @@ public class CreditCardAccount extends Account {
     }
 
     @Override
-    public BigDecimal getTotal() {
+    public BigDecimal getBalance() {
         return totalCredit.subtract(availableCredit);
     }
 
@@ -82,6 +82,6 @@ public class CreditCardAccount extends Account {
     }
 
     public BigDecimal getRemainingBalance() {
-        return getTotal().subtract(statement);
+        return getBalance().subtract(statement);
     }
 }

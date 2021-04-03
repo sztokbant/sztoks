@@ -19,7 +19,7 @@ public class TithingAccount extends Account {
 
     public static final String ACCOUNT_SUB_TYPE = "TITHING";
 
-    @Column @Getter @Setter private BigDecimal amount;
+    @Column @Getter @Setter private BigDecimal balance;
 
     public TithingAccount(@NonNull final CurrencyUnit currencyUnit) {
         this(currencyUnit, LocalDate.now());
@@ -31,20 +31,20 @@ public class TithingAccount extends Account {
     }
 
     public TithingAccount(
-            @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal amount) {
-        this(currencyUnit, LocalDate.now(), amount);
+            @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal balance) {
+        this(currencyUnit, LocalDate.now(), balance);
     }
 
     public TithingAccount(
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate createDate,
-            @NonNull final BigDecimal amount) {
+            @NonNull final BigDecimal balance) {
         super(
                 getTithingAccountNameFor(currencyUnit),
                 AccountType.LIABILITY,
                 currencyUnit,
                 createDate);
-        this.amount = amount;
+        this.balance = balance;
     }
 
     public static String getTithingAccountNameFor(final CurrencyUnit currencyUnit) {
@@ -52,12 +52,7 @@ public class TithingAccount extends Account {
     }
 
     @Override
-    public BigDecimal getTotal() {
-        return amount;
-    }
-
-    @Override
     public TithingAccount copy() {
-        return new TithingAccount(CurrencyUnit.of(currency), amount);
+        return new TithingAccount(CurrencyUnit.of(currency), balance);
     }
 }

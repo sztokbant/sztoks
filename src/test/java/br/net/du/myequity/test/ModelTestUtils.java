@@ -41,11 +41,11 @@ public class ModelTestUtils {
     }
 
     public static boolean equalsIgnoreId(final SimpleAssetAccount a1, final SimpleAssetAccount a2) {
-        return a1.getName().equals(a2.getName()) && a1.getAmount().compareTo(a2.getAmount()) == 0;
+        return a1.getName().equals(a2.getName()) && a1.getBalance().compareTo(a2.getBalance()) == 0;
     }
 
     public static boolean equalsIgnoreId(final ReceivableAccount a1, final ReceivableAccount a2) {
-        return a1.getName().equals(a2.getName()) && a1.getAmount().compareTo(a2.getAmount()) == 0;
+        return a1.getName().equals(a2.getName()) && a1.getBalance().compareTo(a2.getBalance()) == 0;
     }
 
     public static boolean equalsIgnoreId(final InvestmentAccount a1, final InvestmentAccount a2) {
@@ -61,11 +61,11 @@ public class ModelTestUtils {
 
     public static boolean equalsIgnoreId(
             final SimpleLiabilityAccount a1, final SimpleLiabilityAccount a2) {
-        return a1.getName().equals(a2.getName()) && a1.getAmount().compareTo(a2.getAmount()) == 0;
+        return a1.getName().equals(a2.getName()) && a1.getBalance().compareTo(a2.getBalance()) == 0;
     }
 
     public static boolean equalsIgnoreId(final PayableAccount a1, final PayableAccount a2) {
-        return a1.getName().equals(a2.getName()) && a1.getAmount().compareTo(a2.getAmount()) == 0;
+        return a1.getName().equals(a2.getName()) && a1.getBalance().compareTo(a2.getBalance()) == 0;
     }
 
     public static boolean equalsIgnoreId(final CreditCardAccount a1, final CreditCardAccount a2) {

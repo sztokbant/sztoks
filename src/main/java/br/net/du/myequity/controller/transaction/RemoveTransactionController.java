@@ -1,10 +1,13 @@
 package br.net.du.myequity.controller.transaction;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
+import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 
+import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.controller.viewmodel.SnapshotRemoveTransactionJsonResponse;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import org.joda.money.CurrencyUnit;
@@ -28,12 +31,37 @@ public class RemoveTransactionController extends TransactionUpdateControllerBase
         final TransactionType transactionType = transaction.getTransactionType();
         final CurrencyUnit currencyUnit = transaction.getCurrencyUnit();
 
-        return SnapshotRemoveTransactionJsonResponse.builder()
-                .entityId(valueUpdateJsonRequest.getEntityId())
+        final SnapshotRemoveTransactionJsonResponse.SnapshotRemoveTransactionJsonResponseBuilder
+                builder = SnapshotRemoveTransactionJsonResponse.builder();
+
+        if (transactionType.equals(TransactionType.INCOME)
+                || transactionType.equals(TransactionType.DONATION)) {
+            final String tithingBalance =
+                    MoneyFormatUtils.format(
+                            currencyUnit,
+                            toDecimal(snapshot.getTithingAccountFor(currencyUnit).getBalance()));
+
+            final String netWorth =
+                    MoneyFormatUtils.format(
+                            currencyUnit, toDecimal(snapshot.getNetWorth().get(currencyUnit)));
+
+            final String totalLiability =
+                    MoneyFormatUtils.format(
+                            currencyUnit,
+                            toDecimal(
+                                    snapshot.getTotalForAccountType(AccountType.LIABILITY)
+                                            .get(currencyUnit)));
+
+            builder.tithingBalance(tithingBalance)
+                    .netWorth(netWorth)
+                    .totalLiability(totalLiability);
+        }
+
+        return builder.entityId(valueUpdateJsonRequest.getEntityId())
                 .currencyUnit(currencyUnit.getCode())
                 .currencyUnitSymbol(currencyUnit.getSymbol())
                 .type(transactionType.name())
-                .totalForType(
+                .totalForTransactionType(
                         formatAsDecimal(
                                 snapshot.getTotalForTransactionType(transactionType)
                                         .get(currencyUnit)))

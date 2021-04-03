@@ -30,7 +30,7 @@ public class CreditCardTotalsViewModelOutput {
         final CurrencyUnit currencyUnit = creditCardSnapshot.getCurrencyUnit();
 
         final String balance =
-                MoneyFormatUtils.format(currencyUnit, toDecimal(creditCardSnapshot.getTotal()));
+                MoneyFormatUtils.format(currencyUnit, toDecimal(creditCardSnapshot.getBalance()));
 
         final String totalCredit =
                 MoneyFormatUtils.format(

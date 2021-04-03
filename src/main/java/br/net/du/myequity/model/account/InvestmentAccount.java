@@ -63,7 +63,7 @@ public class InvestmentAccount extends Account {
     }
 
     @Override
-    public BigDecimal getTotal() {
+    public BigDecimal getBalance() {
         return shares.multiply(currentShareValue);
     }
 
