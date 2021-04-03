@@ -24,6 +24,7 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, c
     newValueInput.val(currentValueNoCurrencySymbol);
     newValueInput.show();
     newValueInput.focus();
+    newValueInput.select();
   });
 }
 
