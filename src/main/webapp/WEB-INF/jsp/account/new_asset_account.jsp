@@ -32,22 +32,22 @@
                 </div>
             </spring:bind>
 
-            <spring:bind path="typeName">
+            <spring:bind path="subtypeName">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <div>
-                        <form:radiobutton path="typeName" value="SimpleAssetAccount" id="simpleAssetRadio"
+                        <form:radiobutton path="subtypeName" value="SimpleAssetAccount" id="simpleAssetRadio"
                                           checked="checked"/>
                         <label for="simpleAssetRadio">Simple Asset</label>
                     </div>
                     <div>
-                        <form:radiobutton path="typeName" value="ReceivableAccount" id="receivableRadio"/>
+                        <form:radiobutton path="subtypeName" value="ReceivableAccount" id="receivableRadio"/>
                         <label for="receivableRadio">Receivable</label>
                     </div>
                     <div>
-                        <form:radiobutton path="typeName" value="InvestmentAccount" id="investmentRadio"/>
+                        <form:radiobutton path="subtypeName" value="InvestmentAccount" id="investmentRadio"/>
                         <label for="investmentRadio">Investment</label>
                     </div>
-                    <form:errors path="typeName"/>
+                    <form:errors path="subtypeName"/>
                 </div>
             </spring:bind>
 

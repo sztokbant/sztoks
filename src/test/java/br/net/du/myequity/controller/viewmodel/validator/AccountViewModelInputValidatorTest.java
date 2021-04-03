@@ -11,6 +11,7 @@ import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
+import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.service.AccountService;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
@@ -26,7 +27,7 @@ import org.springframework.validation.Errors;
 class AccountViewModelInputValidatorTest {
 
     private static final String ACCOUNT_NAME = "My Account";
-    private static final String TYPE_NAME = "SimpleAssetAccount";
+    private static final String SUBTYPE_NAME = "SimpleAssetAccount";
     private static final String ANOTHER_ACCOUNT_NAME = "Another Account";
     private static final String CURRENCY_UNIT = "USD";
 
@@ -67,7 +68,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_happyFirstAccount() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
@@ -78,11 +79,25 @@ class AccountViewModelInputValidatorTest {
     }
 
     @Test
-    public void validate_happyExintingAccountWithDifferentName() {
+    public void validate_happyExistingAccountWithDifferentName() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(
                 ImmutableList.of(new SimpleAssetAccount(ANOTHER_ACCOUNT_NAME, CurrencyUnit.USD)));
+
+        // WHEN
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
+
+        // THEN
+        assertFalse(errors.hasErrors());
+    }
+
+    @Test
+    public void validate_happyExistingAccountWithSameNameAndDifferentSubtype() {
+        // GIVEN
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, CURRENCY_UNIT);
+        defineExistingAccounts(
+                ImmutableList.of(new SimpleLiabilityAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
@@ -107,7 +122,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_nullName_hasErrors() {
         // GIVEN
-        populateAccountForm(null, TYPE_NAME, CURRENCY_UNIT);
+        populateAccountForm(null, SUBTYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
@@ -118,7 +133,7 @@ class AccountViewModelInputValidatorTest {
     }
 
     @Test
-    public void validate_nullType_hasErrors() {
+    public void validate_nullSubtype_hasErrors() {
         // GIVEN
         populateAccountForm(ACCOUNT_NAME, null, CURRENCY_UNIT);
         defineExistingAccounts(ImmutableList.of());
@@ -131,9 +146,35 @@ class AccountViewModelInputValidatorTest {
     }
 
     @Test
+    public void validate_invalidSubtype_hasErrors() {
+        // GIVEN
+        populateAccountForm(ACCOUNT_NAME, "SomeInvalidAccount", CURRENCY_UNIT);
+        defineExistingAccounts(ImmutableList.of());
+
+        // WHEN
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
+
+        // THEN
+        assertTrue(errors.hasErrors());
+    }
+
+    @Test
+    public void validate_tithingSubtype_hasErrors() {
+        // GIVEN
+        populateAccountForm(ACCOUNT_NAME, "TithingAccount", CURRENCY_UNIT);
+        defineExistingAccounts(ImmutableList.of());
+
+        // WHEN
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
+
+        // THEN
+        assertTrue(errors.hasErrors());
+    }
+
+    @Test
     public void validate_nullCurrency_hasErrors() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, null);
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, null);
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
@@ -146,7 +187,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_emptyName_hasErrors() {
         // GIVEN
-        populateAccountForm(StringUtils.EMPTY, TYPE_NAME, CURRENCY_UNIT);
+        populateAccountForm(StringUtils.EMPTY, SUBTYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
@@ -159,7 +200,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_emptyCurrency_hasErrors() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, StringUtils.EMPTY);
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, StringUtils.EMPTY);
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
@@ -172,7 +213,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_invalidCurrency_hasErrors() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, "xyz");
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, "xyz");
         defineExistingAccounts(ImmutableList.of());
 
         // WHEN
@@ -185,7 +226,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_existingName_hasErrors() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(
                 ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
 
@@ -199,7 +240,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_existingNameExtraSpaces_hasErrors() {
         // GIVEN
-        populateAccountForm(" " + ACCOUNT_NAME + " ", TYPE_NAME, CURRENCY_UNIT);
+        populateAccountForm(" " + ACCOUNT_NAME + " ", SUBTYPE_NAME, CURRENCY_UNIT);
         defineExistingAccounts(
                 ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
 
@@ -213,7 +254,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_noValidationHints_throws() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, CURRENCY_UNIT);
 
         // WHEN/THEN
         assertThrows(
@@ -226,7 +267,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_emptyValidationHints_throws() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, CURRENCY_UNIT);
 
         // WHEN/THEN
         assertThrows(
@@ -240,7 +281,7 @@ class AccountViewModelInputValidatorTest {
     @Test
     public void validate_notUserInValidationHints_throws() {
         // GIVEN
-        populateAccountForm(ACCOUNT_NAME, TYPE_NAME, CURRENCY_UNIT);
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, CURRENCY_UNIT);
 
         // WHEN/THEN
         assertThrows(
@@ -251,9 +292,10 @@ class AccountViewModelInputValidatorTest {
                 });
     }
 
-    private void populateAccountForm(final String name, final String type, final String currency) {
+    private void populateAccountForm(
+            final String name, final String subtypeName, final String currency) {
         accountViewModelInput.setName(name);
-        accountViewModelInput.setTypeName(type);
+        accountViewModelInput.setSubtypeName(subtypeName);
         accountViewModelInput.setCurrencyUnit(currency);
     }
 

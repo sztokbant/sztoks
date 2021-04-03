@@ -8,10 +8,10 @@ import org.joda.money.CurrencyUnit;
 public class AccountViewModelInput {
     private String name;
     private String accountType;
-    private String typeName;
+    private String subtypeName;
     private String currencyUnit;
 
     public Account toAccount() {
-        return AccountFactory.newInstance(typeName, name, CurrencyUnit.of(currencyUnit));
+        return AccountFactory.newInstance(subtypeName, name, CurrencyUnit.of(currencyUnit));
     }
 }

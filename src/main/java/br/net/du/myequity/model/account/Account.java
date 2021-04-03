@@ -27,7 +27,7 @@ import org.joda.money.CurrencyUnit;
 @DiscriminatorColumn(name = Account.DISCRIMINATOR_COLUMN)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public abstract class Account implements Comparable<Account> {
-    public static final String DISCRIMINATOR_COLUMN = "account_sub_type";
+    public static final String DISCRIMINATOR_COLUMN = "account_subtype";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -128,6 +128,13 @@ public abstract class Account implements Comparable<Account> {
 
     @Override
     public int compareTo(final Account other) {
-        return name.compareTo(other.getName());
+        final String thisClass = getClass().getSimpleName();
+        final String otherClass = other.getClass().getSimpleName();
+
+        if (thisClass.equals(otherClass)) {
+            return name.compareTo(other.getName());
+        }
+
+        return thisClass.compareTo(otherClass);
     }
 }
