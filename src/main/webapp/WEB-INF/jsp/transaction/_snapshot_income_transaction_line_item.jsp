@@ -15,7 +15,7 @@
     </div>
 
     <div class="col col-cell align-center">
-        ${entity.donationRatio}
+        ${entity.tithingPercentage}
     </div>
 
     <div class="col col-cell align-right editable-asset">

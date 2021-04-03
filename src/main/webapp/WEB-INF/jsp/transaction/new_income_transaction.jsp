@@ -26,11 +26,11 @@
 
             <%@ include file="_new_transaction_common.jsp" %>
 
-            <spring:bind path="donationRatio">
+            <spring:bind path="tithingPercentage">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="donationRatio" class="form-control" placeholder="Donation Ratio"
+                    <form:input type="text" path="tithingPercentage" class="form-control" placeholder="Tithing Percentage"
                                 autofocus="true"></form:input>
-                    <form:errors path="donationRatio"/>
+                    <form:errors path="tithingPercentage"/>
                 </div>
             </spring:bind>
 

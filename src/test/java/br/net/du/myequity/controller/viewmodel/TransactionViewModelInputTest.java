@@ -91,7 +91,7 @@ public class TransactionViewModelInputTest {
     public static void populateIncomeTransactionAttributes(
             final TransactionViewModelInput transactionViewModelInput) {
         transactionViewModelInput.setTypeName("INCOME");
-        transactionViewModelInput.setDonationRatio("30.00");
+        transactionViewModelInput.setTithingPercentage("30.00");
     }
 
     public static void populateInvestmentTransactionAttributes(

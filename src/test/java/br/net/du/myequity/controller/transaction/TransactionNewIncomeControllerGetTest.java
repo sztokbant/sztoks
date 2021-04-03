@@ -73,6 +73,6 @@ class TransactionNewIncomeControllerGetTest extends GetControllerTestBase {
         assertNull(transactionViewModelInput.getDescription());
         assertNull(transactionViewModelInput.getIsRecurring());
 
-        assertNull(transactionViewModelInput.getDonationRatio());
+        assertNull(transactionViewModelInput.getTithingPercentage());
     }
 }

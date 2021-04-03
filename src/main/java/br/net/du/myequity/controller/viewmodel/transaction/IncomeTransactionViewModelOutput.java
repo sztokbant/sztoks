@@ -7,12 +7,12 @@ import br.net.du.myequity.model.transaction.Transaction;
 import lombok.Getter;
 
 public class IncomeTransactionViewModelOutput extends TransactionViewModelOutput {
-    @Getter private final String donationRatio;
+    @Getter private final String tithingPercentage;
 
     public IncomeTransactionViewModelOutput(
-            final TransactionViewModelOutput other, final String donationRatio) {
+            final TransactionViewModelOutput other, final String tithingPercentage) {
         super(other);
-        this.donationRatio = donationRatio;
+        this.tithingPercentage = tithingPercentage;
     }
 
     public static IncomeTransactionViewModelOutput of(
@@ -21,7 +21,7 @@ public class IncomeTransactionViewModelOutput extends TransactionViewModelOutput
 
         return new IncomeTransactionViewModelOutput(
                 TransactionViewModelOutput.of(transaction, includeTotals),
-                formatAsPercentage(income.getDonationRatio()));
+                formatAsPercentage(income.getTithingPercentage()));
     }
 
     public static IncomeTransactionViewModelOutput of(final Transaction transaction) {

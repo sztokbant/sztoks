@@ -21,7 +21,7 @@ public class TransactionViewModelInput {
     private Boolean isRecurring;
 
     // INCOME only
-    private String donationRatio;
+    private String tithingPercentage;
 
     // INVESTMENT only
     private String investmentCategory;
@@ -40,7 +40,7 @@ public class TransactionViewModelInput {
                     new BigDecimal(amount),
                     description,
                     isRecurring,
-                    new BigDecimal(donationRatio));
+                    new BigDecimal(tithingPercentage));
         } else if (transactionType.equals(TransactionType.INVESTMENT)) {
             return new InvestmentTransaction(
                     localDate,

@@ -90,7 +90,7 @@ public class ModelTestUtils {
     public static boolean equalsIgnoreIdAndDate(
             final IncomeTransaction t1, final IncomeTransaction t2) {
         return equalsIgnoreIdAndDate((Transaction) t1, (Transaction) t2)
-                && t1.getDonationRatio().equals(t2.getDonationRatio());
+                && t1.getTithingPercentage().equals(t2.getTithingPercentage());
     }
 
     public static boolean equalsIgnoreIdAndDate(

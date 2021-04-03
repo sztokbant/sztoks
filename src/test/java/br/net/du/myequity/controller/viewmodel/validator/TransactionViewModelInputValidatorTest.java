@@ -171,10 +171,10 @@ class TransactionViewModelInputValidatorTest {
     }
 
     @Test
-    public void validate_invalidDonationRatio_hasErrors() {
+    public void validate_invalidTithingPercentage_hasErrors() {
         // GIVEN
         populateIncomeTransactionAttributes(transactionViewModelInput);
-        transactionViewModelInput.setDonationRatio("XYZ");
+        transactionViewModelInput.setTithingPercentage("XYZ");
 
         // WHEN
         validator.validate(transactionViewModelInput, errors);

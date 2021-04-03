@@ -4,11 +4,11 @@ import static br.net.du.myequity.controller.util.ControllerConstants.AMOUNT;
 import static br.net.du.myequity.controller.util.ControllerConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.controller.util.ControllerConstants.DATE;
 import static br.net.du.myequity.controller.util.ControllerConstants.DESCRIPTION;
-import static br.net.du.myequity.controller.util.ControllerConstants.DONATION_RATIO;
 import static br.net.du.myequity.controller.util.ControllerConstants.INVESTMENT_CATEGORY;
 import static br.net.du.myequity.controller.util.ControllerConstants.IS_RECURRING;
 import static br.net.du.myequity.controller.util.ControllerConstants.IS_TAX_DEDUCTIBLE;
 import static br.net.du.myequity.controller.util.ControllerConstants.NOT_EMPTY;
+import static br.net.du.myequity.controller.util.ControllerConstants.TITHING_PERCENTAGE;
 
 import br.net.du.myequity.controller.viewmodel.TransactionViewModelInput;
 import br.net.du.myequity.model.transaction.InvestmentCategory;
@@ -52,7 +52,7 @@ public class TransactionViewModelInputValidator implements SmartValidator {
         final TransactionType transactionType =
                 TransactionType.valueOf(transactionViewModelInput.getTypeName());
         if (transactionType.equals(TransactionType.INCOME)) {
-            rejectIfInvalidDonationRatio(transactionViewModelInput, errors);
+            rejectIfInvalidTithingPercentage(transactionViewModelInput, errors);
         } else if (transactionType.equals(TransactionType.INVESTMENT)) {
             rejectIfInvalidInvestmentCategory(transactionViewModelInput, errors);
         } else if (transactionType.equals(TransactionType.DONATION)) {
@@ -113,15 +113,15 @@ public class TransactionViewModelInputValidator implements SmartValidator {
         }
     }
 
-    private void rejectIfInvalidDonationRatio(
+    private void rejectIfInvalidTithingPercentage(
             final TransactionViewModelInput transactionViewModelInput, final Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, DONATION_RATIO, NOT_EMPTY);
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, TITHING_PERCENTAGE, NOT_EMPTY);
 
-        if (StringUtils.isNotBlank(transactionViewModelInput.getDonationRatio())) {
+        if (StringUtils.isNotBlank(transactionViewModelInput.getTithingPercentage())) {
             try {
-                new BigDecimal(transactionViewModelInput.getDonationRatio());
+                new BigDecimal(transactionViewModelInput.getTithingPercentage());
             } catch (final NumberFormatException e) {
-                errors.rejectValue(DONATION_RATIO, "Invalid.donationRatio");
+                errors.rejectValue(TITHING_PERCENTAGE, "Invalid.tithingPercentage");
             }
         }
     }

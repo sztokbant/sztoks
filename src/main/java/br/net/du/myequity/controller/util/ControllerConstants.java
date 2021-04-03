@@ -18,7 +18,7 @@ public class ControllerConstants {
     public static final String CURRENCY_UNIT = "currencyUnit";
     public static final String DATE = "date";
     public static final String DESCRIPTION = "description";
-    public static final String DONATION_RATIO = "donationRatio";
+    public static final String TITHING_PERCENTAGE = "tithingPercentage";
     public static final String INVESTMENT_CATEGORY = "investmentCategory";
     public static final String IS_RECURRING = "isRecurring";
     public static final String IS_TAX_DEDUCTIBLE = "isTaxDeductible";

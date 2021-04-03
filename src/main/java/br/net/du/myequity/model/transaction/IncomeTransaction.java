@@ -21,7 +21,7 @@ public class IncomeTransaction extends Transaction {
     @Transient @Getter
     private final TransactionType transactionType = TransactionType.valueOf(TRANSACTION_TYPE);
 
-    @Column @Getter @Setter private BigDecimal donationRatio;
+    @Column @Getter @Setter private BigDecimal tithingPercentage;
 
     public IncomeTransaction(
             final LocalDate date,
@@ -29,19 +29,19 @@ public class IncomeTransaction extends Transaction {
             final BigDecimal amount,
             final String description,
             final boolean isRecurring,
-            final BigDecimal donationRatio) {
+            final BigDecimal tithingPercentage) {
         super(date, currency, amount, description, isRecurring);
-        this.donationRatio = donationRatio;
+        this.tithingPercentage = tithingPercentage;
     }
 
     public BigDecimal getTithingAmount() {
         final BigDecimal oneHundred = new BigDecimal("100.00");
-        return getDonationRatio().multiply(amount).divide(oneHundred, RoundingMode.HALF_UP);
+        return getTithingPercentage().multiply(amount).divide(oneHundred, RoundingMode.HALF_UP);
     }
 
     @Override
     public IncomeTransaction copy() {
         return new IncomeTransaction(
-                date, currency, amount, description, isRecurring, donationRatio);
+                date, currency, amount, description, isRecurring, tithingPercentage);
     }
 }
