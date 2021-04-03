@@ -21,13 +21,12 @@ public class CreditCardUpdateController extends AccountUpdateControllerBase {
         final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
                 updateCreditCardTotalCreditFunction =
                         (jsonRequest, account) -> {
-                            final CreditCardAccount creditCardSnapshot =
-                                    (CreditCardAccount) account;
+                            final CreditCardAccount creditCardAccount = (CreditCardAccount) account;
 
                             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            creditCardSnapshot.setTotalCredit(newValue);
+                            creditCardAccount.setTotalCredit(newValue);
 
-                            return CreditCardAccountViewModelOutput.of(creditCardSnapshot, true);
+                            return CreditCardAccountViewModelOutput.of(creditCardAccount, true);
                         };
 
         return updateAccountField(
@@ -43,13 +42,12 @@ public class CreditCardUpdateController extends AccountUpdateControllerBase {
         final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
                 updateCreditCardAvailableCreditFunction =
                         (jsonRequest, account) -> {
-                            final CreditCardAccount creditCardSnapshot =
-                                    (CreditCardAccount) account;
+                            final CreditCardAccount creditCardAccount = (CreditCardAccount) account;
 
                             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            creditCardSnapshot.setAvailableCredit(newValue);
+                            creditCardAccount.setAvailableCredit(newValue);
 
-                            return CreditCardAccountViewModelOutput.of(creditCardSnapshot, true);
+                            return CreditCardAccountViewModelOutput.of(creditCardAccount, true);
                         };
 
         return updateAccountField(
@@ -65,13 +63,12 @@ public class CreditCardUpdateController extends AccountUpdateControllerBase {
         final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
                 updateCreditCardStatementFunction =
                         (jsonRequest, account) -> {
-                            final CreditCardAccount creditCardSnapshot =
-                                    (CreditCardAccount) account;
+                            final CreditCardAccount creditCardAccount = (CreditCardAccount) account;
 
                             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            creditCardSnapshot.setStatement(newValue);
+                            creditCardAccount.setStatement(newValue);
 
-                            return CreditCardAccountViewModelOutput.of(creditCardSnapshot, true);
+                            return CreditCardAccountViewModelOutput.of(creditCardAccount, true);
                         };
 
         return updateAccountField(

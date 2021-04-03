@@ -22,13 +22,12 @@ public class InvestmentUpdateController extends AccountUpdateControllerBase {
         final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
                 updateInvestmentSharesFunction =
                         (jsonRequest, account) -> {
-                            final InvestmentAccount investmentSnapshot =
-                                    (InvestmentAccount) account;
+                            final InvestmentAccount investmentAccount = (InvestmentAccount) account;
 
                             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            investmentSnapshot.setShares(newValue);
+                            investmentAccount.setShares(newValue);
 
-                            return InvestmentAccountViewModelOutput.of(investmentSnapshot, true);
+                            return InvestmentAccountViewModelOutput.of(investmentAccount, true);
                         };
 
         return updateAccountField(
@@ -45,13 +44,12 @@ public class InvestmentUpdateController extends AccountUpdateControllerBase {
         final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
                 updateInvestmentAmountInvestedFunction =
                         (jsonRequest, account) -> {
-                            final InvestmentAccount investmentSnapshot =
-                                    (InvestmentAccount) account;
+                            final InvestmentAccount investmentAccount = (InvestmentAccount) account;
 
                             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            investmentSnapshot.setAmountInvested(newValue);
+                            investmentAccount.setAmountInvested(newValue);
 
-                            return InvestmentAccountViewModelOutput.of(investmentSnapshot);
+                            return InvestmentAccountViewModelOutput.of(investmentAccount);
                         };
 
         return updateAccountField(
@@ -67,13 +65,12 @@ public class InvestmentUpdateController extends AccountUpdateControllerBase {
         final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
                 updateInvestmentCurrentShareValueFunction =
                         (jsonRequest, account) -> {
-                            final InvestmentAccount investmentSnapshot =
-                                    (InvestmentAccount) account;
+                            final InvestmentAccount investmentAccount = (InvestmentAccount) account;
 
                             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            investmentSnapshot.setCurrentShareValue(newValue);
+                            investmentAccount.setCurrentShareValue(newValue);
 
-                            return InvestmentAccountViewModelOutput.of(investmentSnapshot, true);
+                            return InvestmentAccountViewModelOutput.of(investmentAccount, true);
                         };
 
         return updateAccountField(
