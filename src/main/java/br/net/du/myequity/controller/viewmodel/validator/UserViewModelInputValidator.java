@@ -1,5 +1,13 @@
 package br.net.du.myequity.controller.viewmodel.validator;
 
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.EMAIL_FIELD;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.FIRST_NAME_FIELD;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.LAST_NAME_FIELD;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.NOT_EMPTY_ERRORCODE;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.PASSWORD_CONFIRM_FIELD;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.PASSWORD_FIELD;
+import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace;
+
 import br.net.du.myequity.controller.viewmodel.UserViewModelInput;
 import br.net.du.myequity.service.UserService;
 import java.util.regex.Pattern;
@@ -7,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 @Component
@@ -28,13 +35,14 @@ public class UserViewModelInputValidator implements Validator {
 
     @Override
     public void validate(final Object o, final Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "NotEmpty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "NotEmpty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwordConfirm", "NotEmpty");
-
         final UserViewModelInput userViewModelInput = (UserViewModelInput) o;
+
+        rejectIfEmptyOrWhitespace(errors, EMAIL_FIELD, NOT_EMPTY_ERRORCODE);
+        rejectIfEmptyOrWhitespace(errors, FIRST_NAME_FIELD, NOT_EMPTY_ERRORCODE);
+        rejectIfEmptyOrWhitespace(errors, LAST_NAME_FIELD, NOT_EMPTY_ERRORCODE);
+        rejectIfEmptyOrWhitespace(errors, PASSWORD_FIELD, NOT_EMPTY_ERRORCODE);
+        rejectIfEmptyOrWhitespace(errors, PASSWORD_CONFIRM_FIELD, NOT_EMPTY_ERRORCODE);
+
         rejectIfInvalidOrExistingEmail(errors, userViewModelInput);
         rejectIfInvalidPassword(errors, userViewModelInput);
     }
@@ -43,9 +51,9 @@ public class UserViewModelInputValidator implements Validator {
             final Errors errors, final UserViewModelInput userViewModelInput) {
         if (StringUtils.isEmpty(userViewModelInput.getEmail())
                 || !EMAIL_PATTERN.matcher(userViewModelInput.getEmail()).matches()) {
-            errors.rejectValue("email", "Invalid.userForm.email");
+            errors.rejectValue(EMAIL_FIELD, "Invalid.userForm.email");
         } else if (userService.findByEmail(userViewModelInput.getEmail()) != null) {
-            errors.rejectValue("email", "Duplicate.userForm.email");
+            errors.rejectValue(EMAIL_FIELD, "Duplicate.userForm.email");
         }
     }
 
@@ -54,11 +62,11 @@ public class UserViewModelInputValidator implements Validator {
         if (StringUtils.isEmpty(userViewModelInput.getPassword())
                 || (userViewModelInput.getPassword().length() < 8)
                 || (userViewModelInput.getPassword().length() > 32)) {
-            errors.rejectValue("password", "Size.userForm.password");
+            errors.rejectValue(PASSWORD_FIELD, "Size.userForm.password");
         } else if (!userViewModelInput
                 .getPasswordConfirm()
                 .equals(userViewModelInput.getPassword())) {
-            errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
+            errors.rejectValue(PASSWORD_CONFIRM_FIELD, "Diff.userForm.passwordConfirm");
         }
     }
 }

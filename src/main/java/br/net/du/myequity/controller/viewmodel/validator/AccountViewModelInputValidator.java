@@ -1,8 +1,9 @@
 package br.net.du.myequity.controller.viewmodel.validator;
 
-import static br.net.du.myequity.controller.util.ControllerConstants.CURRENCY_UNIT;
-import static br.net.du.myequity.controller.util.ControllerConstants.NAME;
-import static br.net.du.myequity.controller.util.ControllerConstants.NOT_EMPTY;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.NAME_FIELD;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.NOT_EMPTY_ERRORCODE;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.SUBTYPE_NAME_FIELD;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.rejectIfInvalidCurrencyUnit;
 import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace;
 
 import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
@@ -11,8 +12,6 @@ import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.TithingAccount;
 import br.net.du.myequity.service.AccountService;
 import java.util.List;
-import org.joda.money.CurrencyUnit;
-import org.joda.money.IllegalCurrencyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -20,8 +19,6 @@ import org.springframework.validation.SmartValidator;
 
 @Component
 public class AccountViewModelInputValidator implements SmartValidator {
-    public static final String SUBTYPE_NAME_KEY = "subtypeName";
-
     private final AccountService accountService;
 
     @Autowired
@@ -45,7 +42,7 @@ public class AccountViewModelInputValidator implements SmartValidator {
         final Snapshot snapshot = getSnapshot(validationHints);
 
         rejectIfInvalidOrDuplicateNameAndSubType(accountViewModelInput, snapshot, errors);
-        rejectIfInvalidCurrencyUnit(accountViewModelInput, errors);
+        rejectIfInvalidCurrencyUnit(accountViewModelInput.getCurrencyUnit(), errors);
     }
 
     private Snapshot getSnapshot(Object[] validationHints) {
@@ -60,15 +57,15 @@ public class AccountViewModelInputValidator implements SmartValidator {
 
     private void rejectIfInvalidOrDuplicateNameAndSubType(
             AccountViewModelInput accountViewModelInput, Snapshot snapshot, Errors errors) {
-        rejectIfEmptyOrWhitespace(errors, NAME, NOT_EMPTY);
-        rejectIfEmptyOrWhitespace(errors, SUBTYPE_NAME_KEY, NOT_EMPTY);
+        rejectIfEmptyOrWhitespace(errors, NAME_FIELD, NOT_EMPTY_ERRORCODE);
+        rejectIfEmptyOrWhitespace(errors, SUBTYPE_NAME_FIELD, NOT_EMPTY_ERRORCODE);
 
         final String inputSubtypeName = accountViewModelInput.getSubtypeName();
         if (TithingAccount.class.getSimpleName().equals(inputSubtypeName)) {
-            errors.rejectValue(SUBTYPE_NAME_KEY, "Invalid.value");
+            errors.rejectValue(SUBTYPE_NAME_FIELD, "Invalid.value");
         }
 
-        if (errors.hasFieldErrors(SUBTYPE_NAME_KEY) || errors.hasFieldErrors(NAME)) {
+        if (errors.hasFieldErrors(SUBTYPE_NAME_FIELD) || errors.hasFieldErrors(NAME_FIELD)) {
             return;
         }
 
@@ -81,7 +78,7 @@ public class AccountViewModelInputValidator implements SmartValidator {
 
             rejectIfExistingNameAndSubType(inputName, inputSubType, snapshot, errors);
         } catch (final ClassNotFoundException e) {
-            errors.rejectValue(SUBTYPE_NAME_KEY, "Invalid.value");
+            errors.rejectValue(SUBTYPE_NAME_FIELD, "Invalid.value");
         }
     }
 
@@ -100,22 +97,7 @@ public class AccountViewModelInputValidator implements SmartValidator {
                                         (inputSubType.isInstance(account))
                                                 && account.getName().equals(inputName));
         if (isDuplicate) {
-            errors.rejectValue(NAME, "Duplicate.accountForm.name");
-        }
-    }
-
-    private void rejectIfInvalidCurrencyUnit(
-            final AccountViewModelInput accountViewModelInput, final Errors errors) {
-        rejectIfEmptyOrWhitespace(errors, CURRENCY_UNIT, NOT_EMPTY);
-
-        if (errors.hasFieldErrors(CURRENCY_UNIT)) {
-            return;
-        }
-
-        try {
-            CurrencyUnit.of(accountViewModelInput.getCurrencyUnit());
-        } catch (final NullPointerException | IllegalCurrencyException e) {
-            errors.rejectValue(CURRENCY_UNIT, "Invalid.currency");
+            errors.rejectValue(NAME_FIELD, "Duplicate.accountForm.name");
         }
     }
 }
