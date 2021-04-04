@@ -2,9 +2,11 @@ package br.net.du.myequity.service;
 
 import static br.net.du.myequity.test.ModelTestUtils.buildUser;
 import static br.net.du.myequity.test.ModelTestUtils.equalsIgnoreIdAndDate;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.FOURTH_SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.THIRD_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static br.net.du.myequity.test.TestConstants.newCreditCardAccount;
 import static br.net.du.myequity.test.TestConstants.newInvestmentAccount;
 import static br.net.du.myequity.test.TestConstants.newRecurringDonation;
@@ -218,6 +220,11 @@ public class SnapshotServiceTest {
     }
 
     private Snapshot newEmptySnapshot(final String snapshotName) {
-        return new Snapshot(snapshotName, ImmutableSortedSet.of(), ImmutableList.of());
+        return new Snapshot(
+                snapshotName,
+                CURRENCY_UNIT,
+                TITHING_PERCENTAGE,
+                ImmutableSortedSet.of(),
+                ImmutableList.of());
     }
 }

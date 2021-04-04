@@ -1,11 +1,13 @@
 package br.net.du.myequity.persistence;
 
 import static br.net.du.myequity.test.ModelTestUtils.equalsIgnoreId;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.EMAIL;
 import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
 import static br.net.du.myequity.test.TestConstants.LAST_NAME;
 import static br.net.du.myequity.test.TestConstants.PASSWORD;
 import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -66,13 +68,19 @@ class PersistenceTest {
         final LocalDate now = LocalDate.of(2021, 03, 01);
         try (MockedStatic<LocalDate> localDateStaticMock = mockStatic(LocalDate.class)) {
             localDateStaticMock.when(LocalDate::now).thenReturn(now);
-            userService.signUp(EMAIL, FIRST_NAME, LAST_NAME, PASSWORD);
+            userService.signUp(
+                    EMAIL, FIRST_NAME, LAST_NAME, CURRENCY_UNIT, TITHING_PERCENTAGE, PASSWORD);
         }
 
         user = userService.findByEmail(EMAIL);
 
         secondSnapshot =
-                new Snapshot(SECOND_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
+                new Snapshot(
+                        SECOND_SNAPSHOT_NAME,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of());
     }
 
     @Test

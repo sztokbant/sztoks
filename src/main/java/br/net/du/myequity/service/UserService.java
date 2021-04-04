@@ -5,8 +5,10 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.UserRepository;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.NonNull;
+import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ public class UserService {
             @NonNull final String email,
             @NonNull final String firstName,
             @NonNull final String lastName,
+            @NonNull final CurrencyUnit baseCurrencyUnit,
+            @NonNull final BigDecimal defaultTithingPercentage,
             @NonNull final String password) {
         final User user = new User(email.trim(), firstName.trim(), lastName.trim());
         user.setPassword(passwordEncoder.encode(password));
@@ -29,7 +33,12 @@ public class UserService {
         final String firstSnapshotName =
                 String.format("%04d-%02d", now.getYear(), now.getMonth().getValue());
         user.addSnapshot(
-                new Snapshot(firstSnapshotName, ImmutableSortedSet.of(), ImmutableList.of()));
+                new Snapshot(
+                        firstSnapshotName,
+                        baseCurrencyUnit,
+                        defaultTithingPercentage,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of()));
 
         save(user);
     }

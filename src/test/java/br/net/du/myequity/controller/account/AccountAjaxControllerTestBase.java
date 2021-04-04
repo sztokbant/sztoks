@@ -1,7 +1,9 @@
 package br.net.du.myequity.controller.account;
 
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -60,7 +62,13 @@ abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestB
 
     @BeforeEach
     public void ajaxSnapshotControllerTestBaseSetUp() throws Exception {
-        snapshot = new Snapshot(FIRST_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
+        snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_NAME,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of());
         snapshot.setId(SNAPSHOT_ID);
 
         final ValueUpdateJsonRequest valueUpdateJsonRequest =

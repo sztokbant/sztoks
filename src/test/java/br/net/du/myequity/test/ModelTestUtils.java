@@ -1,6 +1,8 @@
 package br.net.du.myequity.test;
 
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
@@ -32,7 +34,12 @@ public class ModelTestUtils {
         user.setId(id);
 
         final Snapshot snapshot =
-                new Snapshot(FIRST_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
+                new Snapshot(
+                        FIRST_SNAPSHOT_NAME,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of());
         snapshot.setId(SNAPSHOT_ID);
 
         user.addSnapshot(snapshot);

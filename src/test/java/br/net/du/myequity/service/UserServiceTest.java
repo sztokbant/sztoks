@@ -1,10 +1,12 @@
 package br.net.du.myequity.service;
 
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.EMAIL;
 import static br.net.du.myequity.test.TestConstants.EXTRA_SPACES;
 import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
 import static br.net.du.myequity.test.TestConstants.LAST_NAME;
 import static br.net.du.myequity.test.TestConstants.PASSWORD;
+import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -34,6 +36,8 @@ class UserServiceTest {
                 EMAIL + EXTRA_SPACES,
                 FIRST_NAME + EXTRA_SPACES,
                 LAST_NAME + EXTRA_SPACES,
+                CURRENCY_UNIT,
+                TITHING_PERCENTAGE,
                 PASSWORD);
 
         // THEN

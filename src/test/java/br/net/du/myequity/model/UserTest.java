@@ -1,5 +1,6 @@
 package br.net.du.myequity.model;
 
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.EMAIL;
 import static br.net.du.myequity.test.TestConstants.FIFTH_SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
@@ -10,6 +11,7 @@ import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.SEVENTH_SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.SIXTH_SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.THIRD_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -44,7 +46,13 @@ class UserTest {
         simpleLiabilityAccount = new SimpleLiabilityAccount("Liability Account", CurrencyUnit.USD);
         simpleLiabilityAccount.setId(7L);
 
-        snapshot = new Snapshot(FIRST_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of());
+        snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_NAME,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of());
         snapshot.setId(42L);
     }
 
@@ -99,7 +107,12 @@ class UserTest {
         assertTrue(user.getSnapshots().isEmpty());
         user.addSnapshot(snapshot);
         final Snapshot newSnapshot =
-                new Snapshot(snapshot.getName(), ImmutableSortedSet.of(), ImmutableList.of());
+                new Snapshot(
+                        snapshot.getName(),
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of());
         newSnapshot.setId(snapshot.getId() + 1);
 
         // WHEN/THEN
@@ -145,19 +158,54 @@ class UserTest {
     public void compareTo_snapshotsAreOrderedByNameDescending() {
         // GIVEN
         user.addSnapshot(
-                new Snapshot(FIFTH_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+                new Snapshot(
+                        FIFTH_SNAPSHOT_NAME,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of()));
         user.addSnapshot(
-                new Snapshot(THIRD_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+                new Snapshot(
+                        THIRD_SNAPSHOT_NAME,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of()));
         user.addSnapshot(
-                new Snapshot(SIXTH_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+                new Snapshot(
+                        SIXTH_SNAPSHOT_NAME,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of()));
         user.addSnapshot(
-                new Snapshot(SEVENTH_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+                new Snapshot(
+                        SEVENTH_SNAPSHOT_NAME,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of()));
         user.addSnapshot(
-                new Snapshot(FIRST_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+                new Snapshot(
+                        FIRST_SNAPSHOT_NAME,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of()));
         user.addSnapshot(
-                new Snapshot(SECOND_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+                new Snapshot(
+                        SECOND_SNAPSHOT_NAME,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of()));
         user.addSnapshot(
-                new Snapshot(FOURTH_SNAPSHOT_NAME, ImmutableSortedSet.of(), ImmutableList.of()));
+                new Snapshot(
+                        FOURTH_SNAPSHOT_NAME,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of()));
 
         // WHEN
         final Iterator<Snapshot> iterator = user.getSnapshots().iterator();

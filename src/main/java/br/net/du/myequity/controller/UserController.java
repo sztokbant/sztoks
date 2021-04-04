@@ -6,6 +6,8 @@ import br.net.du.myequity.controller.viewmodel.UserViewModelInput;
 import br.net.du.myequity.controller.viewmodel.validator.UserViewModelInputValidator;
 import br.net.du.myequity.service.SecurityService;
 import br.net.du.myequity.service.UserService;
+import java.math.BigDecimal;
+import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,9 +48,13 @@ public class UserController {
         final String email = userViewModelInput.getEmail().trim();
         final String firstName = userViewModelInput.getFirstName().trim();
         final String lastName = userViewModelInput.getLastName().trim();
+        final CurrencyUnit baseCurrencyUnit = CurrencyUnit.of(userViewModelInput.getCurrencyUnit());
+        final BigDecimal defaultTithingPercentage =
+                new BigDecimal(userViewModelInput.getTithingPercentage());
         final String password = userViewModelInput.getPassword();
 
-        userService.signUp(email, firstName, lastName, password);
+        userService.signUp(
+                email, firstName, lastName, baseCurrencyUnit, defaultTithingPercentage, password);
         securityService.autoLogin(email, password);
 
         return REDIRECT_TO_HOME;

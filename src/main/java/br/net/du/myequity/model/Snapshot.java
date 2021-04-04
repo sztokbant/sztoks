@@ -72,6 +72,14 @@ public class Snapshot implements Comparable<Snapshot> {
     @Getter
     private String name;
 
+    @Column(nullable = false)
+    protected String baseCurrency;
+
+    @Column(nullable = false)
+    @Getter
+    @Setter
+    private BigDecimal defaultTithingPercentage;
+
     @OneToOne
     @JoinColumn(name = "previous_id", nullable = true)
     @Getter
@@ -95,9 +103,13 @@ public class Snapshot implements Comparable<Snapshot> {
 
     public Snapshot(
             @NonNull final String name,
+            @NonNull final CurrencyUnit baseCurrencyUnit,
+            @NonNull final BigDecimal defaultTithingPercentage,
             @NotNull final SortedSet<Account> accounts,
             @NonNull final List<Transaction> transactions) {
         setName(name);
+        this.baseCurrency = baseCurrencyUnit.getCode();
+        this.defaultTithingPercentage = defaultTithingPercentage;
 
         accounts.stream().forEach(account -> addAccount(account.copy()));
 
@@ -116,6 +128,14 @@ public class Snapshot implements Comparable<Snapshot> {
 
                             addTransaction(transactionCopy);
                         });
+    }
+
+    public CurrencyUnit getCurrencyUnit() {
+        return CurrencyUnit.of(baseCurrency);
+    }
+
+    public void setCurrencyUnit(final CurrencyUnit currencyUnit) {
+        baseCurrency = currencyUnit.getCode();
     }
 
     public void setName(@NonNull final String name) {

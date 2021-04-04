@@ -116,14 +116,21 @@ class UserControllerTest {
                                 .param(FIRST_NAME_FIELD, FIRST_NAME + EXTRA_SPACES)
                                 .param(LAST_NAME_FIELD, LAST_NAME + EXTRA_SPACES)
                                 .param(CURRENCY_UNIT_FIELD, CURRENCY_UNIT.getCode())
-                                .param(TITHING_PERCENTAGE_FIELD, TITHING_PERCENTAGE)
+                                .param(TITHING_PERCENTAGE_FIELD, TITHING_PERCENTAGE.toPlainString())
                                 .param(PASSWORD_FIELD, PASSWORD)
                                 .param(PASSWORD_CONFIRM_FIELD, PASSWORD));
 
         // THEN
         verifyRedirect(resultActions, "/");
 
-        verify(userService).signUp(eq(EMAIL), eq(FIRST_NAME), eq(LAST_NAME), eq(PASSWORD));
+        verify(userService)
+                .signUp(
+                        eq(EMAIL),
+                        eq(FIRST_NAME),
+                        eq(LAST_NAME),
+                        eq(CURRENCY_UNIT),
+                        eq(TITHING_PERCENTAGE),
+                        eq(PASSWORD));
         verify(securityService).autoLogin(eq(EMAIL), eq(PASSWORD));
     }
 
