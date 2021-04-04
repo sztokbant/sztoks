@@ -1,11 +1,20 @@
 package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.test.ControllerTestUtils.verifyRedirect;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT_FIELD;
 import static br.net.du.myequity.test.TestConstants.EMAIL;
+import static br.net.du.myequity.test.TestConstants.EMAIL_FIELD;
 import static br.net.du.myequity.test.TestConstants.EXTRA_SPACES;
 import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
+import static br.net.du.myequity.test.TestConstants.FIRST_NAME_FIELD;
 import static br.net.du.myequity.test.TestConstants.LAST_NAME;
+import static br.net.du.myequity.test.TestConstants.LAST_NAME_FIELD;
 import static br.net.du.myequity.test.TestConstants.PASSWORD;
+import static br.net.du.myequity.test.TestConstants.PASSWORD_CONFIRM_FIELD;
+import static br.net.du.myequity.test.TestConstants.PASSWORD_FIELD;
+import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
+import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE_FIELD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -36,12 +45,6 @@ class UserControllerTest {
 
     private static final String SIGNUP_URL = "/signup";
     private static final String LOGIN_URL = "/login";
-
-    private static final String EMAIL_KEY = "email";
-    private static final String FIRST_NAME_KEY = "firstName";
-    private static final String LAST_NAME_KEY = "lastName";
-    private static final String PASSWORD_KEY = "password";
-    private static final String PASSWORD_CONFIRM_KEY = "passwordConfirm";
 
     private static final String LOGOUT_PARAM = "logout";
     private static final String ERROR_PARAM = "error";
@@ -109,11 +112,13 @@ class UserControllerTest {
                         MockMvcRequestBuilders.post(SIGNUP_URL)
                                 .with(csrf())
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                                .param(EMAIL_KEY, EMAIL + EXTRA_SPACES)
-                                .param(FIRST_NAME_KEY, FIRST_NAME + EXTRA_SPACES)
-                                .param(LAST_NAME_KEY, LAST_NAME + EXTRA_SPACES)
-                                .param(PASSWORD_KEY, PASSWORD)
-                                .param(PASSWORD_CONFIRM_KEY, PASSWORD));
+                                .param(EMAIL_FIELD, EMAIL + EXTRA_SPACES)
+                                .param(FIRST_NAME_FIELD, FIRST_NAME + EXTRA_SPACES)
+                                .param(LAST_NAME_FIELD, LAST_NAME + EXTRA_SPACES)
+                                .param(CURRENCY_UNIT_FIELD, CURRENCY_UNIT.getCode())
+                                .param(TITHING_PERCENTAGE_FIELD, TITHING_PERCENTAGE)
+                                .param(PASSWORD_FIELD, PASSWORD)
+                                .param(PASSWORD_CONFIRM_FIELD, PASSWORD));
 
         // THEN
         verifyRedirect(resultActions, "/");

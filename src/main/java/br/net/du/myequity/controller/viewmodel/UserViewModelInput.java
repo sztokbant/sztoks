@@ -11,6 +11,8 @@ public class UserViewModelInput {
     private String email;
     private String firstName;
     private String lastName;
+    private String currencyUnit;
+    private String tithingPercentage;
     private String password;
     private String passwordConfirm;
 }

@@ -45,6 +45,22 @@
                 </div>
             </spring:bind>
 
+            <spring:bind path="currencyUnit">
+                <div class="form-group ${status.error ? 'has-error' : ''}">
+                    <form:input type="text" path="currencyUnit" class="form-control" placeholder="Default Currency"
+                                autofocus="true"></form:input>
+                    <form:errors path="currencyUnit"/>
+                </div>
+            </spring:bind>
+
+            <spring:bind path="tithingPercentage">
+                <div class="form-group ${status.error ? 'has-error' : ''}">
+                    <form:input type="text" path="tithingPercentage" class="form-control" placeholder="Default Tithing Percentage"
+                                autofocus="true"></form:input>
+                    <form:errors path="tithingPercentage"/>
+                </div>
+            </spring:bind>
+
             <spring:bind path="password">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <form:input type="password" path="password" class="form-control"

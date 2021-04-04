@@ -4,6 +4,13 @@ import static br.net.du.myequity.controller.viewmodel.TransactionViewModelInputT
 import static br.net.du.myequity.controller.viewmodel.TransactionViewModelInputTest.populateDonationTransactionAttributes;
 import static br.net.du.myequity.controller.viewmodel.TransactionViewModelInputTest.populateIncomeTransactionAttributes;
 import static br.net.du.myequity.controller.viewmodel.TransactionViewModelInputTest.populateInvestmentTransactionAttributes;
+import static br.net.du.myequity.test.TestConstants.AMOUNT_FIELD;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT_FIELD;
+import static br.net.du.myequity.test.TestConstants.DATE_FIELD;
+import static br.net.du.myequity.test.TestConstants.INVESTMENT_CATEGORY_FIELD;
+import static br.net.du.myequity.test.TestConstants.IS_RECURRING_FIELD;
+import static br.net.du.myequity.test.TestConstants.IS_TAX_DEDUCTIBLE_FIELD;
+import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE_FIELD;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -119,7 +126,7 @@ class TransactionViewModelInputValidatorTest {
     }
 
     @Test
-    public void validate_invalidEmail_hasErrors() {
+    public void validate_invalidDate_hasErrors() {
         // GIVEN
         populateDonationTransactionAttributes(transactionViewModelInput);
         transactionViewModelInput.setDate("not_a_date");
@@ -128,7 +135,7 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(DATE_FIELD));
     }
 
     @Test
@@ -141,7 +148,7 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
     }
 
     @Test
@@ -154,7 +161,7 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(AMOUNT_FIELD));
     }
 
     @Test
@@ -167,7 +174,7 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(IS_RECURRING_FIELD));
     }
 
     @Test
@@ -180,7 +187,7 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(TITHING_PERCENTAGE_FIELD));
     }
 
     @Test
@@ -193,7 +200,7 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(INVESTMENT_CATEGORY_FIELD));
     }
 
     @Test
@@ -206,6 +213,6 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(IS_TAX_DEDUCTIBLE_FIELD));
     }
 }

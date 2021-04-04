@@ -31,6 +31,22 @@ public class TestConstants {
 
     public static final String ACCOUNT_NAME = "Account Name";
     public static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.USD;
+    public static final String TITHING_PERCENTAGE = "15.00";
+
+    public static final String AMOUNT_FIELD = "amount";
+    public static final String CURRENCY_UNIT_FIELD = "currencyUnit";
+    public static final String DATE_FIELD = "date";
+    public static final String EMAIL_FIELD = "email";
+    public static final String FIRST_NAME_FIELD = "firstName";
+    public static final String INVESTMENT_CATEGORY_FIELD = "investmentCategory";
+    public static final String IS_RECURRING_FIELD = "isRecurring";
+    public static final String IS_TAX_DEDUCTIBLE_FIELD = "isTaxDeductible";
+    public static final String LAST_NAME_FIELD = "lastName";
+    public static final String NAME_FIELD = "name";
+    public static final String PASSWORD_CONFIRM_FIELD = "passwordConfirm";
+    public static final String PASSWORD_FIELD = "password";
+    public static final String SUBTYPE_NAME_FIELD = "subtypeName";
+    public static final String TITHING_PERCENTAGE_FIELD = "tithingPercentage";
 
     public static SimpleAssetAccount newSimpleAssetAccount() {
         return new SimpleAssetAccount("Savings", CurrencyUnit.USD, new BigDecimal("10000.00"));

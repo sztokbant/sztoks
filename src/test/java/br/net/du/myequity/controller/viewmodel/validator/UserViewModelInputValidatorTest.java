@@ -1,8 +1,15 @@
 package br.net.du.myequity.controller.viewmodel.validator;
 
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT_FIELD;
 import static br.net.du.myequity.test.TestConstants.EMAIL;
+import static br.net.du.myequity.test.TestConstants.EMAIL_FIELD;
 import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
+import static br.net.du.myequity.test.TestConstants.FIRST_NAME_FIELD;
 import static br.net.du.myequity.test.TestConstants.LAST_NAME;
+import static br.net.du.myequity.test.TestConstants.LAST_NAME_FIELD;
+import static br.net.du.myequity.test.TestConstants.PASSWORD_CONFIRM_FIELD;
+import static br.net.du.myequity.test.TestConstants.PASSWORD_FIELD;
+import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE_FIELD;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
@@ -82,7 +89,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(EMAIL_FIELD));
     }
 
     @Test
@@ -94,7 +101,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(EMAIL_FIELD));
     }
 
     @Test
@@ -107,7 +114,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(EMAIL_FIELD));
     }
 
     @Test
@@ -119,7 +126,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(FIRST_NAME_FIELD));
     }
 
     @Test
@@ -131,7 +138,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(FIRST_NAME_FIELD));
     }
 
     @Test
@@ -143,7 +150,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(LAST_NAME_FIELD));
     }
 
     @Test
@@ -155,7 +162,79 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(LAST_NAME_FIELD));
+    }
+
+    @Test
+    public void validate_emptyCurrencyUnit_hasErrors() {
+        // GIVEN
+        userViewModelInput.setCurrencyUnit(StringUtils.EMPTY);
+
+        // WHEN
+        validator.validate(userViewModelInput, errors);
+
+        // THEN
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+    }
+
+    @Test
+    public void validate_nullCurrencyUnit_hasErrors() {
+        // GIVEN
+        userViewModelInput.setCurrencyUnit(null);
+
+        // WHEN
+        validator.validate(userViewModelInput, errors);
+
+        // THEN
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+    }
+
+    @Test
+    public void validate_invalidCurrencyUnit_hasErrors() {
+        // GIVEN
+        userViewModelInput.setCurrencyUnit("XYZ");
+
+        // WHEN
+        validator.validate(userViewModelInput, errors);
+
+        // THEN
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+    }
+
+    @Test
+    public void validate_emptyTithingPercentage_hasErrors() {
+        // GIVEN
+        userViewModelInput.setTithingPercentage(StringUtils.EMPTY);
+
+        // WHEN
+        validator.validate(userViewModelInput, errors);
+
+        // THEN
+        assertTrue(errors.hasFieldErrors(TITHING_PERCENTAGE_FIELD));
+    }
+
+    @Test
+    public void validate_nullTithingPercentage_hasErrors() {
+        // GIVEN
+        userViewModelInput.setTithingPercentage(null);
+
+        // WHEN
+        validator.validate(userViewModelInput, errors);
+
+        // THEN
+        assertTrue(errors.hasFieldErrors(TITHING_PERCENTAGE_FIELD));
+    }
+
+    @Test
+    public void validate_invalidTithingPercentage_hasErrors() {
+        // GIVEN
+        userViewModelInput.setTithingPercentage("NotANumber");
+
+        // WHEN
+        validator.validate(userViewModelInput, errors);
+
+        // THEN
+        assertTrue(errors.hasFieldErrors(TITHING_PERCENTAGE_FIELD));
     }
 
     @Test
@@ -167,7 +246,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(PASSWORD_FIELD));
     }
 
     @Test
@@ -179,7 +258,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(PASSWORD_FIELD));
     }
 
     @Test
@@ -191,7 +270,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(PASSWORD_FIELD));
     }
 
     @Test
@@ -203,7 +282,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(PASSWORD_FIELD));
     }
 
     @Test
@@ -215,7 +294,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(PASSWORD_CONFIRM_FIELD));
     }
 
     private void populateUserViewModelInput() {
@@ -224,6 +303,8 @@ class UserViewModelInputValidatorTest {
         userViewModelInput.setFirstName(FIRST_NAME);
         userViewModelInput.setLastName(LAST_NAME);
         userViewModelInput.setEmail(EMAIL);
+        userViewModelInput.setCurrencyUnit("USD");
+        userViewModelInput.setTithingPercentage("10.00");
         userViewModelInput.setPassword("password");
         userViewModelInput.setPasswordConfirm("password");
     }

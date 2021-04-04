@@ -6,6 +6,8 @@ import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommon
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.NOT_EMPTY_ERRORCODE;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.PASSWORD_CONFIRM_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.PASSWORD_FIELD;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.rejectIfInvalidCurrencyUnit;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.rejectIfInvalidTithingPercentage;
 import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace;
 
 import br.net.du.myequity.controller.viewmodel.UserViewModelInput;
@@ -40,6 +42,8 @@ public class UserViewModelInputValidator implements Validator {
         rejectIfEmptyOrWhitespace(errors, EMAIL_FIELD, NOT_EMPTY_ERRORCODE);
         rejectIfEmptyOrWhitespace(errors, FIRST_NAME_FIELD, NOT_EMPTY_ERRORCODE);
         rejectIfEmptyOrWhitespace(errors, LAST_NAME_FIELD, NOT_EMPTY_ERRORCODE);
+        rejectIfInvalidCurrencyUnit(userViewModelInput.getCurrencyUnit(), errors);
+        rejectIfInvalidTithingPercentage(userViewModelInput.getTithingPercentage(), errors);
         rejectIfEmptyOrWhitespace(errors, PASSWORD_FIELD, NOT_EMPTY_ERRORCODE);
         rejectIfEmptyOrWhitespace(errors, PASSWORD_CONFIRM_FIELD, NOT_EMPTY_ERRORCODE);
 

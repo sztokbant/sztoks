@@ -1,6 +1,9 @@
 package br.net.du.myequity.controller.viewmodel.validator;
 
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT_FIELD;
 import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.NAME_FIELD;
+import static br.net.du.myequity.test.TestConstants.SUBTYPE_NAME_FIELD;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -129,7 +132,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(NAME_FIELD));
     }
 
     @Test
@@ -142,7 +145,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(SUBTYPE_NAME_FIELD));
     }
 
     @Test
@@ -155,7 +158,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(SUBTYPE_NAME_FIELD));
     }
 
     @Test
@@ -168,11 +171,11 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(SUBTYPE_NAME_FIELD));
     }
 
     @Test
-    public void validate_nullCurrency_hasErrors() {
+    public void validate_nullCurrencyUnit_hasErrors() {
         // GIVEN
         populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, null);
         defineExistingAccounts(ImmutableList.of());
@@ -181,7 +184,33 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+    }
+
+    @Test
+    public void validate_emptyCurrencyUnit_hasErrors() {
+        // GIVEN
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, StringUtils.EMPTY);
+        defineExistingAccounts(ImmutableList.of());
+
+        // WHEN
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
+
+        // THEN
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+    }
+
+    @Test
+    public void validate_invalidCurrencyUnit_hasErrors() {
+        // GIVEN
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, "xyz");
+        defineExistingAccounts(ImmutableList.of());
+
+        // WHEN
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
+
+        // THEN
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
     }
 
     @Test
@@ -194,33 +223,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasErrors());
-    }
-
-    @Test
-    public void validate_emptyCurrency_hasErrors() {
-        // GIVEN
-        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, StringUtils.EMPTY);
-        defineExistingAccounts(ImmutableList.of());
-
-        // WHEN
-        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
-
-        // THEN
-        assertTrue(errors.hasErrors());
-    }
-
-    @Test
-    public void validate_invalidCurrency_hasErrors() {
-        // GIVEN
-        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, "xyz");
-        defineExistingAccounts(ImmutableList.of());
-
-        // WHEN
-        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
-
-        // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(NAME_FIELD));
     }
 
     @Test
@@ -234,7 +237,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(NAME_FIELD));
     }
 
     @Test
@@ -248,7 +251,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasErrors());
+        assertTrue(errors.hasFieldErrors(NAME_FIELD));
     }
 
     @Test
