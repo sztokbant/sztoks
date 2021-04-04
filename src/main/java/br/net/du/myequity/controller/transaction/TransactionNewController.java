@@ -9,8 +9,8 @@ import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 
 import br.net.du.myequity.controller.interceptor.WebController;
 import br.net.du.myequity.controller.util.SnapshotUtils;
-import br.net.du.myequity.controller.viewmodel.TransactionViewModelInput;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelInput;
 import br.net.du.myequity.controller.viewmodel.validator.TransactionViewModelInputValidator;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;

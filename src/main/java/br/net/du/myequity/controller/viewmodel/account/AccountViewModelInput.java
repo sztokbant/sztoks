@@ -1,4 +1,4 @@
-package br.net.du.myequity.controller.viewmodel;
+package br.net.du.myequity.controller.viewmodel.account;
 
 import br.net.du.myequity.model.account.Account;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package br.net.du.myequity.controller.viewmodel;
+package br.net.du.myequity.controller.viewmodel.transaction;
 
 import br.net.du.myequity.model.transaction.DonationTransaction;
 import br.net.du.myequity.model.transaction.IncomeTransaction;

@@ -1,6 +1,6 @@
 <table class="center-w50pct">
     <tr>
-        <td colspan="2"><a href="#"><b>Additional Currencies</b></a></td>
+        <td colspan="2"><a href="/snapshot/${snapshot.id}/currencies"><b>Additional Currencies</b></a></td>
     </tr>
     <c:forEach var="entry" items="${snapshot.currencyConversionRates}">
         <tr>

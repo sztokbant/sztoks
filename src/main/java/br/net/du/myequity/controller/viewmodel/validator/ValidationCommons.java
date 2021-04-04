@@ -12,6 +12,7 @@ import org.springframework.validation.Errors;
 public class ValidationCommons {
 
     public static final String AMOUNT_FIELD = "amount";
+    public static final String CONVERSION_RATE_FIELD = "conversionRate";
     public static final String CURRENCY_UNIT_FIELD = "currencyUnit";
     public static final String DATE_FIELD = "date";
     public static final String DESCRIPTION_FIELD = "description";

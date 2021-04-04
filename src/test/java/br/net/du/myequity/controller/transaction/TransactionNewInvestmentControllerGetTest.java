@@ -12,7 +12,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.controller.GetControllerTestBase;
-import br.net.du.myequity.controller.viewmodel.TransactionViewModelInput;
+import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelInput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.service.SnapshotService;
 import java.util.Optional;

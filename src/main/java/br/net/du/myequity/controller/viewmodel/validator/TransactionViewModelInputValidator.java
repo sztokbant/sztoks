@@ -14,7 +14,7 @@ import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommon
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.rejectIfUnsupportedCurrencyUnit;
 import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace;
 
-import br.net.du.myequity.controller.viewmodel.TransactionViewModelInput;
+import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelInput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.transaction.InvestmentCategory;
 import br.net.du.myequity.model.transaction.TransactionType;

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
+import br.net.du.myequity.controller.viewmodel.account.AccountViewModelInput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SimpleAssetAccount;

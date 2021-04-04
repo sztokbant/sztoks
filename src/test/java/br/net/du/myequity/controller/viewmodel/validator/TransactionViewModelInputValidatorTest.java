@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import br.net.du.myequity.controller.viewmodel.TransactionViewModelInput;
+import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelInput;
 import br.net.du.myequity.model.Snapshot;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;

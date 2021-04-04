@@ -3,6 +3,7 @@ package br.net.du.myequity.controller.viewmodel;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelInput;
 import br.net.du.myequity.model.transaction.DonationTransaction;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.InvestmentTransaction;

@@ -109,7 +109,7 @@ public class Snapshot implements Comparable<Snapshot> {
             name = "snapshot_currency_conversion_rates",
             joinColumns = {@JoinColumn(name = "snapshot_id", referencedColumnName = "id")})
     @MapKeyColumn(name = "to_currency")
-    @Column(name = "conversion_rate")
+    @Column(name = "conversion_rate", precision = 19, scale = 4)
     private Map<String, BigDecimal> currencyConversionRates = new HashMap<>();
 
     public Snapshot(
@@ -304,12 +304,20 @@ public class Snapshot implements Comparable<Snapshot> {
 
     public boolean supports(@NonNull final CurrencyUnit currencyUnit) {
         final String currencyStr = currencyUnit.toString();
-        return currencyStr.equals(baseCurrency) || currencyConversionRates.containsKey(currencyStr);
+        return currencyStr.equals(baseCurrency) || hasConversionRate(currencyUnit);
+    }
+
+    public boolean hasConversionRate(@NonNull final CurrencyUnit currencyUnit) {
+        return currencyConversionRates.containsKey(currencyUnit.toString());
     }
 
     public void putCurrencyConversionRate(
             @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal conversionRate) {
         currencyConversionRates.put(currencyUnit.getCode(), conversionRate);
+
+        if (next != null && !next.hasConversionRate(currencyUnit)) {
+            next.putCurrencyConversionRate(currencyUnit, conversionRate);
+        }
     }
 
     public void setUser(final User newUser) {

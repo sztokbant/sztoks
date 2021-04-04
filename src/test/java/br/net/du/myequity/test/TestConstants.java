@@ -35,6 +35,7 @@ public class TestConstants {
     public static final BigDecimal TITHING_PERCENTAGE = new BigDecimal("15.00");
 
     public static final String AMOUNT_FIELD = "amount";
+    public static final String CONVERSION_RATE_FIELD = "conversionRate";
     public static final String CURRENCY_UNIT_FIELD = "currencyUnit";
     public static final String DATE_FIELD = "date";
     public static final String EMAIL_FIELD = "email";
