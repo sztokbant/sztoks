@@ -69,7 +69,8 @@ public class TransactionNewController {
             final BindingResult bindingResult) {
         final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
 
-        transactionViewModelInputValidator.validate(transactionViewModelInput, bindingResult);
+        transactionViewModelInputValidator.validate(
+                transactionViewModelInput, bindingResult, snapshot);
 
         final TransactionType transactionType =
                 TransactionType.valueOf(transactionViewModelInput.getTypeName());

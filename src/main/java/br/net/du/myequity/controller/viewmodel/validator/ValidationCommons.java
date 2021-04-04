@@ -2,6 +2,7 @@ package br.net.du.myequity.controller.viewmodel.validator;
 
 import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace;
 
+import br.net.du.myequity.model.Snapshot;
 import java.math.BigDecimal;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.money.CurrencyUnit;
@@ -27,6 +28,16 @@ public class ValidationCommons {
     public static final String SUBTYPE_NAME_FIELD = "subtypeName";
     public static final String TITHING_PERCENTAGE_FIELD = "tithingPercentage";
 
+    public static Snapshot getSnapshot(final Object[] validationHints) {
+        if ((validationHints == null)
+                || (validationHints.length != 1)
+                || !(validationHints[0] instanceof Snapshot)) {
+            throw new UnsupportedOperationException();
+        }
+
+        return (Snapshot) validationHints[0];
+    }
+
     public static void rejectIfInvalidCurrencyUnit(final String currencyUnit, final Errors errors) {
         rejectIfEmptyOrWhitespace(errors, CURRENCY_UNIT_FIELD, NOT_EMPTY_ERRORCODE);
 
@@ -38,6 +49,13 @@ public class ValidationCommons {
             CurrencyUnit.of(currencyUnit);
         } catch (final NullPointerException | IllegalCurrencyException e) {
             errors.rejectValue(CURRENCY_UNIT_FIELD, "Invalid.currency");
+        }
+    }
+
+    public static void rejectIfUnsupportedCurrencyUnit(
+            final Snapshot snapshot, final CurrencyUnit currencyUnit, final Errors errors) {
+        if (!snapshot.supports(currencyUnit)) {
+            errors.rejectValue(CURRENCY_UNIT_FIELD, "Unsupported.currency");
         }
     }
 

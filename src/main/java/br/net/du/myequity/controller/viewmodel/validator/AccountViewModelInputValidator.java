@@ -1,9 +1,12 @@
 package br.net.du.myequity.controller.viewmodel.validator;
 
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.CURRENCY_UNIT_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.NAME_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.NOT_EMPTY_ERRORCODE;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.SUBTYPE_NAME_FIELD;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.getSnapshot;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.rejectIfInvalidCurrencyUnit;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.rejectIfUnsupportedCurrencyUnit;
 import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace;
 
 import br.net.du.myequity.controller.viewmodel.AccountViewModelInput;
@@ -12,6 +15,7 @@ import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.TithingAccount;
 import br.net.du.myequity.service.AccountService;
 import java.util.List;
+import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -43,16 +47,10 @@ public class AccountViewModelInputValidator implements SmartValidator {
 
         rejectIfInvalidOrDuplicateNameAndSubType(accountViewModelInput, snapshot, errors);
         rejectIfInvalidCurrencyUnit(accountViewModelInput.getCurrencyUnit(), errors);
-    }
-
-    private Snapshot getSnapshot(Object[] validationHints) {
-        if ((validationHints == null)
-                || (validationHints.length != 1)
-                || !(validationHints[0] instanceof Snapshot)) {
-            throw new UnsupportedOperationException();
+        if (!errors.hasFieldErrors(CURRENCY_UNIT_FIELD)) {
+            rejectIfUnsupportedCurrencyUnit(
+                    snapshot, CurrencyUnit.of(accountViewModelInput.getCurrencyUnit()), errors);
         }
-
-        return (Snapshot) validationHints[0];
     }
 
     private void rejectIfInvalidOrDuplicateNameAndSubType(

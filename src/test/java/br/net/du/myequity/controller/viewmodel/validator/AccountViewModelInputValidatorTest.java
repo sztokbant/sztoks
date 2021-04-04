@@ -1,5 +1,7 @@
 package br.net.du.myequity.controller.viewmodel.validator;
 
+import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
+import static br.net.du.myequity.test.TestConstants.ANOTHER_CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT_FIELD;
 import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_NAME;
@@ -20,6 +22,7 @@ import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.service.AccountService;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
+import java.math.BigDecimal;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.money.CurrencyUnit;
@@ -56,7 +59,7 @@ class AccountViewModelInputValidatorTest {
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
                         ImmutableList.of());
-        snapshot.setId(42L);
+        snapshot.setId(SNAPSHOT_ID);
 
         accountViewModelInputValidator = new AccountViewModelInputValidator(accountService);
 
@@ -218,6 +221,33 @@ class AccountViewModelInputValidatorTest {
 
         // THEN
         assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+    }
+
+    @Test
+    public void validate_unsupportedCurrencyUnit_hasErrors() {
+        // GIVEN
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, ANOTHER_CURRENCY_UNIT.toString());
+        defineExistingAccounts(ImmutableList.of());
+
+        // WHEN
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
+
+        // THEN
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+    }
+
+    @Test
+    public void validate_supportedAlternativeCurrencyUnit_happy() {
+        // GIVEN
+        snapshot.putCurrencyConversionRate(ANOTHER_CURRENCY_UNIT, new BigDecimal("1.31"));
+        populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, ANOTHER_CURRENCY_UNIT.toString());
+        defineExistingAccounts(ImmutableList.of());
+
+        // WHEN
+        accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
+
+        // THEN
+        assertFalse(errors.hasErrors());
     }
 
     @Test

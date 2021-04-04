@@ -282,6 +282,11 @@ public class Snapshot implements Comparable<Snapshot> {
         return tithingAccount;
     }
 
+    public boolean supports(@NonNull final CurrencyUnit currencyUnit) {
+        final String currencyStr = currencyUnit.toString();
+        return currencyStr.equals(baseCurrency) || currencyConversionRates.containsKey(currencyStr);
+    }
+
     public void putCurrencyConversionRate(
             @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal conversionRate) {
         currencyConversionRates.put(currencyUnit.getCode(), conversionRate);

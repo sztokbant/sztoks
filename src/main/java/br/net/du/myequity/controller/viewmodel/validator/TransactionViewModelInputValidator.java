@@ -1,17 +1,21 @@
 package br.net.du.myequity.controller.viewmodel.validator;
 
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.AMOUNT_FIELD;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.CURRENCY_UNIT_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.DATE_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.DESCRIPTION_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.INVESTMENT_CATEGORY_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.IS_RECURRING_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.IS_TAX_DEDUCTIBLE_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.NOT_EMPTY_ERRORCODE;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.getSnapshot;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.rejectIfInvalidCurrencyUnit;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.rejectIfInvalidTithingPercentage;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.rejectIfUnsupportedCurrencyUnit;
 import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace;
 
 import br.net.du.myequity.controller.viewmodel.TransactionViewModelInput;
+import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.transaction.InvestmentCategory;
 import br.net.du.myequity.model.transaction.TransactionType;
 import java.math.BigDecimal;
@@ -19,6 +23,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.money.CurrencyUnit;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
@@ -40,9 +45,14 @@ public class TransactionViewModelInputValidator implements SmartValidator {
     @Override
     public void validate(final Object o, final Errors errors, final Object... validationHints) {
         final TransactionViewModelInput transactionViewModelInput = (TransactionViewModelInput) o;
+        final Snapshot snapshot = getSnapshot(validationHints);
 
         rejectIfInvalidDate(transactionViewModelInput, errors);
         rejectIfInvalidCurrencyUnit(transactionViewModelInput.getCurrencyUnit(), errors);
+        if (!errors.hasFieldErrors(CURRENCY_UNIT_FIELD)) {
+            rejectIfUnsupportedCurrencyUnit(
+                    snapshot, CurrencyUnit.of(transactionViewModelInput.getCurrencyUnit()), errors);
+        }
         rejectIfInvalidAmount(transactionViewModelInput, errors);
         rejectIfInvalidDescription(transactionViewModelInput, errors);
         rejectIfInvalidIsRecurring(transactionViewModelInput, errors);

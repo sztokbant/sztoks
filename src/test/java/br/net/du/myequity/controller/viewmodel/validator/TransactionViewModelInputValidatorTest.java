@@ -4,18 +4,27 @@ import static br.net.du.myequity.controller.viewmodel.TransactionViewModelInputT
 import static br.net.du.myequity.controller.viewmodel.TransactionViewModelInputTest.populateDonationTransactionAttributes;
 import static br.net.du.myequity.controller.viewmodel.TransactionViewModelInputTest.populateIncomeTransactionAttributes;
 import static br.net.du.myequity.controller.viewmodel.TransactionViewModelInputTest.populateInvestmentTransactionAttributes;
+import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.myequity.test.TestConstants.AMOUNT_FIELD;
+import static br.net.du.myequity.test.TestConstants.ANOTHER_CURRENCY_UNIT;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT_FIELD;
 import static br.net.du.myequity.test.TestConstants.DATE_FIELD;
+import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.INVESTMENT_CATEGORY_FIELD;
 import static br.net.du.myequity.test.TestConstants.IS_RECURRING_FIELD;
 import static br.net.du.myequity.test.TestConstants.IS_TAX_DEDUCTIBLE_FIELD;
+import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE_FIELD;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.net.du.myequity.controller.viewmodel.TransactionViewModelInput;
+import br.net.du.myequity.model.Snapshot;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSortedSet;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -27,10 +36,21 @@ class TransactionViewModelInputValidatorTest {
 
     private TransactionViewModelInput transactionViewModelInput;
 
+    private Snapshot snapshot;
+
     private Errors errors;
 
     @BeforeEach
     public void setUp() {
+        snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_NAME,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of());
+        snapshot.setId(SNAPSHOT_ID);
+
         validator = new TransactionViewModelInputValidator();
 
         transactionViewModelInput = new TransactionViewModelInput();
@@ -55,7 +75,7 @@ class TransactionViewModelInputValidatorTest {
         populateIncomeTransactionAttributes(transactionViewModelInput);
 
         // WHEN
-        validator.validate(transactionViewModelInput, errors);
+        validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
         assertFalse(errors.hasErrors());
@@ -67,7 +87,7 @@ class TransactionViewModelInputValidatorTest {
         populateInvestmentTransactionAttributes(transactionViewModelInput);
 
         // WHEN
-        validator.validate(transactionViewModelInput, errors);
+        validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
         assertFalse(errors.hasErrors());
@@ -79,7 +99,7 @@ class TransactionViewModelInputValidatorTest {
         populateDonationTransactionAttributes(transactionViewModelInput);
 
         // WHEN
-        validator.validate(transactionViewModelInput, errors);
+        validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
         assertFalse(errors.hasErrors());
@@ -94,7 +114,7 @@ class TransactionViewModelInputValidatorTest {
         assertThrows(
                 NullPointerException.class,
                 () -> {
-                    validator.validate(transactionViewModelInput, errors);
+                    validator.validate(transactionViewModelInput, errors, snapshot);
                 });
     }
 
@@ -108,7 +128,7 @@ class TransactionViewModelInputValidatorTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> {
-                    validator.validate(transactionViewModelInput, errors);
+                    validator.validate(transactionViewModelInput, errors, snapshot);
                 });
     }
 
@@ -119,7 +139,7 @@ class TransactionViewModelInputValidatorTest {
         transactionViewModelInput.setTypeName("INCOME");
 
         // WHEN
-        validator.validate(transactionViewModelInput, errors);
+        validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasErrors());
@@ -132,7 +152,7 @@ class TransactionViewModelInputValidatorTest {
         transactionViewModelInput.setDate("not_a_date");
 
         // WHEN
-        validator.validate(transactionViewModelInput, errors);
+        validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasFieldErrors(DATE_FIELD));
@@ -145,10 +165,37 @@ class TransactionViewModelInputValidatorTest {
         transactionViewModelInput.setCurrencyUnit("XYZ");
 
         // WHEN
-        validator.validate(transactionViewModelInput, errors);
+        validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+    }
+
+    @Test
+    public void validate_unsupportedCurrencyUnit_hasErrors() {
+        // GIVEN
+        populateDonationTransactionAttributes(transactionViewModelInput);
+        transactionViewModelInput.setCurrencyUnit(ANOTHER_CURRENCY_UNIT.toString());
+
+        // WHEN
+        validator.validate(transactionViewModelInput, errors, snapshot);
+
+        // THEN
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+    }
+
+    @Test
+    public void validate_supportedAlternativeCurrencyUnit_happy() {
+        // GIVEN
+        snapshot.putCurrencyConversionRate(ANOTHER_CURRENCY_UNIT, new BigDecimal("1.31"));
+        populateDonationTransactionAttributes(transactionViewModelInput);
+        transactionViewModelInput.setCurrencyUnit(ANOTHER_CURRENCY_UNIT.toString());
+
+        // WHEN
+        validator.validate(transactionViewModelInput, errors, snapshot);
+
+        // THEN
+        assertFalse(errors.hasErrors());
     }
 
     @Test
@@ -158,7 +205,7 @@ class TransactionViewModelInputValidatorTest {
         transactionViewModelInput.setAmount("XYZ");
 
         // WHEN
-        validator.validate(transactionViewModelInput, errors);
+        validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasFieldErrors(AMOUNT_FIELD));
@@ -171,7 +218,7 @@ class TransactionViewModelInputValidatorTest {
         transactionViewModelInput.setIsRecurring(null);
 
         // WHEN
-        validator.validate(transactionViewModelInput, errors);
+        validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasFieldErrors(IS_RECURRING_FIELD));
@@ -184,7 +231,7 @@ class TransactionViewModelInputValidatorTest {
         transactionViewModelInput.setTithingPercentage("XYZ");
 
         // WHEN
-        validator.validate(transactionViewModelInput, errors);
+        validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasFieldErrors(TITHING_PERCENTAGE_FIELD));
@@ -197,7 +244,7 @@ class TransactionViewModelInputValidatorTest {
         transactionViewModelInput.setInvestmentCategory("XYZ");
 
         // WHEN
-        validator.validate(transactionViewModelInput, errors);
+        validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasFieldErrors(INVESTMENT_CATEGORY_FIELD));
@@ -210,7 +257,7 @@ class TransactionViewModelInputValidatorTest {
         transactionViewModelInput.setIsTaxDeductible(null);
 
         // WHEN
-        validator.validate(transactionViewModelInput, errors);
+        validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
         assertTrue(errors.hasFieldErrors(IS_TAX_DEDUCTIBLE_FIELD));
