@@ -276,7 +276,7 @@ public class Snapshot implements Comparable<Snapshot> {
         }
     }
 
-    public TithingAccount getTithingAccountFor(final CurrencyUnit currencyUnit) {
+    private TithingAccount getTithingAccountFor(final CurrencyUnit currencyUnit) {
         final Optional<Account> tithingAccountOpt =
                 accounts.stream()
                         .filter(
@@ -348,6 +348,14 @@ public class Snapshot implements Comparable<Snapshot> {
         return transactions.stream()
                 .filter(transaction -> transaction.getTransactionType().equals(transactionType))
                 .map(t -> toBaseCurrency(t.getCurrencyUnit(), t.getAmount()))
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
+    }
+
+    public BigDecimal getTithingBalance() {
+        return accounts.stream()
+                .filter(account -> (account instanceof TithingAccount))
+                .map(account -> toBaseCurrency(account.getCurrencyUnit(), account.getBalance()))
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
     }

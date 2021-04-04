@@ -10,7 +10,6 @@ import br.net.du.myequity.controller.viewmodel.account.CreditCardAccountViewMode
 import br.net.du.myequity.controller.viewmodel.account.InvestmentAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.PayableAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.ReceivableAccountViewModelOutput;
-import br.net.du.myequity.controller.viewmodel.account.TithingAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
@@ -54,10 +53,11 @@ public class SnapshotViewModelOutput {
     private final List<AccountViewModelOutput> receivableAccounts;
     private final List<AccountViewModelOutput> investmentAccounts;
 
-    private final List<AccountViewModelOutput> tithingAccounts;
     private final List<AccountViewModelOutput> simpleLiabilityAccounts;
     private final List<AccountViewModelOutput> payableAccounts;
     private final List<AccountViewModelOutput> creditCardAccounts;
+
+    private final String tithingBalance;
 
     private final List<TransactionViewModelOutput> incomes;
     private final List<TransactionViewModelOutput> investments;
@@ -150,10 +150,13 @@ public class SnapshotViewModelOutput {
 
         final Map<Class, List<AccountViewModelOutput>> liabilitiesByType =
                 breakDownAccountsByType(accountViewModels.get(AccountType.LIABILITY));
-        builder.tithingAccounts(liabilitiesByType.get(TithingAccountViewModelOutput.class));
         builder.simpleLiabilityAccounts(liabilitiesByType.get(AccountViewModelOutput.class));
         builder.payableAccounts(liabilitiesByType.get(PayableAccountViewModelOutput.class));
         builder.creditCardAccounts(liabilitiesByType.get(CreditCardAccountViewModelOutput.class));
+
+        builder.tithingBalance(
+                MoneyFormatUtils.format(
+                        snapshot.getBaseCurrencyUnit(), snapshot.getTithingBalance()));
     }
 
     private static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(

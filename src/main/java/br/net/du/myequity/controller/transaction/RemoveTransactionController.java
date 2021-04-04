@@ -38,8 +38,8 @@ public class RemoveTransactionController extends TransactionUpdateControllerBase
                 || transactionType.equals(TransactionType.DONATION)) {
             final String tithingBalance =
                     MoneyFormatUtils.format(
-                            currencyUnit,
-                            toDecimal(snapshot.getTithingAccountFor(currencyUnit).getBalance()));
+                            snapshot.getBaseCurrencyUnit(),
+                            toDecimal(snapshot.getTithingBalance()));
 
             final String netWorth =
                     MoneyFormatUtils.format(

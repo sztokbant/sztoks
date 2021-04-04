@@ -14,7 +14,7 @@ function removeTransaction(snapshotId, entityId, type, description) {
 function removeTransactionSuccessCallback(data, result) {
   $("#total_" + result.type).html(result.totalForTransactionType);
   if (result.type == "INCOME" || result.type == "DONATION") {
-    $("#tithing_balance_" + result.currencyUnit).html(result.tithingBalance);
+    $("#tithing_balance").html(result.tithingBalance);
     $("#total_LIABILITY").html(result.totalLiability);
     $("#snapshot_net_worth").html(result.netWorth);
   }
