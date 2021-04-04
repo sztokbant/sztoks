@@ -8,8 +8,8 @@ function snapshotNameUpdateSuccessCallback(data, result) {
 
 function accountBalanceUpdateSuccessCallback(data, result) {
   $("#account_balance_" + data.entityId).html(result.balance);
-  $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
-  $("#total_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);
+  $("#snapshot_net_worth").html(result.netWorth);
+  $("#total_" + result.accountType).html(result.totalForAccountType);
 }
 
 function creditCardTotalCreditUpdateSuccessCallback(data, result) {
@@ -17,8 +17,8 @@ function creditCardTotalCreditUpdateSuccessCallback(data, result) {
   $("#credit_card_used_credit_percentage_" + data.entityId).html(result.usedCreditPercentage);
   $("#credit_card_balance_" + data.entityId).html(result.balance);
   $("#credit_card_remaining_balance_" + data.entityId).html(result.remainingBalance);
-  $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
-  $("#total_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);
+  $("#snapshot_net_worth").html(result.netWorth);
+  $("#total_" + result.accountType).html(result.totalForAccountType);
   updateSnapshotCreditCardTotals(result);
 }
 
@@ -27,8 +27,8 @@ function creditCardAvailableCreditUpdateSuccessCallback(data, result) {
   $("#credit_card_used_credit_percentage_" + data.entityId).html(result.usedCreditPercentage);
   $("#credit_card_remaining_balance_" + data.entityId).html(result.remainingBalance);
   $("#credit_card_balance_" + data.entityId).html(result.balance);
-  $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
-  $("#total_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);
+  $("#snapshot_net_worth").html(result.netWorth);
+  $("#total_" + result.accountType).html(result.totalForAccountType);
   updateSnapshotCreditCardTotals(result);
 }
 
@@ -42,8 +42,8 @@ function investmentSharesUpdateSuccessCallback(data, result) {
   $("#investment_shares_" + data.entityId).html(result.shares);
   $("#investment_average_purchase_price_" + data.entityId).html(result.averagePurchasePrice);
   $("#investment_balance_" + data.entityId).html(result.balance);
-  $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
-  $("#total_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);
+  $("#snapshot_net_worth").html(result.netWorth);
+  $("#total_" + result.accountType).html(result.totalForAccountType);
 }
 
 function investmentAmountInvestedUpdateSuccessCallback(data, result) {
@@ -56,8 +56,8 @@ function investmentCurrentShareValueUpdateSuccessCallback(data, result) {
   $("#investment_current_share_value_" + data.entityId).html(result.currentShareValue);
   $("#investment_profit_percentage_" + data.entityId).html(result.profitPercentage);
   $("#investment_balance_" + data.entityId).html(result.balance);
-  $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
-  $("#total_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);
+  $("#snapshot_net_worth").html(result.netWorth);
+  $("#total_" + result.accountType).html(result.totalForAccountType);
 }
 
 function payableDueDateUpdateSuccessCallback(data, result) {
@@ -70,11 +70,11 @@ function receivableDueDateUpdateSuccessCallback(data, result) {
 
 function transactionAmountUpdateSuccessCallback(data, result) {
   $("#txn_amount_" + data.entityId).html(result.amount);
-  $("#total_" + result.type + "_" + result.currencyUnit).html(result.totalForTransactionType);
+  $("#total_" + result.type).html(result.totalForTransactionType);
 
   if (result.type == "INCOME" || result.type == "DONATION") {
     $("#tithing_balance_" + result.currencyUnit).html(result.tithingBalance);
-    $("#total_LIABILITY_" + result.currencyUnit).html(result.totalLiability);
-    $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
+    $("#total_LIABILITY").html(result.totalLiability);
+    $("#snapshot_net_worth").html(result.netWorth);
   }
 }

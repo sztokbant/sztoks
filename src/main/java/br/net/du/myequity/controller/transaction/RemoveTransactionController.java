@@ -43,14 +43,12 @@ public class RemoveTransactionController extends TransactionUpdateControllerBase
 
             final String netWorth =
                     MoneyFormatUtils.format(
-                            currencyUnit, toDecimal(snapshot.getNetWorth().get(currencyUnit)));
+                            snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getNetWorth()));
 
             final String totalLiability =
                     MoneyFormatUtils.format(
-                            currencyUnit,
-                            toDecimal(
-                                    snapshot.getTotalForAccountType(AccountType.LIABILITY)
-                                            .get(currencyUnit)));
+                            snapshot.getBaseCurrencyUnit(),
+                            toDecimal(snapshot.getTotalFor(AccountType.LIABILITY)));
 
             builder.tithingBalance(tithingBalance)
                     .netWorth(netWorth)
@@ -61,10 +59,7 @@ public class RemoveTransactionController extends TransactionUpdateControllerBase
                 .currencyUnit(currencyUnit.getCode())
                 .currencyUnitSymbol(currencyUnit.getSymbol())
                 .type(transactionType.name())
-                .totalForTransactionType(
-                        formatAsDecimal(
-                                snapshot.getTotalForTransactionType(transactionType)
-                                        .get(currencyUnit)))
+                .totalForTransactionType(formatAsDecimal(snapshot.getTotalFor(transactionType)))
                 .build();
     }
 }

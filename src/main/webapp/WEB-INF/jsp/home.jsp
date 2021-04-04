@@ -50,7 +50,7 @@
                         </c:if>
                         <a href="/snapshot/${snapshot.id}">${snapshot.name}</a>
                     </td>
-                    <td class="align-right-p7"><%@ include file="_snapshot_net_worth.jsp" %></td>
+                    <td class="align-right-p7">${snapshot.netWorth}</td>
                 </tr>
             </c:forEach>
         </table>

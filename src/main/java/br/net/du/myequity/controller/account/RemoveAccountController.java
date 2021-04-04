@@ -39,11 +39,9 @@ public class RemoveAccountController extends AccountUpdateControllerBase {
                 .accountId(account.getId())
                 .currencyUnit(currencyUnit.getCode())
                 .currencyUnitSymbol(currencyUnit.getSymbol())
-                .netWorth(formatAsDecimal(snapshot.getNetWorth().get(currencyUnit)))
+                .netWorth(formatAsDecimal(snapshot.getNetWorth()))
                 .accountType(accountType.name())
-                .totalForAccountType(
-                        formatAsDecimal(
-                                snapshot.getTotalForAccountType(accountType).get(currencyUnit)))
+                .totalForAccountType(formatAsDecimal(snapshot.getTotalFor(accountType)))
                 .creditCardTotalsForCurrencyUnit(creditCardTotalsForCurrencyUnit)
                 .build();
     }

@@ -13,12 +13,12 @@ import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import br.net.du.myequity.model.util.UserUtils;
-import br.net.du.myequity.util.NetWorthUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.sun.istack.NotNull;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +31,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -39,6 +41,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
@@ -100,6 +103,14 @@ public class Snapshot implements Comparable<Snapshot> {
     // this should match Transaction::compareTo()
     @OrderBy("currency ASC, date ASC, description ASC, id ASC")
     private final List<Transaction> transactions = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(
+            name = "snapshot_currency_conversion_rates",
+            joinColumns = {@JoinColumn(name = "snapshot_id", referencedColumnName = "id")})
+    @MapKeyColumn(name = "to_currency")
+    @Column(name = "conversion_rate")
+    private Map<String, BigDecimal> currencyConversionRates = new HashMap<>();
 
     public Snapshot(
             @NonNull final String name,
@@ -271,6 +282,11 @@ public class Snapshot implements Comparable<Snapshot> {
         return tithingAccount;
     }
 
+    public void putCurrencyConversionRate(
+            @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal conversionRate) {
+        currencyConversionRates.put(currencyUnit.getCode(), conversionRate);
+    }
+
     public void setUser(final User newUser) {
         // Prevents infinite loop
         if (UserUtils.equals(user, newUser)) {
@@ -289,24 +305,36 @@ public class Snapshot implements Comparable<Snapshot> {
         }
     }
 
-    public Map<CurrencyUnit, BigDecimal> getNetWorth() {
-        return NetWorthUtils.getNetWorthByCurrency(accounts);
+    public BigDecimal getNetWorth() {
+        return getTotalFor(AccountType.ASSET)
+                .subtract(getTotalFor(AccountType.LIABILITY))
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
-    public Map<CurrencyUnit, BigDecimal> getTotalForAccountType(
-            @NonNull final AccountType accountType) {
-        return NetWorthUtils.breakDownAccountsByCurrency(
-                accounts.stream()
-                        .filter(entry -> entry.getAccountType().equals(accountType))
-                        .collect(Collectors.toSet()));
+    public BigDecimal getTotalFor(@NonNull final AccountType accountType) {
+        return accounts.stream()
+                .filter(account -> account.getAccountType().equals(accountType))
+                .map(account -> toBaseCurrency(account.getCurrencyUnit(), account.getBalance()))
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
     }
 
-    public Map<CurrencyUnit, BigDecimal> getTotalForTransactionType(
-            @NonNull final TransactionType transactionType) {
-        return NetWorthUtils.breakDownTransactionsByCurrency(
-                transactions.stream()
-                        .filter(entry -> entry.getTransactionType().equals(transactionType))
-                        .collect(Collectors.toSet()));
+    public BigDecimal getTotalFor(@NonNull final TransactionType transactionType) {
+        return transactions.stream()
+                .filter(transaction -> transaction.getTransactionType().equals(transactionType))
+                .map(t -> toBaseCurrency(t.getCurrencyUnit(), t.getAmount()))
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
+    }
+
+    private BigDecimal toBaseCurrency(final CurrencyUnit currencyUnit, final BigDecimal amount) {
+        if (currencyUnit.equals(getBaseCurrencyUnit())) {
+            return amount;
+        }
+
+        return amount.divide(
+                        currencyConversionRates.get(currencyUnit.getCode()), RoundingMode.HALF_UP)
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
     /** Create transient CreditCardSnapshot objects aggregated by currency unit. */

@@ -5,23 +5,13 @@
                 <a href="/snapshot/${snapshot.id}/newAssetAccount" style="text-decoration: none;">&#x271A;</a>
             </div>
         </div>
-        <c:choose>
-            <c:when test="${not empty snapshot.assetsBalance}">
-                <c:forEach items="${snapshot.assetsBalance}" var="entry">
-                    <div class="row border-1px-bottom bg-light-yellow">
-                        <div class="col col-cell col-account-name">TOTAL ${entry.key}</div>
-                        <div class="col col-cell align-right"><b><span
-                                id="total_ASSET_${entry.key}">${entry.value}</span></b></div>
-                    </div>
-                </c:forEach>
-            </c:when>
-            <c:otherwise>
-                <div class="row border-1px-bottom bg-light-yellow">
-                    <div class="col col-cell col-account-name">TOTAL</div>
-                    <div class="col col-cell align-right"><b>0.00</b></div>
-                </div>
-            </c:otherwise>
-        </c:choose>
+
+        <div class="row border-1px-bottom bg-light-yellow">
+            <div class="col col-cell col-account-name">TOTAL</div>
+            <div class="col col-cell align-right">
+                <b><span id="total_ASSET">${snapshot.assetsTotal}</span></b>
+            </div>
+        </div>
 
         <c:choose>
             <c:when test="${not empty snapshot.simpleAssetAccounts}">
@@ -84,24 +74,12 @@
             </div>
         </div>
 
-        <c:choose>
-            <c:when test="${not empty snapshot.liabilitiesBalance}">
-                <c:forEach items="${snapshot.liabilitiesBalance}" var="entry">
-                    <div class="row border-1px-bottom bg-light-yellow">
-                        <div class="col col-cell col-account-name">TOTAL ${entry.key}</div>
-                        <div class="col col-cell align-right"><b><span
-                                id="total_LIABILITY_${entry.key}">${entry.value}</span></b>
-                        </div>
-                    </div>
-                </c:forEach>
-            </c:when>
-            <c:otherwise>
-                <div class="row border-1px-bottom bg-light-yellow">
-                    <div class="col col-cell col-account-name">TOTAL</div>
-                    <div class="col col-cell align-right"><b>0.00</b></div>
-                </div>
-            </c:otherwise>
-        </c:choose>
+        <div class="row border-1px-bottom bg-light-yellow">
+            <div class="col col-cell col-account-name">TOTAL</div>
+            <div class="col col-cell align-right">
+                <b><span id="total_LIABILITY">${snapshot.liabilitiesTotal}</span></b>
+            </div>
+        </div>
 
         <c:choose>
             <c:when test="${not empty snapshot.tithingAccounts}">

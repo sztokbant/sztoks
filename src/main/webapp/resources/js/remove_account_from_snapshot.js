@@ -12,8 +12,8 @@ function removeAccountFromSnapshot(snapshotId, entityId, accountName) {
 }
 
 function removeAccountFromSnapshotSuccessCallback(data, result) {
-  $("#snapshot_networth_" + result.currencyUnit).html(result.netWorth);
-  $("#total_" + result.accountType + "_" + result.currencyUnit).html(result.totalForAccountType);
+  $("#snapshot_net_worth").html(result.netWorth);
+  $("#total_" + result.accountType).html(result.totalForAccountType);
   $("#account_row_" + result.accountId).hide();
 
   if (result.creditCardTotalsForCurrencyUnit != null) {

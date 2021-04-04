@@ -75,10 +75,8 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
 
             final String totalForTransactionType =
                     MoneyFormatUtils.format(
-                            currencyUnit,
-                            toDecimal(
-                                    snapshot.getTotalForTransactionType(transactionType)
-                                            .get(currencyUnit)));
+                            snapshot.getBaseCurrencyUnit(),
+                            toDecimal(snapshot.getTotalFor(transactionType)));
 
             builder.totalForTransactionType(totalForTransactionType);
 
@@ -92,14 +90,12 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
 
                 final String netWorth =
                         MoneyFormatUtils.format(
-                                currencyUnit, toDecimal(snapshot.getNetWorth().get(currencyUnit)));
+                                snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getNetWorth()));
 
                 final String totalLiability =
                         MoneyFormatUtils.format(
-                                currencyUnit,
-                                toDecimal(
-                                        snapshot.getTotalForAccountType(AccountType.LIABILITY)
-                                                .get(currencyUnit)));
+                                snapshot.getBaseCurrencyUnit(),
+                                toDecimal(snapshot.getTotalFor(AccountType.LIABILITY)));
 
                 builder.tithingBalance(tithingBalance)
                         .netWorth(netWorth)

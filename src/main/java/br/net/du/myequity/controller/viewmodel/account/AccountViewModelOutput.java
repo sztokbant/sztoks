@@ -57,14 +57,14 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
         if (includeTotals) {
             final String netWorth =
                     MoneyFormatUtils.format(
-                            currencyUnit, toDecimal(snapshot.getNetWorth().get(currencyUnit)));
+                            snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getNetWorth()));
+
             final AccountType accountType = account.getAccountType();
             final String totalForAccountType =
                     MoneyFormatUtils.format(
-                            currencyUnit,
-                            toDecimal(
-                                    snapshot.getTotalForAccountType(accountType)
-                                            .get(currencyUnit)));
+                            snapshot.getBaseCurrencyUnit(),
+                            toDecimal(snapshot.getTotalFor(accountType)));
+
             builder.netWorth(netWorth)
                     .accountType(accountType.name())
                     .totalForAccountType(totalForAccountType);

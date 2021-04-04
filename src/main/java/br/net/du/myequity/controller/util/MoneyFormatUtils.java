@@ -2,6 +2,7 @@ package br.net.du.myequity.controller.util;
 
 import com.google.common.collect.ImmutableMap;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -31,6 +32,7 @@ public class MoneyFormatUtils {
                         ? MONEY_FORMATTERS.get(currencyUnit)
                         : DEFAULT_FORMATTER;
 
-        return moneyFormatter.print(Money.of(currencyUnit, amount));
+        return moneyFormatter.print(
+                Money.of(currencyUnit, amount.setScale(2, RoundingMode.HALF_UP)));
     }
 }

@@ -24,7 +24,6 @@ import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import br.net.du.myequity.service.UserService;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -173,9 +172,7 @@ class PersistenceTest {
 
         final Snapshot persistedSnapshot = snapshotService.findAllByUser(user).get(1);
         assertEquals(2, persistedSnapshot.getAccounts().size());
-        assertEquals(
-                ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-319900.00")),
-                persistedSnapshot.getNetWorth());
+        assertEquals(new BigDecimal("-319900.00"), persistedSnapshot.getNetWorth());
 
         // WHEN
         final SimpleLiabilityAccount persistedSimpleLiabilityAccount =
@@ -187,9 +184,7 @@ class PersistenceTest {
         // THEN
         final Snapshot actualSnapshot = snapshotService.findAllByUser(user).get(1);
         assertEquals(2, actualSnapshot.getAccounts().size());
-        assertEquals(
-                ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-419900.00")),
-                actualSnapshot.getNetWorth());
+        assertEquals(new BigDecimal("-419900.00"), actualSnapshot.getNetWorth());
     }
 
     @Test

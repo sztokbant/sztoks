@@ -21,7 +21,6 @@ import br.net.du.myequity.model.transaction.TransactionType;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,14 +35,14 @@ import org.joda.money.CurrencyUnit;
 public class SnapshotViewModelOutput {
     private final Long id;
     private final String name;
-    private final Map<CurrencyUnit, String> netWorth;
-    private final Map<CurrencyUnit, String> assetsBalance;
-    private final Map<CurrencyUnit, String> liabilitiesBalance;
+    private final String netWorth;
+    private final String assetsTotal;
+    private final String liabilitiesTotal;
     private final Map<String, CreditCardTotalsViewModelOutput> creditCardTotals;
 
-    private final Map<CurrencyUnit, String> incomeTransactionsTotal;
-    private final Map<CurrencyUnit, String> investmentTransactionsTotal;
-    private final Map<CurrencyUnit, String> donationTransactionsTotal;
+    private final String incomeTransactionsTotal;
+    private final String investmentTransactionsTotal;
+    private final String donationTransactionsTotal;
 
     private final Long previousId;
     private final String previousName;
@@ -88,26 +87,30 @@ public class SnapshotViewModelOutput {
                 SnapshotViewModelOutput.builder()
                         .id(snapshot.getId())
                         .name(snapshot.getName())
-                        .netWorth(formatForCurrency(snapshot.getNetWorth()))
-                        .assetsBalance(
-                                formatForCurrency(
-                                        snapshot.getTotalForAccountType(AccountType.ASSET)))
-                        .liabilitiesBalance(
-                                formatForCurrency(
-                                        snapshot.getTotalForAccountType(AccountType.LIABILITY)))
+                        .netWorth(
+                                MoneyFormatUtils.format(
+                                        snapshot.getBaseCurrencyUnit(), snapshot.getNetWorth()))
+                        .assetsTotal(
+                                MoneyFormatUtils.format(
+                                        snapshot.getBaseCurrencyUnit(),
+                                        snapshot.getTotalFor(AccountType.ASSET)))
+                        .liabilitiesTotal(
+                                MoneyFormatUtils.format(
+                                        snapshot.getBaseCurrencyUnit(),
+                                        snapshot.getTotalFor(AccountType.LIABILITY)))
                         .creditCardTotals(getCurrencyUnitCreditCardViewModels(creditCardTotals))
                         .incomeTransactionsTotal(
-                                formatForCurrency(
-                                        snapshot.getTotalForTransactionType(
-                                                TransactionType.INCOME)))
+                                MoneyFormatUtils.format(
+                                        snapshot.getBaseCurrencyUnit(),
+                                        snapshot.getTotalFor(TransactionType.INCOME)))
                         .investmentTransactionsTotal(
-                                formatForCurrency(
-                                        snapshot.getTotalForTransactionType(
-                                                TransactionType.INVESTMENT)))
+                                MoneyFormatUtils.format(
+                                        snapshot.getBaseCurrencyUnit(),
+                                        snapshot.getTotalFor(TransactionType.INVESTMENT)))
                         .donationTransactionsTotal(
-                                formatForCurrency(
-                                        snapshot.getTotalForTransactionType(
-                                                TransactionType.DONATION)))
+                                MoneyFormatUtils.format(
+                                        snapshot.getBaseCurrencyUnit(),
+                                        snapshot.getTotalFor(TransactionType.DONATION)))
                         .previousId(previousId)
                         .previousName(previousName)
                         .nextId(nextId)
@@ -117,18 +120,6 @@ public class SnapshotViewModelOutput {
         addTransactions(builder, snapshot);
 
         return builder.build();
-    }
-
-    private static Map<CurrencyUnit, String> formatForCurrency(
-            final Map<CurrencyUnit, BigDecimal> input) {
-        final Map<CurrencyUnit, String> formattedForCurrency = new HashMap<>();
-
-        for (final CurrencyUnit currencyUnit : input.keySet()) {
-            formattedForCurrency.put(
-                    currencyUnit, MoneyFormatUtils.format(currencyUnit, input.get(currencyUnit)));
-        }
-
-        return formattedForCurrency;
     }
 
     public static Map<String, CreditCardTotalsViewModelOutput> getCurrencyUnitCreditCardViewModels(

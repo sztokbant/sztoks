@@ -29,7 +29,6 @@ import br.net.du.myequity.model.transaction.InvestmentTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
 import java.util.Iterator;
@@ -42,11 +41,9 @@ import org.junit.jupiter.api.Test;
 
 class SnapshotTest {
 
-    private Map<CurrencyUnit, BigDecimal> EXPECTED_NET_WORTH =
-            ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("7500.00"));
+    private BigDecimal EXPECTED_NET_WORTH = new BigDecimal("7500.00");
 
-    private Map<CurrencyUnit, BigDecimal> EXPECTED_NET_WORTH_WITH_TRANSACTIONS =
-            ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("4878.00"));
+    private BigDecimal EXPECTED_NET_WORTH_WITH_TRANSACTIONS = new BigDecimal("4878.00");
 
     private SimpleLiabilityAccount simpleLiabilityAccount;
     private SimpleAssetAccount simpleAssetAccount;
@@ -120,7 +117,7 @@ class SnapshotTest {
     }
 
     @Test
-    public void getTotalForAccountType_assets() {
+    public void getTotalFor_assets() {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
@@ -131,13 +128,11 @@ class SnapshotTest {
                         ImmutableList.of());
 
         // THEN
-        assertEquals(
-                ImmutableMap.of(simpleAssetAccount.getCurrencyUnit(), new BigDecimal("10000.00")),
-                snapshot.getTotalForAccountType(AccountType.ASSET));
+        assertEquals(new BigDecimal("10000.00"), snapshot.getTotalFor(AccountType.ASSET));
     }
 
     @Test
-    public void getTotalForAccountType_liabilities() {
+    public void getTotalFor_liabilities() {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
@@ -148,10 +143,7 @@ class SnapshotTest {
                         ImmutableList.of());
 
         // THEN
-        assertEquals(
-                ImmutableMap.of(
-                        simpleLiabilityAccount.getCurrencyUnit(), new BigDecimal("2500.00")),
-                snapshot.getTotalForAccountType(AccountType.LIABILITY));
+        assertEquals(new BigDecimal("2500.00"), snapshot.getTotalFor(AccountType.LIABILITY));
     }
 
     @Test
@@ -174,9 +166,7 @@ class SnapshotTest {
         assertEquals(simpleLiabilityAccount, accounts.iterator().next());
         assertEquals(snapshot, simpleLiabilityAccount.getSnapshot());
 
-        assertEquals(
-                ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("-2500.00")),
-                snapshot.getNetWorth());
+        assertEquals(new BigDecimal("-2500.00"), snapshot.getNetWorth());
     }
 
     @Test
@@ -201,9 +191,7 @@ class SnapshotTest {
                 equalsIgnoreId(
                         simpleAssetAccount, (SimpleAssetAccount) accounts.iterator().next()));
 
-        assertEquals(
-                ImmutableMap.of(CurrencyUnit.USD, new BigDecimal("10000.00")),
-                snapshot.getNetWorth());
+        assertEquals(new BigDecimal("10000.00"), snapshot.getNetWorth());
     }
 
     @Test
