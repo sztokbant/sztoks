@@ -71,7 +71,7 @@
                             </c:when>
                             <c:otherwise>
                                 <div class="navigation-buttons-padding-bottom">
-                                    <form method="post" action="${contextPath}/snapshot/new">
+                                    <form method="post" action="${contextPath}/snapshot/new" onSubmit="return confirm('Are you sure you want to create a new snapshot based on the current snapshot?')">
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                         <input type="submit" class="btn btn-newsnapshot" value="&#x2795;  Snapshot"/>
                                     </form>
