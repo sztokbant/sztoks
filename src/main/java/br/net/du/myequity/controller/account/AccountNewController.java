@@ -16,6 +16,7 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.service.SnapshotService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,12 +79,17 @@ public class AccountNewController {
             final AccountType accountType,
             final AccountViewModelInput accountViewModelInput) {
         // Ensure snapshot belongs to logged user
-        snapshotUtils.validateSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
 
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_ID_KEY, snapshotId);
         model.addAttribute(ACCOUNT_TYPE_KEY, accountType);
+
+        if (StringUtils.isEmpty(accountViewModelInput.getCurrencyUnit())) {
+            accountViewModelInput.setCurrencyUnit(snapshot.getBaseCurrencyUnit().toString());
+        }
+
         model.addAttribute(ACCOUNT_FORM, accountViewModelInput);
 
         return getTemplateFor(accountType);

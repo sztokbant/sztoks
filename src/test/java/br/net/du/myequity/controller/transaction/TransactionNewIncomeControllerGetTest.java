@@ -1,5 +1,7 @@
 package br.net.du.myequity.controller.transaction;
 
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
+import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,6 +49,9 @@ class TransactionNewIncomeControllerGetTest extends GetControllerTestBase {
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         when(snapshot.getUser()).thenReturn(user);
+        when(snapshot.getBaseCurrencyUnit()).thenReturn(CURRENCY_UNIT);
+        when(snapshot.getDefaultTithingPercentage()).thenReturn(TITHING_PERCENTAGE);
+
         when(snapshotService.findById(eq(42L))).thenReturn(Optional.of(snapshot));
 
         // WHEN
@@ -68,11 +73,13 @@ class TransactionNewIncomeControllerGetTest extends GetControllerTestBase {
         assertNull(transactionViewModelInput.getTypeName());
 
         assertNull(transactionViewModelInput.getDate());
-        assertNull(transactionViewModelInput.getCurrencyUnit());
+        assertEquals(CURRENCY_UNIT.toString(), transactionViewModelInput.getCurrencyUnit());
         assertNull(transactionViewModelInput.getAmount());
         assertNull(transactionViewModelInput.getDescription());
         assertNull(transactionViewModelInput.getIsRecurring());
 
-        assertNull(transactionViewModelInput.getTithingPercentage());
+        assertEquals(
+                TITHING_PERCENTAGE.toPlainString(),
+                transactionViewModelInput.getTithingPercentage());
     }
 }

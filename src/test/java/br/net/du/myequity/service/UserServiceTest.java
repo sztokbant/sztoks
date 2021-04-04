@@ -10,6 +10,7 @@ import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
@@ -50,6 +51,10 @@ class UserServiceTest {
 
         final List<Snapshot> snapshots = snapshotService.findAllByUser(user);
         assertEquals(1, snapshots.size());
+
+        final Snapshot snapshot = snapshots.get(0);
+        assertEquals(CURRENCY_UNIT, snapshot.getBaseCurrencyUnit());
+        assertTrue(TITHING_PERCENTAGE.compareTo(snapshot.getDefaultTithingPercentage()) == 0);
     }
 
     @Test

@@ -79,6 +79,12 @@ public class SnapshotServiceTest {
         final Snapshot newSnapshot = snapshotService.newSnapshot(user, SECOND_SNAPSHOT_NAME);
 
         // THEN
+        assertEquals(snapshot.getBaseCurrencyUnit(), newSnapshot.getBaseCurrencyUnit());
+        assertTrue(
+                snapshot.getDefaultTithingPercentage()
+                                .compareTo(newSnapshot.getDefaultTithingPercentage())
+                        == 0);
+
         final SortedSet<Account> originalAccounts = snapshot.getAccounts();
         final SortedSet<Account> newAccounts = newSnapshot.getAccounts();
         assertEquals(originalAccounts.size(), newAccounts.size());

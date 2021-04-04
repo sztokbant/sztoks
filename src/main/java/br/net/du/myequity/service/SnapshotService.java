@@ -25,7 +25,7 @@ public class SnapshotService {
         final Snapshot newSnapshot =
                 new Snapshot(
                         snapshotName,
-                        currentSnapshot.getCurrencyUnit(),
+                        currentSnapshot.getBaseCurrencyUnit(),
                         currentSnapshot.getDefaultTithingPercentage(),
                         currentSnapshot.getAccounts(),
                         currentSnapshot.getRecurringTransactions());

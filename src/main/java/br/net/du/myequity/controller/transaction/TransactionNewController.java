@@ -16,6 +16,7 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.transaction.TransactionType;
 import br.net.du.myequity.service.SnapshotService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -88,12 +89,22 @@ public class TransactionNewController {
             final TransactionType transactionType,
             final TransactionViewModelInput transactionViewModelInput) {
         // Ensure snapshot belongs to logged user
-        snapshotUtils.validateSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
 
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_ID_KEY, snapshotId);
         model.addAttribute(TRANSACTION_TYPE_KEY, transactionType);
+
+        if (StringUtils.isEmpty(transactionViewModelInput.getCurrencyUnit())) {
+            transactionViewModelInput.setCurrencyUnit(snapshot.getBaseCurrencyUnit().toString());
+        }
+
+        if (StringUtils.isEmpty(transactionViewModelInput.getTithingPercentage())) {
+            transactionViewModelInput.setTithingPercentage(
+                    snapshot.getDefaultTithingPercentage().toPlainString());
+        }
+
         model.addAttribute(TRANSACTION_FORM, transactionViewModelInput);
 
         return getTemplateFor(transactionType);

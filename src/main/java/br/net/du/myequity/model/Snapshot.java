@@ -130,11 +130,11 @@ public class Snapshot implements Comparable<Snapshot> {
                         });
     }
 
-    public CurrencyUnit getCurrencyUnit() {
+    public CurrencyUnit getBaseCurrencyUnit() {
         return CurrencyUnit.of(baseCurrency);
     }
 
-    public void setCurrencyUnit(final CurrencyUnit currencyUnit) {
+    public void setBaseCurrencyUnit(final CurrencyUnit currencyUnit) {
         baseCurrency = currencyUnit.getCode();
     }
 

@@ -78,6 +78,9 @@ class SnapshotTest {
         // THEN
         assertEquals(FIRST_SNAPSHOT_NAME, snapshot.getName());
 
+        assertEquals(CURRENCY_UNIT, snapshot.getBaseCurrencyUnit());
+        assertTrue(TITHING_PERCENTAGE.compareTo(snapshot.getDefaultTithingPercentage()) == 0);
+
         assertNull(simpleAssetAccount.getSnapshot());
         assertNull(simpleLiabilityAccount.getSnapshot());
 
