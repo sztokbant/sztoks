@@ -3,8 +3,8 @@ package br.net.du.myequity.controller.viewmodel.account;
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
+import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
-import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.InvestmentAccount;
 import java.math.BigDecimal;
@@ -44,16 +44,13 @@ public class InvestmentAccountViewModelOutput extends AccountViewModelOutput {
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
 
         final String amountIvested =
-                MoneyFormatUtils.format(
-                        currencyUnit, toDecimal(investmentAccount.getAmountInvested()));
+                format(currencyUnit, toDecimal(investmentAccount.getAmountInvested()));
 
         final String averagePurchasePrice =
-                MoneyFormatUtils.format(
-                        currencyUnit, toDecimal(investmentAccount.getAveragePurchasePrice()));
+                format(currencyUnit, toDecimal(investmentAccount.getAveragePurchasePrice()));
 
         final String currentShareValue =
-                MoneyFormatUtils.format(
-                        currencyUnit, toDecimal((investmentAccount.getCurrentShareValue())));
+                format(currencyUnit, toDecimal((investmentAccount.getCurrentShareValue())));
 
         final String profitPercentage = formatAsPercentage(investmentAccount.getProfitPercentage());
 

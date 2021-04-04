@@ -27,14 +27,21 @@
 <div class="full-width">
     <div class="row">
         <div class="col">
-            <div class="left-button">
-                <c:if test="${snapshot.previousId ne null}">
-                    <a class="btn btn-myequity" href="${contextPath}/snapshot/${snapshot.previousId}">&#x23EA;&nbsp;&nbsp;${snapshot.previousName}</a>
-                </c:if>
+            <div class="row">
+                <div class="col col-edge">
+                    <div class="left-button">
+                        <c:if test="${snapshot.previousId ne null}">
+                            <a class="btn btn-myequity" href="${contextPath}/snapshot/${snapshot.previousId}">&#x23EA;&nbsp;&nbsp;${snapshot.previousName}</a>
+                        </c:if>
+                    </div>
+                </div>
+
+                <div class="col">
+                </div>
             </div>
         </div>
 
-        <div class="col">
+        <div class="col mid-col">
             <div class="text-center snapshot-header">
                 <%@ include file="_snapshot_name.jsp" %>
 
@@ -50,21 +57,29 @@
         </div>
 
         <div class="col">
-            <div class="right-button">
-                <c:choose>
-                    <c:when test="${snapshot.nextId ne null}">
-                        <a class="btn btn-myequity"
-                           href="${contextPath}/snapshot/${snapshot.nextId}">${snapshot.nextName}&nbsp;&#x23E9;</a>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="navigation-buttons-padding-bottom">
-                            <form method="post" action="${contextPath}/snapshot/new">
-                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                <input type="submit" class="btn btn-newsnapshot" value="&#x2795;  Snapshot"/>
-                            </form>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+            <div class="row">
+                <div class="col col-currencies">
+                    <%@ include file="_snapshot_currency_conversion_rates.jsp" %>
+                </div>
+
+                <div class="col col-edge">
+                    <div class="right-button">
+                        <c:choose>
+                            <c:when test="${snapshot.nextId ne null}">
+                                <a class="btn btn-myequity"
+                                   href="${contextPath}/snapshot/${snapshot.nextId}">${snapshot.nextName}&nbsp;&#x23E9;</a>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="navigation-buttons-padding-bottom">
+                                    <form method="post" action="${contextPath}/snapshot/new">
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <input type="submit" class="btn btn-newsnapshot" value="&#x2795;  Snapshot"/>
+                                    </form>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,10 +1,10 @@
 package br.net.du.myequity.controller.viewmodel;
 
+import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getAccountViewModelOutputFactoryMethod;
 import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getTransactionViewModelOutputFactoryMethod;
 import static java.util.stream.Collectors.toList;
 
-import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.CreditCardAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.InvestmentAccountViewModelOutput;
@@ -20,11 +20,13 @@ import br.net.du.myequity.model.transaction.TransactionType;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Data;
 import org.joda.money.CurrencyUnit;
@@ -35,9 +37,10 @@ public class SnapshotViewModelOutput {
     private final Long id;
     private final String name;
     private final String netWorth;
+    private final Map<String, String> currencyConversionRates;
+
     private final String assetsTotal;
     private final String liabilitiesTotal;
-    private final Map<String, CreditCardTotalsViewModelOutput> creditCardTotals;
 
     private final String incomeTransactionsTotal;
     private final String investmentTransactionsTotal;
@@ -56,6 +59,7 @@ public class SnapshotViewModelOutput {
     private final List<AccountViewModelOutput> simpleLiabilityAccounts;
     private final List<AccountViewModelOutput> payableAccounts;
     private final List<AccountViewModelOutput> creditCardAccounts;
+    private final Map<String, CreditCardTotalsViewModelOutput> creditCardTotals;
 
     private final String tithingBalance;
 
@@ -83,33 +87,33 @@ public class SnapshotViewModelOutput {
             nextName = next.getName();
         }
 
+        final CurrencyUnit baseCurrencyUnit = snapshot.getBaseCurrencyUnit();
+
         final SnapshotViewModelOutputBuilder builder =
                 SnapshotViewModelOutput.builder()
                         .id(snapshot.getId())
                         .name(snapshot.getName())
-                        .netWorth(
-                                MoneyFormatUtils.format(
-                                        snapshot.getBaseCurrencyUnit(), snapshot.getNetWorth()))
+                        .netWorth(format(baseCurrencyUnit, snapshot.getNetWorth()))
+                        .currencyConversionRates(
+                                toStringStringMap(snapshot.getCurrencyConversionRates()))
                         .assetsTotal(
-                                MoneyFormatUtils.format(
-                                        snapshot.getBaseCurrencyUnit(),
-                                        snapshot.getTotalFor(AccountType.ASSET)))
+                                format(baseCurrencyUnit, snapshot.getTotalFor(AccountType.ASSET)))
                         .liabilitiesTotal(
-                                MoneyFormatUtils.format(
-                                        snapshot.getBaseCurrencyUnit(),
+                                format(
+                                        baseCurrencyUnit,
                                         snapshot.getTotalFor(AccountType.LIABILITY)))
                         .creditCardTotals(getCurrencyUnitCreditCardViewModels(creditCardTotals))
                         .incomeTransactionsTotal(
-                                MoneyFormatUtils.format(
-                                        snapshot.getBaseCurrencyUnit(),
+                                format(
+                                        baseCurrencyUnit,
                                         snapshot.getTotalFor(TransactionType.INCOME)))
                         .investmentTransactionsTotal(
-                                MoneyFormatUtils.format(
-                                        snapshot.getBaseCurrencyUnit(),
+                                format(
+                                        baseCurrencyUnit,
                                         snapshot.getTotalFor(TransactionType.INVESTMENT)))
                         .donationTransactionsTotal(
-                                MoneyFormatUtils.format(
-                                        snapshot.getBaseCurrencyUnit(),
+                                format(
+                                        baseCurrencyUnit,
                                         snapshot.getTotalFor(TransactionType.DONATION)))
                         .previousId(previousId)
                         .previousName(previousName)
@@ -122,7 +126,16 @@ public class SnapshotViewModelOutput {
         return builder.build();
     }
 
-    public static Map<String, CreditCardTotalsViewModelOutput> getCurrencyUnitCreditCardViewModels(
+    private static Map<String, String> toStringStringMap(
+            final Map<String, BigDecimal> currencyConversionRates) {
+        return currencyConversionRates.entrySet().stream()
+                .collect(
+                        Collectors.toMap(
+                                e -> e.getKey(),
+                                e -> format(CurrencyUnit.of(e.getKey()), e.getValue())));
+    }
+
+    private static Map<String, CreditCardTotalsViewModelOutput> getCurrencyUnitCreditCardViewModels(
             final Map<CurrencyUnit, CreditCardAccount> creditCardTotals) {
         final Map<String, CreditCardTotalsViewModelOutput> creditCardTotalsViewModel =
                 new HashMap<>();
@@ -155,8 +168,7 @@ public class SnapshotViewModelOutput {
         builder.creditCardAccounts(liabilitiesByType.get(CreditCardAccountViewModelOutput.class));
 
         builder.tithingBalance(
-                MoneyFormatUtils.format(
-                        snapshot.getBaseCurrencyUnit(), snapshot.getTithingBalance()));
+                format(snapshot.getBaseCurrencyUnit(), snapshot.getTithingBalance()));
     }
 
     private static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(

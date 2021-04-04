@@ -1,8 +1,8 @@
 package br.net.du.myequity.controller.viewmodel.account;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
+import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
-import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
@@ -44,8 +44,7 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
         final Snapshot snapshot = account.getSnapshot();
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
 
-        final String balance =
-                MoneyFormatUtils.format(currencyUnit, toDecimal(account.getBalance()));
+        final String balance = format(currencyUnit, toDecimal(account.getBalance()));
         final AccountViewModelOutputBuilder builder =
                 AccountViewModelOutput.builder()
                         .accountId(account.getId())
@@ -56,12 +55,11 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
 
         if (includeTotals) {
             final String netWorth =
-                    MoneyFormatUtils.format(
-                            snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getNetWorth()));
+                    format(snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getNetWorth()));
 
             final AccountType accountType = account.getAccountType();
             final String totalForAccountType =
-                    MoneyFormatUtils.format(
+                    format(
                             snapshot.getBaseCurrencyUnit(),
                             toDecimal(snapshot.getTotalFor(accountType)));
 

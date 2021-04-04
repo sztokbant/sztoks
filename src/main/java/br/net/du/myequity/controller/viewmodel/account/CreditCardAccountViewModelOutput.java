@@ -2,8 +2,8 @@ package br.net.du.myequity.controller.viewmodel.account;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
+import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
-import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.controller.viewmodel.CreditCardTotalsViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
@@ -45,16 +45,12 @@ public class CreditCardAccountViewModelOutput extends AccountViewModelOutput {
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
 
         final String totalCredit =
-                MoneyFormatUtils.format(
-                        currencyUnit, toDecimal(creditCardAccount.getTotalCredit()));
+                format(currencyUnit, toDecimal(creditCardAccount.getTotalCredit()));
         final String availableCredit =
-                MoneyFormatUtils.format(
-                        currencyUnit, toDecimal(creditCardAccount.getAvailableCredit()));
-        final String statement =
-                MoneyFormatUtils.format(currencyUnit, toDecimal(creditCardAccount.getStatement()));
+                format(currencyUnit, toDecimal(creditCardAccount.getAvailableCredit()));
+        final String statement = format(currencyUnit, toDecimal(creditCardAccount.getStatement()));
         final String remainingBalance =
-                MoneyFormatUtils.format(
-                        currencyUnit, toDecimal(creditCardAccount.getRemainingBalance()));
+                format(currencyUnit, toDecimal(creditCardAccount.getRemainingBalance()));
         final String usedCreditPercentage =
                 formatAsPercentage(creditCardAccount.getUsedCreditPercentage());
 

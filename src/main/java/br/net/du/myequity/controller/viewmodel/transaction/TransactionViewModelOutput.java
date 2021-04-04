@@ -1,8 +1,8 @@
 package br.net.du.myequity.controller.viewmodel.transaction;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
+import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
-import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.transaction.Transaction;
@@ -53,8 +53,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
     public static TransactionViewModelOutput of(
             final Transaction transaction, final boolean includeTotals) {
         final CurrencyUnit currencyUnit = transaction.getCurrencyUnit();
-        final String amount =
-                MoneyFormatUtils.format(currencyUnit, toDecimal(transaction.getAmount()));
+        final String amount = format(currencyUnit, toDecimal(transaction.getAmount()));
 
         final TransactionType transactionType = transaction.getTransactionType();
 
@@ -73,27 +72,23 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
         if (includeTotals) {
             final Snapshot snapshot = transaction.getSnapshot();
 
+            final CurrencyUnit baseCurrencyUnit = snapshot.getBaseCurrencyUnit();
+
             final String totalForTransactionType =
-                    MoneyFormatUtils.format(
-                            snapshot.getBaseCurrencyUnit(),
-                            toDecimal(snapshot.getTotalFor(transactionType)));
+                    format(baseCurrencyUnit, toDecimal(snapshot.getTotalFor(transactionType)));
 
             builder.totalForTransactionType(totalForTransactionType);
 
             if (transactionType.equals(TransactionType.INCOME)
                     || transactionType.equals(TransactionType.DONATION)) {
                 final String tithingBalance =
-                        MoneyFormatUtils.format(
-                                snapshot.getBaseCurrencyUnit(),
-                                toDecimal(snapshot.getTithingBalance()));
+                        format(baseCurrencyUnit, toDecimal(snapshot.getTithingBalance()));
 
-                final String netWorth =
-                        MoneyFormatUtils.format(
-                                snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getNetWorth()));
+                final String netWorth = format(baseCurrencyUnit, toDecimal(snapshot.getNetWorth()));
 
                 final String totalLiability =
-                        MoneyFormatUtils.format(
-                                snapshot.getBaseCurrencyUnit(),
+                        format(
+                                baseCurrencyUnit,
                                 toDecimal(snapshot.getTotalFor(AccountType.LIABILITY)));
 
                 builder.tithingBalance(tithingBalance)

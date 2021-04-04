@@ -35,3 +35,25 @@
     font-weight: bold;
     color: red;
 }
+
+.center-w50pct {
+    width: 50%;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    text-align: center;
+    font-size: 12px;
+}
+
+.mid-col {
+    max-width: 420px;
+}
+
+.col-currencies {
+    padding-bottom: 13px;
+}
+
+.col-edge {
+    min-width: 140px;
+    max-width: 140px;
+}

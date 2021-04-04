@@ -2,8 +2,8 @@ package br.net.du.myequity.controller.transaction;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
+import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
-import br.net.du.myequity.controller.util.MoneyFormatUtils;
 import br.net.du.myequity.controller.viewmodel.SnapshotRemoveTransactionJsonResponse;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
@@ -36,18 +36,15 @@ public class RemoveTransactionController extends TransactionUpdateControllerBase
 
         if (transactionType.equals(TransactionType.INCOME)
                 || transactionType.equals(TransactionType.DONATION)) {
+            final CurrencyUnit baseCurrencyUnit = snapshot.getBaseCurrencyUnit();
             final String tithingBalance =
-                    MoneyFormatUtils.format(
-                            snapshot.getBaseCurrencyUnit(),
-                            toDecimal(snapshot.getTithingBalance()));
+                    format(baseCurrencyUnit, toDecimal(snapshot.getTithingBalance()));
 
-            final String netWorth =
-                    MoneyFormatUtils.format(
-                            snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getNetWorth()));
+            final String netWorth = format(baseCurrencyUnit, toDecimal(snapshot.getNetWorth()));
 
             final String totalLiability =
-                    MoneyFormatUtils.format(
-                            snapshot.getBaseCurrencyUnit(),
+                    format(
+                            baseCurrencyUnit,
                             toDecimal(snapshot.getTotalFor(AccountType.LIABILITY)));
 
             builder.tithingBalance(tithingBalance)
