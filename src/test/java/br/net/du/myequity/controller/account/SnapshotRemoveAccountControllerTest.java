@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller.account;
 
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;

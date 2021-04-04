@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller.account;
 
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -79,9 +80,9 @@ class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerT
 
         assertEquals(newValue, jsonNode.get(JSON_SHARES).asText());
 
-        assertEquals("R$ 28.00", jsonNode.get(JSON_AVERAGE_PURCHASE_PRICE).asText());
+        assertEquals("$28.00", jsonNode.get(JSON_AVERAGE_PURCHASE_PRICE).asText());
 
-        final String expectedAccountBalance = "R$ 315,000.00";
+        final String expectedAccountBalance = "$315,000.00";
         assertEquals(expectedAccountBalance, jsonNode.get(JSON_BALANCE).asText());
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());

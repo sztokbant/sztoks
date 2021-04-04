@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static org.mockito.Mockito.when;
@@ -12,6 +13,7 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.SnapshotService;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -38,7 +40,8 @@ public abstract class SnapshotControllerAjaxTestBase extends AjaxControllerTestB
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
         snapshot.setId(SNAPSHOT_ID);
     }
 

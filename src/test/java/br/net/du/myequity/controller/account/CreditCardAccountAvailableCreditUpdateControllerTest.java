@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller.account;
 
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -77,24 +78,24 @@ class CreditCardAccountAvailableCreditUpdateControllerTest extends AccountAjaxCo
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
-        assertEquals("R$ 3,000.00", jsonNode.get(JSON_TOTAL_CREDIT).asText());
-        assertEquals("R$ 2,900.00", jsonNode.get(JSON_AVAILABLE_CREDIT).asText());
+        assertEquals("$3,000.00", jsonNode.get(JSON_TOTAL_CREDIT).asText());
+        assertEquals("$2,900.00", jsonNode.get(JSON_AVAILABLE_CREDIT).asText());
 
         final String expectedUsedCreditPercentage = "3.33%";
         assertEquals(
                 expectedUsedCreditPercentage, jsonNode.get(JSON_USED_CREDIT_PERCENTAGE).asText());
 
-        final String expectedAccountBalance = "R$ 100.00";
+        final String expectedAccountBalance = "$100.00";
         assertEquals(expectedAccountBalance, jsonNode.get(JSON_BALANCE).asText());
 
-        assertEquals("R$ 400.00", jsonNode.get(JSON_STATEMENT).asText());
+        assertEquals("$400.00", jsonNode.get(JSON_STATEMENT).asText());
 
-        assertEquals("R$ -300.00", jsonNode.get(JSON_REMAINING_BALANCE).asText());
+        assertEquals("$-300.00", jsonNode.get(JSON_REMAINING_BALANCE).asText());
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
-        assertEquals("R$ -100.00", jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals("$-100.00", jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals("R$ 100.00", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertEquals("$100.00", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
     }
 }

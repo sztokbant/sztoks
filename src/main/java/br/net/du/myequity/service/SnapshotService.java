@@ -28,7 +28,8 @@ public class SnapshotService {
                         currentSnapshot.getBaseCurrencyUnit(),
                         currentSnapshot.getDefaultTithingPercentage(),
                         currentSnapshot.getAccounts(),
-                        currentSnapshot.getRecurringTransactions());
+                        currentSnapshot.getRecurringTransactions(),
+                        currentSnapshot.getCurrencyConversionRates());
 
         user.addSnapshot(newSnapshot);
 

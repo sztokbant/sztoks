@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller.account;
 
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
+import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -77,13 +78,13 @@ class InvestmentAccountCurrentShareValueUpdateControllerTest extends AccountAjax
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
-        assertEquals("R$ 180.99", jsonNode.get(JSON_CURRENT_SHARE_VALUE).asText());
-        assertEquals("R$ 130.47", jsonNode.get(JSON_AVERAGE_PURCHASE_PRICE).asText());
+        assertEquals("$180.99", jsonNode.get(JSON_CURRENT_SHARE_VALUE).asText());
+        assertEquals("$130.47", jsonNode.get(JSON_AVERAGE_PURCHASE_PRICE).asText());
 
         final String expectedProfitPercentage = "38.72%";
         assertEquals(expectedProfitPercentage, jsonNode.get(JSON_PROFIT_PERCENTAGE).asText());
 
-        final String expectedAccountBalance = "R$ 6,515.64";
+        final String expectedAccountBalance = "$6,515.64";
         assertEquals(expectedAccountBalance, jsonNode.get(JSON_BALANCE).asText());
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());

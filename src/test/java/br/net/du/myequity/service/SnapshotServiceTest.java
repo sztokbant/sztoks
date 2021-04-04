@@ -2,6 +2,7 @@ package br.net.du.myequity.service;
 
 import static br.net.du.myequity.test.ModelTestUtils.buildUser;
 import static br.net.du.myequity.test.ModelTestUtils.equalsIgnoreIdAndDate;
+import static br.net.du.myequity.test.TestConstants.ANOTHER_CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.FOURTH_SNAPSHOT_NAME;
 import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_NAME;
@@ -16,6 +17,7 @@ import static br.net.du.myequity.test.TestConstants.newSimpleLiabilityAccount;
 import static br.net.du.myequity.test.TestConstants.newSingleDonation;
 import static br.net.du.myequity.test.TestConstants.newSingleIncome;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,10 +34,13 @@ import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.test.ModelTestUtils;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.SortedSet;
+import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -70,6 +75,8 @@ public class SnapshotServiceTest {
         snapshot.addTransaction(newRecurringDonation());
         snapshot.addTransaction(newSingleDonation());
 
+        snapshot.putCurrencyConversionRate(ANOTHER_CURRENCY_UNIT, new BigDecimal("1.31"));
+
         snapshotService = new SnapshotService(snapshotRepository, userService);
     }
 
@@ -83,6 +90,21 @@ public class SnapshotServiceTest {
         assertTrue(
                 snapshot.getDefaultTithingPercentage()
                                 .compareTo(newSnapshot.getDefaultTithingPercentage())
+                        == 0);
+        assertTrue(newSnapshot.supports(CURRENCY_UNIT));
+        assertTrue(newSnapshot.supports(ANOTHER_CURRENCY_UNIT));
+        assertFalse(newSnapshot.supports(CurrencyUnit.EUR));
+
+        assertEquals(1, newSnapshot.getCurrencyConversionRates().size());
+        assertEquals(
+                ANOTHER_CURRENCY_UNIT.toString(),
+                newSnapshot.getCurrencyConversionRates().keySet().iterator().next());
+        assertTrue(
+                new BigDecimal("1.31")
+                                .compareTo(
+                                        newSnapshot
+                                                .getCurrencyConversionRates()
+                                                .get(ANOTHER_CURRENCY_UNIT.toString()))
                         == 0);
 
         final SortedSet<Account> originalAccounts = snapshot.getAccounts();
@@ -231,6 +253,7 @@ public class SnapshotServiceTest {
                 CURRENCY_UNIT,
                 TITHING_PERCENTAGE,
                 ImmutableSortedSet.of(),
-                ImmutableList.of());
+                ImmutableList.of(),
+                ImmutableMap.of());
     }
 }

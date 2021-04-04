@@ -24,6 +24,7 @@ import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import br.net.du.myequity.service.UserService;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -79,7 +80,8 @@ class PersistenceTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
     }
 
     @Test

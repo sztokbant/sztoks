@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.UserService;
-import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public abstract class AjaxControllerTestBase {
-    protected static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.of("BRL");
-
     protected static final String ACCOUNT_NAME = "Mortgage";
 
     @Autowired protected MockMvc mvc;

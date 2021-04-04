@@ -18,6 +18,7 @@ import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.InvestmentTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 
 public class ModelTestUtils {
@@ -39,7 +40,8 @@ public class ModelTestUtils {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
         snapshot.setId(SNAPSHOT_ID);
 
         user.addSnapshot(snapshot);

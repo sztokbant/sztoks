@@ -18,6 +18,7 @@ import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -61,7 +62,8 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
         snapshot.setId(SNAPSHOT_ID);
 
         assetAccount =

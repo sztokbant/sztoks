@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -52,7 +53,8 @@ class UserTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
         snapshot.setId(42L);
     }
 
@@ -112,7 +114,8 @@ class UserTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
         newSnapshot.setId(snapshot.getId() + 1);
 
         // WHEN/THEN
@@ -163,49 +166,56 @@ class UserTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of()));
+                        ImmutableList.of(),
+                        ImmutableMap.of()));
         user.addSnapshot(
                 new Snapshot(
                         THIRD_SNAPSHOT_NAME,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of()));
+                        ImmutableList.of(),
+                        ImmutableMap.of()));
         user.addSnapshot(
                 new Snapshot(
                         SIXTH_SNAPSHOT_NAME,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of()));
+                        ImmutableList.of(),
+                        ImmutableMap.of()));
         user.addSnapshot(
                 new Snapshot(
                         SEVENTH_SNAPSHOT_NAME,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of()));
+                        ImmutableList.of(),
+                        ImmutableMap.of()));
         user.addSnapshot(
                 new Snapshot(
                         FIRST_SNAPSHOT_NAME,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of()));
+                        ImmutableList.of(),
+                        ImmutableMap.of()));
         user.addSnapshot(
                 new Snapshot(
                         SECOND_SNAPSHOT_NAME,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of()));
+                        ImmutableList.of(),
+                        ImmutableMap.of()));
         user.addSnapshot(
                 new Snapshot(
                         FOURTH_SNAPSHOT_NAME,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of()));
+                        ImmutableList.of(),
+                        ImmutableMap.of()));
 
         // WHEN
         final Iterator<Snapshot> iterator = user.getSnapshots().iterator();

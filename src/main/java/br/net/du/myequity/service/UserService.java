@@ -4,6 +4,7 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.UserRepository;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -38,7 +39,8 @@ public class UserService {
                         baseCurrencyUnit,
                         defaultTithingPercentage,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of()));
+                        ImmutableList.of(),
+                        ImmutableMap.of()));
 
         save(user);
     }

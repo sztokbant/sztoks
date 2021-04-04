@@ -17,6 +17,7 @@ import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.service.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,7 +69,8 @@ abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestB
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
         snapshot.setId(SNAPSHOT_ID);
 
         final ValueUpdateJsonRequest valueUpdateJsonRequest =

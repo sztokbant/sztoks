@@ -29,6 +29,7 @@ import br.net.du.myequity.model.transaction.InvestmentTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
 import java.util.Iterator;
@@ -69,7 +70,8 @@ class SnapshotTest {
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
                         ImmutableList.of(
-                                recurringIncome, singleIncome, recurringDonation, singleDonation));
+                                recurringIncome, singleIncome, recurringDonation, singleDonation),
+                        ImmutableMap.of());
         snapshot.setId(42L);
 
         // THEN
@@ -110,7 +112,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
 
         // THEN
         assertEquals(EXPECTED_NET_WORTH, snapshot.getNetWorth());
@@ -125,7 +128,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
 
         // THEN
         assertEquals(new BigDecimal("10000.00"), snapshot.getTotalFor(AccountType.ASSET));
@@ -140,7 +144,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
 
         // THEN
         assertEquals(new BigDecimal("2500.00"), snapshot.getTotalFor(AccountType.LIABILITY));
@@ -155,7 +160,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
 
         // WHEN
         snapshot.addAccount(simpleLiabilityAccount);
@@ -178,7 +184,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleLiabilityAccount, simpleAssetAccount),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
 
         // WHEN
         snapshot.removeAccount(simpleLiabilityAccount);
@@ -203,7 +210,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
 
         // WHEN
         final Account notInSnapshot = new SimpleAssetAccount("Another Account", CurrencyUnit.USD);
@@ -223,7 +231,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
         simpleAssetAccount.setId(42L);
         snapshot.addAccount(simpleAssetAccount);
 
@@ -240,7 +249,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
         simpleAssetAccount.setId(42L);
         snapshot.addAccount(simpleAssetAccount);
 
@@ -257,7 +267,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
 
         final SortedSet<Account> accounts = snapshot.getAccounts();
 
@@ -287,7 +298,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
 
         // WHEN
         final Map<AccountType, SortedSet<Account>> accountsByType = snapshot.getAccountsByType();
@@ -331,7 +343,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
         final IncomeTransaction transaction = newRecurringIncome();
 
         // WHEN
@@ -357,7 +370,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
         final IncomeTransaction transaction = newSingleIncome();
 
         // WHEN
@@ -383,7 +397,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
 
         snapshot.addTransaction(recurringIncome);
         snapshot.addTransaction(newSingleIncome());
@@ -421,7 +436,8 @@ class SnapshotTest {
                                 recurringDonation,
                                 singleDonation,
                                 recurringInvestment,
-                                singleInvestment));
+                                singleInvestment),
+                        ImmutableMap.of());
 
         // WHEN
         final Map<TransactionType, SortedSet<Transaction>> transactionsByType =
@@ -473,7 +489,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
 
         // Itself
         assertTrue(snapshot.equals(snapshot));
@@ -489,7 +506,8 @@ class SnapshotTest {
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
-                        ImmutableList.of());
+                        ImmutableList.of(),
+                        ImmutableMap.of());
         snapshot.setId(null);
         anotherSnapshot.setId(null);
         assertFalse(snapshot.equals(anotherSnapshot));

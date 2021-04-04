@@ -117,10 +117,13 @@ public class Snapshot implements Comparable<Snapshot> {
             @NonNull final CurrencyUnit baseCurrencyUnit,
             @NonNull final BigDecimal defaultTithingPercentage,
             @NotNull final SortedSet<Account> accounts,
-            @NonNull final List<Transaction> transactions) {
+            @NonNull final List<Transaction> transactions,
+            @NonNull final Map<String, BigDecimal> currencyConversionRates) {
         setName(name);
         this.baseCurrency = baseCurrencyUnit.getCode();
         this.defaultTithingPercentage = defaultTithingPercentage;
+
+        this.currencyConversionRates.putAll(currencyConversionRates);
 
         accounts.stream().forEach(account -> addAccount(account.copy()));
 
@@ -139,14 +142,6 @@ public class Snapshot implements Comparable<Snapshot> {
 
                             addTransaction(transactionCopy);
                         });
-    }
-
-    public CurrencyUnit getBaseCurrencyUnit() {
-        return CurrencyUnit.of(baseCurrency);
-    }
-
-    public void setBaseCurrencyUnit(final CurrencyUnit currencyUnit) {
-        baseCurrency = currencyUnit.getCode();
     }
 
     public void setName(@NonNull final String name) {
@@ -184,6 +179,15 @@ public class Snapshot implements Comparable<Snapshot> {
         if (accounts.contains(account)) {
             return;
         }
+
+        if (!supports(account.getCurrencyUnit())) {
+            throw new IllegalArgumentException(
+                    "Currency "
+                            + account.getCurrencyUnit().toString()
+                            + " not supported by Snapshot "
+                            + id);
+        }
+
         accounts.add(account);
         account.setSnapshot(this);
     }
@@ -222,6 +226,14 @@ public class Snapshot implements Comparable<Snapshot> {
         // Prevents infinite loop
         if (transactions.contains(transaction)) {
             return;
+        }
+
+        if (!supports(transaction.getCurrencyUnit())) {
+            throw new IllegalArgumentException(
+                    "Currency "
+                            + transaction.getCurrencyUnit().toString()
+                            + " not supported by Snapshot "
+                            + id);
         }
 
         if (transaction instanceof IncomeTransaction) {
@@ -280,6 +292,14 @@ public class Snapshot implements Comparable<Snapshot> {
         addAccount(tithingAccount);
 
         return tithingAccount;
+    }
+
+    public CurrencyUnit getBaseCurrencyUnit() {
+        return CurrencyUnit.of(baseCurrency);
+    }
+
+    public Map<String, BigDecimal> getCurrencyConversionRates() {
+        return ImmutableMap.copyOf(currencyConversionRates);
     }
 
     public boolean supports(@NonNull final CurrencyUnit currencyUnit) {
