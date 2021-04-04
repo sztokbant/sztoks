@@ -23,13 +23,6 @@
 <div class="full-width">
     <div class="text-center"><h4>Snapshots</h4></div>
 
-    <div class="navigation-buttons-padding-bottom">
-        <form method="post" action="${contextPath}/snapshot/new">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            <input type="submit" class="btn btn-myequity" value="&#x2795;  Snapshot"/>
-        </form>
-    </div>
-
     <div class="center-w640">
         <table class="full-width">
             <tr class="border-1px">

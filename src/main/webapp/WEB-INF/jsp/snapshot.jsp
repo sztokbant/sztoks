@@ -51,10 +51,20 @@
 
         <div class="col">
             <div class="right-button">
-                <c:if test="${snapshot.nextId ne null}">
-                    <a class="btn btn-myequity"
-                       href="${contextPath}/snapshot/${snapshot.nextId}">${snapshot.nextName}&nbsp;&#x23E9;</a>
-                </c:if>
+                <c:choose>
+                    <c:when test="${snapshot.nextId ne null}">
+                        <a class="btn btn-myequity"
+                           href="${contextPath}/snapshot/${snapshot.nextId}">${snapshot.nextName}&nbsp;&#x23E9;</a>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="navigation-buttons-padding-bottom">
+                            <form method="post" action="${contextPath}/snapshot/new">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                <input type="submit" class="btn btn-newsnapshot" value="&#x2795;  Snapshot"/>
+                            </form>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </div>
@@ -64,8 +74,6 @@
     <%@ include file="account/_snapshot_accounts.jsp" %>
 
     <%@ include file="transaction/_snapshot_transactions.jsp" %>
-
-    <div class="text-center"><a href="/">Back</a></div>
 </div>
 
 </body>

@@ -49,6 +49,12 @@
     background: blanchedalmond;
 }
 
+.btn-newsnapshot {
+    background: indianred;
+    color: white;
+    font-weight: bold;
+}
+
 .valign-top {
     vertical-align: top;
 }
