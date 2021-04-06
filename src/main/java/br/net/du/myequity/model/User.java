@@ -16,7 +16,6 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.money.CurrencyUnit;
 
 @Entity
 @Table(name = "users")
@@ -47,9 +46,6 @@ public class User {
     @Getter
     @Setter
     private String password;
-
-    @Column(nullable = true)
-    private String defaultCurrency;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     // this should match Snapshot::compareTo()
@@ -156,14 +152,6 @@ public class User {
 
         snapshots.remove(snapshot);
         snapshot.setUser(null);
-    }
-
-    public CurrencyUnit getDefaultCurrency() {
-        return CurrencyUnit.of(defaultCurrency);
-    }
-
-    public void setDefaultCurrency(final CurrencyUnit defaultCurrency) {
-        this.defaultCurrency = defaultCurrency.getCode();
     }
 
     @Override
