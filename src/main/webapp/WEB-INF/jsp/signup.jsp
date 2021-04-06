@@ -71,16 +71,9 @@
                 <div class="col col-form-label">
                     <label for="currencyUnit">Default Currency</label>
                 </div>
-                <div class="col">
-                    <spring:bind path="currencyUnit">
-                        <div class="${status.error ? 'has-error' : ''}">
-                            <form:input type="text" id="currencyUnit" path="currencyUnit" class="form-control"
-                                        placeholder="Default Currency"
-                                        autofocus="true"></form:input>
-                            <form:errors path="currencyUnit"/>
-                        </div>
-                    </spring:bind>
-                </div>
+                <spring:bind path="currencyUnit">
+                    <%@ include file="/WEB-INF/jsp/_currency_select.jsp" %>
+                </spring:bind>
             </div>
 
             <div class="row form-group">

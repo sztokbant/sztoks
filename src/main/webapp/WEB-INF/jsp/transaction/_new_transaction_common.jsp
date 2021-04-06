@@ -33,13 +33,7 @@
         <div class="col col-form-label">
             <label for="currencyUnit">Currency</label>
         </div>
-        <div class="col">
-            <div class="${status.error ? 'has-error' : ''}">
-                <form:input type="text" id="currencyUnit" path="currencyUnit" class="form-control" placeholder="Currency"
-                            autofocus="true"></form:input>
-                <form:errors path="currencyUnit"/>
-            </div>
-        </div>
+        <%@ include file="/WEB-INF/jsp/_currency_select.jsp" %>
     </div>
 </spring:bind>
 
