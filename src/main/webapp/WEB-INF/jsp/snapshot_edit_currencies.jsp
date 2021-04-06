@@ -32,12 +32,12 @@
             <c:forEach var="entry" items="${editCurrenciesForm.currencyConversionRates}">
                 <spring:bind path="currencyConversionRates['${entry.key}']">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <div class="row">
-                            <div class="col">
-                                <b>${entry.key}</b>
+                        <div class="row form-group">
+                            <div class="col col-form-label">
+                                <label for="${entry.key}">${entry.key}</label>
                             </div>
                             <div class="col">
-                                <form:input type="number" min="0" step="0.0001" path="currencyConversionRates['${entry.key}']" class="form-control" placeholder="Conversion Rate"
+                                <form:input type="number" min="0" step="0.0001" id="${entry.key}" path="currencyConversionRates['${entry.key}']" class="form-control" placeholder="Conversion Rate"
                                             autofocus="true" value="${entry.value}"></form:input>
                                 <form:errors path="currencyConversionRates['${entry.key}']"/>
                             </div>

@@ -25,36 +25,57 @@
             <form:input type="hidden" path="accountType" value="${accountType}"/>
 
             <spring:bind path="name">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="name" class="form-control" placeholder="Account Name"
-                                autofocus="true"></form:input>
-                    <form:errors path="name"/>
+                <div class="row form-group">
+                    <div class="col col-form-label">
+                        <label for="name">Account Name</label>
+                    </div>
+                    <div class="col">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:input type="text" id="name" path="name" class="form-control" placeholder="Account Name"
+                                        autofocus="true"></form:input>
+                            <form:errors path="name"/>
+                        </div>
+                    </div>
                 </div>
             </spring:bind>
 
             <spring:bind path="subtypeName">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <div>
-                        <form:radiobutton path="subtypeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"/>
-                        <label for="simpleLiabilityRadio">Simple Liability</label>
+                <div class="row form-group">
+                    <div class="col col-form-label">
+                        Liability Type
                     </div>
-                    <div>
-                        <form:radiobutton path="subtypeName" value="PayableAccount" id="payableRadio"/>
-                        <label for="payableRadio">Payable</label>
+                    <div class="col">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <div>
+                                <form:radiobutton path="subtypeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"/>
+                                <label for="simpleLiabilityRadio">Simple Liability</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="subtypeName" value="PayableAccount" id="payableRadio"/>
+                                <label for="payableRadio">Payable</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="subtypeName" value="CreditCardAccount" id="creditCardRadio"/>
+                                <label for="creditCardRadio">Credit Card</label>
+                            </div>
+                            <form:errors path="subtypeName"/>
+                        </div>
                     </div>
-                    <div>
-                        <form:radiobutton path="subtypeName" value="CreditCardAccount" id="creditCardRadio"/>
-                        <label for="creditCardRadio">Credit Card</label>
-                    </div>
-                    <form:errors path="subtypeName"/>
                 </div>
             </spring:bind>
 
             <spring:bind path="currencyUnit">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="currencyUnit" class="form-control" placeholder="Currency"
-                                autofocus="true"></form:input>
-                    <form:errors path="currencyUnit"/>
+                <div class="row form-group">
+                    <div class="col col-form-label">
+                        <label for="currencyUnit">Currency</label>
+                    </div>
+                    <div class="col">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:input type="text" id="currencyUnit" path="currencyUnit" class="form-control" placeholder="Currency"
+                                        autofocus="true"></form:input>
+                            <form:errors path="currencyUnit"/>
+                        </div>
+                    </div>
                 </div>
             </spring:bind>
 

@@ -25,37 +25,58 @@
             <form:input type="hidden" path="accountType" value="${accountType}"/>
 
             <spring:bind path="name">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="name" class="form-control" placeholder="Account Name"
-                                autofocus="true"></form:input>
-                    <form:errors path="name"/>
+                <div class="row form-group">
+                    <div class="col col-form-label">
+                        <label for="name">Account Name</label>
+                    </div>
+                    <div class="col">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:input type="text" id="name" path="name" class="form-control" placeholder="Account Name"
+                                        autofocus="true"></form:input>
+                            <form:errors path="name"/>
+                        </div>
+                    </div>
                 </div>
             </spring:bind>
 
             <spring:bind path="subtypeName">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <div>
-                        <form:radiobutton path="subtypeName" value="SimpleAssetAccount" id="simpleAssetRadio"
-                                          checked="checked"/>
-                        <label for="simpleAssetRadio">Simple Asset</label>
+                <div class="row form-group">
+                    <div class="col col-form-label">
+                        Asset Type
                     </div>
-                    <div>
-                        <form:radiobutton path="subtypeName" value="ReceivableAccount" id="receivableRadio"/>
-                        <label for="receivableRadio">Receivable</label>
+                    <div class="col">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <div>
+                                <form:radiobutton path="subtypeName" value="SimpleAssetAccount" id="simpleAssetRadio"
+                                                  checked="checked"/>
+                                <label for="simpleAssetRadio">Simple Asset</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="subtypeName" value="ReceivableAccount" id="receivableRadio"/>
+                                <label for="receivableRadio">Receivable</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="subtypeName" value="InvestmentAccount" id="investmentRadio"/>
+                                <label for="investmentRadio">Investment</label>
+                            </div>
+                            <form:errors path="subtypeName"/>
+                        </div>
                     </div>
-                    <div>
-                        <form:radiobutton path="subtypeName" value="InvestmentAccount" id="investmentRadio"/>
-                        <label for="investmentRadio">Investment</label>
-                    </div>
-                    <form:errors path="subtypeName"/>
                 </div>
             </spring:bind>
 
             <spring:bind path="currencyUnit">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="currencyUnit" class="form-control" placeholder="Currency"
-                                autofocus="true"></form:input>
-                    <form:errors path="currencyUnit"/>
+                <div class="row form-group">
+                    <div class="col col-form-label">
+                        <label for="currencyUnit">Currency</label>
+                    </div>
+                    <div class="col">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:input type="text" id="currencyUnit" path="currencyUnit" class="form-control" placeholder="Currency"
+                                        autofocus="true"></form:input>
+                            <form:errors path="currencyUnit"/>
+                        </div>
+                    </div>
                 </div>
             </spring:bind>
 

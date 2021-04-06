@@ -28,16 +28,23 @@
             <%@ include file="_new_transaction_common.jsp" %>
 
             <spring:bind path="isTaxDeductible">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <div>
-                        <form:radiobutton path="isTaxDeductible" value="true" id="taxDeductibleRadio" checked="checked"/>
-                        <label for="taxDeductibleRadio">Tax Deductible</label>
+                <div class="row form-group">
+                    <div class="col col-form-label">
+                        Taxation
                     </div>
-                    <div>
-                        <form:radiobutton path="isTaxDeductible" value="false" id="nondeductibleRadio"/>
-                        <label for="nondeductibleRadio">Nondeductible</label>
+                    <div class="col">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <div>
+                                <form:radiobutton path="isTaxDeductible" value="true" id="taxDeductibleRadio" checked="checked"/>
+                                <label for="taxDeductibleRadio">Tax Deductible</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="isTaxDeductible" value="false" id="nondeductibleRadio"/>
+                                <label for="nondeductibleRadio">Nondeductible</label>
+                            </div>
+                            <form:errors path="isTaxDeductible"/>
+                        </div>
                     </div>
-                    <form:errors path="isTaxDeductible"/>
                 </div>
             </spring:bind>
 

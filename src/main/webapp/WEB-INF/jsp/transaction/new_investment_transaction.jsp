@@ -28,21 +28,28 @@
             <%@ include file="_new_transaction_common.jsp" %>
 
             <spring:bind path="investmentCategory">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <div>
-                        <form:radiobutton path="investmentCategory" value="LONG_TERM" id="longTermRadio"
-                                          checked="checked"/>
-                        <label for="longTermRadio">Long Term</label>
+                <div class="row form-group">
+                    <div class="col col-form-label">
+                        Investment Category
                     </div>
-                    <div>
-                        <form:radiobutton path="investmentCategory" value="MID_TERM" id="midTermRadio"/>
-                        <label for="midTermRadio">Mid Term</label>
+                    <div class="col">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <div>
+                                <form:radiobutton path="investmentCategory" value="LONG_TERM" id="longTermRadio"
+                                                  checked="checked"/>
+                                <label for="longTermRadio">Long Term</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="investmentCategory" value="MID_TERM" id="midTermRadio"/>
+                                <label for="midTermRadio">Mid Term</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="investmentCategory" value="SHORT_TERM" id="shortTermRadio"/>
+                                <label for="shortTermRadio">Short Term</label>
+                            </div>
+                            <form:errors path="investmentCategory"/>
+                        </div>
                     </div>
-                    <div>
-                        <form:radiobutton path="investmentCategory" value="SHORT_TERM" id="shortTermRadio"/>
-                        <label for="shortTermRadio">Short Term</label>
-                    </div>
-                    <form:errors path="investmentCategory"/>
                 </div>
             </spring:bind>
 

@@ -39,12 +39,10 @@ public class UserViewModelInputValidator implements Validator {
     public void validate(final Object o, final Errors errors) {
         final UserViewModelInput userViewModelInput = (UserViewModelInput) o;
 
-        rejectIfEmptyOrWhitespace(errors, EMAIL_FIELD, NOT_EMPTY_ERRORCODE);
         rejectIfEmptyOrWhitespace(errors, FIRST_NAME_FIELD, NOT_EMPTY_ERRORCODE);
         rejectIfEmptyOrWhitespace(errors, LAST_NAME_FIELD, NOT_EMPTY_ERRORCODE);
         rejectIfInvalidCurrencyUnit(userViewModelInput.getCurrencyUnit(), errors);
         rejectIfInvalidTithingPercentage(userViewModelInput.getTithingPercentage(), errors);
-        rejectIfEmptyOrWhitespace(errors, PASSWORD_FIELD, NOT_EMPTY_ERRORCODE);
         rejectIfEmptyOrWhitespace(errors, PASSWORD_CONFIRM_FIELD, NOT_EMPTY_ERRORCODE);
 
         rejectIfInvalidOrExistingEmail(errors, userViewModelInput);

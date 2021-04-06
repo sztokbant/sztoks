@@ -27,10 +27,17 @@
             <%@ include file="_new_transaction_common.jsp" %>
 
             <spring:bind path="tithingPercentage">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="tithingPercentage" class="form-control" placeholder="Tithing Percentage"
-                                autofocus="true"></form:input>
-                    <form:errors path="tithingPercentage"/>
+                <div class="row form-group">
+                    <div class="col col-form-label">
+                        <label for="tithingPercentage">Tithing Percentage</label>
+                    </div>
+                    <div class="col">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:input type="number" min="0" step="0.01" id="tithingPercentage" path="tithingPercentage" class="form-control" placeholder="Tithing Percentage"
+                                        autofocus="true"></form:input>
+                            <form:errors path="tithingPercentage"/>
+                        </div>
+                    </div>
                 </div>
             </spring:bind>
 

@@ -21,61 +21,113 @@
     <div class="center-w640">
         <form:form method="POST" modelAttribute="userForm" class="form-signin">
             <h4 class="form-signin-heading">Sign Up</h4>
-            <spring:bind path="email">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="email" class="form-control" placeholder="E-mail"
-                                autofocus="true"></form:input>
-                    <form:errors path="email"></form:errors>
-                </div>
-            </spring:bind>
 
-            <spring:bind path="firstName">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="firstName" class="form-control" placeholder="First Name"
-                                autofocus="true"></form:input>
-                    <form:errors path="firstName"></form:errors>
+            <div class="row form-group">
+                <div class="col col-form-label">
+                    <label for="email">E-mail</label>
                 </div>
-            </spring:bind>
+                <div class="col">
+                    <spring:bind path="email">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:input type="text" id="email" path="email" class="form-control" placeholder="E-mail"
+                                        autofocus="true"></form:input>
+                            <form:errors path="email"></form:errors>
+                        </div>
+                    </spring:bind>
+                </div>
+            </div>
 
-            <spring:bind path="lastName">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="lastName" class="form-control" placeholder="Last Name"
-                                autofocus="true"></form:input>
-                    <form:errors path="lastName"></form:errors>
+            <div class="row form-group">
+                <div class="col col-form-label">
+                    <label for="firstName">First Name</label>
                 </div>
-            </spring:bind>
+                <div class="col">
+                    <spring:bind path="firstName">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:input type="text" id="firstName" path="firstName" class="form-control" placeholder="First Name"
+                                        autofocus="true"></form:input>
+                            <form:errors path="firstName"></form:errors>
+                        </div>
+                    </spring:bind>
+                </div>
+            </div>
 
-            <spring:bind path="currencyUnit">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="currencyUnit" class="form-control" placeholder="Default Currency"
-                                autofocus="true"></form:input>
-                    <form:errors path="currencyUnit"/>
+            <div class="row form-group">
+                <div class="col col-form-label">
+                    <label for="lastName">Last Name</label>
                 </div>
-            </spring:bind>
+                <div class="col">
+                    <spring:bind path="lastName">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:input type="text" id="lastName" path="lastName" class="form-control" placeholder="Last Name"
+                                        autofocus="true"></form:input>
+                            <form:errors path="lastName"></form:errors>
+                        </div>
+                    </spring:bind>
+                </div>
+            </div>
 
-            <spring:bind path="tithingPercentage">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="tithingPercentage" class="form-control" placeholder="Default Tithing Percentage"
-                                autofocus="true"></form:input>
-                    <form:errors path="tithingPercentage"/>
+            <div class="row form-group">
+                <div class="col col-form-label">
+                    <label for="currencyUnit">Default Currency</label>
                 </div>
-            </spring:bind>
+                <div class="col">
+                    <spring:bind path="currencyUnit">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:input type="text" id="currencyUnit" path="currencyUnit" class="form-control"
+                                        placeholder="Default Currency"
+                                        autofocus="true"></form:input>
+                            <form:errors path="currencyUnit"/>
+                        </div>
+                    </spring:bind>
+                </div>
+            </div>
 
-            <spring:bind path="password">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="password" path="password" class="form-control"
-                                placeholder="Password"></form:input>
-                    <form:errors path="password"></form:errors>
+            <div class="row form-group">
+                <div class="col col-form-label">
+                    <label for="tithingPercentage">Default Tithing Percentage</label>
                 </div>
-            </spring:bind>
+                <div class="col">
+                    <spring:bind path="tithingPercentage">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:input type="number" min="0" step="0.01" id="tithingPercentage" path="tithingPercentage" class="form-control"
+                                        placeholder="Default Tithing Percentage"
+                                        autofocus="true"></form:input>
+                            <form:errors path="tithingPercentage"/>
+                        </div>
+                    </spring:bind>
+                </div>
+            </div>
 
-            <spring:bind path="passwordConfirm">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="password" path="passwordConfirm" class="form-control"
-                                placeholder="Confirm your password"></form:input>
-                    <form:errors path="passwordConfirm"></form:errors>
+            <div class="row form-group">
+                <div class="col col-form-label">
+                    <label for="password">Password</label>
                 </div>
-            </spring:bind>
+                <div class="col">
+                    <spring:bind path="password">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:input type="password" id="password" path="password" class="form-control"
+                                        placeholder="Password"></form:input>
+                            <form:errors path="password"></form:errors>
+                        </div>
+                    </spring:bind>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col col-form-label">
+                    <label for="passwordConfirm">Password Confirmation</label>
+                </div>
+                <div class="col">
+                    <spring:bind path="passwordConfirm">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:input type="password" id="passwordConfirm" path="passwordConfirm" class="form-control"
+                                        placeholder="Confirm your password"></form:input>
+                            <form:errors path="passwordConfirm"></form:errors>
+                        </div>
+                    </spring:bind>
+                </div>
+            </div>
 
             <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
             <div class="text-center">Already have an account? <a href="${contextPath}/login">Log in</a>.</div>

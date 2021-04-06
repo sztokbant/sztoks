@@ -15,6 +15,11 @@
     min-width: 25%;
 }
 
+.col-form-label {
+    font-weight: bold;
+    max-width: 40%;
+}
+
 .editable-asset {
     background: coral;
 }
