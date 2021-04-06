@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.controller.SnapshotNewCurrencyController.SNAPSHOT_NEW_CURRENCY_MAPPING;
 import static br.net.du.myequity.controller.util.ControllerConstants.ID;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
@@ -40,6 +41,11 @@ public class SnapshotEditCurrenciesController {
     @GetMapping(SNAPSHOT_EDIT_CURRENCIES_MAPPING)
     public String get(@PathVariable(value = ID) final Long snapshotId, final Model model) {
         final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
+
+        if (snapshot.getCurrencyConversionRates().isEmpty()) {
+            return "redirect:" + SNAPSHOT_NEW_CURRENCY_MAPPING;
+        }
+
         final EditCurrenciesViewModelInput currenciesViewModelInput =
                 new EditCurrenciesViewModelInput(snapshot.getCurrencyConversionRates());
         return prepareGetMapping(snapshot, model, currenciesViewModelInput);

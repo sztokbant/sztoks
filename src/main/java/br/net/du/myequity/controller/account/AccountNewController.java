@@ -1,8 +1,10 @@
 package br.net.du.myequity.controller.account;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.ACCOUNT_TYPE_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.CURRENCIES;
 import static br.net.du.myequity.controller.util.ControllerConstants.ID;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
+import static br.net.du.myequity.controller.util.ControllerConstants.SELECTED_CURRENCY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
@@ -86,8 +88,10 @@ public class AccountNewController {
         model.addAttribute(SNAPSHOT_ID_KEY, snapshotId);
         model.addAttribute(ACCOUNT_TYPE_KEY, accountType);
 
+        model.addAttribute(CURRENCIES, snapshot.getCurrenciesInUse());
+
         if (StringUtils.isEmpty(accountViewModelInput.getCurrencyUnit())) {
-            accountViewModelInput.setCurrencyUnit(snapshot.getBaseCurrencyUnit().toString());
+            model.addAttribute(SELECTED_CURRENCY, snapshot.getBaseCurrencyUnit().toString());
         }
 
         model.addAttribute(ACCOUNT_FORM, accountViewModelInput);

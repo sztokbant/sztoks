@@ -1,6 +1,9 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.CURRENCIES;
+import static br.net.du.myequity.controller.util.ControllerConstants.DEFAULT_CURRENCY_UNIT;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
+import static br.net.du.myequity.controller.util.ControllerConstants.SELECTED_CURRENCY;
 
 import br.net.du.myequity.controller.viewmodel.UserViewModelInput;
 import br.net.du.myequity.controller.viewmodel.validator.UserViewModelInputValidator;
@@ -32,16 +35,30 @@ public class UserController {
     public String signup(final Model model) {
         model.addAttribute(USER_FORM, new UserViewModelInput());
 
+        model.addAttribute(CURRENCIES, CurrencyUnit.registeredCurrencies());
+        model.addAttribute(SELECTED_CURRENCY, DEFAULT_CURRENCY_UNIT.getCode());
+
         return SIGNUP_TEMPLATE;
     }
 
     @PostMapping(SIGNUP_MAPPING)
     public String signup(
+            final Model model,
             @ModelAttribute(USER_FORM) final UserViewModelInput userViewModelInput,
             final BindingResult bindingResult) {
         validator.validate(userViewModelInput, bindingResult);
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute(CURRENCIES, CurrencyUnit.registeredCurrencies());
+
+            try {
+                final CurrencyUnit selectedCurrency =
+                        CurrencyUnit.of(userViewModelInput.getCurrencyUnit());
+                model.addAttribute(SELECTED_CURRENCY, selectedCurrency.getCode());
+            } catch (final Exception e) {
+                model.addAttribute(SELECTED_CURRENCY, DEFAULT_CURRENCY_UNIT.getCode());
+            }
+
             return SIGNUP_TEMPLATE;
         }
 

@@ -302,9 +302,18 @@ public class Snapshot implements Comparable<Snapshot> {
         return ImmutableMap.copyOf(currencyConversionRates);
     }
 
+    public SortedSet<String> getCurrenciesInUse() {
+        final SortedSet<String> availableCurrencies = new TreeSet<>();
+
+        availableCurrencies.add(baseCurrency);
+        availableCurrencies.addAll(currencyConversionRates.keySet());
+
+        return availableCurrencies;
+    }
+
     public boolean supports(@NonNull final CurrencyUnit currencyUnit) {
         final String currencyStr = currencyUnit.toString();
-        return currencyStr.equals(baseCurrency) || hasConversionRate(currencyUnit);
+        return getCurrenciesInUse().contains(currencyStr);
     }
 
     public boolean hasConversionRate(@NonNull final CurrencyUnit currencyUnit) {

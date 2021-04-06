@@ -1,10 +1,13 @@
 package br.net.du.myequity.controller;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.CURRENCIES;
 import static br.net.du.myequity.controller.util.ControllerConstants.ID;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
+import static br.net.du.myequity.controller.util.ControllerConstants.SELECTED_CURRENCY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
+import static java.util.stream.Collectors.toList;
 
 import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.NewCurrencyViewModelInput;
@@ -14,6 +17,8 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.SnapshotService;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.SortedSet;
 import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +31,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class SnapshotNewCurrencyController {
-    private static final String SNAPSHOT_NEW_CURRENCY_MAPPING = "/snapshot/{id}/newCurrency";
+    public static final String SNAPSHOT_NEW_CURRENCY_MAPPING = "/snapshot/{id}/newCurrency";
 
     private static final String SNAPSHOT_NEW_CURRENCY_TEMPLATE = "snapshot_new_currency";
     private static final String NEW_CURRENCY_FORM = "newCurrencyForm";
@@ -73,6 +78,23 @@ public class SnapshotNewCurrencyController {
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_ID_KEY, snapshot.getId());
+
+        final SortedSet<String> currenciesInUse = snapshot.getCurrenciesInUse();
+        final List<String> availableCurrencies =
+                CurrencyUnit.registeredCurrencies().stream()
+                        .map(currencyUnit -> currencyUnit.getCode())
+                        .filter(currency -> !currenciesInUse.contains(currency))
+                        .sorted()
+                        .collect(toList());
+
+        model.addAttribute(CURRENCIES, availableCurrencies);
+
+        try {
+            final CurrencyUnit selectedCurrency =
+                    CurrencyUnit.of(newCurrencyViewModelInput.getCurrencyUnit());
+            model.addAttribute(SELECTED_CURRENCY, selectedCurrency.getCode());
+        } catch (final Exception e) {
+        }
 
         model.addAttribute(NEW_CURRENCY_FORM, newCurrencyViewModelInput);
 

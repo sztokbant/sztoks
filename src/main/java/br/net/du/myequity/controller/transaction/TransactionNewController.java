@@ -1,7 +1,9 @@
 package br.net.du.myequity.controller.transaction;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.CURRENCIES;
 import static br.net.du.myequity.controller.util.ControllerConstants.ID;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
+import static br.net.du.myequity.controller.util.ControllerConstants.SELECTED_CURRENCY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.TRANSACTION_TYPE_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
@@ -97,8 +99,10 @@ public class TransactionNewController {
         model.addAttribute(SNAPSHOT_ID_KEY, snapshotId);
         model.addAttribute(TRANSACTION_TYPE_KEY, transactionType);
 
+        model.addAttribute(CURRENCIES, snapshot.getCurrenciesInUse());
+
         if (StringUtils.isEmpty(transactionViewModelInput.getCurrencyUnit())) {
-            transactionViewModelInput.setCurrencyUnit(snapshot.getBaseCurrencyUnit().toString());
+            model.addAttribute(SELECTED_CURRENCY, snapshot.getBaseCurrencyUnit().toString());
         }
 
         if (StringUtils.isEmpty(transactionViewModelInput.getTithingPercentage())) {
