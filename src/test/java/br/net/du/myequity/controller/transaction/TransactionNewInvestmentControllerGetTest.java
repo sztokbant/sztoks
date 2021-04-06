@@ -74,7 +74,7 @@ class TransactionNewInvestmentControllerGetTest extends GetControllerTestBase {
         assertNull(transactionViewModelInput.getTypeName());
 
         assertNull(transactionViewModelInput.getDate());
-        assertEquals(CURRENCY_UNIT.toString(), transactionViewModelInput.getCurrencyUnit());
+        assertNull(transactionViewModelInput.getCurrencyUnit());
         assertNull(transactionViewModelInput.getAmount());
         assertNull(transactionViewModelInput.getDescription());
         assertNull(transactionViewModelInput.getIsRecurring());
