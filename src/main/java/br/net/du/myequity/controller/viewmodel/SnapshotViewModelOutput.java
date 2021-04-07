@@ -16,7 +16,7 @@ import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelO
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.account.CreditCardAccount;
+import br.net.du.myequity.model.totals.CreditCardTotals;
 import br.net.du.myequity.model.totals.InvestmentTotals;
 import br.net.du.myequity.model.totals.SnapshotTotalsCalculator;
 import br.net.du.myequity.model.transaction.Transaction;
@@ -76,8 +76,8 @@ public class SnapshotViewModelOutput {
         final SnapshotTotalsCalculator snapshotTotalsCalculator =
                 new SnapshotTotalsCalculator(snapshot);
 
-        final Map<CurrencyUnit, CreditCardAccount> creditCardTotals =
-                snapshotTotalsCalculator.getCreditCardTotals();
+        final Map<CurrencyUnit, CreditCardTotals> creditCardTotals =
+                snapshotTotalsCalculator.getCreditCardTotalsByCurrency();
         final InvestmentTotals investmentTotals = snapshotTotalsCalculator.getInvestmentTotals();
 
         Long previousId = null;
@@ -146,14 +146,15 @@ public class SnapshotViewModelOutput {
     }
 
     private static Map<String, CreditCardTotalsViewModelOutput> getCurrencyUnitCreditCardViewModels(
-            final Map<CurrencyUnit, CreditCardAccount> creditCardTotals) {
+            final Map<CurrencyUnit, CreditCardTotals> creditCardTotalsByCurrency) {
         final Map<String, CreditCardTotalsViewModelOutput> creditCardTotalsViewModel =
                 new HashMap<>();
 
-        for (final CurrencyUnit currencyUnit : creditCardTotals.keySet()) {
+        for (final CurrencyUnit currencyUnit : creditCardTotalsByCurrency.keySet()) {
             creditCardTotalsViewModel.put(
                     currencyUnit.getCode(),
-                    CreditCardTotalsViewModelOutput.of(creditCardTotals.get(currencyUnit)));
+                    CreditCardTotalsViewModelOutput.of(
+                            creditCardTotalsByCurrency.get(currencyUnit)));
         }
 
         return creditCardTotalsViewModel;

@@ -61,35 +61,37 @@ public class SnapshotTotalsCalculator {
                 baseCurrencyUnit, totalInvested, profitPercentage, totalBalance);
     }
 
-    /** Create transient CreditCardAccount objects aggregated by currency unit. */
-    public Map<CurrencyUnit, CreditCardAccount> getCreditCardTotals() {
-        final Map<CurrencyUnit, CreditCardAccount> creditCardTotals = new HashMap<>();
+    public Map<CurrencyUnit, CreditCardTotals> getCreditCardTotalsByCurrency() {
+        final Map<CurrencyUnit, CreditCardTotals> creditCardTotals = new HashMap<>();
 
         for (final Account account : snapshot.getAccounts()) {
             if (!(account instanceof CreditCardAccount)) {
                 continue;
             }
 
-            final CreditCardAccount creditCardAccount = (CreditCardAccount) account;
-            final CurrencyUnit currencyUnit = creditCardAccount.getCurrencyUnit();
+            final CurrencyUnit currencyUnit = account.getCurrencyUnit();
 
             if (!creditCardTotals.containsKey(currencyUnit)) {
-                creditCardTotals.put(currencyUnit, creditCardAccount.copy());
-            } else {
-                final CreditCardAccount creditCardTotalForCurrency =
-                        creditCardTotals.get(currencyUnit);
-                updateCreditCardTotalsForCurrency(creditCardAccount, creditCardTotalForCurrency);
-                creditCardTotals.put(currencyUnit, creditCardTotalForCurrency);
+                creditCardTotals.put(
+                        currencyUnit,
+                        new CreditCardTotals(
+                                currencyUnit, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO));
             }
+
+            final CreditCardTotals creditCardTotalsForCurrency = creditCardTotals.get(currencyUnit);
+            updateCreditCardTotals(creditCardTotalsForCurrency, (CreditCardAccount) account);
+
+            creditCardTotals.put(currencyUnit, creditCardTotalsForCurrency);
         }
 
         return creditCardTotals;
     }
 
-    /** Create transient CreditCardAccount object for specified currency unit. */
-    public CreditCardAccount getCreditCardTotalsForCurrencyUnit(
+    public CreditCardTotals getCreditCardTotalsForCurrency(
             @NonNull final CurrencyUnit currencyUnit) {
-        CreditCardAccount creditCardTotalsForCurrencyUnit = null;
+        final CreditCardTotals creditCardTotals =
+                new CreditCardTotals(
+                        currencyUnit, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
 
         for (final Account account : snapshot.getAccounts()) {
             if (!(account instanceof CreditCardAccount)
@@ -97,31 +99,19 @@ public class SnapshotTotalsCalculator {
                 continue;
             }
 
-            final CreditCardAccount creditCardSnapshot = (CreditCardAccount) account;
-
-            if (creditCardTotalsForCurrencyUnit == null) {
-                creditCardTotalsForCurrencyUnit = creditCardSnapshot.copy();
-            } else {
-                updateCreditCardTotalsForCurrency(
-                        creditCardSnapshot, creditCardTotalsForCurrencyUnit);
-            }
+            updateCreditCardTotals(creditCardTotals, (CreditCardAccount) account);
         }
 
-        return creditCardTotalsForCurrencyUnit;
+        return creditCardTotals;
     }
 
-    private void updateCreditCardTotalsForCurrency(
-            final CreditCardAccount creditCardAccount,
-            final CreditCardAccount creditCardSnapshotForCurrency) {
-        creditCardSnapshotForCurrency.setAvailableCredit(
-                creditCardSnapshotForCurrency
-                        .getAvailableCredit()
-                        .add(creditCardAccount.getAvailableCredit()));
-        creditCardSnapshotForCurrency.setTotalCredit(
-                creditCardSnapshotForCurrency
-                        .getTotalCredit()
-                        .add(creditCardAccount.getTotalCredit()));
-        creditCardSnapshotForCurrency.setStatement(
-                creditCardSnapshotForCurrency.getStatement().add(creditCardAccount.getStatement()));
+    private void updateCreditCardTotals(
+            final CreditCardTotals creditCardTotals, final CreditCardAccount creditCardAccount) {
+        creditCardTotals.setTotalCredit(
+                creditCardTotals.getTotalCredit().add(creditCardAccount.getTotalCredit()));
+        creditCardTotals.setAvailableCredit(
+                creditCardTotals.getAvailableCredit().add(creditCardAccount.getAvailableCredit()));
+        creditCardTotals.setStatement(
+                creditCardTotals.getStatement().add(creditCardAccount.getStatement()));
     }
 }

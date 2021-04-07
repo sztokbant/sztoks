@@ -1,12 +1,10 @@
 package br.net.du.myequity.controller.viewmodel.account;
 
-import static br.net.du.myequity.controller.util.ControllerConstants.ZERO;
-import static br.net.du.myequity.controller.util.ControllerConstants.ZERO_PERCENT;
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
-import br.net.du.myequity.model.account.CreditCardAccount;
+import br.net.du.myequity.model.totals.CreditCardTotals;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +23,7 @@ public class CreditCardTotalsViewModelOutput {
     private final String remainingBalance;
     private final String usedCreditPercentage;
 
-    public static CreditCardTotalsViewModelOutput of(final CreditCardAccount creditCardTotals) {
+    public static CreditCardTotalsViewModelOutput of(final CreditCardTotals creditCardTotals) {
         final CurrencyUnit currencyUnit = creditCardTotals.getCurrencyUnit();
 
         final String balance = format(currencyUnit, toDecimal(creditCardTotals.getBalance()));
@@ -47,17 +45,5 @@ public class CreditCardTotalsViewModelOutput {
                 statement,
                 remainingBalance,
                 usedCreditPercentage);
-    }
-
-    public static CreditCardTotalsViewModelOutput newEmptyInstance() {
-        return CreditCardTotalsViewModelOutput.builder()
-                .balance(ZERO)
-                .totalCredit(ZERO)
-                .availableCredit(ZERO)
-                .statement(ZERO)
-                .remainingBalance(ZERO)
-                .usedCreditPercentage(ZERO_PERCENT)
-                .availableCredit(ZERO)
-                .build();
     }
 }

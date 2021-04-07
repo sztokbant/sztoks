@@ -59,8 +59,7 @@ public class CreditCardAccountViewModelOutput extends AccountViewModelOutput {
                     new SnapshotTotalsCalculator(account.getSnapshot());
             creditCardTotalsForCurrencyUnit =
                     CreditCardTotalsViewModelOutput.of(
-                            snapshotTotalsCalculator.getCreditCardTotalsForCurrencyUnit(
-                                    currencyUnit));
+                            snapshotTotalsCalculator.getCreditCardTotalsForCurrency(currencyUnit));
         } else {
             creditCardTotalsForCurrencyUnit = null;
         }

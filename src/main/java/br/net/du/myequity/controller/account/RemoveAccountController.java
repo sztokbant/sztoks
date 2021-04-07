@@ -43,7 +43,9 @@ public class RemoveAccountController extends AccountUpdateControllerBase {
 
         final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit =
                 (account instanceof CreditCardAccount)
-                        ? getCreditCardTotalsViewModelOutput(snapshot, currencyUnit)
+                        ? CreditCardTotalsViewModelOutput.of(
+                                snapshotTotalsCalculator.getCreditCardTotalsForCurrency(
+                                        currencyUnit))
                         : null;
 
         return SnapshotRemoveAccountJsonResponse.builder()
@@ -55,18 +57,5 @@ public class RemoveAccountController extends AccountUpdateControllerBase {
                 .totalForAccountType(formatAsDecimal(snapshot.getTotalFor(accountType)))
                 .creditCardTotalsForCurrencyUnit(creditCardTotalsForCurrencyUnit)
                 .build();
-    }
-
-    private CreditCardTotalsViewModelOutput getCreditCardTotalsViewModelOutput(
-            final Snapshot snapshot, final CurrencyUnit currencyUnit) {
-        final SnapshotTotalsCalculator snapshotTotalsCalculator =
-                new SnapshotTotalsCalculator(snapshot);
-
-        final CreditCardAccount creditCardTotals =
-                snapshotTotalsCalculator.getCreditCardTotalsForCurrencyUnit(currencyUnit);
-
-        return (creditCardTotals != null)
-                ? CreditCardTotalsViewModelOutput.of(creditCardTotals)
-                : CreditCardTotalsViewModelOutput.newEmptyInstance();
     }
 }

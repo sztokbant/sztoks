@@ -63,6 +63,11 @@ public class CreditCardAccount extends Account {
 
     @Override
     public BigDecimal getBalance() {
+        return getBalance(totalCredit, availableCredit);
+    }
+
+    public static BigDecimal getBalance(
+            final BigDecimal totalCredit, final BigDecimal availableCredit) {
         return totalCredit.subtract(availableCredit);
     }
 
@@ -73,6 +78,11 @@ public class CreditCardAccount extends Account {
     }
 
     public BigDecimal getUsedCreditPercentage() {
+        return getUsedCreditPercentage(totalCredit, availableCredit);
+    }
+
+    public static BigDecimal getUsedCreditPercentage(
+            final BigDecimal totalCredit, final BigDecimal availableCredit) {
         if (totalCredit.compareTo(BigDecimal.ZERO) == 0) {
             return BigDecimal.ZERO;
         }
@@ -83,6 +93,11 @@ public class CreditCardAccount extends Account {
     }
 
     public BigDecimal getRemainingBalance() {
-        return getBalance().subtract(statement);
+        return getRemainingBalance(getBalance(), statement);
+    }
+
+    public static BigDecimal getRemainingBalance(
+            final BigDecimal balance, final BigDecimal statement) {
+        return balance.subtract(statement);
     }
 }
