@@ -34,7 +34,7 @@ $(document).ready(function() {
     <div class="col col-cell align-center editable-liability">
         <form id="form_payable_due_date_${entity.accountId}">
             <span id="payable_due_date_${entity.accountId}">${entity.dueDate}</span>
-            <span><input id="new_payable_due_date_${entity.accountId}" name="amount" type="text"
+            <span><input id="new_payable_due_date_${entity.accountId}" name="amount" type="date"
                          style="display: none;"/></span>
             <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>

@@ -20,7 +20,7 @@
         </div>
         <div class="col">
             <div class="${status.error ? 'has-error' : ''}">
-                <form:input type="text" id="date" path="date" class="form-control" placeholder="Date"
+                <form:input type="date" id="date" path="date" class="form-control" placeholder="Date"
                             autofocus="true"></form:input>
                 <form:errors path="date"/>
             </div>
