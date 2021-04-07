@@ -1,5 +1,7 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.util.ModelConstants.ONE_HUNDRED;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -79,11 +81,10 @@ public class InvestmentAccount extends Account {
         if (averagePurchasePrice.compareTo(BigDecimal.ZERO) == 0) {
             return BigDecimal.ZERO;
         }
-        final BigDecimal oneHundred = new BigDecimal("100.00");
         return (currentShareValue
-                        .multiply(oneHundred)
+                        .multiply(ONE_HUNDRED)
                         .divide(averagePurchasePrice, RoundingMode.HALF_UP))
-                .subtract(oneHundred);
+                .subtract(ONE_HUNDRED);
     }
 
     public BigDecimal getAveragePurchasePrice() {

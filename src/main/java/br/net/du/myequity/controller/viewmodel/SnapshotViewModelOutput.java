@@ -7,7 +7,9 @@ import static java.util.stream.Collectors.toList;
 
 import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.CreditCardAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.CreditCardTotalsViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.InvestmentAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.InvestmentTotalsViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.PayableAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.ReceivableAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
@@ -15,6 +17,8 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.account.CreditCardAccount;
+import br.net.du.myequity.model.totals.InvestmentTotals;
+import br.net.du.myequity.model.totals.SnapshotTotalsCalculator;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import com.google.common.collect.ImmutableList;
@@ -55,6 +59,7 @@ public class SnapshotViewModelOutput {
     private final List<AccountViewModelOutput> simpleAssetAccounts;
     private final List<AccountViewModelOutput> receivableAccounts;
     private final List<AccountViewModelOutput> investmentAccounts;
+    private final InvestmentTotalsViewModelOutput investmentTotals;
 
     private final List<AccountViewModelOutput> simpleLiabilityAccounts;
     private final List<AccountViewModelOutput> payableAccounts;
@@ -68,8 +73,12 @@ public class SnapshotViewModelOutput {
     private final List<TransactionViewModelOutput> donations;
 
     public static SnapshotViewModelOutput of(final Snapshot snapshot) {
+        final SnapshotTotalsCalculator snapshotTotalsCalculator =
+                new SnapshotTotalsCalculator(snapshot);
+
         final Map<CurrencyUnit, CreditCardAccount> creditCardTotals =
-                snapshot.getCreditCardTotals();
+                snapshotTotalsCalculator.getCreditCardTotals();
+        final InvestmentTotals investmentTotals = snapshotTotalsCalculator.getInvestmentTotals();
 
         Long previousId = null;
         String previousName = null;
@@ -98,6 +107,7 @@ public class SnapshotViewModelOutput {
                                 toStringStringMap(snapshot.getCurrencyConversionRates()))
                         .assetsTotal(
                                 format(baseCurrencyUnit, snapshot.getTotalFor(AccountType.ASSET)))
+                        .investmentTotals(InvestmentTotalsViewModelOutput.of(investmentTotals))
                         .liabilitiesTotal(
                                 format(
                                         baseCurrencyUnit,

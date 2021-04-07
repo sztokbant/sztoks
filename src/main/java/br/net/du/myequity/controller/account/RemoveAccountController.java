@@ -2,13 +2,16 @@ package br.net.du.myequity.controller.account;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
 
-import br.net.du.myequity.controller.viewmodel.CreditCardTotalsViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.SnapshotRemoveAccountJsonResponse;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
+import br.net.du.myequity.controller.viewmodel.account.CreditCardTotalsViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.InvestmentTotalsViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.account.CreditCardAccount;
+import br.net.du.myequity.model.account.InvestmentAccount;
+import br.net.du.myequity.model.totals.SnapshotTotalsCalculator;
 import org.joda.money.CurrencyUnit;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,12 +26,20 @@ public class RemoveAccountController extends AccountUpdateControllerBase {
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         final Account account = getAccount(model, valueUpdateJsonRequest);
         final Snapshot snapshot = account.getSnapshot();
+        final SnapshotTotalsCalculator snapshotTotalsCalculator =
+                new SnapshotTotalsCalculator(snapshot);
 
         snapshot.removeAccount(account);
         snapshotService.save(snapshot);
 
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
         final AccountType accountType = account.getAccountType();
+
+        final InvestmentTotalsViewModelOutput investmentTotals =
+                (account instanceof InvestmentAccount)
+                        ? InvestmentTotalsViewModelOutput.of(
+                                snapshotTotalsCalculator.getInvestmentTotals())
+                        : null;
 
         final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit =
                 (account instanceof CreditCardAccount)
@@ -48,11 +59,14 @@ public class RemoveAccountController extends AccountUpdateControllerBase {
 
     private CreditCardTotalsViewModelOutput getCreditCardTotalsViewModelOutput(
             final Snapshot snapshot, final CurrencyUnit currencyUnit) {
-        final CreditCardAccount creditCardTotalsSnapshot =
-                snapshot.getCreditCardTotalsForCurrencyUnit(currencyUnit);
+        final SnapshotTotalsCalculator snapshotTotalsCalculator =
+                new SnapshotTotalsCalculator(snapshot);
 
-        return (creditCardTotalsSnapshot != null)
-                ? CreditCardTotalsViewModelOutput.of(creditCardTotalsSnapshot)
+        final CreditCardAccount creditCardTotals =
+                snapshotTotalsCalculator.getCreditCardTotalsForCurrencyUnit(currencyUnit);
+
+        return (creditCardTotals != null)
+                ? CreditCardTotalsViewModelOutput.of(creditCardTotals)
                 : CreditCardTotalsViewModelOutput.newEmptyInstance();
     }
 }

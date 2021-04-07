@@ -1,5 +1,7 @@
 package br.net.du.myequity.model.transaction;
 
+import static br.net.du.myequity.model.util.ModelConstants.ONE_HUNDRED;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -35,8 +37,7 @@ public class IncomeTransaction extends Transaction {
     }
 
     public BigDecimal getTithingAmount() {
-        final BigDecimal oneHundred = new BigDecimal("100.00");
-        return getTithingPercentage().multiply(amount).divide(oneHundred, RoundingMode.HALF_UP);
+        return getTithingPercentage().multiply(amount).divide(ONE_HUNDRED, RoundingMode.HALF_UP);
     }
 
     @Override

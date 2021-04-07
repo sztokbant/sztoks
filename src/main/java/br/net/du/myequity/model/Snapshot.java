@@ -6,7 +6,6 @@ import static java.util.stream.Collectors.toSet;
 
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.account.CreditCardAccount;
 import br.net.du.myequity.model.account.TithingAccount;
 import br.net.du.myequity.model.transaction.DonationTransaction;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
@@ -377,7 +376,7 @@ public class Snapshot implements Comparable<Snapshot> {
                 .orElse(BigDecimal.ZERO);
     }
 
-    private BigDecimal toBaseCurrency(final CurrencyUnit currencyUnit, final BigDecimal amount) {
+    public BigDecimal toBaseCurrency(final CurrencyUnit currencyUnit, final BigDecimal amount) {
         if (currencyUnit.equals(getBaseCurrencyUnit())) {
             return amount;
         }
@@ -385,73 +384,6 @@ public class Snapshot implements Comparable<Snapshot> {
         return amount.divide(
                         currencyConversionRates.get(currencyUnit.getCode()), RoundingMode.HALF_UP)
                 .setScale(2, RoundingMode.HALF_UP);
-    }
-
-    /** Create transient CreditCardSnapshot objects aggregated by currency unit. */
-    public Map<CurrencyUnit, CreditCardAccount> getCreditCardTotals() {
-        final Map<CurrencyUnit, CreditCardAccount> creditCardTotals = new HashMap<>();
-
-        for (final Account account : accounts) {
-            if (!(account instanceof CreditCardAccount)) {
-                continue;
-            }
-
-            final CreditCardAccount creditCardSnapshot = (CreditCardAccount) account;
-            final CurrencyUnit currencyUnit = creditCardSnapshot.getCurrencyUnit();
-
-            if (!creditCardTotals.containsKey(currencyUnit)) {
-                creditCardTotals.put(currencyUnit, creditCardSnapshot.copy());
-            } else {
-                final CreditCardAccount creditCardSnapshotForCurrency =
-                        creditCardTotals.get(currencyUnit);
-                updateCreditCardSnapshotForCurrency(
-                        creditCardSnapshot, creditCardSnapshotForCurrency);
-                creditCardTotals.put(currencyUnit, creditCardSnapshotForCurrency);
-            }
-        }
-
-        return creditCardTotals;
-    }
-
-    /** Create transient CreditCardSnapshot object for specified currency unit. */
-    public CreditCardAccount getCreditCardTotalsForCurrencyUnit(
-            @NonNull final CurrencyUnit currencyUnit) {
-        CreditCardAccount creditCardTotalsForCurrencyUnit = null;
-
-        for (final Account account : accounts) {
-            if (!(account instanceof CreditCardAccount)
-                    || !account.getCurrencyUnit().equals(currencyUnit)) {
-                continue;
-            }
-
-            final CreditCardAccount creditCardSnapshot = (CreditCardAccount) account;
-
-            if (creditCardTotalsForCurrencyUnit == null) {
-                creditCardTotalsForCurrencyUnit = creditCardSnapshot.copy();
-            } else {
-                updateCreditCardSnapshotForCurrency(
-                        creditCardSnapshot, creditCardTotalsForCurrencyUnit);
-            }
-        }
-
-        return creditCardTotalsForCurrencyUnit;
-    }
-
-    private void updateCreditCardSnapshotForCurrency(
-            final CreditCardAccount creditCardSnapshot,
-            final CreditCardAccount creditCardSnapshotForCurrency) {
-        creditCardSnapshotForCurrency.setAvailableCredit(
-                creditCardSnapshotForCurrency
-                        .getAvailableCredit()
-                        .add(creditCardSnapshot.getAvailableCredit()));
-        creditCardSnapshotForCurrency.setTotalCredit(
-                creditCardSnapshotForCurrency
-                        .getTotalCredit()
-                        .add(creditCardSnapshot.getTotalCredit()));
-        creditCardSnapshotForCurrency.setStatement(
-                creditCardSnapshotForCurrency
-                        .getStatement()
-                        .add(creditCardSnapshot.getStatement()));
     }
 
     @Override

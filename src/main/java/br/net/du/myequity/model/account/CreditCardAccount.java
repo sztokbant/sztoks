@@ -1,5 +1,7 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.util.ModelConstants.ONE_HUNDRED;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -75,9 +77,8 @@ public class CreditCardAccount extends Account {
             return BigDecimal.ZERO;
         }
 
-        final BigDecimal oneHundred = new BigDecimal("100.00");
         return (totalCredit.subtract(availableCredit))
-                .multiply(oneHundred)
+                .multiply(ONE_HUNDRED)
                 .divide(totalCredit, RoundingMode.HALF_UP);
     }
 

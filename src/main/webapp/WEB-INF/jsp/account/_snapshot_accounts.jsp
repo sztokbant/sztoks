@@ -64,6 +64,7 @@
                 <c:forEach var="entity" items="${snapshot.investmentAccounts}">
                     <%@ include file="_snapshot_investment_line_item.jsp" %>
                 </c:forEach>
+                <%@ include file="_snapshot_investments_total.jsp" %>
             </c:when>
         </c:choose>
     </div>

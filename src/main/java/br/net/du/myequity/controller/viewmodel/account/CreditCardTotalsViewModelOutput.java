@@ -1,5 +1,7 @@
-package br.net.du.myequity.controller.viewmodel;
+package br.net.du.myequity.controller.viewmodel.account;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.ZERO;
+import static br.net.du.myequity.controller.util.ControllerConstants.ZERO_PERCENT;
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
@@ -15,9 +17,6 @@ import org.joda.money.CurrencyUnit;
 @Builder
 public class CreditCardTotalsViewModelOutput {
 
-    private static final String ZERO = "0.00";
-    private static final String ZERO_PERCENT = "0.00%";
-
     private final String balance;
 
     private final String totalCredit;
@@ -26,20 +25,20 @@ public class CreditCardTotalsViewModelOutput {
     private final String remainingBalance;
     private final String usedCreditPercentage;
 
-    public static CreditCardTotalsViewModelOutput of(final CreditCardAccount creditCardSnapshot) {
-        final CurrencyUnit currencyUnit = creditCardSnapshot.getCurrencyUnit();
+    public static CreditCardTotalsViewModelOutput of(final CreditCardAccount creditCardTotals) {
+        final CurrencyUnit currencyUnit = creditCardTotals.getCurrencyUnit();
 
-        final String balance = format(currencyUnit, toDecimal(creditCardSnapshot.getBalance()));
+        final String balance = format(currencyUnit, toDecimal(creditCardTotals.getBalance()));
 
         final String totalCredit =
-                format(currencyUnit, toDecimal(creditCardSnapshot.getTotalCredit()));
+                format(currencyUnit, toDecimal(creditCardTotals.getTotalCredit()));
         final String availableCredit =
-                format(currencyUnit, toDecimal(creditCardSnapshot.getAvailableCredit()));
-        final String statement = format(currencyUnit, toDecimal(creditCardSnapshot.getStatement()));
+                format(currencyUnit, toDecimal(creditCardTotals.getAvailableCredit()));
+        final String statement = format(currencyUnit, toDecimal(creditCardTotals.getStatement()));
         final String remainingBalance =
-                format(currencyUnit, toDecimal(creditCardSnapshot.getRemainingBalance()));
+                format(currencyUnit, toDecimal(creditCardTotals.getRemainingBalance()));
         final String usedCreditPercentage =
-                formatAsPercentage(creditCardSnapshot.getUsedCreditPercentage());
+                formatAsPercentage(creditCardTotals.getUsedCreditPercentage());
 
         return new CreditCardTotalsViewModelOutput(
                 balance,

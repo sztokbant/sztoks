@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller.viewmodel;
 
+import br.net.du.myequity.controller.viewmodel.account.CreditCardTotalsViewModelOutput;
 import lombok.Builder;
 import lombok.Data;
 

@@ -4,10 +4,9 @@ import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercent
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
-import br.net.du.myequity.controller.viewmodel.CreditCardTotalsViewModelOutput;
-import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.CreditCardAccount;
+import br.net.du.myequity.model.totals.SnapshotTotalsCalculator;
 import lombok.Getter;
 import org.joda.money.CurrencyUnit;
 
@@ -56,10 +55,12 @@ public class CreditCardAccountViewModelOutput extends AccountViewModelOutput {
 
         final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit;
         if (includeTotals) {
-            final Snapshot snapshot = account.getSnapshot();
+            final SnapshotTotalsCalculator snapshotTotalsCalculator =
+                    new SnapshotTotalsCalculator(account.getSnapshot());
             creditCardTotalsForCurrencyUnit =
                     CreditCardTotalsViewModelOutput.of(
-                            snapshot.getCreditCardTotalsForCurrencyUnit(currencyUnit));
+                            snapshotTotalsCalculator.getCreditCardTotalsForCurrencyUnit(
+                                    currencyUnit));
         } else {
             creditCardTotalsForCurrencyUnit = null;
         }

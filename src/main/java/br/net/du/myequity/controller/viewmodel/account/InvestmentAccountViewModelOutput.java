@@ -43,7 +43,7 @@ public class InvestmentAccountViewModelOutput extends AccountViewModelOutput {
 
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
 
-        final String amountIvested =
+        final String amountInvested =
                 format(currencyUnit, toDecimal(investmentAccount.getAmountInvested()));
 
         final String averagePurchasePrice =
@@ -57,7 +57,7 @@ public class InvestmentAccountViewModelOutput extends AccountViewModelOutput {
         return new InvestmentAccountViewModelOutput(
                 AccountViewModelOutput.of(account, includeTotals),
                 shares,
-                amountIvested,
+                amountInvested,
                 averagePurchasePrice,
                 currentShareValue,
                 profitPercentage);
