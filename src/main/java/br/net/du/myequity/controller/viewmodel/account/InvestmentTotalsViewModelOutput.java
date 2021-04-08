@@ -1,7 +1,5 @@
 package br.net.du.myequity.controller.viewmodel.account;
 
-import static br.net.du.myequity.controller.util.ControllerConstants.ZERO;
-import static br.net.du.myequity.controller.util.ControllerConstants.ZERO_PERCENT;
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
@@ -31,13 +29,5 @@ public class InvestmentTotalsViewModelOutput {
         final String balance = format(currencyUnit, toDecimal(investmentTotals.getBalance()));
 
         return new InvestmentTotalsViewModelOutput(amountInvested, profitPercentage, balance);
-    }
-
-    public static InvestmentTotalsViewModelOutput newEmptyInstance() {
-        return InvestmentTotalsViewModelOutput.builder()
-                .amountInvested(ZERO)
-                .profitPercentage(ZERO_PERCENT)
-                .balance(ZERO)
-                .build();
     }
 }

@@ -1,5 +1,6 @@
 package br.net.du.myequity.model;
 
+import static br.net.du.myequity.model.util.ModelConstants.DIVISION_SCALE;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
@@ -382,8 +383,9 @@ public class Snapshot implements Comparable<Snapshot> {
         }
 
         return amount.divide(
-                        currencyConversionRates.get(currencyUnit.getCode()), RoundingMode.HALF_UP)
-                .setScale(2, RoundingMode.HALF_UP);
+                currencyConversionRates.get(currencyUnit.getCode()),
+                DIVISION_SCALE,
+                RoundingMode.HALF_UP);
     }
 
     @Override

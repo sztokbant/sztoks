@@ -1,5 +1,6 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.util.ModelConstants.DIVISION_SCALE;
 import static br.net.du.myequity.model.util.ModelConstants.ONE_HUNDRED;
 
 import java.math.BigDecimal;
@@ -83,7 +84,7 @@ public class InvestmentAccount extends Account {
         }
         return (currentShareValue
                         .multiply(ONE_HUNDRED)
-                        .divide(averagePurchasePrice, RoundingMode.HALF_UP))
+                        .divide(averagePurchasePrice, DIVISION_SCALE, RoundingMode.HALF_UP))
                 .subtract(ONE_HUNDRED);
     }
 
@@ -91,6 +92,6 @@ public class InvestmentAccount extends Account {
         if (shares.compareTo(BigDecimal.ZERO) == 0) {
             return BigDecimal.ZERO;
         }
-        return amountInvested.divide(shares, RoundingMode.HALF_UP);
+        return amountInvested.divide(shares, DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 }

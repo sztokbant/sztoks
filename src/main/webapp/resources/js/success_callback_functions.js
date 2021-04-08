@@ -41,15 +41,18 @@ function creditCardStatementUpdateSuccessCallback(data, result) {
 function investmentSharesUpdateSuccessCallback(data, result) {
   $("#investment_shares_" + data.entityId).html(result.shares);
   $("#investment_average_purchase_price_" + data.entityId).html(result.averagePurchasePrice);
+  $("#investment_profit_percentage_" + data.entityId).html(result.profitPercentage);
   $("#investment_balance_" + data.entityId).html(result.balance);
   $("#snapshot_net_worth").html(result.netWorth);
   $("#total_" + result.accountType).html(result.totalForAccountType);
+  updateSnapshotInvestmentTotals(result);
 }
 
 function investmentAmountInvestedUpdateSuccessCallback(data, result) {
   $("#investment_amount_invested_" + data.entityId).html(result.amountInvested);
   $("#investment_average_purchase_price_" + data.entityId).html(result.averagePurchasePrice);
   $("#investment_profit_percentage_" + data.entityId).html(result.profitPercentage);
+  updateSnapshotInvestmentTotals(result);
 }
 
 function investmentCurrentShareValueUpdateSuccessCallback(data, result) {
@@ -58,6 +61,7 @@ function investmentCurrentShareValueUpdateSuccessCallback(data, result) {
   $("#investment_balance_" + data.entityId).html(result.balance);
   $("#snapshot_net_worth").html(result.netWorth);
   $("#total_" + result.accountType).html(result.totalForAccountType);
+  updateSnapshotInvestmentTotals(result);
 }
 
 function payableDueDateUpdateSuccessCallback(data, result) {

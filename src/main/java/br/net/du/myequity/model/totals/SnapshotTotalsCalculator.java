@@ -1,5 +1,6 @@
 package br.net.du.myequity.model.totals;
 
+import static br.net.du.myequity.model.util.ModelConstants.DIVISION_SCALE;
 import static br.net.du.myequity.model.util.ModelConstants.ONE_HUNDRED;
 
 import br.net.du.myequity.model.Snapshot;
@@ -53,7 +54,7 @@ public class SnapshotTotalsCalculator {
                 totalInvested.compareTo(BigDecimal.ZERO) == 0
                         ? BigDecimal.ZERO
                         : totalBalance
-                                .divide(totalInvested, RoundingMode.HALF_UP)
+                                .divide(totalInvested, DIVISION_SCALE, RoundingMode.HALF_UP)
                                 .subtract(BigDecimal.ONE)
                                 .multiply(ONE_HUNDRED);
 

@@ -82,14 +82,12 @@ class InvestmentAccountAmountInvestedUpdateControllerTest extends AccountAjaxCon
         final String expectedProfitPercentage = "53.79%";
         assertEquals(expectedProfitPercentage, jsonNode.get(JSON_PROFIT_PERCENTAGE).asText());
 
-        final BigDecimal expectedAccountBalance =
-                CURRENT_SHARES.multiply(CURRENT_CURRENT_SHARE_VALUE).setScale(2);
         assertEquals("$3,388.32", jsonNode.get(JSON_BALANCE).asText());
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
-        assertEquals("null", jsonNode.get(JSON_NET_WORTH).asText());
-        assertEquals("null", jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals("null", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertEquals("$3,388.32", jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals("ASSET", jsonNode.get(JSON_ACCOUNT_TYPE).asText());
+        assertEquals("$3,388.32", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
     }
 }

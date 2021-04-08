@@ -19,4 +19,8 @@ function removeAccountFromSnapshotSuccessCallback(data, result) {
   if (result.creditCardTotalsForCurrencyUnit != null) {
     updateSnapshotCreditCardTotals(result);
   }
+
+  if (result.investmentTotals != null) {
+    updateSnapshotInvestmentTotals(result);
+  }
 }

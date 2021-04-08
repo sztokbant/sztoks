@@ -12,3 +12,9 @@ function updateSnapshotCreditCardTotals(result) {
   $("#snapshot_credit_card_balance_" + result.currencyUnit)
     .html(result.creditCardTotalsForCurrencyUnit.balance);
 }
+
+function updateSnapshotInvestmentTotals(result) {
+  $("#snapshot_investments_amount_invested").html(result.investmentTotals.amountInvested);
+  $("#snapshot_investments_profit_percentage").html(result.investmentTotals.profitPercentage);
+  $("#snapshot_investments_balance").html(result.investmentTotals.balance);
+}

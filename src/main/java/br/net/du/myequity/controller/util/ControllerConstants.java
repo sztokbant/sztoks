@@ -18,8 +18,4 @@ public class ControllerConstants {
     public static final String CURRENCIES = "currencies";
     public static final CurrencyUnit DEFAULT_CURRENCY_UNIT = CurrencyUnit.USD;
     public static final String SELECTED_CURRENCY = "selectedCurrency";
-
-    // ViewModel
-    public static final String ZERO = "0.00";
-    public static final String ZERO_PERCENT = "0.00%";
 }

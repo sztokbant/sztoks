@@ -49,7 +49,7 @@ public class InvestmentUpdateController extends AccountUpdateControllerBase {
                             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
                             investmentAccount.setAmountInvested(newValue);
 
-                            return InvestmentAccountViewModelOutput.of(investmentAccount);
+                            return InvestmentAccountViewModelOutput.of(investmentAccount, true);
                         };
 
         return updateAccountField(
