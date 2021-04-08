@@ -16,11 +16,11 @@ function removeAccountFromSnapshotSuccessCallback(data, result) {
   $("#total_" + result.accountType).html(result.totalForAccountType);
   $("#account_row_" + result.accountId).hide();
 
-  if (result.creditCardTotalsForCurrencyUnit != null) {
-    updateSnapshotCreditCardTotals(result);
-  }
-
-  if (result.investmentTotals != null) {
+  if (result.accountSubtype != null) {
+    $("#snapshot_" + result.accountSubtype + "_balance").html(result.totalForAccountSubtype);
+  } if (result.investmentTotals != null) {
     updateSnapshotInvestmentTotals(result);
+  } else if (result.creditCardTotalsForCurrencyUnit != null) {
+    updateSnapshotCreditCardTotals(result);
   }
 }

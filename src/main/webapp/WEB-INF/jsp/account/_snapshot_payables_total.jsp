@@ -24,6 +24,6 @@
         &nbsp;
     </div>
 
-    <div class="col col-cell align-right"><b><span id="snapshot_payables_balance">${snapshot.payablesBalance}</span></b>
+    <div class="col col-cell align-right"><b><span id="snapshot_PAYABLE_balance">${snapshot.payablesBalance}</span></b>
     </div>
 </div>

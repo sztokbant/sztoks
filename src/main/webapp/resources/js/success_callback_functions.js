@@ -10,6 +10,7 @@ function accountBalanceUpdateSuccessCallback(data, result) {
   $("#account_balance_" + data.entityId).html(result.balance);
   $("#snapshot_net_worth").html(result.netWorth);
   $("#total_" + result.accountType).html(result.totalForAccountType);
+  $("#snapshot_" + result.accountSubtype + "_balance").html(result.totalForAccountSubtype);
 }
 
 function creditCardTotalCreditUpdateSuccessCallback(data, result) {
