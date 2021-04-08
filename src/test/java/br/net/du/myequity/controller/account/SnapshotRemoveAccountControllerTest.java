@@ -83,8 +83,8 @@ class SnapshotRemoveAccountControllerTest extends AccountAjaxControllerTestBase 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
-        assertEquals("0.00", jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals("$0.00", jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals("0.00", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertEquals("$0.00", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
     }
 }
