@@ -63,7 +63,7 @@ public class InvestmentAccountViewModelOutput extends AccountViewModelOutput {
                 includeTotals
                         ? InvestmentTotalsViewModelOutput.of(
                                 new SnapshotTotalsCalculator(account.getSnapshot())
-                                        .getInvestmentTotals())
+                                        .getInvestmentsTotal())
                         : null;
 
         return new InvestmentAccountViewModelOutput(

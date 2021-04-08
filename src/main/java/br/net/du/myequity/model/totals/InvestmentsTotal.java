@@ -7,7 +7,7 @@ import org.joda.money.CurrencyUnit;
 
 @AllArgsConstructor
 @Data
-public class InvestmentTotals {
+public class InvestmentsTotal {
 
     private final CurrencyUnit currencyUnit;
     private final BigDecimal amountInvested;

@@ -21,7 +21,7 @@ import org.joda.money.CurrencyUnit;
 public class SnapshotTotalsCalculator {
     private final Snapshot snapshot;
 
-    public InvestmentTotals getInvestmentTotals() {
+    public InvestmentsTotal getInvestmentsTotal() {
         final CurrencyUnit baseCurrencyUnit = snapshot.getBaseCurrencyUnit();
 
         BigDecimal totalInvested = BigDecimal.ZERO;
@@ -58,12 +58,12 @@ public class SnapshotTotalsCalculator {
                                 .subtract(BigDecimal.ONE)
                                 .multiply(ONE_HUNDRED);
 
-        return new InvestmentTotals(
+        return new InvestmentsTotal(
                 baseCurrencyUnit, totalInvested, profitPercentage, totalBalance);
     }
 
-    public Map<CurrencyUnit, CreditCardTotals> getCreditCardTotalsByCurrency() {
-        final Map<CurrencyUnit, CreditCardTotals> creditCardTotals = new HashMap<>();
+    public Map<CurrencyUnit, CreditCardsTotal> getCreditCardsTotalByCurrency() {
+        final Map<CurrencyUnit, CreditCardsTotal> creditCardsTotal = new HashMap<>();
 
         for (final Account account : snapshot.getAccounts()) {
             if (!(account instanceof CreditCardAccount)) {
@@ -72,26 +72,26 @@ public class SnapshotTotalsCalculator {
 
             final CurrencyUnit currencyUnit = account.getCurrencyUnit();
 
-            if (!creditCardTotals.containsKey(currencyUnit)) {
-                creditCardTotals.put(
+            if (!creditCardsTotal.containsKey(currencyUnit)) {
+                creditCardsTotal.put(
                         currencyUnit,
-                        new CreditCardTotals(
+                        new CreditCardsTotal(
                                 currencyUnit, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO));
             }
 
-            final CreditCardTotals creditCardTotalsForCurrency = creditCardTotals.get(currencyUnit);
-            updateCreditCardTotals(creditCardTotalsForCurrency, (CreditCardAccount) account);
+            final CreditCardsTotal creditCardsTotalForCurrency = creditCardsTotal.get(currencyUnit);
+            updateCreditCardsTotal(creditCardsTotalForCurrency, (CreditCardAccount) account);
 
-            creditCardTotals.put(currencyUnit, creditCardTotalsForCurrency);
+            creditCardsTotal.put(currencyUnit, creditCardsTotalForCurrency);
         }
 
-        return creditCardTotals;
+        return creditCardsTotal;
     }
 
-    public CreditCardTotals getCreditCardTotalsForCurrency(
+    public CreditCardsTotal getCreditCardsTotalForCurrency(
             @NonNull final CurrencyUnit currencyUnit) {
-        final CreditCardTotals creditCardTotals =
-                new CreditCardTotals(
+        final CreditCardsTotal creditCardsTotal =
+                new CreditCardsTotal(
                         currencyUnit, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
 
         for (final Account account : snapshot.getAccounts()) {
@@ -100,14 +100,14 @@ public class SnapshotTotalsCalculator {
                 continue;
             }
 
-            updateCreditCardTotals(creditCardTotals, (CreditCardAccount) account);
+            updateCreditCardsTotal(creditCardsTotal, (CreditCardAccount) account);
         }
 
-        return creditCardTotals;
+        return creditCardsTotal;
     }
 
-    private void updateCreditCardTotals(
-            final CreditCardTotals creditCardTotals, final CreditCardAccount creditCardAccount) {
+    private void updateCreditCardsTotal(
+            final CreditCardsTotal creditCardTotals, final CreditCardAccount creditCardAccount) {
         creditCardTotals.setTotalCredit(
                 creditCardTotals.getTotalCredit().add(creditCardAccount.getTotalCredit()));
         creditCardTotals.setAvailableCredit(

@@ -4,7 +4,7 @@ import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercent
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
-import br.net.du.myequity.model.totals.InvestmentTotals;
+import br.net.du.myequity.model.totals.InvestmentsTotal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class InvestmentTotalsViewModelOutput {
     private final String profitPercentage;
     private final String balance;
 
-    public static InvestmentTotalsViewModelOutput of(final InvestmentTotals investmentTotals) {
+    public static InvestmentTotalsViewModelOutput of(final InvestmentsTotal investmentTotals) {
         final CurrencyUnit currencyUnit = investmentTotals.getCurrencyUnit();
 
         final String amountInvested =

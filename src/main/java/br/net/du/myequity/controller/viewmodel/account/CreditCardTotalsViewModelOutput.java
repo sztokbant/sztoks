@@ -4,7 +4,7 @@ import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercent
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
-import br.net.du.myequity.model.totals.CreditCardTotals;
+import br.net.du.myequity.model.totals.CreditCardsTotal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class CreditCardTotalsViewModelOutput {
     private final String remainingBalance;
     private final String usedCreditPercentage;
 
-    public static CreditCardTotalsViewModelOutput of(final CreditCardTotals creditCardTotals) {
+    public static CreditCardTotalsViewModelOutput of(final CreditCardsTotal creditCardTotals) {
         final CurrencyUnit currencyUnit = creditCardTotals.getCurrencyUnit();
 
         final String balance = format(currencyUnit, toDecimal(creditCardTotals.getBalance()));

@@ -8,7 +8,7 @@ import org.joda.money.CurrencyUnit;
 
 @AllArgsConstructor
 @Data
-public class CreditCardTotals {
+public class CreditCardsTotal {
 
     private final CurrencyUnit currencyUnit;
 

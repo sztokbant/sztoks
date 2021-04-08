@@ -38,13 +38,13 @@ public class RemoveAccountController extends AccountUpdateControllerBase {
         final InvestmentTotalsViewModelOutput investmentTotals =
                 (account instanceof InvestmentAccount)
                         ? InvestmentTotalsViewModelOutput.of(
-                                snapshotTotalsCalculator.getInvestmentTotals())
+                                snapshotTotalsCalculator.getInvestmentsTotal())
                         : null;
 
         final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit =
                 (account instanceof CreditCardAccount)
                         ? CreditCardTotalsViewModelOutput.of(
-                                snapshotTotalsCalculator.getCreditCardTotalsForCurrency(
+                                snapshotTotalsCalculator.getCreditCardsTotalForCurrency(
                                         currencyUnit))
                         : null;
 

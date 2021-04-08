@@ -16,8 +16,8 @@ import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelO
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.totals.CreditCardTotals;
-import br.net.du.myequity.model.totals.InvestmentTotals;
+import br.net.du.myequity.model.totals.CreditCardsTotal;
+import br.net.du.myequity.model.totals.InvestmentsTotal;
 import br.net.du.myequity.model.totals.SnapshotTotalsCalculator;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
@@ -76,9 +76,9 @@ public class SnapshotViewModelOutput {
         final SnapshotTotalsCalculator snapshotTotalsCalculator =
                 new SnapshotTotalsCalculator(snapshot);
 
-        final Map<CurrencyUnit, CreditCardTotals> creditCardTotals =
-                snapshotTotalsCalculator.getCreditCardTotalsByCurrency();
-        final InvestmentTotals investmentTotals = snapshotTotalsCalculator.getInvestmentTotals();
+        final Map<CurrencyUnit, CreditCardsTotal> creditCardTotals =
+                snapshotTotalsCalculator.getCreditCardsTotalByCurrency();
+        final InvestmentsTotal investmentTotals = snapshotTotalsCalculator.getInvestmentsTotal();
 
         Long previousId = null;
         String previousName = null;
@@ -146,7 +146,7 @@ public class SnapshotViewModelOutput {
     }
 
     private static Map<String, CreditCardTotalsViewModelOutput> getCurrencyUnitCreditCardViewModels(
-            final Map<CurrencyUnit, CreditCardTotals> creditCardTotalsByCurrency) {
+            final Map<CurrencyUnit, CreditCardsTotal> creditCardTotalsByCurrency) {
         final Map<String, CreditCardTotalsViewModelOutput> creditCardTotalsViewModel =
                 new HashMap<>();
 
