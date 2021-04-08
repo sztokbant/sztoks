@@ -5,6 +5,7 @@ import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.totals.BalanceUpdateableSubtype;
 import org.joda.money.CurrencyUnit;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,21 +25,30 @@ public class RemoveAccountController extends AccountUpdateControllerBase {
         snapshotService.save(snapshot);
 
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
+        final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot);
 
-        final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot, account);
+        final BalanceUpdateableSubtype balanceUpdateableSubtype =
+                BalanceUpdateableSubtype.forClass(account.getClass());
 
         return SnapshotRemoveAccountJsonResponse.builder()
                 .accountId(account.getId())
                 .currencyUnit(currencyUnit.getCode())
                 .currencyUnitSymbol(currencyUnit.getSymbol())
                 .netWorth(updateableTotals.getNetWorth())
-                .accountType(updateableTotals.getAccountType())
-                .totalForAccountType(updateableTotals.getTotalForAccountType())
-                .accountSubtype(updateableTotals.getBalanceUpdateableSubtype())
-                .totalForAccountSubtype(updateableTotals.getTotalForAccountSubtype())
+                .accountType(account.getAccountType().name())
+                .totalForAccountType(
+                        updateableTotals.getTotalForAccountType(account.getAccountType()))
+                .accountSubtype(
+                        balanceUpdateableSubtype == null ? null : balanceUpdateableSubtype.name())
+                .totalForAccountSubtype(
+                        balanceUpdateableSubtype == null
+                                ? null
+                                : updateableTotals.getTotalForAccountSubtype(
+                                        balanceUpdateableSubtype))
                 .investmentTotals(updateableTotals.getInvestmentTotals())
                 .creditCardTotalsForCurrencyUnit(
-                        updateableTotals.getCreditCardTotalsForCurrencyUnit())
+                        updateableTotals.getCreditCardTotalsForCurrencyUnit(
+                                account.getCurrencyUnit()))
                 .build();
     }
 }

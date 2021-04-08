@@ -44,6 +44,6 @@ public enum BalanceUpdateableSubtype {
             return PAYABLE;
         }
 
-        throw new IllegalArgumentException("Unsupported: " + clazz.getName());
+        return null;
     }
 }

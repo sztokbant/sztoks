@@ -6,6 +6,7 @@ import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.totals.BalanceUpdateableSubtype;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -64,16 +65,27 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
                         .currencyUnitSymbol(currencyUnit.getSymbol());
 
         if (includeTotals) {
-            final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot, account);
+            final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot);
+            final BalanceUpdateableSubtype balanceUpdateableSubtype =
+                    BalanceUpdateableSubtype.forClass(account.getClass());
 
             builder.netWorth(updateableTotals.getNetWorth())
-                    .accountType(updateableTotals.getAccountType())
-                    .totalForAccountType(updateableTotals.getTotalForAccountType())
-                    .accountSubtype(updateableTotals.getBalanceUpdateableSubtype())
-                    .totalForAccountSubtype(updateableTotals.getTotalForAccountSubtype())
+                    .accountType(account.getAccountType().name())
+                    .totalForAccountType(
+                            updateableTotals.getTotalForAccountType(account.getAccountType()))
+                    .accountSubtype(
+                            balanceUpdateableSubtype == null
+                                    ? null
+                                    : balanceUpdateableSubtype.name())
+                    .totalForAccountSubtype(
+                            balanceUpdateableSubtype == null
+                                    ? null
+                                    : updateableTotals.getTotalForAccountSubtype(
+                                            balanceUpdateableSubtype))
                     .investmentTotals(updateableTotals.getInvestmentTotals())
                     .creditCardTotalsForCurrencyUnit(
-                            updateableTotals.getCreditCardTotalsForCurrencyUnit());
+                            updateableTotals.getCreditCardTotalsForCurrencyUnit(
+                                    account.getCurrencyUnit()));
         }
 
         return builder.build();

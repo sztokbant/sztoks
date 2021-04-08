@@ -6,69 +6,45 @@ import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 import br.net.du.myequity.controller.viewmodel.account.CreditCardTotalsViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.InvestmentTotalsViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
-import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.account.CreditCardAccount;
-import br.net.du.myequity.model.account.InvestmentAccount;
 import br.net.du.myequity.model.totals.BalanceUpdateableSubtype;
 import br.net.du.myequity.model.totals.SnapshotTotalsCalculator;
-import lombok.Data;
+import lombok.Getter;
+import org.joda.money.CurrencyUnit;
 
-@Data
 public class UpdateableTotals {
-    private final String netWorth;
-    private final String accountType;
-    private final String totalForAccountType;
-    private final String balanceUpdateableSubtype;
-    private final String totalForAccountSubtype;
-    private final InvestmentTotalsViewModelOutput investmentTotals;
-    private final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit;
+    private final Snapshot snapshot;
+    private final SnapshotTotalsCalculator snapshotTotalsCalculator;
 
-    public UpdateableTotals(final Snapshot snapshot, final Account account) {
+    @Getter private final String netWorth;
+
+    public UpdateableTotals(final Snapshot snapshot) {
+        this.snapshot = snapshot;
+        snapshotTotalsCalculator = new SnapshotTotalsCalculator(snapshot);
         netWorth = format(snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getNetWorth()));
+    }
 
-        final AccountType accountType = account.getAccountType();
-        this.accountType = accountType.name();
+    public String getTotalForAccountType(final AccountType accountType) {
+        return format(snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getTotalFor(accountType)));
+    }
 
-        totalForAccountType =
-                format(
-                        snapshot.getBaseCurrencyUnit(),
-                        toDecimal(snapshot.getTotalFor(accountType)));
+    public String getTotalForAccountSubtype(
+            final BalanceUpdateableSubtype balanceUpdateableSubtype) {
+        return format(
+                snapshot.getBaseCurrencyUnit(),
+                toDecimal(
+                        snapshotTotalsCalculator
+                                .getTotalBalance(balanceUpdateableSubtype)
+                                .getTotalBalance()));
+    }
 
-        final SnapshotTotalsCalculator snapshotTotalsCalculator =
-                new SnapshotTotalsCalculator(snapshot);
+    public InvestmentTotalsViewModelOutput getInvestmentTotals() {
+        return InvestmentTotalsViewModelOutput.of(snapshotTotalsCalculator.getInvestmentsTotal());
+    }
 
-        BalanceUpdateableSubtype balanceUpdateableSubtype;
-        try {
-            balanceUpdateableSubtype = BalanceUpdateableSubtype.forClass(account.getClass());
-        } catch (final IllegalArgumentException e) {
-            balanceUpdateableSubtype = null;
-        }
-
-        this.balanceUpdateableSubtype =
-                balanceUpdateableSubtype != null ? balanceUpdateableSubtype.name() : null;
-
-        totalForAccountSubtype =
-                balanceUpdateableSubtype != null
-                        ? format(
-                                snapshot.getBaseCurrencyUnit(),
-                                toDecimal(
-                                        snapshotTotalsCalculator
-                                                .getTotalBalance(balanceUpdateableSubtype)
-                                                .getTotalBalance()))
-                        : null;
-
-        investmentTotals =
-                account instanceof InvestmentAccount
-                        ? InvestmentTotalsViewModelOutput.of(
-                                snapshotTotalsCalculator.getInvestmentsTotal())
-                        : null;
-
-        creditCardTotalsForCurrencyUnit =
-                account instanceof CreditCardAccount
-                        ? CreditCardTotalsViewModelOutput.of(
-                                snapshotTotalsCalculator.getCreditCardsTotalForCurrency(
-                                        account.getCurrencyUnit()))
-                        : null;
+    public CreditCardTotalsViewModelOutput getCreditCardTotalsForCurrencyUnit(
+            final CurrencyUnit currencyUnit) {
+        return CreditCardTotalsViewModelOutput.of(
+                snapshotTotalsCalculator.getCreditCardsTotalForCurrency(currencyUnit));
     }
 }
