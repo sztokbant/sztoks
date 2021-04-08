@@ -28,6 +28,9 @@
                 <c:forEach var="entity" items="${snapshot.simpleAssetAccounts}">
                     <%@ include file="_snapshot_simple_asset_line_item.jsp" %>
                 </c:forEach>
+                <c:if test="${snapshot.simpleAssetAccounts.size() gt 1}">
+                    <%@ include file="_snapshot_simple_assets_total.jsp" %>
+                </c:if>
             </c:when>
         </c:choose>
 
@@ -46,6 +49,9 @@
                 <c:forEach var="entity" items="${snapshot.receivableAccounts}">
                     <%@ include file="_snapshot_receivable_line_item.jsp" %>
                 </c:forEach>
+                <c:if test="${snapshot.receivableAccounts.size() gt 1}">
+                    <%@ include file="_snapshot_receivables_total.jsp" %>
+                </c:if>
             </c:when>
         </c:choose>
 
@@ -64,7 +70,9 @@
                 <c:forEach var="entity" items="${snapshot.investmentAccounts}">
                     <%@ include file="_snapshot_investment_line_item.jsp" %>
                 </c:forEach>
-                <%@ include file="_snapshot_investments_total.jsp" %>
+                <c:if test="${snapshot.investmentAccounts.size() gt 1}">
+                    <%@ include file="_snapshot_investments_total.jsp" %>
+                </c:if>
             </c:when>
         </c:choose>
     </div>
@@ -102,6 +110,10 @@
                 </c:forEach>
             </c:when>
         </c:choose>
+        <%-- Tithing is counted as a SimpleLiability --%>
+        <c:if test="${snapshot.simpleLiabilityAccounts.size() gt 0}">
+            <%@ include file="_snapshot_simple_liabilities_total.jsp" %>
+        </c:if>
 
         <c:choose>
             <c:when test="${not empty snapshot.payableAccounts}">
@@ -118,6 +130,9 @@
                 <c:forEach var="entity" items="${snapshot.payableAccounts}">
                     <%@ include file="_snapshot_payable_line_item.jsp" %>
                 </c:forEach>
+                <c:if test="${snapshot.payableAccounts.size() gt 1}">
+                    <%@ include file="_snapshot_payables_total.jsp" %>
+                </c:if>
             </c:when>
         </c:choose>
 
@@ -142,7 +157,9 @@
                     <c:set var="currentCurrency" value="${entity.currencyUnit}"/>
                     <%@ include file="_snapshot_credit_card_line_item.jsp" %>
                 </c:forEach>
-                <%@ include file="_snapshot_credit_card_total_for_currency.jsp" %>
+                <c:if test="${snapshot.creditCardAccounts.size() gt 1}">
+                    <%@ include file="_snapshot_credit_card_total_for_currency.jsp" %>
+                </c:if>
             </c:when>
         </c:choose>
     </div>

@@ -16,6 +16,7 @@ import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelO
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
+import br.net.du.myequity.model.totals.BalanceUpdateableSubtype;
 import br.net.du.myequity.model.totals.CreditCardsTotal;
 import br.net.du.myequity.model.totals.InvestmentsTotal;
 import br.net.du.myequity.model.totals.SnapshotTotalsCalculator;
@@ -40,6 +41,7 @@ import org.joda.money.CurrencyUnit;
 public class SnapshotViewModelOutput {
     private final Long id;
     private final String name;
+
     private final String netWorth;
     private final Map<String, String> currencyConversionRates;
 
@@ -57,12 +59,20 @@ public class SnapshotViewModelOutput {
     private final String nextName;
 
     private final List<AccountViewModelOutput> simpleAssetAccounts;
+    private final String simpleAssetsBalance;
+
     private final List<AccountViewModelOutput> receivableAccounts;
+    private final String receivablesBalance;
+
     private final List<AccountViewModelOutput> investmentAccounts;
     private final InvestmentTotalsViewModelOutput investmentTotals;
 
     private final List<AccountViewModelOutput> simpleLiabilityAccounts;
+    private final String simpleLiabilitiesBalance;
+
     private final List<AccountViewModelOutput> payableAccounts;
+    private final String payablesBalance;
+
     private final List<AccountViewModelOutput> creditCardAccounts;
     private final Map<String, CreditCardTotalsViewModelOutput> creditCardTotals;
 
@@ -96,22 +106,32 @@ public class SnapshotViewModelOutput {
             nextName = next.getName();
         }
 
+        final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot);
         final CurrencyUnit baseCurrencyUnit = snapshot.getBaseCurrencyUnit();
 
         final SnapshotViewModelOutputBuilder builder =
                 SnapshotViewModelOutput.builder()
                         .id(snapshot.getId())
                         .name(snapshot.getName())
-                        .netWorth(format(baseCurrencyUnit, snapshot.getNetWorth()))
+                        .netWorth(updateableTotals.getNetWorth())
                         .currencyConversionRates(
                                 toStringStringMap(snapshot.getCurrencyConversionRates()))
-                        .assetsTotal(
-                                format(baseCurrencyUnit, snapshot.getTotalFor(AccountType.ASSET)))
+                        .assetsTotal(updateableTotals.getTotalForAccountType(AccountType.ASSET))
+                        .simpleAssetsBalance(
+                                updateableTotals.getTotalForAccountSubtype(
+                                        BalanceUpdateableSubtype.SIMPLE_ASSET))
+                        .receivablesBalance(
+                                updateableTotals.getTotalForAccountSubtype(
+                                        BalanceUpdateableSubtype.RECEIVABLE))
                         .investmentTotals(InvestmentTotalsViewModelOutput.of(investmentTotals))
                         .liabilitiesTotal(
-                                format(
-                                        baseCurrencyUnit,
-                                        snapshot.getTotalFor(AccountType.LIABILITY)))
+                                updateableTotals.getTotalForAccountType(AccountType.LIABILITY))
+                        .simpleLiabilitiesBalance(
+                                updateableTotals.getTotalForAccountSubtype(
+                                        BalanceUpdateableSubtype.SIMPLE_LIABILITY))
+                        .payablesBalance(
+                                updateableTotals.getTotalForAccountSubtype(
+                                        BalanceUpdateableSubtype.PAYABLE))
                         .creditCardTotals(getCurrencyUnitCreditCardViewModels(creditCardTotals))
                         .incomeTransactionsTotal(
                                 format(
