@@ -7,7 +7,7 @@
         </div>
 
         <div class="row border-1px-bottom bg-light-yellow">
-            <div class="col col-cell col-account-name">TOTAL</div>
+            <div class="col col-cell col-account-name">ASSETS TOTAL</div>
             <div class="col col-cell align-right">
                 <b><span id="total_ASSET">${snapshot.assetsTotal}</span></b>
             </div>
@@ -76,7 +76,7 @@
         </div>
 
         <div class="row border-1px-bottom bg-light-yellow">
-            <div class="col col-cell col-account-name">TOTAL</div>
+            <div class="col col-cell col-account-name">LIABILITIES TOTAL</div>
             <div class="col col-cell align-right">
                 <b><span id="total_LIABILITY">${snapshot.liabilitiesTotal}</span></b>
             </div>
