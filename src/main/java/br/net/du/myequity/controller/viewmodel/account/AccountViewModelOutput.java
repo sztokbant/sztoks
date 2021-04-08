@@ -6,6 +6,9 @@ import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
+import br.net.du.myequity.model.totals.BalanceUpdateableSubtype;
+import br.net.du.myequity.model.totals.BalanceUpdateableSubtypeTotal;
+import br.net.du.myequity.model.totals.SnapshotTotalsCalculator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +30,9 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
     private final String accountType;
     private final String totalForAccountType;
 
+    private final String accountSubtype;
+    private final String totalForAccountSubtype;
+
     public AccountViewModelOutput(final AccountViewModelOutput other) {
         accountId = other.getAccountId();
         name = other.getName();
@@ -38,6 +44,9 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
         netWorth = other.getNetWorth();
         accountType = other.getAccountType();
         totalForAccountType = other.getTotalForAccountType();
+
+        accountSubtype = other.getAccountSubtype();
+        totalForAccountSubtype = other.getTotalForAccountSubtype();
     }
 
     public static AccountViewModelOutput of(final Account account, final boolean includeTotals) {
@@ -66,6 +75,28 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
             builder.netWorth(netWorth)
                     .accountType(accountType.name())
                     .totalForAccountType(totalForAccountType);
+
+            BalanceUpdateableSubtype balanceUpdateableSubtype = null;
+            String totalForAccountSubtype = null;
+            try {
+                final SnapshotTotalsCalculator snapshotTotalsCalculator =
+                        new SnapshotTotalsCalculator(snapshot);
+
+                balanceUpdateableSubtype = BalanceUpdateableSubtype.forClass(account.getClass());
+                final BalanceUpdateableSubtypeTotal totalBalance =
+                        snapshotTotalsCalculator.getTotalBalance(balanceUpdateableSubtype);
+
+                totalForAccountSubtype =
+                        format(
+                                snapshot.getBaseCurrencyUnit(),
+                                toDecimal(totalBalance.getTotalBalance()));
+            } catch (final IllegalArgumentException e) {
+                // Ignored
+            }
+
+            builder.accountSubtype(
+                    balanceUpdateableSubtype != null ? balanceUpdateableSubtype.name() : null);
+            builder.totalForAccountSubtype(totalForAccountSubtype);
         }
 
         return builder.build();

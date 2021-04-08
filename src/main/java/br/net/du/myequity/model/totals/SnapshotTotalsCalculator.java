@@ -21,6 +21,30 @@ import org.joda.money.CurrencyUnit;
 public class SnapshotTotalsCalculator {
     private final Snapshot snapshot;
 
+    public BalanceUpdateableSubtypeTotal getTotalBalance(
+            final BalanceUpdateableSubtype balanceUpdateableSubtype) {
+        final CurrencyUnit baseCurrencyUnit = snapshot.getBaseCurrencyUnit();
+
+        BigDecimal totalBalance = BigDecimal.ZERO;
+
+        for (final Account account : snapshot.getAccounts()) {
+            if (!balanceUpdateableSubtype.accepts(account.getClass())) {
+                continue;
+            }
+
+            final CurrencyUnit currencyUnit = account.getCurrencyUnit();
+
+            final BigDecimal balance =
+                    currencyUnit.equals(baseCurrencyUnit)
+                            ? account.getBalance()
+                            : snapshot.toBaseCurrency(currencyUnit, account.getBalance());
+
+            totalBalance = totalBalance.add(balance);
+        }
+
+        return new BalanceUpdateableSubtypeTotal(baseCurrencyUnit, totalBalance);
+    }
+
     public InvestmentsTotal getInvestmentsTotal() {
         final CurrencyUnit baseCurrencyUnit = snapshot.getBaseCurrencyUnit();
 
