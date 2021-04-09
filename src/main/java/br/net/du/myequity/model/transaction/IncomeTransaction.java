@@ -48,4 +48,16 @@ public class IncomeTransaction extends Transaction {
         return new IncomeTransaction(
                 date, currency, amount, description, isRecurring, tithingPercentage);
     }
+
+    @Override
+    public void setAmount(final BigDecimal amount) {
+        final BigDecimal oldTithingAmount = getTithingAmount();
+
+        this.amount = amount;
+
+        final BigDecimal newTithingAmount = getTithingAmount();
+
+        final BigDecimal diffTithingAmount = newTithingAmount.subtract(oldTithingAmount);
+        getSnapshot().updateTithingAmount(getCurrencyUnit(), diffTithingAmount);
+    }
 }

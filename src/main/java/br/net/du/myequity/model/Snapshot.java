@@ -268,6 +268,10 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     public void updateTithingAmount(final CurrencyUnit currencyUnit, final BigDecimal plusAmount) {
+        if (plusAmount.compareTo(BigDecimal.ZERO) == 0) {
+            return;
+        }
+
         final TithingAccount tithingAccount = getTithingAccountFor(currencyUnit);
         tithingAccount.setBalance(tithingAccount.getBalance().add(plusAmount));
 

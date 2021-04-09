@@ -38,4 +38,15 @@ public class DonationTransaction extends Transaction {
         return new DonationTransaction(
                 date, currency, amount, description, isRecurring, isTaxDeductible);
     }
+
+    @Override
+    public void setAmount(final BigDecimal amount) {
+        final BigDecimal oldAmount = this.amount;
+        final BigDecimal newAmount = amount;
+
+        this.amount = amount;
+
+        final BigDecimal diffTithingAmount = oldAmount.subtract(newAmount);
+        getSnapshot().updateTithingAmount(getCurrencyUnit(), diffTithingAmount);
+    }
 }

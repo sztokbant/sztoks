@@ -1,11 +1,7 @@
 package br.net.du.myequity.controller.transaction;
 
-import static br.net.du.myequity.controller.transaction.TransactionUpdateUtil.updateTithingAmount;
-
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
-import br.net.du.myequity.model.transaction.DonationTransaction;
-import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
@@ -26,30 +22,7 @@ public class AmountUpdateController extends TransactionUpdateControllerBase {
                         (jsonRequest, transaction) -> {
                             final BigDecimal newAmount = new BigDecimal(jsonRequest.getNewValue());
 
-                            if (transaction instanceof IncomeTransaction) {
-                                final IncomeTransaction incomeTransaction =
-                                        (IncomeTransaction) transaction;
-                                final BigDecimal oldTithingAmount =
-                                        incomeTransaction.getTithingAmount();
-
-                                incomeTransaction.setAmount(newAmount);
-                                final BigDecimal newTithingAmount =
-                                        incomeTransaction.getTithingAmount();
-
-                                final BigDecimal diffTithingAmount =
-                                        newTithingAmount.subtract(oldTithingAmount);
-
-                                updateTithingAmount(incomeTransaction, diffTithingAmount);
-                            } else if (transaction instanceof DonationTransaction) {
-                                final BigDecimal oldAmount = transaction.getAmount();
-
-                                transaction.setAmount(newAmount);
-
-                                final BigDecimal diffTithingAmount = oldAmount.subtract(newAmount);
-                                updateTithingAmount(transaction, diffTithingAmount);
-                            } else {
-                                transaction.setAmount(newAmount);
-                            }
+                            transaction.setAmount(newAmount);
 
                             return TransactionViewModelOutput.of(transaction, true);
                         };
