@@ -19,7 +19,7 @@ public class PayableAccount extends Account implements BalanceUpdateable, DueDat
 
     public static final String ACCOUNT_SUB_TYPE = "PAYABLE";
 
-    @Column @Getter @Setter private BigDecimal balance;
+    @Column @Getter BigDecimal balance;
 
     @Column @Getter @Setter private LocalDate dueDate;
 
@@ -56,5 +56,15 @@ public class PayableAccount extends Account implements BalanceUpdateable, DueDat
     @Override
     public PayableAccount copy() {
         return new PayableAccount(name, CurrencyUnit.of(currency), dueDate, balance);
+    }
+
+    @Override
+    public void setBalance(final BigDecimal newBalance) {
+        final BigDecimal oldBalance = balance;
+
+        balance = newBalance;
+
+        final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
+        getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
     }
 }

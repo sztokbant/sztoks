@@ -83,6 +83,16 @@ public class Snapshot implements Comparable<Snapshot> {
     @Setter
     private BigDecimal defaultTithingPercentage;
 
+    @Column(nullable = false)
+    @Getter
+    @Setter
+    private BigDecimal assetsTotal;
+
+    @Column(nullable = false)
+    @Getter
+    @Setter
+    private BigDecimal liabilitiesTotal;
+
     @OneToOne
     @JoinColumn(name = "previous_id", nullable = true)
     @Getter
@@ -122,6 +132,9 @@ public class Snapshot implements Comparable<Snapshot> {
         setName(name);
         this.baseCurrency = baseCurrencyUnit.getCode();
         this.defaultTithingPercentage = defaultTithingPercentage;
+
+        assetsTotal = BigDecimal.ZERO;
+        liabilitiesTotal = BigDecimal.ZERO;
 
         this.currencyConversionRates.putAll(currencyConversionRates);
 
@@ -188,6 +201,8 @@ public class Snapshot implements Comparable<Snapshot> {
                             + id);
         }
 
+        updateNetWorth(account.getAccountType(), account.getCurrencyUnit(), account.getBalance());
+
         accounts.add(account);
         account.setSnapshot(this);
     }
@@ -197,8 +212,27 @@ public class Snapshot implements Comparable<Snapshot> {
         if (!accounts.contains(account)) {
             return;
         }
+
+        updateNetWorth(
+                account.getAccountType(), account.getCurrencyUnit(), account.getBalance().negate());
+
         accounts.remove(account);
         account.setSnapshot(null);
+    }
+
+    public void updateNetWorth(
+            @NonNull final AccountType accountType,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final BigDecimal plusAmount) {
+        if (plusAmount.compareTo(BigDecimal.ZERO) == 0) {
+            return;
+        }
+
+        if (accountType.equals(AccountType.ASSET)) {
+            assetsTotal = assetsTotal.add(toBaseCurrency(currencyUnit, plusAmount));
+        } else { // AccountType.LIABILITY
+            liabilitiesTotal = liabilitiesTotal.add(toBaseCurrency(currencyUnit, plusAmount));
+        }
     }
 
     public SortedSet<Transaction> getTransactions() {
@@ -357,6 +391,7 @@ public class Snapshot implements Comparable<Snapshot> {
                 .setScale(2, RoundingMode.HALF_UP);
     }
 
+    // TODO: Switch to returning this.assetsTotal and this.liabilitiesTotal
     public BigDecimal getTotalFor(@NonNull final AccountType accountType) {
         return accounts.stream()
                 .filter(account -> account.getAccountType().equals(accountType))

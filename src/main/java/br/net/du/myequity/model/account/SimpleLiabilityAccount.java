@@ -9,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;
 import org.joda.money.CurrencyUnit;
 
 @Entity
@@ -19,7 +18,7 @@ public class SimpleLiabilityAccount extends Account implements BalanceUpdateable
 
     public static final String ACCOUNT_SUB_TYPE = "SIMPLE_LIABILITY";
 
-    @Column @Getter @Setter private BigDecimal balance;
+    @Column @Getter private BigDecimal balance;
 
     public SimpleLiabilityAccount(
             @NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
@@ -52,5 +51,15 @@ public class SimpleLiabilityAccount extends Account implements BalanceUpdateable
     @Override
     public SimpleLiabilityAccount copy() {
         return new SimpleLiabilityAccount(name, CurrencyUnit.of(currency), balance);
+    }
+
+    @Override
+    public void setBalance(final BigDecimal newBalance) {
+        final BigDecimal oldBalance = balance;
+
+        balance = newBalance;
+
+        final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
+        getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
     }
 }

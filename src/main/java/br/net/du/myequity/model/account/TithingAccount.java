@@ -9,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;
 import org.joda.money.CurrencyUnit;
 
 @Entity
@@ -19,7 +18,7 @@ public class TithingAccount extends Account {
 
     public static final String ACCOUNT_SUB_TYPE = "TITHING";
 
-    @Column @Getter @Setter private BigDecimal balance;
+    @Column @Getter private BigDecimal balance;
 
     public TithingAccount(@NonNull final CurrencyUnit currencyUnit) {
         this(currencyUnit, LocalDate.now());
@@ -54,5 +53,14 @@ public class TithingAccount extends Account {
     @Override
     public TithingAccount copy() {
         return new TithingAccount(CurrencyUnit.of(currency), balance);
+    }
+
+    public void setBalance(final BigDecimal newBalance) {
+        final BigDecimal oldBalance = balance;
+
+        balance = newBalance;
+
+        final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
+        getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
     }
 }

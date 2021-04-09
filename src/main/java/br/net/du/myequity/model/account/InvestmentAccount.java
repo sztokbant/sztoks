@@ -25,12 +25,11 @@ public class InvestmentAccount extends Account {
 
     @Column(precision = 19, scale = 8) // Allow Satoshi scale
     @Getter
-    @Setter
     private BigDecimal shares;
 
     @Column @Getter @Setter private BigDecimal amountInvested;
 
-    @Column @Getter @Setter private BigDecimal currentShareValue;
+    @Column @Getter private BigDecimal currentShareValue;
 
     public InvestmentAccount(@NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
         this(name, currencyUnit, LocalDate.now());
@@ -93,5 +92,27 @@ public class InvestmentAccount extends Account {
             return BigDecimal.ZERO;
         }
         return amountInvested.divide(shares, DIVISION_SCALE, RoundingMode.HALF_UP);
+    }
+
+    public void setShares(final BigDecimal shares) {
+        final BigDecimal oldBalance = getBalance();
+
+        this.shares = shares;
+
+        final BigDecimal newBalance = getBalance();
+
+        final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
+        getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
+    }
+
+    public void setCurrentShareValue(final BigDecimal currentShareValue) {
+        final BigDecimal oldBalance = getBalance();
+
+        this.currentShareValue = currentShareValue;
+
+        final BigDecimal newBalance = getBalance();
+
+        final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
+        getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
     }
 }

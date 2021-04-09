@@ -23,9 +23,9 @@ public class CreditCardAccount extends Account {
 
     public static final String ACCOUNT_SUB_TYPE = "CREDIT_CARD";
 
-    @Column @Getter @Setter private BigDecimal totalCredit;
+    @Column @Getter private BigDecimal totalCredit;
 
-    @Column @Getter @Setter private BigDecimal availableCredit;
+    @Column @Getter private BigDecimal availableCredit;
 
     @Column @Getter @Setter private BigDecimal statement;
 
@@ -100,5 +100,27 @@ public class CreditCardAccount extends Account {
     public static BigDecimal getRemainingBalance(
             final BigDecimal balance, final BigDecimal statement) {
         return balance.subtract(statement);
+    }
+
+    public void setTotalCredit(final BigDecimal totalCredit) {
+        final BigDecimal oldBalance = getBalance();
+
+        this.totalCredit = totalCredit;
+
+        final BigDecimal newBalance = getBalance();
+
+        final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
+        getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
+    }
+
+    public void setAvailableCredit(final BigDecimal availableCredit) {
+        final BigDecimal oldBalance = getBalance();
+
+        this.availableCredit = availableCredit;
+
+        final BigDecimal newBalance = getBalance();
+
+        final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
+        getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
     }
 }

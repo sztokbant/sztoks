@@ -19,7 +19,7 @@ public class ReceivableAccount extends Account implements BalanceUpdateable, Due
 
     public static final String ACCOUNT_SUB_TYPE = "RECEIVABLE";
 
-    @Column @Getter @Setter private BigDecimal balance;
+    @Column @Getter private BigDecimal balance;
 
     @Column @Getter @Setter private LocalDate dueDate;
 
@@ -58,5 +58,15 @@ public class ReceivableAccount extends Account implements BalanceUpdateable, Due
     @Override
     public ReceivableAccount copy() {
         return new ReceivableAccount(name, CurrencyUnit.of(currency), dueDate, balance);
+    }
+
+    @Override
+    public void setBalance(final BigDecimal newBalance) {
+        final BigDecimal oldBalance = balance;
+
+        balance = newBalance;
+
+        final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
+        getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
     }
 }
