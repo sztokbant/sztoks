@@ -61,7 +61,7 @@ function ajaxPost(endpoint, data, successCallback) {
   });
 }
 
-function prepareCheckbox(elementId, snapshotId, entityId, isRecurring, endpoint) {
+function prepareCheckbox(elementId, snapshotId, entityId, isRecurring, endpoint, successCallback) {
   const checkbox = document.getElementById(elementId);
 
   if (isRecurring) {
@@ -80,6 +80,6 @@ function prepareCheckbox(elementId, snapshotId, entityId, isRecurring, endpoint)
       data['newValue'] = false;
     }
 
-    ajaxPost(endpoint, data, function(data, result){});
+    ajaxPost(endpoint, data, successCallback);
   })
 }

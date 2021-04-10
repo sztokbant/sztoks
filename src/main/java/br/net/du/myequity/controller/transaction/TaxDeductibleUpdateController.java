@@ -26,7 +26,7 @@ public class TaxDeductibleUpdateController extends TransactionUpdateControllerBa
                             final boolean newValue = Boolean.valueOf(jsonRequest.getNewValue());
                             donationTransaction.setTaxDeductible(newValue);
 
-                            return TransactionViewModelOutput.of(transaction, false);
+                            return TransactionViewModelOutput.of(transaction, true);
                         };
 
         return updateTransactionField(

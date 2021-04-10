@@ -94,3 +94,7 @@ function transactionTithingPercentageUpdateSuccessCallback(data, result) {
   $("#total_LIABILITY").html(result.totalLiability);
   $("#snapshot_net_worth").html(result.netWorth);
 }
+
+function donationIsDeductibleUpdateSuccessCallback(data, result) {
+  $("#tax_deductible_donations_total").html(result.taxDeductibleDonationsTotal);
+}

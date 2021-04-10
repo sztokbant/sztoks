@@ -5,7 +5,8 @@ $(document).ready(function() {
     ${snapshot.id},
     ${entity.id},
     ${entity.taxDeductible} == true,
-    "transaction/setTaxDeductible");
+    "transaction/setTaxDeductible",
+    donationIsDeductibleUpdateSuccessCallback);
 })
 </script>
 

@@ -5,7 +5,8 @@ $(document).ready(function() {
     ${snapshot.id},
     ${entity.id},
     ${entity.recurring} == true,
-    "transaction/setRecurring");
+    "transaction/setRecurring",
+    function(data, result){});
 })
 </script>
 
