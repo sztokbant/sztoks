@@ -57,3 +57,43 @@
     min-width: 140px;
     max-width: 140px;
 }
+
+.asset-accounts {
+  background: mistyrose;
+}
+
+.editable-asset {
+    background: lightpink;
+}
+
+.liability-accounts {
+  background: lightcyan;
+}
+
+.editable-liability {
+  background: paleturquoise;
+}
+
+.income-transactions {
+  background: lavender;
+}
+
+.editable-income {
+  background: thistle;
+}
+
+.investment-transactions {
+  background: lavender;
+}
+
+.editable-investment {
+  background: thistle;
+}
+
+.donation-transactions {
+  background: lavender;
+}
+
+.editable-donation {
+    background: thistle;
+}

@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col col-section" style="background: lightpink;">
+    <div class="col col-section asset-accounts">
         <div class="row border-1px-bottom">
             <div class="col col-cell text-center"><b>ASSETS</b>
                 <a href="/snapshot/${snapshot.id}/newAssetAccount" style="text-decoration: none;">&#x271A;</a>
@@ -76,7 +76,7 @@
             </c:when>
         </c:choose>
     </div>
-    <div class="col col-section" style="background: lightblue;">
+    <div class="col col-section liability-accounts">
         <div class="row border-1px-bottom">
             <div class="col col-cell text-center"><b>LIABILITIES</b>
                 <a href="/snapshot/${snapshot.id}/newLiabilityAccount" style="text-decoration: none;">&#x271A;</a>

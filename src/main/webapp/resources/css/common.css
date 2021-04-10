@@ -20,14 +20,6 @@
     max-width: 40%;
 }
 
-.editable-asset {
-    background: coral;
-}
-
-.editable-liability {
-    background: darkturquoise;
-}
-
 .delete-icon {
     float: left;
     margin: 0 7px 0 0;

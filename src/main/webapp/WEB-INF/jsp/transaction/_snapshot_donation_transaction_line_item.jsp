@@ -29,7 +29,7 @@ $(document).ready(function() {
         <input id="TRANSACTION_${entity.id}_taxDeductible" type="checkbox"/>
     </div>
 
-    <div class="col col-cell align-right editable-asset">
+    <div class="col col-cell align-right editable-donation">
         <form id="form_txn_amount_${entity.id}">
             <span id="txn_amount_${entity.id}">${entity.amount}</span>
             <span><input id="new_txn_amount_${entity.id}" name="amount" type="number"
