@@ -97,3 +97,11 @@
 .editable-donation {
     background: thistle;
 }
+
+.bg-transaction-subcategory {
+    background: lightgrey;
+}
+
+.transaction-subcategory-label {
+    font-style: italic;
+}

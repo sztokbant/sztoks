@@ -51,6 +51,7 @@ public class SnapshotViewModelOutput {
     private final String incomeTransactionsTotal;
     private final String investmentTransactionsTotal;
     private final String donationTransactionsTotal;
+    private final String taxDeductibleDonationTransactionsTotal;
 
     private final Long previousId;
     private final String previousName;
@@ -145,6 +146,8 @@ public class SnapshotViewModelOutput {
                                 format(
                                         baseCurrencyUnit,
                                         snapshot.getTotalFor(TransactionType.DONATION)))
+                        .taxDeductibleDonationTransactionsTotal(
+                                format(baseCurrencyUnit, snapshot.getTaxDeductibleDonationsTotal()))
                         .previousId(previousId)
                         .previousName(previousName)
                         .nextId(nextId)

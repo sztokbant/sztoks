@@ -84,6 +84,13 @@
             </div>
         </div>
 
+        <div class="row border-1px-bottom bg-transaction-subcategory">
+            <div class="col col-cell transaction-subcategory-label">Tax Deductible</div>
+            <div class="col col-cell align-right">
+                <span id="total_tax_deductible_donations">${snapshot.taxDeductibleDonationTransactionsTotal}</span>
+            </div>
+        </div>
+
         <c:choose>
             <c:when test="${not empty snapshot.donations}">
                 <div class="row border-1px-bottom">

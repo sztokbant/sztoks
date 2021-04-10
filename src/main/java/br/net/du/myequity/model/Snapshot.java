@@ -103,6 +103,10 @@ public class Snapshot implements Comparable<Snapshot> {
     @Setter
     private BigDecimal donationsTotal;
 
+    @Column(nullable = true)
+    @Setter
+    private BigDecimal taxDeductibleDonationsTotal;
+
     @OneToOne
     @JoinColumn(name = "previous_id", nullable = true)
     @Getter
@@ -154,6 +158,8 @@ public class Snapshot implements Comparable<Snapshot> {
         incomesTotal = BigDecimal.ZERO;
         investmentsTotal = BigDecimal.ZERO;
         donationsTotal = BigDecimal.ZERO;
+
+        taxDeductibleDonationsTotal = BigDecimal.ZERO;
 
         this.currencyConversionRates.putAll(currencyConversionRates);
 
@@ -311,7 +317,8 @@ public class Snapshot implements Comparable<Snapshot> {
         updateTransactionsTotal(
                 transaction.getTransactionType(),
                 transaction.getCurrencyUnit(),
-                transaction.getAmount());
+                transaction.getAmount(),
+                isTaxDeductibleDonation(transaction));
     }
 
     public void removeTransaction(@NonNull final Transaction transaction) {
@@ -335,7 +342,13 @@ public class Snapshot implements Comparable<Snapshot> {
         updateTransactionsTotal(
                 transaction.getTransactionType(),
                 transaction.getCurrencyUnit(),
-                transaction.getAmount().negate());
+                transaction.getAmount().negate(),
+                isTaxDeductibleDonation(transaction));
+    }
+
+    private boolean isTaxDeductibleDonation(@NonNull final Transaction transaction) {
+        return (transaction instanceof DonationTransaction)
+                && ((DonationTransaction) transaction).isTaxDeductible();
     }
 
     public void updateTithingAmount(
@@ -356,6 +369,14 @@ public class Snapshot implements Comparable<Snapshot> {
             @NonNull final TransactionType transactionType,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final BigDecimal amount) {
+        updateTransactionsTotal(transactionType, currencyUnit, amount, false);
+    }
+
+    public void updateTransactionsTotal(
+            @NonNull final TransactionType transactionType,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final BigDecimal amount,
+            final boolean isTaxDeductibleDonation) {
         if (amount.compareTo(BigDecimal.ZERO) == 0) {
             return;
         }
@@ -378,6 +399,20 @@ public class Snapshot implements Comparable<Snapshot> {
             } else {
                 donationsTotal = donationsTotal.add(toBaseCurrency(currencyUnit, amount));
             }
+
+            if (isTaxDeductibleDonation) {
+                updateTaxDeductibleDonationsTotal(currencyUnit, amount);
+            }
+        }
+    }
+
+    public void updateTaxDeductibleDonationsTotal(
+            @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal amount) {
+        if (taxDeductibleDonationsTotal == null) {
+            taxDeductibleDonationsTotal = getTaxDeductibleDonationsTotal();
+        } else {
+            taxDeductibleDonationsTotal =
+                    taxDeductibleDonationsTotal.add(toBaseCurrency(currencyUnit, amount));
         }
     }
 
@@ -461,18 +496,18 @@ public class Snapshot implements Comparable<Snapshot> {
     public BigDecimal getTotalFor(@NonNull final AccountType accountType) {
         if (accountType.equals(AccountType.ASSET)) {
             if (assetsTotal == null) {
-                assetsTotal = calculateTotalFor(AccountType.ASSET);
+                assetsTotal = computeTotalFor(AccountType.ASSET);
             }
             return assetsTotal;
         } else {
             if (liabilitiesTotal == null) {
-                liabilitiesTotal = calculateTotalFor(AccountType.LIABILITY);
+                liabilitiesTotal = computeTotalFor(AccountType.LIABILITY);
             }
             return liabilitiesTotal;
         }
     }
 
-    public BigDecimal calculateTotalFor(@NonNull final AccountType accountType) {
+    public BigDecimal computeTotalFor(@NonNull final AccountType accountType) {
         return accounts.stream()
                 .filter(account -> account.getAccountType().equals(accountType))
                 .map(account -> toBaseCurrency(account.getCurrencyUnit(), account.getBalance()))
@@ -483,25 +518,43 @@ public class Snapshot implements Comparable<Snapshot> {
     public BigDecimal getTotalFor(@NonNull final TransactionType transactionType) {
         if (transactionType.equals(TransactionType.INCOME)) {
             if (incomesTotal == null) {
-                incomesTotal = calculateTotalFor(TransactionType.INCOME);
+                incomesTotal = computeTotalFor(TransactionType.INCOME);
             }
             return incomesTotal;
         } else if (transactionType.equals(TransactionType.INVESTMENT)) {
             if (investmentsTotal == null) {
-                investmentsTotal = calculateTotalFor(TransactionType.INVESTMENT);
+                investmentsTotal = computeTotalFor(TransactionType.INVESTMENT);
             }
             return investmentsTotal;
         } else {
             if (donationsTotal == null) {
-                donationsTotal = calculateTotalFor(TransactionType.DONATION);
+                donationsTotal = computeTotalFor(TransactionType.DONATION);
             }
             return donationsTotal;
         }
     }
 
-    public BigDecimal calculateTotalFor(@NonNull final TransactionType transactionType) {
+    public BigDecimal computeTotalFor(@NonNull final TransactionType transactionType) {
         return transactions.stream()
                 .filter(transaction -> transaction.getTransactionType().equals(transactionType))
+                .map(t -> toBaseCurrency(t.getCurrencyUnit(), t.getAmount()))
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
+    }
+
+    public BigDecimal getTaxDeductibleDonationsTotal() {
+        if (taxDeductibleDonationsTotal == null) {
+            taxDeductibleDonationsTotal = comupteTaxDeductibleDonationsTotal();
+        }
+        return taxDeductibleDonationsTotal;
+    }
+
+    private BigDecimal comupteTaxDeductibleDonationsTotal() {
+        return transactions.stream()
+                .filter(
+                        transaction ->
+                                transaction.getTransactionType().equals(TransactionType.DONATION)
+                                        && ((DonationTransaction) transaction).isTaxDeductible())
                 .map(t -> toBaseCurrency(t.getCurrencyUnit(), t.getAmount()))
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);

@@ -9,7 +9,6 @@ import javax.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @DiscriminatorValue(DonationTransaction.TRANSACTION_TYPE)
@@ -20,7 +19,7 @@ public class DonationTransaction extends Transaction {
     @Transient @Getter
     private final TransactionType transactionType = TransactionType.valueOf(TRANSACTION_TYPE);
 
-    @Column @Getter @Setter private boolean isTaxDeductible;
+    @Column @Getter private boolean isTaxDeductible;
 
     public DonationTransaction(
             final LocalDate date,
@@ -48,6 +47,13 @@ public class DonationTransaction extends Transaction {
         final BigDecimal diffTithingAmount = oldAmount.subtract(newAmount);
         getSnapshot().updateTithingAmount(getCurrencyUnit(), diffTithingAmount);
 
-        updateSnapshotTransactionTotal(newAmount, oldAmount);
+        updateSnapshotTransactionTotal(newAmount, oldAmount, isTaxDeductible);
+    }
+
+    public void setTaxDeductible(final boolean isTaxDeductible) {
+        this.isTaxDeductible = isTaxDeductible;
+
+        final BigDecimal diffTaxDeductibleAmount = isTaxDeductible ? amount : amount.negate();
+        getSnapshot().updateTaxDeductibleDonationsTotal(getCurrencyUnit(), diffTaxDeductibleAmount);
     }
 }

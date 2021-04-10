@@ -133,7 +133,15 @@ public abstract class Transaction implements Comparable<Transaction> {
 
     protected void updateSnapshotTransactionTotal(
             final BigDecimal newAmount, final BigDecimal oldAmount) {
+        updateSnapshotTransactionTotal(newAmount, oldAmount, false);
+    }
+
+    protected void updateSnapshotTransactionTotal(
+            final BigDecimal newAmount,
+            final BigDecimal oldAmount,
+            final boolean isTaxDeductibleDonation) {
         final BigDecimal diffAmount = newAmount.subtract(oldAmount);
-        snapshot.updateTransactionsTotal(getTransactionType(), getCurrencyUnit(), diffAmount);
+        snapshot.updateTransactionsTotal(
+                getTransactionType(), getCurrencyUnit(), diffAmount, isTaxDeductibleDonation);
     }
 }
