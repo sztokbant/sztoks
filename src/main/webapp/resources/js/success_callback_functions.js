@@ -83,3 +83,11 @@ function transactionAmountUpdateSuccessCallback(data, result) {
     $("#snapshot_net_worth").html(result.netWorth);
   }
 }
+
+function transactionTithingPercentageUpdateSuccessCallback(data, result) {
+  $("#txn_tithing_percentage_" + data.entityId).html(result.tithingPercentage) + "%";
+
+  $("#tithing_balance").html(result.tithingBalance);
+  $("#total_LIABILITY").html(result.totalLiability);
+  $("#snapshot_net_worth").html(result.netWorth);
+}

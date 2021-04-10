@@ -146,6 +146,11 @@ public class Snapshot implements Comparable<Snapshot> {
             @NonNull final Map<String, BigDecimal> currencyConversionRates) {
         setName(name);
         this.baseCurrency = baseCurrencyUnit.getCode();
+
+        if (defaultTithingPercentage.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException(
+                    "tithingPercentage must be greater than or equal to zero");
+        }
         this.defaultTithingPercentage = defaultTithingPercentage;
 
         assetsTotal = BigDecimal.ZERO;

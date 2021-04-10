@@ -64,6 +64,11 @@ public class IncomeTransaction extends Transaction {
     }
 
     public void setTithingPercentage(final BigDecimal tithingPercentage) {
+        if (tithingPercentage.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException(
+                    "tithingPercentage must be greater than or equal to zero");
+        }
+
         final BigDecimal oldTithingAmount = getTithingAmount();
 
         this.tithingPercentage = tithingPercentage;

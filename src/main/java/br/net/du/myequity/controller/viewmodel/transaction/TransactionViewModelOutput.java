@@ -1,10 +1,12 @@
 package br.net.du.myequity.controller.viewmodel.transaction;
 
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.AccountType;
+import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import java.time.LocalDate;
@@ -24,6 +26,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
     private final String currencyUnit;
     private final String currencyUnitSymbol;
     private final String amount;
+    private final String tithingPercentage;
     private final String description;
     private final boolean isRecurring;
 
@@ -41,6 +44,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
         currencyUnit = other.getCurrencyUnit();
         currencyUnitSymbol = other.getCurrencyUnitSymbol();
         amount = other.getAmount();
+        tithingPercentage = other.getTithingPercentage();
         description = other.getDescription();
         isRecurring = other.isRecurring();
 
@@ -57,6 +61,12 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
 
         final TransactionType transactionType = transaction.getTransactionType();
 
+        final String tithingPercentage =
+                transaction.getTransactionType().equals(TransactionType.INCOME)
+                        ? formatAsPercentage(
+                                ((IncomeTransaction) transaction).getTithingPercentage())
+                        : null;
+
         final TransactionViewModelOutputBuilder builder =
                 TransactionViewModelOutput.builder()
                         .id(transaction.getId())
@@ -66,6 +76,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
                         .currencyUnit(transaction.getCurrencyUnit().getCode())
                         .currencyUnitSymbol(transaction.getCurrencyUnit().getSymbol())
                         .amount(amount)
+                        .tithingPercentage(tithingPercentage)
                         .description(transaction.getDescription())
                         .isRecurring(transaction.isRecurring());
 
