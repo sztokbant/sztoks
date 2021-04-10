@@ -93,6 +93,21 @@ public class Snapshot implements Comparable<Snapshot> {
     @Setter
     private BigDecimal liabilitiesTotal;
 
+    @Column(nullable = false)
+    @Getter
+    @Setter
+    private BigDecimal incomesTotal;
+
+    @Column(nullable = false)
+    @Getter
+    @Setter
+    private BigDecimal investmentsTotal;
+
+    @Column(nullable = false)
+    @Getter
+    @Setter
+    private BigDecimal donationsTotal;
+
     @OneToOne
     @JoinColumn(name = "previous_id", nullable = true)
     @Getter
@@ -135,6 +150,10 @@ public class Snapshot implements Comparable<Snapshot> {
 
         assetsTotal = BigDecimal.ZERO;
         liabilitiesTotal = BigDecimal.ZERO;
+
+        incomesTotal = BigDecimal.ZERO;
+        investmentsTotal = BigDecimal.ZERO;
+        donationsTotal = BigDecimal.ZERO;
 
         this.currencyConversionRates.putAll(currencyConversionRates);
 
@@ -278,6 +297,11 @@ public class Snapshot implements Comparable<Snapshot> {
             updateTithingAmount(transaction.getCurrencyUnit(), transaction.getAmount().negate());
         }
 
+        updateTransactionsTotal(
+                transaction.getTransactionType(),
+                transaction.getCurrencyUnit(),
+                transaction.getAmount());
+
         transactions.add(transaction);
         transaction.setSnapshot(this);
     }
@@ -297,11 +321,17 @@ public class Snapshot implements Comparable<Snapshot> {
             updateTithingAmount(transaction.getCurrencyUnit(), transaction.getAmount());
         }
 
+        updateTransactionsTotal(
+                transaction.getTransactionType(),
+                transaction.getCurrencyUnit(),
+                transaction.getAmount().negate());
+
         transactions.remove(transaction);
         transaction.setSnapshot(null);
     }
 
-    public void updateTithingAmount(final CurrencyUnit currencyUnit, final BigDecimal plusAmount) {
+    public void updateTithingAmount(
+            @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal plusAmount) {
         if (plusAmount.compareTo(BigDecimal.ZERO) == 0) {
             return;
         }
@@ -311,6 +341,28 @@ public class Snapshot implements Comparable<Snapshot> {
 
         if (next != null) {
             next.updateTithingAmount(currencyUnit, plusAmount);
+        }
+    }
+
+    public void updateTransactionsTotal(
+            @NonNull final TransactionType transactionType,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) == 0) {
+            return;
+        }
+
+        switch (transactionType) {
+            case INCOME:
+                incomesTotal = incomesTotal.add(toBaseCurrency(currencyUnit, amount));
+                break;
+
+            case INVESTMENT:
+                investmentsTotal = investmentsTotal.add(toBaseCurrency(currencyUnit, amount));
+                break;
+
+            default:
+                donationsTotal = donationsTotal.add(toBaseCurrency(currencyUnit, amount));
         }
     }
 
@@ -391,8 +443,17 @@ public class Snapshot implements Comparable<Snapshot> {
                 .setScale(2, RoundingMode.HALF_UP);
     }
 
-    // TODO: Switch to returning this.assetsTotal and this.liabilitiesTotal
     public BigDecimal getTotalFor(@NonNull final AccountType accountType) {
+        switch (accountType) {
+            case ASSET:
+                return assetsTotal;
+            default:
+                return liabilitiesTotal;
+        }
+    }
+
+    // TODO: Remove this method
+    public BigDecimal getTotalForLegacy(@NonNull final AccountType accountType) {
         return accounts.stream()
                 .filter(account -> account.getAccountType().equals(accountType))
                 .map(account -> toBaseCurrency(account.getCurrencyUnit(), account.getBalance()))
@@ -401,6 +462,18 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     public BigDecimal getTotalFor(@NonNull final TransactionType transactionType) {
+        switch (transactionType) {
+            case INCOME:
+                return incomesTotal;
+            case INVESTMENT:
+                return investmentsTotal;
+            default:
+                return donationsTotal;
+        }
+    }
+
+    // TODO: Remove this method
+    public BigDecimal getTotalForLegacy(@NonNull final TransactionType transactionType) {
         return transactions.stream()
                 .filter(transaction -> transaction.getTransactionType().equals(transactionType))
                 .map(t -> toBaseCurrency(t.getCurrencyUnit(), t.getAmount()))

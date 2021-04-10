@@ -40,13 +40,14 @@ public class DonationTransaction extends Transaction {
     }
 
     @Override
-    public void setAmount(final BigDecimal amount) {
-        final BigDecimal oldAmount = this.amount;
-        final BigDecimal newAmount = amount;
+    public void setAmount(final BigDecimal newAmount) {
+        final BigDecimal oldAmount = amount;
 
-        this.amount = amount;
+        amount = newAmount;
 
         final BigDecimal diffTithingAmount = oldAmount.subtract(newAmount);
         getSnapshot().updateTithingAmount(getCurrencyUnit(), diffTithingAmount);
+
+        updateSnapshotTransactionTotal(newAmount, oldAmount);
     }
 }

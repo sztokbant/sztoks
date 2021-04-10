@@ -13,7 +13,6 @@ import javax.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @DiscriminatorValue(IncomeTransaction.TRANSACTION_TYPE)
@@ -24,7 +23,7 @@ public class IncomeTransaction extends Transaction {
     @Transient @Getter
     private final TransactionType transactionType = TransactionType.valueOf(TRANSACTION_TYPE);
 
-    @Column @Getter @Setter private BigDecimal tithingPercentage;
+    @Column @Getter private BigDecimal tithingPercentage;
 
     public IncomeTransaction(
             final LocalDate date,
@@ -50,10 +49,24 @@ public class IncomeTransaction extends Transaction {
     }
 
     @Override
-    public void setAmount(final BigDecimal amount) {
+    public void setAmount(final BigDecimal newAmount) {
+        final BigDecimal oldAmount = getAmount();
         final BigDecimal oldTithingAmount = getTithingAmount();
 
-        this.amount = amount;
+        amount = newAmount;
+
+        final BigDecimal newTithingAmount = getTithingAmount();
+
+        final BigDecimal diffTithingAmount = newTithingAmount.subtract(oldTithingAmount);
+        getSnapshot().updateTithingAmount(getCurrencyUnit(), diffTithingAmount);
+
+        updateSnapshotTransactionTotal(newAmount, oldAmount);
+    }
+
+    public void setTithingPercentage(final BigDecimal tithingPercentage) {
+        final BigDecimal oldTithingAmount = getTithingAmount();
+
+        this.tithingPercentage = tithingPercentage;
 
         final BigDecimal newTithingAmount = getTithingAmount();
 

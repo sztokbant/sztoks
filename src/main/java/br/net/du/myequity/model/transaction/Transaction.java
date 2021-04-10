@@ -47,7 +47,6 @@ public abstract class Transaction implements Comparable<Transaction> {
 
     @Column(nullable = false)
     @Getter
-    @Setter
     protected BigDecimal amount;
 
     @Column(nullable = false)
@@ -73,6 +72,8 @@ public abstract class Transaction implements Comparable<Transaction> {
     public abstract Transaction copy();
 
     public abstract TransactionType getTransactionType();
+
+    public abstract void setAmount(BigDecimal amount);
 
     public CurrencyUnit getCurrencyUnit() {
         return CurrencyUnit.of(currency);
@@ -128,5 +129,11 @@ public abstract class Transaction implements Comparable<Transaction> {
             return date.compareTo(other.getDate());
         }
         return currency.compareTo(other.getCurrency());
+    }
+
+    protected void updateSnapshotTransactionTotal(
+            final BigDecimal newAmount, final BigDecimal oldAmount) {
+        final BigDecimal diffAmount = newAmount.subtract(oldAmount);
+        snapshot.updateTransactionsTotal(getTransactionType(), getCurrencyUnit(), diffAmount);
     }
 }

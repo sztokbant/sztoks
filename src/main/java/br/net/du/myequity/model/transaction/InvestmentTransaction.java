@@ -44,4 +44,13 @@ public class InvestmentTransaction extends Transaction {
         return new InvestmentTransaction(
                 date, currency, amount, description, isRecurring, investmentCategory);
     }
+
+    @Override
+    public void setAmount(final BigDecimal newAmount) {
+        final BigDecimal oldAmount = amount;
+
+        amount = newAmount;
+
+        updateSnapshotTransactionTotal(newAmount, oldAmount);
+    }
 }
