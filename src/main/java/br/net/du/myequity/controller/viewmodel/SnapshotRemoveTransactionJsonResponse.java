@@ -11,6 +11,7 @@ public class SnapshotRemoveTransactionJsonResponse {
     private String currencyUnitSymbol;
     private String type;
     private String totalForTransactionType;
+    private String taxDeductibleDonationsTotal;
     private String tithingBalance;
     private String netWorth;
     private String totalLiability;

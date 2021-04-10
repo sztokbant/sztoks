@@ -108,7 +108,6 @@ public class SnapshotViewModelOutput {
         }
 
         final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot);
-        final CurrencyUnit baseCurrencyUnit = snapshot.getBaseCurrencyUnit();
 
         final SnapshotViewModelOutputBuilder builder =
                 SnapshotViewModelOutput.builder()
@@ -117,7 +116,7 @@ public class SnapshotViewModelOutput {
                         .netWorth(updateableTotals.getNetWorth())
                         .currencyConversionRates(
                                 toStringStringMap(snapshot.getCurrencyConversionRates()))
-                        .assetsTotal(updateableTotals.getTotalForAccountType(AccountType.ASSET))
+                        .assetsTotal(updateableTotals.getTotalFor(AccountType.ASSET))
                         .simpleAssetsBalance(
                                 updateableTotals.getTotalForAccountSubtype(
                                         BalanceUpdateableSubtype.SIMPLE_ASSET))
@@ -125,8 +124,7 @@ public class SnapshotViewModelOutput {
                                 updateableTotals.getTotalForAccountSubtype(
                                         BalanceUpdateableSubtype.RECEIVABLE))
                         .investmentTotals(InvestmentTotalsViewModelOutput.of(investmentTotals))
-                        .liabilitiesTotal(
-                                updateableTotals.getTotalForAccountType(AccountType.LIABILITY))
+                        .liabilitiesTotal(updateableTotals.getTotalFor(AccountType.LIABILITY))
                         .simpleLiabilitiesBalance(
                                 updateableTotals.getTotalForAccountSubtype(
                                         BalanceUpdateableSubtype.SIMPLE_LIABILITY))
@@ -135,19 +133,13 @@ public class SnapshotViewModelOutput {
                                         BalanceUpdateableSubtype.PAYABLE))
                         .creditCardTotals(getCurrencyUnitCreditCardViewModels(creditCardTotals))
                         .incomeTransactionsTotal(
-                                format(
-                                        baseCurrencyUnit,
-                                        snapshot.getTotalFor(TransactionType.INCOME)))
+                                updateableTotals.getTotalFor(TransactionType.INCOME))
                         .investmentTransactionsTotal(
-                                format(
-                                        baseCurrencyUnit,
-                                        snapshot.getTotalFor(TransactionType.INVESTMENT)))
+                                updateableTotals.getTotalFor(TransactionType.INVESTMENT))
                         .donationTransactionsTotal(
-                                format(
-                                        baseCurrencyUnit,
-                                        snapshot.getTotalFor(TransactionType.DONATION)))
+                                updateableTotals.getTotalFor(TransactionType.DONATION))
                         .taxDeductibleDonationTransactionsTotal(
-                                format(baseCurrencyUnit, snapshot.getTaxDeductibleDonationsTotal()))
+                                updateableTotals.getTaxDeductibleDonationsTotal())
                         .previousId(previousId)
                         .previousName(previousName)
                         .nextId(nextId)

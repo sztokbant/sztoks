@@ -1,19 +1,20 @@
 package br.net.du.myequity.controller.viewmodel.transaction;
 
-import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
-import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
-import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
-
-import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.joda.money.CurrencyUnit;
+
+import java.time.LocalDate;
+
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
+import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
+import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
 @AllArgsConstructor
 @Data
@@ -32,6 +33,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
 
     // fields only used on updates
     private final String totalForTransactionType;
+    private final String taxDeductibleDonationsTotal;
     private final String tithingBalance;
     private final String netWorth;
     private final String totalLiability;
@@ -49,6 +51,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
         isRecurring = other.isRecurring();
 
         totalForTransactionType = other.getTotalForTransactionType();
+        taxDeductibleDonationsTotal = other.taxDeductibleDonationsTotal;
         tithingBalance = other.getTithingBalance();
         netWorth = other.getNetWorth();
         totalLiability = other.getTotalLiability();
@@ -81,30 +84,21 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
                         .isRecurring(transaction.isRecurring());
 
         if (includeTotals) {
-            final Snapshot snapshot = transaction.getSnapshot();
+            final UpdateableTotals updateableTotals =
+                    new UpdateableTotals(transaction.getSnapshot());
 
-            final CurrencyUnit baseCurrencyUnit = snapshot.getBaseCurrencyUnit();
-
-            final String totalForTransactionType =
-                    format(baseCurrencyUnit, toDecimal(snapshot.getTotalFor(transactionType)));
-
-            builder.totalForTransactionType(totalForTransactionType);
+            builder.totalForTransactionType(updateableTotals.getTotalFor(transactionType));
 
             if (transactionType.equals(TransactionType.INCOME)
                     || transactionType.equals(TransactionType.DONATION)) {
-                final String tithingBalance =
-                        format(baseCurrencyUnit, toDecimal(snapshot.getTithingBalance()));
+                if (transactionType.equals(TransactionType.DONATION)) {
+                    builder.taxDeductibleDonationsTotal(
+                            updateableTotals.getTaxDeductibleDonationsTotal());
+                }
 
-                final String netWorth = format(baseCurrencyUnit, toDecimal(snapshot.getNetWorth()));
-
-                final String totalLiability =
-                        format(
-                                baseCurrencyUnit,
-                                toDecimal(snapshot.getTotalFor(AccountType.LIABILITY)));
-
-                builder.tithingBalance(tithingBalance)
-                        .netWorth(netWorth)
-                        .totalLiability(totalLiability);
+                builder.tithingBalance(updateableTotals.getTithingBalance())
+                        .totalLiability(updateableTotals.getTotalFor(AccountType.LIABILITY))
+                        .netWorth(updateableTotals.getNetWorth());
             }
         }
 

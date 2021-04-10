@@ -36,8 +36,7 @@ public class RemoveAccountController extends AccountUpdateControllerBase {
                 .currencyUnitSymbol(currencyUnit.getSymbol())
                 .netWorth(updateableTotals.getNetWorth())
                 .accountType(account.getAccountType().name())
-                .totalForAccountType(
-                        updateableTotals.getTotalForAccountType(account.getAccountType()))
+                .totalForAccountType(updateableTotals.getTotalFor(account.getAccountType()))
                 .accountSubtype(
                         balanceUpdateableSubtype == null ? null : balanceUpdateableSubtype.name())
                 .totalForAccountSubtype(

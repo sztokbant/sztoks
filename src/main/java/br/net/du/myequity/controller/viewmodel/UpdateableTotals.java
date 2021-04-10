@@ -1,16 +1,17 @@
 package br.net.du.myequity.controller.viewmodel;
 
-import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
-import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
-
 import br.net.du.myequity.controller.viewmodel.account.CreditCardTotalsViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.InvestmentTotalsViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.totals.BalanceUpdateableSubtype;
 import br.net.du.myequity.model.totals.SnapshotTotalsCalculator;
+import br.net.du.myequity.model.transaction.TransactionType;
 import lombok.Getter;
 import org.joda.money.CurrencyUnit;
+
+import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
+import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
 public class UpdateableTotals {
     private final Snapshot snapshot;
@@ -24,7 +25,7 @@ public class UpdateableTotals {
         netWorth = format(snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getNetWorth()));
     }
 
-    public String getTotalForAccountType(final AccountType accountType) {
+    public String getTotalFor(final AccountType accountType) {
         return format(snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getTotalFor(accountType)));
     }
 
@@ -46,5 +47,20 @@ public class UpdateableTotals {
             final CurrencyUnit currencyUnit) {
         return CreditCardTotalsViewModelOutput.of(
                 snapshotTotalsCalculator.getCreditCardsTotalForCurrency(currencyUnit));
+    }
+
+    public String getTotalFor(final TransactionType transactionType) {
+        return format(
+                snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getTotalFor(transactionType)));
+    }
+
+    public String getTaxDeductibleDonationsTotal() {
+        return format(
+                snapshot.getBaseCurrencyUnit(),
+                toDecimal(snapshot.getTaxDeductibleDonationsTotal()));
+    }
+
+    public String getTithingBalance() {
+        return format(snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getTithingBalance()));
     }
 }

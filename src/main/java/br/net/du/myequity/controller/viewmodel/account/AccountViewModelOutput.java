@@ -71,8 +71,7 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
 
             builder.netWorth(updateableTotals.getNetWorth())
                     .accountType(account.getAccountType().name())
-                    .totalForAccountType(
-                            updateableTotals.getTotalForAccountType(account.getAccountType()))
+                    .totalForAccountType(updateableTotals.getTotalFor(account.getAccountType()))
                     .accountSubtype(
                             balanceUpdateableSubtype == null
                                     ? null
