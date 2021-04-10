@@ -462,7 +462,18 @@ public class Snapshot implements Comparable<Snapshot> {
 
     public void putCurrencyConversionRate(
             @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal conversionRate) {
-        currencyConversionRates.put(currencyUnit.getCode(), conversionRate);
+        final BigDecimal previousValue =
+                currencyConversionRates.put(currencyUnit.getCode(), conversionRate);
+
+        if (previousValue != null) {
+            // Recompute totals if this currency was already present
+            assetsTotal = computeTotalFor(AccountType.ASSET);
+            liabilitiesTotal = computeTotalFor(AccountType.LIABILITY);
+            incomesTotal = computeTotalFor(TransactionType.INCOME);
+            investmentsTotal = computeTotalFor(TransactionType.INVESTMENT);
+            donationsTotal = computeTotalFor(TransactionType.DONATION);
+            taxDeductibleDonationsTotal = comupteTaxDeductibleDonationsTotal();
+        }
 
         if (next != null && !next.hasConversionRate(currencyUnit)) {
             next.putCurrencyConversionRate(currencyUnit, conversionRate);
