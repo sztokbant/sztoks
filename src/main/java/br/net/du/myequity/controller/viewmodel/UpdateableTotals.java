@@ -1,5 +1,8 @@
 package br.net.du.myequity.controller.viewmodel;
 
+import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
+import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
+
 import br.net.du.myequity.controller.viewmodel.account.CreditCardTotalsViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.InvestmentTotalsViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
@@ -9,9 +12,6 @@ import br.net.du.myequity.model.totals.SnapshotTotalsCalculator;
 import br.net.du.myequity.model.transaction.TransactionType;
 import lombok.Getter;
 import org.joda.money.CurrencyUnit;
-
-import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
-import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
 public class UpdateableTotals {
     private final Snapshot snapshot;

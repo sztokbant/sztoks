@@ -78,6 +78,9 @@ function transactionAmountUpdateSuccessCallback(data, result) {
   $("#total_" + result.type).html(result.totalForTransactionType);
 
   if (result.type == "INCOME" || result.type == "DONATION") {
+    if (result.type == "DONATION") {
+      $("#tax_deductible_donations_total").html(result.taxDeductibleDonationsTotal);
+    }
     $("#tithing_balance").html(result.tithingBalance);
     $("#total_LIABILITY").html(result.totalLiability);
     $("#snapshot_net_worth").html(result.netWorth);

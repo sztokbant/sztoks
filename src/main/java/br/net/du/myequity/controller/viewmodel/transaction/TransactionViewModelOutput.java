@@ -1,20 +1,19 @@
 package br.net.du.myequity.controller.viewmodel.transaction;
 
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
+import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
+import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
+
 import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.joda.money.CurrencyUnit;
-
-import java.time.LocalDate;
-
-import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
-import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
-import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
 @AllArgsConstructor
 @Data

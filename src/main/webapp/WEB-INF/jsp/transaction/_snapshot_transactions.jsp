@@ -87,7 +87,7 @@
         <div class="row border-1px-bottom bg-transaction-subcategory">
             <div class="col col-cell transaction-subcategory-label">Tax Deductible</div>
             <div class="col col-cell align-right">
-                <span id="total_tax_deductible_donations">${snapshot.taxDeductibleDonationTransactionsTotal}</span>
+                <span id="tax_deductible_donations_total">${snapshot.taxDeductibleDonationTransactionsTotal}</span>
             </div>
         </div>
 
