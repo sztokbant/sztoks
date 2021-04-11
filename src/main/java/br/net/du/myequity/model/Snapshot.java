@@ -107,28 +107,36 @@ public class Snapshot implements Comparable<Snapshot> {
     @Setter
     private BigDecimal taxDeductibleDonationsTotal;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "previous_id", nullable = true)
     @Getter
     @Setter
     private Snapshot previous;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "next_id", nullable = true)
     @Getter
     @Setter
     private Snapshot next;
 
-    @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "snapshot",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
     @SortNatural // Ref.: https://thorben-janssen.com/ordering-vs-sorting-hibernate-use/
     private final SortedSet<Account> accounts = new TreeSet<>();
 
-    @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "snapshot",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
     // this should match Transaction::compareTo()
     @OrderBy("currency ASC, date ASC, description ASC, id ASC")
     private final List<Transaction> transactions = new ArrayList<>();
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
             name = "snapshot_currency_conversion_rates",
             joinColumns = {@JoinColumn(name = "snapshot_id", referencedColumnName = "id")})
