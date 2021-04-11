@@ -1,4 +1,4 @@
-function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, currencyUnitSymbol, data, successCallback) {
+function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, data, successCallback) {
   theForm.submit(function(event) {
     event.preventDefault();
     newValueInput.hide();
@@ -6,7 +6,7 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, c
   });
 
   newValueInput.focusout(function() {
-    var currentValueNoCurrencySymbol = stripCurrencyFormat(currentValueSpan, currencyUnitSymbol);
+    var currentValueNoCurrencySymbol = stripCurrencyFormat(currentValueSpan);
     var newValue = newValueInput.val();
 
     if (newValue && newValue.trim() != "" && newValue.trim() != currentValueNoCurrencySymbol) {
@@ -19,7 +19,7 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, c
   });
 
   currentValueSpan.click(function() {
-    var currentValueNoCurrencySymbol = stripCurrencyFormat(currentValueSpan, currencyUnitSymbol);
+    var currentValueNoCurrencySymbol = stripCurrencyFormat(currentValueSpan);
     currentValueSpan.hide();
     newValueInput.val(currentValueNoCurrencySymbol);
     newValueInput.show();
@@ -28,14 +28,12 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, c
   });
 }
 
-function stripCurrencyFormat(currentValueSpan, currencyUnitSymbol) {
-  if (currencyUnitSymbol) {
-    return currentValueSpan.text()
-      .replace(currencyUnitSymbol, '')
-      .replaceAll(',', '')
-      .trim();
-  }
-  return currentValueSpan.text().trim();
+function stripCurrencyFormat(currentValueSpan) {
+  return currentValueSpan
+    .text()
+    .replace(/^[^\d]+/g, '')
+    .replaceAll(',', '')
+    .trim();
 }
 
 function ajaxPost(endpoint, data, successCallback) {

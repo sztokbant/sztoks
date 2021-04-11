@@ -9,7 +9,6 @@ $(document).ready(function() {
     $("#investment_shares_${entity.accountId}"),
     $("#new_investment_shares_${entity.accountId}"),
     "snapshot/updateInvestmentShares",
-    "${entity.currencyUnitSymbol}",
     data,
     investmentSharesUpdateSuccessCallback,
   );
@@ -18,7 +17,6 @@ $(document).ready(function() {
     $("#investment_amount_invested_${entity.accountId}"),
     $("#new_investment_amount_invested_${entity.accountId}"),
     "snapshot/updateInvestmentAmountInvested",
-    "${entity.currencyUnitSymbol}",
     data,
     investmentAmountInvestedUpdateSuccessCallback,
   );
@@ -27,7 +25,6 @@ $(document).ready(function() {
     $("#investment_current_share_value_${entity.accountId}"),
     $("#new_investment_current_share_value_${entity.accountId}"),
     "snapshot/updateInvestmentCurrentShareValue",
-    "${entity.currencyUnitSymbol}",
     data,
     investmentCurrentShareValueUpdateSuccessCallback,
   );

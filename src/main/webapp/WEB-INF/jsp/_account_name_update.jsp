@@ -7,7 +7,6 @@ $(document).ready(function() {
     $("#account_name_${account.id}"),
     $("#new_account_name_${account.id}"),
     "account/updateName",
-    "",
     data,
     accountNameUpdateSuccessCallback,
   );

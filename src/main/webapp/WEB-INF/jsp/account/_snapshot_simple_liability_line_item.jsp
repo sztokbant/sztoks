@@ -9,7 +9,6 @@ $(document).ready(function() {
     $("#account_balance_${entity.accountId}"),
     $("#new_account_balance_${entity.accountId}"),
     "snapshot/updateAccountBalance",
-    "${entity.currencyUnitSymbol}",
     data,
     accountBalanceUpdateSuccessCallback,
   );

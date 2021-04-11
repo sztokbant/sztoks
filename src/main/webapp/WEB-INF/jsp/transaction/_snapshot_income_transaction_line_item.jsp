@@ -11,7 +11,6 @@ $(document).ready(function() {
     $("#txn_tithing_percentage_${entity.id}"),
     $("#new_txn_tithing_percentage_${entity.id}"),
     "transaction/updateTithingPercentage",
-    "${entity.currencyUnitSymbol}",
     data,
     transactionTithingPercentageUpdateSuccessCallback,
   );

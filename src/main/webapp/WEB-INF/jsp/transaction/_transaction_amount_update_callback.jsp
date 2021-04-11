@@ -9,7 +9,6 @@ $(document).ready(function() {
     $("#txn_amount_${entity.id}"),
     $("#new_txn_amount_${entity.id}"),
     "transaction/updateAmount",
-    "${entity.currencyUnitSymbol}",
     data,
     transactionAmountUpdateSuccessCallback,
   );

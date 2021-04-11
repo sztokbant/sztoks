@@ -9,7 +9,6 @@ $(document).ready(function() {
     $("#receivable_due_date_${entity.accountId}"),
     $("#new_receivable_due_date_${entity.accountId}"),
     "snapshot/updateAccountDueDate",
-    "",
     data,
     receivableDueDateUpdateSuccessCallback,
   );
@@ -18,7 +17,6 @@ $(document).ready(function() {
     $("#account_balance_${entity.accountId}"),
     $("#new_account_balance_${entity.accountId}"),
     "snapshot/updateAccountBalance",
-    "${entity.currencyUnitSymbol}",
     data,
     accountBalanceUpdateSuccessCallback,
   );

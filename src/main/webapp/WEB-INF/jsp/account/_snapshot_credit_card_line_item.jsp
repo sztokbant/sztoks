@@ -9,7 +9,6 @@ $(document).ready(function() {
     $("#credit_card_total_credit_${entity.accountId}"),
     $("#new_credit_card_total_credit_${entity.accountId}"),
     "snapshot/updateCreditCardTotalCredit",
-    "${entity.currencyUnitSymbol}",
     data,
     creditCardTotalCreditUpdateSuccessCallback,
   );
@@ -18,7 +17,6 @@ $(document).ready(function() {
     $("#credit_card_available_credit_${entity.accountId}"),
     $("#new_credit_card_available_credit_${entity.accountId}"),
     "snapshot/updateCreditCardAvailableCredit",
-    "${entity.currencyUnitSymbol}",
     data,
     creditCardAvailableCreditUpdateSuccessCallback,
   );
@@ -27,7 +25,6 @@ $(document).ready(function() {
     $("#credit_card_statement_${entity.accountId}"),
     $("#new_credit_card_statement_${entity.accountId}"),
     "snapshot/updateCreditCardStatement",
-    "${entity.currencyUnitSymbol}",
     data,
     creditCardStatementUpdateSuccessCallback,
   );
