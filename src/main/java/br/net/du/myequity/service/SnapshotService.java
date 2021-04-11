@@ -2,6 +2,7 @@ package br.net.du.myequity.service;
 
 import br.net.du.myequity.exception.MyEquityException;
 import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.SnapshotSummary;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import java.util.List;
@@ -46,8 +47,13 @@ public class SnapshotService {
         return snapshotRepository.findById(snapshotId);
     }
 
-    public List<Snapshot> findAllByUser(@NonNull final User user) {
-        return snapshotRepository.findAllByUser(user);
+    public List<SnapshotSummary> findAllSummariesByUser(@NonNull final User user) {
+        return snapshotRepository.findAllByUserOrderByNameDesc(user);
+    }
+
+    // Used only by automated tests
+    public Snapshot findTopBy(@NonNull final User user) {
+        return snapshotRepository.findTopByUserOrderByNameDesc(user);
     }
 
     public void deleteSnapshot(@NonNull final User user, @NonNull final Snapshot snapshot) {

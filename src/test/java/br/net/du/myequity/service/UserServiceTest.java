@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.SnapshotSummary;
 import br.net.du.myequity.model.User;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -49,10 +50,11 @@ class UserServiceTest {
         assertEquals(FIRST_NAME, user.getFirstName());
         assertEquals(LAST_NAME, user.getLastName());
 
-        final List<Snapshot> snapshots = snapshotService.findAllByUser(user);
-        assertEquals(1, snapshots.size());
+        final List<SnapshotSummary> snapshotSummaries =
+                snapshotService.findAllSummariesByUser(user);
+        assertEquals(1, snapshotSummaries.size());
 
-        final Snapshot snapshot = snapshots.get(0);
+        final Snapshot snapshot = snapshotService.findTopBy(user);
         assertEquals(CURRENCY_UNIT, snapshot.getBaseCurrencyUnit());
         assertTrue(TITHING_PERCENTAGE.compareTo(snapshot.getDefaultTithingPercentage()) == 0);
     }

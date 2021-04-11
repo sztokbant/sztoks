@@ -3,17 +3,21 @@ package br.net.du.myequity.controller;
 import static br.net.du.myequity.test.ControllerTestUtils.verifyRedirect;
 import static br.net.du.myequity.test.ModelTestUtils.buildUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.myequity.controller.viewmodel.HomeSnapshotViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.SnapshotSummaryViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.SnapshotSummary;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.service.SnapshotService;
 import br.net.du.myequity.service.UserService;
 import com.google.common.collect.ImmutableList;
+import java.math.BigDecimal;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,6 +43,8 @@ class HomeControllerTest {
 
     @MockBean private UserService userService;
 
+    @MockBean private SnapshotService snapshotService;
+
     private User user;
 
     private Snapshot snapshot;
@@ -63,6 +69,16 @@ class HomeControllerTest {
     public void get_happy_noAccounts() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
+        when(snapshotService.findAllSummariesByUser(eq(user)))
+                .thenReturn(
+                        ImmutableList.of(
+                                new SnapshotSummary(
+                                        user.getId(),
+                                        snapshot.getId(),
+                                        snapshot.getName(),
+                                        snapshot.getBaseCurrencyUnit().getCode(),
+                                        BigDecimal.ZERO,
+                                        BigDecimal.ZERO)));
 
         // WHEN
         final ResultActions resultActions =
@@ -80,7 +96,7 @@ class HomeControllerTest {
         assertEquals(UserViewModelOutput.of(user), model.get(USER_KEY));
         assertEquals(
                 ImmutableList.of(
-                        new HomeSnapshotViewModelOutput(
+                        new SnapshotSummaryViewModelOutput(
                                 snapshot.getId(),
                                 snapshot.getName(),
                                 new UpdateableTotals(snapshot).getNetWorth())),

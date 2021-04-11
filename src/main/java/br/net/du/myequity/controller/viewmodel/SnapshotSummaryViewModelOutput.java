@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Data
-public class HomeSnapshotViewModelOutput {
+public class SnapshotSummaryViewModelOutput {
     private final long id;
     private final String name;
     private final String netWorth;
