@@ -34,12 +34,8 @@ public class SnapshotNewController {
     private String getNextSnapshotName(final User user) {
         final Snapshot latestSnapshot = user.getSnapshots().first();
 
-        final String[] latestSnapshotNameParts = latestSnapshot.getName().split("-");
-        final int latestSnapshotYear = Integer.valueOf(latestSnapshotNameParts[0]);
-        final int latestSnapshotMonth = Integer.valueOf(latestSnapshotNameParts[1]);
-
         final LocalDate latestSnapshotDate =
-                LocalDate.of(latestSnapshotYear, latestSnapshotMonth, 1);
+                LocalDate.of(latestSnapshot.getYear(), latestSnapshot.getMonth(), 1);
 
         final LocalDate newSnapshotDate = latestSnapshotDate.plusMonths(1);
 

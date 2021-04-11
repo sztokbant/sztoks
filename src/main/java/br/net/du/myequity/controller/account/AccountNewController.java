@@ -16,7 +16,9 @@ import br.net.du.myequity.controller.viewmodel.account.AccountViewModelInput;
 import br.net.du.myequity.controller.viewmodel.validator.AccountViewModelInputValidator;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
+import br.net.du.myequity.model.account.DueDateUpdateable;
 import br.net.du.myequity.service.SnapshotService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +71,13 @@ public class AccountNewController {
             return prepareGetMapping(snapshotId, model, accountType, accountViewModelInput);
         }
 
-        snapshot.addAccount(accountViewModelInput.toAccount());
+        final Account account = accountViewModelInput.toAccount();
+
+        if (account instanceof DueDateUpdateable) {
+            ((DueDateUpdateable) account).setDueDate(snapshot.atEndOfMonth());
+        }
+
+        snapshot.addAccount(account);
         snapshotService.save(snapshot);
 
         return String.format(REDIRECT_SNAPSHOT_TEMPLATE, snapshot.getId());

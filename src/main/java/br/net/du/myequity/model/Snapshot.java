@@ -20,6 +20,7 @@ import com.sun.istack.NotNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -173,9 +174,8 @@ public class Snapshot implements Comparable<Snapshot> {
 
         accounts.stream().forEach(account -> addAccount(account.copy()));
 
-        final String[] nameParts = name.split("-");
-        final int year = Integer.parseInt(nameParts[0]);
-        final int month = Integer.parseInt(nameParts[1]);
+        final int year = getYear();
+        final int month = getMonth();
 
         transactions.stream()
                 .forEach(
@@ -192,6 +192,24 @@ public class Snapshot implements Comparable<Snapshot> {
 
     public void setName(@NonNull final String name) {
         this.name = validateName(name.trim());
+    }
+
+    public int getYear() {
+        final String[] snapshotNameParts = name.split("-");
+        return Integer.valueOf(snapshotNameParts[0]);
+    }
+
+    public int getMonth() {
+        final String[] snapshotNameParts = name.split("-");
+        return Integer.valueOf(snapshotNameParts[1]);
+    }
+
+    public LocalDate atEndOfMonth() {
+        final String[] snapshotNameParts = name.split("-");
+        final int year = Integer.valueOf(snapshotNameParts[0]);
+        final int month = Integer.valueOf(snapshotNameParts[1]);
+
+        return YearMonth.of(year, month).atEndOfMonth();
     }
 
     private String validateName(@NonNull final String name) {
