@@ -31,7 +31,7 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, d
 function stripCurrencyFormat(currentValueSpan) {
   return currentValueSpan
     .text()
-    .replace(/^[^\d]+/g, '')
+    .replace(/^[^\d-]+/g, '')
     .replaceAll(',', '')
     .trim();
 }
