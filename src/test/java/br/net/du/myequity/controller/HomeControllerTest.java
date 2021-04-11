@@ -7,7 +7,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.myequity.controller.viewmodel.SnapshotViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.HomeSnapshotViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
@@ -78,6 +79,11 @@ class HomeControllerTest {
 
         assertEquals(UserViewModelOutput.of(user), model.get(USER_KEY));
         assertEquals(
-                ImmutableList.of(SnapshotViewModelOutput.of(snapshot)), model.get(SNAPSHOTS_KEY));
+                ImmutableList.of(
+                        new HomeSnapshotViewModelOutput(
+                                snapshot.getId(),
+                                snapshot.getName(),
+                                new UpdateableTotals(snapshot).getNetWorth())),
+                model.get(SNAPSHOTS_KEY));
     }
 }
