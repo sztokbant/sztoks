@@ -5,14 +5,14 @@ spring:
     password: ${JDBC_DATABASE_PASSWORD}
 
   jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-
     hibernate:
       ddl-auto: update
 
+    show-sql: true
+
+    properties:
+      hibernate:
+        generate_statistics: true
   mvc:
     view:
       prefix: /WEB-INF/jsp/
@@ -20,3 +20,8 @@ spring:
 
   messages:
     basename: validation
+
+logging:
+  level:
+    org:
+      hibernate: INFO
