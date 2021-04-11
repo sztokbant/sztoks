@@ -47,8 +47,7 @@
                     <div class="col">
                         <div class="${status.error ? 'has-error' : ''}">
                             <div>
-                                <form:radiobutton path="subtypeName" value="SimpleAssetAccount" id="simpleAssetRadio"
-                                                  checked="checked"/>
+                                <form:radiobutton path="subtypeName" value="SimpleAssetAccount" id="simpleAssetRadio"/>
                                 <label for="simpleAssetRadio">Simple Asset</label>
                             </div>
                             <div>
