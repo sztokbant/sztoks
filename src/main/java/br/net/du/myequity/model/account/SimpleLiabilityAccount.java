@@ -18,7 +18,9 @@ public class SimpleLiabilityAccount extends Account implements BalanceUpdateable
 
     public static final String ACCOUNT_SUB_TYPE = "SIMPLE_LIABILITY";
 
-    @Column @Getter private BigDecimal balance;
+    @Column(precision = 19, scale = 8)
+    @Getter
+    private BigDecimal balance;
 
     public SimpleLiabilityAccount(
             @NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {

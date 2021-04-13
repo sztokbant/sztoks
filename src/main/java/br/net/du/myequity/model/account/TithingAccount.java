@@ -18,7 +18,9 @@ public class TithingAccount extends Account {
 
     public static final String ACCOUNT_SUB_TYPE = "TITHING";
 
-    @Column @Getter private BigDecimal balance;
+    @Column(precision = 19, scale = 8)
+    @Getter
+    private BigDecimal balance;
 
     public TithingAccount(@NonNull final CurrencyUnit currencyUnit) {
         this(currencyUnit, LocalDate.now());

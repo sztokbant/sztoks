@@ -27,9 +27,14 @@ public class InvestmentAccount extends Account {
     @Getter
     private BigDecimal shares;
 
-    @Column @Getter @Setter private BigDecimal amountInvested;
+    @Column(precision = 19, scale = 8)
+    @Getter
+    @Setter
+    private BigDecimal amountInvested;
 
-    @Column @Getter private BigDecimal currentShareValue;
+    @Column(precision = 19, scale = 8)
+    @Getter
+    private BigDecimal currentShareValue;
 
     public InvestmentAccount(@NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
         this(name, currencyUnit, LocalDate.now());

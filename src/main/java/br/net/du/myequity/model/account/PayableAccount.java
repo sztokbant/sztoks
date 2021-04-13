@@ -19,7 +19,9 @@ public class PayableAccount extends Account implements BalanceUpdateable, DueDat
 
     public static final String ACCOUNT_SUB_TYPE = "PAYABLE";
 
-    @Column @Getter BigDecimal balance;
+    @Column(precision = 19, scale = 8)
+    @Getter
+    BigDecimal balance;
 
     @Column @Getter @Setter private LocalDate dueDate;
 

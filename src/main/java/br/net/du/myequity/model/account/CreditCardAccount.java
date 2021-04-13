@@ -23,11 +23,18 @@ public class CreditCardAccount extends Account {
 
     public static final String ACCOUNT_SUB_TYPE = "CREDIT_CARD";
 
-    @Column @Getter private BigDecimal totalCredit;
+    @Column(precision = 19, scale = 8)
+    @Getter
+    private BigDecimal totalCredit;
 
-    @Column @Getter private BigDecimal availableCredit;
+    @Column(precision = 19, scale = 8)
+    @Getter
+    private BigDecimal availableCredit;
 
-    @Column @Getter @Setter private BigDecimal statement;
+    @Column(precision = 19, scale = 8)
+    @Getter
+    @Setter
+    private BigDecimal statement;
 
     public CreditCardAccount(@NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
         this(name, currencyUnit, LocalDate.now());

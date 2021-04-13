@@ -19,7 +19,9 @@ public class ReceivableAccount extends Account implements BalanceUpdateable, Due
 
     public static final String ACCOUNT_SUB_TYPE = "RECEIVABLE";
 
-    @Column @Getter private BigDecimal balance;
+    @Column(precision = 19, scale = 8)
+    @Getter
+    private BigDecimal balance;
 
     @Column @Getter @Setter private LocalDate dueDate;
 
