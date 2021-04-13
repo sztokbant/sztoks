@@ -35,8 +35,7 @@
                     <div class="col">
                         <div class="${status.error ? 'has-error' : ''}">
                             <div>
-                                <form:radiobutton path="investmentCategory" value="LONG_TERM" id="longTermRadio"
-                                                  checked="checked"/>
+                                <form:radiobutton path="investmentCategory" value="LONG_TERM" id="longTermRadio"/>
                                 <label for="longTermRadio">Long Term</label>
                             </div>
                             <div>
@@ -44,7 +43,7 @@
                                 <label for="midTermRadio">Mid Term</label>
                             </div>
                             <div>
-                                <form:radiobutton path="investmentCategory" value="SHORT_TERM" id="shortTermRadio"/>
+                                <form:radiobutton path="investmentCategory" value="SHORT_TERM" id="shortTermRadio" checked="checked"/>
                                 <label for="shortTermRadio">Short Term</label>
                             </div>
                             <form:errors path="investmentCategory"/>

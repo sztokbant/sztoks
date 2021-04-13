@@ -60,13 +60,13 @@
         <div class="col">
             <div class="${status.error ? 'has-error' : ''}">
                 <div>
+                    <form:radiobutton path="isRecurring" value="true" id="recurringRadio"/>
+                    <label for="recurringRadio">Recurring</label>
+                </div>
+                <div>
                     <form:radiobutton path="isRecurring" value="false" id="nonrecurringRadio"
                                       checked="checked"/>
                     <label for="nonrecurringRadio">Nonrecurring</label>
-                </div>
-                <div>
-                    <form:radiobutton path="isRecurring" value="true" id="recurringRadio"/>
-                    <label for="recurringRadio">Recurring</label>
                 </div>
                 <form:errors path="isRecurring"/>
             </div>

@@ -35,11 +35,11 @@
                     <div class="col">
                         <div class="${status.error ? 'has-error' : ''}">
                             <div>
-                                <form:radiobutton path="isTaxDeductible" value="true" id="taxDeductibleRadio" checked="checked"/>
+                                <form:radiobutton path="isTaxDeductible" value="true" id="taxDeductibleRadio"/>
                                 <label for="taxDeductibleRadio">Tax Deductible</label>
                             </div>
                             <div>
-                                <form:radiobutton path="isTaxDeductible" value="false" id="nondeductibleRadio"/>
+                                <form:radiobutton path="isTaxDeductible" value="false" id="nondeductibleRadio" checked="checked"/>
                                 <label for="nondeductibleRadio">Nondeductible</label>
                             </div>
                             <form:errors path="isTaxDeductible"/>
