@@ -10,7 +10,8 @@ import static br.net.du.myequity.test.TestConstants.ANOTHER_CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT_FIELD;
 import static br.net.du.myequity.test.TestConstants.DATE_FIELD;
-import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_YEAR;
 import static br.net.du.myequity.test.TestConstants.INVESTMENT_CATEGORY_FIELD;
 import static br.net.du.myequity.test.TestConstants.IS_RECURRING_FIELD;
 import static br.net.du.myequity.test.TestConstants.IS_TAX_DEDUCTIBLE_FIELD;
@@ -45,7 +46,8 @@ class TransactionViewModelInputValidatorTest {
     public void setUp() {
         snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),

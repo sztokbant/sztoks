@@ -3,7 +3,8 @@ package br.net.du.myequity.model;
 import static br.net.du.myequity.test.ModelTestUtils.equalsIgnoreId;
 import static br.net.du.myequity.test.ModelTestUtils.equalsIgnoreIdAndDate;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
-import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_YEAR;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static br.net.du.myequity.test.TestConstants.newRecurringDonation;
 import static br.net.du.myequity.test.TestConstants.newRecurringIncome;
@@ -65,7 +66,8 @@ class SnapshotTest {
 
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
@@ -75,7 +77,8 @@ class SnapshotTest {
         snapshot.setId(42L);
 
         // THEN
-        assertEquals(FIRST_SNAPSHOT_NAME, snapshot.getName());
+        assertEquals(FIRST_SNAPSHOT_YEAR, snapshot.getYear());
+        assertEquals(FIRST_SNAPSHOT_MONTH, snapshot.getMonth());
 
         assertEquals(CURRENCY_UNIT, snapshot.getBaseCurrencyUnit());
         assertTrue(TITHING_PERCENTAGE.compareTo(snapshot.getDefaultTithingPercentage()) == 0);
@@ -108,7 +111,8 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
@@ -124,7 +128,8 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
@@ -140,7 +145,8 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
@@ -156,7 +162,8 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -180,7 +187,8 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleLiabilityAccount, simpleAssetAccount),
@@ -206,7 +214,8 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
@@ -227,7 +236,8 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -245,7 +255,8 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -263,7 +274,8 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
@@ -294,7 +306,8 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
@@ -339,7 +352,8 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -366,7 +380,8 @@ class SnapshotTest {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -393,7 +408,8 @@ class SnapshotTest {
         final IncomeTransaction recurringIncome = newRecurringIncome(42L);
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -426,7 +442,8 @@ class SnapshotTest {
 
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -485,7 +502,8 @@ class SnapshotTest {
     public void equals() {
         final Snapshot snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -502,7 +520,8 @@ class SnapshotTest {
         // Same Id null
         final Snapshot anotherSnapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),

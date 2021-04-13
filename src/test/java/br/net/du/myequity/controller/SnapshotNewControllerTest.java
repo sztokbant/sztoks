@@ -3,8 +3,10 @@ package br.net.du.myequity.controller;
 import static br.net.du.myequity.test.ControllerTestUtils.verifyRedirect;
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
-import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_NAME;
-import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_YEAR;
+import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_YEAR;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -46,7 +48,8 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
     public void setUp() {
         snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -61,7 +64,8 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
 
         final Snapshot newSnapshot =
                 new Snapshot(
-                        SECOND_SNAPSHOT_NAME,
+                        SECOND_SNAPSHOT_YEAR,
+                        SECOND_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -69,7 +73,8 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
                         ImmutableMap.of());
         newSnapshot.setId(snapshot.getId() + 1);
 
-        when(snapshotService.newSnapshot(eq(user), eq(SECOND_SNAPSHOT_NAME)))
+        when(snapshotService.newSnapshot(
+                        eq(user), eq(SECOND_SNAPSHOT_YEAR), eq(SECOND_SNAPSHOT_MONTH)))
                 .thenReturn(newSnapshot);
     }
 
@@ -84,7 +89,8 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED));
 
         // THEN
-        verify(snapshotService).newSnapshot(eq(user), eq(SECOND_SNAPSHOT_NAME));
+        verify(snapshotService)
+                .newSnapshot(eq(user), eq(SECOND_SNAPSHOT_YEAR), eq(SECOND_SNAPSHOT_MONTH));
         verifyRedirect(resultActions, NEW_SNAPSHOT_URL);
     }
 }

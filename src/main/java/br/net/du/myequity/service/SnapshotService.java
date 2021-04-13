@@ -18,14 +18,16 @@ public class SnapshotService {
 
     private final UserService userService;
 
-    public Snapshot newSnapshot(@NonNull final User user, @NonNull final String snapshotName) {
+    public Snapshot newSnapshot(
+            @NonNull final User user, final int snapshotYear, final int snapshotMonth) {
         assert !user.getSnapshots().isEmpty();
 
         final Snapshot currentSnapshot = user.getSnapshots().first();
 
         final Snapshot newSnapshot =
                 new Snapshot(
-                        snapshotName,
+                        snapshotYear,
+                        snapshotMonth,
                         currentSnapshot.getBaseCurrencyUnit(),
                         currentSnapshot.getDefaultTithingPercentage(),
                         currentSnapshot.getAccounts(),
@@ -48,12 +50,12 @@ public class SnapshotService {
     }
 
     public List<SnapshotSummary> findAllSummariesByUser(@NonNull final User user) {
-        return snapshotRepository.findAllByUserOrderByNameDesc(user);
+        return snapshotRepository.findAllByUserOrderByYearDescMonthDesc(user);
     }
 
     // Used only by automated tests
     public Snapshot findTopBy(@NonNull final User user) {
-        return snapshotRepository.findTopByUserOrderByNameDesc(user);
+        return snapshotRepository.findTopByUserOrderByYearDescMonthDesc(user);
     }
 
     public void deleteSnapshot(@NonNull final User user, @NonNull final Snapshot snapshot) {

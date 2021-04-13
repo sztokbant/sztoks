@@ -57,7 +57,9 @@ import org.hibernate.annotations.SortNatural;
 import org.joda.money.CurrencyUnit;
 
 @Entity
-@Table(name = "snapshots", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "name"}))
+@Table(
+        name = "snapshots",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "year", "month"}))
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Snapshot implements Comparable<Snapshot> {
     private static final Pattern VALID_NAME_PATTERN = Pattern.compile("^[0-9]{4}-[0-9]{2}$");
@@ -74,7 +76,11 @@ public class Snapshot implements Comparable<Snapshot> {
 
     @Column(nullable = false)
     @Getter
-    private String name;
+    private Integer year;
+
+    @Column(nullable = false)
+    @Getter
+    private Integer month;
 
     @Column(nullable = false)
     protected String baseCurrency;
@@ -146,13 +152,16 @@ public class Snapshot implements Comparable<Snapshot> {
     private Map<String, BigDecimal> currencyConversionRates = new HashMap<>();
 
     public Snapshot(
-            @NonNull final String name,
+            final int year,
+            final int month,
             @NonNull final CurrencyUnit baseCurrencyUnit,
             @NonNull final BigDecimal defaultTithingPercentage,
             @NotNull final SortedSet<Account> accounts,
             @NonNull final List<Transaction> transactions,
             @NonNull final Map<String, BigDecimal> currencyConversionRates) {
-        setName(name);
+        this.year = year;
+        this.month = month;
+
         this.baseCurrency = baseCurrencyUnit.getCode();
 
         if (defaultTithingPercentage.compareTo(BigDecimal.ZERO) < 0) {
@@ -174,9 +183,6 @@ public class Snapshot implements Comparable<Snapshot> {
 
         accounts.stream().forEach(account -> addAccount(account.copy()));
 
-        final int year = getYear();
-        final int month = getMonth();
-
         transactions.stream()
                 .forEach(
                         transaction -> {
@@ -188,28 +194,6 @@ public class Snapshot implements Comparable<Snapshot> {
 
                             addTransaction(transactionCopy);
                         });
-    }
-
-    public void setName(@NonNull final String name) {
-        this.name = validateName(name.trim());
-    }
-
-    public int getYear() {
-        final String[] snapshotNameParts = name.split("-");
-        return Integer.valueOf(snapshotNameParts[0]);
-    }
-
-    public int getMonth() {
-        final String[] snapshotNameParts = name.split("-");
-        return Integer.valueOf(snapshotNameParts[1]);
-    }
-
-    public LocalDate atEndOfMonth() {
-        final String[] snapshotNameParts = name.split("-");
-        final int year = Integer.valueOf(snapshotNameParts[0]);
-        final int month = Integer.valueOf(snapshotNameParts[1]);
-
-        return YearMonth.of(year, month).atEndOfMonth();
     }
 
     private String validateName(@NonNull final String name) {
@@ -642,6 +626,9 @@ public class Snapshot implements Comparable<Snapshot> {
 
     @Override
     public int compareTo(final Snapshot other) {
-        return other.getName().compareTo(name);
+        if (other.getYear().compareTo(year) == 0) {
+            return other.getMonth().compareTo(month);
+        }
+        return other.getYear().compareTo(year);
     }
 }

@@ -2,7 +2,8 @@ package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
-import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_YEAR;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -36,7 +37,8 @@ public abstract class SnapshotControllerAjaxTestBase extends AjaxControllerTestB
     public void createEntity() {
         snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),

@@ -4,9 +4,12 @@ import static br.net.du.myequity.test.ModelTestUtils.buildUser;
 import static br.net.du.myequity.test.ModelTestUtils.equalsIgnoreIdAndDate;
 import static br.net.du.myequity.test.TestConstants.ANOTHER_CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
-import static br.net.du.myequity.test.TestConstants.FOURTH_SNAPSHOT_NAME;
-import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_NAME;
-import static br.net.du.myequity.test.TestConstants.THIRD_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.FOURTH_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.FOURTH_SNAPSHOT_YEAR;
+import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_YEAR;
+import static br.net.du.myequity.test.TestConstants.THIRD_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.THIRD_SNAPSHOT_YEAR;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static br.net.du.myequity.test.TestConstants.newCreditCardAccount;
 import static br.net.du.myequity.test.TestConstants.newInvestmentAccount;
@@ -83,7 +86,8 @@ public class SnapshotServiceTest {
     @Test
     public void newSnapshot_happy() throws Exception {
         // WHEN
-        final Snapshot newSnapshot = snapshotService.newSnapshot(user, SECOND_SNAPSHOT_NAME);
+        final Snapshot newSnapshot =
+                snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
 
         // THEN
         assertEquals(snapshot.getBaseCurrencyUnit(), newSnapshot.getBaseCurrencyUnit());
@@ -149,8 +153,10 @@ public class SnapshotServiceTest {
     @Test
     public void newSnapshot_twice_properlySetsNextAndPrevious() {
         // WHEN
-        final Snapshot secondSnapshot = snapshotService.newSnapshot(user, SECOND_SNAPSHOT_NAME);
-        final Snapshot thirdSnapshot = snapshotService.newSnapshot(user, THIRD_SNAPSHOT_NAME);
+        final Snapshot secondSnapshot =
+                snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
+        final Snapshot thirdSnapshot =
+                snapshotService.newSnapshot(user, THIRD_SNAPSHOT_YEAR, THIRD_SNAPSHOT_MONTH);
 
         // THEN
         verify(snapshotRepository, times(1)).save(eq(secondSnapshot));
@@ -169,7 +175,8 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_first_happy() {
         // GIVEN
-        final Snapshot secondSnapshot = newEmptySnapshot(SECOND_SNAPSHOT_NAME);
+        final Snapshot secondSnapshot =
+                newEmptySnapshot(SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
         secondSnapshot.setId(snapshot.getId() + 1);
         user.addSnapshot(secondSnapshot);
 
@@ -189,7 +196,8 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_last_happy() {
         // GIVEN
-        final Snapshot secondSnapshot = newEmptySnapshot(SECOND_SNAPSHOT_NAME);
+        final Snapshot secondSnapshot =
+                newEmptySnapshot(SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
         secondSnapshot.setId(snapshot.getId() + 1);
         user.addSnapshot(secondSnapshot);
 
@@ -209,15 +217,17 @@ public class SnapshotServiceTest {
     @Test
     public void deleteSnapshot_middle_happy() {
         // GIVEN
-        final Snapshot secondSnapshot = newEmptySnapshot(SECOND_SNAPSHOT_NAME);
+        final Snapshot secondSnapshot =
+                newEmptySnapshot(SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
         secondSnapshot.setId(snapshot.getId() + 1);
         user.addSnapshot(secondSnapshot);
 
-        final Snapshot thirdSnapshot = newEmptySnapshot(THIRD_SNAPSHOT_NAME);
+        final Snapshot thirdSnapshot = newEmptySnapshot(THIRD_SNAPSHOT_YEAR, THIRD_SNAPSHOT_MONTH);
         thirdSnapshot.setId(secondSnapshot.getId() + 1);
         user.addSnapshot(thirdSnapshot);
 
-        final Snapshot fourthSnapshot = newEmptySnapshot(FOURTH_SNAPSHOT_NAME);
+        final Snapshot fourthSnapshot =
+                newEmptySnapshot(FOURTH_SNAPSHOT_YEAR, FOURTH_SNAPSHOT_MONTH);
         fourthSnapshot.setId(thirdSnapshot.getId() + 1);
         user.addSnapshot(fourthSnapshot);
 
@@ -247,9 +257,10 @@ public class SnapshotServiceTest {
         assertEquals(1, user.getSnapshots().size());
     }
 
-    private Snapshot newEmptySnapshot(final String snapshotName) {
+    private Snapshot newEmptySnapshot(final int year, final int month) {
         return new Snapshot(
-                snapshotName,
+                year,
+                month,
                 CURRENCY_UNIT,
                 TITHING_PERCENTAGE,
                 ImmutableSortedSet.of(),

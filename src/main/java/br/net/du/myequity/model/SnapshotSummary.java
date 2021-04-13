@@ -12,7 +12,8 @@ public class SnapshotSummary {
     private final Long userId;
 
     private final Long id;
-    private final String name;
+    private final Integer year;
+    private final Integer month;
 
     private final String baseCurrency;
     private final BigDecimal assetsTotal;

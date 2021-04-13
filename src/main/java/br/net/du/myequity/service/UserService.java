@@ -31,11 +31,10 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(password));
 
         final LocalDate now = LocalDate.now();
-        final String firstSnapshotName =
-                String.format("%04d-%02d", now.getYear(), now.getMonth().getValue());
         user.addSnapshot(
                 new Snapshot(
-                        firstSnapshotName,
+                        now.getYear(),
+                        now.getMonthValue(),
                         baseCurrencyUnit,
                         defaultTithingPercentage,
                         ImmutableSortedSet.of(),

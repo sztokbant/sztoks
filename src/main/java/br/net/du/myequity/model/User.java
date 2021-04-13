@@ -54,7 +54,7 @@ public class User {
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     // this should match Snapshot::compareTo()
-    @OrderBy("name DESC")
+    @OrderBy("year DESC, month DESC")
     private final List<Snapshot> snapshots = new ArrayList<>();
 
     public User(final String email, final String firstName, final String lastName) {
@@ -83,11 +83,17 @@ public class User {
             return;
         }
 
-        // Ensures uniqueness of Snapshot name
+        // Ensures uniqueness of Snapshot year & month
         for (final Snapshot existingSnapshot : snapshots) {
-            if (existingSnapshot.getName().equals(snapshot.getName())) {
+            if (existingSnapshot.getYear().equals(snapshot.getYear())
+                    && existingSnapshot.getMonth().equals(snapshot.getMonth())) {
                 throw new IllegalArgumentException(
-                        "User " + id + " already has a Snapshot named " + snapshot.getName());
+                        "User "
+                                + id
+                                + " already has a Snapshot for "
+                                + snapshot.getYear()
+                                + "-"
+                                + snapshot.getMonth());
             }
         }
 

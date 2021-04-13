@@ -75,7 +75,8 @@ class HomeControllerTest {
                                 new SnapshotSummary(
                                         user.getId(),
                                         snapshot.getId(),
-                                        snapshot.getName(),
+                                        snapshot.getYear(),
+                                        snapshot.getMonth(),
                                         snapshot.getBaseCurrencyUnit().getCode(),
                                         BigDecimal.ZERO,
                                         BigDecimal.ZERO)));
@@ -98,7 +99,8 @@ class HomeControllerTest {
                 ImmutableList.of(
                         new SnapshotSummaryViewModelOutput(
                                 snapshot.getId(),
-                                snapshot.getName(),
+                                snapshot.getYear(),
+                                snapshot.getMonth(),
                                 new UpdateableTotals(snapshot).getNetWorth())),
                 model.get(SNAPSHOTS_KEY));
     }

@@ -34,7 +34,8 @@ public class HomeController {
                                 snapshotSummary ->
                                         new SnapshotSummaryViewModelOutput(
                                                 snapshotSummary.getId(),
-                                                snapshotSummary.getName(),
+                                                snapshotSummary.getYear(),
+                                                snapshotSummary.getMonth(),
                                                 format(
                                                         snapshotSummary.getBaseCurrencyUnit(),
                                                         toDecimal(snapshotSummary.getNetWorth()))))

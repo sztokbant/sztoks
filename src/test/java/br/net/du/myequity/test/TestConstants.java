@@ -14,13 +14,26 @@ import org.joda.money.CurrencyUnit;
 
 public class TestConstants {
 
-    public static final String FIRST_SNAPSHOT_NAME = "2021-03";
-    public static final String SECOND_SNAPSHOT_NAME = "2021-04";
-    public static final String THIRD_SNAPSHOT_NAME = "2021-05";
-    public static final String FOURTH_SNAPSHOT_NAME = "2021-06";
-    public static final String FIFTH_SNAPSHOT_NAME = "2021-07";
-    public static final String SIXTH_SNAPSHOT_NAME = "2021-08";
-    public static final String SEVENTH_SNAPSHOT_NAME = "2021-09";
+    public static final int FIRST_SNAPSHOT_YEAR = 2021;
+    public static final int FIRST_SNAPSHOT_MONTH = 3;
+
+    public static final int SECOND_SNAPSHOT_YEAR = 2021;
+    public static final int SECOND_SNAPSHOT_MONTH = 4;
+
+    public static final int THIRD_SNAPSHOT_YEAR = 2021;
+    public static final int THIRD_SNAPSHOT_MONTH = 5;
+
+    public static final int FOURTH_SNAPSHOT_YEAR = 2021;
+    public static final int FOURTH_SNAPSHOT_MONTH = 6;
+
+    public static final int FIFTH_SNAPSHOT_YEAR = 2021;
+    public static final int FIFTH_SNAPSHOT_MONTH = 7;
+
+    public static final int SIXTH_SNAPSHOT_YEAR = 2021;
+    public static final int SIXTH_SNAPSHOT_MONTH = 8;
+
+    public static final int SEVENTH_SNAPSHOT_YEAR = 2021;
+    public static final int SEVENTH_SNAPSHOT_MONTH = 9;
 
     public static final String EMAIL = "example@example.com";
     public static final String FIRST_NAME = "Bill";

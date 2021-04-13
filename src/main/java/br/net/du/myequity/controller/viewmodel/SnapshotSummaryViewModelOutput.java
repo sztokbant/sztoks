@@ -7,6 +7,11 @@ import lombok.RequiredArgsConstructor;
 @Data
 public class SnapshotSummaryViewModelOutput {
     private final long id;
-    private final String name;
+    private final int year;
+    private final int month;
     private final String netWorth;
+
+    public String getName() {
+        return SnapshotViewModelOutput.getDisplayTitle(year, month);
+    }
 }

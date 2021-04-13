@@ -7,8 +7,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SnapshotRepository extends JpaRepository<Snapshot, Long> {
-    List<SnapshotSummary> findAllByUserOrderByNameDesc(User user);
+    List<SnapshotSummary> findAllByUserOrderByYearDescMonthDesc(User user);
 
     // Used only by automated tests
-    Snapshot findTopByUserOrderByNameDesc(User user);
+    Snapshot findTopByUserOrderByYearDescMonthDesc(User user);
 }

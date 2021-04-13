@@ -96,7 +96,7 @@ public class SnapshotViewModelOutput {
         final Snapshot previous = snapshot.getPrevious();
         if (previous != null) {
             previousId = previous.getId();
-            previousName = previous.getName();
+            previousName = getDisplayTitle(previous.getYear(), previous.getMonth());
         }
 
         Long nextId = null;
@@ -104,7 +104,7 @@ public class SnapshotViewModelOutput {
         final Snapshot next = snapshot.getNext();
         if (next != null) {
             nextId = next.getId();
-            nextName = next.getName();
+            nextName = getDisplayTitle(next.getYear(), next.getMonth());
         }
 
         final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot);
@@ -112,7 +112,7 @@ public class SnapshotViewModelOutput {
         final SnapshotViewModelOutputBuilder builder =
                 SnapshotViewModelOutput.builder()
                         .id(snapshot.getId())
-                        .name(snapshot.getName())
+                        .name(getDisplayTitle(snapshot.getYear(), snapshot.getMonth()))
                         .netWorth(updateableTotals.getNetWorth())
                         .currencyConversionRates(
                                 toStringStringMap(snapshot.getCurrencyConversionRates()))
@@ -149,6 +149,10 @@ public class SnapshotViewModelOutput {
         addTransactions(builder, snapshot);
 
         return builder.build();
+    }
+
+    public static String getDisplayTitle(final int year, final int month) {
+        return String.format("%04d-%02d", year, month);
     }
 
     private static Map<String, String> toStringStringMap(

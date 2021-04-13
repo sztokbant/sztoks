@@ -6,7 +6,8 @@ import static br.net.du.myequity.test.TestConstants.EMAIL;
 import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
 import static br.net.du.myequity.test.TestConstants.LAST_NAME;
 import static br.net.du.myequity.test.TestConstants.PASSWORD;
-import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_YEAR;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -76,7 +77,8 @@ class PersistenceTest {
 
         secondSnapshot =
                 new Snapshot(
-                        SECOND_SNAPSHOT_NAME,
+                        SECOND_SNAPSHOT_YEAR,
+                        SECOND_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),

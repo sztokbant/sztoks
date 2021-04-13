@@ -2,15 +2,22 @@ package br.net.du.myequity.model;
 
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.EMAIL;
-import static br.net.du.myequity.test.TestConstants.FIFTH_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.FIFTH_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.FIFTH_SNAPSHOT_YEAR;
 import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
-import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_NAME;
-import static br.net.du.myequity.test.TestConstants.FOURTH_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_YEAR;
+import static br.net.du.myequity.test.TestConstants.FOURTH_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.FOURTH_SNAPSHOT_YEAR;
 import static br.net.du.myequity.test.TestConstants.LAST_NAME;
-import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_NAME;
-import static br.net.du.myequity.test.TestConstants.SEVENTH_SNAPSHOT_NAME;
-import static br.net.du.myequity.test.TestConstants.SIXTH_SNAPSHOT_NAME;
-import static br.net.du.myequity.test.TestConstants.THIRD_SNAPSHOT_NAME;
+import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.SECOND_SNAPSHOT_YEAR;
+import static br.net.du.myequity.test.TestConstants.SEVENTH_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.SEVENTH_SNAPSHOT_YEAR;
+import static br.net.du.myequity.test.TestConstants.SIXTH_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.SIXTH_SNAPSHOT_YEAR;
+import static br.net.du.myequity.test.TestConstants.THIRD_SNAPSHOT_MONTH;
+import static br.net.du.myequity.test.TestConstants.THIRD_SNAPSHOT_YEAR;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -25,6 +32,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedSet;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +57,8 @@ class UserTest {
 
         snapshot =
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -110,7 +119,8 @@ class UserTest {
         user.addSnapshot(snapshot);
         final Snapshot newSnapshot =
                 new Snapshot(
-                        snapshot.getName(),
+                        snapshot.getYear(),
+                        snapshot.getMonth(),
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -162,7 +172,8 @@ class UserTest {
         // GIVEN
         user.addSnapshot(
                 new Snapshot(
-                        FIFTH_SNAPSHOT_NAME,
+                        FIFTH_SNAPSHOT_YEAR,
+                        FIFTH_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -170,7 +181,8 @@ class UserTest {
                         ImmutableMap.of()));
         user.addSnapshot(
                 new Snapshot(
-                        THIRD_SNAPSHOT_NAME,
+                        THIRD_SNAPSHOT_YEAR,
+                        THIRD_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -178,7 +190,8 @@ class UserTest {
                         ImmutableMap.of()));
         user.addSnapshot(
                 new Snapshot(
-                        SIXTH_SNAPSHOT_NAME,
+                        SIXTH_SNAPSHOT_YEAR,
+                        SIXTH_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -186,7 +199,8 @@ class UserTest {
                         ImmutableMap.of()));
         user.addSnapshot(
                 new Snapshot(
-                        SEVENTH_SNAPSHOT_NAME,
+                        SEVENTH_SNAPSHOT_YEAR,
+                        SEVENTH_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -194,7 +208,8 @@ class UserTest {
                         ImmutableMap.of()));
         user.addSnapshot(
                 new Snapshot(
-                        FIRST_SNAPSHOT_NAME,
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -202,7 +217,8 @@ class UserTest {
                         ImmutableMap.of()));
         user.addSnapshot(
                 new Snapshot(
-                        SECOND_SNAPSHOT_NAME,
+                        SECOND_SNAPSHOT_YEAR,
+                        SECOND_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -210,7 +226,8 @@ class UserTest {
                         ImmutableMap.of()));
         user.addSnapshot(
                 new Snapshot(
-                        FOURTH_SNAPSHOT_NAME,
+                        FOURTH_SNAPSHOT_YEAR,
+                        FOURTH_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
                         ImmutableSortedSet.of(),
@@ -218,16 +235,33 @@ class UserTest {
                         ImmutableMap.of()));
 
         // WHEN
-        final Iterator<Snapshot> iterator = user.getSnapshots().iterator();
+        final SortedSet<Snapshot> snapshots = user.getSnapshots();
 
         // THEN
-        assertEquals(SEVENTH_SNAPSHOT_NAME, iterator.next().getName());
-        assertEquals(SIXTH_SNAPSHOT_NAME, iterator.next().getName());
-        assertEquals(FIFTH_SNAPSHOT_NAME, iterator.next().getName());
-        assertEquals(FOURTH_SNAPSHOT_NAME, iterator.next().getName());
-        assertEquals(THIRD_SNAPSHOT_NAME, iterator.next().getName());
-        assertEquals(SECOND_SNAPSHOT_NAME, iterator.next().getName());
-        assertEquals(FIRST_SNAPSHOT_NAME, iterator.next().getName());
+        assertEquals(7, snapshots.size());
+
+        final Iterator<Snapshot> iterator = snapshots.iterator();
+        Snapshot snapshot = iterator.next();
+        assertEquals(SEVENTH_SNAPSHOT_YEAR, snapshot.getYear());
+        assertEquals(SEVENTH_SNAPSHOT_MONTH, snapshot.getMonth());
+        snapshot = iterator.next();
+        assertEquals(SIXTH_SNAPSHOT_YEAR, snapshot.getYear());
+        assertEquals(SIXTH_SNAPSHOT_MONTH, snapshot.getMonth());
+        snapshot = iterator.next();
+        assertEquals(FIFTH_SNAPSHOT_YEAR, snapshot.getYear());
+        assertEquals(FIFTH_SNAPSHOT_MONTH, snapshot.getMonth());
+        snapshot = iterator.next();
+        assertEquals(FOURTH_SNAPSHOT_YEAR, snapshot.getYear());
+        assertEquals(FOURTH_SNAPSHOT_MONTH, snapshot.getMonth());
+        snapshot = iterator.next();
+        assertEquals(THIRD_SNAPSHOT_YEAR, snapshot.getYear());
+        assertEquals(THIRD_SNAPSHOT_MONTH, snapshot.getMonth());
+        snapshot = iterator.next();
+        assertEquals(SECOND_SNAPSHOT_YEAR, snapshot.getYear());
+        assertEquals(SECOND_SNAPSHOT_MONTH, snapshot.getMonth());
+        snapshot = iterator.next();
+        assertEquals(FIRST_SNAPSHOT_YEAR, snapshot.getYear());
+        assertEquals(FIRST_SNAPSHOT_MONTH, snapshot.getMonth());
     }
 
     @Test
