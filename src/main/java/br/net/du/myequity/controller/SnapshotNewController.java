@@ -2,12 +2,15 @@ package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
+import static br.net.du.myequity.model.util.SnapshotUtils.computeNextSnapshotPeriod;
 
 import br.net.du.myequity.controller.interceptor.WebController;
+import br.net.du.myequity.exception.MyEquityException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.SnapshotService;
 import java.time.LocalDate;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,22 +25,20 @@ public class SnapshotNewController {
     @PostMapping("/snapshot/new")
     public String newSnapshot(final Model model) {
         final User user = getLoggedUser(model);
+        final Snapshot snapshot = user.getSnapshots().first();
 
-        final LocalDate newSnapshotPeriod = getNewSnapshotPeriod(user);
+        final Optional<LocalDate> nextSnapshotPeriodOpt = computeNextSnapshotPeriod(snapshot);
+
+        if (!nextSnapshotPeriodOpt.isPresent()) {
+            throw new MyEquityException(String.format("Too early to create a new Snapshot"));
+        }
+
+        final LocalDate nextSnapshotPeriod = nextSnapshotPeriodOpt.get();
 
         final Snapshot newSnapshot =
                 snapshotService.newSnapshot(
-                        user, newSnapshotPeriod.getYear(), newSnapshotPeriod.getMonthValue());
+                        user, nextSnapshotPeriod.getYear(), nextSnapshotPeriod.getMonthValue());
 
         return String.format(REDIRECT_SNAPSHOT_TEMPLATE, newSnapshot.getId());
-    }
-
-    private LocalDate getNewSnapshotPeriod(final User user) {
-        final Snapshot latestSnapshot = user.getSnapshots().first();
-
-        final LocalDate latestSnapshotDate =
-                LocalDate.of(latestSnapshot.getYear(), latestSnapshot.getMonth(), 1);
-
-        return latestSnapshotDate.plusMonths(1);
     }
 }

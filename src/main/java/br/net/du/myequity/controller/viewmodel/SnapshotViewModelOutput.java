@@ -22,6 +22,7 @@ import br.net.du.myequity.model.totals.InvestmentsTotal;
 import br.net.du.myequity.model.totals.SnapshotTotalsCalculator;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
+import br.net.du.myequity.model.util.SnapshotUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.lang.reflect.Method;
@@ -41,6 +42,7 @@ import org.joda.money.CurrencyUnit;
 public class SnapshotViewModelOutput {
     private final Long id;
     private final String name;
+    private final boolean newSnapshotAllowed;
 
     private final String netWorth;
     private final Map<String, String> currencyConversionRates;
@@ -113,6 +115,8 @@ public class SnapshotViewModelOutput {
                 SnapshotViewModelOutput.builder()
                         .id(snapshot.getId())
                         .name(getDisplayTitle(snapshot.getYear(), snapshot.getMonth()))
+                        .newSnapshotAllowed(
+                                SnapshotUtils.computeNextSnapshotPeriod(snapshot).isPresent())
                         .netWorth(updateableTotals.getNetWorth())
                         .currencyConversionRates(
                                 toStringStringMap(snapshot.getCurrencyConversionRates()))
