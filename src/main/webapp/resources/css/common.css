@@ -20,11 +20,6 @@
     max-width: 40%;
 }
 
-.delete-icon {
-    float: left;
-    margin: 0 7px 0 0;
-}
-
 .transparent-button {
     border: none;
     background: transparent;

@@ -21,6 +21,11 @@
     margin: -11px 0 5px 0;
 }
 
+.delete-icon {
+    float: left;
+    margin: 0 7px 0 0;
+}
+
 .col-section {
     margin: 1px;
     border: outset 1px;

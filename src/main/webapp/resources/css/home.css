@@ -3,3 +3,7 @@
     color: white;
     background: #666;
 }
+
+.col-snapshot-delete {
+    max-width: 42px;
+}

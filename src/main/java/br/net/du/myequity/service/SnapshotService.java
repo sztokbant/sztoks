@@ -66,6 +66,10 @@ public class SnapshotService {
                     "Snapshot cannot be deleted as it is the only remaining snapshot.");
         }
 
+        if (snapshot.getNext() != null) {
+            throw new MyEquityException("Only the most recent Snapshot can be deleted.");
+        }
+
         snapshot.getAccounts().forEach(account -> snapshot.removeAccount(account));
 
         snapshot.getTransactions().forEach(transaction -> snapshot.removeTransaction(transaction));

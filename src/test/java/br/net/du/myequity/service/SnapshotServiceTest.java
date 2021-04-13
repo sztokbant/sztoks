@@ -173,7 +173,7 @@ public class SnapshotServiceTest {
     }
 
     @Test
-    public void deleteSnapshot_first_happy() {
+    public void deleteSnapshot_first_throws() {
         // GIVEN
         final Snapshot secondSnapshot =
                 newEmptySnapshot(SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
@@ -182,15 +182,14 @@ public class SnapshotServiceTest {
 
         assertEquals(2, user.getSnapshots().size());
 
-        // WHEN
-        snapshotService.deleteSnapshot(user, snapshot);
-
         // THEN
-        assertEquals(1, user.getSnapshots().size());
-        assertEquals(secondSnapshot, user.getSnapshots().first());
+        assertThrows(
+                MyEquityException.class,
+                () -> {
+                    snapshotService.deleteSnapshot(user, snapshot);
+                });
 
-        assertNull(secondSnapshot.getPrevious());
-        assertNull(secondSnapshot.getNext());
+        assertEquals(2, user.getSnapshots().size());
     }
 
     @Test
@@ -215,7 +214,7 @@ public class SnapshotServiceTest {
     }
 
     @Test
-    public void deleteSnapshot_middle_happy() {
+    public void deleteSnapshot_middle_throws() {
         // GIVEN
         final Snapshot secondSnapshot =
                 newEmptySnapshot(SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
@@ -233,13 +232,14 @@ public class SnapshotServiceTest {
 
         assertEquals(4, user.getSnapshots().size());
 
-        // WHEN
-        snapshotService.deleteSnapshot(user, thirdSnapshot);
-
         // THEN
-        assertEquals(3, user.getSnapshots().size());
-        assertEquals(fourthSnapshot, secondSnapshot.getNext());
-        assertEquals(secondSnapshot, fourthSnapshot.getPrevious());
+        assertThrows(
+                MyEquityException.class,
+                () -> {
+                    snapshotService.deleteSnapshot(user, thirdSnapshot);
+                });
+
+        assertEquals(4, user.getSnapshots().size());
     }
 
     @Test

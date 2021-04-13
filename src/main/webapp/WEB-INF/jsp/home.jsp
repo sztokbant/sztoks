@@ -28,19 +28,26 @@
                 <th class="snapshots-title">Snapshot Name</th>
                 <th class="snapshots-title">Net Worth</th>
             </tr>
+
+            <c:set var="isFirst" value="true"/>
             <c:forEach var="snapshot" items="${snapshots}">
                 <tr class="border-1px bg-light-yellow">
                     <td class="valign-top">
-                        <c:if test="${snapshots.size() gt 1}">
-                            <div class="delete-icon">
-                                <form method="post" action="${contextPath}/snapshot/delete/${snapshot.id}"
-                                      onsubmit="return confirm('Are you sure you want to permanently delete snapshot \'${snapshot.name}\'?');">
-                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                    <input type="submit" value="&#x26D4" class="transparent-button"/>
-                                </form>
+                        <div class="row">
+                            <div class="col col-snapshot-delete">
+                                <c:if test="${isFirst and snapshots.size() gt 1}">
+                                    <form method="post" action="${contextPath}/snapshot/delete/${snapshot.id}"
+                                          onsubmit="return confirm('Are you sure you want to PERMANENTLY delete snapshot \'${snapshot.name}\'?');">
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <input type="submit" value="&#x26D4" class="transparent-button"/>
+                                    </form>
+                                    <c:set var="isFirst" value="false"/>
+                                </c:if>
                             </div>
-                        </c:if>
-                        <a href="/snapshot/${snapshot.id}">${snapshot.name}</a>
+                            <div class="col col-account-name">
+                                <a href="/snapshot/${snapshot.id}">${snapshot.name}</a>
+                            </div>
+                        </div>
                     </td>
                     <td class="align-right-p7">${snapshot.netWorth}</td>
                 </tr>

@@ -1,5 +1,14 @@
 package br.net.du.myequity.controller.account;
 
+import static br.net.du.myequity.controller.util.ControllerConstants.ACCOUNT_TYPE_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.CURRENCIES;
+import static br.net.du.myequity.controller.util.ControllerConstants.ID;
+import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
+import static br.net.du.myequity.controller.util.ControllerConstants.SELECTED_CURRENCY;
+import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
+import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
+
 import br.net.du.myequity.controller.interceptor.WebController;
 import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
@@ -11,6 +20,7 @@ import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.account.DueDateUpdateable;
 import br.net.du.myequity.service.SnapshotService;
+import java.time.YearMonth;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,17 +30,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.time.YearMonth;
-
-import static br.net.du.myequity.controller.util.ControllerConstants.ACCOUNT_TYPE_KEY;
-import static br.net.du.myequity.controller.util.ControllerConstants.CURRENCIES;
-import static br.net.du.myequity.controller.util.ControllerConstants.ID;
-import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
-import static br.net.du.myequity.controller.util.ControllerConstants.SELECTED_CURRENCY;
-import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
-import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
-import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 
 @Controller
 @WebController
