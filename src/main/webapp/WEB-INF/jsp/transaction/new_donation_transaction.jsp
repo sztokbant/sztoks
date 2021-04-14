@@ -48,7 +48,8 @@
                 </div>
             </spring:bind>
 
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+            <button class="btn btn-lg btn-primary btn-block" type="submit"
+                    onClick="this.form.submit(); this.disabled=true; this.innerText='Saving...';">Save</button>
             <div class="text-center"><a href="${contextPath}/snapshot/${snapshotId}">Back</a></div>
         </form:form>
     </div>

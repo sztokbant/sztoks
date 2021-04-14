@@ -122,7 +122,8 @@
                 </div>
             </div>
 
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+            <button class="btn btn-lg btn-primary btn-block" type="submit"
+                    onClick="this.form.submit(); this.disabled=true; this.innerText='Signing up...';">Sign up</button>
             <div class="text-center">Already have an account? <a href="${contextPath}/login">Log in</a>.</div>
         </form:form>
     </div>
