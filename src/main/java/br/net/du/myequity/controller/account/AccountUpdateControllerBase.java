@@ -3,7 +3,6 @@ package br.net.du.myequity.controller.account;
 import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
-import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
@@ -38,10 +37,13 @@ public class AccountUpdateControllerBase {
     }
 
     Account getAccount(final Model model, final ValueUpdateJsonRequest valueUpdateJsonRequest) {
-        final Snapshot snapshot =
-                snapshotUtils.validateSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
+        // Ensure snapshot belongs to logged user
+        snapshotUtils.validateSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
+
         final Optional<Account> accountOpt =
-                snapshot.getAccountById(valueUpdateJsonRequest.getEntityId());
+                accountService.findByIdAndSnapshotId(
+                        valueUpdateJsonRequest.getEntityId(),
+                        valueUpdateJsonRequest.getSnapshotId());
 
         if (!accountOpt.isPresent()) {
             throw new IllegalArgumentException("account not found");

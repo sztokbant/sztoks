@@ -54,7 +54,7 @@ class UserServiceTest {
                 snapshotService.findAllSummariesByUser(user);
         assertEquals(1, snapshotSummaries.size());
 
-        final Snapshot snapshot = snapshotService.findTopBy(user);
+        final Snapshot snapshot = snapshotService.findTopByUser(user);
         assertEquals(CURRENCY_UNIT, snapshot.getBaseCurrencyUnit());
         assertTrue(TITHING_PERCENTAGE.compareTo(snapshot.getDefaultTithingPercentage()) == 0);
     }

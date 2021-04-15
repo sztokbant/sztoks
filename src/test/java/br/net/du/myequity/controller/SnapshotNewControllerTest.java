@@ -80,6 +80,9 @@ class SnapshotNewControllerTest extends PostControllerTestBase {
 
     @Test
     public void post_happy() throws Exception {
+        // GIVEN
+        when(snapshotService.findTopByUser(eq(user))).thenReturn(snapshot);
+
         // WHEN
         final ResultActions resultActions =
                 mvc.perform(

@@ -7,6 +7,7 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.totals.BalanceUpdateableSubtype;
 import org.joda.money.CurrencyUnit;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RemoveAccountController extends AccountUpdateControllerBase {
 
     @PostMapping("/snapshot/removeAccount")
+    @Transactional
     public SnapshotRemoveAccountJsonResponse post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         final Account account = getAccount(model, valueUpdateJsonRequest);

@@ -58,7 +58,8 @@ class InvestmentAccountCurrentShareValueUpdateControllerTest extends AccountAjax
 
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
-        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+        when(accountService.findByIdAndSnapshotId(ACCOUNT_ID, SNAPSHOT_ID))
+                .thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions =

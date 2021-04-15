@@ -8,6 +8,7 @@ import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import org.joda.money.CurrencyUnit;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RemoveTransactionController extends TransactionUpdateControllerBase {
 
     @PostMapping("/transaction/remove")
+    @Transactional
     public SnapshotRemoveTransactionJsonResponse post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         final Transaction transaction = getTransaction(model, valueUpdateJsonRequest);

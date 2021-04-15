@@ -6,6 +6,7 @@ import br.net.du.myequity.controller.viewmodel.EntityRenameJsonResponse;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,8 @@ public class AccountRenameController {
     @Autowired private AccountUtils accountUtils;
 
     @PostMapping("/account/updateName")
+    @Transactional
+    // TODO: Deprecate this method in lieu of AccountUpdateControllerBase::getAccount
     public EntityRenameJsonResponse post(
             final Model model, @RequestBody final EntityRenameJsonRequest entityNameJsonRequest) {
         final Account account = accountUtils.getAccount(model, entityNameJsonRequest.getId());

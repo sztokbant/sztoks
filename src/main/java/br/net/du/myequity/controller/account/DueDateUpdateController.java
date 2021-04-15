@@ -9,6 +9,7 @@ import br.net.du.myequity.model.account.DueDateUpdateable;
 import br.net.du.myequity.model.account.PayableAccount;
 import java.time.LocalDate;
 import java.util.function.BiFunction;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DueDateUpdateController extends AccountUpdateControllerBase {
 
     @PostMapping("/snapshot/updateAccountDueDate")
+    @Transactional
     public AccountViewModelOutput post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 

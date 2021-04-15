@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -23,9 +24,10 @@ public class SnapshotNewController {
     @Autowired private SnapshotService snapshotService;
 
     @PostMapping("/snapshot/new")
+    @Transactional
     public String newSnapshot(final Model model) {
         final User user = getLoggedUser(model);
-        final Snapshot snapshot = user.getSnapshots().first();
+        final Snapshot snapshot = snapshotService.findTopByUser(user);
 
         final Optional<LocalDate> nextSnapshotPeriodOpt = computeNextSnapshotPeriod(snapshot);
 

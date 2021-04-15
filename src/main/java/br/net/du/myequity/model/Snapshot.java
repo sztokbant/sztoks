@@ -377,13 +377,6 @@ public class Snapshot implements Comparable<Snapshot> {
     public void updateTransactionsTotal(
             @NonNull final TransactionType transactionType,
             @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final BigDecimal amount) {
-        updateTransactionsTotal(transactionType, currencyUnit, amount, false);
-    }
-
-    public void updateTransactionsTotal(
-            @NonNull final TransactionType transactionType,
-            @NonNull final CurrencyUnit currencyUnit,
             @NonNull final BigDecimal amount,
             final boolean isTaxDeductibleDonation) {
         if (amount.compareTo(BigDecimal.ZERO) == 0) {

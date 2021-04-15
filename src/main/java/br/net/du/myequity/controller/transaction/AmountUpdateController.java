@@ -5,6 +5,7 @@ import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelO
 import br.net.du.myequity.model.transaction.Transaction;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AmountUpdateController extends TransactionUpdateControllerBase {
 
     @PostMapping("/transaction/updateAmount")
+    @Transactional
     public TransactionViewModelOutput post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 

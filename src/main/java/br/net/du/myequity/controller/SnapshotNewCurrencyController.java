@@ -22,6 +22,7 @@ import java.util.SortedSet;
 import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +50,7 @@ public class SnapshotNewCurrencyController {
     }
 
     @PostMapping(SNAPSHOT_NEW_CURRENCY_MAPPING)
+    @Transactional
     public String post(
             @PathVariable(value = ID) final Long snapshotId,
             final Model model,

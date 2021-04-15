@@ -11,6 +11,7 @@ import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.SnapshotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ public class SnapshotDeleteController {
     @Autowired private SnapshotUtils snapshotUtils;
 
     @PostMapping("/snapshot/delete/{id}")
+    @Transactional
     public String delete(@PathVariable(value = ID) final Long snapshotId, final Model model) {
         final User user = getLoggedUser(model);
         final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);

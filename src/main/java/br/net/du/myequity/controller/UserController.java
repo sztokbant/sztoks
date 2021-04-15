@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,7 @@ public class UserController {
     }
 
     @PostMapping(SIGNUP_MAPPING)
+    @Transactional
     public String signup(
             final Model model,
             @ModelAttribute(USER_FORM) final UserViewModelInput userViewModelInput,

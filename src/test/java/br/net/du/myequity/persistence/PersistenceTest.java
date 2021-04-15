@@ -103,7 +103,7 @@ class PersistenceTest {
         assertEquals(secondSnapshot, user.getSnapshots().first());
 
         // SnapshotService's perspective
-        final Snapshot actualSnapshot = snapshotService.findTopBy(user);
+        final Snapshot actualSnapshot = snapshotService.findTopByUser(user);
         assertNotNull(actualSnapshot.getId());
         assertEquals(user, actualSnapshot.getUser());
         assertEquals(secondSnapshot, actualSnapshot);
@@ -121,7 +121,7 @@ class PersistenceTest {
         secondSnapshot.addAccount(simpleLiabilityAccount);
 
         // THEN
-        final Snapshot actualSnapshot = snapshotService.findTopBy(user);
+        final Snapshot actualSnapshot = snapshotService.findTopByUser(user);
 
         final Map<AccountType, SortedSet<Account>> accountsByType =
                 actualSnapshot.getAccountsByType();
@@ -151,12 +151,12 @@ class PersistenceTest {
         secondSnapshot.addAccount(simpleLiabilityAccount);
 
         // WHEN
-        final Snapshot persistedSnapshot = snapshotService.findTopBy(user);
+        final Snapshot persistedSnapshot = snapshotService.findTopByUser(user);
         assertEquals(2, persistedSnapshot.getAccounts().size());
         persistedSnapshot.removeAccount(simpleLiabilityAccount);
 
         // THEN
-        final Snapshot actualSnapshot = snapshotService.findTopBy(user);
+        final Snapshot actualSnapshot = snapshotService.findTopByUser(user);
         final SortedSet<Account> actualAccounts = actualSnapshot.getAccounts();
         assertEquals(1, actualAccounts.size());
         assertTrue(
@@ -174,7 +174,7 @@ class PersistenceTest {
         secondSnapshot.addAccount(simpleAssetAccount);
         secondSnapshot.addAccount(simpleLiabilityAccount);
 
-        final Snapshot persistedSnapshot = snapshotService.findTopBy(user);
+        final Snapshot persistedSnapshot = snapshotService.findTopByUser(user);
         assertEquals(2, persistedSnapshot.getAccounts().size());
         assertEquals(new BigDecimal("-319900.00"), persistedSnapshot.getNetWorth());
 
@@ -186,7 +186,7 @@ class PersistenceTest {
                 persistedSimpleLiabilityAccount.getBalance().add(new BigDecimal("100000.00")));
 
         // THEN
-        final Snapshot actualSnapshot = snapshotService.findTopBy(user);
+        final Snapshot actualSnapshot = snapshotService.findTopByUser(user);
         assertEquals(2, actualSnapshot.getAccounts().size());
         assertEquals(new BigDecimal("-419900.00"), actualSnapshot.getNetWorth());
     }

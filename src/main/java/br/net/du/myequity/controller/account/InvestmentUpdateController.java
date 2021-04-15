@@ -7,6 +7,7 @@ import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.InvestmentAccount;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class InvestmentUpdateController extends AccountUpdateControllerBase {
 
     @PostMapping("/snapshot/updateInvestmentShares")
+    @Transactional
     public AccountViewModelOutput updateInvestmentShares(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
@@ -38,6 +40,7 @@ public class InvestmentUpdateController extends AccountUpdateControllerBase {
     }
 
     @PostMapping("/snapshot/updateInvestmentAmountInvested")
+    @Transactional
     public AccountViewModelOutput updateInvestmentAmountInvested(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
@@ -60,6 +63,7 @@ public class InvestmentUpdateController extends AccountUpdateControllerBase {
     }
 
     @PostMapping("/snapshot/updateInvestmentCurrentShareValue")
+    @Transactional
     public AccountViewModelOutput updateInvestmentCurrentShareValue(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>

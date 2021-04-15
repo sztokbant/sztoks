@@ -22,6 +22,10 @@ public class AccountService {
         return accountRepository.findById(accountId);
     }
 
+    public Optional<Account> findByIdAndSnapshotId(final Long accountId, final Long snapshotId) {
+        return accountRepository.findByIdAndSnapshotId(accountId, snapshotId);
+    }
+
     public List<Account> findBySnapshot(@NonNull final Snapshot snapshot) {
         return accountRepository.findBySnapshot(snapshot);
     }

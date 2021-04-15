@@ -49,13 +49,12 @@ public class SnapshotService {
         return snapshotRepository.findById(snapshotId);
     }
 
-    public List<SnapshotSummary> findAllSummariesByUser(@NonNull final User user) {
-        return snapshotRepository.findAllByUserOrderByYearDescMonthDesc(user);
+    public Snapshot findTopByUser(@NonNull final User user) {
+        return snapshotRepository.findTopByUserOrderByYearDescMonthDesc(user);
     }
 
-    // Used only by automated tests
-    public Snapshot findTopBy(@NonNull final User user) {
-        return snapshotRepository.findTopByUserOrderByYearDescMonthDesc(user);
+    public List<SnapshotSummary> findAllSummariesByUser(@NonNull final User user) {
+        return snapshotRepository.findAllByUserOrderByYearDescMonthDesc(user);
     }
 
     public void deleteSnapshot(@NonNull final User user, @NonNull final Snapshot snapshot) {
