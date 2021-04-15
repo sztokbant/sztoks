@@ -54,7 +54,7 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-configurations.compile {
+configurations.implementation {
     spotless {
         java {
             googleJavaFormat().aosp()
