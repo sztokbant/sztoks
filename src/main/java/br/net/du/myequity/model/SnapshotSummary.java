@@ -24,6 +24,9 @@ public class SnapshotSummary {
     }
 
     public BigDecimal getNetWorth() {
+        if (assetsTotal == null || liabilitiesTotal == null) {
+            return BigDecimal.ZERO;
+        }
         return assetsTotal.subtract(liabilitiesTotal).setScale(2, RoundingMode.HALF_UP);
     }
 }

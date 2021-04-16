@@ -47,22 +47,31 @@ public class CumulativeTransactionTotalsImpl implements CumulativeTransactionTot
 
         final CurrencyUnit otherBaseCurrency = CurrencyUnit.of(other.getBaseCurrency());
 
-        incomesTotal =
-                incomesTotal.add(
-                        snapshot.toBaseCurrency(otherBaseCurrency, other.getIncomesTotal()));
+        if (other.getIncomesTotal() != null) {
+            incomesTotal =
+                    incomesTotal.add(
+                            snapshot.toBaseCurrency(otherBaseCurrency, other.getIncomesTotal()));
+        }
 
-        investmentsTotal =
-                investmentsTotal.add(
-                        snapshot.toBaseCurrency(otherBaseCurrency, other.getInvestmentsTotal()));
+        if (other.getInvestmentsTotal() != null) {
+            investmentsTotal =
+                    investmentsTotal.add(
+                            snapshot.toBaseCurrency(
+                                    otherBaseCurrency, other.getInvestmentsTotal()));
+        }
 
-        donationsTotal =
-                donationsTotal.add(
-                        snapshot.toBaseCurrency(otherBaseCurrency, other.getDonationsTotal()));
+        if (other.getDonationsTotal() != null) {
+            donationsTotal =
+                    donationsTotal.add(
+                            snapshot.toBaseCurrency(otherBaseCurrency, other.getDonationsTotal()));
+        }
 
-        taxDeductibleDonationsTotal =
-                taxDeductibleDonationsTotal.add(
-                        snapshot.toBaseCurrency(
-                                otherBaseCurrency, other.getTaxDeductibleDonationsTotal()));
+        if (other.getTaxDeductibleDonationsTotal() != null) {
+            taxDeductibleDonationsTotal =
+                    taxDeductibleDonationsTotal.add(
+                            snapshot.toBaseCurrency(
+                                    otherBaseCurrency, other.getTaxDeductibleDonationsTotal()));
+        }
 
         investmentAvg =
                 incomesTotal.compareTo(BigDecimal.ZERO) == 0
