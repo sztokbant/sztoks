@@ -65,8 +65,11 @@ public class SnapshotService {
     }
 
     public List<CumulativeTransactionTotals> findYearToDateCumulativeTransactionTotals(
-            @NonNull final Integer refYear, @NonNull final Long userId) {
-        return snapshotRepository.findYearToDateCumulativeTransactionTotals(refYear, userId);
+            @NonNull final Integer refYear,
+            @NonNull final Integer refMonth,
+            @NonNull final Long userId) {
+        return snapshotRepository.findYearToDateCumulativeTransactionTotals(
+                refYear, refMonth, userId);
     }
 
     public void deleteSnapshot(@NonNull final User user, @NonNull final Snapshot snapshot) {

@@ -26,8 +26,8 @@ public interface SnapshotRepository extends JpaRepository<Snapshot, Long> {
                             + "SUM(s.investments_total) investmentsTotal, \n"
                             + "SUM(s.donations_total) donationsTotal, \n"
                             + "SUM(s.tax_deductible_donations_total) taxDeductibleDonationsTotal, \n"
-                            + "CASE SUM(s.incomes_total) WHEN 0 THEN 0 ELSE SUM(s.donations_total) / SUM(s.incomes_total) END donationAvg, \n"
-                            + "CASE SUM(s.incomes_total) WHEN 0 THEN 0 ELSE SUM(s.investments_total) / SUM(s.incomes_total) END investmentAvg \n"
+                            + "CASE SUM(s.incomes_total) WHEN 0 THEN 0 ELSE SUM(s.investments_total) * 100.0 / SUM(s.incomes_total) END investmentAvg, \n"
+                            + "CASE SUM(s.incomes_total) WHEN 0 THEN 0 ELSE SUM(s.donations_total) * 100.0 / SUM(s.incomes_total) END donationAvg \n"
                             + "FROM (SELECT * FROM snapshots WHERE id <= ?1 AND user_id = ?2 ORDER BY year DESC, month DESC LIMIT 12) s \n"
                             + "GROUP BY baseCurrency \n",
             nativeQuery = true)
@@ -42,13 +42,13 @@ public interface SnapshotRepository extends JpaRepository<Snapshot, Long> {
                             + "SUM(s.investments_total) investmentsTotal, \n"
                             + "SUM(s.donations_total) donationsTotal, \n"
                             + "SUM(s.tax_deductible_donations_total) taxDeductibleDonationsTotal, \n"
-                            + "CASE SUM(s.incomes_total) WHEN 0 THEN 0 ELSE SUM(s.donations_total) / SUM(s.incomes_total) END donationAvg, \n"
-                            + "CASE SUM(s.incomes_total) WHEN 0 THEN 0 ELSE SUM(s.investments_total) / SUM(s.incomes_total) END investmentAvg \n"
-                            + "FROM (SELECT * FROM snapshots WHERE year = ?1 AND user_id = ?2) s \n"
+                            + "CASE SUM(s.incomes_total) WHEN 0 THEN 0 ELSE SUM(s.investments_total) * 100.0 / SUM(s.incomes_total) END investmentAvg, \n"
+                            + "CASE SUM(s.incomes_total) WHEN 0 THEN 0 ELSE SUM(s.donations_total) * 100.0 / SUM(s.incomes_total) END donationAvg \n"
+                            + "FROM (SELECT * FROM snapshots WHERE year = ?1 AND month <= ?2 AND user_id = ?3) s \n"
                             + "GROUP BY baseCurrency \n",
             nativeQuery = true)
     List<CumulativeTransactionTotals> findYearToDateCumulativeTransactionTotals(
-            Integer refYear, Long userId);
+            Integer refYear, Integer refMonth, Long userId);
 
     List<SnapshotSummary> findAllByUserOrderByYearDescMonthDesc(User user);
 }

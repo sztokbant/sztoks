@@ -13,7 +13,7 @@ public interface CumulativeTransactionTotals {
 
     BigDecimal getTaxDeductibleDonationsTotal();
 
-    BigDecimal getDonationAvg();
-
     BigDecimal getInvestmentAvg();
+
+    BigDecimal getDonationAvg();
 }
