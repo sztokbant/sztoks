@@ -22,6 +22,7 @@ public class RecurringUpdateController extends TransactionUpdateControllerBase {
                 updateRecurringFunction =
                         (jsonRequest, transaction) -> {
                             final boolean newValue = Boolean.valueOf(jsonRequest.getNewValue());
+
                             transaction.setRecurring(newValue);
 
                             return TransactionViewModelOutput.of(transaction, false);

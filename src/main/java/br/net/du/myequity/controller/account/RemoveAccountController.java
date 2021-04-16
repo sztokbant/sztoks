@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 public class RemoveAccountController extends AccountUpdateControllerBase {
 
@@ -20,12 +22,27 @@ public class RemoveAccountController extends AccountUpdateControllerBase {
     @Transactional
     public SnapshotRemoveAccountJsonResponse post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
-        final Account account = getAccount(model, valueUpdateJsonRequest);
-        final Snapshot snapshot = account.getSnapshot();
+        // Ensure snapshot belongs to logged user
+        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
+
+        final Optional<Account> accountOpt =
+                accountService.findByIdAndSnapshotId(
+                        valueUpdateJsonRequest.getEntityId(),
+                        valueUpdateJsonRequest.getSnapshotId());
+
+        if (!accountOpt.isPresent()) {
+            throw new IllegalArgumentException("account not found");
+        }
+
+        final Account account = accountOpt.get();
 
         snapshot.removeAccount(account);
         snapshotService.save(snapshot);
 
+        return buildJsonResponse(snapshot, account);
+    }
+
+    private SnapshotRemoveAccountJsonResponse buildJsonResponse(final Snapshot snapshot, final Account account) {
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
         final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot);
 

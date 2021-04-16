@@ -21,7 +21,6 @@ public class AccountRenameController {
 
     @PostMapping("/account/updateName")
     @Transactional
-    // TODO: Deprecate this method in lieu of AccountUpdateControllerBase::getAccount
     public EntityRenameJsonResponse post(
             final Model model, @RequestBody final EntityRenameJsonRequest entityNameJsonRequest) {
         final Account account = accountUtils.getAccount(model, entityNameJsonRequest.getId());

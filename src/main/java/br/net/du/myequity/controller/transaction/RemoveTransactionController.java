@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 public class RemoveTransactionController extends TransactionUpdateControllerBase {
 
@@ -21,12 +23,31 @@ public class RemoveTransactionController extends TransactionUpdateControllerBase
     @Transactional
     public SnapshotRemoveTransactionJsonResponse post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
-        final Transaction transaction = getTransaction(model, valueUpdateJsonRequest);
-        final Snapshot snapshot = transaction.getSnapshot();
+        // Ensure snapshot belongs to logged user
+        final Snapshot snapshot =
+                snapshotUtils.validateSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
+
+        final Optional<Transaction> transactionOpt =
+                transactionService.findByIdAndSnapshotId(
+                        valueUpdateJsonRequest.getEntityId(),
+                        valueUpdateJsonRequest.getSnapshotId());
+
+        if (!transactionOpt.isPresent()) {
+            throw new IllegalArgumentException("transaction not found");
+        }
+
+        final Transaction transaction = transactionOpt.get();
 
         snapshot.removeTransaction(transaction);
         snapshotService.save(snapshot);
 
+        return buildJsonResponse(valueUpdateJsonRequest, snapshot, transaction);
+    }
+
+    private SnapshotRemoveTransactionJsonResponse buildJsonResponse(
+            final ValueUpdateJsonRequest valueUpdateJsonRequest,
+            final Snapshot snapshot,
+            final Transaction transaction) {
         final TransactionType transactionType = transaction.getTransactionType();
         final CurrencyUnit currencyUnit = transaction.getCurrencyUnit();
 
