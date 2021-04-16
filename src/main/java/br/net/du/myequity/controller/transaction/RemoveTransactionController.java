@@ -7,14 +7,13 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
+import java.util.Optional;
 import org.joda.money.CurrencyUnit;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @RestController
 public class RemoveTransactionController extends TransactionUpdateControllerBase {

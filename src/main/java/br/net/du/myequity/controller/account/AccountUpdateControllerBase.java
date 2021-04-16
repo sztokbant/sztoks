@@ -25,7 +25,8 @@ public class AccountUpdateControllerBase {
             final Class clazz,
             final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput> function) {
         // Ensure snapshot belongs to logged user
-        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
+        final Snapshot snapshot =
+                snapshotUtils.validateSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
 
         final Optional<Account> accountOpt =
                 accountService.findByIdAndSnapshotId(
@@ -49,5 +50,4 @@ public class AccountUpdateControllerBase {
 
         return jsonResponse;
     }
-
 }

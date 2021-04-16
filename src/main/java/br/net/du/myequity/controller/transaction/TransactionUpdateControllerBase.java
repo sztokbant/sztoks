@@ -5,7 +5,6 @@ import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.transaction.Transaction;
-import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import br.net.du.myequity.service.TransactionService;
 import java.util.Optional;
