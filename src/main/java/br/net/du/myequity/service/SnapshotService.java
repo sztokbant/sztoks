@@ -4,6 +4,7 @@ import br.net.du.myequity.exception.MyEquityException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.SnapshotSummary;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.totals.CumulativeTransactionTotals;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import java.util.List;
 import java.util.Optional;
@@ -55,6 +56,17 @@ public class SnapshotService {
 
     public List<SnapshotSummary> findAllSummariesByUser(@NonNull final User user) {
         return snapshotRepository.findAllByUserOrderByYearDescMonthDesc(user);
+    }
+
+    public List<CumulativeTransactionTotals> findPastTwelveMonthsCumulativeTransactionTotals(
+            @NonNull final Long refSnapshotId, @NonNull final Long userId) {
+        return snapshotRepository.findPastTwelveMonthsCumulativeTransactionTotals(
+                refSnapshotId, userId);
+    }
+
+    public List<CumulativeTransactionTotals> findYearToDateCumulativeTransactionTotals(
+            @NonNull final Integer refYear, @NonNull final Long userId) {
+        return snapshotRepository.findYearToDateCumulativeTransactionTotals(refYear, userId);
     }
 
     public void deleteSnapshot(@NonNull final User user, @NonNull final Snapshot snapshot) {
