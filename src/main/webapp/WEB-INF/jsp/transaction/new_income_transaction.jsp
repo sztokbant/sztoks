@@ -41,6 +41,43 @@
                 </div>
             </spring:bind>
 
+            <spring:bind path="category">
+                <div class="row form-group">
+                    <div class="col col-form-label">
+                        Income Category
+                    </div>
+                    <div class="col">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <div>
+                                <form:radiobutton path="category" value="JOB" id="jobRadio"/>
+                                <label for="jobRadio">Job</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="category" value="BUSINESS" id="businessRadio"/>
+                                <label for="businessRadio">Business</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="category" value="SIDE_GIG" id="sideGigRadio"/>
+                                <label for="sideGigRadio">Side Gig</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="category" value="GIFT" id="giftRadio"/>
+                                <label for="giftRadio">Gift</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="category" value="PROMO" id="promoRadio"/>
+                                <label for="promoRadio">Promo</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="category" value="OTHER" id="otherRadio" checked="checked"/>
+                                <label for="otherRadio">Other</label>
+                            </div>
+                            <form:errors path="category"/>
+                        </div>
+                    </div>
+                </div>
+            </spring:bind>
+
             <button class="btn btn-lg btn-primary btn-block" type="submit"
                     onClick="this.form.submit(); this.disabled=true; this.innerText='Saving...';">Save</button>
             <div class="text-center"><a href="${contextPath}/snapshot/${snapshotId}">Back</a></div>

@@ -27,6 +27,10 @@ $(document).ready(function() {
     </div>
 
     <div class="col col-cell align-center">
+        ${entity.category}
+    </div>
+
+    <div class="col col-cell align-center">
         <input id="TRANSACTION_${entity.id}_taxDeductible" type="checkbox"/>
     </div>
 

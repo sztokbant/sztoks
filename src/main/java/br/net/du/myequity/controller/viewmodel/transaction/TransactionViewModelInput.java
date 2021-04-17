@@ -1,6 +1,8 @@
 package br.net.du.myequity.controller.viewmodel.transaction;
 
+import br.net.du.myequity.model.transaction.DonationCategory;
 import br.net.du.myequity.model.transaction.DonationTransaction;
+import br.net.du.myequity.model.transaction.IncomeCategory;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.InvestmentCategory;
 import br.net.du.myequity.model.transaction.InvestmentTransaction;
@@ -20,11 +22,11 @@ public class TransactionViewModelInput {
     private String description;
     private Boolean isRecurring;
 
-    // INCOME only
-    private String tithingPercentage;
-
     // Categorizable only
     private String category;
+
+    // INCOME only
+    private String tithingPercentage;
 
     // DONATION only
     private Boolean isTaxDeductible;
@@ -40,7 +42,8 @@ public class TransactionViewModelInput {
                     new BigDecimal(amount),
                     description,
                     isRecurring,
-                    new BigDecimal(tithingPercentage));
+                    new BigDecimal(tithingPercentage),
+                    IncomeCategory.valueOf(category));
         } else if (transactionType.equals(TransactionType.INVESTMENT)) {
             return new InvestmentTransaction(
                     localDate,
@@ -56,7 +59,8 @@ public class TransactionViewModelInput {
                     new BigDecimal(amount),
                     description,
                     isRecurring,
-                    isTaxDeductible);
+                    isTaxDeductible,
+                    DonationCategory.valueOf(category));
         }
 
         throw new IllegalArgumentException("typeName: " + typeName);

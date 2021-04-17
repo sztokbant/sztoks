@@ -16,6 +16,8 @@ import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhit
 
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelInput;
 import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.transaction.DonationCategory;
+import br.net.du.myequity.model.transaction.IncomeCategory;
 import br.net.du.myequity.model.transaction.InvestmentCategory;
 import br.net.du.myequity.model.transaction.TransactionType;
 import java.math.BigDecimal;
@@ -59,11 +61,12 @@ public class TransactionViewModelInputValidator implements SmartValidator {
 
         final TransactionType transactionType =
                 TransactionType.valueOf(transactionViewModelInput.getTypeName());
+
+        rejectIfInvalidCategory(transactionType, transactionViewModelInput.getCategory(), errors);
+
         if (transactionType.equals(TransactionType.INCOME)) {
             rejectIfInvalidTithingPercentage(
                     transactionViewModelInput.getTithingPercentage(), errors);
-        } else if (transactionType.equals(TransactionType.INVESTMENT)) {
-            rejectIfInvalidCategory(transactionViewModelInput, errors);
         } else if (transactionType.equals(TransactionType.DONATION)) {
             rejectIfInvalidIsTaxDeductible(transactionViewModelInput, errors);
         }
@@ -110,12 +113,18 @@ public class TransactionViewModelInputValidator implements SmartValidator {
     }
 
     private void rejectIfInvalidCategory(
-            final TransactionViewModelInput transactionViewModelInput, final Errors errors) {
+            final TransactionType transactionType, final String category, final Errors errors) {
         rejectIfEmptyOrWhitespace(errors, CATEGORY_FIELD, NOT_EMPTY_ERRORCODE);
 
-        if (StringUtils.isNotBlank(transactionViewModelInput.getCategory())) {
+        if (!errors.hasFieldErrors(CATEGORY_FIELD)) {
             try {
-                InvestmentCategory.valueOf(transactionViewModelInput.getCategory());
+                if (transactionType.equals(TransactionType.INCOME)) {
+                    IncomeCategory.valueOf(category);
+                } else if (transactionType.equals(TransactionType.INVESTMENT)) {
+                    InvestmentCategory.valueOf(category);
+                } else if (transactionType.equals(TransactionType.DONATION)) {
+                    DonationCategory.valueOf(category);
+                }
             } catch (final Exception e) {
                 errors.rejectValue(CATEGORY_FIELD, "Invalid.investmentCategory");
             }

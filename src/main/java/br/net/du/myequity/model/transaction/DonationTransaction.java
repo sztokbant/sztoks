@@ -10,11 +10,12 @@ import javax.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Entity
 @DiscriminatorValue(DonationTransaction.TRANSACTION_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class DonationTransaction extends Transaction {
+public class DonationTransaction extends Transaction implements Categorizable<DonationCategory> {
     static final String TRANSACTION_TYPE = "DONATION";
 
     @Transient @Getter
@@ -28,15 +29,23 @@ public class DonationTransaction extends Transaction {
             final BigDecimal amount,
             final String description,
             final boolean isRecurring,
-            final boolean isTaxDeductible) {
+            final boolean isTaxDeductible,
+            final DonationCategory category) {
         super(date, currency, amount, description, isRecurring);
         this.isTaxDeductible = isTaxDeductible;
+        this.category = category.name();
     }
 
     @Override
     public DonationTransaction copy() {
         return new DonationTransaction(
-                date, currency, amount, description, isRecurring, isTaxDeductible);
+                date,
+                currency,
+                amount,
+                description,
+                isRecurring,
+                isTaxDeductible,
+                DonationCategory.valueOf(category));
     }
 
     @Override
@@ -57,5 +66,15 @@ public class DonationTransaction extends Transaction {
 
         final BigDecimal diffTaxDeductibleAmount = isTaxDeductible ? amount : amount.negate();
         getSnapshot().updateTaxDeductibleDonationsTotal(getCurrencyUnit(), diffTaxDeductibleAmount);
+    }
+
+    @Override
+    public DonationCategory getCategory() {
+        return DonationCategory.valueOf(category);
+    }
+
+    @Override
+    public void setCategory(@NonNull final DonationCategory category) {
+        this.category = category.name();
     }
 }

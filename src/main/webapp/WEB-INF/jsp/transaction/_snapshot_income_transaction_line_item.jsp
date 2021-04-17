@@ -31,6 +31,10 @@ $(document).ready(function() {
         ${entity.date}
     </div>
 
+    <div class="col col-cell align-center">
+        ${entity.category}
+    </div>
+
     <div class="col col-cell align-right editable-income">
         <form id="form_txn_tithing_percentage_${entity.id}">
             <span id="txn_tithing_percentage_${entity.id}">${entity.tithingPercentage}</span>

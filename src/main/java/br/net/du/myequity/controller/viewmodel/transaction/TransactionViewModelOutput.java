@@ -6,6 +6,7 @@ import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
 import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
 import br.net.du.myequity.model.account.AccountType;
+import br.net.du.myequity.model.transaction.Categorizable;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
@@ -30,6 +31,9 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
     private final String description;
     private final boolean isRecurring;
 
+    // Categorizable only
+    private final String category;
+
     // fields only used on updates
     private final String totalForTransactionType;
     private final String taxDeductibleDonationsTotal;
@@ -48,6 +52,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
         tithingPercentage = other.getTithingPercentage();
         description = other.getDescription();
         isRecurring = other.isRecurring();
+        category = other.getCategory();
 
         totalForTransactionType = other.getTotalForTransactionType();
         taxDeductibleDonationsTotal = other.taxDeductibleDonationsTotal;
@@ -81,6 +86,12 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
                         .tithingPercentage(tithingPercentage)
                         .description(transaction.getDescription())
                         .isRecurring(transaction.isRecurring());
+
+        final String category =
+                transaction instanceof Categorizable
+                        ? ((Categorizable) transaction).getCategory().name()
+                        : null;
+        builder.category(category);
 
         if (includeTotals) {
             final UpdateableTotals updateableTotals =

@@ -14,11 +14,12 @@ import javax.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Entity
 @DiscriminatorValue(IncomeTransaction.TRANSACTION_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class IncomeTransaction extends Transaction {
+public class IncomeTransaction extends Transaction implements Categorizable<IncomeCategory> {
     static final String TRANSACTION_TYPE = "INCOME";
 
     @Transient @Getter
@@ -32,9 +33,11 @@ public class IncomeTransaction extends Transaction {
             final BigDecimal amount,
             final String description,
             final boolean isRecurring,
-            final BigDecimal tithingPercentage) {
+            final BigDecimal tithingPercentage,
+            final IncomeCategory incomeCategory) {
         super(date, currency, amount, description, isRecurring);
         this.tithingPercentage = tithingPercentage;
+        category = incomeCategory.name();
     }
 
     public BigDecimal getTithingAmount() {
@@ -46,7 +49,13 @@ public class IncomeTransaction extends Transaction {
     @Override
     public IncomeTransaction copy() {
         return new IncomeTransaction(
-                date, currency, amount, description, isRecurring, tithingPercentage);
+                date,
+                currency,
+                amount,
+                description,
+                isRecurring,
+                tithingPercentage,
+                IncomeCategory.valueOf(category));
     }
 
     @Override
@@ -80,5 +89,15 @@ public class IncomeTransaction extends Transaction {
         final BigDecimal diffTithingAmount = newTithingAmount.subtract(oldTithingAmount);
         getSnapshot()
                 .updateTithingAmount(getCurrencyUnit(), diffTithingAmount, TithingAccount.class);
+    }
+
+    @Override
+    public IncomeCategory getCategory() {
+        return IncomeCategory.valueOf(category);
+    }
+
+    @Override
+    public void setCategory(@NonNull final IncomeCategory category) {
+        this.category = category.name();
     }
 }
