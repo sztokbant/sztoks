@@ -1,6 +1,7 @@
 package br.net.du.myequity.model.totals;
 
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.FutureTithingAccount;
 import br.net.du.myequity.model.account.PayableAccount;
 import br.net.du.myequity.model.account.ReceivableAccount;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
@@ -12,7 +13,10 @@ import java.util.Set;
 public enum BalanceUpdateableSubtype {
     SIMPLE_ASSET(new Class[] {SimpleAssetAccount.class}),
     RECEIVABLE(new Class[] {ReceivableAccount.class}),
-    SIMPLE_LIABILITY((new Class[] {SimpleLiabilityAccount.class, TithingAccount.class})),
+    SIMPLE_LIABILITY(
+            (new Class[] {
+                SimpleLiabilityAccount.class, TithingAccount.class, FutureTithingAccount.class
+            })),
     PAYABLE(new Class[] {PayableAccount.class});
 
     private final Set<Class> classes = new HashSet<>();
@@ -36,7 +40,9 @@ public enum BalanceUpdateableSubtype {
             return RECEIVABLE;
         }
 
-        if (clazz.equals(SimpleLiabilityAccount.class) || clazz.equals(TithingAccount.class)) {
+        if (clazz.equals(SimpleLiabilityAccount.class)
+                || clazz.equals(TithingAccount.class)
+                || clazz.equals(FutureTithingAccount.class)) {
             return SIMPLE_LIABILITY;
         }
 
