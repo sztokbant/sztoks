@@ -57,8 +57,8 @@ public class FutureTithingAccount extends Account {
     }
 
     @Override
-    public TithingAccount copy() {
-        return new TithingAccount(CurrencyUnit.of(currency), referenceAmount);
+    public FutureTithingAccount copy() {
+        return new FutureTithingAccount(CurrencyUnit.of(currency), referenceAmount);
     }
 
     public void setReferenceAmount(final BigDecimal newReferenceAmount) {
