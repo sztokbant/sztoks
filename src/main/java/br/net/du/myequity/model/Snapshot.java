@@ -402,7 +402,8 @@ public class Snapshot implements Comparable<Snapshot> {
             throw new IllegalStateException("Error updating tithing account");
         }
 
-        if (next != null) {
+        // FutureTithingAccount balances should not propagate by updating past snapshots
+        if (next != null && !tithingAccountType.equals(FutureTithingAccount.class)) {
             next.updateTithingAmount(currencyUnit, plusAmount, tithingAccountType);
         }
     }
