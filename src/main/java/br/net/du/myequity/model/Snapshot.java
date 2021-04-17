@@ -261,11 +261,11 @@ public class Snapshot implements Comparable<Snapshot> {
                     FutureTithingAccount.class);
         }
 
-        accounts.remove(account);
-        account.setSnapshot(null);
-
         updateNetWorth(
                 account.getAccountType(), account.getCurrencyUnit(), account.getBalance().negate());
+
+        accounts.remove(account);
+        account.setSnapshot(null);
     }
 
     public void updateNetWorth(
