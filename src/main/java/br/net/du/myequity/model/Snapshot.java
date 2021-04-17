@@ -27,8 +27,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -61,8 +59,6 @@ import org.joda.money.CurrencyUnit;
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "year", "month"}))
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Snapshot implements Comparable<Snapshot> {
-    private static final Pattern VALID_NAME_PATTERN = Pattern.compile("^[0-9]{4}-[0-9]{2}$");
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -193,14 +189,6 @@ public class Snapshot implements Comparable<Snapshot> {
 
                             addTransaction(transactionCopy);
                         });
-    }
-
-    private String validateName(@NonNull final String name) {
-        final Matcher matcher = VALID_NAME_PATTERN.matcher(name);
-        if (!matcher.find()) {
-            throw new IllegalArgumentException(String.format("Invalid Snapshot name: %s", name));
-        }
-        return name;
     }
 
     public SortedSet<Account> getAccounts() {
