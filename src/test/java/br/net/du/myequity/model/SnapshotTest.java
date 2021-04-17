@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
+import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.model.transaction.DonationTransaction;
@@ -223,7 +224,9 @@ class SnapshotTest {
                         ImmutableMap.of());
 
         // WHEN
-        final Account notInSnapshot = new SimpleAssetAccount("Another Account", CurrencyUnit.USD);
+        final Account notInSnapshot =
+                new SimpleAssetAccount(
+                        "Another Account", CurrencyUnit.USD, FutureTithingPolicy.NONE);
         snapshot.removeAccount(notInSnapshot);
 
         // THEN
@@ -293,7 +296,10 @@ class SnapshotTest {
 
         final Account notInSnapshot =
                 new SimpleAssetAccount(
-                        "Another Account", CurrencyUnit.USD, new BigDecimal("50000"));
+                        "Another Account",
+                        CurrencyUnit.USD,
+                        FutureTithingPolicy.NONE,
+                        new BigDecimal("50000"));
         assertThrows(
                 UnsupportedOperationException.class,
                 () -> {

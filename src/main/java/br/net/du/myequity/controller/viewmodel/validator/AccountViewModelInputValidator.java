@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller.viewmodel.validator;
 
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.CURRENCY_UNIT_FIELD;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.FUTURE_TITHING_POLICY_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.NAME_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.NOT_EMPTY_ERRORCODE;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.SUBTYPE_NAME_FIELD;
@@ -12,6 +13,7 @@ import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhit
 import br.net.du.myequity.controller.viewmodel.account.AccountViewModelInput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.TithingAccount;
 import br.net.du.myequity.service.AccountService;
 import java.util.List;
@@ -47,6 +49,7 @@ public class AccountViewModelInputValidator implements SmartValidator {
 
         rejectIfInvalidOrDuplicateNameAndSubType(accountViewModelInput, snapshot, errors);
         rejectIfInvalidCurrencyUnit(accountViewModelInput.getCurrencyUnit(), errors);
+        rejectIfInvalidFutureTithingPolicy(accountViewModelInput.getFutureTithingPolicy(), errors);
         if (!errors.hasFieldErrors(CURRENCY_UNIT_FIELD)) {
             rejectIfUnsupportedCurrencyUnit(
                     snapshot, CurrencyUnit.of(accountViewModelInput.getCurrencyUnit()), errors);
@@ -96,6 +99,17 @@ public class AccountViewModelInputValidator implements SmartValidator {
                                                 && account.getName().equals(inputName));
         if (isDuplicate) {
             errors.rejectValue(NAME_FIELD, "Duplicate.accountForm.name");
+        }
+    }
+
+    public static void rejectIfInvalidFutureTithingPolicy(
+            final String futureTithingPolicy, final Errors errors) {
+        if (futureTithingPolicy != null) {
+            try {
+                FutureTithingPolicy.valueOf(futureTithingPolicy);
+            } catch (final Exception e) {
+                errors.rejectValue(FUTURE_TITHING_POLICY_FIELD, "Invalid.futureTithingPolicy");
+            }
         }
     }
 }

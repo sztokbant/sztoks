@@ -102,6 +102,7 @@
         </div>
 
         <%@ include file="_snapshot_tithing_line_item.jsp" %>
+        <%@ include file="_snapshot_future_tithing_line_item.jsp" %>
 
         <c:choose>
             <c:when test="${not empty snapshot.simpleLiabilityAccounts}">
@@ -110,10 +111,8 @@
                 </c:forEach>
             </c:when>
         </c:choose>
-        <%-- Tithing is counted as a SimpleLiability --%>
-        <c:if test="${snapshot.simpleLiabilityAccounts.size() gt 0}">
-            <%@ include file="_snapshot_simple_liabilities_total.jsp" %>
-        </c:if>
+        <%-- Tithing accounts are counted grouped along with SimpleLiability accounts --%>
+        <%@ include file="_snapshot_simple_liabilities_total.jsp" %>
 
         <c:choose>
             <c:when test="${not empty snapshot.payableAccounts}">

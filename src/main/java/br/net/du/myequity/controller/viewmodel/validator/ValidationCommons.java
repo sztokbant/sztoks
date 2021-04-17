@@ -18,6 +18,7 @@ public class ValidationCommons {
     public static final String DESCRIPTION_FIELD = "description";
     public static final String EMAIL_FIELD = "email";
     public static final String FIRST_NAME_FIELD = "firstName";
+    public static final String FUTURE_TITHING_POLICY_FIELD = "futureTithingPolicy";
     public static final String INVESTMENT_CATEGORY_FIELD = "investmentCategory";
     public static final String IS_RECURRING_FIELD = "isRecurring";
     public static final String IS_TAX_DEDUCTIBLE_FIELD = "isTaxDeductible";

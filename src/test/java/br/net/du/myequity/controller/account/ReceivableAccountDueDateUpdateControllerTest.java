@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.ReceivableAccount;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,7 +37,13 @@ class ReceivableAccountDueDateUpdateControllerTest extends AccountAjaxController
 
     @Override
     public void createEntity() {
-        account = new ReceivableAccount("Friend", CURRENCY_UNIT, CURRENT_DUE_DATE, CURRENT_BALANCE);
+        account =
+                new ReceivableAccount(
+                        "Friend",
+                        CURRENCY_UNIT,
+                        FutureTithingPolicy.NONE,
+                        CURRENT_DUE_DATE,
+                        CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
     }
 

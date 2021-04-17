@@ -15,7 +15,8 @@ import org.joda.money.CurrencyUnit;
 @Entity
 @DiscriminatorValue(ReceivableAccount.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class ReceivableAccount extends Account implements BalanceUpdateable, DueDateUpdateable {
+public class ReceivableAccount extends Account
+        implements BalanceUpdateable, DueDateUpdateable, FutureTithingCapable {
 
     public static final String ACCOUNT_SUB_TYPE = "RECEIVABLE";
 
@@ -25,41 +26,47 @@ public class ReceivableAccount extends Account implements BalanceUpdateable, Due
 
     @Column @Getter @Setter private LocalDate dueDate;
 
-    public ReceivableAccount(@NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
-        this(name, currencyUnit, LocalDate.now());
+    public ReceivableAccount(
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final FutureTithingPolicy futureTithingPolicy) {
+        this(name, currencyUnit, futureTithingPolicy, LocalDate.now());
     }
 
     public ReceivableAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate createDate) {
-        this(name, currencyUnit, createDate, LocalDate.now(), BigDecimal.ZERO);
+        this(name, currencyUnit, futureTithingPolicy, createDate, LocalDate.now(), BigDecimal.ZERO);
     }
 
     public ReceivableAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate dueDate,
             @NonNull final BigDecimal balance) {
-        this(name, currencyUnit, LocalDate.now(), dueDate, balance);
-        this.dueDate = dueDate;
-        this.balance = balance;
+        this(name, currencyUnit, futureTithingPolicy, LocalDate.now(), dueDate, balance);
     }
 
     public ReceivableAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate createDate,
             @NonNull final LocalDate dueDate,
             @NonNull final BigDecimal balance) {
         super(name, AccountType.ASSET, currencyUnit, createDate);
+        this.futureTithingPolicy = futureTithingPolicy;
         this.dueDate = dueDate;
         this.balance = balance;
     }
 
     @Override
     public ReceivableAccount copy() {
-        return new ReceivableAccount(name, CurrencyUnit.of(currency), dueDate, balance);
+        return new ReceivableAccount(
+                name, CurrencyUnit.of(currency), futureTithingPolicy, dueDate, balance);
     }
 
     @Override
@@ -70,5 +77,24 @@ public class ReceivableAccount extends Account implements BalanceUpdateable, Due
 
         final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
         getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
+
+        if (!getFutureTithingPolicy().equals(FutureTithingPolicy.NONE)) {
+            getSnapshot()
+                    .updateTithingAmount(
+                            getCurrencyUnit(), balanceDiff, FutureTithingAccount.class);
+        }
+    }
+
+    @Override
+    public FutureTithingPolicy getFutureTithingPolicy() {
+        return futureTithingPolicy == null ? FutureTithingPolicy.NONE : futureTithingPolicy;
+    }
+
+    @Override
+    public BigDecimal getFutureTithingReferenceAmount() {
+        if (getFutureTithingPolicy().equals(FutureTithingPolicy.NONE)) {
+            return BigDecimal.ZERO;
+        }
+        return getBalance();
     }
 }

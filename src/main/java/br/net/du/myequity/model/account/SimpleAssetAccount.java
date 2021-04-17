@@ -14,7 +14,7 @@ import org.joda.money.CurrencyUnit;
 @Entity
 @DiscriminatorValue(SimpleAssetAccount.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class SimpleAssetAccount extends Account implements BalanceUpdateable {
+public class SimpleAssetAccount extends Account implements BalanceUpdateable, FutureTithingCapable {
 
     public static final String ACCOUNT_SUB_TYPE = "SIMPLE_ASSET";
 
@@ -23,36 +23,43 @@ public class SimpleAssetAccount extends Account implements BalanceUpdateable {
     private BigDecimal balance;
 
     public SimpleAssetAccount(
-            @NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
-        this(name, currencyUnit, LocalDate.now());
+            @NonNull final String name,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final FutureTithingPolicy futureTithingPolicy) {
+        this(name, currencyUnit, futureTithingPolicy, LocalDate.now());
     }
 
     public SimpleAssetAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate createDate) {
-        this(name, currencyUnit, createDate, BigDecimal.ZERO);
+        this(name, currencyUnit, futureTithingPolicy, createDate, BigDecimal.ZERO);
     }
 
     public SimpleAssetAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final FutureTithingPolicy futureTithingPolicy,
             @NonNull final BigDecimal balance) {
-        this(name, currencyUnit, LocalDate.now(), balance);
+        this(name, currencyUnit, futureTithingPolicy, LocalDate.now(), balance);
     }
 
     public SimpleAssetAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate createDate,
             @NonNull final BigDecimal balance) {
         super(name, AccountType.ASSET, currencyUnit, createDate);
+        this.futureTithingPolicy = futureTithingPolicy;
         this.balance = balance;
     }
 
     @Override
     public SimpleAssetAccount copy() {
-        return new SimpleAssetAccount(name, CurrencyUnit.of(currency), balance);
+        return new SimpleAssetAccount(
+                name, CurrencyUnit.of(currency), futureTithingPolicy, balance);
     }
 
     @Override
@@ -63,5 +70,24 @@ public class SimpleAssetAccount extends Account implements BalanceUpdateable {
 
         final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
         getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
+
+        if (!getFutureTithingPolicy().equals(FutureTithingPolicy.NONE)) {
+            getSnapshot()
+                    .updateTithingAmount(
+                            getCurrencyUnit(), balanceDiff, FutureTithingAccount.class);
+        }
+    }
+
+    @Override
+    public FutureTithingPolicy getFutureTithingPolicy() {
+        return futureTithingPolicy == null ? FutureTithingPolicy.NONE : futureTithingPolicy;
+    }
+
+    @Override
+    public BigDecimal getFutureTithingReferenceAmount() {
+        if (getFutureTithingPolicy().equals(FutureTithingPolicy.NONE)) {
+            return BigDecimal.ZERO;
+        }
+        return getBalance();
     }
 }

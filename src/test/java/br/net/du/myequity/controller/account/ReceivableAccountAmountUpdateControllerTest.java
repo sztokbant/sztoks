@@ -9,6 +9,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.model.account.AccountType;
+import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.ReceivableAccount;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +38,13 @@ class ReceivableAccountAmountUpdateControllerTest extends AccountAjaxControllerT
 
     @Override
     public void createEntity() {
-        account = new ReceivableAccount("Friend", CURRENCY_UNIT, LocalDate.now(), CURRENT_BALANCE);
+        account =
+                new ReceivableAccount(
+                        "Friend",
+                        CURRENCY_UNIT,
+                        FutureTithingPolicy.NONE,
+                        LocalDate.now(),
+                        CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
     }
 

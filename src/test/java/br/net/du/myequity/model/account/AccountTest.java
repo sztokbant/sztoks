@@ -50,7 +50,8 @@ class AccountTest {
         final String accountName = "Wallet";
         final AccountType accountType = AccountType.ASSET;
         final CurrencyUnit currencyUnit = CurrencyUnit.USD;
-        final Account account = new SimpleAssetAccount(accountName, currencyUnit);
+        final Account account =
+                new SimpleAssetAccount(accountName, currencyUnit, FutureTithingPolicy.NONE);
         assertEquals(currencyUnit, account.getCurrencyUnit());
 
         // WHEN
@@ -75,7 +76,8 @@ class AccountTest {
 
         // Same Id null
         final Account anotherAccount =
-                new SimpleAssetAccount("Wallet", CurrencyUnit.USD, LocalDate.now());
+                new SimpleAssetAccount(
+                        "Wallet", CurrencyUnit.USD, FutureTithingPolicy.NONE, LocalDate.now());
         account.setId(null);
         anotherAccount.setId(null);
         assertFalse(account.equals(anotherAccount));

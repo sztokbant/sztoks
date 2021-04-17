@@ -62,6 +62,9 @@ public abstract class Account implements Comparable<Account> {
     @Setter
     private LocalDate createDate;
 
+    @Column(nullable = true)
+    protected FutureTithingPolicy futureTithingPolicy;
+
     Account(
             final String name,
             final AccountType accountType,

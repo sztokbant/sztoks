@@ -14,6 +14,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.service.AccountService;
@@ -69,7 +70,11 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
         snapshot.setId(SNAPSHOT_ID);
 
         assetAccount =
-                new SimpleAssetAccount("Checking Account", CurrencyUnit.USD, LocalDate.now());
+                new SimpleAssetAccount(
+                        "Checking Account",
+                        CurrencyUnit.USD,
+                        FutureTithingPolicy.NONE,
+                        LocalDate.now());
         assetAccount.setId(ASSET_ACCOUNT_ID);
 
         liabilityAccount =

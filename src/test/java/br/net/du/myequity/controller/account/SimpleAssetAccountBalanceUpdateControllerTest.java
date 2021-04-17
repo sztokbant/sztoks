@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.account.CreditCardAccount;
+import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,7 +39,9 @@ class SimpleAssetAccountBalanceUpdateControllerTest extends AccountAjaxControlle
 
     @Override
     public void createEntity() {
-        account = new SimpleAssetAccount("Savings", CURRENCY_UNIT, CURRENT_BALANCE);
+        account =
+                new SimpleAssetAccount(
+                        "Savings", CURRENCY_UNIT, FutureTithingPolicy.NONE, CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
     }
 

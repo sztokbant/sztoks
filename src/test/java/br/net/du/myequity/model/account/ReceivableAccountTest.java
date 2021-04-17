@@ -22,12 +22,17 @@ class ReceivableAccountTest {
         final ReceivableAccount actual;
         try (MockedStatic<LocalDate> localDateStaticMock = mockStatic(LocalDate.class)) {
             localDateStaticMock.when(LocalDate::now).thenReturn(now);
-            actual = new ReceivableAccount(ACCOUNT_NAME, CURRENCY_UNIT);
+            actual = new ReceivableAccount(ACCOUNT_NAME, CURRENCY_UNIT, FutureTithingPolicy.NONE);
         }
 
         // THEN
         final ReceivableAccount expected =
-                new ReceivableAccount(ACCOUNT_NAME, CURRENCY_UNIT, now, BigDecimal.ZERO);
+                new ReceivableAccount(
+                        ACCOUNT_NAME,
+                        CURRENCY_UNIT,
+                        FutureTithingPolicy.NONE,
+                        now,
+                        BigDecimal.ZERO);
 
         assertTrue(equalsIgnoreId(actual, expected));
     }

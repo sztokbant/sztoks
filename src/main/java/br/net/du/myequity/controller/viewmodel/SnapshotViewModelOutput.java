@@ -80,6 +80,7 @@ public class SnapshotViewModelOutput {
     private final Map<String, CreditCardTotalsViewModelOutput> creditCardTotals;
 
     private final String tithingBalance;
+    private final String futureTithingBalance;
 
     private final List<TransactionViewModelOutput> incomes;
     private final List<TransactionViewModelOutput> investments;
@@ -203,6 +204,8 @@ public class SnapshotViewModelOutput {
 
         builder.tithingBalance(
                 format(snapshot.getBaseCurrencyUnit(), snapshot.getTithingBalance()));
+        builder.futureTithingBalance(
+                format(snapshot.getBaseCurrencyUnit(), snapshot.getFutureTithingBalance()));
     }
 
     private static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(

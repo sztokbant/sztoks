@@ -19,6 +19,7 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
+import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.service.AccountService;
@@ -60,7 +61,9 @@ class PersistenceTest {
     @BeforeEach
     public void setUp() {
         assetAmount = new BigDecimal("100.00");
-        simpleAssetAccount = new SimpleAssetAccount("Asset Account", CurrencyUnit.USD, assetAmount);
+        simpleAssetAccount =
+                new SimpleAssetAccount(
+                        "Asset Account", CurrencyUnit.USD, FutureTithingPolicy.NONE, assetAmount);
 
         liabilityAmount = new BigDecimal("320000.00");
         simpleLiabilityAccount =

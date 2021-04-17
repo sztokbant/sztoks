@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.InvestmentAccount;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,6 +41,7 @@ class InvestmentAccountAmountInvestedUpdateControllerTest extends AccountAjaxCon
                 new InvestmentAccount(
                         "AMZN",
                         CURRENCY_UNIT,
+                        FutureTithingPolicy.NONE,
                         CURRENT_SHARES,
                         CURRENT_AMOUNT_INVESTED,
                         CURRENT_CURRENT_SHARE_VALUE);

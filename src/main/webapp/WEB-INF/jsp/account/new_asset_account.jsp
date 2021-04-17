@@ -73,6 +73,31 @@
                 </div>
             </spring:bind>
 
+            <spring:bind path="futureTithingPolicy">
+                <div class="row form-group">
+                    <div class="col col-form-label">
+                        Future Tithing Policy
+                    </div>
+                    <div class="col">
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <div>
+                                <form:radiobutton path="futureTithingPolicy" value="NONE" id="noneRadio" checked="checked"/>
+                                <label for="noneRadio">None</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="futureTithingPolicy" value="PROFITS_ONLY" id="profitsOnlyRadio"/>
+                                <label for="profitsOnlyRadio">Profits Only</label>
+                            </div>
+                            <div>
+                                <form:radiobutton path="futureTithingPolicy" value="ALL" id="allRadio"/>
+                                <label for="allRadio">All</label>
+                            </div>
+                            <form:errors path="futureTithingPolicy"/>
+                        </div>
+                    </div>
+                </div>
+            </spring:bind>
+
             <button class="btn btn-lg btn-primary btn-block" type="submit"
                     onClick="this.form.submit(); this.disabled=true; this.innerText='Saving...';">Save</button>
             <div class="text-center"><a href="${contextPath}/snapshot/${snapshotId}">Back</a></div>

@@ -13,13 +13,15 @@ class InvestmentAccountTest {
     @Test
     public void newEmptySnapshot_happy() {
         // WHEN
-        final InvestmentAccount actual = new InvestmentAccount(ACCOUNT_NAME, CURRENCY_UNIT);
+        final InvestmentAccount actual =
+                new InvestmentAccount(ACCOUNT_NAME, CURRENCY_UNIT, FutureTithingPolicy.NONE);
 
         // THEN
         final InvestmentAccount expected =
                 new InvestmentAccount(
                         ACCOUNT_NAME,
                         CURRENCY_UNIT,
+                        FutureTithingPolicy.NONE,
                         BigDecimal.ZERO,
                         BigDecimal.ZERO,
                         BigDecimal.ZERO);

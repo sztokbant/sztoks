@@ -1,6 +1,7 @@
 package br.net.du.myequity.test;
 
 import br.net.du.myequity.model.account.CreditCardAccount;
+import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.InvestmentAccount;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
@@ -64,7 +65,8 @@ public class TestConstants {
     public static final String TITHING_PERCENTAGE_FIELD = "tithingPercentage";
 
     public static SimpleAssetAccount newSimpleAssetAccount() {
-        return new SimpleAssetAccount("Savings", CurrencyUnit.USD, new BigDecimal("10000.00"));
+        return new SimpleAssetAccount(
+                "Savings", CurrencyUnit.USD, FutureTithingPolicy.NONE, new BigDecimal("10000.00"));
     }
 
     public static SimpleLiabilityAccount newSimpleLiabilityAccount() {
@@ -84,6 +86,7 @@ public class TestConstants {
         return new InvestmentAccount(
                 "AMZN",
                 CurrencyUnit.USD,
+                FutureTithingPolicy.NONE,
                 new BigDecimal("175.00"),
                 new BigDecimal("1100.00"),
                 new BigDecimal("3500.00"));

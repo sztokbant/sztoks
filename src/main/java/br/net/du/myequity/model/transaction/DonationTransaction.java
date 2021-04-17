@@ -1,5 +1,6 @@
 package br.net.du.myequity.model.transaction;
 
+import br.net.du.myequity.model.account.TithingAccount;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -45,7 +46,8 @@ public class DonationTransaction extends Transaction {
         amount = newAmount;
 
         final BigDecimal diffTithingAmount = oldAmount.subtract(newAmount);
-        getSnapshot().updateTithingAmount(getCurrencyUnit(), diffTithingAmount);
+        getSnapshot()
+                .updateTithingAmount(getCurrencyUnit(), diffTithingAmount, TithingAccount.class);
 
         updateSnapshotTransactionTotal(newAmount, oldAmount, isTaxDeductible);
     }

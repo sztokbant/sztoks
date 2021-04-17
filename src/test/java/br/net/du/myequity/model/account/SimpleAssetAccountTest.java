@@ -13,11 +13,13 @@ class SimpleAssetAccountTest {
     @Test
     public void newEmptySnapshot_happy() {
         // WHEN
-        final SimpleAssetAccount actual = new SimpleAssetAccount(ACCOUNT_NAME, CURRENCY_UNIT);
+        final SimpleAssetAccount actual =
+                new SimpleAssetAccount(ACCOUNT_NAME, CURRENCY_UNIT, FutureTithingPolicy.NONE);
 
         // THEN
         final SimpleAssetAccount expected =
-                new SimpleAssetAccount(ACCOUNT_NAME, CURRENCY_UNIT, BigDecimal.ZERO);
+                new SimpleAssetAccount(
+                        ACCOUNT_NAME, CURRENCY_UNIT, FutureTithingPolicy.NONE, BigDecimal.ZERO);
 
         assertTrue(equalsIgnoreId(actual, expected));
     }

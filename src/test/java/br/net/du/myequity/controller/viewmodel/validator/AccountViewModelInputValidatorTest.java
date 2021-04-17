@@ -18,6 +18,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import br.net.du.myequity.controller.viewmodel.account.AccountViewModelInput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.service.AccountService;
@@ -100,7 +101,9 @@ class AccountViewModelInputValidatorTest {
         // GIVEN
         populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, CURRENCY_UNIT.toString());
         defineExistingAccounts(
-                ImmutableList.of(new SimpleAssetAccount(ANOTHER_ACCOUNT_NAME, CurrencyUnit.USD)));
+                ImmutableList.of(
+                        new SimpleAssetAccount(
+                                ANOTHER_ACCOUNT_NAME, CurrencyUnit.USD, FutureTithingPolicy.NONE)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
@@ -272,7 +275,9 @@ class AccountViewModelInputValidatorTest {
         // GIVEN
         populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, CURRENCY_UNIT.toString());
         defineExistingAccounts(
-                ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
+                ImmutableList.of(
+                        new SimpleAssetAccount(
+                                ACCOUNT_NAME, CurrencyUnit.USD, FutureTithingPolicy.NONE)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
@@ -286,7 +291,9 @@ class AccountViewModelInputValidatorTest {
         // GIVEN
         populateAccountForm(" " + ACCOUNT_NAME + " ", SUBTYPE_NAME, CURRENCY_UNIT.toString());
         defineExistingAccounts(
-                ImmutableList.of(new SimpleAssetAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
+                ImmutableList.of(
+                        new SimpleAssetAccount(
+                                ACCOUNT_NAME, CurrencyUnit.USD, FutureTithingPolicy.NONE)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);

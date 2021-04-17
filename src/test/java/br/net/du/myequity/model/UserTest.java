@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import com.google.common.collect.ImmutableList;
@@ -49,7 +50,8 @@ class UserTest {
         user = new User(EMAIL, FIRST_NAME, LAST_NAME);
         user.setId(1L);
 
-        simpleAssetAccount = new SimpleAssetAccount("Asset Account", CurrencyUnit.USD);
+        simpleAssetAccount =
+                new SimpleAssetAccount("Asset Account", CurrencyUnit.USD, FutureTithingPolicy.NONE);
         simpleAssetAccount.setId(99L);
 
         simpleLiabilityAccount = new SimpleLiabilityAccount("Liability Account", CurrencyUnit.USD);
