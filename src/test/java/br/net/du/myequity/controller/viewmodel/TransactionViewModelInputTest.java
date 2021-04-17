@@ -98,7 +98,7 @@ public class TransactionViewModelInputTest {
     public static void populateInvestmentTransactionAttributes(
             final TransactionViewModelInput transactionViewModelInput) {
         transactionViewModelInput.setTypeName("INVESTMENT");
-        transactionViewModelInput.setInvestmentCategory("LONG_TERM");
+        transactionViewModelInput.setCategory("LONG_TERM");
     }
 
     public static void populateDonationTransactionAttributes(

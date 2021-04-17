@@ -1,10 +1,10 @@
 package br.net.du.myequity.controller.viewmodel.validator;
 
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.AMOUNT_FIELD;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.CATEGORY_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.CURRENCY_UNIT_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.DATE_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.DESCRIPTION_FIELD;
-import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.INVESTMENT_CATEGORY_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.IS_RECURRING_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.IS_TAX_DEDUCTIBLE_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.NOT_EMPTY_ERRORCODE;
@@ -63,7 +63,7 @@ public class TransactionViewModelInputValidator implements SmartValidator {
             rejectIfInvalidTithingPercentage(
                     transactionViewModelInput.getTithingPercentage(), errors);
         } else if (transactionType.equals(TransactionType.INVESTMENT)) {
-            rejectIfInvalidInvestmentCategory(transactionViewModelInput, errors);
+            rejectIfInvalidCategory(transactionViewModelInput, errors);
         } else if (transactionType.equals(TransactionType.DONATION)) {
             rejectIfInvalidIsTaxDeductible(transactionViewModelInput, errors);
         }
@@ -109,15 +109,15 @@ public class TransactionViewModelInputValidator implements SmartValidator {
         }
     }
 
-    private void rejectIfInvalidInvestmentCategory(
+    private void rejectIfInvalidCategory(
             final TransactionViewModelInput transactionViewModelInput, final Errors errors) {
-        rejectIfEmptyOrWhitespace(errors, INVESTMENT_CATEGORY_FIELD, NOT_EMPTY_ERRORCODE);
+        rejectIfEmptyOrWhitespace(errors, CATEGORY_FIELD, NOT_EMPTY_ERRORCODE);
 
-        if (StringUtils.isNotBlank(transactionViewModelInput.getInvestmentCategory())) {
+        if (StringUtils.isNotBlank(transactionViewModelInput.getCategory())) {
             try {
-                InvestmentCategory.valueOf(transactionViewModelInput.getInvestmentCategory());
+                InvestmentCategory.valueOf(transactionViewModelInput.getCategory());
             } catch (final Exception e) {
-                errors.rejectValue(INVESTMENT_CATEGORY_FIELD, "Invalid.investmentCategory");
+                errors.rejectValue(CATEGORY_FIELD, "Invalid.investmentCategory");
             }
         }
     }

@@ -107,7 +107,7 @@ public class ModelTestUtils {
     public static boolean equalsIgnoreIdAndDate(
             final InvestmentTransaction t1, final InvestmentTransaction t2) {
         return equalsIgnoreIdAndDate((Transaction) t1, (Transaction) t2)
-                && t1.getInvestmentCategory().equals(t2.getInvestmentCategory());
+                && t1.getCategory().equals(t2.getCategory());
     }
 
     public static boolean equalsIgnoreIdAndDate(

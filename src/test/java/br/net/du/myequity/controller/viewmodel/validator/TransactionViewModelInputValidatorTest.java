@@ -7,12 +7,12 @@ import static br.net.du.myequity.controller.viewmodel.TransactionViewModelInputT
 import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.myequity.test.TestConstants.AMOUNT_FIELD;
 import static br.net.du.myequity.test.TestConstants.ANOTHER_CURRENCY_UNIT;
+import static br.net.du.myequity.test.TestConstants.CATEGORY_FIELD;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT_FIELD;
 import static br.net.du.myequity.test.TestConstants.DATE_FIELD;
 import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_MONTH;
 import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_YEAR;
-import static br.net.du.myequity.test.TestConstants.INVESTMENT_CATEGORY_FIELD;
 import static br.net.du.myequity.test.TestConstants.IS_RECURRING_FIELD;
 import static br.net.du.myequity.test.TestConstants.IS_TAX_DEDUCTIBLE_FIELD;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
@@ -245,13 +245,13 @@ class TransactionViewModelInputValidatorTest {
     public void validate_invalidInvestmentCategory_hasErrors() {
         // GIVEN
         populateInvestmentTransactionAttributes(transactionViewModelInput);
-        transactionViewModelInput.setInvestmentCategory("XYZ");
+        transactionViewModelInput.setCategory("XYZ");
 
         // WHEN
         validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(INVESTMENT_CATEGORY_FIELD));
+        assertTrue(errors.hasFieldErrors(CATEGORY_FIELD));
     }
 
     @Test

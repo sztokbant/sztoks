@@ -27,7 +27,7 @@
 
             <%@ include file="_new_transaction_common.jsp" %>
 
-            <spring:bind path="investmentCategory">
+            <spring:bind path="category">
                 <div class="row form-group">
                     <div class="col col-form-label">
                         Investment Category
@@ -35,18 +35,18 @@
                     <div class="col">
                         <div class="${status.error ? 'has-error' : ''}">
                             <div>
-                                <form:radiobutton path="investmentCategory" value="LONG_TERM" id="longTermRadio"/>
+                                <form:radiobutton path="category" value="LONG_TERM" id="longTermRadio"/>
                                 <label for="longTermRadio">Long Term</label>
                             </div>
                             <div>
-                                <form:radiobutton path="investmentCategory" value="MID_TERM" id="midTermRadio"/>
+                                <form:radiobutton path="category" value="MID_TERM" id="midTermRadio"/>
                                 <label for="midTermRadio">Mid Term</label>
                             </div>
                             <div>
-                                <form:radiobutton path="investmentCategory" value="SHORT_TERM" id="shortTermRadio" checked="checked"/>
+                                <form:radiobutton path="category" value="SHORT_TERM" id="shortTermRadio" checked="checked"/>
                                 <label for="shortTermRadio">Short Term</label>
                             </div>
-                            <form:errors path="investmentCategory"/>
+                            <form:errors path="category"/>
                         </div>
                     </div>
                 </div>

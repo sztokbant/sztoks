@@ -23,8 +23,8 @@ public class TransactionViewModelInput {
     // INCOME only
     private String tithingPercentage;
 
-    // INVESTMENT only
-    private String investmentCategory;
+    // Categorizable only
+    private String category;
 
     // DONATION only
     private Boolean isTaxDeductible;
@@ -48,7 +48,7 @@ public class TransactionViewModelInput {
                     new BigDecimal(amount),
                     description,
                     isRecurring,
-                    InvestmentCategory.valueOf(investmentCategory));
+                    InvestmentCategory.valueOf(category));
         } else if (transactionType.equals(TransactionType.DONATION)) {
             return new DonationTransaction(
                     localDate,

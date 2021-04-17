@@ -54,7 +54,7 @@ public class TestConstants {
     public static final String DATE_FIELD = "date";
     public static final String EMAIL_FIELD = "email";
     public static final String FIRST_NAME_FIELD = "firstName";
-    public static final String INVESTMENT_CATEGORY_FIELD = "investmentCategory";
+    public static final String CATEGORY_FIELD = "category";
     public static final String IS_RECURRING_FIELD = "isRecurring";
     public static final String IS_TAX_DEDUCTIBLE_FIELD = "isTaxDeductible";
     public static final String LAST_NAME_FIELD = "lastName";

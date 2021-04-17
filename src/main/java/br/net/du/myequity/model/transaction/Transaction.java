@@ -56,6 +56,8 @@ public abstract class Transaction implements Comparable<Transaction> {
 
     @Column @Getter @Setter protected boolean isRecurring;
 
+    @Column protected String category;
+
     public Transaction(
             final LocalDate date,
             final String currency,

@@ -19,7 +19,7 @@ public class InvestmentTransactionViewModelOutput extends TransactionViewModelOu
 
         return new InvestmentTransactionViewModelOutput(
                 TransactionViewModelOutput.of(transaction, includeTotals),
-                investment.getInvestmentCategory().name());
+                investment.getCategory().name());
     }
 
     public static InvestmentTransactionViewModelOutput of(final Transaction transaction) {
