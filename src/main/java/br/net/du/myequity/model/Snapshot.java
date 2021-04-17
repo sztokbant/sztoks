@@ -179,7 +179,23 @@ public class Snapshot implements Comparable<Snapshot> {
 
         this.currencyConversionRates.putAll(currencyConversionRates);
 
-        accounts.stream().forEach(account -> addAccount(account.copy()));
+        // Consolidate TithingAccounts into baseCurrency
+        accounts.stream()
+                .filter(account -> (account instanceof TithingAccount))
+                .map(account -> account.copy())
+                .forEach(
+                        account ->
+                                updateTithingAmount(
+                                        baseCurrencyUnit,
+                                        toBaseCurrency(
+                                                account.getCurrencyUnit(), account.getBalance()),
+                                        TithingAccount.class));
+
+        // Add remaining accounts
+        accounts.stream()
+                .filter(account -> !(account instanceof TithingAccount))
+                .map(account -> account.copy())
+                .forEach(account -> addAccount(account));
 
         transactions.stream()
                 .forEach(
