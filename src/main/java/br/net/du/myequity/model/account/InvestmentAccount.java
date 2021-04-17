@@ -44,7 +44,7 @@ public class InvestmentAccount extends Account implements FutureTithingCapable {
     public InvestmentAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final FutureTithingPolicy futureTithingPolicy,
+            final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate createDate) {
         this(
                 name,
@@ -59,7 +59,7 @@ public class InvestmentAccount extends Account implements FutureTithingCapable {
     public InvestmentAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final FutureTithingPolicy futureTithingPolicy,
+            final FutureTithingPolicy futureTithingPolicy,
             @NonNull final BigDecimal shares,
             @NonNull final BigDecimal amountInvested,
             @NonNull final BigDecimal currentShareValue) {
@@ -76,7 +76,7 @@ public class InvestmentAccount extends Account implements FutureTithingCapable {
     public InvestmentAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final FutureTithingPolicy futureTithingPolicy,
+            final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate createDate,
             @NonNull final BigDecimal shares,
             @NonNull final BigDecimal amountInvested,

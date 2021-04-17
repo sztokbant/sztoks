@@ -36,7 +36,7 @@ public class ReceivableAccount extends Account
     public ReceivableAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final FutureTithingPolicy futureTithingPolicy,
+            final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate createDate) {
         this(name, currencyUnit, futureTithingPolicy, createDate, LocalDate.now(), BigDecimal.ZERO);
     }
@@ -44,7 +44,7 @@ public class ReceivableAccount extends Account
     public ReceivableAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final FutureTithingPolicy futureTithingPolicy,
+            final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate dueDate,
             @NonNull final BigDecimal balance) {
         this(name, currencyUnit, futureTithingPolicy, LocalDate.now(), dueDate, balance);
@@ -53,7 +53,7 @@ public class ReceivableAccount extends Account
     public ReceivableAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final FutureTithingPolicy futureTithingPolicy,
+            final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate createDate,
             @NonNull final LocalDate dueDate,
             @NonNull final BigDecimal balance) {

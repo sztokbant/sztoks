@@ -32,7 +32,7 @@ public class SimpleAssetAccount extends Account implements BalanceUpdateable, Fu
     public SimpleAssetAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final FutureTithingPolicy futureTithingPolicy,
+            final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate createDate) {
         this(name, currencyUnit, futureTithingPolicy, createDate, BigDecimal.ZERO);
     }
@@ -40,7 +40,7 @@ public class SimpleAssetAccount extends Account implements BalanceUpdateable, Fu
     public SimpleAssetAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final FutureTithingPolicy futureTithingPolicy,
+            final FutureTithingPolicy futureTithingPolicy,
             @NonNull final BigDecimal balance) {
         this(name, currencyUnit, futureTithingPolicy, LocalDate.now(), balance);
     }
@@ -48,7 +48,7 @@ public class SimpleAssetAccount extends Account implements BalanceUpdateable, Fu
     public SimpleAssetAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final FutureTithingPolicy futureTithingPolicy,
+            final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate createDate,
             @NonNull final BigDecimal balance) {
         super(name, AccountType.ASSET, currencyUnit, createDate);
