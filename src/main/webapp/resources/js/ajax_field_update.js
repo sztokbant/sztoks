@@ -6,7 +6,7 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, d
   });
 
   newValueInput.focusout(function() {
-    var currentValueNoCurrencySymbol = stripCurrencyFormat(currentValueSpan);
+    var currentValueNoCurrencySymbol = stripDecimal(currentValueSpan);
     var newValue = newValueInput.val();
 
     if (newValue && newValue.trim() != "" && newValue.trim() != currentValueNoCurrencySymbol) {
@@ -19,7 +19,7 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, d
   });
 
   currentValueSpan.click(function() {
-    var currentValueNoCurrencySymbol = stripCurrencyFormat(currentValueSpan);
+    var currentValueNoCurrencySymbol = stripDecimal(currentValueSpan);
     currentValueSpan.hide();
     newValueInput.val(currentValueNoCurrencySymbol);
     newValueInput.show();
@@ -28,11 +28,12 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, d
   });
 }
 
-function stripCurrencyFormat(currentValueSpan) {
+function stripDecimal(currentValueSpan) {
   return currentValueSpan
     .text()
     .replace(/^[^\d-]+/g, '')
     .replaceAll(',', '')
+    .replaceAll('%', '')
     .trim();
 }
 
