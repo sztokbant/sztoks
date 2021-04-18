@@ -93,6 +93,7 @@ public class TransactionViewModelInputTest {
             final TransactionViewModelInput transactionViewModelInput) {
         transactionViewModelInput.setTypeName("INCOME");
         transactionViewModelInput.setTithingPercentage("30.00");
+        transactionViewModelInput.setCategory("JOB");
     }
 
     public static void populateInvestmentTransactionAttributes(
@@ -105,5 +106,6 @@ public class TransactionViewModelInputTest {
             final TransactionViewModelInput transactionViewModelInput) {
         transactionViewModelInput.setTypeName("DONATION");
         transactionViewModelInput.setIsTaxDeductible(true);
+        transactionViewModelInput.setCategory("FAMILY");
     }
 }

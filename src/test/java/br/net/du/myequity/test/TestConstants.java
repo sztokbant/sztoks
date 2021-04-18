@@ -5,7 +5,9 @@ import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.InvestmentAccount;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
+import br.net.du.myequity.model.transaction.DonationCategory;
 import br.net.du.myequity.model.transaction.DonationTransaction;
+import br.net.du.myequity.model.transaction.IncomeCategory;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.InvestmentCategory;
 import br.net.du.myequity.model.transaction.InvestmentTransaction;
@@ -105,7 +107,8 @@ public class TestConstants {
                 new BigDecimal("12000.00"),
                 "Salary",
                 true,
-                new BigDecimal("20.00"));
+                new BigDecimal("20.00"),
+                IncomeCategory.JOB);
     }
 
     public static IncomeTransaction newSingleIncome(final long id) {
@@ -121,7 +124,8 @@ public class TestConstants {
                 new BigDecimal("1700.00"),
                 "Side Gig",
                 false,
-                new BigDecimal("20.00"));
+                new BigDecimal("20.00"),
+                IncomeCategory.SIDE_GIG);
     }
 
     public static DonationTransaction newRecurringDonation(final long id) {
@@ -137,7 +141,8 @@ public class TestConstants {
                 new BigDecimal("108.00"),
                 "Charity",
                 true,
-                true);
+                true,
+                DonationCategory.SPIRITUAL);
     }
 
     public static DonationTransaction newSingleDonation(final long id) {
@@ -153,7 +158,8 @@ public class TestConstants {
                 new BigDecimal("10.00"),
                 "Beggar",
                 false,
-                true);
+                true,
+                DonationCategory.OTHER);
     }
 
     public static InvestmentTransaction newRecurringInvestment(final long id) {
