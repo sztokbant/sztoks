@@ -16,6 +16,9 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.totals.CumulativeTransactionTotals;
 import br.net.du.myequity.model.totals.CumulativeTransactionTotalsImpl;
+import br.net.du.myequity.model.transaction.DonationCategory;
+import br.net.du.myequity.model.transaction.IncomeCategory;
+import br.net.du.myequity.model.transaction.InvestmentCategory;
 import br.net.du.myequity.service.SnapshotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,6 +51,10 @@ public class SnapshotController {
         model.addAttribute(
                 TWELVE_MONTHS_TOTALS,
                 new CumulativeTransactionTotalsViewModelOutput(twelveMonthsTotals));
+
+        model.addAttribute("incomeCategories", IncomeCategory.values());
+        model.addAttribute("investmentCategories", InvestmentCategory.values());
+        model.addAttribute("donationCategories", DonationCategory.values());
 
         final CumulativeTransactionTotals ytdTotals =
                 new CumulativeTransactionTotalsImpl(

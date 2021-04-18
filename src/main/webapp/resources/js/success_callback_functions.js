@@ -98,3 +98,6 @@ function transactionTithingPercentageUpdateSuccessCallback(data, result) {
 function donationIsDeductibleUpdateSuccessCallback(data, result) {
   $("#tax_deductible_donations_total").html(result.taxDeductibleDonationsTotal);
 }
+
+function transactionCategoryUpdateSuccessCallback(data, result) {
+}
