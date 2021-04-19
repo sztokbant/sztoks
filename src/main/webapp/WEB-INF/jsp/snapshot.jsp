@@ -1,6 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
@@ -43,7 +44,7 @@
 
         <div class="col mid-col">
             <div class="text-center snapshot-header">
-                <%@ include file="_snapshot_name.jsp" %>
+                <span id="snapshot_name_${snapshot.id}" class="snapshot-name">${snapshot.name}</span>
 
                 <table class="full-width">
                     <tr class="border-1px bg-light-yellow">
