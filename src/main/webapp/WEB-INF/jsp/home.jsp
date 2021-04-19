@@ -31,7 +31,14 @@
 
             <c:set var="isFirst" value="true"/>
             <c:forEach var="snapshot" items="${snapshots}">
-                <tr class="border-1px bg-light-yellow">
+                    <c:set var="rowClass" value="bg-light-yellow"/>
+                    <c:set var="aClass" value=""/>
+                    <c:if test='${snapshot.name.endsWith("-01")}'>
+                        <c:set var="rowClass" value="bg-red"/>
+                        <c:set var="aClass" value="bg-red-link"/>
+                    </c:if>
+
+                    <tr class="border-1px ${rowClass}">
                     <td class="valign-top">
                         <div class="row">
                             <div class="col col-snapshot-delete">
@@ -45,7 +52,7 @@
                                 </c:if>
                             </div>
                             <div class="col col-account-name">
-                                <a href="/snapshot/${snapshot.id}">${snapshot.name}</a>
+                                <a class="${aClass}" href="/snapshot/${snapshot.id}">${snapshot.name}</a>
                             </div>
                         </div>
                     </td>

@@ -76,11 +76,21 @@
 .border-1px {
     border: 1px;
     border-style: solid;
+    border-color: black;
 }
 
 .bg-light-yellow {
     background: #fff9a1;
 }
+
+.bg-red {
+    background: lightcoral;
+    color: white;
+}
+
+a.bg-red-link:link, a.bg-red-link:visited {
+  color: white;
+};
 
 .navigation-buttons-padding-bottom {
     text-align: center;
