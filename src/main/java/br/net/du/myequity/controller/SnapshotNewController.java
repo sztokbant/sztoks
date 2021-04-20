@@ -5,7 +5,7 @@ import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.model.util.SnapshotUtils.computeNextSnapshotPeriod;
 
 import br.net.du.myequity.controller.interceptor.WebController;
-import br.net.du.myequity.exception.MyEquityException;
+import br.net.du.myequity.exception.SztoksException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.service.SnapshotService;
@@ -32,7 +32,7 @@ public class SnapshotNewController {
         final Optional<LocalDate> nextSnapshotPeriodOpt = computeNextSnapshotPeriod(snapshot);
 
         if (!nextSnapshotPeriodOpt.isPresent()) {
-            throw new MyEquityException(String.format("Too early to create a new Snapshot"));
+            throw new SztoksException(String.format("Too early to create a new Snapshot"));
         }
 
         final LocalDate nextSnapshotPeriod = nextSnapshotPeriodOpt.get();

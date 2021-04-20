@@ -1,4 +1,4 @@
-MyEquity is a balance sheet web app built with Spring Boot.
+Sztoks is a balance sheet-like web app built with Spring Boot.
 
 To run from IntelliJ IDEA, create a Gradle run configuration, set "Tasks" as ":bootRun", and point to your MySQL server settings in the "Environment variables" field, e.g.:
 

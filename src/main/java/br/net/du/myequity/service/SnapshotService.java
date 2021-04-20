@@ -1,6 +1,6 @@
 package br.net.du.myequity.service;
 
-import br.net.du.myequity.exception.MyEquityException;
+import br.net.du.myequity.exception.SztoksException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.SnapshotSummary;
 import br.net.du.myequity.model.User;
@@ -76,12 +76,12 @@ public class SnapshotService {
         assert user.getSnapshots().contains(snapshot);
 
         if (user.getSnapshots().size() == 1) {
-            throw new MyEquityException(
+            throw new SztoksException(
                     "Snapshot cannot be deleted as it is the only remaining snapshot.");
         }
 
         if (snapshot.getNext() != null) {
-            throw new MyEquityException("Only the most recent Snapshot can be deleted.");
+            throw new SztoksException("Only the most recent Snapshot can be deleted.");
         }
 
         snapshot.getAccounts().forEach(account -> snapshot.removeAccount(account));

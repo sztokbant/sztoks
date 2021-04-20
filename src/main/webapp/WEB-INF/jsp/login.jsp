@@ -50,8 +50,7 @@
 
                 <button class="btn btn-lg btn-primary btn-block" type="submit"
                         onClick="this.form.submit(); this.disabled=true; this.innerText='Logging in...';">Log in</button>
-                <div class="text-center">Don't have an account? <a href="${contextPath}/signup">Sign up for My
-                    Equity</a>.
+                <div class="text-center">Don't have an account? <a href="${contextPath}/signup">Sign up for Sztoks</a>.
                 </div>
             </div>
         </form>

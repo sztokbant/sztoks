@@ -1,6 +1,6 @@
 package br.net.du.myequity.controller.interceptor;
 
-import br.net.du.myequity.exception.MyEquityException;
+import br.net.du.myequity.exception.SztoksException;
 import br.net.du.myequity.exception.UserNotFoundException;
 import lombok.Builder;
 import lombok.Data;
@@ -18,10 +18,10 @@ public class RestControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handleUserNotFoundException() {}
 
-    @ExceptionHandler(MyEquityException.class)
+    @ExceptionHandler(SztoksException.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public JsonErrorResponse handleMyEquityException(final Exception e) {
+    public JsonErrorResponse handleSztoksException(final Exception e) {
         return JsonErrorResponse.builder().errorMessage(e.getMessage()).build();
     }
 

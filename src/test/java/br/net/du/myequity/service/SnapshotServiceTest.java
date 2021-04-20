@@ -29,7 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import br.net.du.myequity.exception.MyEquityException;
+import br.net.du.myequity.exception.SztoksException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
@@ -184,7 +184,7 @@ public class SnapshotServiceTest {
 
         // THEN
         assertThrows(
-                MyEquityException.class,
+                SztoksException.class,
                 () -> {
                     snapshotService.deleteSnapshot(user, snapshot);
                 });
@@ -234,7 +234,7 @@ public class SnapshotServiceTest {
 
         // THEN
         assertThrows(
-                MyEquityException.class,
+                SztoksException.class,
                 () -> {
                     snapshotService.deleteSnapshot(user, thirdSnapshot);
                 });
@@ -249,7 +249,7 @@ public class SnapshotServiceTest {
 
         // THEN
         assertThrows(
-                MyEquityException.class,
+                SztoksException.class,
                 () -> {
                     snapshotService.deleteSnapshot(user, snapshot);
                 });
