@@ -14,6 +14,7 @@ import br.net.du.myequity.controller.SnapshotControllerAjaxTestBase;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.transaction.Transaction;
+import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.TransactionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
@@ -41,6 +42,8 @@ abstract class TransactionAjaxControllerTestBase extends SnapshotControllerAjaxT
     final String newValue;
 
     @MockBean TransactionService transactionService;
+
+    @MockBean AccountService accountService;
 
     Transaction transaction;
 

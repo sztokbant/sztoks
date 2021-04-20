@@ -133,8 +133,7 @@ public class InvestmentAccount extends Account implements FutureTithingCapable {
 
         final BigDecimal profitDiff = newProfit.subtract(oldProfit);
         if (getFutureTithingPolicy().equals(FutureTithingPolicy.PROFITS_ONLY)) {
-            getSnapshot()
-                    .updateTithingAmount(getCurrencyUnit(), profitDiff, FutureTithingAccount.class);
+            getSnapshot().updateFutureTithingAmount(getCurrencyUnit(), profitDiff);
         }
     }
 
@@ -152,12 +151,9 @@ public class InvestmentAccount extends Account implements FutureTithingCapable {
 
         final BigDecimal profitDiff = newProfit.subtract(oldProfit);
         if (getFutureTithingPolicy().equals(FutureTithingPolicy.ALL)) {
-            getSnapshot()
-                    .updateTithingAmount(
-                            getCurrencyUnit(), balanceDiff, FutureTithingAccount.class);
+            getSnapshot().updateFutureTithingAmount(getCurrencyUnit(), balanceDiff);
         } else if (getFutureTithingPolicy().equals(FutureTithingPolicy.PROFITS_ONLY)) {
-            getSnapshot()
-                    .updateTithingAmount(getCurrencyUnit(), profitDiff, FutureTithingAccount.class);
+            getSnapshot().updateFutureTithingAmount(getCurrencyUnit(), profitDiff);
         }
     }
 
@@ -175,12 +171,9 @@ public class InvestmentAccount extends Account implements FutureTithingCapable {
 
         final BigDecimal profitDiff = newProfit.subtract(oldProfit);
         if (getFutureTithingPolicy().equals(FutureTithingPolicy.ALL)) {
-            getSnapshot()
-                    .updateTithingAmount(
-                            getCurrencyUnit(), balanceDiff, FutureTithingAccount.class);
+            getSnapshot().updateFutureTithingAmount(getCurrencyUnit(), balanceDiff);
         } else if (getFutureTithingPolicy().equals(FutureTithingPolicy.PROFITS_ONLY)) {
-            getSnapshot()
-                    .updateTithingAmount(getCurrencyUnit(), profitDiff, FutureTithingAccount.class);
+            getSnapshot().updateFutureTithingAmount(getCurrencyUnit(), profitDiff);
         }
     }
 

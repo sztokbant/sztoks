@@ -3,7 +3,6 @@ package br.net.du.myequity.model.transaction;
 import static br.net.du.myequity.model.util.ModelConstants.DIVISION_SCALE;
 import static br.net.du.myequity.model.util.ModelConstants.ONE_HUNDRED;
 
-import br.net.du.myequity.model.account.TithingAccount;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -68,8 +67,7 @@ public class IncomeTransaction extends Transaction implements Categorizable<Inco
         final BigDecimal newTithingAmount = getTithingAmount();
 
         final BigDecimal diffTithingAmount = newTithingAmount.subtract(oldTithingAmount);
-        getSnapshot()
-                .updateTithingAmount(getCurrencyUnit(), diffTithingAmount, TithingAccount.class);
+        getSnapshot().updateTithingAmount(getCurrencyUnit(), diffTithingAmount);
 
         updateSnapshotTransactionTotal(newAmount, oldAmount);
     }
@@ -87,8 +85,7 @@ public class IncomeTransaction extends Transaction implements Categorizable<Inco
         final BigDecimal newTithingAmount = getTithingAmount();
 
         final BigDecimal diffTithingAmount = newTithingAmount.subtract(oldTithingAmount);
-        getSnapshot()
-                .updateTithingAmount(getCurrencyUnit(), diffTithingAmount, TithingAccount.class);
+        getSnapshot().updateTithingAmount(getCurrencyUnit(), diffTithingAmount);
     }
 
     @Override

@@ -19,7 +19,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.sun.istack.NotNull;
-import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -160,7 +159,7 @@ public class Snapshot implements Comparable<Snapshot> {
         this.year = year;
         this.month = month;
 
-        this.baseCurrency = baseCurrencyUnit.getCode();
+        baseCurrency = baseCurrencyUnit.getCode();
 
         if (defaultTithingPercentage.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException(
@@ -179,7 +178,14 @@ public class Snapshot implements Comparable<Snapshot> {
 
         this.currencyConversionRates.putAll(currencyConversionRates);
 
-        // Consolidate TithingAccounts into baseCurrency
+        consolidateTithingAccountsToBaseCurrency(baseCurrencyUnit, accounts);
+        addNonTithingAccounts(accounts);
+        addTransactionAccounts(year, month, transactions);
+    }
+
+    private void consolidateTithingAccountsToBaseCurrency(
+            @NonNull final CurrencyUnit baseCurrencyUnit,
+            @NonNull final SortedSet<Account> accounts) {
         accounts.stream()
                 .filter(account -> (account instanceof TithingAccount))
                 .map(account -> account.copy())
@@ -188,15 +194,18 @@ public class Snapshot implements Comparable<Snapshot> {
                                 updateTithingAmount(
                                         baseCurrencyUnit,
                                         toBaseCurrency(
-                                                account.getCurrencyUnit(), account.getBalance()),
-                                        TithingAccount.class));
+                                                account.getCurrencyUnit(), account.getBalance())));
+    }
 
-        // Add remaining accounts
+    private void addNonTithingAccounts(@NonNull final SortedSet<Account> accounts) {
         accounts.stream()
                 .filter(account -> !(account instanceof TithingAccount))
                 .map(account -> account.copy())
                 .forEach(account -> addAccount(account));
+    }
 
+    private void addTransactionAccounts(
+            final int year, final int month, @NonNull final List<Transaction> transactions) {
         transactions.stream()
                 .forEach(
                         transaction -> {
@@ -255,10 +264,9 @@ public class Snapshot implements Comparable<Snapshot> {
         }
 
         if (account instanceof FutureTithingCapable) {
-            updateTithingAmount(
+            updateFutureTithingAmount(
                     account.getCurrencyUnit(),
-                    ((FutureTithingCapable) account).getFutureTithingReferenceAmount().negate(),
-                    FutureTithingAccount.class);
+                    ((FutureTithingCapable) account).getFutureTithingReferenceAmount().negate());
         }
 
         updateNetWorth(
@@ -329,14 +337,9 @@ public class Snapshot implements Comparable<Snapshot> {
         if (transaction instanceof IncomeTransaction) {
             final IncomeTransaction incomeTransaction = (IncomeTransaction) transaction;
             updateTithingAmount(
-                    incomeTransaction.getCurrencyUnit(),
-                    incomeTransaction.getTithingAmount(),
-                    TithingAccount.class);
+                    incomeTransaction.getCurrencyUnit(), incomeTransaction.getTithingAmount());
         } else if (transaction instanceof DonationTransaction) {
-            updateTithingAmount(
-                    transaction.getCurrencyUnit(),
-                    transaction.getAmount().negate(),
-                    TithingAccount.class);
+            updateTithingAmount(transaction.getCurrencyUnit(), transaction.getAmount().negate());
         }
 
         transactions.add(transaction);
@@ -359,11 +362,9 @@ public class Snapshot implements Comparable<Snapshot> {
             final IncomeTransaction incomeTransaction = (IncomeTransaction) transaction;
             updateTithingAmount(
                     incomeTransaction.getCurrencyUnit(),
-                    incomeTransaction.getTithingAmount().negate(),
-                    TithingAccount.class);
+                    incomeTransaction.getTithingAmount().negate());
         } else if (transaction instanceof DonationTransaction) {
-            updateTithingAmount(
-                    transaction.getCurrencyUnit(), transaction.getAmount(), TithingAccount.class);
+            updateTithingAmount(transaction.getCurrencyUnit(), transaction.getAmount());
         }
 
         transactions.remove(transaction);
@@ -382,30 +383,28 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     public void updateTithingAmount(
-            @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final BigDecimal plusAmount,
-            @NonNull final Class<? extends Account> tithingAccountType) {
+            @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal plusAmount) {
         if (plusAmount.compareTo(BigDecimal.ZERO) == 0) {
             return;
         }
 
-        final Account account = getTithingAccountFor(currencyUnit, tithingAccountType);
+        final TithingAccount tithingAccount = getTithingAccount(currencyUnit);
+        tithingAccount.setBalance(tithingAccount.getBalance().add(plusAmount));
 
-        if (account instanceof TithingAccount) {
-            final TithingAccount tithingAccount = (TithingAccount) account;
-            tithingAccount.setBalance(tithingAccount.getBalance().add(plusAmount));
-        } else if (account instanceof FutureTithingAccount) {
-            final FutureTithingAccount futureTithingAccount = (FutureTithingAccount) account;
-            futureTithingAccount.setReferenceAmount(
-                    futureTithingAccount.getReferenceAmount().add(plusAmount));
-        } else {
-            throw new IllegalStateException("Error updating tithing account");
+        if (next != null) {
+            next.updateTithingAmount(currencyUnit, plusAmount);
+        }
+    }
+
+    public void updateFutureTithingAmount(
+            @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal plusAmount) {
+        if (plusAmount.compareTo(BigDecimal.ZERO) == 0) {
+            return;
         }
 
-        // FutureTithingAccount balances should not propagate by updating past snapshots
-        if (next != null && !tithingAccountType.equals(FutureTithingAccount.class)) {
-            next.updateTithingAmount(currencyUnit, plusAmount, tithingAccountType);
-        }
+        final FutureTithingAccount futureTithingAccount = getFutureTithingAccount(currencyUnit);
+        futureTithingAccount.setReferenceAmount(
+                futureTithingAccount.getReferenceAmount().add(plusAmount));
     }
 
     public void updateTransactionsTotal(
@@ -452,30 +451,42 @@ public class Snapshot implements Comparable<Snapshot> {
         }
     }
 
-    private Account getTithingAccountFor(
-            final CurrencyUnit currencyUnit, final Class<? extends Account> tithingAccountType) {
+    public TithingAccount getTithingAccount(@NonNull final CurrencyUnit currencyUnit) {
         final Optional<Account> tithingAccountOpt =
                 accounts.stream()
                         .filter(
                                 account ->
-                                        tithingAccountType.isInstance(account)
+                                        (account instanceof TithingAccount)
                                                 && account.getCurrencyUnit().equals(currencyUnit))
                         .findFirst();
+
         if (tithingAccountOpt.isPresent()) {
-            return tithingAccountOpt.get();
+            return (TithingAccount) tithingAccountOpt.get();
         }
 
-        try {
-            final Constructor constructor =
-                    tithingAccountType.getDeclaredConstructor(CurrencyUnit.class);
+        final TithingAccount tithingAccount = new TithingAccount(currencyUnit);
+        addAccount(tithingAccount);
 
-            final Account tithingAccount = (Account) constructor.newInstance(currencyUnit);
-            addAccount(tithingAccount);
+        return tithingAccount;
+    }
 
-            return tithingAccount;
-        } catch (final Exception e) {
-            throw new IllegalStateException("Tithing account instantiation failure");
+    public FutureTithingAccount getFutureTithingAccount(@NonNull final CurrencyUnit currencyUnit) {
+        final Optional<Account> futureTithingAccountOpt =
+                accounts.stream()
+                        .filter(
+                                account ->
+                                        (account instanceof FutureTithingAccount)
+                                                && account.getCurrencyUnit().equals(currencyUnit))
+                        .findFirst();
+
+        if (futureTithingAccountOpt.isPresent()) {
+            return (FutureTithingAccount) futureTithingAccountOpt.get();
         }
+
+        final FutureTithingAccount futureTithingAccount = new FutureTithingAccount(currencyUnit);
+        addAccount(futureTithingAccount);
+
+        return futureTithingAccount;
     }
 
     public CurrencyUnit getBaseCurrencyUnit() {

@@ -79,9 +79,7 @@ public class ReceivableAccount extends Account
         getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
 
         if (!getFutureTithingPolicy().equals(FutureTithingPolicy.NONE)) {
-            getSnapshot()
-                    .updateTithingAmount(
-                            getCurrencyUnit(), balanceDiff, FutureTithingAccount.class);
+            getSnapshot().updateFutureTithingAmount(getCurrencyUnit(), balanceDiff);
         }
     }
 

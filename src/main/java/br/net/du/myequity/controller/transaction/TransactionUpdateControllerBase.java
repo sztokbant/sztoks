@@ -5,6 +5,7 @@ import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.transaction.Transaction;
+import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import br.net.du.myequity.service.TransactionService;
 import java.util.Optional;
@@ -16,6 +17,8 @@ public class TransactionUpdateControllerBase {
     @Autowired protected SnapshotService snapshotService;
 
     @Autowired protected TransactionService transactionService;
+
+    @Autowired protected AccountService accountService;
 
     @Autowired protected SnapshotUtils snapshotUtils;
 
@@ -48,6 +51,7 @@ public class TransactionUpdateControllerBase {
                 function.apply(valueUpdateJsonRequest, transaction);
 
         transactionService.save(transaction);
+        accountService.save(snapshot.getTithingAccount(transaction.getCurrencyUnit()));
         snapshotService.save(snapshot);
 
         return jsonResponse;

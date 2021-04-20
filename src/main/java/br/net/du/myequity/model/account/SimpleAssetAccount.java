@@ -72,9 +72,7 @@ public class SimpleAssetAccount extends Account implements BalanceUpdateable, Fu
         getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
 
         if (!getFutureTithingPolicy().equals(FutureTithingPolicy.NONE)) {
-            getSnapshot()
-                    .updateTithingAmount(
-                            getCurrencyUnit(), balanceDiff, FutureTithingAccount.class);
+            getSnapshot().updateFutureTithingAmount(getCurrencyUnit(), balanceDiff);
         }
     }
 

@@ -46,6 +46,7 @@ public class AccountUpdateControllerBase {
         final AccountViewModelOutput jsonResponse = function.apply(valueUpdateJsonRequest, account);
 
         accountService.save(account);
+        accountService.save(snapshot.getFutureTithingAccount(account.getCurrencyUnit()));
         snapshotService.save(snapshot);
 
         return jsonResponse;

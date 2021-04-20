@@ -4,6 +4,8 @@ import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -93,5 +95,13 @@ class IncomeTransactionAmountUpdateControllerTest extends TransactionAjaxControl
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals("$521.60", jsonNode.get(JSON_TOTAL_LIABILITY).asText());
         assertEquals("$-521.60", jsonNode.get(JSON_NET_WORTH).asText());
+
+        verify(userService).findByEmail(eq(user.getEmail()));
+        verify(snapshotService).findById(eq(SNAPSHOT_ID));
+        verify(transactionService).findByIdAndSnapshotId(eq(TRANSACTION_ID), eq(SNAPSHOT_ID));
+
+        verify(transactionService).save(transaction);
+        verify(snapshotService).save(snapshot);
+        verify(accountService).save(tithingAccount);
     }
 }
