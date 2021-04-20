@@ -17,7 +17,7 @@ public class TransactionService {
     }
 
     public Optional<Transaction> findByIdAndSnapshotId(
-            @NonNull final Long snapshotId, @NonNull final Long transactionId) {
-        return transactionRepository.findByIdAndSnapshotId(snapshotId, transactionId);
+            @NonNull final Long transactionId, @NonNull final Long snapshotId) {
+        return transactionRepository.findByIdAndSnapshotId(transactionId, snapshotId);
     }
 }

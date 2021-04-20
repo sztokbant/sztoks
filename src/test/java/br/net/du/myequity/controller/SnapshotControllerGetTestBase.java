@@ -35,7 +35,6 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
 
     protected static final long ASSET_ACCOUNT_ID = 42L;
     protected static final long LIABILITY_ACCOUNT_ID = 72L;
-    protected static final long SNAPSHOT_INDEX = 1L;
 
     @MockBean protected SnapshotService snapshotService;
 

@@ -31,7 +31,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestBase {
 
     static final Long ACCOUNT_ID = 1L;
-    static final long SNAPSHOT_INDEX = 1L;
 
     static final String JSON_ACCOUNT_TYPE = "accountType";
     static final String JSON_AVAILABLE_CREDIT = "availableCredit";
