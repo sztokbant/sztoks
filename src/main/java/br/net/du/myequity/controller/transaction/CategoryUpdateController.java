@@ -11,17 +11,18 @@ import br.net.du.myequity.model.transaction.InvestmentCategory;
 import br.net.du.myequity.model.transaction.InvestmentTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
 import java.util.function.BiFunction;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CategoryUpdateController extends TransactionUpdateControllerBase {
+public class CategoryUpdateController {
+
+    @Autowired private TransactionUpdater transactionUpdater;
 
     @PostMapping("/transaction/updateCategory")
-    @Transactional
     public TransactionViewModelOutput post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
@@ -47,7 +48,7 @@ public class CategoryUpdateController extends TransactionUpdateControllerBase {
                             return TransactionViewModelOutput.of(transaction, true);
                         };
 
-        return updateTransactionField(
+        return transactionUpdater.updateField(
                 model, valueUpdateJsonRequest, Categorizable.class, updateCategoryFunction);
     }
 }

@@ -4,17 +4,18 @@ import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
 import br.net.du.myequity.model.transaction.Transaction;
 import java.util.function.BiFunction;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class RecurringUpdateController extends TransactionUpdateControllerBase {
+public class RecurringUpdateController {
+
+    @Autowired private TransactionUpdater transactionUpdater;
 
     @PostMapping("/transaction/setRecurring")
-    @Transactional
     public TransactionViewModelOutput post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
@@ -28,7 +29,7 @@ public class RecurringUpdateController extends TransactionUpdateControllerBase {
                             return TransactionViewModelOutput.of(transaction, false);
                         };
 
-        return updateTransactionField(
+        return transactionUpdater.updateField(
                 model, valueUpdateJsonRequest, Transaction.class, updateRecurringFunction);
     }
 }

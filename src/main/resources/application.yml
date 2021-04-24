@@ -12,7 +12,8 @@ spring:
 
     properties:
       hibernate:
-        generate_statistics: true
+        generate_statistics: false
+
   mvc:
     view:
       prefix: /WEB-INF/jsp/
@@ -23,5 +24,6 @@ spring:
 
 logging:
   level:
-    org:
-      hibernate: INFO
+    root: INFO
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: DEBUG

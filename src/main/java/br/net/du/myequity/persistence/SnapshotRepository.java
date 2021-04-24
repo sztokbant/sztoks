@@ -7,13 +7,15 @@ import br.net.du.myequity.model.totals.CumulativeTransactionTotals;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.LockModeType;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
-public interface SnapshotRepository extends JpaRepository<Snapshot, Long> {
+public interface SnapshotRepository extends CustomRepository<Snapshot, Long> {
     @Lock(LockModeType.PESSIMISTIC_READ)
     Optional<Snapshot> findById(Long id);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<Snapshot> findByIdAndUserId(Long snapshotId, Long userId);
 
     @Lock(LockModeType.PESSIMISTIC_READ)
     Snapshot findTopByUserOrderByYearDescMonthDesc(User user);

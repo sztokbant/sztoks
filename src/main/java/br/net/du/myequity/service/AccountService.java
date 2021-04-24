@@ -8,12 +8,14 @@ import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService {
     private final AccountRepository accountRepository;
 
+    @Transactional
     public Account save(@NonNull final Account account) {
         return accountRepository.save(account);
     }
@@ -30,6 +32,7 @@ public class AccountService {
         return accountRepository.findBySnapshot(snapshot);
     }
 
+    @Transactional
     public void delete(@NonNull final Account account) {
         accountRepository.delete(account);
     }

@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -61,6 +63,9 @@ import org.joda.money.CurrencyUnit;
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "year", "month"}))
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class Snapshot implements Comparable<Snapshot> {
+    private static Logger LOG = Logger.getLogger(Snapshot.class.getName());
+    private static Level LEVEL = Level.INFO;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -417,23 +422,31 @@ public class Snapshot implements Comparable<Snapshot> {
         }
 
         if (transactionType == TransactionType.INCOME) {
-            if (incomesTotal == null) {
-                incomesTotal = getTotalFor(TransactionType.INCOME);
-            } else {
-                incomesTotal = incomesTotal.add(toBaseCurrency(currencyUnit, amount));
-            }
+            final BigDecimal newAmount =
+                    (incomesTotal == null)
+                            ? getTotalFor(TransactionType.INCOME)
+                            : incomesTotal.add(toBaseCurrency(currencyUnit, amount));
+            incomesTotal = newAmount;
+
+            LOG.log(LEVEL, "[SZTOKS] new incomesTotal = " + newAmount);
+
         } else if (transactionType == TransactionType.INVESTMENT) {
-            if (investmentsTotal == null) {
-                investmentsTotal = getTotalFor(TransactionType.INVESTMENT);
-            } else {
-                investmentsTotal = investmentsTotal.add(toBaseCurrency(currencyUnit, amount));
-            }
+            final BigDecimal newAmount =
+                    (investmentsTotal == null)
+                            ? getTotalFor(TransactionType.INVESTMENT)
+                            : investmentsTotal.add(toBaseCurrency(currencyUnit, amount));
+            investmentsTotal = newAmount;
+
+            LOG.log(LEVEL, "[SZTOKS] new investmentsTotal = " + newAmount);
+
         } else {
-            if (donationsTotal == null) {
-                donationsTotal = getTotalFor(TransactionType.DONATION);
-            } else {
-                donationsTotal = donationsTotal.add(toBaseCurrency(currencyUnit, amount));
-            }
+            final BigDecimal newAmount =
+                    (donationsTotal == null)
+                            ? getTotalFor(TransactionType.DONATION)
+                            : donationsTotal.add(toBaseCurrency(currencyUnit, amount));
+            donationsTotal = newAmount;
+
+            LOG.log(LEVEL, "[SZTOKS] new donationsTotal = " + newAmount);
 
             if (isTaxDeductibleDonation) {
                 updateTaxDeductibleDonationsTotal(currencyUnit, amount);

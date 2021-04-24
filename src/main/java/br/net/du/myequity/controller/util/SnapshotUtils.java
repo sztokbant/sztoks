@@ -28,4 +28,19 @@ public class SnapshotUtils {
     private boolean snapshotBelongsToUser(final User user, final Optional<Snapshot> snapshotOpt) {
         return snapshotOpt.isPresent() && snapshotOpt.get().getUser().equals(user);
     }
+
+    public Snapshot validateLockAndRefreshSnapshot(final Model model, final Long snapshotId) {
+        final User user = getLoggedUser(model);
+
+        final Optional<Snapshot> snapshotOpt =
+                snapshotService.findByIdAndUserId(snapshotId, user.getId());
+        if (!snapshotOpt.isPresent()) {
+            throw new IllegalArgumentException();
+        }
+
+        final Snapshot snapshot = snapshotOpt.get();
+        snapshotService.refresh(snapshot);
+
+        return snapshot;
+    }
 }

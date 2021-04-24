@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller.transaction;
 
+import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.SnapshotRemoveTransactionJsonResponse;
 import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
@@ -7,8 +8,11 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
+import br.net.du.myequity.service.SnapshotService;
+import br.net.du.myequity.service.TransactionService;
 import java.util.Optional;
 import org.joda.money.CurrencyUnit;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +20,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class RemoveTransactionController extends TransactionUpdateControllerBase {
+public class RemoveTransactionController {
+
+    @Autowired protected SnapshotService snapshotService;
+
+    @Autowired protected TransactionService transactionService;
+
+    @Autowired protected SnapshotUtils snapshotUtils;
 
     @PostMapping("/transaction/remove")
     @Transactional

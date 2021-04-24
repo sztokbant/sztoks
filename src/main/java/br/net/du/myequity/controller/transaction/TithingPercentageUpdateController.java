@@ -6,17 +6,18 @@ import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class TithingPercentageUpdateController extends TransactionUpdateControllerBase {
+public class TithingPercentageUpdateController {
+
+    @Autowired private TransactionUpdater transactionUpdater;
 
     @PostMapping("/transaction/updateTithingPercentage")
-    @Transactional
     public TransactionViewModelOutput post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
@@ -38,7 +39,7 @@ public class TithingPercentageUpdateController extends TransactionUpdateControll
                             return TransactionViewModelOutput.of(transaction, true);
                         };
 
-        return updateTransactionField(
+        return transactionUpdater.updateField(
                 model, valueUpdateJsonRequest, Transaction.class, updateAmountFunction);
     }
 }

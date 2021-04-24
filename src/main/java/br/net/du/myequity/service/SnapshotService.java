@@ -11,6 +11,7 @@ import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class SnapshotService {
 
     private final UserService userService;
 
+    @Transactional
     public Snapshot newSnapshot(
             @NonNull final User user, final int snapshotYear, final int snapshotMonth) {
         assert !user.getSnapshots().isEmpty();
@@ -46,8 +48,17 @@ public class SnapshotService {
         return snapshotRepository.save(snapshot);
     }
 
+    public void refresh(@NonNull final Snapshot snapshot) {
+        snapshotRepository.refresh(snapshot);
+    }
+
     public Optional<Snapshot> findById(@NonNull final Long snapshotId) {
         return snapshotRepository.findById(snapshotId);
+    }
+
+    public Optional<Snapshot> findByIdAndUserId(
+            @NonNull final Long snapshotId, @NonNull final Long userId) {
+        return snapshotRepository.findByIdAndUserId(snapshotId, userId);
     }
 
     public Snapshot findTopByUser(@NonNull final User user) {
@@ -72,6 +83,7 @@ public class SnapshotService {
                 refYear, refMonth, userId);
     }
 
+    @Transactional
     public void deleteSnapshot(@NonNull final User user, @NonNull final Snapshot snapshot) {
         assert user.getSnapshots().contains(snapshot);
 
