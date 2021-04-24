@@ -8,6 +8,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID
 import static br.net.du.myequity.controller.util.ControllerConstants.TRANSACTION_TYPE_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
+import static br.net.du.myequity.controller.util.TransactionUtils.hasTithingImpact;
 
 import br.net.du.myequity.controller.interceptor.WebController;
 import br.net.du.myequity.controller.util.SnapshotUtils;
@@ -16,8 +17,12 @@ import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelI
 import br.net.du.myequity.controller.viewmodel.validator.TransactionViewModelInputValidator;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
+import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,6 +46,8 @@ public class TransactionNewController {
     @Autowired private SnapshotUtils snapshotUtils;
 
     @Autowired private TransactionViewModelInputValidator transactionViewModelInputValidator;
+
+    @Autowired private AccountService accountService;
 
     @GetMapping("/snapshot/{id}/newIncomeTransaction")
     public String newIncomeTransaction(
@@ -71,7 +78,7 @@ public class TransactionNewController {
             @ModelAttribute(TRANSACTION_FORM)
                     final TransactionViewModelInput transactionViewModelInput,
             final BindingResult bindingResult) {
-        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotUtils.validateLockAndRefreshSnapshot(model, snapshotId);
 
         transactionViewModelInputValidator.validate(
                 transactionViewModelInput, bindingResult, snapshot);
@@ -82,7 +89,19 @@ public class TransactionNewController {
             return prepareGetMapping(snapshotId, model, transactionType, transactionViewModelInput);
         }
 
-        snapshot.addTransaction(transactionViewModelInput.toTransaction());
+        final Transaction transaction = transactionViewModelInput.toTransaction();
+
+        final Optional<Account> tithingAccountOpt =
+                hasTithingImpact(transaction)
+                        ? Optional.of(snapshot.getTithingAccount(transaction.getCurrencyUnit()))
+                        : Optional.empty();
+
+        snapshot.addTransaction(transaction);
+
+        if (tithingAccountOpt.isPresent()) {
+            accountService.save(tithingAccountOpt.get());
+        }
+
         snapshotService.save(snapshot);
 
         return String.format(REDIRECT_SNAPSHOT_TEMPLATE, snapshot.getId());

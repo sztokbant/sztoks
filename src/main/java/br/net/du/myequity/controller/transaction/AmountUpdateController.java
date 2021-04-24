@@ -31,6 +31,6 @@ public class AmountUpdateController {
                         };
 
         return transactionUpdater.updateField(
-                model, valueUpdateJsonRequest, Transaction.class, updateAmountFunction);
+                model, valueUpdateJsonRequest, Transaction.class, updateAmountFunction, true);
     }
 }

@@ -11,8 +11,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.account.FutureTithingPolicy;
-import br.net.du.myequity.model.account.ReceivableAccount;
+import br.net.du.myequity.model.account.PayableAccount;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -29,29 +28,23 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ReceivableAccountAmountUpdateControllerTest extends AccountAjaxControllerTestBase {
+class PayableAccountBalanceUpdateControllerTest extends AccountAjaxControllerTestBase {
 
-    private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
+    private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
 
-    ReceivableAccountAmountUpdateControllerTest() {
+    PayableAccountBalanceUpdateControllerTest() {
         super("/snapshot/updateAccountBalance", "108.00");
     }
 
     @Override
     public void createEntity() {
-        account =
-                new ReceivableAccount(
-                        "Friend",
-                        CURRENCY_UNIT,
-                        FutureTithingPolicy.NONE,
-                        LocalDate.now(),
-                        CURRENT_BALANCE);
+        account = new PayableAccount("Friend", CURRENCY_UNIT, LocalDate.now(), CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
     }
 
     @Test
-    public void post_happy() throws Exception {
+    public void updateAccountBalance_payableAccount_happy() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
@@ -83,7 +76,7 @@ class ReceivableAccountAmountUpdateControllerTest extends AccountAjaxControllerT
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
         assertEquals("$108.00", jsonNode.get(JSON_BALANCE).asText());
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
-        assertEquals("$108.00", jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals("$-108.00", jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
         assertEquals("$108.00", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
 

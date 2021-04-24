@@ -83,7 +83,7 @@ class SimpleAssetAccountBalanceUpdateControllerTest extends AccountAjaxControlle
     }
 
     @Test
-    public void post_happy() throws Exception {
+    public void updateAccountBalance_simpleAsset_happy() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 

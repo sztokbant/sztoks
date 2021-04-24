@@ -37,6 +37,10 @@ public class DueDateUpdateController {
                         };
 
         return accountUpdater.updateField(
-                model, valueUpdateJsonRequest, DueDateUpdateable.class, updateDueDateFunction);
+                model,
+                valueUpdateJsonRequest,
+                DueDateUpdateable.class,
+                updateDueDateFunction,
+                false);
     }
 }

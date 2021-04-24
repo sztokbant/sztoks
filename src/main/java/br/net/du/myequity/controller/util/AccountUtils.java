@@ -4,6 +4,8 @@ import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.FutureTithingCapable;
+import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.service.AccountService;
 import java.util.Optional;
 import lombok.NonNull;
@@ -26,5 +28,12 @@ public class AccountUtils {
 
     private boolean accountBelongsToUser(final User user, final Optional<Account> accountOpt) {
         return accountOpt.isPresent() && accountOpt.get().getSnapshot().getUser().equals(user);
+    }
+
+    public static boolean hasFutureTithingImpact(@NonNull final Account account) {
+        return account instanceof FutureTithingCapable
+                && !((FutureTithingCapable) account)
+                        .getFutureTithingPolicy()
+                        .equals(FutureTithingPolicy.NONE);
     }
 }

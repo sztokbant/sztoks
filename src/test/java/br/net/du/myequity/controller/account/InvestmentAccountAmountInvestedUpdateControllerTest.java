@@ -5,11 +5,13 @@ import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import br.net.du.myequity.model.account.FutureTithingAccount;
 import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.InvestmentAccount;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -58,8 +60,9 @@ class InvestmentAccountAmountInvestedUpdateControllerTest extends AccountAjaxCon
         snapshot.setUser(user);
         snapshot.addAccount(account);
 
-        when(snapshotService.findByIdAndUserId(SNAPSHOT_ID, user.getId()))
-                .thenReturn(Optional.of(snapshot));
+        final FutureTithingAccount futureTithingAccount = prepareFutureTithingAccount();
+
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         when(accountService.findByIdAndSnapshotId(ACCOUNT_ID, SNAPSHOT_ID))
                 .thenReturn(Optional.of(account));
@@ -92,10 +95,11 @@ class InvestmentAccountAmountInvestedUpdateControllerTest extends AccountAjaxCon
 
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
-        assertEquals("$3,388.32", jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals("$3,313.32", jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals("ASSET", jsonNode.get(JSON_ACCOUNT_TYPE).asText());
         assertEquals("$3,388.32", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
 
-        verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
+        verify(snapshotService).findById(eq(SNAPSHOT_ID));
+        verify(accountService, times(0)).save(futureTithingAccount);
     }
 }

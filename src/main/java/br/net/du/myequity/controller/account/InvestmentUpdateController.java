@@ -37,7 +37,8 @@ public class InvestmentUpdateController {
                 model,
                 valueUpdateJsonRequest,
                 InvestmentAccount.class,
-                updateInvestmentSharesFunction);
+                updateInvestmentSharesFunction,
+                true);
     }
 
     @PostMapping("/snapshot/updateInvestmentAmountInvested")
@@ -59,7 +60,8 @@ public class InvestmentUpdateController {
                 model,
                 valueUpdateJsonRequest,
                 InvestmentAccount.class,
-                updateInvestmentAmountInvestedFunction);
+                updateInvestmentAmountInvestedFunction,
+                false);
     }
 
     @PostMapping("/snapshot/updateInvestmentCurrentShareValue")
@@ -80,6 +82,7 @@ public class InvestmentUpdateController {
                 model,
                 valueUpdateJsonRequest,
                 InvestmentAccount.class,
-                updateInvestmentCurrentShareValueFunction);
+                updateInvestmentCurrentShareValueFunction,
+                true);
     }
 }

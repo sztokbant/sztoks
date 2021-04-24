@@ -37,7 +37,8 @@ public class CreditCardUpdateController {
                 model,
                 valueUpdateJsonRequest,
                 CreditCardAccount.class,
-                updateCreditCardTotalCreditFunction);
+                updateCreditCardTotalCreditFunction,
+                true);
     }
 
     @PostMapping("/snapshot/updateCreditCardAvailableCredit")
@@ -58,7 +59,8 @@ public class CreditCardUpdateController {
                 model,
                 valueUpdateJsonRequest,
                 CreditCardAccount.class,
-                updateCreditCardAvailableCreditFunction);
+                updateCreditCardAvailableCreditFunction,
+                true);
     }
 
     @PostMapping("/snapshot/updateCreditCardStatement")
@@ -79,6 +81,7 @@ public class CreditCardUpdateController {
                 model,
                 valueUpdateJsonRequest,
                 CreditCardAccount.class,
-                updateCreditCardStatementFunction);
+                updateCreditCardStatementFunction,
+                false);
     }
 }

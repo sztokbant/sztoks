@@ -15,11 +15,13 @@ import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.FutureTithingAccount;
 import br.net.du.myequity.service.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
+import java.math.BigDecimal;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestBase {
 
     static final Long ACCOUNT_ID = 1L;
+
+    static final BigDecimal CURRENT_FUTURE_TITHING_ACCOUNT_REFERENCE_AMOUNT =
+            new BigDecimal("500.00");
+    static final Long FUTURE_TITHING_ACCOUNT_ID = 1008L;
 
     static final String JSON_ACCOUNT_TYPE = "accountType";
     static final String JSON_AVAILABLE_CREDIT = "availableCredit";
@@ -154,5 +160,15 @@ abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestB
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
+    }
+
+    protected FutureTithingAccount prepareFutureTithingAccount() {
+        final FutureTithingAccount futureTithingAccount = new FutureTithingAccount(CURRENCY_UNIT);
+
+        snapshot.addAccount(futureTithingAccount);
+        futureTithingAccount.setReferenceAmount(CURRENT_FUTURE_TITHING_ACCOUNT_REFERENCE_AMOUNT);
+        futureTithingAccount.setId(FUTURE_TITHING_ACCOUNT_ID);
+
+        return futureTithingAccount;
     }
 }

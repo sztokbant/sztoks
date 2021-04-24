@@ -36,6 +36,7 @@ public class TaxDeductibleUpdateController {
                 model,
                 valueUpdateJsonRequest,
                 DonationTransaction.class,
-                updateTaxDeductibleFunction);
+                updateTaxDeductibleFunction,
+                true);
     }
 }

@@ -1,13 +1,17 @@
 package br.net.du.myequity.controller.transaction;
 
+import static br.net.du.myequity.controller.util.TransactionUtils.hasTithingImpact;
+
 import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.SnapshotRemoveTransactionJsonResponse;
 import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
+import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import br.net.du.myequity.service.TransactionService;
 import java.util.Optional;
@@ -22,11 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RemoveTransactionController {
 
-    @Autowired protected SnapshotService snapshotService;
+    @Autowired private SnapshotService snapshotService;
 
-    @Autowired protected TransactionService transactionService;
+    @Autowired private TransactionService transactionService;
 
-    @Autowired protected SnapshotUtils snapshotUtils;
+    @Autowired private SnapshotUtils snapshotUtils;
+
+    @Autowired private AccountService accountService;
 
     @PostMapping("/transaction/remove")
     @Transactional
@@ -34,7 +40,8 @@ public class RemoveTransactionController {
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         // Ensure snapshot belongs to logged user
         final Snapshot snapshot =
-                snapshotUtils.validateSnapshot(model, valueUpdateJsonRequest.getSnapshotId());
+                snapshotUtils.validateLockAndRefreshSnapshot(
+                        model, valueUpdateJsonRequest.getSnapshotId());
 
         final Optional<Transaction> transactionOpt =
                 transactionService.findByIdAndSnapshotId(
@@ -47,7 +54,17 @@ public class RemoveTransactionController {
 
         final Transaction transaction = transactionOpt.get();
 
+        final Optional<Account> tithingAccountOpt =
+                hasTithingImpact(transaction)
+                        ? Optional.of(snapshot.getTithingAccount(transaction.getCurrencyUnit()))
+                        : Optional.empty();
+
         snapshot.removeTransaction(transaction);
+
+        if (tithingAccountOpt.isPresent()) {
+            accountService.save(tithingAccountOpt.get());
+        }
+
         snapshotService.save(snapshot);
 
         return buildJsonResponse(valueUpdateJsonRequest, snapshot, transaction);

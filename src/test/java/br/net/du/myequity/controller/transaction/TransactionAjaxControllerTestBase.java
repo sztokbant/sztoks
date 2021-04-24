@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.net.du.myequity.controller.SnapshotControllerAjaxTestBase;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.account.TithingAccount;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.TransactionService;
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
+import java.math.BigDecimal;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 abstract class TransactionAjaxControllerTestBase extends SnapshotControllerAjaxTestBase {
 
     static final Long TRANSACTION_ID = 1L;
+
+    static final BigDecimal CURRENT_TITHING_ACCOUNT_BALANCE = new BigDecimal("500.00");
+    static final Long TITHING_ACCOUNT_ID = 108L;
 
     static final String JSON_AMOUNT = "amount";
     static final String JSON_CURRENCY_UNIT = "currencyUnit";
@@ -96,5 +101,15 @@ abstract class TransactionAjaxControllerTestBase extends SnapshotControllerAjaxT
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
+    }
+
+    protected TithingAccount prepareTithingAccount() {
+        final TithingAccount tithingAccount = new TithingAccount(CURRENCY_UNIT);
+
+        snapshot.addAccount(tithingAccount);
+        tithingAccount.setBalance(CURRENT_TITHING_ACCOUNT_BALANCE);
+        tithingAccount.setId(TITHING_ACCOUNT_ID);
+
+        return tithingAccount;
     }
 }

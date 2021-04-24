@@ -53,7 +53,7 @@ class InvestmentAccountCurrentShareValueUpdateControllerTest extends AccountAjax
     }
 
     @Test
-    public void updateInvestmentAmountInvested_happy() throws Exception {
+    public void updateInvestmentCurrentShareValue_happy() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 

@@ -33,7 +33,6 @@ class IncomeTransactionAmountUpdateControllerTest extends TransactionAjaxControl
 
     private static final BigDecimal CURRENT_TRANSACTION_AMOUNT = new BigDecimal("0.00");
     private static final BigDecimal TITHING_PERCENTAGE = new BigDecimal("20.00");
-    private static final BigDecimal CURRENT_TITHING_ACCOUNT_BALANCE = new BigDecimal("500.00");
 
     IncomeTransactionAmountUpdateControllerTest() {
         super("/transaction/updateAmount", "108.00");
@@ -60,9 +59,7 @@ class IncomeTransactionAmountUpdateControllerTest extends TransactionAjaxControl
 
         snapshot.setUser(user);
 
-        final TithingAccount tithingAccount = new TithingAccount(CURRENCY_UNIT);
-        snapshot.addAccount(tithingAccount);
-        tithingAccount.setBalance(CURRENT_TITHING_ACCOUNT_BALANCE);
+        final TithingAccount tithingAccount = prepareTithingAccount();
 
         snapshot.addTransaction(transaction);
 

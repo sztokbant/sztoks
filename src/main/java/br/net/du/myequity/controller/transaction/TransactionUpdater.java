@@ -1,9 +1,12 @@
 package br.net.du.myequity.controller.transaction;
 
+import static br.net.du.myequity.controller.util.TransactionUtils.hasTithingImpact;
+
 import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import br.net.du.myequity.service.AccountService;
@@ -23,13 +26,13 @@ public class TransactionUpdater {
     private static Logger LOG = Logger.getLogger(TransactionUpdater.class.getName());
     private static Level LEVEL = Level.INFO;
 
-    @Autowired protected SnapshotService snapshotService;
+    @Autowired private SnapshotService snapshotService;
 
-    @Autowired protected TransactionService transactionService;
+    @Autowired private TransactionService transactionService;
 
-    @Autowired protected AccountService accountService;
+    @Autowired private AccountService accountService;
 
-    @Autowired protected SnapshotUtils snapshotUtils;
+    @Autowired private SnapshotUtils snapshotUtils;
 
     @Transactional
     public TransactionViewModelOutput updateField(
@@ -37,25 +40,30 @@ public class TransactionUpdater {
             final ValueUpdateJsonRequest valueUpdateJsonRequest,
             final Class clazz,
             final BiFunction<ValueUpdateJsonRequest, Transaction, TransactionViewModelOutput>
-                    function) {
+                    function,
+            final boolean isSnapshotImpactingField) {
+        final Long snapshotId = valueUpdateJsonRequest.getSnapshotId();
+
         // Ensure snapshot belongs to logged user
         final Snapshot snapshot =
-                snapshotUtils.validateLockAndRefreshSnapshot(
-                        model, valueUpdateJsonRequest.getSnapshotId());
+                isSnapshotImpactingField
+                        ? snapshotUtils.validateLockAndRefreshSnapshot(model, snapshotId)
+                        : snapshotUtils.validateSnapshot(model, snapshotId);
 
-        LOG.log(
-                LEVEL,
-                "[SZTOKS] Locked snapshot, incomesTotal = "
-                        + snapshot.getTotalFor(TransactionType.INCOME)
-                        + ", investmentsTotal = "
-                        + snapshot.getTotalFor(TransactionType.INVESTMENT)
-                        + ", donationsTotal = "
-                        + snapshot.getTotalFor(TransactionType.DONATION));
+        if (isSnapshotImpactingField) {
+            LOG.log(
+                    LEVEL,
+                    "[SZTOKS] Locked snapshot, incomesTotal = "
+                            + snapshot.getTotalFor(TransactionType.INCOME)
+                            + ", investmentsTotal = "
+                            + snapshot.getTotalFor(TransactionType.INVESTMENT)
+                            + ", donationsTotal = "
+                            + snapshot.getTotalFor(TransactionType.DONATION));
+        }
 
         final Optional<Transaction> transactionOpt =
                 transactionService.findByIdAndSnapshotId(
-                        valueUpdateJsonRequest.getEntityId(),
-                        valueUpdateJsonRequest.getSnapshotId());
+                        valueUpdateJsonRequest.getEntityId(), snapshotId);
 
         if (!transactionOpt.isPresent()) {
             throw new IllegalArgumentException("transaction not found");
@@ -66,6 +74,11 @@ public class TransactionUpdater {
         if (!clazz.isInstance(transaction)) {
             throw new IllegalArgumentException("transaction not found");
         }
+
+        final Optional<Account> tithingAccountOpt =
+                isSnapshotImpactingField && hasTithingImpact(transaction)
+                        ? Optional.of(snapshot.getTithingAccount(transaction.getCurrencyUnit()))
+                        : Optional.empty();
 
         final TransactionViewModelOutput jsonResponse =
                 function.apply(valueUpdateJsonRequest, transaction);
@@ -80,12 +93,15 @@ public class TransactionUpdater {
         //            e.printStackTrace();
         //        }
 
-        LOG.log(LEVEL, "[SZTOKS] Saving account...");
-        accountService.save(snapshot.getTithingAccount(transaction.getCurrencyUnit()));
+        if (isSnapshotImpactingField) {
+            if (tithingAccountOpt.isPresent()) {
+                LOG.log(LEVEL, "[SZTOKS] Saving account...");
+                accountService.save(tithingAccountOpt.get());
+            }
 
-        LOG.log(LEVEL, "[SZTOKS] Saving snapshot...");
-        snapshotService.save(snapshot);
-
+            LOG.log(LEVEL, "[SZTOKS] Saving snapshot...");
+            snapshotService.save(snapshot);
+        }
         return jsonResponse;
     }
 }

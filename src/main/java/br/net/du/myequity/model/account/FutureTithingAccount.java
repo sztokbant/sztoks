@@ -44,15 +44,11 @@ public class FutureTithingAccount extends Account {
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate createDate,
             @NonNull final BigDecimal referenceAmount) {
-        super(
-                getTithingAccountNameFor(currencyUnit),
-                AccountType.LIABILITY,
-                currencyUnit,
-                createDate);
+        super(getAccountNameFor(currencyUnit), AccountType.LIABILITY, currencyUnit, createDate);
         this.referenceAmount = referenceAmount;
     }
 
-    public static String getTithingAccountNameFor(final CurrencyUnit currencyUnit) {
+    public static String getAccountNameFor(final CurrencyUnit currencyUnit) {
         return String.format("FUTURE TITHING %s", currencyUnit.getCode());
     }
 

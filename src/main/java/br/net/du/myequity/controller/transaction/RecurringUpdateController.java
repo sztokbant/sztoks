@@ -30,6 +30,6 @@ public class RecurringUpdateController {
                         };
 
         return transactionUpdater.updateField(
-                model, valueUpdateJsonRequest, Transaction.class, updateRecurringFunction);
+                model, valueUpdateJsonRequest, Transaction.class, updateRecurringFunction, false);
     }
 }

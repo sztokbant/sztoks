@@ -1,5 +1,7 @@
 package br.net.du.myequity.controller.account;
 
+import static br.net.du.myequity.controller.util.AccountUtils.hasFutureTithingImpact;
+
 import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
@@ -22,34 +24,39 @@ public class AccountUpdater {
     private static Logger LOG = Logger.getLogger(AccountUpdater.class.getName());
     private static Level LEVEL = Level.INFO;
 
-    @Autowired protected SnapshotService snapshotService;
+    @Autowired private SnapshotService snapshotService;
 
-    @Autowired protected AccountService accountService;
+    @Autowired private AccountService accountService;
 
-    @Autowired protected SnapshotUtils snapshotUtils;
+    @Autowired private SnapshotUtils snapshotUtils;
 
     @Transactional
     public AccountViewModelOutput updateField(
             final Model model,
             final ValueUpdateJsonRequest valueUpdateJsonRequest,
             final Class clazz,
-            final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput> function) {
+            final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput> function,
+            final boolean isSnapshotImpactingField) {
+        final Long snapshotId = valueUpdateJsonRequest.getSnapshotId();
+
         // Ensure snapshot belongs to logged user
         final Snapshot snapshot =
-                snapshotUtils.validateLockAndRefreshSnapshot(
-                        model, valueUpdateJsonRequest.getSnapshotId());
+                isSnapshotImpactingField
+                        ? snapshotUtils.validateLockAndRefreshSnapshot(model, snapshotId)
+                        : snapshotUtils.validateSnapshot(model, snapshotId);
 
-        LOG.log(
-                LEVEL,
-                "[SZTOKS] Locked snapshot, assetsTotal = "
-                        + snapshot.getTotalFor(AccountType.ASSET)
-                        + ", liabilitiesTotal = "
-                        + snapshot.getTotalFor(AccountType.LIABILITY));
+        if (isSnapshotImpactingField) {
+            LOG.log(
+                    LEVEL,
+                    "[SZTOKS] Locked snapshot, assetsTotal = "
+                            + snapshot.getTotalFor(AccountType.ASSET)
+                            + ", liabilitiesTotal = "
+                            + snapshot.getTotalFor(AccountType.LIABILITY));
+        }
 
         final Optional<Account> accountOpt =
                 accountService.findByIdAndSnapshotId(
-                        valueUpdateJsonRequest.getEntityId(),
-                        valueUpdateJsonRequest.getSnapshotId());
+                        valueUpdateJsonRequest.getEntityId(), snapshotId);
 
         if (!accountOpt.isPresent()) {
             throw new IllegalArgumentException("account not found");
@@ -60,6 +67,11 @@ public class AccountUpdater {
         if (!clazz.isInstance(account)) {
             throw new IllegalArgumentException("account not found");
         }
+
+        final Optional<Account> futureTithingAccountOpt =
+                isSnapshotImpactingField && hasFutureTithingImpact(account)
+                        ? Optional.of(snapshot.getFutureTithingAccount(account.getCurrencyUnit()))
+                        : Optional.empty();
 
         final AccountViewModelOutput jsonResponse = function.apply(valueUpdateJsonRequest, account);
 
@@ -73,11 +85,15 @@ public class AccountUpdater {
         //            e.printStackTrace();
         //        }
 
-        LOG.log(LEVEL, "[SZTOKS] Saving future tithing account...");
-        accountService.save(snapshot.getFutureTithingAccount(account.getCurrencyUnit()));
+        if (isSnapshotImpactingField) {
+            if (futureTithingAccountOpt.isPresent()) {
+                LOG.log(LEVEL, "[SZTOKS] Saving future tithing account...");
+                accountService.save(futureTithingAccountOpt.get());
+            }
 
-        LOG.log(LEVEL, "[SZTOKS] Saving snapshot...");
-        snapshotService.save(snapshot);
+            LOG.log(LEVEL, "[SZTOKS] Saving snapshot...");
+            snapshotService.save(snapshot);
+        }
 
         return jsonResponse;
     }

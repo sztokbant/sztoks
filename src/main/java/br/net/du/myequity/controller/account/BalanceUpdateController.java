@@ -31,6 +31,6 @@ public class BalanceUpdateController {
                         };
 
         return accountUpdater.updateField(
-                model, valueUpdateJsonRequest, BalanceUpdateable.class, updateAmountFunction);
+                model, valueUpdateJsonRequest, BalanceUpdateable.class, updateAmountFunction, true);
     }
 }

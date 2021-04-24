@@ -49,6 +49,6 @@ public class CategoryUpdateController {
                         };
 
         return transactionUpdater.updateField(
-                model, valueUpdateJsonRequest, Categorizable.class, updateCategoryFunction);
+                model, valueUpdateJsonRequest, Categorizable.class, updateCategoryFunction, false);
     }
 }

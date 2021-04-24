@@ -43,7 +43,7 @@ class SimpleLiabilityAccountBalanceUpdateControllerTest extends AccountAjaxContr
     }
 
     @Test
-    public void post_happy() throws Exception {
+    public void updateAccountBalance_simpleLiability_happy() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 

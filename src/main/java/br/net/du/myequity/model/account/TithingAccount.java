@@ -40,15 +40,11 @@ public class TithingAccount extends Account {
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate createDate,
             @NonNull final BigDecimal balance) {
-        super(
-                getTithingAccountNameFor(currencyUnit),
-                AccountType.LIABILITY,
-                currencyUnit,
-                createDate);
+        super(getAccountNameFor(currencyUnit), AccountType.LIABILITY, currencyUnit, createDate);
         this.balance = balance;
     }
 
-    public static String getTithingAccountNameFor(final CurrencyUnit currencyUnit) {
+    public static String getAccountNameFor(final CurrencyUnit currencyUnit) {
         return String.format("TITHING %s", currencyUnit.getCode());
     }
 
