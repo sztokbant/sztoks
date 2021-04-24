@@ -7,16 +7,18 @@ import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.CreditCardAccount;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CreditCardUpdateController extends AccountUpdateControllerBase {
+public class CreditCardUpdateController {
+
+    @Autowired AccountUpdater accountUpdater;
+
     @PostMapping("/snapshot/updateCreditCardTotalCredit")
-    @Transactional
     public AccountViewModelOutput updateCreditCardTotalCredit(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
@@ -31,7 +33,7 @@ public class CreditCardUpdateController extends AccountUpdateControllerBase {
                             return CreditCardAccountViewModelOutput.of(creditCardAccount, true);
                         };
 
-        return updateAccountField(
+        return accountUpdater.updateField(
                 model,
                 valueUpdateJsonRequest,
                 CreditCardAccount.class,
@@ -39,7 +41,6 @@ public class CreditCardUpdateController extends AccountUpdateControllerBase {
     }
 
     @PostMapping("/snapshot/updateCreditCardAvailableCredit")
-    @Transactional
     public AccountViewModelOutput updateCreditCardAvailableCredit(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
@@ -53,7 +54,7 @@ public class CreditCardUpdateController extends AccountUpdateControllerBase {
                             return CreditCardAccountViewModelOutput.of(creditCardAccount, true);
                         };
 
-        return updateAccountField(
+        return accountUpdater.updateField(
                 model,
                 valueUpdateJsonRequest,
                 CreditCardAccount.class,
@@ -61,7 +62,6 @@ public class CreditCardUpdateController extends AccountUpdateControllerBase {
     }
 
     @PostMapping("/snapshot/updateCreditCardStatement")
-    @Transactional
     public AccountViewModelOutput updateCreditCardStatement(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
@@ -75,7 +75,7 @@ public class CreditCardUpdateController extends AccountUpdateControllerBase {
                             return CreditCardAccountViewModelOutput.of(creditCardAccount, true);
                         };
 
-        return updateAccountField(
+        return accountUpdater.updateField(
                 model,
                 valueUpdateJsonRequest,
                 CreditCardAccount.class,

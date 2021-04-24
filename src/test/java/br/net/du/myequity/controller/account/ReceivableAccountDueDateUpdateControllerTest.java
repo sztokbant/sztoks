@@ -4,6 +4,8 @@ import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -55,7 +57,8 @@ class ReceivableAccountDueDateUpdateControllerTest extends AccountAjaxController
         snapshot.setUser(user);
         snapshot.addAccount(account);
 
-        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findByIdAndUserId(SNAPSHOT_ID, user.getId()))
+                .thenReturn(Optional.of(snapshot));
 
         when(accountService.findByIdAndSnapshotId(ACCOUNT_ID, SNAPSHOT_ID))
                 .thenReturn(Optional.of(account));
@@ -79,5 +82,7 @@ class ReceivableAccountDueDateUpdateControllerTest extends AccountAjaxController
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
         assertEquals(newValue, jsonNode.get(JSON_DUE_DATE).asText());
+
+        verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
     }
 }

@@ -66,7 +66,8 @@ class IncomeTransactionAmountUpdateControllerTest extends TransactionAjaxControl
 
         snapshot.addTransaction(transaction);
 
-        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+        when(snapshotService.findByIdAndUserId(SNAPSHOT_ID, user.getId()))
+                .thenReturn(Optional.of(snapshot));
 
         when(transactionService.findByIdAndSnapshotId(TRANSACTION_ID, SNAPSHOT_ID))
                 .thenReturn(Optional.of(transaction));
@@ -97,7 +98,7 @@ class IncomeTransactionAmountUpdateControllerTest extends TransactionAjaxControl
         assertEquals("$-521.60", jsonNode.get(JSON_NET_WORTH).asText());
 
         verify(userService).findByEmail(eq(user.getEmail()));
-        verify(snapshotService).findById(eq(SNAPSHOT_ID));
+        verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
         verify(transactionService).findByIdAndSnapshotId(eq(TRANSACTION_ID), eq(SNAPSHOT_ID));
 
         verify(transactionService).save(transaction);

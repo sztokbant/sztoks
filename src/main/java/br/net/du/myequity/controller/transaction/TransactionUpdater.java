@@ -46,7 +46,11 @@ public class TransactionUpdater {
         LOG.log(
                 LEVEL,
                 "[SZTOKS] Locked snapshot, incomesTotal = "
-                        + snapshot.getTotalFor(TransactionType.INCOME));
+                        + snapshot.getTotalFor(TransactionType.INCOME)
+                        + ", investmentsTotal = "
+                        + snapshot.getTotalFor(TransactionType.INVESTMENT)
+                        + ", donationsTotal = "
+                        + snapshot.getTotalFor(TransactionType.DONATION));
 
         final Optional<Transaction> transactionOpt =
                 transactionService.findByIdAndSnapshotId(

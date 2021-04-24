@@ -290,17 +290,27 @@ public class Snapshot implements Comparable<Snapshot> {
         }
 
         if (accountType.equals(AccountType.ASSET)) {
-            if (assetsTotal == null) {
-                assetsTotal = getTotalFor(AccountType.ASSET);
-            } else {
-                assetsTotal = assetsTotal.add(toBaseCurrency(currencyUnit, plusAmount));
-            }
-        } else { // AccountType.LIABILITY
-            if (liabilitiesTotal == null) {
-                liabilitiesTotal = getTotalFor(AccountType.LIABILITY);
-            } else {
-                liabilitiesTotal = liabilitiesTotal.add(toBaseCurrency(currencyUnit, plusAmount));
-            }
+            final BigDecimal newAmount =
+                    (assetsTotal == null)
+                            ? getTotalFor(AccountType.ASSET)
+                            : assetsTotal.add(toBaseCurrency(currencyUnit, plusAmount));
+
+            assetsTotal = newAmount;
+
+            LOG.log(LEVEL, "[SZTOKS] new assetsTotal = " + newAmount);
+
+        } else if (accountType.equals(AccountType.LIABILITY)) {
+            final BigDecimal newAmount =
+                    (liabilitiesTotal == null)
+                            ? getTotalFor(AccountType.LIABILITY)
+                            : liabilitiesTotal.add(toBaseCurrency(currencyUnit, plusAmount));
+
+            liabilitiesTotal = newAmount;
+
+            LOG.log(LEVEL, "[SZTOKS] new liabilitiesTotal = " + newAmount);
+
+        } else {
+            throw new IllegalStateException("Unknown account type");
         }
     }
 
@@ -439,7 +449,7 @@ public class Snapshot implements Comparable<Snapshot> {
 
             LOG.log(LEVEL, "[SZTOKS] new investmentsTotal = " + newAmount);
 
-        } else {
+        } else if (transactionType == TransactionType.DONATION) {
             final BigDecimal newAmount =
                     (donationsTotal == null)
                             ? getTotalFor(TransactionType.DONATION)
@@ -451,6 +461,8 @@ public class Snapshot implements Comparable<Snapshot> {
             if (isTaxDeductibleDonation) {
                 updateTaxDeductibleDonationsTotal(currencyUnit, amount);
             }
+        } else {
+            throw new IllegalStateException("Unknown transaction type");
         }
     }
 
