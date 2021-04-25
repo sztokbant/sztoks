@@ -19,6 +19,7 @@ import javax.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import org.joda.money.CurrencyUnit;
 
@@ -66,17 +67,20 @@ public abstract class Account implements Comparable<Account> {
     protected FutureTithingPolicy futureTithingPolicy;
 
     Account(
-            final String name,
-            final AccountType accountType,
-            final CurrencyUnit currencyUnit,
-            final LocalDate createDate) {
+            @NonNull final String name,
+            @NonNull final AccountType accountType,
+            @NonNull final CurrencyUnit currencyUnit,
+            @NonNull final LocalDate createDate) {
         this.name = name;
         this.accountType = accountType;
-        this.currency = currencyUnit.getCode();
+        setCurrencyUnit(currencyUnit);
         this.createDate = createDate;
     }
 
-    Account(final String name, final AccountType accountType, final CurrencyUnit currencyUnit) {
+    Account(
+            @NonNull final String name,
+            @NonNull final AccountType accountType,
+            @NonNull final CurrencyUnit currencyUnit) {
         this(name, accountType, currencyUnit, LocalDate.now());
     }
 
@@ -84,7 +88,7 @@ public abstract class Account implements Comparable<Account> {
         return CurrencyUnit.of(currency);
     }
 
-    public void setCurrencyUnit(final CurrencyUnit currencyUnit) {
+    public void setCurrencyUnit(@NonNull final CurrencyUnit currencyUnit) {
         currency = currencyUnit.getCode();
     }
 
@@ -135,7 +139,7 @@ public abstract class Account implements Comparable<Account> {
     }
 
     @Override
-    public int compareTo(final Account other) {
+    public int compareTo(@NonNull final Account other) {
         final String thisClass = getClass().getSimpleName();
         final String otherClass = other.getClass().getSimpleName();
 

@@ -70,7 +70,11 @@ public class ReceivableAccount extends Account
     }
 
     @Override
-    public void setBalance(final BigDecimal newBalance) {
+    public void setBalance(@NonNull final BigDecimal newBalance) {
+        if (balance.compareTo(newBalance) == 0) {
+            return;
+        }
+
         final BigDecimal oldBalance = balance;
 
         balance = newBalance;

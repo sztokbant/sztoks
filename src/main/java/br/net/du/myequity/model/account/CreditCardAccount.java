@@ -75,7 +75,7 @@ public class CreditCardAccount extends Account {
     }
 
     public static BigDecimal getBalance(
-            final BigDecimal totalCredit, final BigDecimal availableCredit) {
+            @NonNull final BigDecimal totalCredit, @NonNull final BigDecimal availableCredit) {
         return totalCredit.subtract(availableCredit);
     }
 
@@ -90,7 +90,7 @@ public class CreditCardAccount extends Account {
     }
 
     public static BigDecimal getUsedCreditPercentage(
-            final BigDecimal totalCredit, final BigDecimal availableCredit) {
+            @NonNull final BigDecimal totalCredit, @NonNull final BigDecimal availableCredit) {
         if (totalCredit.compareTo(BigDecimal.ZERO) == 0) {
             return BigDecimal.ZERO;
         }
@@ -105,11 +105,15 @@ public class CreditCardAccount extends Account {
     }
 
     public static BigDecimal getRemainingBalance(
-            final BigDecimal balance, final BigDecimal statement) {
+            @NonNull final BigDecimal balance, @NonNull final BigDecimal statement) {
         return balance.subtract(statement);
     }
 
-    public void setTotalCredit(final BigDecimal totalCredit) {
+    public void setTotalCredit(@NonNull final BigDecimal totalCredit) {
+        if (this.totalCredit.compareTo(totalCredit) == 0) {
+            return;
+        }
+
         final BigDecimal oldBalance = getBalance();
 
         this.totalCredit = totalCredit;
@@ -120,7 +124,11 @@ public class CreditCardAccount extends Account {
         getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
     }
 
-    public void setAvailableCredit(final BigDecimal availableCredit) {
+    public void setAvailableCredit(@NonNull final BigDecimal availableCredit) {
+        if (this.availableCredit.compareTo(availableCredit) == 0) {
+            return;
+        }
+
         final BigDecimal oldBalance = getBalance();
 
         this.availableCredit = availableCredit;

@@ -123,7 +123,11 @@ public class InvestmentAccount extends Account implements FutureTithingCapable {
         return amountInvested.divide(shares, DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
-    public void setAmountInvested(final BigDecimal newAmountInvested) {
+    public void setAmountInvested(@NonNull final BigDecimal newAmountInvested) {
+        if (amountInvested.compareTo(newAmountInvested) == 0) {
+            return;
+        }
+
         final BigDecimal balance = getBalance();
         final BigDecimal oldProfit = balance.subtract(amountInvested);
 
@@ -137,7 +141,11 @@ public class InvestmentAccount extends Account implements FutureTithingCapable {
         }
     }
 
-    public void setShares(final BigDecimal shares) {
+    public void setShares(@NonNull final BigDecimal shares) {
+        if (this.shares.compareTo(shares) == 0) {
+            return;
+        }
+
         final BigDecimal oldBalance = getBalance();
         final BigDecimal oldProfit = oldBalance.subtract(amountInvested);
 
@@ -157,7 +165,11 @@ public class InvestmentAccount extends Account implements FutureTithingCapable {
         }
     }
 
-    public void setCurrentShareValue(final BigDecimal currentShareValue) {
+    public void setCurrentShareValue(@NonNull final BigDecimal currentShareValue) {
+        if (this.currentShareValue.compareTo(currentShareValue) == 0) {
+            return;
+        }
+
         final BigDecimal oldBalance = getBalance();
         final BigDecimal oldProfit = oldBalance.subtract(amountInvested);
 

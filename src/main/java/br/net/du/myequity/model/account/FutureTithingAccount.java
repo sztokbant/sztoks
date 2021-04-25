@@ -48,7 +48,7 @@ public class FutureTithingAccount extends Account {
         this.referenceAmount = referenceAmount;
     }
 
-    public static String getAccountNameFor(final CurrencyUnit currencyUnit) {
+    public static String getAccountNameFor(@NonNull final CurrencyUnit currencyUnit) {
         return String.format("FUTURE TITHING %s", currencyUnit.getCode());
     }
 
@@ -57,7 +57,11 @@ public class FutureTithingAccount extends Account {
         return new FutureTithingAccount(CurrencyUnit.of(currency), referenceAmount);
     }
 
-    public void setReferenceAmount(final BigDecimal newReferenceAmount) {
+    public void setReferenceAmount(@NonNull final BigDecimal newReferenceAmount) {
+        if (referenceAmount.compareTo(newReferenceAmount) == 0) {
+            return;
+        }
+
         final BigDecimal oldBalance = getBalance();
 
         referenceAmount = newReferenceAmount;
