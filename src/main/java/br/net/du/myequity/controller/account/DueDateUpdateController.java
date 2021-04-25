@@ -7,6 +7,7 @@ import br.net.du.myequity.controller.viewmodel.account.ReceivableAccountViewMode
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.DueDateUpdateable;
 import br.net.du.myequity.model.account.PayableAccount;
+import br.net.du.myequity.model.account.ReceivableAccount;
 import java.time.LocalDate;
 import java.util.function.BiFunction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,12 @@ public class DueDateUpdateController {
                             ((DueDateUpdateable) account).setDueDate(dueDate);
 
                             if (account instanceof PayableAccount) {
-                                return PayableAccountViewModelOutput.of(account);
+                                return PayableAccountViewModelOutput.of(account, false);
+                            } else if (account instanceof ReceivableAccount) {
+                                return ReceivableAccountViewModelOutput.of(account, false);
+                            } else {
+                                throw new IllegalStateException("Uknown account type");
                             }
-                            return ReceivableAccountViewModelOutput.of(account);
                         };
 
         return accountUpdater.updateField(

@@ -34,6 +34,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -226,7 +227,11 @@ class SnapshotTest {
         // WHEN
         final Account notInSnapshot =
                 new SimpleAssetAccount(
-                        "Another Account", CurrencyUnit.USD, FutureTithingPolicy.NONE);
+                        "Another Account",
+                        CurrencyUnit.USD,
+                        FutureTithingPolicy.NONE,
+                        LocalDate.now(),
+                        BigDecimal.ZERO);
         snapshot.removeAccount(notInSnapshot);
 
         // THEN
@@ -299,6 +304,7 @@ class SnapshotTest {
                         "Another Account",
                         CurrencyUnit.USD,
                         FutureTithingPolicy.NONE,
+                        LocalDate.now(),
                         new BigDecimal("50000"));
         assertThrows(
                 UnsupportedOperationException.class,

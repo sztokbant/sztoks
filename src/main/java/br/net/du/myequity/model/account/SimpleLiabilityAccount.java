@@ -22,23 +22,10 @@ public class SimpleLiabilityAccount extends Account implements BalanceUpdateable
     @Getter
     private BigDecimal balance;
 
+    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
     public SimpleLiabilityAccount(
             @NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
-        this(name, currencyUnit, LocalDate.now());
-    }
-
-    public SimpleLiabilityAccount(
-            @NonNull final String name,
-            @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final LocalDate createDate) {
-        this(name, currencyUnit, createDate, BigDecimal.ZERO);
-    }
-
-    public SimpleLiabilityAccount(
-            @NonNull final String name,
-            @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final BigDecimal balance) {
-        this(name, currencyUnit, LocalDate.now(), balance);
+        this(name, currencyUnit, LocalDate.now(), BigDecimal.ZERO);
     }
 
     public SimpleLiabilityAccount(
@@ -52,7 +39,8 @@ public class SimpleLiabilityAccount extends Account implements BalanceUpdateable
 
     @Override
     public SimpleLiabilityAccount copy() {
-        return new SimpleLiabilityAccount(name, CurrencyUnit.of(currency), balance);
+        return new SimpleLiabilityAccount(
+                name, CurrencyUnit.of(currency), LocalDate.now(), balance);
     }
 
     @Override

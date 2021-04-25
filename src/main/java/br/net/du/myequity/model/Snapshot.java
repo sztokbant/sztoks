@@ -489,7 +489,8 @@ public class Snapshot implements Comparable<Snapshot> {
             return (TithingAccount) tithingAccountOpt.get();
         }
 
-        final TithingAccount tithingAccount = new TithingAccount(currencyUnit);
+        final TithingAccount tithingAccount =
+                new TithingAccount(currencyUnit, LocalDate.now(), BigDecimal.ZERO);
         addAccount(tithingAccount);
 
         return tithingAccount;
@@ -508,7 +509,8 @@ public class Snapshot implements Comparable<Snapshot> {
             return (FutureTithingAccount) futureTithingAccountOpt.get();
         }
 
-        final FutureTithingAccount futureTithingAccount = new FutureTithingAccount(currencyUnit);
+        final FutureTithingAccount futureTithingAccount =
+                new FutureTithingAccount(currencyUnit, LocalDate.now(), BigDecimal.ZERO);
         addAccount(futureTithingAccount);
 
         return futureTithingAccount;

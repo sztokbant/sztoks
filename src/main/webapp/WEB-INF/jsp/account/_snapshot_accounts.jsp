@@ -56,6 +56,27 @@
         </c:choose>
 
         <c:choose>
+            <c:when test="${not empty snapshot.sharedBillReceivableAccounts}">
+                <div class="row border-1px-bottom">
+                    <div class="col col-cell col-title short">&nbsp;</div>
+                    <div class="col col-cell col-title col-account-name"><i>Shared Bill Receivables</i></div>
+                    <div class="col col-cell col-title">Due Day</div>
+                    <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">Number of Partners</div>
+                    <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">Bill Amount</div>
+                    <div class="col col-cell col-title">Balance</div>
+                </div>
+                <c:forEach var="entity" items="${snapshot.sharedBillReceivableAccounts}">
+                    <%@ include file="_snapshot_shared_bill_receivable_line_item.jsp" %>
+                </c:forEach>
+                <c:if test="${snapshot.sharedBillReceivableAccounts.size() gt 1}">
+                    <%@ include file="_snapshot_shared_bill_receivables_total.jsp" %>
+                </c:if>
+            </c:when>
+        </c:choose>
+
+        <c:choose>
             <c:when test="${not empty snapshot.investmentAccounts}">
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>

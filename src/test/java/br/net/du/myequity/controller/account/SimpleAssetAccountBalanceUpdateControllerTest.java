@@ -18,6 +18,7 @@ import br.net.du.myequity.model.account.SimpleAssetAccount;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -43,7 +44,11 @@ class SimpleAssetAccountBalanceUpdateControllerTest extends AccountAjaxControlle
     public void createEntity() {
         account =
                 new SimpleAssetAccount(
-                        "Savings", CURRENCY_UNIT, FutureTithingPolicy.NONE, CURRENT_BALANCE);
+                        "Savings",
+                        CURRENCY_UNIT,
+                        FutureTithingPolicy.NONE,
+                        LocalDate.now(),
+                        CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
     }
 
@@ -58,6 +63,7 @@ class SimpleAssetAccountBalanceUpdateControllerTest extends AccountAjaxControlle
                 new CreditCardAccount(
                         "Citi Double Cash",
                         CURRENCY_UNIT,
+                        LocalDate.now(),
                         CURRENT_BALANCE,
                         CURRENT_BALANCE,
                         CURRENT_BALANCE);

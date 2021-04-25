@@ -6,6 +6,7 @@ import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 class SimpleLiabilityAccountTest {
@@ -14,11 +15,13 @@ class SimpleLiabilityAccountTest {
     public void newEmptySnapshot_happy() {
         // WHEN
         final SimpleLiabilityAccount actual =
-                new SimpleLiabilityAccount(ACCOUNT_NAME, CURRENCY_UNIT);
+                new SimpleLiabilityAccount(
+                        ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now(), BigDecimal.ZERO);
 
         // THEN
         final SimpleLiabilityAccount expected =
-                new SimpleLiabilityAccount(ACCOUNT_NAME, CURRENCY_UNIT, BigDecimal.ZERO);
+                new SimpleLiabilityAccount(
+                        ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now(), BigDecimal.ZERO);
 
         assertTrue(equalsIgnoreId(actual, expected));
     }

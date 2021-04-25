@@ -13,6 +13,22 @@ function accountBalanceUpdateSuccessCallback(data, result) {
   $("#snapshot_" + result.accountSubtype + "_balance").html(result.totalForAccountSubtype);
 }
 
+function accountBillAmountUpdateSuccessCallback(data, result) {
+  $("#account_bill_amount_" + data.entityId).html(result.billAmount);
+  $("#account_balance_" + data.entityId).html(result.balance);
+  $("#snapshot_net_worth").html(result.netWorth);
+  $("#total_" + result.accountType).html(result.totalForAccountType);
+  $("#snapshot_" + result.accountSubtype + "_balance").html(result.totalForAccountSubtype);
+}
+
+function accountNumberOfPartnersUpdateSuccessCallback(data, result) {
+  $("#account_number_of_partners_" + data.entityId).html(result.numberOfPartners);
+  $("#account_balance_" + data.entityId).html(result.balance);
+  $("#snapshot_net_worth").html(result.netWorth);
+  $("#total_" + result.accountType).html(result.totalForAccountType);
+  $("#snapshot_" + result.accountSubtype + "_balance").html(result.totalForAccountSubtype);
+}
+
 function creditCardTotalCreditUpdateSuccessCallback(data, result) {
   $("#credit_card_total_credit_" + data.entityId).html(result.totalCredit);
   $("#credit_card_used_credit_percentage_" + data.entityId).html(result.usedCreditPercentage);
@@ -71,6 +87,10 @@ function payableDueDateUpdateSuccessCallback(data, result) {
 
 function receivableDueDateUpdateSuccessCallback(data, result) {
   $("#receivable_due_date_" + data.entityId).html(result.dueDate);
+}
+
+function receivableDueDayUpdateSuccessCallback(data, result) {
+  $("#receivable_due_day_" + data.entityId).html(result.dueDay);
 }
 
 function transactionAmountUpdateSuccessCallback(data, result) {

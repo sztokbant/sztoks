@@ -22,12 +22,14 @@ class PayableAccountTest {
         final PayableAccount actual;
         try (MockedStatic<LocalDate> localDateStaticMock = mockStatic(LocalDate.class)) {
             localDateStaticMock.when(LocalDate::now).thenReturn(now);
-            actual = new PayableAccount(ACCOUNT_NAME, CURRENCY_UNIT);
+            actual =
+                    new PayableAccount(
+                            ACCOUNT_NAME, CURRENCY_UNIT, now, LocalDate.now(), BigDecimal.ZERO);
         }
 
         // THEN
         final PayableAccount expected =
-                new PayableAccount(ACCOUNT_NAME, CURRENCY_UNIT, now, BigDecimal.ZERO);
+                new PayableAccount(ACCOUNT_NAME, CURRENCY_UNIT, now, now, BigDecimal.ZERO);
 
         assertTrue(equalsIgnoreId(actual, expected));
     }

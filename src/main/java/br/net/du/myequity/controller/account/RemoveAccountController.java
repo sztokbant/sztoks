@@ -10,7 +10,7 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.FutureTithingAccount;
 import br.net.du.myequity.model.account.TithingAccount;
-import br.net.du.myequity.model.totals.BalanceUpdateableSubtype;
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import br.net.du.myequity.service.AccountService;
 import br.net.du.myequity.service.SnapshotService;
 import java.util.Optional;
@@ -76,8 +76,8 @@ public class RemoveAccountController {
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
         final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot);
 
-        final BalanceUpdateableSubtype balanceUpdateableSubtype =
-                BalanceUpdateableSubtype.forClass(account.getClass());
+        final AccountSubtypeDisplayGroup accountSubtypeDisplayGroup =
+                AccountSubtypeDisplayGroup.forClass(account.getClass());
 
         return SnapshotRemoveAccountJsonResponse.builder()
                 .accountId(account.getId())
@@ -87,12 +87,14 @@ public class RemoveAccountController {
                 .accountType(account.getAccountType().name())
                 .totalForAccountType(updateableTotals.getTotalFor(account.getAccountType()))
                 .accountSubtype(
-                        balanceUpdateableSubtype == null ? null : balanceUpdateableSubtype.name())
+                        accountSubtypeDisplayGroup == null
+                                ? null
+                                : accountSubtypeDisplayGroup.name())
                 .totalForAccountSubtype(
-                        balanceUpdateableSubtype == null
+                        accountSubtypeDisplayGroup == null
                                 ? null
                                 : updateableTotals.getTotalForAccountSubtype(
-                                        balanceUpdateableSubtype))
+                                        accountSubtypeDisplayGroup))
                 .investmentTotals(updateableTotals.getInvestmentTotals())
                 .creditCardTotalsForCurrencyUnit(
                         updateableTotals.getCreditCardTotalsForCurrencyUnit(

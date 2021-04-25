@@ -34,43 +34,19 @@ public class InvestmentAccount extends Account implements FutureTithingCapable {
     @Getter
     private BigDecimal currentShareValue;
 
+    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
     public InvestmentAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final FutureTithingPolicy futureTithingPolicy) {
-        this(name, currencyUnit, futureTithingPolicy, LocalDate.now());
-    }
-
-    public InvestmentAccount(
-            @NonNull final String name,
-            @NonNull final CurrencyUnit currencyUnit,
-            final FutureTithingPolicy futureTithingPolicy,
-            @NonNull final LocalDate createDate) {
-        this(
-                name,
-                currencyUnit,
-                futureTithingPolicy,
-                createDate,
-                BigDecimal.ZERO,
-                BigDecimal.ZERO,
-                BigDecimal.ZERO);
-    }
-
-    public InvestmentAccount(
-            @NonNull final String name,
-            @NonNull final CurrencyUnit currencyUnit,
-            final FutureTithingPolicy futureTithingPolicy,
-            @NonNull final BigDecimal shares,
-            @NonNull final BigDecimal amountInvested,
-            @NonNull final BigDecimal currentShareValue) {
         this(
                 name,
                 currencyUnit,
                 futureTithingPolicy,
                 LocalDate.now(),
-                shares,
-                amountInvested,
-                currentShareValue);
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO);
     }
 
     public InvestmentAccount(
@@ -99,6 +75,7 @@ public class InvestmentAccount extends Account implements FutureTithingCapable {
                 name,
                 CurrencyUnit.of(currency),
                 futureTithingPolicy,
+                LocalDate.now(),
                 shares,
                 amountInvested,
                 currentShareValue);

@@ -55,6 +55,10 @@
                                 <label for="receivableRadio">Receivable</label>
                             </div>
                             <div>
+                                <form:radiobutton path="subtypeName" value="SharedBillReceivableAccount" id="sharedBillReceivableRadio"/>
+                                <label for="sharedBillReceivableRadio">Shared Bill Receivable</label>
+                            </div>
+                            <div>
                                 <form:radiobutton path="subtypeName" value="InvestmentAccount" id="investmentRadio"/>
                                 <label for="investmentRadio">Investment</label>
                             </div>

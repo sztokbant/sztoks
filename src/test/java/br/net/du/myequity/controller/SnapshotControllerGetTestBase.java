@@ -22,6 +22,7 @@ import br.net.du.myequity.service.SnapshotService;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 import org.joda.money.CurrencyUnit;
@@ -73,11 +74,13 @@ abstract class SnapshotControllerGetTestBase extends GetControllerTestBase {
                         "Checking Account",
                         CurrencyUnit.USD,
                         FutureTithingPolicy.NONE,
-                        LocalDate.now());
+                        LocalDate.now(),
+                        BigDecimal.ZERO);
         assetAccount.setId(ASSET_ACCOUNT_ID);
 
         liabilityAccount =
-                new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, LocalDate.now());
+                new SimpleLiabilityAccount(
+                        "Mortgage", CurrencyUnit.USD, LocalDate.now(), BigDecimal.ZERO);
         liabilityAccount.setId(LIABILITY_ACCOUNT_ID);
     }
 

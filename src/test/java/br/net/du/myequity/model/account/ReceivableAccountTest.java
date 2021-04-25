@@ -22,7 +22,14 @@ class ReceivableAccountTest {
         final ReceivableAccount actual;
         try (MockedStatic<LocalDate> localDateStaticMock = mockStatic(LocalDate.class)) {
             localDateStaticMock.when(LocalDate::now).thenReturn(now);
-            actual = new ReceivableAccount(ACCOUNT_NAME, CURRENCY_UNIT, FutureTithingPolicy.NONE);
+            actual =
+                    new ReceivableAccount(
+                            ACCOUNT_NAME,
+                            CURRENCY_UNIT,
+                            FutureTithingPolicy.NONE,
+                            now,
+                            now,
+                            BigDecimal.ZERO);
         }
 
         // THEN
@@ -31,6 +38,7 @@ class ReceivableAccountTest {
                         ACCOUNT_NAME,
                         CURRENCY_UNIT,
                         FutureTithingPolicy.NONE,
+                        now,
                         now,
                         BigDecimal.ZERO);
 

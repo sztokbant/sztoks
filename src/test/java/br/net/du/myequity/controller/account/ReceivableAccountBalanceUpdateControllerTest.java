@@ -46,6 +46,7 @@ class ReceivableAccountBalanceUpdateControllerTest extends AccountAjaxController
                         CURRENCY_UNIT,
                         FutureTithingPolicy.NONE,
                         LocalDate.now(),
+                        LocalDate.now(),
                         CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
     }

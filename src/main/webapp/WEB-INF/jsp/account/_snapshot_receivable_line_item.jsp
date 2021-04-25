@@ -8,7 +8,7 @@ $(document).ready(function() {
   prepareUpdateForm($("#form_receivable_due_date_${entity.accountId}"),
     $("#receivable_due_date_${entity.accountId}"),
     $("#new_receivable_due_date_${entity.accountId}"),
-    "snapshot/updateAccountDueDate",
+    "snapshot/updateAccountDueDay",
     data,
     receivableDueDateUpdateSuccessCallback,
   );

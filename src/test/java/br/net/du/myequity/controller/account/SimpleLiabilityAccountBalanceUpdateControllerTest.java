@@ -15,6 +15,7 @@ import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -38,7 +39,9 @@ class SimpleLiabilityAccountBalanceUpdateControllerTest extends AccountAjaxContr
 
     @Override
     public void createEntity() {
-        account = new SimpleLiabilityAccount("Mortgage", CURRENCY_UNIT, CURRENT_BALANCE);
+        account =
+                new SimpleLiabilityAccount(
+                        "Mortgage", CURRENCY_UNIT, LocalDate.now(), CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
     }
 

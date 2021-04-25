@@ -12,11 +12,12 @@ import br.net.du.myequity.controller.viewmodel.account.InvestmentAccountViewMode
 import br.net.du.myequity.controller.viewmodel.account.InvestmentTotalsViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.PayableAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.ReceivableAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.SharedBillReceivableAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.totals.BalanceUpdateableSubtype;
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import br.net.du.myequity.model.totals.CreditCardsTotal;
 import br.net.du.myequity.model.totals.InvestmentsTotal;
 import br.net.du.myequity.model.totals.SnapshotTotalsCalculator;
@@ -66,6 +67,9 @@ public class SnapshotViewModelOutput {
 
     private final List<AccountViewModelOutput> receivableAccounts;
     private final String receivablesBalance;
+
+    private final List<AccountViewModelOutput> sharedBillReceivableAccounts;
+    private final String sharedBillReceivablesBalance;
 
     private final List<AccountViewModelOutput> investmentAccounts;
     private final InvestmentTotalsViewModelOutput investmentTotals;
@@ -124,18 +128,21 @@ public class SnapshotViewModelOutput {
                         .assetsTotal(updateableTotals.getTotalFor(AccountType.ASSET))
                         .simpleAssetsBalance(
                                 updateableTotals.getTotalForAccountSubtype(
-                                        BalanceUpdateableSubtype.SIMPLE_ASSET))
+                                        AccountSubtypeDisplayGroup.SIMPLE_ASSET))
                         .receivablesBalance(
                                 updateableTotals.getTotalForAccountSubtype(
-                                        BalanceUpdateableSubtype.RECEIVABLE))
+                                        AccountSubtypeDisplayGroup.RECEIVABLE))
+                        .sharedBillReceivablesBalance(
+                                updateableTotals.getTotalForAccountSubtype(
+                                        AccountSubtypeDisplayGroup.SHARED_BILL_RECEIVABLE))
                         .investmentTotals(InvestmentTotalsViewModelOutput.of(investmentTotals))
                         .liabilitiesTotal(updateableTotals.getTotalFor(AccountType.LIABILITY))
                         .simpleLiabilitiesBalance(
                                 updateableTotals.getTotalForAccountSubtype(
-                                        BalanceUpdateableSubtype.SIMPLE_LIABILITY))
+                                        AccountSubtypeDisplayGroup.SIMPLE_LIABILITY))
                         .payablesBalance(
                                 updateableTotals.getTotalForAccountSubtype(
-                                        BalanceUpdateableSubtype.PAYABLE))
+                                        AccountSubtypeDisplayGroup.PAYABLE))
                         .creditCardTotals(getCurrencyUnitCreditCardViewModels(creditCardTotals))
                         .incomeTransactionsTotal(
                                 updateableTotals.getTotalFor(TransactionType.INCOME))
@@ -194,6 +201,8 @@ public class SnapshotViewModelOutput {
 
         builder.simpleAssetAccounts(assetsByType.get(AccountViewModelOutput.class));
         builder.receivableAccounts(assetsByType.get(ReceivableAccountViewModelOutput.class));
+        builder.sharedBillReceivableAccounts(
+                assetsByType.get(SharedBillReceivableAccountViewModelOutput.class));
         builder.investmentAccounts(assetsByType.get(InvestmentAccountViewModelOutput.class));
 
         final Map<Class, List<AccountViewModelOutput>> liabilitiesByType =

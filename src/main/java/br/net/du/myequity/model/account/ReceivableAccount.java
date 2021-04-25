@@ -26,28 +26,18 @@ public class ReceivableAccount extends Account
 
     @Column @Getter @Setter private LocalDate dueDate;
 
+    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
     public ReceivableAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final FutureTithingPolicy futureTithingPolicy) {
-        this(name, currencyUnit, futureTithingPolicy, LocalDate.now());
-    }
-
-    public ReceivableAccount(
-            @NonNull final String name,
-            @NonNull final CurrencyUnit currencyUnit,
-            final FutureTithingPolicy futureTithingPolicy,
-            @NonNull final LocalDate createDate) {
-        this(name, currencyUnit, futureTithingPolicy, createDate, LocalDate.now(), BigDecimal.ZERO);
-    }
-
-    public ReceivableAccount(
-            @NonNull final String name,
-            @NonNull final CurrencyUnit currencyUnit,
-            final FutureTithingPolicy futureTithingPolicy,
-            @NonNull final LocalDate dueDate,
-            @NonNull final BigDecimal balance) {
-        this(name, currencyUnit, futureTithingPolicy, LocalDate.now(), dueDate, balance);
+        this(
+                name,
+                currencyUnit,
+                futureTithingPolicy,
+                LocalDate.now(),
+                LocalDate.now(),
+                BigDecimal.ZERO);
     }
 
     public ReceivableAccount(
@@ -66,7 +56,12 @@ public class ReceivableAccount extends Account
     @Override
     public ReceivableAccount copy() {
         return new ReceivableAccount(
-                name, CurrencyUnit.of(currency), futureTithingPolicy, dueDate, balance);
+                name,
+                CurrencyUnit.of(currency),
+                futureTithingPolicy,
+                LocalDate.now(),
+                dueDate,
+                balance);
     }
 
     @Override

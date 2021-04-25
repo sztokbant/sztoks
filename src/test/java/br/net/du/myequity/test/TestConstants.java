@@ -68,17 +68,23 @@ public class TestConstants {
 
     public static SimpleAssetAccount newSimpleAssetAccount() {
         return new SimpleAssetAccount(
-                "Savings", CurrencyUnit.USD, FutureTithingPolicy.NONE, new BigDecimal("10000.00"));
+                "Savings",
+                CurrencyUnit.USD,
+                FutureTithingPolicy.NONE,
+                LocalDate.now(),
+                new BigDecimal("10000.00"));
     }
 
     public static SimpleLiabilityAccount newSimpleLiabilityAccount() {
-        return new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, new BigDecimal("2500.00"));
+        return new SimpleLiabilityAccount(
+                "Mortgage", CurrencyUnit.USD, LocalDate.now(), new BigDecimal("2500.00"));
     }
 
     public static CreditCardAccount newCreditCardAccount() {
         return new CreditCardAccount(
                 "Chase Sapphire Reserve",
                 CurrencyUnit.USD,
+                LocalDate.now(),
                 new BigDecimal("10000.00"),
                 new BigDecimal("9500.00"),
                 new BigDecimal("1000.00"));
@@ -89,6 +95,7 @@ public class TestConstants {
                 "AMZN",
                 CurrencyUnit.USD,
                 FutureTithingPolicy.NONE,
+                LocalDate.now(),
                 new BigDecimal("175.00"),
                 new BigDecimal("1100.00"),
                 new BigDecimal("3500.00"));

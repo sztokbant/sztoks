@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,8 @@ class AccountTest {
         final LocalDate now = LocalDate.now();
 
         // WHEN
-        final Account account = new SimpleLiabilityAccount(accountName, currencyUnit, now);
+        final Account account =
+                new SimpleLiabilityAccount(accountName, currencyUnit, now, BigDecimal.ZERO);
 
         // THEN
         assertEquals(accountName, account.getName());
@@ -36,7 +38,9 @@ class AccountTest {
         final CurrencyUnit currencyUnit = CurrencyUnit.USD;
 
         // WHEN
-        final Account account = new SimpleLiabilityAccount(accountName, currencyUnit);
+        final Account account =
+                new SimpleLiabilityAccount(
+                        accountName, currencyUnit, LocalDate.now(), BigDecimal.ZERO);
 
         // THEN
         assertEquals(accountName, account.getName());
@@ -51,7 +55,12 @@ class AccountTest {
         final AccountType accountType = AccountType.ASSET;
         final CurrencyUnit currencyUnit = CurrencyUnit.USD;
         final Account account =
-                new SimpleAssetAccount(accountName, currencyUnit, FutureTithingPolicy.NONE);
+                new SimpleAssetAccount(
+                        accountName,
+                        currencyUnit,
+                        FutureTithingPolicy.NONE,
+                        LocalDate.now(),
+                        BigDecimal.ZERO);
         assertEquals(currencyUnit, account.getCurrencyUnit());
 
         // WHEN
@@ -65,7 +74,8 @@ class AccountTest {
     @Test
     public void equals() {
         final Account account =
-                new SimpleLiabilityAccount("Mortgage", CurrencyUnit.USD, LocalDate.now());
+                new SimpleLiabilityAccount(
+                        "Mortgage", CurrencyUnit.USD, LocalDate.now(), BigDecimal.ZERO);
 
         // Itself
         assertTrue(account.equals(account));
@@ -77,7 +87,11 @@ class AccountTest {
         // Same Id null
         final Account anotherAccount =
                 new SimpleAssetAccount(
-                        "Wallet", CurrencyUnit.USD, FutureTithingPolicy.NONE, LocalDate.now());
+                        "Wallet",
+                        CurrencyUnit.USD,
+                        FutureTithingPolicy.NONE,
+                        LocalDate.now(),
+                        BigDecimal.ZERO);
         account.setId(null);
         anotherAccount.setId(null);
         assertFalse(account.equals(anotherAccount));

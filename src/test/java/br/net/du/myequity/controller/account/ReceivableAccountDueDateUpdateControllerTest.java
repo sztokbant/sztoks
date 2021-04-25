@@ -46,6 +46,7 @@ class ReceivableAccountDueDateUpdateControllerTest extends AccountAjaxController
                         "Friend",
                         CURRENCY_UNIT,
                         FutureTithingPolicy.NONE,
+                        LocalDate.now(),
                         CURRENT_DUE_DATE,
                         CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);

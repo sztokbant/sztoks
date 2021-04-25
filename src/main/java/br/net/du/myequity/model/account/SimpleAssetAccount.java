@@ -22,27 +22,12 @@ public class SimpleAssetAccount extends Account implements BalanceUpdateable, Fu
     @Getter
     private BigDecimal balance;
 
+    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
     public SimpleAssetAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final FutureTithingPolicy futureTithingPolicy) {
-        this(name, currencyUnit, futureTithingPolicy, LocalDate.now());
-    }
-
-    public SimpleAssetAccount(
-            @NonNull final String name,
-            @NonNull final CurrencyUnit currencyUnit,
-            final FutureTithingPolicy futureTithingPolicy,
-            @NonNull final LocalDate createDate) {
-        this(name, currencyUnit, futureTithingPolicy, createDate, BigDecimal.ZERO);
-    }
-
-    public SimpleAssetAccount(
-            @NonNull final String name,
-            @NonNull final CurrencyUnit currencyUnit,
-            final FutureTithingPolicy futureTithingPolicy,
-            @NonNull final BigDecimal balance) {
-        this(name, currencyUnit, futureTithingPolicy, LocalDate.now(), balance);
+        this(name, currencyUnit, futureTithingPolicy, LocalDate.now(), BigDecimal.ZERO);
     }
 
     public SimpleAssetAccount(
@@ -59,7 +44,7 @@ public class SimpleAssetAccount extends Account implements BalanceUpdateable, Fu
     @Override
     public SimpleAssetAccount copy() {
         return new SimpleAssetAccount(
-                name, CurrencyUnit.of(currency), futureTithingPolicy, balance);
+                name, CurrencyUnit.of(currency), futureTithingPolicy, LocalDate.now(), balance);
     }
 
     @Override

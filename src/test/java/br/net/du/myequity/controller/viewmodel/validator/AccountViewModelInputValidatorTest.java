@@ -26,6 +26,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.money.CurrencyUnit;
@@ -103,7 +104,11 @@ class AccountViewModelInputValidatorTest {
         defineExistingAccounts(
                 ImmutableList.of(
                         new SimpleAssetAccount(
-                                ANOTHER_ACCOUNT_NAME, CurrencyUnit.USD, FutureTithingPolicy.NONE)));
+                                ANOTHER_ACCOUNT_NAME,
+                                CurrencyUnit.USD,
+                                FutureTithingPolicy.NONE,
+                                LocalDate.now(),
+                                BigDecimal.ZERO)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
@@ -117,7 +122,9 @@ class AccountViewModelInputValidatorTest {
         // GIVEN
         populateAccountForm(ACCOUNT_NAME, SUBTYPE_NAME, CURRENCY_UNIT.toString());
         defineExistingAccounts(
-                ImmutableList.of(new SimpleLiabilityAccount(ACCOUNT_NAME, CurrencyUnit.USD)));
+                ImmutableList.of(
+                        new SimpleLiabilityAccount(
+                                ACCOUNT_NAME, CurrencyUnit.USD, LocalDate.now(), BigDecimal.ZERO)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
@@ -277,7 +284,11 @@ class AccountViewModelInputValidatorTest {
         defineExistingAccounts(
                 ImmutableList.of(
                         new SimpleAssetAccount(
-                                ACCOUNT_NAME, CurrencyUnit.USD, FutureTithingPolicy.NONE)));
+                                ACCOUNT_NAME,
+                                CurrencyUnit.USD,
+                                FutureTithingPolicy.NONE,
+                                LocalDate.now(),
+                                BigDecimal.ZERO)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
@@ -293,7 +304,11 @@ class AccountViewModelInputValidatorTest {
         defineExistingAccounts(
                 ImmutableList.of(
                         new SimpleAssetAccount(
-                                ACCOUNT_NAME, CurrencyUnit.USD, FutureTithingPolicy.NONE)));
+                                ACCOUNT_NAME,
+                                CurrencyUnit.USD,
+                                FutureTithingPolicy.NONE,
+                                LocalDate.now(),
+                                BigDecimal.ZERO)));
 
         // WHEN
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);

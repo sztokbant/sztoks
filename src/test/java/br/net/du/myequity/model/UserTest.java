@@ -31,6 +31,8 @@ import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
@@ -51,10 +53,17 @@ class UserTest {
         user.setId(1L);
 
         simpleAssetAccount =
-                new SimpleAssetAccount("Asset Account", CurrencyUnit.USD, FutureTithingPolicy.NONE);
+                new SimpleAssetAccount(
+                        "Asset Account",
+                        CurrencyUnit.USD,
+                        FutureTithingPolicy.NONE,
+                        LocalDate.now(),
+                        BigDecimal.ZERO);
         simpleAssetAccount.setId(99L);
 
-        simpleLiabilityAccount = new SimpleLiabilityAccount("Liability Account", CurrencyUnit.USD);
+        simpleLiabilityAccount =
+                new SimpleLiabilityAccount(
+                        "Liability Account", CurrencyUnit.USD, LocalDate.now(), BigDecimal.ZERO);
         simpleLiabilityAccount.setId(7L);
 
         snapshot =

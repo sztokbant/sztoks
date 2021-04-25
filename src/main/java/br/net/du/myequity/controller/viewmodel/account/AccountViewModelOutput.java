@@ -6,10 +6,12 @@ import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.totals.BalanceUpdateableSubtype;
+import br.net.du.myequity.model.account.SharedBillReceivableAccount;
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.money.CurrencyUnit;
 
 @AllArgsConstructor
@@ -22,6 +24,11 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
     private final String balance;
     private final String currencyUnit;
     private final String currencyUnitSymbol;
+
+    // SharedBillReceivable only
+    private final String billAmount;
+    private final Integer numberOfPartners;
+    private final Integer dueDay;
 
     // fields only used on updates
     private final String netWorth;
@@ -40,6 +47,10 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
         balance = other.getBalance();
         currencyUnit = other.getCurrencyUnit();
         currencyUnitSymbol = other.getCurrencyUnitSymbol();
+
+        billAmount = other.getBillAmount();
+        numberOfPartners = other.getNumberOfPartners();
+        dueDay = other.getDueDay();
 
         netWorth = other.getNetWorth();
         accountType = other.getAccountType();
@@ -64,23 +75,40 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
                         .currencyUnit(currencyUnit.getCode())
                         .currencyUnitSymbol(currencyUnit.getSymbol());
 
+        builder.billAmount(
+                account instanceof SharedBillReceivableAccount
+                        ? format(
+                                currencyUnit,
+                                toDecimal(((SharedBillReceivableAccount) account).getBillAmount()))
+                        : StringUtils.EMPTY);
+
+        builder.numberOfPartners(
+                account instanceof SharedBillReceivableAccount
+                        ? ((SharedBillReceivableAccount) account).getNumberOfPartners()
+                        : 0);
+
+        builder.dueDay(
+                account instanceof SharedBillReceivableAccount
+                        ? ((SharedBillReceivableAccount) account).getDueDay()
+                        : 0);
+
         if (includeTotals) {
             final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot);
-            final BalanceUpdateableSubtype balanceUpdateableSubtype =
-                    BalanceUpdateableSubtype.forClass(account.getClass());
+            final AccountSubtypeDisplayGroup accountSubtypeDisplayGroup =
+                    AccountSubtypeDisplayGroup.forClass(account.getClass());
 
             builder.netWorth(updateableTotals.getNetWorth())
                     .accountType(account.getAccountType().name())
                     .totalForAccountType(updateableTotals.getTotalFor(account.getAccountType()))
                     .accountSubtype(
-                            balanceUpdateableSubtype == null
+                            accountSubtypeDisplayGroup == null
                                     ? null
-                                    : balanceUpdateableSubtype.name())
+                                    : accountSubtypeDisplayGroup.name())
                     .totalForAccountSubtype(
-                            balanceUpdateableSubtype == null
+                            accountSubtypeDisplayGroup == null
                                     ? null
                                     : updateableTotals.getTotalForAccountSubtype(
-                                            balanceUpdateableSubtype))
+                                            accountSubtypeDisplayGroup))
                     .investmentTotals(updateableTotals.getInvestmentTotals())
                     .creditCardTotalsForCurrencyUnit(
                             updateableTotals.getCreditCardTotalsForCurrencyUnit(

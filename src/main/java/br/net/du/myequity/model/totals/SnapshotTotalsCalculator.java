@@ -22,13 +22,13 @@ public class SnapshotTotalsCalculator {
     private final Snapshot snapshot;
 
     public BalanceUpdateableSubtypeTotal getTotalBalance(
-            final BalanceUpdateableSubtype balanceUpdateableSubtype) {
+            final AccountSubtypeDisplayGroup accountSubtypeDisplayGroup) {
         final CurrencyUnit baseCurrencyUnit = snapshot.getBaseCurrencyUnit();
 
         BigDecimal totalBalance = BigDecimal.ZERO;
 
         for (final Account account : snapshot.getAccounts()) {
-            if (!balanceUpdateableSubtype.accepts(account.getClass())) {
+            if (!accountSubtypeDisplayGroup.accepts(account.getClass())) {
                 continue;
             }
 

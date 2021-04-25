@@ -40,7 +40,13 @@ class PayableAccountDueDateUpdateControllerTest extends AccountAjaxControllerTes
 
     @Override
     public void createEntity() {
-        account = new PayableAccount("Friend", CURRENCY_UNIT, CURRENT_DUE_DATE, CURRENT_BALANCE);
+        account =
+                new PayableAccount(
+                        "Friend",
+                        CURRENCY_UNIT,
+                        LocalDate.now(),
+                        CURRENT_DUE_DATE,
+                        CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
     }
 

@@ -26,20 +26,6 @@ public class FutureTithingAccount extends Account {
     @Getter
     private BigDecimal referenceAmount;
 
-    public FutureTithingAccount(@NonNull final CurrencyUnit currencyUnit) {
-        this(currencyUnit, LocalDate.now());
-    }
-
-    public FutureTithingAccount(
-            @NonNull final CurrencyUnit currencyUnit, @NonNull final LocalDate createDate) {
-        this(currencyUnit, createDate, BigDecimal.ZERO);
-    }
-
-    public FutureTithingAccount(
-            @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal referenceAmount) {
-        this(currencyUnit, LocalDate.now(), referenceAmount);
-    }
-
     public FutureTithingAccount(
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate createDate,
@@ -54,7 +40,8 @@ public class FutureTithingAccount extends Account {
 
     @Override
     public FutureTithingAccount copy() {
-        return new FutureTithingAccount(CurrencyUnit.of(currency), referenceAmount);
+        return new FutureTithingAccount(
+                CurrencyUnit.of(currency), LocalDate.now(), referenceAmount);
     }
 
     public void setReferenceAmount(@NonNull final BigDecimal newReferenceAmount) {

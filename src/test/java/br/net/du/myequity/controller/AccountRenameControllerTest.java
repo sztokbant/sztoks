@@ -12,6 +12,7 @@ import br.net.du.myequity.controller.viewmodel.EntityRenameJsonRequest;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +49,9 @@ class AccountRenameControllerTest extends AccountControllerTestBase {
 
     @Override
     public void createEntity() {
-        account = new SimpleLiabilityAccount(ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now());
+        account =
+                new SimpleLiabilityAccount(
+                        ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now(), BigDecimal.ZERO);
         account.setId(ACCOUNT_ID);
     }
 

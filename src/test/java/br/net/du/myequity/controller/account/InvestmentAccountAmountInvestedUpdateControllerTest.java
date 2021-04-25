@@ -17,6 +17,7 @@ import br.net.du.myequity.model.account.InvestmentAccount;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -46,6 +47,7 @@ class InvestmentAccountAmountInvestedUpdateControllerTest extends AccountAjaxCon
                         "AMZN",
                         CURRENCY_UNIT,
                         FutureTithingPolicy.NONE,
+                        LocalDate.now(),
                         CURRENT_SHARES,
                         CURRENT_AMOUNT_INVESTED,
                         CURRENT_CURRENT_SHARE_VALUE);

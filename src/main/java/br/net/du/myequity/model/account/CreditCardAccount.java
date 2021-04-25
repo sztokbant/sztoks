@@ -36,24 +36,15 @@ public class CreditCardAccount extends Account {
     @Setter
     private BigDecimal statement;
 
+    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
     public CreditCardAccount(@NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
-        this(name, currencyUnit, LocalDate.now());
-    }
-
-    public CreditCardAccount(
-            @NonNull final String name,
-            @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final LocalDate createDate) {
-        this(name, currencyUnit, createDate, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
-    }
-
-    public CreditCardAccount(
-            @NonNull final String name,
-            @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final BigDecimal totalCredit,
-            @NonNull final BigDecimal availableCredit,
-            @NonNull final BigDecimal statement) {
-        this(name, currencyUnit, LocalDate.now(), totalCredit, availableCredit, statement);
+        this(
+                name,
+                currencyUnit,
+                LocalDate.now(),
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO);
     }
 
     public CreditCardAccount(
@@ -82,7 +73,12 @@ public class CreditCardAccount extends Account {
     @Override
     public CreditCardAccount copy() {
         return new CreditCardAccount(
-                name, CurrencyUnit.of(currency), totalCredit, availableCredit, statement);
+                name,
+                CurrencyUnit.of(currency),
+                LocalDate.now(),
+                totalCredit,
+                availableCredit,
+                statement);
     }
 
     public BigDecimal getUsedCreditPercentage() {

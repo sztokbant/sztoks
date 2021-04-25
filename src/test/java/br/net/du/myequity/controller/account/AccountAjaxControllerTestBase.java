@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -163,7 +164,8 @@ abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestB
     }
 
     protected FutureTithingAccount prepareFutureTithingAccount() {
-        final FutureTithingAccount futureTithingAccount = new FutureTithingAccount(CURRENCY_UNIT);
+        final FutureTithingAccount futureTithingAccount =
+                new FutureTithingAccount(CURRENCY_UNIT, LocalDate.now(), BigDecimal.ZERO);
 
         snapshot.addAccount(futureTithingAccount);
         futureTithingAccount.setReferenceAmount(CURRENT_FUTURE_TITHING_ACCOUNT_REFERENCE_AMOUNT);

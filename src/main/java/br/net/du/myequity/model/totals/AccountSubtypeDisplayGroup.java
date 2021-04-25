@@ -4,15 +4,17 @@ import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.FutureTithingAccount;
 import br.net.du.myequity.model.account.PayableAccount;
 import br.net.du.myequity.model.account.ReceivableAccount;
+import br.net.du.myequity.model.account.SharedBillReceivableAccount;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
 import br.net.du.myequity.model.account.TithingAccount;
 import java.util.HashSet;
 import java.util.Set;
 
-public enum BalanceUpdateableSubtype {
+public enum AccountSubtypeDisplayGroup {
     SIMPLE_ASSET(new Class[] {SimpleAssetAccount.class}),
     RECEIVABLE(new Class[] {ReceivableAccount.class}),
+    SHARED_BILL_RECEIVABLE(new Class[] {SharedBillReceivableAccount.class}),
     SIMPLE_LIABILITY(
             (new Class[] {
                 SimpleLiabilityAccount.class, TithingAccount.class, FutureTithingAccount.class
@@ -21,7 +23,7 @@ public enum BalanceUpdateableSubtype {
 
     private final Set<Class> classes = new HashSet<>();
 
-    BalanceUpdateableSubtype(final Class<? extends Account>[] classes) {
+    AccountSubtypeDisplayGroup(final Class<? extends Account>[] classes) {
         for (final Class clazz : classes) {
             this.classes.add(clazz);
         }
@@ -31,13 +33,17 @@ public enum BalanceUpdateableSubtype {
         return classes.contains(clazz);
     }
 
-    public static BalanceUpdateableSubtype forClass(final Class<? extends Account> clazz) {
+    public static AccountSubtypeDisplayGroup forClass(final Class<? extends Account> clazz) {
         if (clazz.equals(SimpleAssetAccount.class)) {
             return SIMPLE_ASSET;
         }
 
         if (clazz.equals(ReceivableAccount.class)) {
             return RECEIVABLE;
+        }
+
+        if (clazz.equals(SharedBillReceivableAccount.class)) {
+            return SHARED_BILL_RECEIVABLE;
         }
 
         if (clazz.equals(SimpleLiabilityAccount.class)

@@ -63,11 +63,16 @@ class PersistenceTest {
         assetAmount = new BigDecimal("100.00");
         simpleAssetAccount =
                 new SimpleAssetAccount(
-                        "Asset Account", CurrencyUnit.USD, FutureTithingPolicy.NONE, assetAmount);
+                        "Asset Account",
+                        CurrencyUnit.USD,
+                        FutureTithingPolicy.NONE,
+                        LocalDate.now(),
+                        assetAmount);
 
         liabilityAmount = new BigDecimal("320000.00");
         simpleLiabilityAccount =
-                new SimpleLiabilityAccount("Liability Account", CurrencyUnit.USD, liabilityAmount);
+                new SimpleLiabilityAccount(
+                        "Liability Account", CurrencyUnit.USD, LocalDate.now(), liabilityAmount);
 
         final LocalDate now = LocalDate.of(2021, 03, 01);
         try (MockedStatic<LocalDate> localDateStaticMock = mockStatic(LocalDate.class)) {

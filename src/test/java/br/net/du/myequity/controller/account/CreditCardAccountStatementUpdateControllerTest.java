@@ -17,6 +17,7 @@ import br.net.du.myequity.model.account.FutureTithingAccount;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -46,6 +47,7 @@ class CreditCardAccountStatementUpdateControllerTest extends AccountAjaxControll
                 new CreditCardAccount(
                         "Chase Sapphire Reserve",
                         CURRENCY_UNIT,
+                        LocalDate.now(),
                         CURRENT_TOTAL_CREDIT,
                         CURRENT_AVAILABLE_CREDIT,
                         CURRENT_STATEMENT);

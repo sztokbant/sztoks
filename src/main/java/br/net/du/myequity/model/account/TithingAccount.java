@@ -22,20 +22,6 @@ public class TithingAccount extends Account {
     @Getter
     private BigDecimal balance;
 
-    public TithingAccount(@NonNull final CurrencyUnit currencyUnit) {
-        this(currencyUnit, LocalDate.now());
-    }
-
-    public TithingAccount(
-            @NonNull final CurrencyUnit currencyUnit, @NonNull final LocalDate createDate) {
-        this(currencyUnit, createDate, BigDecimal.ZERO);
-    }
-
-    public TithingAccount(
-            @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal balance) {
-        this(currencyUnit, LocalDate.now(), balance);
-    }
-
     public TithingAccount(
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate createDate,
@@ -50,7 +36,7 @@ public class TithingAccount extends Account {
 
     @Override
     public TithingAccount copy() {
-        return new TithingAccount(CurrencyUnit.of(currency), balance);
+        return new TithingAccount(CurrencyUnit.of(currency), LocalDate.now(), balance);
     }
 
     public void setBalance(@NonNull final BigDecimal newBalance) {

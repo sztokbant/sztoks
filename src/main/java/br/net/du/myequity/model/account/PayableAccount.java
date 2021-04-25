@@ -25,23 +25,9 @@ public class PayableAccount extends Account implements BalanceUpdateable, DueDat
 
     @Column @Getter @Setter private LocalDate dueDate;
 
+    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
     public PayableAccount(@NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
-        this(name, currencyUnit, LocalDate.now());
-    }
-
-    public PayableAccount(
-            @NonNull final String name,
-            @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final LocalDate createDate) {
-        this(name, currencyUnit, createDate, LocalDate.now(), BigDecimal.ZERO);
-    }
-
-    public PayableAccount(
-            @NonNull final String name,
-            @NonNull final CurrencyUnit currencyUnit,
-            @NonNull final LocalDate dueDate,
-            @NonNull final BigDecimal balance) {
-        this(name, currencyUnit, LocalDate.now(), dueDate, balance);
+        this(name, currencyUnit, LocalDate.now(), LocalDate.now(), BigDecimal.ZERO);
     }
 
     public PayableAccount(
@@ -57,7 +43,8 @@ public class PayableAccount extends Account implements BalanceUpdateable, DueDat
 
     @Override
     public PayableAccount copy() {
-        return new PayableAccount(name, CurrencyUnit.of(currency), dueDate, balance);
+        return new PayableAccount(
+                name, CurrencyUnit.of(currency), LocalDate.now(), dueDate, balance);
     }
 
     @Override

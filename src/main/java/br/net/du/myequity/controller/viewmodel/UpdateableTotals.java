@@ -7,7 +7,7 @@ import br.net.du.myequity.controller.viewmodel.account.CreditCardTotalsViewModel
 import br.net.du.myequity.controller.viewmodel.account.InvestmentTotalsViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.totals.BalanceUpdateableSubtype;
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import br.net.du.myequity.model.totals.SnapshotTotalsCalculator;
 import br.net.du.myequity.model.transaction.TransactionType;
 import lombok.Getter;
@@ -30,12 +30,12 @@ public class UpdateableTotals {
     }
 
     public String getTotalForAccountSubtype(
-            final BalanceUpdateableSubtype balanceUpdateableSubtype) {
+            final AccountSubtypeDisplayGroup accountSubtypeDisplayGroup) {
         return format(
                 snapshot.getBaseCurrencyUnit(),
                 toDecimal(
                         snapshotTotalsCalculator
-                                .getTotalBalance(balanceUpdateableSubtype)
+                                .getTotalBalance(accountSubtypeDisplayGroup)
                                 .getTotalBalance()));
     }
 

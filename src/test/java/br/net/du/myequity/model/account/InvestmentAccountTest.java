@@ -6,6 +6,7 @@ import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 class InvestmentAccountTest {
@@ -14,7 +15,14 @@ class InvestmentAccountTest {
     public void newEmptySnapshot_happy() {
         // WHEN
         final InvestmentAccount actual =
-                new InvestmentAccount(ACCOUNT_NAME, CURRENCY_UNIT, FutureTithingPolicy.NONE);
+                new InvestmentAccount(
+                        ACCOUNT_NAME,
+                        CURRENCY_UNIT,
+                        FutureTithingPolicy.NONE,
+                        LocalDate.now(),
+                        BigDecimal.ZERO,
+                        BigDecimal.ZERO,
+                        BigDecimal.ZERO);
 
         // THEN
         final InvestmentAccount expected =
@@ -22,6 +30,7 @@ class InvestmentAccountTest {
                         ACCOUNT_NAME,
                         CURRENCY_UNIT,
                         FutureTithingPolicy.NONE,
+                        LocalDate.now(),
                         BigDecimal.ZERO,
                         BigDecimal.ZERO,
                         BigDecimal.ZERO);
