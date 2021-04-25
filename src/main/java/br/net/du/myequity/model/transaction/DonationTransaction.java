@@ -23,13 +23,13 @@ public class DonationTransaction extends Transaction implements Categorizable<Do
     @Column @Getter private boolean isTaxDeductible;
 
     public DonationTransaction(
-            final LocalDate date,
-            final String currency,
-            final BigDecimal amount,
-            final String description,
+            @NonNull final LocalDate date,
+            @NonNull final String currency,
+            @NonNull final BigDecimal amount,
+            @NonNull final String description,
             final boolean isRecurring,
             final boolean isTaxDeductible,
-            final DonationCategory category) {
+            @NonNull final DonationCategory category) {
         super(date, currency, amount, description, isRecurring);
         this.isTaxDeductible = isTaxDeductible;
         this.category = category.name();
@@ -48,7 +48,11 @@ public class DonationTransaction extends Transaction implements Categorizable<Do
     }
 
     @Override
-    public void setAmount(final BigDecimal newAmount) {
+    public void setAmount(@NonNull final BigDecimal newAmount) {
+        if (amount.compareTo(newAmount) == 0) {
+            return;
+        }
+
         final BigDecimal oldAmount = amount;
 
         amount = newAmount;
@@ -60,6 +64,10 @@ public class DonationTransaction extends Transaction implements Categorizable<Do
     }
 
     public void setTaxDeductible(final boolean isTaxDeductible) {
+        if (this.isTaxDeductible == isTaxDeductible) {
+            return;
+        }
+
         this.isTaxDeductible = isTaxDeductible;
 
         final BigDecimal diffTaxDeductibleAmount = isTaxDeductible ? amount : amount.negate();

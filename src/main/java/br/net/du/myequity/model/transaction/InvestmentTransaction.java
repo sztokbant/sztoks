@@ -21,12 +21,12 @@ public class InvestmentTransaction extends Transaction
     private final TransactionType transactionType = TransactionType.valueOf(TRANSACTION_TYPE);
 
     public InvestmentTransaction(
-            final LocalDate date,
-            final String currency,
-            final BigDecimal amount,
-            final String description,
+            @NonNull final LocalDate date,
+            @NonNull final String currency,
+            @NonNull final BigDecimal amount,
+            @NonNull final String description,
             final boolean isRecurring,
-            final InvestmentCategory category) {
+            @NonNull final InvestmentCategory category) {
         super(date, currency, amount, description, isRecurring);
         this.category = category.name();
     }
@@ -53,7 +53,11 @@ public class InvestmentTransaction extends Transaction
     }
 
     @Override
-    public void setAmount(final BigDecimal newAmount) {
+    public void setAmount(@NonNull final BigDecimal newAmount) {
+        if (amount.compareTo(newAmount) == 0) {
+            return;
+        }
+
         final BigDecimal oldAmount = amount;
 
         amount = newAmount;

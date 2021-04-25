@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import org.joda.money.CurrencyUnit;
 
@@ -59,10 +60,10 @@ public abstract class Transaction implements Comparable<Transaction> {
     @Column protected String category;
 
     public Transaction(
-            final LocalDate date,
-            final String currency,
-            final BigDecimal amount,
-            final String description,
+            @NonNull final LocalDate date,
+            @NonNull final String currency,
+            @NonNull final BigDecimal amount,
+            @NonNull final String description,
             final boolean isRecurring) {
         this.date = date;
         this.currency = currency;
@@ -120,7 +121,7 @@ public abstract class Transaction implements Comparable<Transaction> {
     }
 
     @Override
-    public int compareTo(final Transaction other) {
+    public int compareTo(@NonNull final Transaction other) {
         if (currency.equals(other.getCurrency())) {
             if (date.equals(other.getDate())) {
                 if (description.equals(other.getDescription())) {
@@ -134,13 +135,13 @@ public abstract class Transaction implements Comparable<Transaction> {
     }
 
     protected void updateSnapshotTransactionTotal(
-            final BigDecimal newAmount, final BigDecimal oldAmount) {
+            @NonNull final BigDecimal newAmount, @NonNull final BigDecimal oldAmount) {
         updateSnapshotTransactionTotal(newAmount, oldAmount, false);
     }
 
     protected void updateSnapshotTransactionTotal(
-            final BigDecimal newAmount,
-            final BigDecimal oldAmount,
+            @NonNull final BigDecimal newAmount,
+            @NonNull final BigDecimal oldAmount,
             final boolean isTaxDeductibleDonation) {
         final BigDecimal diffAmount = newAmount.subtract(oldAmount);
         snapshot.updateTransactionsTotal(

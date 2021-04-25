@@ -27,13 +27,13 @@ public class IncomeTransaction extends Transaction implements Categorizable<Inco
     @Column @Getter private BigDecimal tithingPercentage;
 
     public IncomeTransaction(
-            final LocalDate date,
-            final String currency,
-            final BigDecimal amount,
-            final String description,
+            @NonNull final LocalDate date,
+            @NonNull final String currency,
+            @NonNull final BigDecimal amount,
+            @NonNull final String description,
             final boolean isRecurring,
-            final BigDecimal tithingPercentage,
-            final IncomeCategory incomeCategory) {
+            @NonNull final BigDecimal tithingPercentage,
+            @NonNull final IncomeCategory incomeCategory) {
         super(date, currency, amount, description, isRecurring);
         this.tithingPercentage = tithingPercentage;
         category = incomeCategory.name();
@@ -58,7 +58,11 @@ public class IncomeTransaction extends Transaction implements Categorizable<Inco
     }
 
     @Override
-    public void setAmount(final BigDecimal newAmount) {
+    public void setAmount(@NonNull final BigDecimal newAmount) {
+        if (amount.compareTo(newAmount) == 0) {
+            return;
+        }
+
         final BigDecimal oldAmount = getAmount();
         final BigDecimal oldTithingAmount = getTithingAmount();
 
@@ -72,7 +76,11 @@ public class IncomeTransaction extends Transaction implements Categorizable<Inco
         updateSnapshotTransactionTotal(newAmount, oldAmount);
     }
 
-    public void setTithingPercentage(final BigDecimal tithingPercentage) {
+    public void setTithingPercentage(@NonNull final BigDecimal tithingPercentage) {
+        if (this.tithingPercentage.compareTo(tithingPercentage) == 0) {
+            return;
+        }
+
         if (tithingPercentage.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException(
                     "tithingPercentage must be greater than or equal to zero");
