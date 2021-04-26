@@ -21,7 +21,15 @@
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/snapshot.css" rel="stylesheet">
 </head>
-<body>
+
+<c:choose>
+    <c:when test="${snapshot.nextId ne null}">
+        <body style="background-color: #ccc;">
+    </c:when>
+    <c:otherwise>
+        <body>
+    </c:otherwise>
+</c:choose>
 
 <%@ include file="_header.jsp" %>
 
