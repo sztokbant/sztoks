@@ -81,6 +81,22 @@ function investmentCurrentShareValueUpdateSuccessCallback(data, result) {
   updateSnapshotInvestmentTotals(result);
 }
 
+function giftCertificateSharesUpdateSuccessCallback(data, result) {
+  $("#gift_certificate_shares_" + data.entityId).html(result.shares);
+  $("#gift_certificate_balance_" + data.entityId).html(result.balance);
+  $("#snapshot_net_worth").html(result.netWorth);
+  $("#total_" + result.accountType).html(result.totalForAccountType);
+  $("#snapshot_" + result.accountSubtype + "_balance").html(result.totalForAccountSubtype);
+}
+
+function giftCertificateCurrentShareValueUpdateSuccessCallback(data, result) {
+  $("#gift_certificate_current_share_value_" + data.entityId).html(result.currentShareValue);
+  $("#gift_certificate_balance_" + data.entityId).html(result.balance);
+  $("#snapshot_net_worth").html(result.netWorth);
+  $("#total_" + result.accountType).html(result.totalForAccountType);
+  $("#snapshot_" + result.accountSubtype + "_balance").html(result.totalForAccountSubtype);
+}
+
 function payableDueDateUpdateSuccessCallback(data, result) {
   $("#payable_due_date_" + data.entityId).html(result.dueDate);
 }

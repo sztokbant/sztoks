@@ -8,6 +8,7 @@ import static java.util.stream.Collectors.toList;
 import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.CreditCardAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.CreditCardTotalsViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.GiftCertificateAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.InvestmentAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.InvestmentTotalsViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.PayableAccountViewModelOutput;
@@ -64,6 +65,9 @@ public class SnapshotViewModelOutput {
 
     private final List<AccountViewModelOutput> simpleAssetAccounts;
     private final String simpleAssetsBalance;
+
+    private final List<AccountViewModelOutput> giftCertificateAccounts;
+    private final String giftCertificatesBalance;
 
     private final List<AccountViewModelOutput> receivableAccounts;
     private final String receivablesBalance;
@@ -129,6 +133,9 @@ public class SnapshotViewModelOutput {
                         .simpleAssetsBalance(
                                 updateableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.SIMPLE_ASSET))
+                        .giftCertificatesBalance(
+                                updateableTotals.getTotalForAccountSubtype(
+                                        AccountSubtypeDisplayGroup.GIFT_CERTIFICATE))
                         .receivablesBalance(
                                 updateableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.RECEIVABLE))
@@ -200,6 +207,8 @@ public class SnapshotViewModelOutput {
                 breakDownAccountsByType(accountViewModels.get(AccountType.ASSET));
 
         builder.simpleAssetAccounts(assetsByType.get(AccountViewModelOutput.class));
+        builder.giftCertificateAccounts(
+                assetsByType.get(GiftCertificateAccountViewModelOutput.class));
         builder.receivableAccounts(assetsByType.get(ReceivableAccountViewModelOutput.class));
         builder.sharedBillReceivableAccounts(
                 assetsByType.get(SharedBillReceivableAccountViewModelOutput.class));

@@ -2,6 +2,7 @@ package br.net.du.myequity.model.totals;
 
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.FutureTithingAccount;
+import br.net.du.myequity.model.account.GiftCertificateAccount;
 import br.net.du.myequity.model.account.PayableAccount;
 import br.net.du.myequity.model.account.ReceivableAccount;
 import br.net.du.myequity.model.account.SharedBillReceivableAccount;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 public enum AccountSubtypeDisplayGroup {
     SIMPLE_ASSET(new Class[] {SimpleAssetAccount.class}),
+    GIFT_CERTIFICATE(new Class[] {GiftCertificateAccount.class}),
     RECEIVABLE(new Class[] {ReceivableAccount.class}),
     SHARED_BILL_RECEIVABLE(new Class[] {SharedBillReceivableAccount.class}),
     SIMPLE_LIABILITY(
@@ -36,6 +38,10 @@ public enum AccountSubtypeDisplayGroup {
     public static AccountSubtypeDisplayGroup forClass(final Class<? extends Account> clazz) {
         if (clazz.equals(SimpleAssetAccount.class)) {
             return SIMPLE_ASSET;
+        }
+
+        if (clazz.equals(GiftCertificateAccount.class)) {
+            return GIFT_CERTIFICATE;
         }
 
         if (clazz.equals(ReceivableAccount.class)) {

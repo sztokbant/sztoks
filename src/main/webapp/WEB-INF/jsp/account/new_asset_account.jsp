@@ -51,6 +51,10 @@
                                 <label for="simpleAssetRadio">Simple Asset</label>
                             </div>
                             <div>
+                                <form:radiobutton path="subtypeName" value="GiftCertificateAccount" id="giftCertificateRadio"/>
+                                <label for="giftCertificateRadio">Gift Certificate</label>
+                            </div>
+                            <div>
                                 <form:radiobutton path="subtypeName" value="ReceivableAccount" id="receivableRadio"/>
                                 <label for="receivableRadio">Receivable</label>
                             </div>

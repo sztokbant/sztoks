@@ -37,7 +37,7 @@ class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerT
     private static final BigDecimal CURRENT_SHARES = new BigDecimal("50.00");
 
     InvestmentAccountSharesUpdateControllerTest() {
-        super("/snapshot/updateInvestmentShares", "75.00");
+        super("/snapshot/updateAccountShares", "75.00");
     }
 
     @Override
@@ -55,7 +55,7 @@ class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerT
     }
 
     @Test
-    public void updateInvestmentShares_happy() throws Exception {
+    public void updateAccountShares_happy() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 

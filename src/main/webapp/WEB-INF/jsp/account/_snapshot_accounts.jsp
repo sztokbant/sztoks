@@ -35,6 +35,27 @@
         </c:choose>
 
         <c:choose>
+            <c:when test="${not empty snapshot.giftCertificateAccounts}">
+                <div class="row border-1px-bottom">
+                    <div class="col col-cell col-title short">&nbsp;</div>
+                    <div class="col col-cell col-title col-account-name"><i>Gift Certificates</i></div>
+                    <div class="col col-cell col-title">Shares</div>
+                    <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">Current Share Value</div>
+                    <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">Balance</div>
+                </div>
+                <c:forEach var="entity" items="${snapshot.giftCertificateAccounts}">
+                    <%@ include file="_snapshot_gift_certificate_line_item.jsp" %>
+                </c:forEach>
+                <c:if test="${snapshot.giftCertificateAccounts.size() gt 1}">
+                    <%@ include file="_snapshot_gift_certificates_total.jsp" %>
+                </c:if>
+            </c:when>
+        </c:choose>
+
+        <c:choose>
             <c:when test="${not empty snapshot.receivableAccounts}">
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>

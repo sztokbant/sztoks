@@ -8,7 +8,7 @@ $(document).ready(function() {
   prepareUpdateForm($("#form_investment_shares_${entity.accountId}"),
     $("#investment_shares_${entity.accountId}"),
     $("#new_investment_shares_${entity.accountId}"),
-    "snapshot/updateInvestmentShares",
+    "snapshot/updateAccountShares",
     data,
     investmentSharesUpdateSuccessCallback,
   );
@@ -24,7 +24,7 @@ $(document).ready(function() {
   prepareUpdateForm($("#form_investment_current_share_value_${entity.accountId}"),
     $("#investment_current_share_value_${entity.accountId}"),
     $("#new_investment_current_share_value_${entity.accountId}"),
-    "snapshot/updateInvestmentCurrentShareValue",
+    "snapshot/updateAccountCurrentShareValue",
     data,
     investmentCurrentShareValueUpdateSuccessCallback,
   );

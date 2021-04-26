@@ -2,9 +2,12 @@ package br.net.du.myequity.controller.account;
 
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.GiftCertificateAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.InvestmentAccountViewModelOutput;
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.GiftCertificateAccount;
 import br.net.du.myequity.model.account.InvestmentAccount;
+import br.net.du.myequity.model.account.SharesUpdateable;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,26 +21,32 @@ public class InvestmentUpdateController {
 
     @Autowired AccountUpdater accountUpdater;
 
-    @PostMapping("/snapshot/updateInvestmentShares")
-    public AccountViewModelOutput updateInvestmentShares(
+    @PostMapping("/snapshot/updateAccountShares")
+    public AccountViewModelOutput updateAccountShares(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
         final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
-                updateInvestmentSharesFunction =
+                updateAccountSharesFunction =
                         (jsonRequest, account) -> {
-                            final InvestmentAccount investmentAccount = (InvestmentAccount) account;
+                            final SharesUpdateable sharesUpdateable = (SharesUpdateable) account;
 
                             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            investmentAccount.setShares(newValue);
+                            sharesUpdateable.setShares(newValue);
 
-                            return InvestmentAccountViewModelOutput.of(investmentAccount, true);
+                            if (account instanceof InvestmentAccount) {
+                                return InvestmentAccountViewModelOutput.of(account, true);
+                            } else if (account instanceof GiftCertificateAccount) {
+                                return GiftCertificateAccountViewModelOutput.of(account, true);
+                            } else {
+                                throw new IllegalStateException("Unknown account type");
+                            }
                         };
 
         return accountUpdater.updateField(
                 model,
                 valueUpdateJsonRequest,
-                InvestmentAccount.class,
-                updateInvestmentSharesFunction,
+                SharesUpdateable.class,
+                updateAccountSharesFunction,
                 true);
     }
 
@@ -64,25 +73,31 @@ public class InvestmentUpdateController {
                 false);
     }
 
-    @PostMapping("/snapshot/updateInvestmentCurrentShareValue")
-    public AccountViewModelOutput updateInvestmentCurrentShareValue(
+    @PostMapping("/snapshot/updateAccountCurrentShareValue")
+    public AccountViewModelOutput updateAccountCurrentShareValue(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
-                updateInvestmentCurrentShareValueFunction =
+                updateAccountCurrentShareValueFunction =
                         (jsonRequest, account) -> {
-                            final InvestmentAccount investmentAccount = (InvestmentAccount) account;
+                            final SharesUpdateable sharesUpdateable = (SharesUpdateable) account;
 
                             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            investmentAccount.setCurrentShareValue(newValue);
+                            sharesUpdateable.setCurrentShareValue(newValue);
 
-                            return InvestmentAccountViewModelOutput.of(investmentAccount, true);
+                            if (account instanceof InvestmentAccount) {
+                                return InvestmentAccountViewModelOutput.of(account, true);
+                            } else if (account instanceof GiftCertificateAccount) {
+                                return GiftCertificateAccountViewModelOutput.of(account, true);
+                            } else {
+                                throw new IllegalStateException("Unknown account type");
+                            }
                         };
 
         return accountUpdater.updateField(
                 model,
                 valueUpdateJsonRequest,
-                InvestmentAccount.class,
-                updateInvestmentCurrentShareValueFunction,
+                SharesUpdateable.class,
+                updateAccountCurrentShareValueFunction,
                 true);
     }
 }
