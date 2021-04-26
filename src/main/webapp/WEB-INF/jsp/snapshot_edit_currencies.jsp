@@ -33,8 +33,8 @@
                 <spring:bind path="currencyConversionRates['${entry.key}']">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
                         <div class="row form-group">
-                            <div class="col col-form-label">
-                                <label for="${entry.key}">${entry.key}</label>
+                            <div class="col">
+                                <label for="${entry.key}">1 ${baseCurrency} to <span class="col-form-label">${entry.key}</span></label>
                             </div>
                             <div class="col">
                                 <form:input type="number" min="0" step="0.0001" id="${entry.key}" path="currencyConversionRates['${entry.key}']" class="form-control" placeholder="Conversion Rate"

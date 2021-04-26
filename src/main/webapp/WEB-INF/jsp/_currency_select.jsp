@@ -1,6 +1,6 @@
 <div class="col">
     <div class="${status.error ? 'has-error' : ''}">
-        <form:select path="currencyUnit" class="form-control">
+        <form:select path="currencyUnit" class="form-control" id="currency_select">
             <c:forEach items="${currencies}" var="currency">
                 <c:choose>
                     <c:when test="${currency eq selectedCurrency}">

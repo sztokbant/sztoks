@@ -9,6 +9,7 @@
     <meta charset="utf-8">
     <title>Add New Currency</title>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 </head>
@@ -16,6 +17,20 @@
 <body>
 
 <%@ include file="/WEB-INF/jsp/_header.jsp" %>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  var currencySelect = document.getElementById("currency_select");
+
+  $("#selected_currency").html(currencySelect.value);
+
+  currencySelect.onchange =
+    (evt) => {
+      newValue = evt.srcElement.value;
+      $("#selected_currency").html(newValue);
+    };
+});
+</script>
 
 <div class="full-width">
     <div class="center-w640">
@@ -30,8 +45,8 @@
             </div>
 
             <div class="row form-group">
-                <div class="col col-form-label">
-                    <label for="conversionRate">Conversion Rate</label>
+                <div class="col">
+                    <label for="conversionRate"><span class="col-form-label">Conversion Rate</span><br/><i>1 ${baseCurrency} to <span id="selected_currency"></span></i></label>
                 </div>
                 <div class="col">
                     <spring:bind path="conversionRate">

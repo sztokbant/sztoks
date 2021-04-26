@@ -4,6 +4,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.CURRENCIES;
 import static br.net.du.myequity.controller.util.ControllerConstants.ID;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
 import static br.net.du.myequity.controller.util.ControllerConstants.SELECTED_CURRENCY;
+import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_BASE_CURRENCY_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
@@ -80,6 +81,7 @@ public class SnapshotNewCurrencyController {
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_ID_KEY, snapshot.getId());
+        model.addAttribute(SNAPSHOT_BASE_CURRENCY_KEY, snapshot.getBaseCurrencyUnit().getCode());
 
         final SortedSet<String> currenciesInUse = snapshot.getCurrenciesInUse();
         final List<String> availableCurrencies =

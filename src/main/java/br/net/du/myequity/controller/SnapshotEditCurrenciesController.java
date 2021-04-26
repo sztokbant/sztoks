@@ -3,6 +3,7 @@ package br.net.du.myequity.controller;
 import static br.net.du.myequity.controller.SnapshotNewCurrencyController.SNAPSHOT_NEW_CURRENCY_MAPPING;
 import static br.net.du.myequity.controller.util.ControllerConstants.ID;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
+import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_BASE_CURRENCY_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
@@ -86,6 +87,7 @@ public class SnapshotEditCurrenciesController {
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_ID_KEY, snapshot.getId());
+        model.addAttribute(SNAPSHOT_BASE_CURRENCY_KEY, snapshot.getBaseCurrencyUnit().getCode());
 
         model.addAttribute(EDIT_CURRENCIES_FORM, currenciesViewModelInput);
 
