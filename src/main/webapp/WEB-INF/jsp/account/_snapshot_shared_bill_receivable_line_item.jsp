@@ -21,6 +21,14 @@ $(document).ready(function() {
     accountNumberOfPartnersUpdateSuccessCallback,
   );
 
+  prepareCheckbox(
+    "ACCOUNT_${entity.accountId}_payment_received",
+    ${snapshot.id},
+    ${entity.accountId},
+    ${entity.isPaymentReceived} == true,
+    "snapshot/updateAccountPaymentReceived",
+    accountPaymentReceivedUpdateSuccessCallback);
+
   prepareUpdateForm($("#form_account_bill_amount_${entity.accountId}"),
     $("#account_bill_amount_${entity.accountId}"),
     $("#new_account_bill_amount_${entity.accountId}"),
@@ -29,7 +37,6 @@ $(document).ready(function() {
     accountBillAmountUpdateSuccessCallback,
   );
 })
-
 </script>
 
 <div class="row border-1px-bottom" id="account_row_${entity.accountId}">
@@ -58,8 +65,8 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell">
-        &nbsp;
+    <div class="col col-cell align-center">
+        <input id="ACCOUNT_${entity.accountId}_payment_received" type="checkbox"/>
     </div>
 
     <div class="col col-cell align-right editable-asset">

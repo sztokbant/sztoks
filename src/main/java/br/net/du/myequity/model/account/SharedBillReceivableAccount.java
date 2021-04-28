@@ -24,6 +24,10 @@ public class SharedBillReceivableAccount extends Account implements FutureTithin
     @Getter
     private BigDecimal billAmount;
 
+    @Column(nullable = true)
+    @Getter
+    private boolean isPaymentReceived;
+
     @Column @Getter private Integer numberOfPartners;
 
     @Column @Getter private Integer dueDay;
@@ -33,7 +37,15 @@ public class SharedBillReceivableAccount extends Account implements FutureTithin
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final FutureTithingPolicy futureTithingPolicy) {
-        this(name, currencyUnit, futureTithingPolicy, LocalDate.now(), BigDecimal.ZERO, 1, 1);
+        this(
+                name,
+                currencyUnit,
+                futureTithingPolicy,
+                LocalDate.now(),
+                BigDecimal.ZERO,
+                false,
+                1,
+                1);
     }
 
     public SharedBillReceivableAccount(
@@ -42,6 +54,7 @@ public class SharedBillReceivableAccount extends Account implements FutureTithin
             final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate createDate,
             @NonNull final BigDecimal billAmount,
+            final boolean isPaymentReceived,
             final int numberOfPartners,
             final int dueDay) {
         super(name, AccountType.ASSET, currencyUnit, createDate);
@@ -57,6 +70,7 @@ public class SharedBillReceivableAccount extends Account implements FutureTithin
 
         this.futureTithingPolicy = futureTithingPolicy;
         this.billAmount = billAmount;
+        this.isPaymentReceived = isPaymentReceived;
         this.numberOfPartners = numberOfPartners;
         this.dueDay = dueDay;
     }
@@ -69,12 +83,17 @@ public class SharedBillReceivableAccount extends Account implements FutureTithin
                 futureTithingPolicy,
                 LocalDate.now(),
                 billAmount,
+                isPaymentReceived,
                 numberOfPartners,
                 dueDay);
     }
 
     @Override
     public BigDecimal getBalance() {
+        if (isPaymentReceived) {
+            return BigDecimal.ZERO;
+        }
+
         final BigDecimal numberOfPartners = new BigDecimal(this.numberOfPartners);
         return numberOfPartners
                 .multiply(billAmount)
@@ -92,6 +111,25 @@ public class SharedBillReceivableAccount extends Account implements FutureTithin
         final BigDecimal oldBalance = getBalance();
 
         billAmount = newBillAmount;
+
+        final BigDecimal newBalance = getBalance();
+
+        final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
+        getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
+
+        if (!getFutureTithingPolicy().equals(FutureTithingPolicy.NONE)) {
+            getSnapshot().updateFutureTithingAmount(getCurrencyUnit(), balanceDiff);
+        }
+    }
+
+    public void setPaymentReceived(final boolean isPaymentReceived) {
+        if (this.isPaymentReceived == isPaymentReceived) {
+            return;
+        }
+
+        final BigDecimal oldBalance = getBalance();
+
+        this.isPaymentReceived = isPaymentReceived;
 
         final BigDecimal newBalance = getBalance();
 

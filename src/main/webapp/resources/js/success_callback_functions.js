@@ -21,6 +21,13 @@ function accountBillAmountUpdateSuccessCallback(data, result) {
   $("#snapshot_" + result.accountSubtype + "_balance").html(result.totalForAccountSubtype);
 }
 
+function accountPaymentReceivedUpdateSuccessCallback(data, result) {
+  $("#account_balance_" + data.entityId).html(result.balance);
+  $("#snapshot_net_worth").html(result.netWorth);
+  $("#total_" + result.accountType).html(result.totalForAccountType);
+  $("#snapshot_" + result.accountSubtype + "_balance").html(result.totalForAccountSubtype);
+}
+
 function accountNumberOfPartnersUpdateSuccessCallback(data, result) {
   $("#account_number_of_partners_" + data.entityId).html(result.numberOfPartners);
   $("#account_balance_" + data.entityId).html(result.balance);

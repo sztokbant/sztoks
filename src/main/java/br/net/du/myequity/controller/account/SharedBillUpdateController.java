@@ -39,6 +39,28 @@ public class SharedBillUpdateController {
                 true);
     }
 
+    @PostMapping("/snapshot/updateAccountPaymentReceived")
+    public AccountViewModelOutput updateAccountPaymentReceived(
+            final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
+
+        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
+                updateAmountFunction =
+                        (jsonRequest, account) -> {
+                            final boolean newValue = new Boolean(jsonRequest.getNewValue());
+
+                            ((SharedBillReceivableAccount) account).setPaymentReceived(newValue);
+
+                            return SharedBillReceivableAccountViewModelOutput.of(account, true);
+                        };
+
+        return accountUpdater.updateField(
+                model,
+                valueUpdateJsonRequest,
+                SharedBillReceivableAccount.class,
+                updateAmountFunction,
+                true);
+    }
+
     @PostMapping("/snapshot/updateAccountNumberOfPartners")
     public AccountViewModelOutput updateNumberOfPartners(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {

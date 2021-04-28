@@ -60,10 +60,10 @@ function ajaxPost(endpoint, data, successCallback) {
   });
 }
 
-function prepareCheckbox(elementId, snapshotId, entityId, isRecurring, endpoint, successCallback) {
+function prepareCheckbox(elementId, snapshotId, entityId, isChecked, endpoint, successCallback) {
   const checkbox = document.getElementById(elementId);
 
-  if (isRecurring) {
+  if (isChecked) {
     checkbox.setAttribute('checked', true);
   }
 

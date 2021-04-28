@@ -84,7 +84,7 @@
                     <div class="col col-cell col-title">Due Day</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">Number of Partners</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">Payment received?</div>
                     <div class="col col-cell col-title">Bill Amount</div>
                     <div class="col col-cell col-title">Balance</div>
                 </div>

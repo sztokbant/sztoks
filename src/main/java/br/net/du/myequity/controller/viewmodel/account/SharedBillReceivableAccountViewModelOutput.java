@@ -12,16 +12,19 @@ import org.joda.money.CurrencyUnit;
 @Getter
 public class SharedBillReceivableAccountViewModelOutput extends AccountViewModelOutput {
     private final String billAmount;
+    private final Boolean isPaymentReceived;
     private final Integer numberOfPartners;
     private final Integer dueDay;
 
     public SharedBillReceivableAccountViewModelOutput(
             @NonNull final AccountViewModelOutput other,
             @NonNull final String billAmount,
+            final boolean isPaymentReceived,
             final int numberOfPartners,
             final int dueDay) {
         super(other);
         this.billAmount = billAmount;
+        this.isPaymentReceived = isPaymentReceived;
         this.numberOfPartners = numberOfPartners;
         this.dueDay = dueDay;
     }
@@ -35,12 +38,14 @@ public class SharedBillReceivableAccountViewModelOutput extends AccountViewModel
 
         final String billAmount =
                 format(currencyUnit, toDecimal(sharedBillReceivableAccount.getBillAmount()));
+        final boolean isPaymentReceived = sharedBillReceivableAccount.isPaymentReceived();
         final Integer numberOfPartners = sharedBillReceivableAccount.getNumberOfPartners();
         final Integer dueDay = sharedBillReceivableAccount.getDueDay();
 
         return new SharedBillReceivableAccountViewModelOutput(
                 AccountViewModelOutput.of(account, includeTotals),
                 billAmount,
+                isPaymentReceived,
                 numberOfPartners,
                 dueDay);
     }
