@@ -21,6 +21,7 @@ public class TransactionViewModelInput {
     private String amount;
     private String description;
     private Boolean isRecurring;
+    private Boolean isResettable;
 
     // Categorizable only
     private String category;
@@ -42,6 +43,7 @@ public class TransactionViewModelInput {
                     new BigDecimal(amount),
                     description,
                     isRecurring,
+                    isResettable,
                     new BigDecimal(tithingPercentage),
                     IncomeCategory.valueOf(category));
         } else if (transactionType.equals(TransactionType.INVESTMENT)) {
@@ -51,6 +53,7 @@ public class TransactionViewModelInput {
                     new BigDecimal(amount),
                     description,
                     isRecurring,
+                    isResettable,
                     InvestmentCategory.valueOf(category));
         } else if (transactionType.equals(TransactionType.DONATION)) {
             return new DonationTransaction(
@@ -59,6 +62,7 @@ public class TransactionViewModelInput {
                     new BigDecimal(amount),
                     description,
                     isRecurring,
+                    isResettable,
                     isTaxDeductible,
                     DonationCategory.valueOf(category));
         }

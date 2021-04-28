@@ -87,6 +87,7 @@ public class TransactionViewModelInputTest {
         transactionViewModelInput.setAmount("108.00");
         transactionViewModelInput.setDescription("Transaction Description");
         transactionViewModelInput.setIsRecurring(true);
+        transactionViewModelInput.setIsResettable(true);
     }
 
     public static void populateIncomeTransactionAttributes(

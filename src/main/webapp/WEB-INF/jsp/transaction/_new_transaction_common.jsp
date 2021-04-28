@@ -73,3 +73,25 @@
         </div>
     </div>
 </spring:bind>
+
+<spring:bind path="isResettable">
+    <div class="row form-group">
+        <div class="col col-form-label">
+            Reset monthly?
+        </div>
+        <div class="col">
+            <div class="${status.error ? 'has-error' : ''}">
+                <div>
+                    <form:radiobutton path="isResettable" value="true" id="resettableRadio"/>
+                    <label for="resettableRadio">Yes</label>
+                </div>
+                <div>
+                    <form:radiobutton path="isResettable" value="false" id="nonResettableRadio"
+                                      checked="checked"/>
+                    <label for="nonResettableRadio">No</label>
+                </div>
+                <form:errors path="isResettable"/>
+            </div>
+        </div>
+    </div>
+</spring:bind>

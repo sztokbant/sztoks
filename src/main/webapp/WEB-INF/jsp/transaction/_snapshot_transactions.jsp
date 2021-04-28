@@ -42,6 +42,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title short">&#128260;</div>
+                    <div class="col col-cell col-title short">&#x23EE;</div>
                     <div class="col col-cell col-title col-account-name">Description</div>
                     <div class="col col-cell col-title">Date</div>
                     <div class="col col-cell col-title">Category</div>
@@ -99,6 +100,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title short">&#128260;</div>
+                    <div class="col col-cell col-title short">&#x23EE;</div>
                     <div class="col col-cell col-title col-account-name">Description</div>
                     <div class="col col-cell col-title">Date</div>
                     <div class="col col-cell col-title">Category</div>
@@ -175,6 +177,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title short">&#128260;</div>
+                    <div class="col col-cell col-title short">&#x23EE;</div>
                     <div class="col col-cell col-title col-account-name">Description</div>
                     <div class="col col-cell col-title">Date</div>
                     <div class="col col-cell col-title">Category</div>

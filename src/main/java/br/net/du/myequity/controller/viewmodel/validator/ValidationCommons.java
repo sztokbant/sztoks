@@ -21,6 +21,7 @@ public class ValidationCommons {
     public static final String FUTURE_TITHING_POLICY_FIELD = "futureTithingPolicy";
     public static final String CATEGORY_FIELD = "category";
     public static final String IS_RECURRING_FIELD = "isRecurring";
+    public static final String IS_RESETTABLE_FIELD = "isResettable";
     public static final String IS_TAX_DEDUCTIBLE_FIELD = "isTaxDeductible";
     public static final String LAST_NAME_FIELD = "lastName";
     public static final String NAME_FIELD = "name";

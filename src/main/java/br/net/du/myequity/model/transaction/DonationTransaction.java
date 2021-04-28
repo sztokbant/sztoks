@@ -28,9 +28,10 @@ public class DonationTransaction extends Transaction implements Categorizable<Do
             @NonNull final BigDecimal amount,
             @NonNull final String description,
             final boolean isRecurring,
+            final boolean isResettable,
             final boolean isTaxDeductible,
             @NonNull final DonationCategory category) {
-        super(date, currency, amount, description, isRecurring);
+        super(date, currency, amount, description, isRecurring, isResettable);
         this.isTaxDeductible = isTaxDeductible;
         this.category = category.name();
     }
@@ -40,9 +41,10 @@ public class DonationTransaction extends Transaction implements Categorizable<Do
         return new DonationTransaction(
                 date,
                 currency,
-                amount,
+                isResettable ? BigDecimal.ZERO : amount,
                 description,
                 isRecurring,
+                isResettable,
                 isTaxDeductible,
                 DonationCategory.valueOf(category));
     }

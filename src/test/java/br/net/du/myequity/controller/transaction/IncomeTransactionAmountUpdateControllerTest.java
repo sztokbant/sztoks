@@ -47,6 +47,7 @@ class IncomeTransactionAmountUpdateControllerTest extends TransactionAjaxControl
                         CURRENT_TRANSACTION_AMOUNT,
                         "Salary",
                         false,
+                        false,
                         TITHING_PERCENTAGE,
                         IncomeCategory.JOB);
         transaction.setId(TRANSACTION_ID);

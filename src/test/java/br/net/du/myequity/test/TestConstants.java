@@ -114,6 +114,7 @@ public class TestConstants {
                 new BigDecimal("12000.00"),
                 "Salary",
                 true,
+                false,
                 new BigDecimal("20.00"),
                 IncomeCategory.JOB);
     }
@@ -130,6 +131,7 @@ public class TestConstants {
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("1700.00"),
                 "Side Gig",
+                false,
                 false,
                 new BigDecimal("20.00"),
                 IncomeCategory.SIDE_GIG);
@@ -148,6 +150,7 @@ public class TestConstants {
                 new BigDecimal("108.00"),
                 "Charity",
                 true,
+                false,
                 true,
                 DonationCategory.SPIRITUAL);
     }
@@ -164,6 +167,7 @@ public class TestConstants {
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("10.00"),
                 "Beggar",
+                false,
                 false,
                 true,
                 DonationCategory.OTHER);
@@ -182,6 +186,7 @@ public class TestConstants {
                 new BigDecimal("1500.00"),
                 "Retirement Fund",
                 true,
+                false,
                 InvestmentCategory.LONG_TERM);
     }
 
@@ -197,6 +202,7 @@ public class TestConstants {
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("200.00"),
                 "Savings",
+                false,
                 false,
                 InvestmentCategory.SHORT_TERM);
     }

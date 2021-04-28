@@ -32,9 +32,10 @@ public class IncomeTransaction extends Transaction implements Categorizable<Inco
             @NonNull final BigDecimal amount,
             @NonNull final String description,
             final boolean isRecurring,
+            final boolean isResettable,
             @NonNull final BigDecimal tithingPercentage,
             @NonNull final IncomeCategory incomeCategory) {
-        super(date, currency, amount, description, isRecurring);
+        super(date, currency, amount, description, isRecurring, isResettable);
         this.tithingPercentage = tithingPercentage;
         category = incomeCategory.name();
     }
@@ -50,9 +51,10 @@ public class IncomeTransaction extends Transaction implements Categorizable<Inco
         return new IncomeTransaction(
                 date,
                 currency,
-                amount,
+                isResettable ? BigDecimal.ZERO : amount,
                 description,
                 isRecurring,
+                isResettable,
                 tithingPercentage,
                 IncomeCategory.valueOf(category));
     }

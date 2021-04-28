@@ -20,6 +20,8 @@ $(document).ready(function() {
 
     <%@ include file="_recurring_checkbox.jsp" %>
 
+    <%@ include file="_resettable_checkbox.jsp" %>
+
     <div class="col col-cell col-account-name">
         ${entity.description}
     </div>
