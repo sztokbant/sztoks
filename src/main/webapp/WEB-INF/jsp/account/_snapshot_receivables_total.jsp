@@ -24,6 +24,10 @@
         &nbsp;
     </div>
 
+    <div class="col col-cell">
+        &nbsp;
+    </div>
+
     <div class="col col-cell align-right"><b><span
             id="snapshot_RECEIVABLE_balance">${snapshot.receivablesBalance}</span></b></div>
 </div>

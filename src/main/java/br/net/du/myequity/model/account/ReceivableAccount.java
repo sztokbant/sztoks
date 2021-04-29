@@ -88,6 +88,22 @@ public class ReceivableAccount extends Account
     }
 
     @Override
+    public void setFutureTithingPolicy(@NonNull final FutureTithingPolicy futureTithingPolicy) {
+        if (this.futureTithingPolicy.equals(futureTithingPolicy)) {
+            return;
+        }
+
+        final BigDecimal oldReferenceAmount = getFutureTithingReferenceAmount();
+
+        this.futureTithingPolicy = futureTithingPolicy;
+
+        final BigDecimal newReferenceAmount = getFutureTithingReferenceAmount();
+
+        final BigDecimal referenceAmountDiff = newReferenceAmount.subtract(oldReferenceAmount);
+        getSnapshot().updateFutureTithingAmount(getCurrencyUnit(), referenceAmountDiff);
+    }
+
+    @Override
     public BigDecimal getFutureTithingReferenceAmount() {
         if (getFutureTithingPolicy().equals(FutureTithingPolicy.NONE)) {
             return BigDecimal.ZERO;

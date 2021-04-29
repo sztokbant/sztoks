@@ -13,5 +13,7 @@
 
     <div class="col col-cell"></div>
 
+    <div class="col col-cell"></div>
+
     <div class="col col-cell align-right"><b><span id="snapshot_GIFT_CERTIFICATE_balance">${snapshot.giftCertificatesBalance}</span></b></div>
 </div>

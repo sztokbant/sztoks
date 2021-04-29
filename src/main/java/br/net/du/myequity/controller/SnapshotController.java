@@ -14,6 +14,7 @@ import br.net.du.myequity.controller.viewmodel.SnapshotViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.totals.CumulativeTransactionTotals;
 import br.net.du.myequity.model.totals.CumulativeTransactionTotalsImpl;
 import br.net.du.myequity.model.transaction.DonationCategory;
@@ -52,6 +53,8 @@ public class SnapshotController {
         model.addAttribute(
                 TWELVE_MONTHS_TOTALS,
                 new CumulativeTransactionTotalsViewModelOutput(twelveMonthsTotals));
+
+        model.addAttribute("futureTithingPolicies", FutureTithingPolicy.shortValues());
 
         model.addAttribute("recurrencePolicies", RecurrencePolicy.shortValues());
 

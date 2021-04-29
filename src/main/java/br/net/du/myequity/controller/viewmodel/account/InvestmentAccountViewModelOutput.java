@@ -6,6 +6,7 @@ import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.FutureTithingCapable;
 import br.net.du.myequity.model.account.InvestmentAccount;
 import java.math.BigDecimal;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class InvestmentAccountViewModelOutput extends AccountViewModelOutput {
     private final String averagePurchasePrice;
     private final String currentShareValue;
     private final String profitPercentage;
+    private final String futureTithingPolicy;
 
     public InvestmentAccountViewModelOutput(
             final AccountViewModelOutput other,
@@ -25,13 +27,15 @@ public class InvestmentAccountViewModelOutput extends AccountViewModelOutput {
             final String amountInvested,
             final String averagePurchasePrice,
             final String currentShareValue,
-            final String profitPercentage) {
+            final String profitPercentage,
+            final String futureTithingPolicy) {
         super(other);
         this.shares = shares;
         this.amountInvested = amountInvested;
         this.averagePurchasePrice = averagePurchasePrice;
         this.currentShareValue = currentShareValue;
         this.profitPercentage = profitPercentage;
+        this.futureTithingPolicy = futureTithingPolicy;
     }
 
     public static InvestmentAccountViewModelOutput of(
@@ -54,13 +58,17 @@ public class InvestmentAccountViewModelOutput extends AccountViewModelOutput {
 
         final String profitPercentage = formatAsPercentage(investmentAccount.getProfitPercentage());
 
+        final String futureTithingPolicy =
+                ((FutureTithingCapable) account).getFutureTithingPolicy().getShortValue();
+
         return new InvestmentAccountViewModelOutput(
                 AccountViewModelOutput.of(account, includeTotals),
                 shares,
                 amountInvested,
                 averagePurchasePrice,
                 currentShareValue,
-                profitPercentage);
+                profitPercentage,
+                futureTithingPolicy);
     }
 
     public static InvestmentAccountViewModelOutput of(final Account account) {

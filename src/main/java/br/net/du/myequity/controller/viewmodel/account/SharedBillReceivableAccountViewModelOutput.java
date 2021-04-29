@@ -4,6 +4,7 @@ import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.FutureTithingCapable;
 import br.net.du.myequity.model.account.SharedBillReceivableAccount;
 import lombok.Getter;
 import lombok.NonNull;
@@ -15,18 +16,21 @@ public class SharedBillReceivableAccountViewModelOutput extends AccountViewModel
     private final Boolean isPaymentReceived;
     private final Integer numberOfPartners;
     private final Integer dueDay;
+    private final String futureTithingPolicy;
 
     public SharedBillReceivableAccountViewModelOutput(
             @NonNull final AccountViewModelOutput other,
             @NonNull final String billAmount,
             final boolean isPaymentReceived,
             final int numberOfPartners,
-            final int dueDay) {
+            final int dueDay,
+            final String futureTithingPolicy) {
         super(other);
         this.billAmount = billAmount;
         this.isPaymentReceived = isPaymentReceived;
         this.numberOfPartners = numberOfPartners;
         this.dueDay = dueDay;
+        this.futureTithingPolicy = futureTithingPolicy;
     }
 
     public static SharedBillReceivableAccountViewModelOutput of(
@@ -42,12 +46,16 @@ public class SharedBillReceivableAccountViewModelOutput extends AccountViewModel
         final Integer numberOfPartners = sharedBillReceivableAccount.getNumberOfPartners();
         final Integer dueDay = sharedBillReceivableAccount.getDueDay();
 
+        final String futureTithingPolicy =
+                ((FutureTithingCapable) account).getFutureTithingPolicy().getShortValue();
+
         return new SharedBillReceivableAccountViewModelOutput(
                 AccountViewModelOutput.of(account, includeTotals),
                 billAmount,
                 isPaymentReceived,
                 numberOfPartners,
-                dueDay);
+                dueDay,
+                futureTithingPolicy);
     }
 
     public static SharedBillReceivableAccountViewModelOutput of(final Account account) {

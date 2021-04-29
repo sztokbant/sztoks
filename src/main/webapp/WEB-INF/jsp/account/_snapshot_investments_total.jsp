@@ -5,6 +5,8 @@
 
     <div class="col col-cell"></div>
 
+    <div class="col col-cell"></div>
+
     <div class="col col-cell align-right"><b><span id="snapshot_investments_amount_invested">${snapshot.investmentTotals.amountInvested}</span></b>
     </div>
 

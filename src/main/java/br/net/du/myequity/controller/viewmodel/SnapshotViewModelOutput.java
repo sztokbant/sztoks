@@ -14,6 +14,8 @@ import br.net.du.myequity.controller.viewmodel.account.InvestmentTotalsViewModel
 import br.net.du.myequity.controller.viewmodel.account.PayableAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.ReceivableAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.SharedBillReceivableAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.SimpleAssetAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.SimpleLiabilityAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
@@ -206,7 +208,7 @@ public class SnapshotViewModelOutput {
         final Map<Class, List<AccountViewModelOutput>> assetsByType =
                 breakDownAccountsByType(accountViewModels.get(AccountType.ASSET));
 
-        builder.simpleAssetAccounts(assetsByType.get(AccountViewModelOutput.class));
+        builder.simpleAssetAccounts(assetsByType.get(SimpleAssetAccountViewModelOutput.class));
         builder.giftCertificateAccounts(
                 assetsByType.get(GiftCertificateAccountViewModelOutput.class));
         builder.receivableAccounts(assetsByType.get(ReceivableAccountViewModelOutput.class));
@@ -216,7 +218,8 @@ public class SnapshotViewModelOutput {
 
         final Map<Class, List<AccountViewModelOutput>> liabilitiesByType =
                 breakDownAccountsByType(accountViewModels.get(AccountType.LIABILITY));
-        builder.simpleLiabilityAccounts(liabilitiesByType.get(AccountViewModelOutput.class));
+        builder.simpleLiabilityAccounts(
+                liabilitiesByType.get(SimpleLiabilityAccountViewModelOutput.class));
         builder.payableAccounts(liabilitiesByType.get(PayableAccountViewModelOutput.class));
         builder.creditCardAccounts(liabilitiesByType.get(CreditCardAccountViewModelOutput.class));
 

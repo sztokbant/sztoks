@@ -21,6 +21,8 @@ $(document).ready(function() {
 
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
+    <%@ include file="_account_future_tithing_select.jsp" %>
+
     <div class="col col-cell">
         &nbsp;
     </div>

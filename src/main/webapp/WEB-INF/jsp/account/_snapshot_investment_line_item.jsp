@@ -37,6 +37,8 @@ $(document).ready(function() {
 
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
+    <%@ include file="_account_future_tithing_select.jsp" %>
+
     <div class="col col-cell align-right editable-asset">
         <form id="form_investment_shares_${entity.accountId}">
             <span id="investment_shares_${entity.accountId}">${entity.shares}</span>

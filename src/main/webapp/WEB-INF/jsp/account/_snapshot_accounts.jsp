@@ -18,6 +18,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title col-account-name"><i>Simple Assets</i></div>
+                    <div class="col col-cell col-title">Future Tithing</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
@@ -39,6 +40,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title col-account-name"><i>Gift Certificates</i></div>
+                    <div class="col col-cell col-title">Future Tithing</div>
                     <div class="col col-cell col-title">Shares</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
@@ -60,6 +62,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title col-account-name"><i>Receivables</i></div>
+                    <div class="col col-cell col-title">Future Tithing</div>
                     <div class="col col-cell col-title">Due Date</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
@@ -81,6 +84,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title col-account-name"><i>Shared Bill Receivables</i></div>
+                    <div class="col col-cell col-title">Future Tithing</div>
                     <div class="col col-cell col-title">Due Day</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">Number of Partners</div>
@@ -102,6 +106,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title col-account-name"><i>Investments</i></div>
+                    <div class="col col-cell col-title">Future Tithing</div>
                     <div class="col col-cell col-title">Shares</div>
                     <div class="col col-cell col-title">Amount Invested</div>
                     <div class="col col-cell col-title">Average Purchase Price</div>
