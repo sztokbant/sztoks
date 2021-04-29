@@ -25,10 +25,9 @@ public class InvestmentTransaction extends Transaction
             @NonNull final String currency,
             @NonNull final BigDecimal amount,
             @NonNull final String description,
-            final boolean isRecurring,
-            final boolean isResettable,
+            @NonNull final RecurrencePolicy recurrencePolicy,
             @NonNull final InvestmentCategory category) {
-        super(date, currency, amount, description, isRecurring, isResettable);
+        super(date, currency, amount, description, recurrencePolicy);
         this.category = category.name();
     }
 
@@ -37,10 +36,9 @@ public class InvestmentTransaction extends Transaction
         return new InvestmentTransaction(
                 date,
                 currency,
-                isResettable ? BigDecimal.ZERO : amount,
+                recurrencePolicy.equals(RecurrencePolicy.RESETTABLE) ? BigDecimal.ZERO : amount,
                 description,
-                isRecurring,
-                isResettable,
+                recurrencePolicy,
                 InvestmentCategory.valueOf(category));
     }
 

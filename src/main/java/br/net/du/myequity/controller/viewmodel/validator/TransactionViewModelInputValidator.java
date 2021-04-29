@@ -5,10 +5,9 @@ import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommon
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.CURRENCY_UNIT_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.DATE_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.DESCRIPTION_FIELD;
-import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.IS_RECURRING_FIELD;
-import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.IS_RESETTABLE_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.IS_TAX_DEDUCTIBLE_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.NOT_EMPTY_ERRORCODE;
+import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.RECURRENCE_POLICY_FIELD;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.getSnapshot;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.rejectIfInvalidCurrencyUnit;
 import static br.net.du.myequity.controller.viewmodel.validator.ValidationCommons.rejectIfInvalidTithingPercentage;
@@ -20,6 +19,7 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.transaction.DonationCategory;
 import br.net.du.myequity.model.transaction.IncomeCategory;
 import br.net.du.myequity.model.transaction.InvestmentCategory;
+import br.net.du.myequity.model.transaction.RecurrencePolicy;
 import br.net.du.myequity.model.transaction.TransactionType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -56,10 +56,10 @@ public class TransactionViewModelInputValidator implements SmartValidator {
             rejectIfUnsupportedCurrencyUnit(
                     snapshot, CurrencyUnit.of(transactionViewModelInput.getCurrencyUnit()), errors);
         }
+
         rejectIfInvalidAmount(transactionViewModelInput, errors);
         rejectIfInvalidDescription(transactionViewModelInput, errors);
-        rejectIfInvalidIsRecurring(transactionViewModelInput, errors);
-        rejectIfInvalidIsResettable(transactionViewModelInput, errors);
+        rejectIfInvalidRecurrencePolicy(transactionViewModelInput, errors);
 
         final TransactionType transactionType =
                 TransactionType.valueOf(transactionViewModelInput.getTypeName());
@@ -105,21 +105,16 @@ public class TransactionViewModelInputValidator implements SmartValidator {
         rejectIfEmptyOrWhitespace(errors, DESCRIPTION_FIELD, NOT_EMPTY_ERRORCODE);
     }
 
-    private void rejectIfInvalidIsRecurring(
+    private void rejectIfInvalidRecurrencePolicy(
             final TransactionViewModelInput transactionViewModelInput, final Errors errors) {
-        rejectIfEmptyOrWhitespace(errors, IS_RECURRING_FIELD, NOT_EMPTY_ERRORCODE);
+        rejectIfEmptyOrWhitespace(errors, RECURRENCE_POLICY_FIELD, NOT_EMPTY_ERRORCODE);
 
-        if (transactionViewModelInput.getIsRecurring() == null) {
-            errors.rejectValue(IS_RECURRING_FIELD, "Invalid.value");
-        }
-    }
-
-    private void rejectIfInvalidIsResettable(
-            final TransactionViewModelInput transactionViewModelInput, final Errors errors) {
-        rejectIfEmptyOrWhitespace(errors, IS_RESETTABLE_FIELD, NOT_EMPTY_ERRORCODE);
-
-        if (transactionViewModelInput.getIsResettable() == null) {
-            errors.rejectValue(IS_RESETTABLE_FIELD, "Invalid.value");
+        if (transactionViewModelInput.getRecurrencePolicy() == null) {
+            try {
+                RecurrencePolicy.valueOf(transactionViewModelInput.getRecurrencePolicy());
+            } catch (final Exception e) {
+                errors.rejectValue(RECURRENCE_POLICY_FIELD, "Invalid.value");
+            }
         }
     }
 

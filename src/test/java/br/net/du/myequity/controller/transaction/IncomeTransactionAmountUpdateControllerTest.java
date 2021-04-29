@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.net.du.myequity.model.account.TithingAccount;
 import br.net.du.myequity.model.transaction.IncomeCategory;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
+import br.net.du.myequity.model.transaction.RecurrencePolicy;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -46,8 +47,7 @@ class IncomeTransactionAmountUpdateControllerTest extends TransactionAjaxControl
                         CURRENCY_UNIT.getCode(),
                         CURRENT_TRANSACTION_AMOUNT,
                         "Salary",
-                        false,
-                        false,
+                        RecurrencePolicy.NONE,
                         TITHING_PERCENTAGE,
                         IncomeCategory.JOB);
         transaction.setId(TRANSACTION_ID);

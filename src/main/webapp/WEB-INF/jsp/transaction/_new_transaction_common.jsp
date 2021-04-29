@@ -52,7 +52,7 @@
     </div>
 </spring:bind>
 
-<spring:bind path="isRecurring">
+<spring:bind path="recurrencePolicy">
     <div class="row form-group">
         <div class="col col-form-label">
             Recurrence
@@ -60,37 +60,19 @@
         <div class="col">
             <div class="${status.error ? 'has-error' : ''}">
                 <div>
-                    <form:radiobutton path="isRecurring" value="true" id="recurringRadio"/>
+                    <form:radiobutton path="recurrencePolicy" value="NONE" id="notRecurringRadio"
+                                      checked="checked"/>
+                    <label for="notRecurringRadio">Not recurring</label>
+                </div>
+                <div>
+                    <form:radiobutton path="recurrencePolicy" value="RECURRING" id="recurringRadio"/>
                     <label for="recurringRadio">Recurring</label>
                 </div>
                 <div>
-                    <form:radiobutton path="isRecurring" value="false" id="nonrecurringRadio"
-                                      checked="checked"/>
-                    <label for="nonrecurringRadio">Nonrecurring</label>
+                    <form:radiobutton path="recurrencePolicy" value="RESETTABLE" id="resettableRadio"/>
+                    <label for="resettableRadio">Recurring + reset to zero every month</label>
                 </div>
-                <form:errors path="isRecurring"/>
-            </div>
-        </div>
-    </div>
-</spring:bind>
-
-<spring:bind path="isResettable">
-    <div class="row form-group">
-        <div class="col col-form-label">
-            Reset monthly?
-        </div>
-        <div class="col">
-            <div class="${status.error ? 'has-error' : ''}">
-                <div>
-                    <form:radiobutton path="isResettable" value="true" id="resettableRadio"/>
-                    <label for="resettableRadio">Yes</label>
-                </div>
-                <div>
-                    <form:radiobutton path="isResettable" value="false" id="nonResettableRadio"
-                                      checked="checked"/>
-                    <label for="nonResettableRadio">No</label>
-                </div>
-                <form:errors path="isResettable"/>
+                <form:errors path="recurrencePolicy"/>
             </div>
         </div>
     </div>

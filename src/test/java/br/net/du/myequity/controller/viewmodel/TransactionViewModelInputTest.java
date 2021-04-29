@@ -7,6 +7,7 @@ import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelI
 import br.net.du.myequity.model.transaction.DonationTransaction;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.InvestmentTransaction;
+import br.net.du.myequity.model.transaction.RecurrencePolicy;
 import br.net.du.myequity.model.transaction.Transaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -86,8 +87,8 @@ public class TransactionViewModelInputTest {
         transactionViewModelInput.setCurrencyUnit("USD");
         transactionViewModelInput.setAmount("108.00");
         transactionViewModelInput.setDescription("Transaction Description");
-        transactionViewModelInput.setIsRecurring(true);
-        transactionViewModelInput.setIsResettable(true);
+        transactionViewModelInput.setRecurrencePolicy(RecurrencePolicy.RESETTABLE.name());
+        ;
     }
 
     public static void populateIncomeTransactionAttributes(

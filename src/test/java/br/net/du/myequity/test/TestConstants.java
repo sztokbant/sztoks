@@ -11,6 +11,7 @@ import br.net.du.myequity.model.transaction.IncomeCategory;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.InvestmentCategory;
 import br.net.du.myequity.model.transaction.InvestmentTransaction;
+import br.net.du.myequity.model.transaction.RecurrencePolicy;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.joda.money.CurrencyUnit;
@@ -57,12 +58,12 @@ public class TestConstants {
     public static final String EMAIL_FIELD = "email";
     public static final String FIRST_NAME_FIELD = "firstName";
     public static final String CATEGORY_FIELD = "category";
-    public static final String IS_RECURRING_FIELD = "isRecurring";
     public static final String IS_TAX_DEDUCTIBLE_FIELD = "isTaxDeductible";
     public static final String LAST_NAME_FIELD = "lastName";
     public static final String NAME_FIELD = "name";
     public static final String PASSWORD_CONFIRM_FIELD = "passwordConfirm";
     public static final String PASSWORD_FIELD = "password";
+    public static final String RECURRENCE_POLICY = "recurrencePolicy";
     public static final String SUBTYPE_NAME_FIELD = "subtypeName";
     public static final String TITHING_PERCENTAGE_FIELD = "tithingPercentage";
 
@@ -113,8 +114,7 @@ public class TestConstants {
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("12000.00"),
                 "Salary",
-                true,
-                false,
+                RecurrencePolicy.RECURRING,
                 new BigDecimal("20.00"),
                 IncomeCategory.JOB);
     }
@@ -131,8 +131,7 @@ public class TestConstants {
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("1700.00"),
                 "Side Gig",
-                false,
-                false,
+                RecurrencePolicy.NONE,
                 new BigDecimal("20.00"),
                 IncomeCategory.SIDE_GIG);
     }
@@ -149,8 +148,7 @@ public class TestConstants {
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("108.00"),
                 "Charity",
-                true,
-                false,
+                RecurrencePolicy.RECURRING,
                 true,
                 DonationCategory.SPIRITUAL);
     }
@@ -167,8 +165,7 @@ public class TestConstants {
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("10.00"),
                 "Beggar",
-                false,
-                false,
+                RecurrencePolicy.NONE,
                 true,
                 DonationCategory.OTHER);
     }
@@ -185,8 +182,7 @@ public class TestConstants {
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("1500.00"),
                 "Retirement Fund",
-                true,
-                false,
+                RecurrencePolicy.RECURRING,
                 InvestmentCategory.LONG_TERM);
     }
 
@@ -202,8 +198,7 @@ public class TestConstants {
                 CurrencyUnit.USD.getCode(),
                 new BigDecimal("200.00"),
                 "Savings",
-                false,
-                false,
+                RecurrencePolicy.NONE,
                 InvestmentCategory.SHORT_TERM);
     }
 }

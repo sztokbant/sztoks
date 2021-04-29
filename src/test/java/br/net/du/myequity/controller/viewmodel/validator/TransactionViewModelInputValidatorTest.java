@@ -13,8 +13,8 @@ import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT_FIELD;
 import static br.net.du.myequity.test.TestConstants.DATE_FIELD;
 import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_MONTH;
 import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_YEAR;
-import static br.net.du.myequity.test.TestConstants.IS_RECURRING_FIELD;
 import static br.net.du.myequity.test.TestConstants.IS_TAX_DEDUCTIBLE_FIELD;
+import static br.net.du.myequity.test.TestConstants.RECURRENCE_POLICY;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE_FIELD;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -216,16 +216,16 @@ class TransactionViewModelInputValidatorTest {
     }
 
     @Test
-    public void validate_nullIsRecurring_hasErrors() {
+    public void validate_nullRecurrencePolicy_hasErrors() {
         // GIVEN
         populateDonationTransactionAttributes(transactionViewModelInput);
-        transactionViewModelInput.setIsRecurring(null);
+        transactionViewModelInput.setRecurrencePolicy(null);
 
         // WHEN
         validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(IS_RECURRING_FIELD));
+        assertTrue(errors.hasFieldErrors(RECURRENCE_POLICY));
     }
 
     @Test

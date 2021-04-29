@@ -6,6 +6,7 @@ import br.net.du.myequity.model.transaction.IncomeCategory;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.InvestmentCategory;
 import br.net.du.myequity.model.transaction.InvestmentTransaction;
+import br.net.du.myequity.model.transaction.RecurrencePolicy;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import java.math.BigDecimal;
@@ -20,8 +21,7 @@ public class TransactionViewModelInput {
     private String currencyUnit;
     private String amount;
     private String description;
-    private Boolean isRecurring;
-    private Boolean isResettable;
+    private String recurrencePolicy;
 
     // Categorizable only
     private String category;
@@ -35,6 +35,7 @@ public class TransactionViewModelInput {
     public Transaction toTransaction() {
         final TransactionType transactionType = TransactionType.valueOf(typeName);
         final LocalDate localDate = LocalDate.parse(date);
+        final RecurrencePolicy recurrencePolicy = RecurrencePolicy.valueOf(this.recurrencePolicy);
 
         if (transactionType.equals(TransactionType.INCOME)) {
             return new IncomeTransaction(
@@ -42,8 +43,7 @@ public class TransactionViewModelInput {
                     currencyUnit,
                     new BigDecimal(amount),
                     description,
-                    isRecurring,
-                    isResettable,
+                    recurrencePolicy,
                     new BigDecimal(tithingPercentage),
                     IncomeCategory.valueOf(category));
         } else if (transactionType.equals(TransactionType.INVESTMENT)) {
@@ -52,8 +52,7 @@ public class TransactionViewModelInput {
                     currencyUnit,
                     new BigDecimal(amount),
                     description,
-                    isRecurring,
-                    isResettable,
+                    recurrencePolicy,
                     InvestmentCategory.valueOf(category));
         } else if (transactionType.equals(TransactionType.DONATION)) {
             return new DonationTransaction(
@@ -61,8 +60,7 @@ public class TransactionViewModelInput {
                     currencyUnit,
                     new BigDecimal(amount),
                     description,
-                    isRecurring,
-                    isResettable,
+                    recurrencePolicy,
                     isTaxDeductible,
                     DonationCategory.valueOf(category));
         }

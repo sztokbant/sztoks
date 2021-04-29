@@ -27,9 +27,7 @@ $(document).ready(function() {
 
     <%@ include file="_remove_transaction.jsp" %>
 
-    <%@ include file="_recurring_checkbox.jsp" %>
-
-    <%@ include file="_resettable_checkbox.jsp" %>
+    <%@ include file="_recurrence_select.jsp" %>
 
     <div class="col col-cell col-account-name">
         ${entity.description}

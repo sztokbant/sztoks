@@ -29,8 +29,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
     private final String amount;
     private final String tithingPercentage;
     private final String description;
-    private final boolean isRecurring;
-    private final boolean isResettable;
+    private final String recurrencePolicy;
 
     // Categorizable only
     private final String category;
@@ -52,8 +51,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
         amount = other.getAmount();
         tithingPercentage = other.getTithingPercentage();
         description = other.getDescription();
-        isRecurring = other.isRecurring();
-        isResettable = other.isResettable();
+        recurrencePolicy = other.getRecurrencePolicy();
         category = other.getCategory();
 
         totalForTransactionType = other.getTotalForTransactionType();
@@ -87,8 +85,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
                         .amount(amount)
                         .tithingPercentage(tithingPercentage)
                         .description(transaction.getDescription())
-                        .isRecurring(transaction.isRecurring())
-                        .isResettable(transaction.isResettable());
+                        .recurrencePolicy(transaction.getRecurrencePolicy().getShortValue());
 
         final String category =
                 transaction instanceof Categorizable

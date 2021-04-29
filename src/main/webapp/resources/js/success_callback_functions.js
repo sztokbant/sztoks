@@ -144,3 +144,6 @@ function donationIsDeductibleUpdateSuccessCallback(data, result) {
 
 function transactionCategoryUpdateSuccessCallback(data, result) {
 }
+
+function transactionRecurrenceUpdateSuccessCallback(data, result) {
+}

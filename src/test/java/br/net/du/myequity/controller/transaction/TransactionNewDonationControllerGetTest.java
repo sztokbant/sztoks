@@ -76,7 +76,7 @@ class TransactionNewDonationControllerGetTest extends GetControllerTestBase {
         assertNull(transactionViewModelInput.getCurrencyUnit());
         assertNull(transactionViewModelInput.getAmount());
         assertNull(transactionViewModelInput.getDescription());
-        assertNull(transactionViewModelInput.getIsRecurring());
+        assertNull(transactionViewModelInput.getRecurrencePolicy());
 
         assertEquals(
                 TITHING_PERCENTAGE.toPlainString(),

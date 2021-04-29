@@ -12,6 +12,7 @@ import br.net.du.myequity.model.account.FutureTithingCapable;
 import br.net.du.myequity.model.account.TithingAccount;
 import br.net.du.myequity.model.transaction.DonationTransaction;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
+import br.net.du.myequity.model.transaction.RecurrencePolicy;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import br.net.du.myequity.model.util.UserUtils;
@@ -331,7 +332,11 @@ public class Snapshot implements Comparable<Snapshot> {
     public List<Transaction> getRecurringTransactions() {
         return ImmutableList.copyOf(
                 transactions.stream()
-                        .filter(Transaction::isRecurring)
+                        .filter(
+                                transaction ->
+                                        !transaction
+                                                .getRecurrencePolicy()
+                                                .equals(RecurrencePolicy.NONE))
                         .collect(Collectors.toCollection(() -> new ArrayList<>())));
     }
 

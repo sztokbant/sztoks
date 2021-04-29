@@ -95,7 +95,7 @@ public class ModelTestUtils {
                 && t1.getCurrency().equals(t2.getCurrency())
                 && t1.getAmount().equals(t2.getAmount())
                 && t1.getDescription().equals(t2.getDescription())
-                && t1.isRecurring() == t2.isRecurring();
+                && t1.getRecurrencePolicy().equals(t2.getRecurrencePolicy());
     }
 
     public static boolean equalsIgnoreIdAndDate(

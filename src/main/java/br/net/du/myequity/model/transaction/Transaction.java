@@ -58,12 +58,7 @@ public abstract class Transaction implements Comparable<Transaction> {
     @Column(nullable = false)
     @Getter
     @Setter
-    protected boolean isRecurring;
-
-    @Column(nullable = false)
-    @Getter
-    @Setter
-    protected boolean isResettable;
+    protected RecurrencePolicy recurrencePolicy;
 
     @Column protected String category;
 
@@ -72,14 +67,12 @@ public abstract class Transaction implements Comparable<Transaction> {
             @NonNull final String currency,
             @NonNull final BigDecimal amount,
             @NonNull final String description,
-            final boolean isRecurring,
-            final boolean isResettable) {
+            @NonNull final RecurrencePolicy recurrencePolicy) {
         this.date = date;
         this.currency = currency;
         this.amount = amount;
         this.description = description;
-        this.isRecurring = isRecurring;
-        this.isResettable = isResettable;
+        this.recurrencePolicy = recurrencePolicy;
     }
 
     public abstract Transaction copy();

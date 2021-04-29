@@ -20,7 +20,6 @@ public class ValidationCommons {
     public static final String FIRST_NAME_FIELD = "firstName";
     public static final String FUTURE_TITHING_POLICY_FIELD = "futureTithingPolicy";
     public static final String CATEGORY_FIELD = "category";
-    public static final String IS_RECURRING_FIELD = "isRecurring";
     public static final String IS_RESETTABLE_FIELD = "isResettable";
     public static final String IS_TAX_DEDUCTIBLE_FIELD = "isTaxDeductible";
     public static final String LAST_NAME_FIELD = "lastName";
@@ -28,6 +27,7 @@ public class ValidationCommons {
     public static final String NOT_EMPTY_ERRORCODE = "NotEmpty";
     public static final String PASSWORD_CONFIRM_FIELD = "passwordConfirm";
     public static final String PASSWORD_FIELD = "password";
+    public static final String RECURRENCE_POLICY_FIELD = "recurrencePolicy";
     public static final String SUBTYPE_NAME_FIELD = "subtypeName";
     public static final String TITHING_PERCENTAGE_FIELD = "tithingPercentage";
 
