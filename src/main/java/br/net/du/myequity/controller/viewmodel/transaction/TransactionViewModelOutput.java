@@ -6,6 +6,7 @@ import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
 import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
 import br.net.du.myequity.model.account.AccountType;
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import br.net.du.myequity.model.transaction.Categorizable;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.Transaction;
@@ -38,6 +39,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
     private final String totalForTransactionType;
     private final String taxDeductibleDonationsTotal;
     private final String tithingBalance;
+    private final String totalTithingBalance;
     private final String netWorth;
     private final String totalLiability;
 
@@ -57,6 +59,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
         totalForTransactionType = other.getTotalForTransactionType();
         taxDeductibleDonationsTotal = other.taxDeductibleDonationsTotal;
         tithingBalance = other.getTithingBalance();
+        totalTithingBalance = other.getTotalTithingBalance();
         netWorth = other.getNetWorth();
         totalLiability = other.getTotalLiability();
     }
@@ -107,6 +110,9 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
                 }
 
                 builder.tithingBalance(updateableTotals.getTithingBalance())
+                        .totalTithingBalance(
+                                updateableTotals.getTotalForAccountSubtype(
+                                        AccountSubtypeDisplayGroup.TITHING))
                         .totalLiability(updateableTotals.getTotalFor(AccountType.LIABILITY))
                         .netWorth(updateableTotals.getNetWorth());
             }

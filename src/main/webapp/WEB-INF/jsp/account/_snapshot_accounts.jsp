@@ -139,7 +139,7 @@
 
         <div class="row border-1px-bottom">
             <div class="col col-cell col-title short">&nbsp;</div>
-            <div class="col col-cell col-title col-account-name"><i>Simple Liabilities</i></div>
+            <div class="col col-cell col-title col-account-name"><i>Tithing</i></div>
             <div class="col col-cell col-title">&nbsp;</div>
             <div class="col col-cell col-title">&nbsp;</div>
             <div class="col col-cell col-title">&nbsp;</div>
@@ -150,6 +150,18 @@
 
         <%@ include file="_snapshot_tithing_line_item.jsp" %>
         <%@ include file="_snapshot_future_tithing_line_item.jsp" %>
+        <%@ include file="_snapshot_tithing_total.jsp" %>
+
+        <div class="row border-1px-bottom">
+            <div class="col col-cell col-title short">&nbsp;</div>
+            <div class="col col-cell col-title col-account-name"><i>Simple Liabilities</i></div>
+            <div class="col col-cell col-title">&nbsp;</div>
+            <div class="col col-cell col-title">&nbsp;</div>
+            <div class="col col-cell col-title">&nbsp;</div>
+            <div class="col col-cell col-title">&nbsp;</div>
+            <div class="col col-cell col-title">&nbsp;</div>
+            <div class="col col-cell col-title">Balance</div>
+        </div>
 
         <c:choose>
             <c:when test="${not empty snapshot.simpleLiabilityAccounts}">
@@ -158,8 +170,9 @@
                 </c:forEach>
             </c:when>
         </c:choose>
-        <%-- Tithing accounts are counted grouped along with SimpleLiability accounts --%>
-        <%@ include file="_snapshot_simple_liabilities_total.jsp" %>
+        <c:if test="${snapshot.simpleLiabilityAccounts.size() gt 1}">
+            <%@ include file="_snapshot_simple_liabilities_total.jsp" %>
+        </c:if>
 
         <c:choose>
             <c:when test="${not empty snapshot.payableAccounts}">

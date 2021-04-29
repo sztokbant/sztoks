@@ -1,10 +1,10 @@
 <div class="row border-1px-bottom" id="account_row_${entity.accountId}">
-    <div class="col col-cell short">
-        &nbsp;
-    </div>
-
     <div class="col col-cell col-account-name">
         TITHING
+    </div>
+
+    <div class="col col-cell short">
+        &nbsp;
     </div>
 
     <div class="col col-cell">

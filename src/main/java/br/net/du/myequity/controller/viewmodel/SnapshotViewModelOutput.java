@@ -80,6 +80,10 @@ public class SnapshotViewModelOutput {
     private final List<AccountViewModelOutput> investmentAccounts;
     private final InvestmentTotalsViewModelOutput investmentTotals;
 
+    private final String tithingBalance;
+    private final String futureTithingBalance;
+    private final String totalTithingBalance;
+
     private final List<AccountViewModelOutput> simpleLiabilityAccounts;
     private final String simpleLiabilitiesBalance;
 
@@ -88,9 +92,6 @@ public class SnapshotViewModelOutput {
 
     private final List<AccountViewModelOutput> creditCardAccounts;
     private final Map<String, CreditCardTotalsViewModelOutput> creditCardTotals;
-
-    private final String tithingBalance;
-    private final String futureTithingBalance;
 
     private final List<TransactionViewModelOutput> incomes;
     private final List<TransactionViewModelOutput> investments;
@@ -145,6 +146,9 @@ public class SnapshotViewModelOutput {
                                 updateableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.SHARED_BILL_RECEIVABLE))
                         .investmentTotals(InvestmentTotalsViewModelOutput.of(investmentTotals))
+                        .totalTithingBalance(
+                                updateableTotals.getTotalForAccountSubtype(
+                                        AccountSubtypeDisplayGroup.TITHING))
                         .liabilitiesTotal(updateableTotals.getTotalFor(AccountType.LIABILITY))
                         .simpleLiabilitiesBalance(
                                 updateableTotals.getTotalForAccountSubtype(

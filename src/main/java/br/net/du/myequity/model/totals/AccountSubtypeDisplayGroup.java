@@ -17,10 +17,8 @@ public enum AccountSubtypeDisplayGroup {
     GIFT_CERTIFICATE(new Class[] {GiftCertificateAccount.class}),
     RECEIVABLE(new Class[] {ReceivableAccount.class}),
     SHARED_BILL_RECEIVABLE(new Class[] {SharedBillReceivableAccount.class}),
-    SIMPLE_LIABILITY(
-            (new Class[] {
-                SimpleLiabilityAccount.class, TithingAccount.class, FutureTithingAccount.class
-            })),
+    TITHING((new Class[] {TithingAccount.class, FutureTithingAccount.class})),
+    SIMPLE_LIABILITY((new Class[] {SimpleLiabilityAccount.class})),
     PAYABLE(new Class[] {PayableAccount.class});
 
     private final Set<Class> classes = new HashSet<>();
@@ -52,9 +50,11 @@ public enum AccountSubtypeDisplayGroup {
             return SHARED_BILL_RECEIVABLE;
         }
 
-        if (clazz.equals(SimpleLiabilityAccount.class)
-                || clazz.equals(TithingAccount.class)
-                || clazz.equals(FutureTithingAccount.class)) {
+        if (clazz.equals(TithingAccount.class) || clazz.equals(FutureTithingAccount.class)) {
+            return TITHING;
+        }
+
+        if (clazz.equals(SimpleLiabilityAccount.class)) {
             return SIMPLE_LIABILITY;
         }
 

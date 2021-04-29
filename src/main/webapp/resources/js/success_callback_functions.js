@@ -125,6 +125,7 @@ function transactionAmountUpdateSuccessCallback(data, result) {
       $("#tax_deductible_donations_total").html(result.taxDeductibleDonationsTotal);
     }
     $("#tithing_balance").html(result.tithingBalance);
+    $("#snapshot_TITHING_balance").html(result.totalTithingBalance);
     $("#total_LIABILITY").html(result.totalLiability);
     $("#snapshot_net_worth").html(result.netWorth);
   }
@@ -134,6 +135,7 @@ function transactionTithingPercentageUpdateSuccessCallback(data, result) {
   $("#txn_tithing_percentage_" + data.entityId).html(result.tithingPercentage) + "%";
 
   $("#tithing_balance").html(result.tithingBalance);
+  $("#snapshot_TITHING_balance").html(result.totalTithingBalance);
   $("#total_LIABILITY").html(result.totalLiability);
   $("#snapshot_net_worth").html(result.netWorth);
 }
