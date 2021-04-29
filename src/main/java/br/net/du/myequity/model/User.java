@@ -52,7 +52,7 @@ public class User {
             mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     // this should match Snapshot::compareTo()
     @OrderBy("year DESC, month DESC")
     private final List<Snapshot> snapshots = new ArrayList<>();
