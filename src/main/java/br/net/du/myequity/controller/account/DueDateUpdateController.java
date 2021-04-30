@@ -36,7 +36,7 @@ public class DueDateUpdateController {
                             } else if (account instanceof ReceivableAccount) {
                                 return ReceivableAccountViewModelOutput.of(account, false);
                             } else {
-                                throw new IllegalStateException("Uknown account type");
+                                throw new IllegalStateException("Unknown account type");
                             }
                         };
 
