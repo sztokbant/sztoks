@@ -31,6 +31,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +40,7 @@ import java.util.SortedSet;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 import org.joda.money.CurrencyUnit;
 
 @Data
@@ -105,21 +107,11 @@ public class SnapshotViewModelOutput {
                 snapshotTotalsCalculator.getCreditCardsTotalByCurrency();
         final InvestmentsTotal investmentTotals = snapshotTotalsCalculator.getInvestmentsTotal();
 
-        Long previousId = null;
-        String previousName = null;
-        final Snapshot previous = snapshot.getPrevious();
-        if (previous != null) {
-            previousId = previous.getId();
-            previousName = getDisplayTitle(previous.getYear(), previous.getMonth());
-        }
+        final Long previousId = snapshot.getPreviousId();
+        final String previousDisplayTitle = getPreviousDisplayTitle(snapshot);
 
-        Long nextId = null;
-        String nextName = null;
-        final Snapshot next = snapshot.getNext();
-        if (next != null) {
-            nextId = next.getId();
-            nextName = getDisplayTitle(next.getYear(), next.getMonth());
-        }
+        final Long nextId = snapshot.getNextId();
+        final String nextDisplayTitle = getNextDisplayTitle(snapshot);
 
         final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot);
 
@@ -166,9 +158,9 @@ public class SnapshotViewModelOutput {
                         .taxDeductibleDonationTransactionsTotal(
                                 updateableTotals.getTaxDeductibleDonationsTotal())
                         .previousId(previousId)
-                        .previousName(previousName)
+                        .previousName(previousDisplayTitle)
                         .nextId(nextId)
-                        .nextName(nextName);
+                        .nextName(nextDisplayTitle);
 
         addAccounts(builder, snapshot);
         addTransactions(builder, snapshot);
@@ -178,6 +170,19 @@ public class SnapshotViewModelOutput {
 
     public static String getDisplayTitle(final int year, final int month) {
         return String.format("%04d-%02d", year, month);
+    }
+
+    private static String getPreviousDisplayTitle(@NonNull final Snapshot snapshot) {
+        final LocalDate previousSnapshotPeriod =
+                LocalDate.of(snapshot.getYear(), snapshot.getMonth(), 15).minusMonths(1);
+        return getDisplayTitle(
+                previousSnapshotPeriod.getYear(), previousSnapshotPeriod.getMonthValue());
+    }
+
+    private static String getNextDisplayTitle(@NonNull final Snapshot snapshot) {
+        final LocalDate nextSnapshotPeriod =
+                LocalDate.of(snapshot.getYear(), snapshot.getMonth(), 15).plusMonths(1);
+        return getDisplayTitle(nextSnapshotPeriod.getYear(), nextSnapshotPeriod.getMonthValue());
     }
 
     private static Map<String, String> toStringStringMap(

@@ -120,14 +120,20 @@ public class Snapshot implements Comparable<Snapshot> {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "previous_id", nullable = true)
     @Getter
-    @Setter
     private Snapshot previous;
+
+    @Column(name = "previous_id", insertable = false, updatable = false)
+    @Getter
+    private Long previousId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "next_id", nullable = true)
     @Getter
-    @Setter
     private Snapshot next;
+
+    @Column(name = "next_id", insertable = false, updatable = false)
+    @Getter
+    private Long nextId;
 
     @OneToMany(
             mappedBy = "snapshot",
@@ -223,6 +229,16 @@ public class Snapshot implements Comparable<Snapshot> {
 
                             addTransaction(transactionCopy);
                         });
+    }
+
+    public void setPrevious(final Snapshot previous) {
+        this.previous = previous;
+        previousId = previous == null ? null : previous.getId();
+    }
+
+    public void setNext(final Snapshot next) {
+        this.next = next;
+        nextId = next == null ? null : next.getId();
     }
 
     public SortedSet<Account> getAccounts() {
