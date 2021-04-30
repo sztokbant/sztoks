@@ -45,7 +45,7 @@ public class CategoryUpdateController {
                                 ((DonationTransaction) transaction).setCategory(category);
                             }
 
-                            return TransactionViewModelOutput.of(transaction, true);
+                            return TransactionViewModelOutput.of(transaction, false);
                         };
 
         return transactionUpdater.updateField(
