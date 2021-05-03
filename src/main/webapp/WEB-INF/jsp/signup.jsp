@@ -77,8 +77,8 @@
             </div>
 
             <div class="row form-group">
-                <div class="col col-form-label">
-                    <label for="tithingPercentage">Default Tithing Percentage</label>
+                <div class="col" style="max-width: 40%;">
+                    <label for="tithingPercentage"><span><b>Default Tithing Percentage</b></span><br/><i>E.g.: "10.00" for 10%</i></label>
                 </div>
                 <div class="col">
                     <spring:bind path="tithingPercentage">
