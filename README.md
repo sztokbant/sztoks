@@ -6,7 +6,7 @@ Many financially successful people emphasize the importance of regularly *saving
 
 **Development**
 
-Sztoks was built using Spring Boot and Java technology and a web front-end.
+Sztoks was built using Spring Boot and Java technology with a web front-end.
 
 To run from IntelliJ IDEA, create a Gradle run configuration, set *Tasks* as `:bootRun`, and set the following "Environment variables" in order to point to your MySQL server settings, e.g.:
 
