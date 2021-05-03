@@ -57,6 +57,10 @@
                                 <label for="businessRadio">Business</label>
                             </div>
                             <div>
+                                <form:radiobutton path="category" value="CAPITAL_GAIN" id="capitalGainRadio"/>
+                                <label for="capitalGainRadio">Capital Gain</label>
+                            </div>
+                            <div>
                                 <form:radiobutton path="category" value="SIDE_GIG" id="sideGigRadio"/>
                                 <label for="sideGigRadio">Side Gig</label>
                             </div>

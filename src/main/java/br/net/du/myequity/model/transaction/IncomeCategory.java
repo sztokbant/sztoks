@@ -6,5 +6,6 @@ public enum IncomeCategory {
     SIDE_GIG,
     GIFT,
     PROMO,
-    OTHER
+    OTHER,
+    CAPITAL_GAIN
 }
