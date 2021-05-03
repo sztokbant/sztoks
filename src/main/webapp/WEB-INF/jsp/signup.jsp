@@ -122,6 +122,12 @@
                 </div>
             </div>
 
+            <div class="row form-group">
+                <div class="col">
+                    By signing up you confirm that you understand that <b>Sztoks</b> is provided for educational purposes only with <b>no guarantees</b>. Use it at your own risk.
+                </div>
+            </div>
+
             <button class="btn btn-lg btn-primary btn-block" type="submit"
                     onClick="this.form.submit(); this.disabled=true; this.innerText='Signing up...';">Sign up</button>
             <div class="text-center">Already have an account? <a href="${contextPath}/login">Log in</a>.</div>
