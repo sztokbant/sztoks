@@ -5,7 +5,7 @@
     <c:forEach var="entry" items="${snapshot.currencyConversionRates}">
         <tr>
             <td class="align-left-p7 valign-top"><b>${entry.key}</b></td>
-            <td class="align-right-p7 valign-top">${entry.value}</td>
+            <td class="align-right-p7 valign-top">${snapshot.oneBaseCurrency} = ${entry.value}</td>
         </tr>
     </c:forEach>
 </table>

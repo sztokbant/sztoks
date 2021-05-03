@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Map;
+import lombok.NonNull;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.joda.money.format.MoneyAmountStyle;
@@ -44,7 +45,8 @@ public class MoneyFormatUtils {
                     CurrencyUnit.EUR,
                     EUR_FORMATTER);
 
-    public static String format(final CurrencyUnit currencyUnit, final BigDecimal amount) {
+    public static String format(
+            @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal amount) {
         final MoneyFormatter moneyFormatter =
                 MONEY_FORMATTERS.containsKey(currencyUnit)
                         ? MONEY_FORMATTERS.get(currencyUnit)

@@ -52,6 +52,7 @@ public class SnapshotViewModelOutput {
 
     private final String netWorth;
     private final Map<String, String> currencyConversionRates;
+    private final String oneBaseCurrency;
 
     private final String assetsTotal;
     private final String liabilitiesTotal;
@@ -124,6 +125,7 @@ public class SnapshotViewModelOutput {
                         .netWorth(updateableTotals.getNetWorth())
                         .currencyConversionRates(
                                 toStringStringMap(snapshot.getCurrencyConversionRates()))
+                        .oneBaseCurrency(format(snapshot.getBaseCurrencyUnit(), BigDecimal.ONE))
                         .assetsTotal(updateableTotals.getTotalFor(AccountType.ASSET))
                         .simpleAssetsBalance(
                                 updateableTotals.getTotalForAccountSubtype(
