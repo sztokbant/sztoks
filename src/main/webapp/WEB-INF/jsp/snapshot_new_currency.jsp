@@ -45,8 +45,8 @@ $(document).ready(function() {
             </div>
 
             <div class="row form-group">
-                <div class="col">
-                    <label for="conversionRate"><span class="col-form-label">Conversion Rate</span><br/><i>1 ${baseCurrency} to <span id="selected_currency"></span></i></label>
+                <div class="col" style="max-width: 40%;">
+                    <label for="conversionRate"><b>Conversion Rate</b><br/><i>1 ${baseCurrency} to <span id="selected_currency"></span></i></label>
                 </div>
                 <div class="col">
                     <spring:bind path="conversionRate">
