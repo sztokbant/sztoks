@@ -45,7 +45,7 @@
                     <div class="col col-cell col-title col-account-name">Description</div>
                     <div class="col col-cell col-title">Date</div>
                     <div class="col col-cell col-title">Category</div>
-                    <div class="col col-cell col-title">Tithing Percentage</div>
+                    <div class="col col-cell col-title">Tithing %</div>
                     <div class="col col-cell col-title">Amount</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.incomes}">
