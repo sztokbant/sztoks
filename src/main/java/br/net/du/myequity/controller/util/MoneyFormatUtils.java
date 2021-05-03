@@ -23,6 +23,12 @@ public class MoneyFormatUtils {
                     .appendAmount(MoneyAmountStyle.ASCII_DECIMAL_POINT_GROUP3_COMMA)
                     .toFormatter();
 
+    private static final MoneyFormatter EUR_FORMATTER =
+            new MoneyFormatterBuilder()
+                    .appendLiteral("€")
+                    .appendAmount(MoneyAmountStyle.ASCII_DECIMAL_POINT_GROUP3_COMMA)
+                    .toFormatter();
+
     private static final MoneyFormatter DEFAULT_FORMATTER =
             new MoneyFormatterBuilder()
                     .appendCurrencySymbolLocalized()
@@ -31,7 +37,12 @@ public class MoneyFormatUtils {
 
     private static final Map<CurrencyUnit, MoneyFormatter> MONEY_FORMATTERS =
             ImmutableMap.of(
-                    CurrencyUnit.of("BRL"), BRL_FORMATTER, CurrencyUnit.of("CAD"), CAD_FORMATTER);
+                    CurrencyUnit.of("BRL"),
+                    BRL_FORMATTER,
+                    CurrencyUnit.CAD,
+                    CAD_FORMATTER,
+                    CurrencyUnit.EUR,
+                    EUR_FORMATTER);
 
     public static String format(final CurrencyUnit currencyUnit, final BigDecimal amount) {
         final MoneyFormatter moneyFormatter =
