@@ -34,7 +34,7 @@
             <div>
                 Many financially successful people emphasize the importance of regularly saving a
                 portion of one's income, as well as donating to charitable causes. <b>Sztoks</b> has built-in
-                muchanisms that allow one to easily <i>"set the sail"</i> and visualize their progress on saving
+                mechanisms that allow one to easily <i>"set the sail"</i> and visualize their progress on saving
                 and on givivng to charity. Knowing where one stands is key to getting where one wants
                 to get, in finances or anything else.
             </div>
