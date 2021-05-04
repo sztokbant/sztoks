@@ -22,9 +22,13 @@ function removeAccountFromSnapshotSuccessCallback(data, result) {
 
   if (result.accountSubtype != null) {
     updateTotalForAccountSubType(result);
-  } if (result.investmentTotals != null) {
+  }
+
+  if (result.investmentTotals != null) {
     updateSnapshotInvestmentTotals(result);
-  } else if (result.creditCardTotalsForCurrencyUnit != null) {
+  }
+
+  if (result.creditCardTotalsForCurrencyUnit != null) {
     updateSnapshotCreditCardTotals(result);
   }
 
