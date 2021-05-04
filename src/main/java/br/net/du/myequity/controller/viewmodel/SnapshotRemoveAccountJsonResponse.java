@@ -18,6 +18,10 @@ public class SnapshotRemoveAccountJsonResponse {
     private String accountSubtype;
     private String totalForAccountSubtype;
 
+    private String futureTithingBalance;
+    private String totalTithingBalance;
+    private String totalLiability;
+
     private InvestmentTotalsViewModelOutput investmentTotals;
     private CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit;
 }

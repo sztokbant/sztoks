@@ -28,6 +28,6 @@
     </div>
 
     <div class="col col-cell align-right">
-        <span id="tithing_balance">${snapshot.futureTithingBalance}</span>
+        <span id="future_tithing_balance">${snapshot.futureTithingBalance}</span>
     </div>
 </div>

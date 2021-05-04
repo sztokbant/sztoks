@@ -63,4 +63,9 @@ public class UpdateableTotals {
     public String getTithingBalance() {
         return format(snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getTithingBalance()));
     }
+
+    public String getFutureTithingBalance() {
+        return format(
+                snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getFutureTithingBalance()));
+    }
 }

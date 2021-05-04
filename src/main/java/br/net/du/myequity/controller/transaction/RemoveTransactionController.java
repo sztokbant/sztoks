@@ -9,6 +9,7 @@ import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import br.net.du.myequity.service.AccountService;
@@ -92,6 +93,9 @@ public class RemoveTransactionController {
             }
 
             builder.tithingBalance(updateableTotals.getTithingBalance())
+                    .totalTithingBalance(
+                            updateableTotals.getTotalForAccountSubtype(
+                                    AccountSubtypeDisplayGroup.TITHING))
                     .totalLiability(updateableTotals.getTotalFor(AccountType.LIABILITY))
                     .netWorth(updateableTotals.getNetWorth());
         }

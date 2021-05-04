@@ -14,10 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
     <script src="${contextPath}/resources/js/ajax_field_update.js"></script>
-    <script src="${contextPath}/resources/js/update_snapshot_totals.js"></script>
     <script src="${contextPath}/resources/js/success_callback_functions.js"></script>
-    <script src="${contextPath}/resources/js/remove_account_from_snapshot.js"></script>
-    <script src="${contextPath}/resources/js/remove_transaction.js"></script>
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/snapshot.css" rel="stylesheet">
 </head>

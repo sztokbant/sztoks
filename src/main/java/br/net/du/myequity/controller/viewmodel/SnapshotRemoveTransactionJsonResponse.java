@@ -13,6 +13,7 @@ public class SnapshotRemoveTransactionJsonResponse {
     private String totalForTransactionType;
     private String taxDeductibleDonationsTotal;
     private String tithingBalance;
+    private String totalTithingBalance;
     private String netWorth;
     private String totalLiability;
 }
