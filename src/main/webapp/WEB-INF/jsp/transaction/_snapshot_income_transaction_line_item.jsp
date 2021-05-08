@@ -55,7 +55,7 @@ $(document).ready(function() {
     <div class="col col-cell align-right editable-income">
         <form id="form_txn_tithing_percentage_${entity.id}">
             <span id="txn_tithing_percentage_${entity.id}">${entity.tithingPercentage}</span>
-            <span><input id="new_txn_tithing_percentage_${entity.id}" name="amount" type="number" min="0"
+            <span><input id="new_txn_tithing_percentage_${entity.id}" name="amount" type="number" min="0" max="100"
                          step="0.01" style="display: none;"/></span>
         </form>
     </div>

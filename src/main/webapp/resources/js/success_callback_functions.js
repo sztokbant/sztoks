@@ -1,3 +1,12 @@
+// SNAPSHOT
+
+function defaultTithingPercentageSuccessCallback(data, result) {
+  $("#default_tithing_percentage").html(result.defaultTithingPercentage);
+  updateTotalForAccountType(result);
+  updateTithingBalance(result);
+  updateNetWorth(result);
+}
+
 // ACCOUNT (ALL)
 
 function accountRenameUpdateSuccessCallback(data, result) {

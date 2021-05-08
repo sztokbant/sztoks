@@ -33,7 +33,7 @@
                     </div>
                     <div class="col">
                         <div class="${status.error ? 'has-error' : ''}">
-                            <form:input type="number" min="0" step="0.01" id="tithingPercentage" path="tithingPercentage" class="form-control" placeholder="Tithing Percentage"
+                            <form:input type="number" min="0" max="100" step="0.01" id="tithingPercentage" path="tithingPercentage" class="form-control" placeholder="Tithing Percentage"
                                         autofocus="true"></form:input>
                             <form:errors path="tithingPercentage"/>
                         </div>

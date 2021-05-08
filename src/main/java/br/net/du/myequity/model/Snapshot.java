@@ -1,6 +1,7 @@
 package br.net.du.myequity.model;
 
 import static br.net.du.myequity.model.util.ModelConstants.DIVISION_SCALE;
+import static br.net.du.myequity.model.util.ModelConstants.ONE_HUNDRED;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
@@ -90,7 +91,6 @@ public class Snapshot implements Comparable<Snapshot> {
 
     @Column(nullable = false)
     @Getter
-    @Setter
     private BigDecimal defaultTithingPercentage;
 
     @Column(nullable = true)
@@ -193,6 +193,35 @@ public class Snapshot implements Comparable<Snapshot> {
         consolidateTithingAccountsToBaseCurrency(baseCurrencyUnit, accounts);
         addNonTithingAccounts(accounts);
         addTransactionAccounts(year, month, transactions);
+    }
+
+    public void setDefaultTithingPercentage(@NonNull final BigDecimal newDefaultTithingPercentage) {
+        if (newDefaultTithingPercentage.compareTo(BigDecimal.ZERO) < 0
+                || newDefaultTithingPercentage.compareTo(ONE_HUNDRED) > 0) {
+            throw new IllegalArgumentException("Invalid tithing percentage");
+        }
+
+        if (newDefaultTithingPercentage.compareTo(defaultTithingPercentage) == 0) {
+            return;
+        }
+
+        final BigDecimal currentFutureTithing = computeFutureTithingTotal();
+
+        defaultTithingPercentage = newDefaultTithingPercentage;
+
+        final BigDecimal newFutureTithing = computeFutureTithingTotal();
+
+        final BigDecimal futureTithingDiff = newFutureTithing.subtract(currentFutureTithing);
+
+        updateNetWorth(AccountType.LIABILITY, getBaseCurrencyUnit(), futureTithingDiff);
+    }
+
+    private BigDecimal computeFutureTithingTotal() {
+        return accounts.stream()
+                .filter(account -> (account instanceof FutureTithingAccount))
+                .map(account -> toBaseCurrency(account.getCurrencyUnit(), account.getBalance()))
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
     }
 
     private void consolidateTithingAccountsToBaseCurrency(
@@ -613,11 +642,13 @@ public class Snapshot implements Comparable<Snapshot> {
                 assetsTotal = computeTotalFor(AccountType.ASSET);
             }
             return assetsTotal;
-        } else {
+        } else if (accountType.equals(AccountType.LIABILITY)) {
             if (liabilitiesTotal == null) {
                 liabilitiesTotal = computeTotalFor(AccountType.LIABILITY);
             }
             return liabilitiesTotal;
+        } else {
+            throw new IllegalArgumentException("Unknown account type");
         }
     }
 

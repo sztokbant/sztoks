@@ -72,7 +72,7 @@ public class SimpleAssetAccount extends Account implements BalanceUpdateable, Fu
 
     @Override
     public void setFutureTithingPolicy(@NonNull final FutureTithingPolicy futureTithingPolicy) {
-        if (this.futureTithingPolicy.equals(futureTithingPolicy)) {
+        if (getFutureTithingPolicy().equals(futureTithingPolicy)) {
             return;
         }
 

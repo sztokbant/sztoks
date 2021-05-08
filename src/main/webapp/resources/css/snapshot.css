@@ -50,6 +50,15 @@
     font-size: 12px;
 }
 
+.center-w75pct {
+    width: 75%;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    text-align: center;
+    font-size: 12px;
+}
+
 .mid-col {
     max-width: 420px;
 }
