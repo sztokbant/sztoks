@@ -43,7 +43,8 @@
                     </div>
                 </div>
 
-                <div class="col">
+                <div class="col col-currencies">
+                    <%@ include file="_snapshot_default_tithing_percentage.jsp" %>
                 </div>
             </div>
         </div>

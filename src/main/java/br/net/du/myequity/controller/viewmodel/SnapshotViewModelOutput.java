@@ -1,5 +1,6 @@
 package br.net.du.myequity.controller.viewmodel;
 
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getAccountViewModelOutputFactoryMethod;
 import static br.net.du.myequity.controller.util.ViewModelOutputUtils.getTransactionViewModelOutputFactoryMethod;
@@ -49,6 +50,8 @@ public class SnapshotViewModelOutput {
     private final Long id;
     private final String name;
     private final boolean newSnapshotAllowed;
+
+    private final String defaultTithingPercentage;
 
     private final String netWorth;
     private final Map<String, String> currencyConversionRates;
@@ -122,6 +125,8 @@ public class SnapshotViewModelOutput {
                         .name(getDisplayTitle(snapshot.getYear(), snapshot.getMonth()))
                         .newSnapshotAllowed(
                                 SnapshotUtils.computeNextSnapshotPeriod(snapshot).isPresent())
+                        .defaultTithingPercentage(
+                                formatAsPercentage(snapshot.getDefaultTithingPercentage()))
                         .netWorth(updateableTotals.getNetWorth())
                         .currencyConversionRates(
                                 toStringStringMap(snapshot.getCurrencyConversionRates()))
