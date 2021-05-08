@@ -27,6 +27,5 @@ $(document).ready(function() {
                 </c:choose>
             </c:forEach>
         </select>
-        <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
 </div>

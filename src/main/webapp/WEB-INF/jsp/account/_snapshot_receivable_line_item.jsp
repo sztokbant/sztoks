@@ -36,7 +36,6 @@ $(document).ready(function() {
             <span id="receivable_due_date_${entity.accountId}">${entity.dueDate}</span>
             <span><input id="new_receivable_due_date_${entity.accountId}" name="amount" type="date"
                          style="display: none;"/></span>
-            <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
 
@@ -60,7 +59,6 @@ $(document).ready(function() {
         <form id="form_account_balance_${entity.accountId}">
             <span id="account_balance_${entity.accountId}">${entity.balance}</span>
             <span><input id="new_account_balance_${entity.accountId}" name="amount" type="number" step="0.01" style="display: none;"/></span>
-            <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
 </div>

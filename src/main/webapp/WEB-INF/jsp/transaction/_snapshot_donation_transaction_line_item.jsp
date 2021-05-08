@@ -51,7 +51,6 @@ $(document).ready(function() {
                     </c:choose>
                 </c:forEach>
             </select>
-            <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
 
@@ -64,7 +63,6 @@ $(document).ready(function() {
             <span id="txn_amount_${entity.id}">${entity.amount}</span>
             <span><input id="new_txn_amount_${entity.id}" name="amount" type="number"
                          step="0.01" style="display: none;"/></span>
-            <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
 </div>

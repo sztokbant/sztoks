@@ -44,7 +44,6 @@ $(document).ready(function() {
             <span id="investment_shares_${entity.accountId}">${entity.shares}</span>
             <span><input id="new_investment_shares_${entity.accountId}" name="amount" type="number" min="0"
                          step="0.00000001" style="display: none;"/></span>
-            <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
 
@@ -54,7 +53,6 @@ $(document).ready(function() {
             <span><input id="new_investment_amount_invested_${entity.accountId}" name="amount" type="number"
                          min="0"
                          step="0.01" style="display: none;"/></span>
-            <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
 
@@ -69,7 +67,6 @@ $(document).ready(function() {
             <span><input id="new_investment_current_share_value_${entity.accountId}" name="amount" type="number"
                          min="0"
                          step="0.01" style="display: none;"/></span>
-            <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
 

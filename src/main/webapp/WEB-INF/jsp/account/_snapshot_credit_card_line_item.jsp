@@ -41,7 +41,6 @@ $(document).ready(function() {
             <span id="credit_card_total_credit_${entity.accountId}">${entity.totalCredit}</span>
             <span><input id="new_credit_card_total_credit_${entity.accountId}" name="amount" type="number" min="0"
                          step="0.01" style="display: none;"/></span>
-            <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
 
@@ -50,7 +49,6 @@ $(document).ready(function() {
             <span id="credit_card_available_credit_${entity.accountId}">${entity.availableCredit}</span>
             <span><input id="new_credit_card_available_credit_${entity.accountId}" name="amount" type="number" min="0"
                          step="0.01" style="display: none;"/></span>
-            <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
 
@@ -72,7 +70,6 @@ $(document).ready(function() {
         <form id="form_credit_card_statement_${entity.accountId}">
             <span id="credit_card_statement_${entity.accountId}">${entity.statement}</span>
             <span><input id="new_credit_card_statement_${entity.accountId}" name="amount" type="number" step="0.01" style="display: none;"/></span>
-            <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
 

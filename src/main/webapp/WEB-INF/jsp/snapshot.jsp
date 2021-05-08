@@ -28,6 +28,8 @@
     </c:otherwise>
 </c:choose>
 
+<input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
 <%@ include file="_header.jsp" %>
 
 <div class="full-width">
