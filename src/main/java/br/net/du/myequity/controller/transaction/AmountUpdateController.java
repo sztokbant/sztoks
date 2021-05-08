@@ -17,18 +17,17 @@ public class AmountUpdateController {
     @Autowired private TransactionUpdater transactionUpdater;
 
     @PostMapping("/transaction/updateAmount")
-    public TransactionViewModelOutput post(
+    public Object post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Transaction, TransactionViewModelOutput>
-                updateAmountFunction =
-                        (jsonRequest, transaction) -> {
-                            final BigDecimal newAmount = new BigDecimal(jsonRequest.getNewValue());
+        final BiFunction<ValueUpdateJsonRequest, Transaction, Object> updateAmountFunction =
+                (jsonRequest, transaction) -> {
+                    final BigDecimal newAmount = new BigDecimal(jsonRequest.getNewValue());
 
-                            transaction.setAmount(newAmount);
+                    transaction.setAmount(newAmount);
 
-                            return TransactionViewModelOutput.of(transaction, true);
-                        };
+                    return TransactionViewModelOutput.of(transaction, true);
+                };
 
         return transactionUpdater.updateField(
                 model, valueUpdateJsonRequest, Transaction.class, updateAmountFunction, true);

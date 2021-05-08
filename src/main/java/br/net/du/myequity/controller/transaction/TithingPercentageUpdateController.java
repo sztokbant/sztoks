@@ -18,26 +18,24 @@ public class TithingPercentageUpdateController {
     @Autowired private TransactionUpdater transactionUpdater;
 
     @PostMapping("/transaction/updateTithingPercentage")
-    public TransactionViewModelOutput post(
+    public Object post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Transaction, TransactionViewModelOutput>
-                updateAmountFunction =
-                        (jsonRequest, transaction) -> {
-                            if (!(transaction instanceof IncomeTransaction)) {
-                                throw new IllegalArgumentException(
-                                        transaction.getClass().getSimpleName()
-                                                + " does not have attribute tithingPercentage");
-                            }
+        final BiFunction<ValueUpdateJsonRequest, Transaction, Object> updateAmountFunction =
+                (jsonRequest, transaction) -> {
+                    if (!(transaction instanceof IncomeTransaction)) {
+                        throw new IllegalArgumentException(
+                                transaction.getClass().getSimpleName()
+                                        + " does not have attribute tithingPercentage");
+                    }
 
-                            final BigDecimal newTithingPercentage =
-                                    new BigDecimal(jsonRequest.getNewValue());
+                    final BigDecimal newTithingPercentage =
+                            new BigDecimal(jsonRequest.getNewValue());
 
-                            ((IncomeTransaction) transaction)
-                                    .setTithingPercentage(newTithingPercentage);
+                    ((IncomeTransaction) transaction).setTithingPercentage(newTithingPercentage);
 
-                            return TransactionViewModelOutput.of(transaction, true);
-                        };
+                    return TransactionViewModelOutput.of(transaction, true);
+                };
 
         return transactionUpdater.updateField(
                 model, valueUpdateJsonRequest, Transaction.class, updateAmountFunction, true);

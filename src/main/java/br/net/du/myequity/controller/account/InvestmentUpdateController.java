@@ -1,7 +1,6 @@
 package br.net.du.myequity.controller.account;
 
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
-import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.GiftCertificateAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.InvestmentAccountViewModelOutput;
 import br.net.du.myequity.model.account.Account;
@@ -22,25 +21,24 @@ public class InvestmentUpdateController {
     @Autowired AccountUpdater accountUpdater;
 
     @PostMapping("/snapshot/updateAccountShares")
-    public AccountViewModelOutput updateAccountShares(
+    public Object updateAccountShares(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
-                updateAccountSharesFunction =
-                        (jsonRequest, account) -> {
-                            final SharesUpdateable sharesUpdateable = (SharesUpdateable) account;
+        final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAccountSharesFunction =
+                (jsonRequest, account) -> {
+                    final SharesUpdateable sharesUpdateable = (SharesUpdateable) account;
 
-                            final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            sharesUpdateable.setShares(newValue);
+                    final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
+                    sharesUpdateable.setShares(newValue);
 
-                            if (account instanceof InvestmentAccount) {
-                                return InvestmentAccountViewModelOutput.of(account, true);
-                            } else if (account instanceof GiftCertificateAccount) {
-                                return GiftCertificateAccountViewModelOutput.of(account, true);
-                            } else {
-                                throw new IllegalStateException("Unknown account type");
-                            }
-                        };
+                    if (account instanceof InvestmentAccount) {
+                        return InvestmentAccountViewModelOutput.of(account, true);
+                    } else if (account instanceof GiftCertificateAccount) {
+                        return GiftCertificateAccountViewModelOutput.of(account, true);
+                    } else {
+                        throw new IllegalStateException("Unknown account type");
+                    }
+                };
 
         return accountUpdater.updateField(
                 model,
@@ -51,10 +49,10 @@ public class InvestmentUpdateController {
     }
 
     @PostMapping("/snapshot/updateInvestmentAmountInvested")
-    public AccountViewModelOutput updateInvestmentAmountInvested(
+    public Object updateInvestmentAmountInvested(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
+        final BiFunction<ValueUpdateJsonRequest, Account, Object>
                 updateInvestmentAmountInvestedFunction =
                         (jsonRequest, account) -> {
                             final InvestmentAccount investmentAccount = (InvestmentAccount) account;
@@ -74,9 +72,9 @@ public class InvestmentUpdateController {
     }
 
     @PostMapping("/snapshot/updateAccountCurrentShareValue")
-    public AccountViewModelOutput updateAccountCurrentShareValue(
+    public Object updateAccountCurrentShareValue(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
+        final BiFunction<ValueUpdateJsonRequest, Account, Object>
                 updateAccountCurrentShareValueFunction =
                         (jsonRequest, account) -> {
                             final SharesUpdateable sharesUpdateable = (SharesUpdateable) account;

@@ -1,7 +1,6 @@
 package br.net.du.myequity.controller.account;
 
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
-import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.PayableAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.ReceivableAccountViewModelOutput;
 import br.net.du.myequity.model.account.Account;
@@ -22,23 +21,22 @@ public class DueDateUpdateController {
     @Autowired AccountUpdater accountUpdater;
 
     @PostMapping("/snapshot/updateAccountDueDate")
-    public AccountViewModelOutput post(
+    public Object post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
-                updateDueDateFunction =
-                        (jsonRequest, account) -> {
-                            final LocalDate dueDate = LocalDate.parse(jsonRequest.getNewValue());
-                            ((DueDateUpdateable) account).setDueDate(dueDate);
+        final BiFunction<ValueUpdateJsonRequest, Account, Object> updateDueDateFunction =
+                (jsonRequest, account) -> {
+                    final LocalDate dueDate = LocalDate.parse(jsonRequest.getNewValue());
+                    ((DueDateUpdateable) account).setDueDate(dueDate);
 
-                            if (account instanceof PayableAccount) {
-                                return PayableAccountViewModelOutput.of(account, false);
-                            } else if (account instanceof ReceivableAccount) {
-                                return ReceivableAccountViewModelOutput.of(account, false);
-                            } else {
-                                throw new IllegalStateException("Unknown account type");
-                            }
-                        };
+                    if (account instanceof PayableAccount) {
+                        return PayableAccountViewModelOutput.of(account, false);
+                    } else if (account instanceof ReceivableAccount) {
+                        return ReceivableAccountViewModelOutput.of(account, false);
+                    } else {
+                        throw new IllegalStateException("Unknown account type");
+                    }
+                };
 
         return accountUpdater.updateField(
                 model,

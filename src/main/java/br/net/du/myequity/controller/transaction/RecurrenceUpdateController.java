@@ -17,10 +17,10 @@ public class RecurrenceUpdateController {
     @Autowired private TransactionUpdater transactionUpdater;
 
     @PostMapping("/transaction/updateRecurrencePolicy")
-    public TransactionViewModelOutput post(
+    public Object post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Transaction, TransactionViewModelOutput>
+        final BiFunction<ValueUpdateJsonRequest, Transaction, Object>
                 updateRecurrencePolicyFunction =
                         (jsonRequest, transaction) -> {
                             final RecurrencePolicy newValue =

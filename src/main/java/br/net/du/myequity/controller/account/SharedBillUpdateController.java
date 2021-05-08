@@ -1,7 +1,6 @@
 package br.net.du.myequity.controller.account;
 
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
-import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.SharedBillReceivableAccountViewModelOutput;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.SharedBillReceivableAccount;
@@ -19,17 +18,16 @@ public class SharedBillUpdateController {
     @Autowired AccountUpdater accountUpdater;
 
     @PostMapping("/snapshot/updateAccountBillAmount")
-    public AccountViewModelOutput updateBillAmount(
+    public Object updateBillAmount(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
-                updateAmountFunction =
-                        (jsonRequest, account) -> {
-                            final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            ((SharedBillReceivableAccount) account).setBillAmount(newValue);
+        final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
+                (jsonRequest, account) -> {
+                    final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
+                    ((SharedBillReceivableAccount) account).setBillAmount(newValue);
 
-                            return SharedBillReceivableAccountViewModelOutput.of(account, true);
-                        };
+                    return SharedBillReceivableAccountViewModelOutput.of(account, true);
+                };
 
         return accountUpdater.updateField(
                 model,
@@ -40,18 +38,17 @@ public class SharedBillUpdateController {
     }
 
     @PostMapping("/snapshot/updateAccountPaymentReceived")
-    public AccountViewModelOutput updateAccountPaymentReceived(
+    public Object updateAccountPaymentReceived(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
-                updateAmountFunction =
-                        (jsonRequest, account) -> {
-                            final boolean newValue = new Boolean(jsonRequest.getNewValue());
+        final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
+                (jsonRequest, account) -> {
+                    final boolean newValue = new Boolean(jsonRequest.getNewValue());
 
-                            ((SharedBillReceivableAccount) account).setPaymentReceived(newValue);
+                    ((SharedBillReceivableAccount) account).setPaymentReceived(newValue);
 
-                            return SharedBillReceivableAccountViewModelOutput.of(account, true);
-                        };
+                    return SharedBillReceivableAccountViewModelOutput.of(account, true);
+                };
 
         return accountUpdater.updateField(
                 model,
@@ -62,17 +59,16 @@ public class SharedBillUpdateController {
     }
 
     @PostMapping("/snapshot/updateAccountNumberOfPartners")
-    public AccountViewModelOutput updateNumberOfPartners(
+    public Object updateNumberOfPartners(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
-                updateAmountFunction =
-                        (jsonRequest, account) -> {
-                            final Integer newValue = Integer.parseInt(jsonRequest.getNewValue());
-                            ((SharedBillReceivableAccount) account).setNumberOfPartners(newValue);
+        final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
+                (jsonRequest, account) -> {
+                    final Integer newValue = Integer.parseInt(jsonRequest.getNewValue());
+                    ((SharedBillReceivableAccount) account).setNumberOfPartners(newValue);
 
-                            return SharedBillReceivableAccountViewModelOutput.of(account, true);
-                        };
+                    return SharedBillReceivableAccountViewModelOutput.of(account, true);
+                };
 
         return accountUpdater.updateField(
                 model,
@@ -83,17 +79,16 @@ public class SharedBillUpdateController {
     }
 
     @PostMapping("/snapshot/updateAccountDueDay")
-    public AccountViewModelOutput updateAccountDueDay(
+    public Object updateAccountDueDay(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
-                updateAmountFunction =
-                        (jsonRequest, account) -> {
-                            final Integer newValue = Integer.parseInt(jsonRequest.getNewValue());
-                            ((SharedBillReceivableAccount) account).setDueDay(newValue);
+        final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
+                (jsonRequest, account) -> {
+                    final Integer newValue = Integer.parseInt(jsonRequest.getNewValue());
+                    ((SharedBillReceivableAccount) account).setDueDay(newValue);
 
-                            return SharedBillReceivableAccountViewModelOutput.of(account, false);
-                        };
+                    return SharedBillReceivableAccountViewModelOutput.of(account, false);
+                };
 
         return accountUpdater.updateField(
                 model,

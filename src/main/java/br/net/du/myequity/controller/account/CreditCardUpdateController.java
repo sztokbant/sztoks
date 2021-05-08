@@ -1,7 +1,6 @@
 package br.net.du.myequity.controller.account;
 
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
-import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.CreditCardAccountViewModelOutput;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.CreditCardAccount;
@@ -19,10 +18,10 @@ public class CreditCardUpdateController {
     @Autowired AccountUpdater accountUpdater;
 
     @PostMapping("/snapshot/updateCreditCardTotalCredit")
-    public AccountViewModelOutput updateCreditCardTotalCredit(
+    public Object updateCreditCardTotalCredit(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
+        final BiFunction<ValueUpdateJsonRequest, Account, Object>
                 updateCreditCardTotalCreditFunction =
                         (jsonRequest, account) -> {
                             final CreditCardAccount creditCardAccount = (CreditCardAccount) account;
@@ -42,9 +41,9 @@ public class CreditCardUpdateController {
     }
 
     @PostMapping("/snapshot/updateCreditCardAvailableCredit")
-    public AccountViewModelOutput updateCreditCardAvailableCredit(
+    public Object updateCreditCardAvailableCredit(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
+        final BiFunction<ValueUpdateJsonRequest, Account, Object>
                 updateCreditCardAvailableCreditFunction =
                         (jsonRequest, account) -> {
                             final CreditCardAccount creditCardAccount = (CreditCardAccount) account;
@@ -64,9 +63,9 @@ public class CreditCardUpdateController {
     }
 
     @PostMapping("/snapshot/updateCreditCardStatement")
-    public AccountViewModelOutput updateCreditCardStatement(
+    public Object updateCreditCardStatement(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
+        final BiFunction<ValueUpdateJsonRequest, Account, Object>
                 updateCreditCardStatementFunction =
                         (jsonRequest, account) -> {
                             final CreditCardAccount creditCardAccount = (CreditCardAccount) account;

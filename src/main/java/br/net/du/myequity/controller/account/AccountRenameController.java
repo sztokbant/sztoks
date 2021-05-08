@@ -20,20 +20,19 @@ public class AccountRenameController {
 
     @PostMapping("/snapshot/renameAccount")
     @Transactional
-    public AccountViewModelOutput post(
+    public Object post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
-                updateAmountFunction =
-                        (jsonRequest, account) -> {
-                            if (StringUtils.isEmpty(jsonRequest.getNewValue())) {
-                                throw new IllegalArgumentException("Account name can't be empty");
-                            }
+        final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
+                (jsonRequest, account) -> {
+                    if (StringUtils.isEmpty(jsonRequest.getNewValue())) {
+                        throw new IllegalArgumentException("Account name can't be empty");
+                    }
 
-                            account.setName(jsonRequest.getNewValue().trim());
+                    account.setName(jsonRequest.getNewValue().trim());
 
-                            return AccountViewModelOutput.of(account, false);
-                        };
+                    return AccountViewModelOutput.of(account, false);
+                };
 
         return accountUpdater.updateField(
                 model,

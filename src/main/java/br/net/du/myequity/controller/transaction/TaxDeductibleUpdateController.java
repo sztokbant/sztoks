@@ -17,20 +17,19 @@ public class TaxDeductibleUpdateController {
     @Autowired private TransactionUpdater transactionUpdater;
 
     @PostMapping("/transaction/setTaxDeductible")
-    public TransactionViewModelOutput post(
+    public Object post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Transaction, TransactionViewModelOutput>
-                updateTaxDeductibleFunction =
-                        (jsonRequest, transaction) -> {
-                            final DonationTransaction donationTransaction =
-                                    (DonationTransaction) transaction;
+        final BiFunction<ValueUpdateJsonRequest, Transaction, Object> updateTaxDeductibleFunction =
+                (jsonRequest, transaction) -> {
+                    final DonationTransaction donationTransaction =
+                            (DonationTransaction) transaction;
 
-                            final boolean newValue = Boolean.valueOf(jsonRequest.getNewValue());
-                            donationTransaction.setTaxDeductible(newValue);
+                    final boolean newValue = Boolean.valueOf(jsonRequest.getNewValue());
+                    donationTransaction.setTaxDeductible(newValue);
 
-                            return TransactionViewModelOutput.of(transaction, true);
-                        };
+                    return TransactionViewModelOutput.of(transaction, true);
+                };
 
         return transactionUpdater.updateField(
                 model,

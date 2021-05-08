@@ -4,7 +4,6 @@ import static br.net.du.myequity.controller.util.TransactionUtils.hasTithingImpa
 
 import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
-import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.transaction.Transaction;
@@ -35,12 +34,11 @@ public class TransactionUpdater {
     @Autowired private SnapshotUtils snapshotUtils;
 
     @Transactional
-    public TransactionViewModelOutput updateField(
+    public Object updateField(
             final Model model,
             final ValueUpdateJsonRequest valueUpdateJsonRequest,
             final Class clazz,
-            final BiFunction<ValueUpdateJsonRequest, Transaction, TransactionViewModelOutput>
-                    function,
+            final BiFunction<ValueUpdateJsonRequest, Transaction, Object> function,
             final boolean isSnapshotImpactingField) {
         final Long snapshotId = valueUpdateJsonRequest.getSnapshotId();
 
@@ -80,8 +78,7 @@ public class TransactionUpdater {
                         ? Optional.of(snapshot.getTithingAccount(transaction.getCurrencyUnit()))
                         : Optional.empty();
 
-        final TransactionViewModelOutput jsonResponse =
-                function.apply(valueUpdateJsonRequest, transaction);
+        final Object jsonResponse = function.apply(valueUpdateJsonRequest, transaction);
 
         LOG.log(LEVEL, "[SZTOKS] Saving transaction...");
         transactionService.save(transaction);

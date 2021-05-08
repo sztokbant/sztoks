@@ -18,10 +18,10 @@ public class FutureTithingPolicyUpdateController {
     @Autowired AccountUpdater accountUpdater;
 
     @PostMapping("/snapshot/updateFutureTithingPolicy")
-    public AccountViewModelOutput post(
+    public Object post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
+        final BiFunction<ValueUpdateJsonRequest, Account, Object>
                 updateFutureTithingPolicyFunction =
                         (jsonRequest, account) -> {
                             final FutureTithingPolicy newValue =

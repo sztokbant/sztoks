@@ -18,17 +18,16 @@ public class BalanceUpdateController {
     @Autowired AccountUpdater accountUpdater;
 
     @PostMapping("/snapshot/updateAccountBalance")
-    public AccountViewModelOutput post(
+    public Object post(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
-                updateAmountFunction =
-                        (jsonRequest, account) -> {
-                            final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            ((BalanceUpdateable) account).setBalance(newValue);
+        final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
+                (jsonRequest, account) -> {
+                    final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
+                    ((BalanceUpdateable) account).setBalance(newValue);
 
-                            return AccountViewModelOutput.of(account, true);
-                        };
+                    return AccountViewModelOutput.of(account, true);
+                };
 
         return accountUpdater.updateField(
                 model, valueUpdateJsonRequest, BalanceUpdateable.class, updateAmountFunction, true);

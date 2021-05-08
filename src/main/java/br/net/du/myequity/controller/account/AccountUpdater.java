@@ -4,7 +4,6 @@ import static br.net.du.myequity.controller.util.AccountUtils.hasFutureTithingIm
 
 import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
-import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
@@ -31,11 +30,11 @@ public class AccountUpdater {
     @Autowired private SnapshotUtils snapshotUtils;
 
     @Transactional
-    public AccountViewModelOutput updateField(
+    public Object updateField(
             final Model model,
             final ValueUpdateJsonRequest valueUpdateJsonRequest,
             final Class clazz,
-            final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput> function,
+            final BiFunction<ValueUpdateJsonRequest, Account, Object> function,
             final boolean isSnapshotImpactingField) {
         final Long snapshotId = valueUpdateJsonRequest.getSnapshotId();
 
@@ -73,7 +72,7 @@ public class AccountUpdater {
                         ? Optional.of(snapshot.getFutureTithingAccount(account.getCurrencyUnit()))
                         : Optional.empty();
 
-        final AccountViewModelOutput jsonResponse = function.apply(valueUpdateJsonRequest, account);
+        final Object jsonResponse = function.apply(valueUpdateJsonRequest, account);
 
         LOG.log(LEVEL, "[SZTOKS] Saving account...");
         accountService.save(account);
