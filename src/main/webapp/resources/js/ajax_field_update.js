@@ -6,10 +6,13 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, d
   });
 
   newValueInput.focusout(function() {
-    var currentValueNoCurrencySymbol = stripDecimal(currentValueSpan);
+    var currentValue = (newValueInput[0].type != "text")
+      ? stripDecimal(currentValueSpan)
+      : currentValueSpan.text();
+
     var newValue = newValueInput.val();
 
-    if (newValue && newValue.trim() != "" && newValue.trim() != currentValueNoCurrencySymbol) {
+    if (newValue && newValue.trim() != "" && newValue.trim() != currentValue) {
       data.newValue = newValue.trim();
       ajaxPost(endpoint, data, successCallback);
     }
@@ -19,9 +22,11 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, d
   });
 
   currentValueSpan.click(function() {
-    var currentValueNoCurrencySymbol = stripDecimal(currentValueSpan);
+    var currentValue = (newValueInput[0].type != "text")
+      ? stripDecimal(currentValueSpan)
+      : currentValueSpan.text();
     currentValueSpan.hide();
-    newValueInput.val(currentValueNoCurrencySymbol);
+    newValueInput.val(currentValue);
     newValueInput.show();
     newValueInput.focus();
     newValueInput.select();

@@ -1,7 +1,7 @@
 // ACCOUNT (ALL)
 
-function accountNameUpdateSuccessCallback(data, result) {
-  $("#account_name_" + data.id).html(result.name);
+function accountRenameUpdateSuccessCallback(data, result) {
+  $("#account_name_" + data.entityId).html(result.name);
 }
 
 function removeAccountFromSnapshot(snapshotId, entityId, accountName) {

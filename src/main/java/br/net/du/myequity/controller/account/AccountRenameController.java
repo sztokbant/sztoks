@@ -1,10 +1,11 @@
 package br.net.du.myequity.controller.account;
 
-import br.net.du.myequity.controller.util.AccountUtils;
-import br.net.du.myequity.controller.viewmodel.EntityRenameJsonRequest;
-import br.net.du.myequity.controller.viewmodel.EntityRenameJsonResponse;
+import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
+import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.service.AccountService;
+import br.net.du.myequity.model.account.BalanceUpdateable;
+import java.util.function.BiFunction;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -15,19 +16,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AccountRenameController {
 
-    @Autowired private AccountService accountService;
+    @Autowired private AccountUpdater accountUpdater;
 
-    @Autowired private AccountUtils accountUtils;
-
-    @PostMapping("/account/updateName")
+    @PostMapping("/snapshot/renameAccount")
     @Transactional
-    public EntityRenameJsonResponse post(
-            final Model model, @RequestBody final EntityRenameJsonRequest entityNameJsonRequest) {
-        final Account account = accountUtils.getAccount(model, entityNameJsonRequest.getId());
+    public AccountViewModelOutput post(
+            final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
-        account.setName(entityNameJsonRequest.getNewValue().trim());
-        accountService.save(account);
+        final BiFunction<ValueUpdateJsonRequest, Account, AccountViewModelOutput>
+                updateAmountFunction =
+                        (jsonRequest, account) -> {
+                            if (StringUtils.isEmpty(jsonRequest.getNewValue())) {
+                                throw new IllegalArgumentException("Account name can't be empty");
+                            }
 
-        return EntityRenameJsonResponse.builder().name(account.getName()).build();
+                            account.setName(jsonRequest.getNewValue().trim());
+
+                            return AccountViewModelOutput.of(account, false);
+                        };
+
+        return accountUpdater.updateField(
+                model,
+                valueUpdateJsonRequest,
+                BalanceUpdateable.class,
+                updateAmountFunction,
+                false);
     }
 }

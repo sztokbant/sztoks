@@ -13,6 +13,8 @@
             </div>
         </div>
 
+        <c:set var="editableClass" value="editable-asset"/>
+
         <c:choose>
             <c:when test="${not empty snapshot.simpleAssetAccounts}">
                 <div class="row border-1px-bottom">
@@ -136,6 +138,8 @@
                 <b><span id="total_LIABILITY">${snapshot.liabilitiesTotal}</span></b>
             </div>
         </div>
+
+        <c:set var="editableClass" value="editable-liability"/>
 
         <div class="row border-1px-bottom">
             <div class="col col-cell col-title short">&nbsp;</div>
