@@ -6,6 +6,7 @@ import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.AccountType;
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
 import lombok.Builder;
@@ -44,6 +45,9 @@ public class SnapshotUpdateDefaultTithingPercentageController {
                                                     snapshot.getDefaultTithingPercentage()))
                                     .futureTithingBalance(
                                             updateableTotals.getFutureTithingBalance())
+                                    .totalTithingBalance(
+                                            updateableTotals.getTotalForAccountSubtype(
+                                                    AccountSubtypeDisplayGroup.TITHING))
                                     .accountType(accountType.name())
                                     .totalForAccountType(updateableTotals.getTotalFor(accountType))
                                     .netWorth(updateableTotals.getNetWorth())
@@ -59,6 +63,7 @@ public class SnapshotUpdateDefaultTithingPercentageController {
     private static class JsonResponse {
         private final String defaultTithingPercentage;
         private final String futureTithingBalance;
+        private final String totalTithingBalance;
         private final String accountType;
         private final String totalForAccountType;
         private final String netWorth;
