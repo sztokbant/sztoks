@@ -1,7 +1,7 @@
 package br.net.du.myequity.controller.account;
 
+import br.net.du.myequity.controller.viewmodel.EntityRenameJsonResponse;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
-import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.BalanceUpdateable;
 import java.util.function.BiFunction;
@@ -31,7 +31,7 @@ public class AccountRenameController {
 
                     account.setName(jsonRequest.getNewValue().trim());
 
-                    return AccountViewModelOutput.of(account, false);
+                    return EntityRenameJsonResponse.builder().name(account.getName()).build();
                 };
 
         return accountUpdater.updateField(

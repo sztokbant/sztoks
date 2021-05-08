@@ -1,5 +1,6 @@
-package br.net.du.myequity.controller;
+package br.net.du.myequity.controller.account;
 
+import static br.net.du.myequity.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -8,8 +9,11 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.myequity.controller.viewmodel.EntityRenameJsonRequest;
+import br.net.du.myequity.controller.AccountControllerTestBase;
+import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
+import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
+import br.net.du.myequity.service.SnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -19,6 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -33,18 +38,21 @@ class AccountRenameControllerTest extends AccountControllerTestBase {
     private static final String NEW_ACCOUNT_NAME_NOT_TRIMMED = "   Wells Fargo Mortgage   ";
     private static final String NEW_ACCOUNT_NAME_TRIMMED = "Wells Fargo Mortgage";
 
+    @MockBean private SnapshotService snapshotService;
+
     public AccountRenameControllerTest() {
-        super("/account/updateName");
+        super("/snapshot/renameAccount");
     }
 
     @BeforeEach
     public void setUp() throws Exception {
-        final EntityRenameJsonRequest entityNameJsonRequest =
-                EntityRenameJsonRequest.builder()
-                        .id(ACCOUNT_ID)
+        final ValueUpdateJsonRequest valueUpdateJsonRequest =
+                ValueUpdateJsonRequest.builder()
+                        .snapshotId(SNAPSHOT_ID)
+                        .entityId(ACCOUNT_ID)
                         .newValue(NEW_ACCOUNT_NAME_NOT_TRIMMED)
                         .build();
-        requestContent = new ObjectMapper().writeValueAsString(entityNameJsonRequest);
+        requestContent = new ObjectMapper().writeValueAsString(valueUpdateJsonRequest);
     }
 
     @Override
@@ -60,9 +68,13 @@ class AccountRenameControllerTest extends AccountControllerTestBase {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        user.getSnapshots().first().addAccount(account);
+        final Snapshot snapshot = user.getSnapshots().first();
 
-        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+        snapshot.addAccount(account);
+
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+        when(accountService.findByIdAndSnapshotId(ACCOUNT_ID, SNAPSHOT_ID))
+                .thenReturn(Optional.of(account));
 
         // WHEN
         final ResultActions resultActions =

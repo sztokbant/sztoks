@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public abstract class AccountControllerTestBase extends AjaxControllerTestBase {
-    static final Long ACCOUNT_ID = 1L;
+    protected static final Long ACCOUNT_ID = 1L;
 
     @MockBean protected AccountService accountService;
 
