@@ -1,4 +1,4 @@
-<table class="center-w50pct">
+<table class="center-w75pct">
     <tr>
         <td colspan="2"><a href="/snapshot/${snapshot.id}/currencies"><b>Additional Currencies</b></a></td>
     </tr>

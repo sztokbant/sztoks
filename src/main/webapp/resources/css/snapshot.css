@@ -41,15 +41,6 @@
     color: red;
 }
 
-.center-w50pct {
-    width: 50%;
-    position: relative;
-    left: 50%;
-    transform: translate(-50%, 0%);
-    text-align: center;
-    font-size: 12px;
-}
-
 .center-w75pct {
     width: 75%;
     position: relative;
