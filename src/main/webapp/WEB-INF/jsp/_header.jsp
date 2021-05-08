@@ -1,3 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <nav class="navbar fixed-top navbar-dark bg-dark">
     <div class="container-fluid">
         <ul class="nav navbar-brand">

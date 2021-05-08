@@ -1,6 +1,5 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
@@ -30,7 +29,7 @@
 
 <input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
-<%@ include file="_header.jsp" %>
+<%@ include file="/WEB-INF/jsp/_header.jsp" %>
 
 <div class="full-width">
     <div class="row">
@@ -104,6 +103,8 @@
     <%@ include file="account/_snapshot_accounts.jsp" %>
     <%@ include file="transaction/_snapshot_transactions.jsp" %>
 </div>
+
+<%@ include file="/WEB-INF/jsp/_footer.jsp" %>
 
 </body>
 </html>

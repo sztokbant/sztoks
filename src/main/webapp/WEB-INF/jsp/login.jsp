@@ -16,7 +16,7 @@
 
 <body>
 
-<%@ include file="_header.jsp" %>
+<%@ include file="/WEB-INF/jsp/_header.jsp" %>
 
 <div class="full-width">
     <div class="row">
@@ -88,6 +88,8 @@
         </div>
     </div>
 </div>
+
+<%@ include file="/WEB-INF/jsp/_footer.jsp" %>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

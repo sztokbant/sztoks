@@ -17,7 +17,7 @@
 </head>
 <body>
 
-<%@ include file="_header.jsp" %>
+<%@ include file="/WEB-INF/jsp/_header.jsp" %>
 
 <div class="full-width">
     <div class="text-center"><h4>Snapshots</h4></div>
@@ -62,6 +62,8 @@
         </table>
     </div>
 </div>
+
+<%@ include file="/WEB-INF/jsp/_footer.jsp" %>
 
 </body>
 </html>
