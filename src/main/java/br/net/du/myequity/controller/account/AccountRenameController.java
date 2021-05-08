@@ -3,7 +3,6 @@ package br.net.du.myequity.controller.account;
 import br.net.du.myequity.controller.viewmodel.EntityRenameJsonResponse;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.BalanceUpdateable;
 import java.util.function.BiFunction;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +34,6 @@ public class AccountRenameController {
                 };
 
         return accountUpdater.updateField(
-                model,
-                valueUpdateJsonRequest,
-                BalanceUpdateable.class,
-                updateAmountFunction,
-                false);
+                model, valueUpdateJsonRequest, Account.class, updateAmountFunction, false);
     }
 }

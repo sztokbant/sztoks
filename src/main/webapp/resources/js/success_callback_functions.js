@@ -201,6 +201,10 @@ function creditCardStatementUpdateSuccessCallback(data, result) {
 
 // TRANSACTION (ALL)
 
+function transactionDescriptionUpdateSuccessCallback(data, result) {
+  $("#transaction_description_" + data.entityId).html(result.description);
+}
+
 function transactionAmountUpdateSuccessCallback(data, result) {
   $("#txn_amount_" + data.entityId).html(result.amount);
   $("#total_" + result.type).html(result.totalForTransactionType);

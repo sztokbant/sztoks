@@ -20,6 +20,8 @@
             </div>
         </div>
 
+        <c:set var="editableClass" value="editable-income"/>
+
         <div class="row border-1px-bottom bg-transaction-subcategory">
             <div class="col col-cell col-title">&nbsp;</div>
             <div class="col col-cell col-title">YTD Total</div>
@@ -69,6 +71,8 @@
                 <b><span id="total_INVESTMENT">${snapshot.investmentTransactionsTotal}</span></b>
             </div>
         </div>
+
+        <c:set var="editableClass" value="editable-investment"/>
 
         <div class="row border-1px-bottom bg-transaction-subcategory">
             <div class="col col-cell col-title">&nbsp;</div>
@@ -125,6 +129,8 @@
                 <b><span id="total_DONATION">${snapshot.donationTransactionsTotal}</span></b>
             </div>
         </div>
+
+        <c:set var="editableClass" value="editable-donation"/>
 
         <div class="row border-1px-bottom bg-transaction-subcategory">
             <div class="col col-cell col-title">&nbsp;</div>

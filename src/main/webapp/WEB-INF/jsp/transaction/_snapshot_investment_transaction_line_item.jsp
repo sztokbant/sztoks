@@ -20,9 +20,7 @@ $(document).ready(function() {
 
     <%@ include file="_recurrence_select.jsp" %>
 
-    <div class="col col-cell col-account-name">
-        ${entity.description}
-    </div>
+    <%@ include file="_snapshot_col_transaction_description.jsp" %>
 
     <div class="col col-cell align-center">
         ${entity.date}
