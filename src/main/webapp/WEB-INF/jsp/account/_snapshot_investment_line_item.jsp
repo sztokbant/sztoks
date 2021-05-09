@@ -39,7 +39,7 @@ $(document).ready(function() {
 
     <%@ include file="_account_future_tithing_select.jsp" %>
 
-    <div class="col col-cell align-right editable-asset">
+    <div class="col col-cell align-right width-70px editable-asset">
         <form id="form_investment_shares_${entity.accountId}">
             <span id="investment_shares_${entity.accountId}">${entity.shares}</span>
             <span><input id="new_investment_shares_${entity.accountId}" name="amount" type="number" min="0"
@@ -83,7 +83,7 @@ $(document).ready(function() {
         </c:otherwise>
     </c:choose>
 
-    <div class="col col-cell align-right ${profitStyle}">
+    <div class="col col-cell align-right width-70px ${profitStyle}">
         <span id="investment_profit_percentage_${entity.accountId}">${entity.profitPercentage}</span>
     </div>
 

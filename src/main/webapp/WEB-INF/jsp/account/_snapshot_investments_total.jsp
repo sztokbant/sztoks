@@ -3,9 +3,9 @@
 
     <div class="col col-cell short"></div>
 
-    <div class="col col-cell"></div>
+    <div class="col col-cell width-70px"></div>
 
-    <div class="col col-cell"></div>
+    <div class="col col-cell width-70px"></div>
 
     <div class="col col-cell align-right"><b><span id="snapshot_investments_amount_invested">${snapshot.investmentTotals.amountInvested}</span></b>
     </div>
@@ -27,7 +27,7 @@
         </c:otherwise>
     </c:choose>
 
-    <div class="col col-cell align-right ${profitStyle}">
+    <div class="col col-cell align-right width-70px ${profitStyle}">
         <b><span id="snapshot_investments_profit_percentage">${snapshot.investmentTotals.profitPercentage}</span></b>
     </div>
 

@@ -20,7 +20,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title col-account-name"><i>Simple Assets</i></div>
-                    <div class="col col-cell col-title">Future Tithing</div>
+                    <div class="col col-cell col-title width-70px">Future Tithing</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
@@ -42,7 +42,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title col-account-name"><i>Gift Certificates</i></div>
-                    <div class="col col-cell col-title">Future Tithing</div>
+                    <div class="col col-cell col-title width-70px">Future Tithing</div>
                     <div class="col col-cell col-title">Shares</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
@@ -108,12 +108,12 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title col-account-name"><i>Investments</i></div>
-                    <div class="col col-cell col-title">Future Tithing</div>
-                    <div class="col col-cell col-title">Shares</div>
+                    <div class="col col-cell col-title width-70px">Future Tithing</div>
+                    <div class="col col-cell col-title width-70px">Shares</div>
                     <div class="col col-cell col-title">Amount Invested</div>
                     <div class="col col-cell col-title">Average Purchase Price</div>
                     <div class="col col-cell col-title">Current Share Value</div>
-                    <div class="col col-cell col-title">Profit</div>
+                    <div class="col col-cell col-title width-70px">Profit</div>
                     <div class="col col-cell col-title">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.investmentAccounts}">
