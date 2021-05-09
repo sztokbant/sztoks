@@ -38,7 +38,6 @@
             </div>
         </div>
 
-
         <c:choose>
             <c:when test="${not empty snapshot.incomes}">
                 <div class="row border-1px-bottom">
@@ -55,9 +54,10 @@
                 </c:forEach>
             </c:when>
         </c:choose>
-
     </div>
+</div>
 
+<div class="row">
     <div class="col col-section investment-transactions">
         <div class="row border-1px-bottom">
             <div class="col col-cell text-center"><b>INVESTMENTS</b>
