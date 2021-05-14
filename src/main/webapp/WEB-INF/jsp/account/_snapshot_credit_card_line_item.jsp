@@ -68,7 +68,7 @@ $(document).ready(function() {
 
     <div class="col col-cell align-right editable-liability">
         <form id="form_credit_card_statement_${entity.accountId}">
-            <span id="credit_card_statement_${entity.accountId}">${entity.statement}</span>
+            <b><span id="credit_card_statement_${entity.accountId}">${entity.statement}</span></b>
             <span><input id="new_credit_card_statement_${entity.accountId}" name="amount" type="number" step="0.01" style="display: none;"/></span>
         </form>
     </div>
