@@ -7,7 +7,7 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, d
 
   newValueInput.focusout(function() {
     var currentValue = (newValueInput[0].type != "text")
-      ? stripDecimal(currentValueSpan)
+      ? stripDecimalForElement(currentValueSpan)
       : currentValueSpan.text();
 
     var newValue = newValueInput.val();
@@ -23,7 +23,7 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, d
 
   currentValueSpan.click(function() {
     var currentValue = (newValueInput[0].type != "text")
-      ? stripDecimal(currentValueSpan)
+      ? stripDecimalForElement(currentValueSpan)
       : currentValueSpan.text();
     currentValueSpan.hide();
     newValueInput.val(currentValue);
@@ -33,9 +33,12 @@ function prepareUpdateForm(theForm, currentValueSpan, newValueInput, endpoint, d
   });
 }
 
-function stripDecimal(currentValueSpan) {
-  return currentValueSpan
-    .text()
+function stripDecimalForElement(currentValueSpan) {
+  return stripDecimalForText(currentValueSpan.text());
+}
+
+function stripDecimalForText(text) {
+  return text
     .replace(/^[^\d-]+/g, '')
     .replaceAll(',', '')
     .replaceAll('%', '')

@@ -7,6 +7,9 @@ $(document).ready(function() {
     entityId: ${entity.id},
   };
 
+  var amountStyle = stripDecimalForText('${entity.amount}') >= 0 ? 'cell-green' : 'cell-red';
+  document.getElementById('div_txn_amount_${entity.id}').classList.add(amountStyle);
+
   document.getElementById("select_txn_investment_category_${entity.id}").onchange =
     (evt) => {
       data.newValue = evt.srcElement.value;
@@ -43,7 +46,7 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell align-right editable-investment">
+    <div id="div_txn_amount_${entity.id}" class="col col-cell align-right editable-investment">
         <form id="form_txn_amount_${entity.id}">
             <span id="txn_amount_${entity.id}">${entity.amount}</span>
             <span><input id="new_txn_amount_${entity.id}" name="amount" type="number"
