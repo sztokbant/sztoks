@@ -13,6 +13,9 @@
     </div>
 </spring:bind>
 
+<jsp:useBean id="nowAsDate" class="java.util.Date"/>
+<fmt:formatDate var="today" value="${nowAsDate}" pattern="yyyy-MM-dd" />
+
 <spring:bind path="date">
     <div class="row form-group">
         <div class="col col-form-label">
@@ -21,7 +24,7 @@
         <div class="col">
             <div class="${status.error ? 'has-error' : ''}">
                 <form:input type="date" id="date" path="date" class="form-control" placeholder="Date"
-                            autofocus="true"></form:input>
+                            value="${today}" autofocus="true"></form:input>
                 <form:errors path="date"/>
             </div>
         </div>
