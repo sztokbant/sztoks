@@ -7,59 +7,70 @@ import br.net.du.myequity.model.transaction.DonationTransaction;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
 import br.net.du.myequity.model.transaction.InvestmentTransaction;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.joda.money.CurrencyUnit;
 
+@Getter
 public class CumulativeTransactionCategoryTotalsViewModelOutput {
 
-    @RequiredArgsConstructor
-    @Getter
-    static class CategoryAmountViewModelOutput
-            implements Comparable<CategoryAmountViewModelOutput> {
-        private final String category;
-        private final String currency;
-        private final String amount;
-
-        @Override
-        public int compareTo(
-                @NonNull
-                        final CumulativeTransactionCategoryTotalsViewModelOutput
-                                        .CategoryAmountViewModelOutput
-                                other) {
-            if (category.equals(other.getCategory())) {
-                return currency.compareTo(other.getCurrency());
-            }
-            return category.compareTo(other.getCategory());
-        }
+    private enum Period {
+        YTD,
+        TWELVE_MONTHS
     }
 
-    private final SortedSet<CategoryAmountViewModelOutput> incomeCategories;
-    private final SortedSet<CategoryAmountViewModelOutput> investmentCategories;
-    private final SortedSet<CategoryAmountViewModelOutput> donationCategories;
+    @Getter
+    @Setter
+    public static class PeriodAmounts {
+        private String ytd = "-";
+        private String twelveMonths = "-";
+    }
+
+    private final SortedMap<String, SortedMap<String, PeriodAmounts>> incomeCategories;
+    private final SortedMap<String, SortedMap<String, PeriodAmounts>> investmentCategories;
+    private final SortedMap<String, SortedMap<String, PeriodAmounts>> donationCategories;
 
     public CumulativeTransactionCategoryTotalsViewModelOutput(
-            @NonNull final List<CumulativeTransactionCategoryTotals> categoryTotals) {
+            @NonNull final List<CumulativeTransactionCategoryTotals> ytdCategoryTotals,
+            @NonNull final List<CumulativeTransactionCategoryTotals> twelveMonthCategoryTotals) {
 
-        incomeCategories = new TreeSet<>();
-        investmentCategories = new TreeSet<>();
-        donationCategories = new TreeSet<>();
+        incomeCategories = new TreeMap<>();
+        investmentCategories = new TreeMap<>();
+        donationCategories = new TreeMap<>();
 
-        categoryTotals.stream()
+        ytdCategoryTotals.stream()
                 .forEach(
                         totals -> {
                             if (IncomeTransaction.TRANSACTION_TYPE.equals(
                                     totals.getTransactionType())) {
-                                incomeCategories.add(toCategoryAmountViewModelOutput(totals));
+                                insert(incomeCategories, totals, Period.YTD);
                             } else if (InvestmentTransaction.TRANSACTION_TYPE.equals(
                                     totals.getTransactionType())) {
-                                investmentCategories.add(toCategoryAmountViewModelOutput(totals));
+                                insert(investmentCategories, totals, Period.YTD);
                             } else if (DonationTransaction.TRANSACTION_TYPE.equals(
                                     totals.getTransactionType())) {
-                                donationCategories.add(toCategoryAmountViewModelOutput(totals));
+                                insert(donationCategories, totals, Period.YTD);
+                            } else {
+                                throw new IllegalStateException(
+                                        "Unknown transaction type: " + totals.getTransactionType());
+                            }
+                        });
+
+        twelveMonthCategoryTotals.stream()
+                .forEach(
+                        totals -> {
+                            if (IncomeTransaction.TRANSACTION_TYPE.equals(
+                                    totals.getTransactionType())) {
+                                insert(incomeCategories, totals, Period.TWELVE_MONTHS);
+                            } else if (InvestmentTransaction.TRANSACTION_TYPE.equals(
+                                    totals.getTransactionType())) {
+                                insert(investmentCategories, totals, Period.TWELVE_MONTHS);
+                            } else if (DonationTransaction.TRANSACTION_TYPE.equals(
+                                    totals.getTransactionType())) {
+                                insert(donationCategories, totals, Period.TWELVE_MONTHS);
                             } else {
                                 throw new IllegalStateException(
                                         "Unknown transaction type: " + totals.getTransactionType());
@@ -67,11 +78,30 @@ public class CumulativeTransactionCategoryTotalsViewModelOutput {
                         });
     }
 
-    private CategoryAmountViewModelOutput toCategoryAmountViewModelOutput(
-            @NonNull final CumulativeTransactionCategoryTotals totals) {
-        return new CategoryAmountViewModelOutput(
-                totals.getCategory(),
-                totals.getCurrency(),
-                format(CurrencyUnit.of(totals.getCurrency()), totals.getAmount()));
+    private void insert(
+            @NonNull final SortedMap<String, SortedMap<String, PeriodAmounts>> categories,
+            @NonNull final CumulativeTransactionCategoryTotals totals,
+            @NonNull final Period period) {
+
+        if (!categories.containsKey(totals.getCategory())) {
+            categories.put(totals.getCategory(), new TreeMap<>());
+        }
+
+        final SortedMap<String, PeriodAmounts> byCurrency = categories.get(totals.getCategory());
+        if (!byCurrency.containsKey(totals.getCurrency())) {
+            byCurrency.put(totals.getCurrency(), new PeriodAmounts());
+        }
+
+        final PeriodAmounts periodAmounts = byCurrency.get(totals.getCurrency());
+
+        final String formattedAmount =
+                format(CurrencyUnit.of(totals.getCurrency()), totals.getAmount());
+        if (period.equals(Period.YTD)) {
+            periodAmounts.setYtd(formattedAmount);
+        } else if (period.equals(Period.TWELVE_MONTHS)) {
+            periodAmounts.setTwelveMonths(formattedAmount);
+        } else {
+            throw new IllegalStateException("Unknown period: " + period.name());
+        }
     }
 }

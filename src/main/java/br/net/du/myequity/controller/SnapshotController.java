@@ -2,11 +2,10 @@ package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.ID;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.TRANSACTION_CATEGORY_TOTALS;
 import static br.net.du.myequity.controller.util.ControllerConstants.TWELVE_MONTHS_TOTALS;
-import static br.net.du.myequity.controller.util.ControllerConstants.TWELVE_MONTHS_TRANSACTION_CATEGORY_TOTALS;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.YTD_TOTALS;
-import static br.net.du.myequity.controller.util.ControllerConstants.YTD_TRANSACTION_CATEGORY_TOTALS;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 
 import br.net.du.myequity.controller.interceptor.WebController;
@@ -60,15 +59,13 @@ public class SnapshotController {
         model.addAttribute(
                 TWELVE_MONTHS_TOTALS,
                 getPastTwelveMonthsTransactionTotalsViewModelOutput(user, snapshot));
-        model.addAttribute(
-                TWELVE_MONTHS_TRANSACTION_CATEGORY_TOTALS,
-                getPastTwelveMonthsTransactionCategoryTotalsViewModelOutput(user, snapshot));
 
         model.addAttribute(
                 YTD_TOTALS, getYearToDateTransactionTotalsViewModelOutput(user, snapshot));
-        model.addAttribute(
-                YTD_TRANSACTION_CATEGORY_TOTALS,
-                getYearToDateTransactionCategoryTotalsViewModelOutput(user, snapshot));
+
+        final CumulativeTransactionCategoryTotalsViewModelOutput value =
+                getCumulativeTransactionCategoryTotalsViewModelOutput(user, snapshot);
+        model.addAttribute(TRANSACTION_CATEGORY_TOTALS, value);
 
         return SNAPSHOT;
     }
@@ -85,16 +82,6 @@ public class SnapshotController {
         return new CumulativeTransactionTotalsViewModelOutput(twelveMonthsTotals);
     }
 
-    private CumulativeTransactionCategoryTotalsViewModelOutput
-            getPastTwelveMonthsTransactionCategoryTotalsViewModelOutput(
-                    @NonNull final User user, @NonNull final Snapshot snapshot) {
-        final List<CumulativeTransactionCategoryTotals> twelveMonthsCategoryTotals =
-                snapshotService.findPastTwelveMonthsCumulativeTransactionCategoryTotals(
-                        snapshot.getId(), user.getId());
-
-        return new CumulativeTransactionCategoryTotalsViewModelOutput(twelveMonthsCategoryTotals);
-    }
-
     private CumulativeTransactionTotalsViewModelOutput
             getYearToDateTransactionTotalsViewModelOutput(
                     @NonNull final User user, @NonNull final Snapshot snapshot) {
@@ -108,12 +95,17 @@ public class SnapshotController {
     }
 
     private CumulativeTransactionCategoryTotalsViewModelOutput
-            getYearToDateTransactionCategoryTotalsViewModelOutput(
+            getCumulativeTransactionCategoryTotalsViewModelOutput(
                     @NonNull final User user, @NonNull final Snapshot snapshot) {
         final List<CumulativeTransactionCategoryTotals> yearToDateCategoryTotals =
                 snapshotService.findYearToDateTransactionCategoryTotals(
                         snapshot.getYear(), snapshot.getMonth(), user.getId());
 
-        return new CumulativeTransactionCategoryTotalsViewModelOutput(yearToDateCategoryTotals);
+        final List<CumulativeTransactionCategoryTotals> twelveMonthsCategoryTotals =
+                snapshotService.findPastTwelveMonthsCumulativeTransactionCategoryTotals(
+                        snapshot.getId(), user.getId());
+
+        return new CumulativeTransactionCategoryTotalsViewModelOutput(
+                yearToDateCategoryTotals, twelveMonthsCategoryTotals);
     }
 }

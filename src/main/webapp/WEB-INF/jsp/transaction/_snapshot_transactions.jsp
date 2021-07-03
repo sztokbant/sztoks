@@ -38,6 +38,8 @@
             </div>
         </div>
 
+        <%@ include file="_snapshot_income_categories_totals.jsp" %>
+
         <c:choose>
             <c:when test="${not empty snapshot.incomes}">
                 <div class="row border-1px-bottom">
@@ -97,6 +99,8 @@
                 <span id="twelve_months_investment_avg">${twelveMonthsTotals.investmentAvg}</span>
             </div>
         </div>
+
+        <%@ include file="_snapshot_investment_categories_totals.jsp" %>
 
         <c:choose>
             <c:when test="${not empty snapshot.investments}">
@@ -175,6 +179,8 @@
                 <span id="twelve_months_donation_avg">${twelveMonthsTotals.donationAvg}</span>
             </div>
         </div>
+
+        <%@ include file="_snapshot_donation_categories_totals.jsp" %>
 
         <c:choose>
             <c:when test="${not empty snapshot.donations}">
