@@ -15,7 +15,7 @@ import lombok.NonNull;
 @DiscriminatorValue(DonationTransaction.TRANSACTION_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class DonationTransaction extends Transaction implements Categorizable<DonationCategory> {
-    static final String TRANSACTION_TYPE = "DONATION";
+    public static final String TRANSACTION_TYPE = "DONATION";
 
     @Transient @Getter
     private final TransactionType transactionType = TransactionType.valueOf(TRANSACTION_TYPE);

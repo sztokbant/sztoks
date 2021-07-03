@@ -3,6 +3,7 @@ package br.net.du.myequity.persistence;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.SnapshotSummary;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.totals.CumulativeTransactionCategoryTotals;
 import br.net.du.myequity.model.totals.CumulativeTransactionTotals;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,8 @@ public interface SnapshotRepository extends CustomRepository<Snapshot, Long> {
     @Lock(LockModeType.PESSIMISTIC_READ)
     Snapshot findTopByUserOrderByYearDescMonthDesc(User user);
 
+    List<SnapshotSummary> findAllByUserOrderByYearDescMonthDesc(User user);
+
     @Query(
             value =
                     "SELECT \n"
@@ -33,7 +36,7 @@ public interface SnapshotRepository extends CustomRepository<Snapshot, Long> {
                             + "FROM (SELECT * FROM snapshots WHERE id <= ?1 AND user_id = ?2 ORDER BY year DESC, month DESC LIMIT 12) s \n"
                             + "GROUP BY baseCurrency \n",
             nativeQuery = true)
-    List<CumulativeTransactionTotals> findPastTwelveMonthsCumulativeTransactionTotals(
+    List<CumulativeTransactionTotals> findPastTwelveMonthsTransactionTotals(
             Long refSnapshotId, Long userId);
 
     @Query(
@@ -52,5 +55,37 @@ public interface SnapshotRepository extends CustomRepository<Snapshot, Long> {
     List<CumulativeTransactionTotals> findYearToDateCumulativeTransactionTotals(
             Integer refYear, Integer refMonth, Long userId);
 
-    List<SnapshotSummary> findAllByUserOrderByYearDescMonthDesc(User user);
+    @Query(
+            value =
+                    "SELECT \n"
+                            + "t.transaction_type transactionType, \n"
+                            + "t.category category, \n"
+                            + "t.currency currency, \n"
+                            + "SUM(t.amount) amount\n"
+                            + "FROM transactions t \n"
+                            + "WHERE snapshot_id IN \n"
+                            + "  (SELECT id FROM \n"
+                            + "    (SELECT id FROM snapshots WHERE id <= ?1 AND user_id = ?2 ORDER BY year DESC, month DESC LIMIT 12) \n"
+                            + "  tmp) \n"
+                            + "GROUP BY currency, transaction_type, category",
+            nativeQuery = true)
+    List<CumulativeTransactionCategoryTotals> findPastTwelveMonthsTransactionCategoryTotals(
+            Long refSnapshotId, Long userId);
+
+    @Query(
+            value =
+                    "SELECT \n"
+                            + "t.transaction_type transactionType, \n"
+                            + "t.category category, \n"
+                            + "t.currency currency, \n"
+                            + "SUM(t.amount) amount\n"
+                            + "FROM transactions t \n"
+                            + "WHERE snapshot_id IN \n"
+                            + "  (SELECT id FROM \n"
+                            + "    (SELECT id FROM snapshots WHERE year = ?1 AND month <= ?2 AND user_id = ?3) \n"
+                            + "  tmp) \n"
+                            + "GROUP BY currency, transaction_type, category",
+            nativeQuery = true)
+    List<CumulativeTransactionCategoryTotals> findYearToDateTransactionCategoryTotals(
+            Integer refYear, Integer refMonth, Long userId);
 }

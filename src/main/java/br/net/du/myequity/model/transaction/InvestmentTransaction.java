@@ -15,7 +15,7 @@ import lombok.NonNull;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class InvestmentTransaction extends Transaction
         implements Categorizable<InvestmentCategory> {
-    static final String TRANSACTION_TYPE = "INVESTMENT";
+    public static final String TRANSACTION_TYPE = "INVESTMENT";
 
     @Transient @Getter
     private final TransactionType transactionType = TransactionType.valueOf(TRANSACTION_TYPE);

@@ -4,6 +4,7 @@ import br.net.du.myequity.exception.SztoksException;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.SnapshotSummary;
 import br.net.du.myequity.model.User;
+import br.net.du.myequity.model.totals.CumulativeTransactionCategoryTotals;
 import br.net.du.myequity.model.totals.CumulativeTransactionTotals;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import java.util.List;
@@ -69,17 +70,31 @@ public class SnapshotService {
         return snapshotRepository.findAllByUserOrderByYearDescMonthDesc(user);
     }
 
-    public List<CumulativeTransactionTotals> findPastTwelveMonthsCumulativeTransactionTotals(
+    public List<CumulativeTransactionTotals> findPastTwelveMonthsTransactionTotals(
             @NonNull final Long refSnapshotId, @NonNull final Long userId) {
-        return snapshotRepository.findPastTwelveMonthsCumulativeTransactionTotals(
-                refSnapshotId, userId);
+        return snapshotRepository.findPastTwelveMonthsTransactionTotals(refSnapshotId, userId);
     }
 
-    public List<CumulativeTransactionTotals> findYearToDateCumulativeTransactionTotals(
+    public List<CumulativeTransactionTotals> findYearToDateTransactionTotals(
             @NonNull final Integer refYear,
             @NonNull final Integer refMonth,
             @NonNull final Long userId) {
         return snapshotRepository.findYearToDateCumulativeTransactionTotals(
+                refYear, refMonth, userId);
+    }
+
+    public List<CumulativeTransactionCategoryTotals>
+            findPastTwelveMonthsCumulativeTransactionCategoryTotals(
+                    @NonNull final Long refSnapshotId, @NonNull final Long userId) {
+        return snapshotRepository.findPastTwelveMonthsTransactionCategoryTotals(
+                refSnapshotId, userId);
+    }
+
+    public List<CumulativeTransactionCategoryTotals> findYearToDateTransactionCategoryTotals(
+            @NonNull final Integer refYear,
+            @NonNull final Integer refMonth,
+            @NonNull final Long userId) {
+        return snapshotRepository.findYearToDateTransactionCategoryTotals(
                 refYear, refMonth, userId);
     }
 

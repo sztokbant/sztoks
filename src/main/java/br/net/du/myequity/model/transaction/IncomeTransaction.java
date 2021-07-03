@@ -19,7 +19,7 @@ import lombok.NonNull;
 @DiscriminatorValue(IncomeTransaction.TRANSACTION_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class IncomeTransaction extends Transaction implements Categorizable<IncomeCategory> {
-    static final String TRANSACTION_TYPE = "INCOME";
+    public static final String TRANSACTION_TYPE = "INCOME";
 
     @Transient @Getter
     private final TransactionType transactionType = TransactionType.valueOf(TRANSACTION_TYPE);

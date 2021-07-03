@@ -17,7 +17,10 @@ public class ControllerConstants {
     public static final String USER_KEY = "user";
 
     public static final String TWELVE_MONTHS_TOTALS = "twelveMonthsTotals";
+    public static final String TWELVE_MONTHS_TRANSACTION_CATEGORY_TOTALS =
+            "twelveMonthsTransactionCategoryTotals";
     public static final String YTD_TOTALS = "ytdTotals";
+    public static final String YTD_TRANSACTION_CATEGORY_TOTALS = "ytdTransactionCategoryTotals";
 
     public static final String CURRENCIES = "currencies";
     public static final CurrencyUnit DEFAULT_CURRENCY_UNIT = CurrencyUnit.USD;
