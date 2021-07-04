@@ -41,36 +41,25 @@ public class CumulativeTransactionCategoryTotalsViewModelOutput {
         investmentCategories = new TreeMap<>();
         donationCategories = new TreeMap<>();
 
-        ytdCategoryTotals.stream()
-                .forEach(
-                        totals -> {
-                            if (IncomeTransaction.TRANSACTION_TYPE.equals(
-                                    totals.getTransactionType())) {
-                                insert(incomeCategories, totals, Period.YTD);
-                            } else if (InvestmentTransaction.TRANSACTION_TYPE.equals(
-                                    totals.getTransactionType())) {
-                                insert(investmentCategories, totals, Period.YTD);
-                            } else if (DonationTransaction.TRANSACTION_TYPE.equals(
-                                    totals.getTransactionType())) {
-                                insert(donationCategories, totals, Period.YTD);
-                            } else {
-                                throw new IllegalStateException(
-                                        "Unknown transaction type: " + totals.getTransactionType());
-                            }
-                        });
+        processTransactionCategories(ytdCategoryTotals, Period.YTD);
+        processTransactionCategories(twelveMonthCategoryTotals, Period.TWELVE_MONTHS);
+    }
 
-        twelveMonthCategoryTotals.stream()
+    private void processTransactionCategories(
+            @NonNull final List<CumulativeTransactionCategoryTotals> categoryTotals,
+            @NonNull final Period period) {
+        categoryTotals.stream()
                 .forEach(
                         totals -> {
                             if (IncomeTransaction.TRANSACTION_TYPE.equals(
                                     totals.getTransactionType())) {
-                                insert(incomeCategories, totals, Period.TWELVE_MONTHS);
+                                insert(incomeCategories, totals, period);
                             } else if (InvestmentTransaction.TRANSACTION_TYPE.equals(
                                     totals.getTransactionType())) {
-                                insert(investmentCategories, totals, Period.TWELVE_MONTHS);
+                                insert(investmentCategories, totals, period);
                             } else if (DonationTransaction.TRANSACTION_TYPE.equals(
                                     totals.getTransactionType())) {
-                                insert(donationCategories, totals, Period.TWELVE_MONTHS);
+                                insert(donationCategories, totals, period);
                             } else {
                                 throw new IllegalStateException(
                                         "Unknown transaction type: " + totals.getTransactionType());
