@@ -138,26 +138,6 @@
 
         <div class="row border-1px-bottom bg-transaction-subcategory">
             <div class="col col-cell col-title">&nbsp;</div>
-            <div class="col col-cell col-title">Month</div>
-            <div class="col col-cell col-title">YTD</div>
-            <div class="col col-cell col-title">12mo</div>
-        </div>
-
-        <div class="row border-1px-bottom bg-transaction-subcategory">
-            <div class="col col-cell transaction-subcategory-label">Tax Deductible</div>
-            <div class="col col-cell text-center">
-                <span id="tax_deductible_donations_total">${snapshot.taxDeductibleDonationTransactionsTotal}</span>
-            </div>
-            <div class="col col-cell text-center">
-                <span id="ytd_tax_deductible_donations_total">${ytdTotals.taxDeductibleDonationsTotal}</span>
-            </div>
-            <div class="col col-cell text-center">
-                <span id="twelve_months_tax_deductible_donations_total">${twelveMonthsTotals.taxDeductibleDonationsTotal}</span>
-            </div>
-        </div>
-
-        <div class="row border-1px-bottom bg-transaction-subcategory">
-            <div class="col col-cell col-title">&nbsp;</div>
             <div class="col col-cell col-title">YTD Total</div>
             <div class="col col-cell col-title">YTD Avg</div>
             <div class="col col-cell col-title">12mo Total</div>
@@ -177,6 +157,28 @@
             </div>
             <div class="col col-cell text-center">
                 <span id="twelve_months_donation_avg">${twelveMonthsTotals.donationAvg}</span>
+            </div>
+        </div>
+
+        <div class="row border-1px-bottom bg-transaction-subcategory">
+            <div class="col col-cell col-title">&nbsp;</div>
+            <div class="col col-cell col-title">YTD Total</div>
+            <div class="col col-cell col-title">&nbsp;</div>
+            <div class="col col-cell col-title">12mo Total</div>
+            <div class="col col-cell col-title">This Month</div>
+        </div>
+
+        <div class="row border-1px-bottom bg-transaction-subcategory">
+            <div class="col col-cell transaction-subcategory-label">Tax Deductible</div>
+            <div class="col col-cell text-center">
+                <span id="ytd_tax_deductible_donations_total">${ytdTotals.taxDeductibleDonationsTotal}</span>
+            </div>
+            <div class="col col-cell">&nbsp;</div>
+            <div class="col col-cell text-center">
+                <span id="twelve_months_tax_deductible_donations_total">${twelveMonthsTotals.taxDeductibleDonationsTotal}</span>
+            </div>
+            <div class="col col-cell text-center">
+                <span id="tax_deductible_donations_total">${snapshot.taxDeductibleDonationTransactionsTotal}</span>
             </div>
         </div>
 
