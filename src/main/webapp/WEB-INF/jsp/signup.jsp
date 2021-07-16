@@ -124,7 +124,7 @@
 
             <div class="row form-group">
                 <div class="col">
-                    By signing up you confirm that you <b>understand</b> and <b>agree</b> that <b>Sztoks</b> is provided for educational purposes only with <b>no guarantees</b>. Use it at your own risk.
+                    By signing up you confirm that you <b>understand</b> and <b>agree</b> that <b>Sztoks</b> is provided for educational purposes only with <b>no guarantees</b>. Use it at your own discretion.
                 </div>
             </div>
 

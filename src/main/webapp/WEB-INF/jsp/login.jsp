@@ -40,7 +40,7 @@
             </div>
             <br />
             <div>
-                <b>Sztoks</b> is provided for educational purposes only with <b>no guarantees</b>. Use it at your own risk.
+                <b>Sztoks</b> is provided for educational purposes only with <b>no guarantees</b>. Use it at your own discretion.
             </div>
             <br/>
             <div>
