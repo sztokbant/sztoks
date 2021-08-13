@@ -86,7 +86,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell col-title short">&nbsp;</div>
                     <div class="col col-cell col-title col-account-name"><i>Shared Bill Receivables</i></div>
-                    <div class="col col-cell col-title">Future Tithing</div>
+                    <div class="col col-cell col-title width-70px">Future Tithing</div>
                     <div class="col col-cell col-title">Due Day</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">Number of Partners</div>
