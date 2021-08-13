@@ -215,7 +215,20 @@ function transactionDescriptionUpdateSuccessCallback(data, result) {
 }
 
 function transactionAmountUpdateSuccessCallback(data, result) {
-  $("#txn_amount_" + data.entityId).html(result.amount);
+  let txn_amount = $("#txn_amount_" + data.entityId);
+  txn_amount.html(result.amount);
+  let amount = stripDecimalForText(result.amount);
+  if (amount > 0) {
+    txn_amount.removeClass('cell-red');
+    txn_amount.addClass('cell-green');
+  } else if (amount < 0) {
+    txn_amount.removeClass('cell-green');
+    txn_amount.addClass('cell-red');
+  } else {
+    txn_amount.removeClass('cell-red');
+    txn_amount.removeClass('cell-green');
+  }
+
   $("#total_" + result.type).html(result.totalForTransactionType);
 
   if (result.type == "INCOME" || result.type == "DONATION") {

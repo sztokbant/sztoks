@@ -7,8 +7,6 @@ $(document).ready(function() {
     entityId: ${entity.id},
   };
 
-  var amountStyle = stripDecimalForText('${entity.amount}') >= 0 ? 'cell-green' : 'cell-red';
-  document.getElementById('div_txn_amount_${entity.id}').classList.add(amountStyle);
 
   document.getElementById("select_txn_investment_category_${entity.id}").onchange =
     (evt) => {
