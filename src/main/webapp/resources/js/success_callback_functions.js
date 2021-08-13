@@ -132,7 +132,7 @@ function updateSnapshotInvestmentTotals(result) {
 function investmentSharesUpdateSuccessCallback(data, result) {
   $("#investment_shares_" + data.entityId).html(result.shares);
   $("#investment_average_purchase_price_" + data.entityId).html(result.averagePurchasePrice);
-  $("#investment_profit_percentage_" + data.entityId).html(result.profitPercentage);
+  updateProfitPercentage(data.entityId, result.profitPercentage);
   $("#investment_balance_" + data.entityId).html(result.balance);
   updateTotalForAccountType(result);
   updateSnapshotInvestmentTotals(result);
@@ -143,7 +143,7 @@ function investmentSharesUpdateSuccessCallback(data, result) {
 function investmentAmountInvestedUpdateSuccessCallback(data, result) {
   $("#investment_amount_invested_" + data.entityId).html(result.amountInvested);
   $("#investment_average_purchase_price_" + data.entityId).html(result.averagePurchasePrice);
-  $("#investment_profit_percentage_" + data.entityId).html(result.profitPercentage);
+  updateProfitPercentage(data.entityId, result.profitPercentage);
   updateSnapshotInvestmentTotals(result);
   updateTithingBalance(result);
   updateNetWorth(result);
@@ -151,12 +151,29 @@ function investmentAmountInvestedUpdateSuccessCallback(data, result) {
 
 function investmentCurrentShareValueUpdateSuccessCallback(data, result) {
   $("#investment_current_share_value_" + data.entityId).html(result.currentShareValue);
-  $("#investment_profit_percentage_" + data.entityId).html(result.profitPercentage);
+  updateProfitPercentage(data.entityId, result.profitPercentage);
   $("#investment_balance_" + data.entityId).html(result.balance);
   updateTotalForAccountType(result);
   updateSnapshotInvestmentTotals(result);
   updateTithingBalance(result);
   updateNetWorth(result);
+}
+
+function updateProfitPercentage(entityId, profitPercentage) {
+  let profit_percentage_span = $("#investment_profit_percentage_" + entityId);
+  profit_percentage_span.html(profitPercentage);
+
+  let percentage = stripDecimalForText(profitPercentage);
+  if (percentage > 0) {
+    profit_percentage_span.removeClass('cell-red');
+    profit_percentage_span.addClass('cell-green');
+  } else if (percentage < 0) {
+    profit_percentage_span.removeClass('cell-green');
+    profit_percentage_span.addClass('cell-red');
+  } else {
+    profit_percentage_span.removeClass('cell-red');
+    profit_percentage_span.removeClass('cell-green');
+  }
 }
 
 // PAYABLE ACCOUNT
@@ -203,19 +220,19 @@ function creditCardAvailableCreditUpdateSuccessCallback(data, result) {
 }
 
 function updateUsedCreditPercentage(entityId, usedCreditPercentage) {
-  let txn_percentage = $("#credit_card_used_credit_percentage_" + entityId);
-  txn_percentage.html(usedCreditPercentage);
+  let used_credit_percentage_span = $("#credit_card_used_credit_percentage_" + entityId);
+  used_credit_percentage_span.html(usedCreditPercentage);
 
   let percentage = stripDecimalForText(usedCreditPercentage);
   if (percentage >= 30) {
-    txn_percentage.removeClass('cell-orange');
-    txn_percentage.addClass('cell-red');
+    used_credit_percentage_span.removeClass('cell-orange');
+    used_credit_percentage_span.addClass('cell-red');
   } else if (percentage >= 10) {
-    txn_percentage.removeClass('cell-red');
-    txn_percentage.addClass('cell-orange');
+    used_credit_percentage_span.removeClass('cell-red');
+    used_credit_percentage_span.addClass('cell-orange');
   } else {
-    txn_percentage.removeClass('cell-red');
-    txn_percentage.removeClass('cell-orange');
+    used_credit_percentage_span.removeClass('cell-red');
+    used_credit_percentage_span.removeClass('cell-orange');
   }
 }
 

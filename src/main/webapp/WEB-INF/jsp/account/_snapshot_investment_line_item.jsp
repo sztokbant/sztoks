@@ -83,8 +83,9 @@ $(document).ready(function() {
         </c:otherwise>
     </c:choose>
 
-    <div class="col col-cell align-right width-70px ${profitStyle}">
-        <span id="investment_profit_percentage_${entity.accountId}">${entity.profitPercentage}</span>
+    <div class="col col-cell align-right width-70px">
+        <span id="investment_profit_percentage_${entity.accountId}"
+              class="${profitStyle}">${entity.profitPercentage}</span>
     </div>
 
     <div class="col col-cell align-right">
