@@ -36,6 +36,11 @@
     color: green;
 }
 
+.cell-orange {
+    font-weight: bold;
+    color: darkorange;
+}
+
 .cell-red {
     font-weight: bold;
     color: red;

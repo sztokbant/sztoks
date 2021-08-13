@@ -57,6 +57,9 @@ $(document).ready(function() {
         <c:when test="${ccUsageValue ge 30}">
             <c:set var="ccUsageStyle" value="cell-red"/>
         </c:when>
+        <c:when test="${ccUsageValue ge 10}">
+            <c:set var="ccUsageStyle" value="cell-orange"/>
+        </c:when>
         <c:otherwise>
             <c:set var="ccUsageStyle" value=""/>
         </c:otherwise>
