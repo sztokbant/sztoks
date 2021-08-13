@@ -1,6 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib  prefix="szt" uri="http://sztoks.com/functions" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
@@ -14,18 +15,6 @@
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
     <script src="${contextPath}/resources/js/ajax_field_update.js"></script>
     <script src="${contextPath}/resources/js/success_callback_functions.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $("span[id^=txn_amount_]").each(function(idx, value) {
-          let amount = stripDecimalForText(value.innerText);
-          if (amount > 0) {
-            value.classList.add('cell-green');
-          } else if (amount < 0) {
-            value.classList.add('cell-red');
-          }
-        });
-      });
-    </script>
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/snapshot.css" rel="stylesheet">
 </head>

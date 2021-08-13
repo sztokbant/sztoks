@@ -45,10 +45,6 @@ $(document).ready(function() {
     </div>
 
     <div id="div_txn_amount_${entity.id}" class="col col-cell align-right editable-investment">
-        <form id="form_txn_amount_${entity.id}">
-            <span id="txn_amount_${entity.id}">${entity.amount}</span>
-            <span><input id="new_txn_amount_${entity.id}" name="amount" type="number"
-                         step="0.01" style="display: none;"/></span>
-        </form>
+        <%@ include file="_transaction_amount_form.jsp" %>
     </div>
 </div>
