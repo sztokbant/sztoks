@@ -12,11 +12,17 @@
         <c:when test="${ccUsageValue ge 30}">
             <c:set var="ccUsageStyle" value="cell-red"/>
         </c:when>
+        <c:when test="${ccUsageValue ge 10}">
+            <c:set var="ccUsageStyle" value="cell-orange"/>
+        </c:when>
         <c:otherwise>
             <c:set var="ccUsageStyle" value=""/>
         </c:otherwise>
     </c:choose>
-    <div class="col col-cell align-right ${ccUsageStyle}"><b><span id="snapshot_credit_card_used_credit_percentage_${currentCurrency}">${ccTotals.usedCreditPercentage}</span></b>
+
+    <div class="col col-cell align-right">
+        <b><span id="snapshot_credit_card_used_credit_percentage_${currentCurrency}"
+                 class="${ccUsageStyle}">${ccTotals.usedCreditPercentage}</span></b>
     </div>
 
     <div class="col col-cell align-right"><b><span id="snapshot_credit_card_statement_${currentCurrency}">${ccTotals.statement}</span></b>

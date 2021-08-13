@@ -125,7 +125,22 @@ function giftCertificateCurrentShareValueUpdateSuccessCallback(data, result) {
 
 function updateSnapshotInvestmentTotals(result) {
   $("#snapshot_investments_amount_invested").html(result.investmentTotals.amountInvested);
-  $("#snapshot_investments_profit_percentage").html(result.investmentTotals.profitPercentage);
+
+  let profit_percentage_span = $("#snapshot_investments_profit_percentage");
+  profit_percentage_span.html(result.investmentTotals.profitPercentage);
+
+  let percentage = stripDecimalForText(result.investmentTotals.profitPercentage);
+  if (percentage > 0) {
+    profit_percentage_span.removeClass('cell-red');
+    profit_percentage_span.addClass('cell-green');
+  } else if (percentage < 0) {
+    profit_percentage_span.removeClass('cell-green');
+    profit_percentage_span.addClass('cell-red');
+  } else {
+    profit_percentage_span.removeClass('cell-red');
+    profit_percentage_span.removeClass('cell-green');
+  }
+
   $("#snapshot_investments_balance").html(result.investmentTotals.balance);
 }
 
@@ -189,8 +204,22 @@ function updateSnapshotCreditCardTotals(result) {
     .html(result.creditCardTotalsForCurrencyUnit.totalCredit);
   $("#snapshot_credit_card_available_credit_" + result.currencyUnit)
     .html(result.creditCardTotalsForCurrencyUnit.availableCredit);
-  $("#snapshot_credit_card_used_credit_percentage_" + result.currencyUnit)
-    .html(result.creditCardTotalsForCurrencyUnit.usedCreditPercentage);
+
+  let used_credit_percentage_span = $("#snapshot_credit_card_used_credit_percentage_" + result.currencyUnit);
+  used_credit_percentage_span.html(result.creditCardTotalsForCurrencyUnit.usedCreditPercentage);
+
+  let percentage = stripDecimalForText(result.creditCardTotalsForCurrencyUnit.usedCreditPercentage);
+  if (percentage >= 30) {
+    used_credit_percentage_span.removeClass('cell-orange');
+    used_credit_percentage_span.addClass('cell-red');
+  } else if (percentage >= 10) {
+    used_credit_percentage_span.removeClass('cell-red');
+    used_credit_percentage_span.addClass('cell-orange');
+  } else {
+    used_credit_percentage_span.removeClass('cell-red');
+    used_credit_percentage_span.removeClass('cell-orange');
+  }
+
   $("#snapshot_credit_card_statement_" + result.currencyUnit)
     .html(result.creditCardTotalsForCurrencyUnit.statement);
   $("#snapshot_credit_card_remaining_balance_" + result.currencyUnit)

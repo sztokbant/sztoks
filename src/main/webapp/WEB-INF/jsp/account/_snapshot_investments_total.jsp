@@ -27,8 +27,8 @@
         </c:otherwise>
     </c:choose>
 
-    <div class="col col-cell align-right width-70px ${profitStyle}">
-        <b><span id="snapshot_investments_profit_percentage">${snapshot.investmentTotals.profitPercentage}</span></b>
+    <div class="col col-cell align-right width-70px">
+        <b><span id="snapshot_investments_profit_percentage" class="${profitStyle}">${snapshot.investmentTotals.profitPercentage}</span></b>
     </div>
 
     <div class="col col-cell align-right"><b><span id="snapshot_investments_balance">${snapshot.investmentTotals.balance}</span></b></div>
