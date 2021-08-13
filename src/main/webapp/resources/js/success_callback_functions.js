@@ -184,7 +184,7 @@ function updateSnapshotCreditCardTotals(result) {
 
 function creditCardTotalCreditUpdateSuccessCallback(data, result) {
   $("#credit_card_total_credit_" + data.entityId).html(result.totalCredit);
-  $("#credit_card_used_credit_percentage_" + data.entityId).html(result.usedCreditPercentage);
+  updateUsedCreditPercentage(data.entityId, result.usedCreditPercentage);
   $("#credit_card_balance_" + data.entityId).html(result.balance);
   $("#credit_card_remaining_balance_" + data.entityId).html(result.remainingBalance);
   updateTotalForAccountType(result);
@@ -194,12 +194,29 @@ function creditCardTotalCreditUpdateSuccessCallback(data, result) {
 
 function creditCardAvailableCreditUpdateSuccessCallback(data, result) {
   $("#credit_card_available_credit_" + data.entityId).html(result.availableCredit);
-  $("#credit_card_used_credit_percentage_" + data.entityId).html(result.usedCreditPercentage);
+  updateUsedCreditPercentage(data.entityId, result.usedCreditPercentage);
   $("#credit_card_remaining_balance_" + data.entityId).html(result.remainingBalance);
   $("#credit_card_balance_" + data.entityId).html(result.balance);
   updateTotalForAccountType(result);
   updateSnapshotCreditCardTotals(result);
   updateNetWorth(result);
+}
+
+function updateUsedCreditPercentage(entityId, usedCreditPercentage) {
+  let txn_percentage = $("#credit_card_used_credit_percentage_" + entityId);
+  txn_percentage.html(usedCreditPercentage);
+
+  let percentage = stripDecimalForText(usedCreditPercentage);
+  if (percentage >= 30) {
+    txn_percentage.removeClass('cell-orange');
+    txn_percentage.addClass('cell-red');
+  } else if (percentage >= 10) {
+    txn_percentage.removeClass('cell-red');
+    txn_percentage.addClass('cell-orange');
+  } else {
+    txn_percentage.removeClass('cell-red');
+    txn_percentage.removeClass('cell-orange');
+  }
 }
 
 function creditCardStatementUpdateSuccessCallback(data, result) {
