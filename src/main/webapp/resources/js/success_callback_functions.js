@@ -130,16 +130,7 @@ function updateSnapshotInvestmentTotals(result) {
   profit_percentage_span.html(result.investmentTotals.profitPercentage);
 
   let percentage = stripDecimalForText(result.investmentTotals.profitPercentage);
-  if (percentage > 0) {
-    profit_percentage_span.removeClass('cell-red');
-    profit_percentage_span.addClass('cell-green');
-  } else if (percentage < 0) {
-    profit_percentage_span.removeClass('cell-green');
-    profit_percentage_span.addClass('cell-red');
-  } else {
-    profit_percentage_span.removeClass('cell-red');
-    profit_percentage_span.removeClass('cell-green');
-  }
+  colorizeProfitPercentage(percentage, profit_percentage_span);
 
   $("#snapshot_investments_balance").html(result.investmentTotals.balance);
 }
@@ -179,17 +170,22 @@ function updateProfitPercentage(entityId, profitPercentage) {
   profit_percentage_span.html(profitPercentage);
 
   let percentage = stripDecimalForText(profitPercentage);
+  colorizeProfitPercentage(percentage, profit_percentage_span);
+}
+
+function colorizeProfitPercentage(percentage, element) {
   if (percentage > 0) {
-    profit_percentage_span.removeClass('cell-red');
-    profit_percentage_span.addClass('cell-green');
+    element.removeClass('cell-red');
+    element.addClass('cell-green');
   } else if (percentage < 0) {
-    profit_percentage_span.removeClass('cell-green');
-    profit_percentage_span.addClass('cell-red');
+    element.removeClass('cell-green');
+    element.addClass('cell-red');
   } else {
-    profit_percentage_span.removeClass('cell-red');
-    profit_percentage_span.removeClass('cell-green');
+    element.removeClass('cell-red');
+    element.removeClass('cell-green');
   }
 }
+
 
 // PAYABLE ACCOUNT
 
@@ -209,16 +205,7 @@ function updateSnapshotCreditCardTotals(result) {
   used_credit_percentage_span.html(result.creditCardTotalsForCurrencyUnit.usedCreditPercentage);
 
   let percentage = stripDecimalForText(result.creditCardTotalsForCurrencyUnit.usedCreditPercentage);
-  if (percentage >= 30) {
-    used_credit_percentage_span.removeClass('cell-orange');
-    used_credit_percentage_span.addClass('cell-red');
-  } else if (percentage >= 10) {
-    used_credit_percentage_span.removeClass('cell-red');
-    used_credit_percentage_span.addClass('cell-orange');
-  } else {
-    used_credit_percentage_span.removeClass('cell-red');
-    used_credit_percentage_span.removeClass('cell-orange');
-  }
+  colorizeCreditCardPercentage(percentage, used_credit_percentage_span);
 
   $("#snapshot_credit_card_statement_" + result.currencyUnit)
     .html(result.creditCardTotalsForCurrencyUnit.statement);
@@ -253,15 +240,19 @@ function updateUsedCreditPercentage(entityId, usedCreditPercentage) {
   used_credit_percentage_span.html(usedCreditPercentage);
 
   let percentage = stripDecimalForText(usedCreditPercentage);
+  colorizeCreditCardPercentage(percentage, used_credit_percentage_span);
+}
+
+function colorizeCreditCardPercentage(percentage, element) {
   if (percentage >= 30) {
-    used_credit_percentage_span.removeClass('cell-orange');
-    used_credit_percentage_span.addClass('cell-red');
+    element.removeClass('cell-orange');
+    element.addClass('cell-red');
   } else if (percentage >= 10) {
-    used_credit_percentage_span.removeClass('cell-red');
-    used_credit_percentage_span.addClass('cell-orange');
+    element.removeClass('cell-red');
+    element.addClass('cell-orange');
   } else {
-    used_credit_percentage_span.removeClass('cell-red');
-    used_credit_percentage_span.removeClass('cell-orange');
+    element.removeClass('cell-red');
+    element.removeClass('cell-orange');
   }
 }
 
