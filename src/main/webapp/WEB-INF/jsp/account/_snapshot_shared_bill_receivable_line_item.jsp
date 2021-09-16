@@ -25,8 +25,8 @@ $(document).ready(function() {
     "ACCOUNT_${entity.accountId}_payment_received",
     ${snapshot.id},
     ${entity.accountId},
-    ${entity.isPaymentReceived} == true,
-    "snapshot/updateAccountPaymentReceived",
+    ${entity.isPaid} == true,
+    "snapshot/updateBillIsPaid",
     accountPaymentReceivedUpdateSuccessCallback);
 
   prepareUpdateForm($("#form_account_bill_amount_${entity.accountId}"),

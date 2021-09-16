@@ -1,9 +1,9 @@
 package br.net.du.myequity.controller.account;
 
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
-import br.net.du.myequity.controller.viewmodel.account.SharedBillReceivableAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.SharedBillAccountViewModelOutput;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.SharedBillReceivableAccount;
+import br.net.du.myequity.model.account.SharedBillAccount;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,38 +24,30 @@ public class SharedBillUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
                 (jsonRequest, account) -> {
                     final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                    ((SharedBillReceivableAccount) account).setBillAmount(newValue);
+                    ((SharedBillAccount) account).setBillAmount(newValue);
 
-                    return SharedBillReceivableAccountViewModelOutput.of(account, true);
+                    return SharedBillAccountViewModelOutput.of(account, true);
                 };
 
         return accountUpdater.updateField(
-                model,
-                valueUpdateJsonRequest,
-                SharedBillReceivableAccount.class,
-                updateAmountFunction,
-                true);
+                model, valueUpdateJsonRequest, SharedBillAccount.class, updateAmountFunction, true);
     }
 
-    @PostMapping("/snapshot/updateAccountPaymentReceived")
-    public Object updateAccountPaymentReceived(
+    @PostMapping("/snapshot/updateBillIsPaid")
+    public Object updateBillIsPaid(
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
 
         final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
                 (jsonRequest, account) -> {
                     final boolean newValue = new Boolean(jsonRequest.getNewValue());
 
-                    ((SharedBillReceivableAccount) account).setPaymentReceived(newValue);
+                    ((SharedBillAccount) account).setIsPaid(newValue);
 
-                    return SharedBillReceivableAccountViewModelOutput.of(account, true);
+                    return SharedBillAccountViewModelOutput.of(account, true);
                 };
 
         return accountUpdater.updateField(
-                model,
-                valueUpdateJsonRequest,
-                SharedBillReceivableAccount.class,
-                updateAmountFunction,
-                true);
+                model, valueUpdateJsonRequest, SharedBillAccount.class, updateAmountFunction, true);
     }
 
     @PostMapping("/snapshot/updateAccountNumberOfPartners")
@@ -65,17 +57,13 @@ public class SharedBillUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
                 (jsonRequest, account) -> {
                     final Integer newValue = Integer.parseInt(jsonRequest.getNewValue());
-                    ((SharedBillReceivableAccount) account).setNumberOfPartners(newValue);
+                    ((SharedBillAccount) account).setNumberOfPartners(newValue);
 
-                    return SharedBillReceivableAccountViewModelOutput.of(account, true);
+                    return SharedBillAccountViewModelOutput.of(account, true);
                 };
 
         return accountUpdater.updateField(
-                model,
-                valueUpdateJsonRequest,
-                SharedBillReceivableAccount.class,
-                updateAmountFunction,
-                true);
+                model, valueUpdateJsonRequest, SharedBillAccount.class, updateAmountFunction, true);
     }
 
     @PostMapping("/snapshot/updateAccountDueDay")
@@ -85,15 +73,15 @@ public class SharedBillUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
                 (jsonRequest, account) -> {
                     final Integer newValue = Integer.parseInt(jsonRequest.getNewValue());
-                    ((SharedBillReceivableAccount) account).setDueDay(newValue);
+                    ((SharedBillAccount) account).setDueDay(newValue);
 
-                    return SharedBillReceivableAccountViewModelOutput.of(account, false);
+                    return SharedBillAccountViewModelOutput.of(account, false);
                 };
 
         return accountUpdater.updateField(
                 model,
                 valueUpdateJsonRequest,
-                SharedBillReceivableAccount.class,
+                SharedBillAccount.class,
                 updateAmountFunction,
                 false);
     }

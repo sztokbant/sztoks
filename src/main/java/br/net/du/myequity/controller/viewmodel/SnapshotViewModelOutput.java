@@ -14,7 +14,7 @@ import br.net.du.myequity.controller.viewmodel.account.InvestmentAccountViewMode
 import br.net.du.myequity.controller.viewmodel.account.InvestmentTotalsViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.PayableAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.ReceivableAccountViewModelOutput;
-import br.net.du.myequity.controller.viewmodel.account.SharedBillReceivableAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.SharedBillAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.SimpleAssetAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.SimpleLiabilityAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.transaction.TransactionViewModelOutput;
@@ -229,7 +229,7 @@ public class SnapshotViewModelOutput {
                 assetsByType.get(GiftCertificateAccountViewModelOutput.class));
         builder.receivableAccounts(assetsByType.get(ReceivableAccountViewModelOutput.class));
         builder.sharedBillReceivableAccounts(
-                assetsByType.get(SharedBillReceivableAccountViewModelOutput.class));
+                assetsByType.get(SharedBillAccountViewModelOutput.class));
         builder.investmentAccounts(assetsByType.get(InvestmentAccountViewModelOutput.class));
 
         final Map<Class, List<AccountViewModelOutput>> liabilitiesByType =
