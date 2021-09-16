@@ -7,13 +7,15 @@
 <head>
     <meta charset="utf-8">
     <title>Sztoks</title>
+
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
+    <link href="${contextPath}/resources/css/home.css" rel="stylesheet">
+
+    <script src="${contextPath}/resources/js/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
     <script src="${contextPath}/resources/js/ajax_field_update.js"></script>
     <script src="${contextPath}/resources/js/success_callback_functions.js"></script>
-    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
-    <link href="${contextPath}/resources/css/home.css" rel="stylesheet">
 </head>
 <body>
 

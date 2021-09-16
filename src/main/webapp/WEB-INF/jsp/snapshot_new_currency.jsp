@@ -9,9 +9,10 @@
     <meta charset="utf-8">
     <title>Add New Currency</title>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
+
+    <script src="${contextPath}/resources/js/jquery.min.js"></script>
 </head>
 
 <body>
@@ -68,6 +69,5 @@ $(document).ready(function() {
 
 <%@ include file="/WEB-INF/jsp/_footer.jsp" %>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 </body>
 </html>
