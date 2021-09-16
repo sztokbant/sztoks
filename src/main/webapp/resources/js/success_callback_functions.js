@@ -69,10 +69,10 @@ function receivableDueDateUpdateSuccessCallback(data, result) {
   $("#receivable_due_date_" + data.entityId).html(result.dueDate);
 }
 
-// SHARED BILL RECEIVABLE ACCOUNT
+// SHARED BILL ACCOUNT
 
-function receivableDueDayUpdateSuccessCallback(data, result) {
-  $("#receivable_due_day_" + data.entityId).html(result.dueDay);
+function sharedBillDueDayUpdateSuccessCallback(data, result) {
+  $("#shared_bill_due_day_" + data.entityId).html(result.dueDay);
 }
 
 function accountBillAmountUpdateSuccessCallback(data, result) {
