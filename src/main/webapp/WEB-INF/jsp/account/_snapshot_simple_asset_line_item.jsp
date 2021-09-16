@@ -43,7 +43,7 @@ $(document).ready(function() {
         &nbsp;
     </div>
 
-    <div class="col col-cell align-right editable-asset">
+    <div class="col col-cell align-right ${editableClass}">
         <form id="form_account_balance_${entity.accountId}">
             <span id="account_balance_${entity.accountId}">${entity.balance}</span>
             <span><input id="new_account_balance_${entity.accountId}" name="amount" type="number"

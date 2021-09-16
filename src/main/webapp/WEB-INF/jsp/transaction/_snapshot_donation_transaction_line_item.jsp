@@ -53,7 +53,7 @@ $(document).ready(function() {
         <input id="TRANSACTION_${entity.id}_taxDeductible" type="checkbox"/>
     </div>
 
-    <div class="col col-cell align-right editable-donation">
+    <div class="col col-cell align-right ${editableClass}">
         <%@ include file="_transaction_amount_form.jsp" %>
     </div>
 </div>

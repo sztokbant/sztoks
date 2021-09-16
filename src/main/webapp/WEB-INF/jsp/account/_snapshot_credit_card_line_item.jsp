@@ -36,7 +36,7 @@ $(document).ready(function() {
 
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
-    <div class="col col-cell align-right editable-liability">
+    <div class="col col-cell align-right ${editableClass}">
         <form id="form_credit_card_total_credit_${entity.accountId}">
             <span id="credit_card_total_credit_${entity.accountId}">${entity.totalCredit}</span>
             <span><input id="new_credit_card_total_credit_${entity.accountId}" name="amount" type="number" min="0"
@@ -44,7 +44,7 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell align-right editable-liability">
+    <div class="col col-cell align-right ${editableClass}">
         <form id="form_credit_card_available_credit_${entity.accountId}">
             <span id="credit_card_available_credit_${entity.accountId}">${entity.availableCredit}</span>
             <span><input id="new_credit_card_available_credit_${entity.accountId}" name="amount" type="number" min="0"
@@ -69,7 +69,7 @@ $(document).ready(function() {
         <span id="credit_card_used_credit_percentage_${entity.accountId}" class="${ccUsageStyle}">${entity.usedCreditPercentage}</span>
     </div>
 
-    <div class="col col-cell align-right editable-liability">
+    <div class="col col-cell align-right ${editableClass}">
         <form id="form_credit_card_statement_${entity.accountId}">
             <b><span id="credit_card_statement_${entity.accountId}">${entity.statement}</span></b>
             <span><input id="new_credit_card_statement_${entity.accountId}" name="amount" type="number" step="0.01" style="display: none;"/></span>

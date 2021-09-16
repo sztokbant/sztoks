@@ -42,7 +42,7 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div id="div_txn_amount_${entity.id}" class="col col-cell align-right editable-investment">
+    <div id="div_txn_amount_${entity.id}" class="col col-cell align-right ${editableClass}">
         <%@ include file="_transaction_amount_form.jsp" %>
     </div>
 </div>

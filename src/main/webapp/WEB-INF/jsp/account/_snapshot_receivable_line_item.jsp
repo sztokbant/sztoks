@@ -31,7 +31,7 @@ $(document).ready(function() {
 
     <%@ include file="_account_future_tithing_select.jsp" %>
 
-    <div class="col col-cell align-center editable-asset">
+    <div class="col col-cell align-center ${editableClass}">
         <form id="form_receivable_due_date_${entity.accountId}">
             <span id="receivable_due_date_${entity.accountId}">${entity.dueDate}</span>
             <span><input id="new_receivable_due_date_${entity.accountId}" name="amount" type="date"
@@ -55,7 +55,7 @@ $(document).ready(function() {
         &nbsp;
     </div>
 
-    <div class="col col-cell align-right editable-asset">
+    <div class="col col-cell align-right ${editableClass}">
         <form id="form_account_balance_${entity.accountId}">
             <span id="account_balance_${entity.accountId}">${entity.balance}</span>
             <span><input id="new_account_balance_${entity.accountId}" name="amount" type="number" step="0.01" style="display: none;"/></span>

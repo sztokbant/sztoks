@@ -31,7 +31,7 @@ $(document).ready(function() {
 
     <%@ include file="_account_future_tithing_select.jsp" %>
 
-    <div class="col col-cell align-right editable-asset">
+    <div class="col col-cell align-right ${editableClass}">
         <form id="form_gift_certificate_shares_${entity.accountId}">
             <span id="gift_certificate_shares_${entity.accountId}">${entity.shares}</span>
             <span><input id="new_gift_certificate_shares_${entity.accountId}" name="amount" type="number" min="0"
@@ -47,7 +47,7 @@ $(document).ready(function() {
         &nbsp;
     </div>
 
-    <div class="col col-cell align-right editable-asset">
+    <div class="col col-cell align-right ${editableClass}">
         <form id="form_gift_certificate_current_share_value_${entity.accountId}">
             <span id="gift_certificate_current_share_value_${entity.accountId}">${entity.currentShareValue}</span>
             <span><input id="new_gift_certificate_current_share_value_${entity.accountId}" name="amount" type="number"

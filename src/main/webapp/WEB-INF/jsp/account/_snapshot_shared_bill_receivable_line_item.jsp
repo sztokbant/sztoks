@@ -46,7 +46,7 @@ $(document).ready(function() {
 
     <%@ include file="_account_future_tithing_select.jsp" %>
 
-    <div class="col col-cell align-center editable-asset">
+    <div class="col col-cell align-center ${editableClass}">
         <form id="form_receivable_due_day_${entity.accountId}">
             <span id="receivable_due_day_${entity.accountId}">${entity.dueDay}</span>
             <span><input id="new_receivable_due_day_${entity.accountId}" name="amount" type="number" step="1" min="1" max="31"
@@ -58,7 +58,7 @@ $(document).ready(function() {
         &nbsp;
     </div>
 
-    <div class="col col-cell align-center editable-asset">
+    <div class="col col-cell align-center ${editableClass}">
         <form id="form_account_number_of_partners_${entity.accountId}">
             <span id="account_number_of_partners_${entity.accountId}">${entity.numberOfPartners}</span>
             <span><input id="new_account_number_of_partners_${entity.accountId}" name="number_of_partners" type="number" step="1" min="1" style="display: none;"/></span>
@@ -69,7 +69,7 @@ $(document).ready(function() {
         <input id="ACCOUNT_${entity.accountId}_is_paid" type="checkbox"/>
     </div>
 
-    <div class="col col-cell align-right editable-asset">
+    <div class="col col-cell align-right ${editableClass}">
         <form id="form_account_bill_amount_${entity.accountId}">
             <span id="account_bill_amount_${entity.accountId}">${entity.billAmount}</span>
             <span><input id="new_account_bill_amount_${entity.accountId}" name="amount" type="number" step="0.01" style="display: none;"/></span>

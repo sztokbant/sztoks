@@ -50,7 +50,7 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell align-center editable-income">
+    <div class="col col-cell align-center ${editableClass}">
         <form id="form_txn_tithing_percentage_${entity.id}">
             <span id="txn_tithing_percentage_${entity.id}">${entity.tithingPercentage}</span>
             <span><input id="new_txn_tithing_percentage_${entity.id}" name="amount" type="number" min="0" max="100"
@@ -58,7 +58,7 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell align-right editable-income">
+    <div class="col col-cell align-right ${editableClass}">
         <%@ include file="_transaction_amount_form.jsp" %>
     </div>
 </div>
