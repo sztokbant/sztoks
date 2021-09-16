@@ -268,6 +268,10 @@ function transactionDescriptionUpdateSuccessCallback(data, result) {
   $("#transaction_description_" + data.entityId).html(result.description);
 }
 
+function transactionDateUpdateSuccessCallback(data, result) {
+  $("#transaction_date_" + data.entityId).html(result.date);
+}
+
 function transactionAmountUpdateSuccessCallback(data, result) {
   let txn_amount = $("#txn_amount_" + data.entityId);
   txn_amount.html(result.amount);

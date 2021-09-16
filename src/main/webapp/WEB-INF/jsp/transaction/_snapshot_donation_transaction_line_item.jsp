@@ -30,9 +30,7 @@ $(document).ready(function() {
 
     <%@ include file="_snapshot_col_transaction_description.jsp" %>
 
-    <div class="col col-cell align-center">
-        ${entity.date}
-    </div>
+    <%@ include file="_snapshot_col_transaction_date.jsp" %>
 
     <div class="col col-cell align-center">
         <form id="form_txn_donation_category_${entity.id}">
