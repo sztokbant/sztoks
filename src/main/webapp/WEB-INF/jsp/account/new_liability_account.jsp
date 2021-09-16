@@ -55,6 +55,10 @@
                                 <label for="payableRadio">Payable</label>
                             </div>
                             <div>
+                                <form:radiobutton path="subtypeName" value="SharedBillPayableAccount" id="sharedBillPayableRadio"/>
+                                <label for="sharedBillPayableRadio">Shared Bill Payable</label>
+                            </div>
+                            <div>
                                 <form:radiobutton path="subtypeName" value="CreditCardAccount" id="creditCardRadio"/>
                                 <label for="creditCardRadio">Credit Card</label>
                             </div>

@@ -37,7 +37,7 @@ public abstract class SharedBillAccount extends Account {
             final boolean isPaid,
             final int numberOfPartners,
             final int dueDay) {
-        super(name, AccountType.ASSET, currencyUnit, createDate);
+        super(name, accountType, currencyUnit, createDate);
 
         if (numberOfPartners < 1) {
             throw new IllegalArgumentException(

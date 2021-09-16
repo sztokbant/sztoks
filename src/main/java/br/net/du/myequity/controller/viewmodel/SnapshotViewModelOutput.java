@@ -96,6 +96,9 @@ public class SnapshotViewModelOutput {
     private final List<AccountViewModelOutput> payableAccounts;
     private final String payablesBalance;
 
+    private final List<AccountViewModelOutput> sharedBillPayableAccounts;
+    private final String sharedBillPayablesBalance;
+
     private final List<AccountViewModelOutput> creditCardAccounts;
     private final Map<String, CreditCardTotalsViewModelOutput> creditCardTotals;
 
@@ -155,6 +158,9 @@ public class SnapshotViewModelOutput {
                         .payablesBalance(
                                 updateableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.PAYABLE))
+                        .sharedBillPayablesBalance(
+                                updateableTotals.getTotalForAccountSubtype(
+                                        AccountSubtypeDisplayGroup.SHARED_BILL_PAYABLE))
                         .creditCardTotals(getCurrencyUnitCreditCardViewModels(creditCardTotals))
                         .incomeTransactionsTotal(
                                 updateableTotals.getTotalFor(TransactionType.INCOME))
@@ -237,6 +243,8 @@ public class SnapshotViewModelOutput {
         builder.simpleLiabilityAccounts(
                 liabilitiesByType.get(SimpleLiabilityAccountViewModelOutput.class));
         builder.payableAccounts(liabilitiesByType.get(PayableAccountViewModelOutput.class));
+        builder.sharedBillPayableAccounts(
+                liabilitiesByType.get(SharedBillAccountViewModelOutput.class));
         builder.creditCardAccounts(liabilitiesByType.get(CreditCardAccountViewModelOutput.class));
 
         builder.tithingBalance(

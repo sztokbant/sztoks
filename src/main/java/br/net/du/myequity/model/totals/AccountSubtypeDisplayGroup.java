@@ -5,6 +5,7 @@ import br.net.du.myequity.model.account.FutureTithingAccount;
 import br.net.du.myequity.model.account.GiftCertificateAccount;
 import br.net.du.myequity.model.account.PayableAccount;
 import br.net.du.myequity.model.account.ReceivableAccount;
+import br.net.du.myequity.model.account.SharedBillPayableAccount;
 import br.net.du.myequity.model.account.SharedBillReceivableAccount;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
@@ -19,7 +20,8 @@ public enum AccountSubtypeDisplayGroup {
     SHARED_BILL_RECEIVABLE(new Class[] {SharedBillReceivableAccount.class}),
     TITHING((new Class[] {TithingAccount.class, FutureTithingAccount.class})),
     SIMPLE_LIABILITY((new Class[] {SimpleLiabilityAccount.class})),
-    PAYABLE(new Class[] {PayableAccount.class});
+    PAYABLE(new Class[] {PayableAccount.class}),
+    SHARED_BILL_PAYABLE(new Class[] {SharedBillPayableAccount.class});
 
     private final Set<Class> classes = new HashSet<>();
 
@@ -60,6 +62,10 @@ public enum AccountSubtypeDisplayGroup {
 
         if (clazz.equals(PayableAccount.class)) {
             return PAYABLE;
+        }
+
+        if (clazz.equals(SharedBillPayableAccount.class)) {
+            return SHARED_BILL_PAYABLE;
         }
 
         return null;
