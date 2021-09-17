@@ -24,8 +24,8 @@ public class SharedBillPayableAccount extends SharedBillAccount {
                 AccountType.LIABILITY,
                 currencyUnit,
                 LocalDate.now(),
-                BigDecimal.ZERO,
                 false,
+                BigDecimal.ZERO,
                 1,
                 1);
     }

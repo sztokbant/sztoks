@@ -14,15 +14,11 @@ import org.joda.money.CurrencyUnit;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public abstract class SharedBillAccount extends Account {
+public abstract class SharedBillAccount extends HasPaidFlagAccount {
 
     @Column(precision = 19, scale = 2)
     @Getter
     protected BigDecimal billAmount;
-
-    @Column(nullable = true)
-    @Getter
-    protected boolean isPaid;
 
     @Column @Getter protected Integer numberOfPartners;
 
@@ -33,11 +29,11 @@ public abstract class SharedBillAccount extends Account {
             @NonNull final AccountType accountType,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate createDate,
-            @NonNull final BigDecimal billAmount,
             final boolean isPaid,
+            @NonNull final BigDecimal billAmount,
             final int numberOfPartners,
             final int dueDay) {
-        super(name, accountType, currencyUnit, createDate);
+        super(name, accountType, currencyUnit, createDate, isPaid);
 
         if (numberOfPartners < 1) {
             throw new IllegalArgumentException(
@@ -49,17 +45,12 @@ public abstract class SharedBillAccount extends Account {
         }
 
         this.billAmount = billAmount;
-        this.isPaid = isPaid;
         this.numberOfPartners = numberOfPartners;
         this.dueDay = dueDay;
     }
 
     @Override
-    public BigDecimal getBalance() {
-        if (isPaid) {
-            return BigDecimal.ZERO;
-        }
-
+    protected BigDecimal getNominalBalance() {
         final BigDecimal numberOfPartners = new BigDecimal(this.numberOfPartners);
         return numberOfPartners
                 .multiply(billAmount)
@@ -85,23 +76,6 @@ public abstract class SharedBillAccount extends Account {
         final BigDecimal oldBalance = getBalance();
 
         billAmount = newBillAmount;
-
-        final BigDecimal newBalance = getBalance();
-
-        final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
-        getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
-
-        updateFutureTithingAmount(balanceDiff);
-    }
-
-    public void setIsPaid(final boolean isPaid) {
-        if (this.isPaid == isPaid) {
-            return;
-        }
-
-        final BigDecimal oldBalance = getBalance();
-
-        this.isPaid = isPaid;
 
         final BigDecimal newBalance = getBalance();
 

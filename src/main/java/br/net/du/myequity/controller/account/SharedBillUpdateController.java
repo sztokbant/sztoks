@@ -3,6 +3,7 @@ package br.net.du.myequity.controller.account;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.account.SharedBillAccountViewModelOutput;
 import br.net.du.myequity.model.account.Account;
+import br.net.du.myequity.model.account.HasPaidFlagAccount;
 import br.net.du.myequity.model.account.SharedBillAccount;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
@@ -41,13 +42,17 @@ public class SharedBillUpdateController {
                 (jsonRequest, account) -> {
                     final boolean newValue = new Boolean(jsonRequest.getNewValue());
 
-                    ((SharedBillAccount) account).setIsPaid(newValue);
+                    ((HasPaidFlagAccount) account).setIsPaid(newValue);
 
                     return SharedBillAccountViewModelOutput.of(account, true);
                 };
 
         return accountUpdater.updateField(
-                model, valueUpdateJsonRequest, SharedBillAccount.class, updateAmountFunction, true);
+                model,
+                valueUpdateJsonRequest,
+                HasPaidFlagAccount.class,
+                updateAmountFunction,
+                true);
     }
 
     @PostMapping("/snapshot/updateAccountNumberOfPartners")

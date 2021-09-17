@@ -21,8 +21,7 @@ public class SharedBillReceivableAccount extends SharedBillAccount implements Fu
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final FutureTithingPolicy futureTithingPolicy) {
-        super(name, AccountType.ASSET, currencyUnit, LocalDate.now(), BigDecimal.ZERO, false, 1, 1);
-
+        super(name, AccountType.ASSET, currencyUnit, LocalDate.now(), false, BigDecimal.ZERO, 1, 1);
         this.futureTithingPolicy = futureTithingPolicy;
     }
 
