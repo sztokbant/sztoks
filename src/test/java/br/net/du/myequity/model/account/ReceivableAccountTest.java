@@ -29,7 +29,8 @@ class ReceivableAccountTest {
                             FutureTithingPolicy.NONE,
                             now,
                             now,
-                            BigDecimal.ZERO);
+                            BigDecimal.ZERO,
+                            false);
         }
 
         // THEN
@@ -40,7 +41,8 @@ class ReceivableAccountTest {
                         FutureTithingPolicy.NONE,
                         now,
                         now,
-                        BigDecimal.ZERO);
+                        BigDecimal.ZERO,
+                        false);
 
         assertTrue(equalsIgnoreId(actual, expected));
     }

@@ -1,9 +1,13 @@
 package br.net.du.myequity.controller.account;
 
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
+import br.net.du.myequity.controller.viewmodel.account.PayableAccountViewModelOutput;
+import br.net.du.myequity.controller.viewmodel.account.ReceivableAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.SharedBillAccountViewModelOutput;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.HasPaidFlagAccount;
+import br.net.du.myequity.model.account.BillAccount;
+import br.net.du.myequity.model.account.PayableAccount;
+import br.net.du.myequity.model.account.ReceivableAccount;
 import br.net.du.myequity.model.account.SharedBillAccount;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
@@ -14,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class SharedBillUpdateController {
+public class BillUpdateController {
 
     @Autowired AccountUpdater accountUpdater;
 
@@ -25,13 +29,21 @@ public class SharedBillUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
                 (jsonRequest, account) -> {
                     final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                    ((SharedBillAccount) account).setBillAmount(newValue);
+                    ((BillAccount) account).setBillAmount(newValue);
 
-                    return SharedBillAccountViewModelOutput.of(account, true);
+                    if (account instanceof SharedBillAccount) {
+                        return SharedBillAccountViewModelOutput.of(account, true);
+                    } else if (account instanceof ReceivableAccount) {
+                        return ReceivableAccountViewModelOutput.of(account, true);
+                    } else if (account instanceof PayableAccount) {
+                        return PayableAccountViewModelOutput.of(account, true);
+                    } else {
+                        throw new IllegalArgumentException("Unrecognized account sub_type");
+                    }
                 };
 
         return accountUpdater.updateField(
-                model, valueUpdateJsonRequest, SharedBillAccount.class, updateAmountFunction, true);
+                model, valueUpdateJsonRequest, BillAccount.class, updateAmountFunction, true);
     }
 
     @PostMapping("/snapshot/updateBillIsPaid")
@@ -42,17 +54,21 @@ public class SharedBillUpdateController {
                 (jsonRequest, account) -> {
                     final boolean newValue = new Boolean(jsonRequest.getNewValue());
 
-                    ((HasPaidFlagAccount) account).setIsPaid(newValue);
+                    ((BillAccount) account).setIsPaid(newValue);
 
-                    return SharedBillAccountViewModelOutput.of(account, true);
+                    if (account instanceof SharedBillAccount) {
+                        return SharedBillAccountViewModelOutput.of(account, true);
+                    } else if (account instanceof ReceivableAccount) {
+                        return ReceivableAccountViewModelOutput.of(account, true);
+                    } else if (account instanceof PayableAccount) {
+                        return PayableAccountViewModelOutput.of(account, true);
+                    } else {
+                        throw new IllegalArgumentException("Unrecognized account sub_type");
+                    }
                 };
 
         return accountUpdater.updateField(
-                model,
-                valueUpdateJsonRequest,
-                HasPaidFlagAccount.class,
-                updateAmountFunction,
-                true);
+                model, valueUpdateJsonRequest, BillAccount.class, updateAmountFunction, true);
     }
 
     @PostMapping("/snapshot/updateAccountNumberOfPartners")

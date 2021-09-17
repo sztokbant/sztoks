@@ -29,13 +29,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ReceivableAccountBalanceUpdateControllerTest extends AccountAjaxControllerTestBase {
+class ReceivableAccountBillAmountUpdateControllerTest extends AccountAjaxControllerTestBase {
 
     private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
-    private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
+    private static final BigDecimal CURRENT_BILL_AMOUNT = new BigDecimal("99.00");
 
-    ReceivableAccountBalanceUpdateControllerTest() {
-        super("/snapshot/updateAccountBalance", "108.00");
+    ReceivableAccountBillAmountUpdateControllerTest() {
+        super("/snapshot/updateAccountBillAmount", "108.00");
     }
 
     @Override
@@ -47,7 +47,8 @@ class ReceivableAccountBalanceUpdateControllerTest extends AccountAjaxController
                         FutureTithingPolicy.NONE,
                         LocalDate.now(),
                         LocalDate.now(),
-                        CURRENT_BALANCE);
+                        CURRENT_BILL_AMOUNT,
+                        false);
         account.setId(ACCOUNT_ID);
     }
 

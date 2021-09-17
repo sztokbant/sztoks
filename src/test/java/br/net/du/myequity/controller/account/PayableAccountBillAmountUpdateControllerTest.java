@@ -28,20 +28,25 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class PayableAccountBalanceUpdateControllerTest extends AccountAjaxControllerTestBase {
+class PayableAccountBillAmountUpdateControllerTest extends AccountAjaxControllerTestBase {
 
     private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
-    private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
+    private static final BigDecimal CURRENT_BILL_AMOUNT = new BigDecimal("99.00");
 
-    PayableAccountBalanceUpdateControllerTest() {
-        super("/snapshot/updateAccountBalance", "108.00");
+    PayableAccountBillAmountUpdateControllerTest() {
+        super("/snapshot/updateAccountBillAmount", "108.00");
     }
 
     @Override
     public void createEntity() {
         account =
                 new PayableAccount(
-                        "Friend", CURRENCY_UNIT, LocalDate.now(), LocalDate.now(), CURRENT_BALANCE);
+                        "Friend",
+                        CURRENCY_UNIT,
+                        LocalDate.now(),
+                        LocalDate.now(),
+                        CURRENT_BILL_AMOUNT,
+                        false);
         account.setId(ACCOUNT_ID);
     }
 

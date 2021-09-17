@@ -12,36 +12,29 @@ import org.joda.money.CurrencyUnit;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public abstract class HasPaidFlagAccount extends Account {
+public abstract class BillAccount extends Account {
+
+    @Column(precision = 19, scale = 2)
+    @Getter
+    protected BigDecimal billAmount;
 
     @Column(nullable = true)
     @Getter
     protected boolean isPaid;
 
-    public HasPaidFlagAccount(
+    public BillAccount(
             @NonNull final String name,
             @NonNull final AccountType accountType,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate createDate,
+            @NonNull final BigDecimal billAmount,
             final boolean isPaid) {
         super(name, accountType, currencyUnit, createDate);
+        this.billAmount = billAmount;
         this.isPaid = isPaid;
     }
 
-    @Override
-    public BigDecimal getBalance() {
-        if (isPaid) {
-            return BigDecimal.ZERO;
-        }
-
-        return getNominalBalance();
-    }
-
-    protected abstract BigDecimal getNominalBalance();
-
     public void setIsPaid(final boolean isPaid) {
-        // TODO: Why is this.isPaid nullable? It appears that this would not behave correctly if
-        // this.isPaid == null, and isPaid == false.
         if (this.isPaid == isPaid) {
             return;
         }
@@ -56,6 +49,25 @@ public abstract class HasPaidFlagAccount extends Account {
         getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
 
         updateFutureTithingAmount(balanceDiff);
+    }
+
+    public void setBillAmount(@NonNull final BigDecimal newBillAmount) {
+        if (billAmount.compareTo(newBillAmount) == 0) {
+            return;
+        }
+
+        final BigDecimal oldBalance = getBalance();
+
+        billAmount = newBillAmount;
+
+        if (!isPaid) {
+            final BigDecimal newBalance = getBalance();
+
+            final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
+            getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
+
+            updateFutureTithingAmount(balanceDiff);
+        }
     }
 
     protected void updateFutureTithingAmount(final BigDecimal balanceDiff) {}

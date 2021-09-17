@@ -12,7 +12,7 @@ spring:
 
     properties:
       hibernate:
-        generate_statistics: true
+        generate_statistics: false
 
   mvc:
     view:
@@ -25,5 +25,5 @@ spring:
 logging:
   level:
     root: INFO
-    org.springframework.orm.jpa: DEBUG
-    org.springframework.transaction: DEBUG
+    org.springframework.orm.jpa: INFO
+    org.springframework.transaction: INFO

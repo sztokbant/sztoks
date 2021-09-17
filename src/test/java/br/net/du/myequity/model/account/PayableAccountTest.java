@@ -24,12 +24,17 @@ class PayableAccountTest {
             localDateStaticMock.when(LocalDate::now).thenReturn(now);
             actual =
                     new PayableAccount(
-                            ACCOUNT_NAME, CURRENCY_UNIT, now, LocalDate.now(), BigDecimal.ZERO);
+                            ACCOUNT_NAME,
+                            CURRENCY_UNIT,
+                            now,
+                            LocalDate.now(),
+                            BigDecimal.ZERO,
+                            false);
         }
 
         // THEN
         final PayableAccount expected =
-                new PayableAccount(ACCOUNT_NAME, CURRENCY_UNIT, now, now, BigDecimal.ZERO);
+                new PayableAccount(ACCOUNT_NAME, CURRENCY_UNIT, now, now, BigDecimal.ZERO, false);
 
         assertTrue(equalsIgnoreId(actual, expected));
     }

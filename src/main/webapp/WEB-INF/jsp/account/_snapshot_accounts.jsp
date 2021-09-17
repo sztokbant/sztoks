@@ -68,8 +68,8 @@
                     <div class="col col-cell col-title">Due Date</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">Is paid?</div>
+                    <div class="col col-cell col-title">Amount</div>
                     <div class="col col-cell col-title">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.receivableAccounts}">
@@ -186,8 +186,8 @@
                     <div class="col col-cell col-title">Due Date</div>
                     <div class="col col-cell col-title">&nbsp;</div>
                     <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
+                    <div class="col col-cell col-title">Is paid?</div>
+                    <div class="col col-cell col-title">Amount</div>
                     <div class="col col-cell col-title">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.payableAccounts}">

@@ -15,14 +15,10 @@ import org.joda.money.CurrencyUnit;
 @Entity
 @DiscriminatorValue(ReceivableAccount.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class ReceivableAccount extends Account
-        implements BalanceUpdateable, DueDateUpdateable, FutureTithingCapable {
+public class ReceivableAccount extends BillAccount
+        implements DueDateUpdateable, FutureTithingCapable {
 
     public static final String ACCOUNT_SUB_TYPE = "RECEIVABLE";
-
-    @Column(precision = 19, scale = 8)
-    @Getter
-    private BigDecimal balance;
 
     @Column @Getter @Setter private LocalDate dueDate;
 
@@ -37,7 +33,8 @@ public class ReceivableAccount extends Account
                 futureTithingPolicy,
                 LocalDate.now(),
                 LocalDate.now(),
-                BigDecimal.ZERO);
+                BigDecimal.ZERO,
+                false);
     }
 
     public ReceivableAccount(
@@ -46,11 +43,11 @@ public class ReceivableAccount extends Account
             final FutureTithingPolicy futureTithingPolicy,
             @NonNull final LocalDate createDate,
             @NonNull final LocalDate dueDate,
-            @NonNull final BigDecimal balance) {
-        super(name, AccountType.ASSET, currencyUnit, createDate);
+            @NonNull final BigDecimal billAmount,
+            final boolean isPaid) {
+        super(name, AccountType.ASSET, currencyUnit, createDate, billAmount, isPaid);
         this.futureTithingPolicy = futureTithingPolicy;
         this.dueDate = dueDate;
-        this.balance = balance;
     }
 
     @Override
@@ -61,25 +58,13 @@ public class ReceivableAccount extends Account
                 futureTithingPolicy,
                 LocalDate.now(),
                 dueDate,
-                balance);
+                billAmount,
+                isPaid);
     }
 
     @Override
-    public void setBalance(@NonNull final BigDecimal newBalance) {
-        if (balance.compareTo(newBalance) == 0) {
-            return;
-        }
-
-        final BigDecimal oldBalance = balance;
-
-        balance = newBalance;
-
-        final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
-        getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
-
-        if (!getFutureTithingPolicy().equals(FutureTithingPolicy.NONE)) {
-            getSnapshot().updateFutureTithingAmount(getCurrencyUnit(), balanceDiff);
-        }
+    public BigDecimal getBalance() {
+        return isPaid ? BigDecimal.ZERO : getBillAmount();
     }
 
     @Override

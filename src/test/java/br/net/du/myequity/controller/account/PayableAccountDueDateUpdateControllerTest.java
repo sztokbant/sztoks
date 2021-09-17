@@ -46,7 +46,8 @@ class PayableAccountDueDateUpdateControllerTest extends AccountAjaxControllerTes
                         CURRENCY_UNIT,
                         LocalDate.now(),
                         CURRENT_DUE_DATE,
-                        CURRENT_BALANCE);
+                        CURRENT_BALANCE,
+                        false);
         account.setId(ACCOUNT_ID);
     }
 

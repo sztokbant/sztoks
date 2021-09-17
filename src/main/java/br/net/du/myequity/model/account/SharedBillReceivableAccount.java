@@ -1,5 +1,7 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.util.ModelConstants.DIVISION_SCALE;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.DiscriminatorValue;
@@ -21,7 +23,7 @@ public class SharedBillReceivableAccount extends SharedBillAccount implements Fu
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final FutureTithingPolicy futureTithingPolicy) {
-        super(name, AccountType.ASSET, currencyUnit, LocalDate.now(), false, BigDecimal.ZERO, 1, 1);
+        super(name, AccountType.ASSET, currencyUnit, LocalDate.now(), BigDecimal.ZERO, false, 1, 1);
         this.futureTithingPolicy = futureTithingPolicy;
     }
 
@@ -63,6 +65,21 @@ public class SharedBillReceivableAccount extends SharedBillAccount implements Fu
                 isPaid(),
                 getNumberOfPartners(),
                 getDueDay());
+    }
+
+    @Override
+    public BigDecimal getBalance() {
+        if (isPaid) {
+            return BigDecimal.ZERO;
+        }
+
+        final BigDecimal numberOfPartners = new BigDecimal(this.numberOfPartners);
+        return numberOfPartners
+                .multiply(billAmount)
+                .divide(
+                        numberOfPartners.add(BigDecimal.ONE),
+                        DIVISION_SCALE,
+                        BigDecimal.ROUND_HALF_UP);
     }
 
     @Override

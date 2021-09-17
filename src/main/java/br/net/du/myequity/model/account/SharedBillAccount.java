@@ -1,7 +1,5 @@
 package br.net.du.myequity.model.account;
 
-import static br.net.du.myequity.model.util.ModelConstants.DIVISION_SCALE;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -14,11 +12,7 @@ import org.joda.money.CurrencyUnit;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public abstract class SharedBillAccount extends HasPaidFlagAccount {
-
-    @Column(precision = 19, scale = 2)
-    @Getter
-    protected BigDecimal billAmount;
+public abstract class SharedBillAccount extends BillAccount {
 
     @Column @Getter protected Integer numberOfPartners;
 
@@ -29,11 +23,11 @@ public abstract class SharedBillAccount extends HasPaidFlagAccount {
             @NonNull final AccountType accountType,
             @NonNull final CurrencyUnit currencyUnit,
             @NonNull final LocalDate createDate,
-            final boolean isPaid,
             @NonNull final BigDecimal billAmount,
+            final boolean isPaid,
             final int numberOfPartners,
             final int dueDay) {
-        super(name, accountType, currencyUnit, createDate, isPaid);
+        super(name, accountType, currencyUnit, createDate, billAmount, isPaid);
 
         if (numberOfPartners < 1) {
             throw new IllegalArgumentException(
@@ -44,20 +38,8 @@ public abstract class SharedBillAccount extends HasPaidFlagAccount {
             throw new IllegalArgumentException("numberOfPartners must be between 1 and 31");
         }
 
-        this.billAmount = billAmount;
         this.numberOfPartners = numberOfPartners;
         this.dueDay = dueDay;
-    }
-
-    @Override
-    protected BigDecimal getNominalBalance() {
-        final BigDecimal numberOfPartners = new BigDecimal(this.numberOfPartners);
-        return numberOfPartners
-                .multiply(billAmount)
-                .divide(
-                        numberOfPartners.add(BigDecimal.ONE),
-                        DIVISION_SCALE,
-                        BigDecimal.ROUND_HALF_UP);
     }
 
     public void setDueDay(final int dueDay) {
@@ -66,23 +48,6 @@ public abstract class SharedBillAccount extends HasPaidFlagAccount {
         }
 
         this.dueDay = dueDay;
-    }
-
-    public void setBillAmount(@NonNull final BigDecimal newBillAmount) {
-        if (billAmount.compareTo(newBillAmount) == 0) {
-            return;
-        }
-
-        final BigDecimal oldBalance = getBalance();
-
-        billAmount = newBillAmount;
-
-        final BigDecimal newBalance = getBalance();
-
-        final BigDecimal balanceDiff = newBalance.subtract(oldBalance);
-        getSnapshot().updateNetWorth(getAccountType(), getCurrencyUnit(), balanceDiff);
-
-        updateFutureTithingAmount(balanceDiff);
     }
 
     public void setNumberOfPartners(final int newNumberOfPartners) {

@@ -12,14 +12,6 @@ $(document).ready(function() {
     data,
     receivableDueDateUpdateSuccessCallback,
   );
-
-  prepareUpdateForm($("#form_account_balance_${entity.accountId}"),
-    $("#account_balance_${entity.accountId}"),
-    $("#new_account_balance_${entity.accountId}"),
-    "snapshot/updateAccountBalance",
-    data,
-    accountBalanceUpdateSuccessCallback,
-  );
 })
 
 </script>
@@ -47,18 +39,11 @@ $(document).ready(function() {
         &nbsp;
     </div>
 
-    <div class="col col-cell">
-        &nbsp;
-    </div>
+    <%@ include file="_snapshot_col_is_paid.jsp" %>
 
-    <div class="col col-cell">
-        &nbsp;
-    </div>
+    <%@ include file="_snapshot_col_bill_amount.jsp" %>
 
-    <div class="col col-cell align-right ${editableClass}">
-        <form id="form_account_balance_${entity.accountId}">
-            <span id="account_balance_${entity.accountId}">${entity.balance}</span>
-            <span><input id="new_account_balance_${entity.accountId}" name="amount" type="number" step="0.01" style="display: none;"/></span>
-        </form>
+    <div class="col col-cell align-right">
+        <span id="account_balance_${entity.accountId}">${entity.balance}</span>
     </div>
 </div>

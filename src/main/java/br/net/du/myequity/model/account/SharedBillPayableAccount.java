@@ -1,5 +1,7 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.util.ModelConstants.DIVISION_SCALE;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.DiscriminatorValue;
@@ -24,8 +26,8 @@ public class SharedBillPayableAccount extends SharedBillAccount {
                 AccountType.LIABILITY,
                 currencyUnit,
                 LocalDate.now(),
-                false,
                 BigDecimal.ZERO,
+                false,
                 1,
                 1);
     }
@@ -66,5 +68,20 @@ public class SharedBillPayableAccount extends SharedBillAccount {
                 isPaid(),
                 getNumberOfPartners(),
                 getDueDay());
+    }
+
+    @Override
+    public BigDecimal getBalance() {
+        if (isPaid) {
+            return BigDecimal.ZERO;
+        }
+
+        final BigDecimal numberOfPartners = new BigDecimal(this.numberOfPartners);
+        return numberOfPartners
+                .multiply(billAmount)
+                .divide(
+                        numberOfPartners.add(BigDecimal.ONE),
+                        DIVISION_SCALE,
+                        BigDecimal.ROUND_HALF_UP);
     }
 }
