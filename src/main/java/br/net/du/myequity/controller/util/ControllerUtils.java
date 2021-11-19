@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Optional;
+import lombok.NonNull;
+import org.springframework.mobile.device.Device;
 import org.springframework.ui.Model;
 
 public class ControllerUtils {
@@ -26,6 +28,25 @@ public class ControllerUtils {
         }
 
         return loggedUserOpt.get();
+    }
+
+    public static String prepareTemplate(
+            @NonNull final Model model,
+            @NonNull final Device device,
+            @NonNull final String templateName) {
+        final String deviceType;
+        if (device.isMobile()) {
+            deviceType = "MOBILE";
+        } else if (device.isTablet()) {
+            deviceType = "TABLET";
+        } else {
+            deviceType = "DESKTOP";
+        }
+
+        model.addAttribute("deviceType", deviceType);
+        model.addAttribute("devicePlatform", device.getDevicePlatform().toString());
+
+        return templateName;
     }
 
     public static String formatAsPercentage(final BigDecimal input) {

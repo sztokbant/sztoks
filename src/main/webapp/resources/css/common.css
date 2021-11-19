@@ -37,6 +37,13 @@
     transform: translate(-50%, 0%);
 }
 
+.center-w100pct {
+    width: 100%;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
 .btn-myequity {
     background: blanchedalmond;
 }

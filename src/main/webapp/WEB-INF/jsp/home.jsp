@@ -19,12 +19,21 @@
 </head>
 <body>
 
+<c:choose>
+    <c:when test="${deviceType eq 'MOBILE'}">
+        <c:set var="divClass" value="center-w100pct" />
+    </c:when>
+    <c:otherwise>
+        <c:set var="divClass" value="center-w640" />
+    </c:otherwise>
+</c:choose>
+
 <%@ include file="/WEB-INF/jsp/_header.jsp" %>
 
 <div class="full-width">
     <div class="text-center"><h4>Snapshots</h4></div>
 
-    <div class="center-w640">
+    <div class="${divClass}">
         <table class="full-width">
             <tr class="border-1px">
                 <th class="snapshots-title">Snapshot Name</th>

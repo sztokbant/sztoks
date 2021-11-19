@@ -3,6 +3,7 @@ package br.net.du.myequity.controller;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOTS_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
+import static br.net.du.myequity.controller.util.ControllerUtils.prepareTemplate;
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
@@ -14,6 +15,7 @@ import br.net.du.myequity.service.SnapshotService;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -23,7 +25,7 @@ public class HomeController {
     @Autowired private SnapshotService snapshotService;
 
     @GetMapping("/")
-    public String get(final Model model) {
+    public String get(final Model model, final Device device) {
         final User user = getLoggedUser(model);
 
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
@@ -43,6 +45,6 @@ public class HomeController {
 
         model.addAttribute(SNAPSHOTS_KEY, homeSnapshotViewModelOutputs);
 
-        return "home";
+        return prepareTemplate(model, device, "home");
     }
 }
