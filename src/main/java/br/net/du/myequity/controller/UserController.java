@@ -5,6 +5,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.DEFAULT_CUR
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
 import static br.net.du.myequity.controller.util.ControllerConstants.SELECTED_CURRENCY;
 
+import br.net.du.myequity.controller.interceptor.WebController;
 import br.net.du.myequity.controller.viewmodel.UserViewModelInput;
 import br.net.du.myequity.controller.viewmodel.validator.UserViewModelInputValidator;
 import br.net.du.myequity.service.SecurityService;
@@ -12,7 +13,6 @@ import br.net.du.myequity.service.UserService;
 import java.math.BigDecimal;
 import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@Controller
+@WebController
 public class UserController {
     private static final String SIGNUP_MAPPING = "/signup";
     private static final String SIGNUP_TEMPLATE = "signup";

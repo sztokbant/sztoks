@@ -8,6 +8,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 
+import br.net.du.myequity.controller.interceptor.WebController;
 import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.EditCurrenciesViewModelInput;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
@@ -18,7 +19,6 @@ import br.net.du.myequity.service.SnapshotService;
 import java.math.BigDecimal;
 import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@Controller
+@WebController
 public class SnapshotEditCurrenciesController {
     private static final String SNAPSHOT_EDIT_CURRENCIES_MAPPING = "/snapshot/{id}/currencies";
 

@@ -6,6 +6,7 @@ import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
+import br.net.du.myequity.controller.interceptor.WebController;
 import br.net.du.myequity.controller.viewmodel.SnapshotSummaryViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
 import br.net.du.myequity.model.User;
@@ -13,11 +14,10 @@ import br.net.du.myequity.service.SnapshotService;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Controller
+@WebController
 public class HomeController {
 
     @Autowired private SnapshotService snapshotService;
