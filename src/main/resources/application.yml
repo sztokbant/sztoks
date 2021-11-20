@@ -14,13 +14,13 @@ spring:
       hibernate:
         generate_statistics: false
 
+  messages:
+    basename: validation
+
   mvc:
     view:
       prefix: /WEB-INF/jsp/
       suffix: .jsp
-
-  messages:
-    basename: validation
 
 logging:
   level:
