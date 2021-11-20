@@ -22,11 +22,13 @@
 <%@ include file="/WEB-INF/jsp/_header.jsp" %>
 
 <div class="full-width">
-    <div class="row">
-        <div class="col">
-            <div>
-                <h4 class="form-heading">About</h4>
-            </div>
+
+    <c:choose>
+        <c:when test="${deviceType ne 'MOBILE'}">
+            <div class="row">
+                <div class="col">
+        </c:when>
+    </c:choose>
 
             <div>
                 <b>Sztoks</b> is a balance sheet-like web app which allows one to keep a monthly snapshot of
@@ -49,9 +51,18 @@
             <div>
                 The source code for <b>Sztoks</b> is available on <a href="https://github.com/sztokbant/sztoks" target="_blank"><b>GitHub</b></a>.
             </div>
-        </div>
 
-        <div class="col">
+    <c:choose>
+        <c:when test="${deviceType ne 'MOBILE'}">
+                </div>
+
+                <div class="col">
+        </c:when>
+        <c:otherwise>
+            <br/>
+        </c:otherwise>
+    </c:choose>
+
             <div>
                 <form method="POST" action="${contextPath}/login" class="form-signin">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -88,7 +99,13 @@
                     </div>
                 </form>
             </div>
-        </div>
+
+    <c:choose>
+        <c:when test="${deviceType ne 'MOBILE'}">
+            </div>
+        </c:when>
+    </c:choose>
+
     </div>
 </div>
 

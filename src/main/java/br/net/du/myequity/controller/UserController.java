@@ -4,6 +4,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.CURRENCIES;
 import static br.net.du.myequity.controller.util.ControllerConstants.DEFAULT_CURRENCY_UNIT;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_HOME;
 import static br.net.du.myequity.controller.util.ControllerConstants.SELECTED_CURRENCY;
+import static br.net.du.myequity.controller.util.ControllerUtils.prepareTemplate;
 
 import br.net.du.myequity.controller.interceptor.WebController;
 import br.net.du.myequity.controller.viewmodel.UserViewModelInput;
@@ -12,7 +13,10 @@ import br.net.du.myequity.service.SecurityService;
 import br.net.du.myequity.service.UserService;
 import java.math.BigDecimal;
 import org.joda.money.CurrencyUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +29,8 @@ public class UserController {
     private static final String SIGNUP_MAPPING = "/signup";
     private static final String SIGNUP_TEMPLATE = "signup";
     private static final String USER_FORM = "userForm";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired private UserService userService;
 
@@ -80,7 +86,11 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(final Model model, final String error, final String logout) {
+    public String login(
+            final Model model, final Device device, final String error, final String logout) {
+
+        LOGGER.info("*** INSIDE login(): " + device.toString() + " ***");
+
         if (error != null) {
             model.addAttribute("error", "Invalid E-mail or Password.");
         }
@@ -89,6 +99,6 @@ public class UserController {
             model.addAttribute("message", "You have been logged out successfully.");
         }
 
-        return "login";
+        return prepareTemplate(model, device, "login");
     }
 }
