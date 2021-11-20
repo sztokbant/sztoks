@@ -3,7 +3,7 @@ package br.net.du.myequity.controller.account;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.account.AccountViewModelOutput;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.BalanceUpdateable;
+import br.net.du.myequity.model.account.BalanceUpdatable;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +24,12 @@ public class BalanceUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
                 (jsonRequest, account) -> {
                     final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                    ((BalanceUpdateable) account).setBalance(newValue);
+                    ((BalanceUpdatable) account).setBalance(newValue);
 
                     return AccountViewModelOutput.of(account, true);
                 };
 
         return accountUpdater.updateField(
-                model, valueUpdateJsonRequest, BalanceUpdateable.class, updateAmountFunction, true);
+                model, valueUpdateJsonRequest, BalanceUpdatable.class, updateAmountFunction, true);
     }
 }

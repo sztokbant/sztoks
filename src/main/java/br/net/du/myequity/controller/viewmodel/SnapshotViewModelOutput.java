@@ -120,7 +120,7 @@ public class SnapshotViewModelOutput {
         final Long nextId = snapshot.getNextId();
         final String nextDisplayTitle = getNextDisplayTitle(snapshot);
 
-        final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot);
+        final UpdatableTotals updatableTotals = new UpdatableTotals(snapshot);
 
         final SnapshotViewModelOutputBuilder builder =
                 SnapshotViewModelOutput.builder()
@@ -130,46 +130,46 @@ public class SnapshotViewModelOutput {
                                 SnapshotUtils.computeNextSnapshotPeriod(snapshot).isPresent())
                         .defaultTithingPercentage(
                                 formatAsPercentage(snapshot.getDefaultTithingPercentage()))
-                        .netWorth(updateableTotals.getNetWorth())
+                        .netWorth(updatableTotals.getNetWorth())
                         .currencyConversionRates(
                                 toStringStringMap(snapshot.getCurrencyConversionRates()))
                         .oneBaseCurrency(format(snapshot.getBaseCurrencyUnit(), BigDecimal.ONE))
-                        .assetsTotal(updateableTotals.getTotalFor(AccountType.ASSET))
+                        .assetsTotal(updatableTotals.getTotalFor(AccountType.ASSET))
                         .simpleAssetsBalance(
-                                updateableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.SIMPLE_ASSET))
                         .giftCertificatesBalance(
-                                updateableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.GIFT_CERTIFICATE))
                         .receivablesBalance(
-                                updateableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.RECEIVABLE))
                         .sharedBillReceivablesBalance(
-                                updateableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.SHARED_BILL_RECEIVABLE))
                         .investmentTotals(InvestmentTotalsViewModelOutput.of(investmentTotals))
                         .totalTithingBalance(
-                                updateableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.TITHING))
-                        .liabilitiesTotal(updateableTotals.getTotalFor(AccountType.LIABILITY))
+                        .liabilitiesTotal(updatableTotals.getTotalFor(AccountType.LIABILITY))
                         .simpleLiabilitiesBalance(
-                                updateableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.SIMPLE_LIABILITY))
                         .payablesBalance(
-                                updateableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.PAYABLE))
                         .sharedBillPayablesBalance(
-                                updateableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.SHARED_BILL_PAYABLE))
                         .creditCardTotals(getCurrencyUnitCreditCardViewModels(creditCardTotals))
                         .incomeTransactionsTotal(
-                                updateableTotals.getTotalFor(TransactionType.INCOME))
+                                updatableTotals.getTotalFor(TransactionType.INCOME))
                         .investmentTransactionsTotal(
-                                updateableTotals.getTotalFor(TransactionType.INVESTMENT))
+                                updatableTotals.getTotalFor(TransactionType.INVESTMENT))
                         .donationTransactionsTotal(
-                                updateableTotals.getTotalFor(TransactionType.DONATION))
+                                updatableTotals.getTotalFor(TransactionType.DONATION))
                         .taxDeductibleDonationTransactionsTotal(
-                                updateableTotals.getTaxDeductibleDonationsTotal())
+                                updatableTotals.getTaxDeductibleDonationsTotal())
                         .previousId(previousId)
                         .previousName(previousDisplayTitle)
                         .nextId(nextId)

@@ -15,7 +15,7 @@ import org.joda.money.CurrencyUnit;
 @DiscriminatorValue(GiftCertificateAccount.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class GiftCertificateAccount extends Account
-        implements SharesUpdateable, FutureTithingCapable {
+        implements SharesUpdatable, FutureTithingCapable {
 
     public static final String ACCOUNT_SUB_TYPE = "GIFT_CERTIFICATE";
 

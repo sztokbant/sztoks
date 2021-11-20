@@ -21,7 +21,7 @@ import org.joda.money.CurrencyUnit;
 public class SnapshotTotalsCalculator {
     private final Snapshot snapshot;
 
-    public BalanceUpdateableSubtypeTotal getTotalBalance(
+    public BalanceUpdatableSubtypeTotal getTotalBalance(
             final AccountSubtypeDisplayGroup accountSubtypeDisplayGroup) {
         final CurrencyUnit baseCurrencyUnit = snapshot.getBaseCurrencyUnit();
 
@@ -42,7 +42,7 @@ public class SnapshotTotalsCalculator {
             totalBalance = totalBalance.add(balance);
         }
 
-        return new BalanceUpdateableSubtypeTotal(baseCurrencyUnit, totalBalance);
+        return new BalanceUpdatableSubtypeTotal(baseCurrencyUnit, totalBalance);
     }
 
     public InvestmentsTotal getInvestmentsTotal() {

@@ -6,7 +6,7 @@ import br.net.du.myequity.controller.viewmodel.account.InvestmentAccountViewMode
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.GiftCertificateAccount;
 import br.net.du.myequity.model.account.InvestmentAccount;
-import br.net.du.myequity.model.account.SharesUpdateable;
+import br.net.du.myequity.model.account.SharesUpdatable;
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +26,10 @@ public class InvestmentUpdateController {
 
         final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAccountSharesFunction =
                 (jsonRequest, account) -> {
-                    final SharesUpdateable sharesUpdateable = (SharesUpdateable) account;
+                    final SharesUpdatable sharesUpdatable = (SharesUpdatable) account;
 
                     final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                    sharesUpdateable.setShares(newValue);
+                    sharesUpdatable.setShares(newValue);
 
                     if (account instanceof InvestmentAccount) {
                         return InvestmentAccountViewModelOutput.of(account, true);
@@ -43,7 +43,7 @@ public class InvestmentUpdateController {
         return accountUpdater.updateField(
                 model,
                 valueUpdateJsonRequest,
-                SharesUpdateable.class,
+                SharesUpdatable.class,
                 updateAccountSharesFunction,
                 true);
     }
@@ -77,10 +77,10 @@ public class InvestmentUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Account, Object>
                 updateAccountCurrentShareValueFunction =
                         (jsonRequest, account) -> {
-                            final SharesUpdateable sharesUpdateable = (SharesUpdateable) account;
+                            final SharesUpdatable sharesUpdatable = (SharesUpdatable) account;
 
                             final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            sharesUpdateable.setCurrentShareValue(newValue);
+                            sharesUpdatable.setCurrentShareValue(newValue);
 
                             if (account instanceof InvestmentAccount) {
                                 return InvestmentAccountViewModelOutput.of(account, true);
@@ -94,7 +94,7 @@ public class InvestmentUpdateController {
         return accountUpdater.updateField(
                 model,
                 valueUpdateJsonRequest,
-                SharesUpdateable.class,
+                SharesUpdatable.class,
                 updateAccountCurrentShareValueFunction,
                 true);
     }

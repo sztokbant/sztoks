@@ -46,7 +46,7 @@ function removeAccountFromSnapshotSuccessCallback(data, result) {
   updateNetWorth(result);
 }
 
-// BALANCE UPDATEABLE ACCOUNT
+// BALANCE UPDATABLE ACCOUNT
 
 function accountBalanceUpdateSuccessCallback(data, result) {
   $("#account_balance_" + data.entityId).html(result.balance);
@@ -185,7 +185,6 @@ function colorizeProfitPercentage(percentage, element) {
     element.removeClass('cell-green');
   }
 }
-
 
 // PAYABLE ACCOUNT
 

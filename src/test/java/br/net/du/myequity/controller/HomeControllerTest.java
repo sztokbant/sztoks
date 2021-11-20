@@ -9,7 +9,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.myequity.controller.viewmodel.SnapshotSummaryViewModelOutput;
-import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
+import br.net.du.myequity.controller.viewmodel.UpdatableTotals;
 import br.net.du.myequity.controller.viewmodel.UserViewModelOutput;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.SnapshotSummary;
@@ -101,7 +101,7 @@ class HomeControllerTest {
                                 snapshot.getId(),
                                 snapshot.getYear(),
                                 snapshot.getMonth(),
-                                new UpdateableTotals(snapshot).getNetWorth())),
+                                new UpdatableTotals(snapshot).getNetWorth())),
                 model.get(SNAPSHOTS_KEY));
     }
 }

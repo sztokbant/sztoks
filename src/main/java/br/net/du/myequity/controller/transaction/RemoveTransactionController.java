@@ -4,7 +4,7 @@ import static br.net.du.myequity.controller.util.TransactionUtils.hasTithingImpa
 
 import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.SnapshotRemoveTransactionJsonResponse;
-import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
+import br.net.du.myequity.controller.viewmodel.UpdatableTotals;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
@@ -81,23 +81,23 @@ public class RemoveTransactionController {
         final SnapshotRemoveTransactionJsonResponse.SnapshotRemoveTransactionJsonResponseBuilder
                 builder = SnapshotRemoveTransactionJsonResponse.builder();
 
-        final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot);
+        final UpdatableTotals updatableTotals = new UpdatableTotals(snapshot);
 
-        builder.totalForTransactionType(updateableTotals.getTotalFor(transactionType));
+        builder.totalForTransactionType(updatableTotals.getTotalFor(transactionType));
 
         if (transactionType.equals(TransactionType.INCOME)
                 || transactionType.equals(TransactionType.DONATION)) {
             if (transactionType.equals(TransactionType.DONATION)) {
                 builder.taxDeductibleDonationsTotal(
-                        updateableTotals.getTaxDeductibleDonationsTotal());
+                        updatableTotals.getTaxDeductibleDonationsTotal());
             }
 
-            builder.tithingBalance(updateableTotals.getTithingBalance())
+            builder.tithingBalance(updatableTotals.getTithingBalance())
                     .totalTithingBalance(
-                            updateableTotals.getTotalForAccountSubtype(
+                            updatableTotals.getTotalForAccountSubtype(
                                     AccountSubtypeDisplayGroup.TITHING))
-                    .totalLiability(updateableTotals.getTotalFor(AccountType.LIABILITY))
-                    .netWorth(updateableTotals.getNetWorth());
+                    .totalLiability(updatableTotals.getTotalFor(AccountType.LIABILITY))
+                    .netWorth(updatableTotals.getNetWorth());
         }
 
         return builder.entityId(valueUpdateJsonRequest.getEntityId())

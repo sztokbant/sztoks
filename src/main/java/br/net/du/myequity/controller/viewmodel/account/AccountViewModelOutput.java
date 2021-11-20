@@ -3,7 +3,7 @@ package br.net.du.myequity.controller.viewmodel.account;
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
-import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
+import br.net.du.myequity.controller.viewmodel.UpdatableTotals;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
@@ -75,13 +75,13 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
                         .currencyUnitSymbol(currencyUnit.getSymbol());
 
         if (includeTotals) {
-            final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot);
+            final UpdatableTotals updatableTotals = new UpdatableTotals(snapshot);
             final AccountSubtypeDisplayGroup accountSubtypeDisplayGroup =
                     AccountSubtypeDisplayGroup.forClass(account.getClass());
 
             final String totalForAccountType =
-                    updateableTotals.getTotalFor(account.getAccountType());
-            builder.netWorth(updateableTotals.getNetWorth())
+                    updatableTotals.getTotalFor(account.getAccountType());
+            builder.netWorth(updatableTotals.getNetWorth())
                     .accountType(account.getAccountType().name())
                     .totalForAccountType(totalForAccountType)
                     .accountSubtype(
@@ -91,21 +91,21 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
                     .totalForAccountSubtype(
                             accountSubtypeDisplayGroup == null
                                     ? null
-                                    : updateableTotals.getTotalForAccountSubtype(
+                                    : updatableTotals.getTotalForAccountSubtype(
                                             accountSubtypeDisplayGroup))
-                    .investmentTotals(updateableTotals.getInvestmentTotals())
+                    .investmentTotals(updatableTotals.getInvestmentTotals())
                     .creditCardTotalsForCurrencyUnit(
-                            updateableTotals.getCreditCardTotalsForCurrencyUnit(
+                            updatableTotals.getCreditCardTotalsForCurrencyUnit(
                                     account.getCurrencyUnit()));
 
             if (account instanceof FutureTithingCapable) {
                 final String totalLiability =
                         account.getAccountType().equals(AccountType.LIABILITY)
                                 ? totalForAccountType
-                                : updateableTotals.getTotalFor(AccountType.LIABILITY);
-                builder.futureTithingBalance(updateableTotals.getFutureTithingBalance())
+                                : updatableTotals.getTotalFor(AccountType.LIABILITY);
+                builder.futureTithingBalance(updatableTotals.getFutureTithingBalance())
                         .totalTithingBalance(
-                                updateableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.TITHING))
                         .totalLiability(totalLiability);
             }

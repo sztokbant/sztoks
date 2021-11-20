@@ -14,7 +14,7 @@ import org.joda.money.CurrencyUnit;
 @Entity
 @DiscriminatorValue(SimpleAssetAccount.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class SimpleAssetAccount extends Account implements BalanceUpdateable, FutureTithingCapable {
+public class SimpleAssetAccount extends Account implements BalanceUpdatable, FutureTithingCapable {
 
     public static final String ACCOUNT_SUB_TYPE = "SIMPLE_ASSET";
 

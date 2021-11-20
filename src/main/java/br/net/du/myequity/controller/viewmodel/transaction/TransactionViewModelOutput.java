@@ -4,7 +4,7 @@ import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercent
 import static br.net.du.myequity.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.myequity.controller.util.MoneyFormatUtils.format;
 
-import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
+import br.net.du.myequity.controller.viewmodel.UpdatableTotals;
 import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import br.net.du.myequity.model.transaction.Categorizable;
@@ -97,24 +97,23 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
         builder.category(category);
 
         if (includeTotals) {
-            final UpdateableTotals updateableTotals =
-                    new UpdateableTotals(transaction.getSnapshot());
+            final UpdatableTotals updatableTotals = new UpdatableTotals(transaction.getSnapshot());
 
-            builder.totalForTransactionType(updateableTotals.getTotalFor(transactionType));
+            builder.totalForTransactionType(updatableTotals.getTotalFor(transactionType));
 
             if (transactionType.equals(TransactionType.INCOME)
                     || transactionType.equals(TransactionType.DONATION)) {
                 if (transactionType.equals(TransactionType.DONATION)) {
                     builder.taxDeductibleDonationsTotal(
-                            updateableTotals.getTaxDeductibleDonationsTotal());
+                            updatableTotals.getTaxDeductibleDonationsTotal());
                 }
 
-                builder.tithingBalance(updateableTotals.getTithingBalance())
+                builder.tithingBalance(updatableTotals.getTithingBalance())
                         .totalTithingBalance(
-                                updateableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtype(
                                         AccountSubtypeDisplayGroup.TITHING))
-                        .totalLiability(updateableTotals.getTotalFor(AccountType.LIABILITY))
-                        .netWorth(updateableTotals.getNetWorth());
+                        .totalLiability(updatableTotals.getTotalFor(AccountType.LIABILITY))
+                        .netWorth(updatableTotals.getNetWorth());
             }
         }
 

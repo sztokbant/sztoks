@@ -2,7 +2,7 @@ package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.controller.util.ControllerUtils.formatAsPercentage;
 
-import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
+import br.net.du.myequity.controller.viewmodel.UpdatableTotals;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.AccountType;
@@ -35,22 +35,20 @@ public class SnapshotUpdateDefaultTithingPercentageController {
 
                             snapshot.setDefaultTithingPercentage(newValue);
 
-                            final UpdateableTotals updateableTotals =
-                                    new UpdateableTotals(snapshot);
+                            final UpdatableTotals updatableTotals = new UpdatableTotals(snapshot);
 
                             final AccountType accountType = AccountType.LIABILITY;
                             return JsonResponse.builder()
                                     .defaultTithingPercentage(
                                             formatAsPercentage(
                                                     snapshot.getDefaultTithingPercentage()))
-                                    .futureTithingBalance(
-                                            updateableTotals.getFutureTithingBalance())
+                                    .futureTithingBalance(updatableTotals.getFutureTithingBalance())
                                     .totalTithingBalance(
-                                            updateableTotals.getTotalForAccountSubtype(
+                                            updatableTotals.getTotalForAccountSubtype(
                                                     AccountSubtypeDisplayGroup.TITHING))
                                     .accountType(accountType.name())
-                                    .totalForAccountType(updateableTotals.getTotalFor(accountType))
-                                    .netWorth(updateableTotals.getNetWorth())
+                                    .totalForAccountType(updatableTotals.getTotalFor(accountType))
+                                    .netWorth(updatableTotals.getNetWorth())
                                     .build();
                         };
 

@@ -16,7 +16,7 @@ import org.joda.money.CurrencyUnit;
 @DiscriminatorValue(ReceivableAccount.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class ReceivableAccount extends BillAccount
-        implements DueDateUpdateable, FutureTithingCapable {
+        implements DueDateUpdatable, FutureTithingCapable {
 
     public static final String ACCOUNT_SUB_TYPE = "RECEIVABLE";
 

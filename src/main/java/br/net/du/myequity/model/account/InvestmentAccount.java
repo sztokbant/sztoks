@@ -18,7 +18,7 @@ import org.joda.money.CurrencyUnit;
 @Entity
 @DiscriminatorValue(InvestmentAccount.ACCOUNT_SUB_TYPE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class InvestmentAccount extends Account implements SharesUpdateable, FutureTithingCapable {
+public class InvestmentAccount extends Account implements SharesUpdatable, FutureTithingCapable {
 
     public static final String ACCOUNT_SUB_TYPE = "INVESTMENT";
 

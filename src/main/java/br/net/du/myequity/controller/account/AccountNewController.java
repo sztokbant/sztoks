@@ -18,7 +18,7 @@ import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.User;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.account.DueDateUpdateable;
+import br.net.du.myequity.model.account.DueDateUpdatable;
 import br.net.du.myequity.service.SnapshotService;
 import java.time.YearMonth;
 import org.apache.commons.lang3.StringUtils;
@@ -76,8 +76,8 @@ public class AccountNewController {
 
         final Account account = accountViewModelInput.toAccount();
 
-        if (account instanceof DueDateUpdateable) {
-            ((DueDateUpdateable) account)
+        if (account instanceof DueDateUpdatable) {
+            ((DueDateUpdatable) account)
                     .setDueDate(
                             YearMonth.of(snapshot.getYear(), snapshot.getMonth()).atEndOfMonth());
         }

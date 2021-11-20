@@ -4,7 +4,7 @@ import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.controller.viewmodel.account.PayableAccountViewModelOutput;
 import br.net.du.myequity.controller.viewmodel.account.ReceivableAccountViewModelOutput;
 import br.net.du.myequity.model.account.Account;
-import br.net.du.myequity.model.account.DueDateUpdateable;
+import br.net.du.myequity.model.account.DueDateUpdatable;
 import br.net.du.myequity.model.account.PayableAccount;
 import br.net.du.myequity.model.account.ReceivableAccount;
 import java.time.LocalDate;
@@ -27,7 +27,7 @@ public class DueDateUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Account, Object> updateDueDateFunction =
                 (jsonRequest, account) -> {
                     final LocalDate dueDate = LocalDate.parse(jsonRequest.getNewValue());
-                    ((DueDateUpdateable) account).setDueDate(dueDate);
+                    ((DueDateUpdatable) account).setDueDate(dueDate);
 
                     if (account instanceof PayableAccount) {
                         return PayableAccountViewModelOutput.of(account, false);
@@ -41,7 +41,7 @@ public class DueDateUpdateController {
         return accountUpdater.updateField(
                 model,
                 valueUpdateJsonRequest,
-                DueDateUpdateable.class,
+                DueDateUpdatable.class,
                 updateDueDateFunction,
                 false);
     }

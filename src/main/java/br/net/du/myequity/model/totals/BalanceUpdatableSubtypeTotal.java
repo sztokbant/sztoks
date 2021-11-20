@@ -7,7 +7,7 @@ import org.joda.money.CurrencyUnit;
 
 @AllArgsConstructor
 @Data
-public class BalanceUpdateableSubtypeTotal {
+public class BalanceUpdatableSubtypeTotal {
 
     private final CurrencyUnit currencyUnit;
     private final BigDecimal totalBalance;

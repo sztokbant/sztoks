@@ -4,7 +4,7 @@ import static br.net.du.myequity.controller.util.AccountUtils.hasFutureTithingIm
 
 import br.net.du.myequity.controller.util.SnapshotUtils;
 import br.net.du.myequity.controller.viewmodel.SnapshotRemoveAccountJsonResponse;
-import br.net.du.myequity.controller.viewmodel.UpdateableTotals;
+import br.net.du.myequity.controller.viewmodel.UpdatableTotals;
 import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
@@ -79,16 +79,16 @@ public class RemoveAccountController {
     private SnapshotRemoveAccountJsonResponse buildJsonResponse(
             final Snapshot snapshot, final Account account) {
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
-        final UpdateableTotals updateableTotals = new UpdateableTotals(snapshot);
+        final UpdatableTotals updatableTotals = new UpdatableTotals(snapshot);
 
-        final String totalForAccountType = updateableTotals.getTotalFor(account.getAccountType());
+        final String totalForAccountType = updatableTotals.getTotalFor(account.getAccountType());
 
         final SnapshotRemoveAccountJsonResponse.SnapshotRemoveAccountJsonResponseBuilder builder =
                 SnapshotRemoveAccountJsonResponse.builder()
                         .accountId(account.getId())
                         .currencyUnit(currencyUnit.getCode())
                         .currencyUnitSymbol(currencyUnit.getSymbol())
-                        .netWorth(updateableTotals.getNetWorth())
+                        .netWorth(updatableTotals.getNetWorth())
                         .accountType(account.getAccountType().name())
                         .totalForAccountType(totalForAccountType);
 
@@ -97,14 +97,14 @@ public class RemoveAccountController {
         if (accountSubtypeDisplayGroup != null) {
             builder.accountSubtype(accountSubtypeDisplayGroup.name())
                     .totalForAccountSubtype(
-                            updateableTotals.getTotalForAccountSubtype(accountSubtypeDisplayGroup));
+                            updatableTotals.getTotalForAccountSubtype(accountSubtypeDisplayGroup));
         }
 
         if (account instanceof InvestmentAccount) {
-            builder.investmentTotals(updateableTotals.getInvestmentTotals());
+            builder.investmentTotals(updatableTotals.getInvestmentTotals());
         } else if (account instanceof CreditCardAccount) {
             builder.creditCardTotalsForCurrencyUnit(
-                    updateableTotals.getCreditCardTotalsForCurrencyUnit(account.getCurrencyUnit()));
+                    updatableTotals.getCreditCardTotalsForCurrencyUnit(account.getCurrencyUnit()));
         }
 
         if (account instanceof FutureTithingCapable
@@ -114,10 +114,10 @@ public class RemoveAccountController {
             final String totalLiability =
                     account.getAccountType().equals(AccountType.LIABILITY)
                             ? totalForAccountType
-                            : updateableTotals.getTotalFor(AccountType.LIABILITY);
-            builder.futureTithingBalance(updateableTotals.getFutureTithingBalance())
+                            : updatableTotals.getTotalFor(AccountType.LIABILITY);
+            builder.futureTithingBalance(updatableTotals.getFutureTithingBalance())
                     .totalTithingBalance(
-                            updateableTotals.getTotalForAccountSubtype(
+                            updatableTotals.getTotalForAccountSubtype(
                                     AccountSubtypeDisplayGroup.TITHING))
                     .totalLiability(totalLiability);
         }

@@ -13,13 +13,13 @@ import br.net.du.myequity.model.transaction.TransactionType;
 import lombok.Getter;
 import org.joda.money.CurrencyUnit;
 
-public class UpdateableTotals {
+public class UpdatableTotals {
     private final Snapshot snapshot;
     private final SnapshotTotalsCalculator snapshotTotalsCalculator;
 
     @Getter private final String netWorth;
 
-    public UpdateableTotals(final Snapshot snapshot) {
+    public UpdatableTotals(final Snapshot snapshot) {
         this.snapshot = snapshot;
         snapshotTotalsCalculator = new SnapshotTotalsCalculator(snapshot);
         netWorth = format(snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getNetWorth()));
