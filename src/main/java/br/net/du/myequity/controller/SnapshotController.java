@@ -7,6 +7,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.TWELVE_MONT
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.YTD_TOTALS;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
+import static br.net.du.myequity.controller.util.ControllerUtils.prepareTemplate;
 
 import br.net.du.myequity.controller.interceptor.WebController;
 import br.net.du.myequity.controller.util.SnapshotUtils;
@@ -28,6 +29,7 @@ import br.net.du.myequity.service.SnapshotService;
 import java.util.List;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +43,10 @@ public class SnapshotController {
     @Autowired private SnapshotUtils snapshotUtils;
 
     @GetMapping("/snapshot/{id}")
-    public String get(@PathVariable(value = ID) final Long snapshotId, final Model model) {
+    public String get(
+            @PathVariable(value = ID) final Long snapshotId,
+            final Model model,
+            final Device device) {
         final User user = getLoggedUser(model);
         final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
 
@@ -65,7 +70,7 @@ public class SnapshotController {
                 getCumulativeTransactionCategoryTotalsViewModelOutput(user, snapshot);
         model.addAttribute(TRANSACTION_CATEGORY_TOTALS, value);
 
-        return SNAPSHOT;
+        return prepareTemplate(model, device, SNAPSHOT);
     }
 
     private CumulativeTransactionTotalsViewModelOutput

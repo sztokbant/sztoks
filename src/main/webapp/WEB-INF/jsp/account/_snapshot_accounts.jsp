@@ -125,6 +125,14 @@
             </c:when>
         </c:choose>
     </div>
+
+<c:choose>
+    <c:when test="${deviceType eq 'MOBILE'}">
+        </div>
+        <div class="row">
+    </c:when>
+</c:choose>
+
     <div class="col col-section liability-accounts">
         <div class="row border-1px-bottom">
             <div class="col col-cell text-center"><b>LIABILITIES</b>

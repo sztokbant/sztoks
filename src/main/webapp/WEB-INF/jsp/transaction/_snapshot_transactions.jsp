@@ -5,6 +5,7 @@
         </div>
     </div>
 </div>
+
 <div class="row">
     <div class="col col-section income-transactions">
         <div class="row border-1px-bottom">
@@ -119,6 +120,13 @@
         </c:choose>
 
     </div>
+
+<c:choose>
+    <c:when test="${deviceType eq 'MOBILE'}">
+        </div>
+        <div class="row">
+    </c:when>
+</c:choose>
 
     <div class="col col-section donation-transactions">
         <div class="row border-1px-bottom">
