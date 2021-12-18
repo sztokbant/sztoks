@@ -56,31 +56,38 @@
                 <div class="col">
                     <div class="${status.error ? 'has-error' : ''}">
                         <div>
-                            <form:radiobutton path="category" value="JOB" id="jobRadio"/>
+                            <form:radiobutton path="category" value="JOB" id="jobRadio"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="jobRadio" class="form-entry-${deviceType}">Job</label>
                         </div>
                         <div>
-                            <form:radiobutton path="category" value="BUSINESS" id="businessRadio"/>
+                            <form:radiobutton path="category" value="BUSINESS" id="businessRadio"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="businessRadio" class="form-entry-${deviceType}">Business</label>
                         </div>
                         <div>
-                            <form:radiobutton path="category" value="CAPITAL_GAIN" id="capitalGainRadio"/>
+                            <form:radiobutton path="category" value="CAPITAL_GAIN" id="capitalGainRadio"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="capitalGainRadio" class="form-entry-${deviceType}">Capital Gain</label>
                         </div>
                         <div>
-                            <form:radiobutton path="category" value="SIDE_GIG" id="sideGigRadio"/>
+                            <form:radiobutton path="category" value="SIDE_GIG" id="sideGigRadio"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="sideGigRadio" class="form-entry-${deviceType}">Side Gig</label>
                         </div>
                         <div>
-                            <form:radiobutton path="category" value="GIFT" id="giftRadio"/>
+                            <form:radiobutton path="category" value="GIFT" id="giftRadio"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="giftRadio" class="form-entry-${deviceType}">Gift</label>
                         </div>
                         <div>
-                            <form:radiobutton path="category" value="PROMO" id="promoRadio"/>
+                            <form:radiobutton path="category" value="PROMO" id="promoRadio"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="promoRadio" class="form-entry-${deviceType}">Promo</label>
                         </div>
                         <div>
-                            <form:radiobutton path="category" value="OTHER" id="otherRadio" checked="checked"/>
+                            <form:radiobutton path="category" value="OTHER" id="otherRadio" checked="checked"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="otherRadio" class="form-entry-${deviceType}">Other</label>
                         </div>
                         <form:errors path="category"/>

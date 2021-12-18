@@ -64,15 +64,18 @@
             <div class="${status.error ? 'has-error' : ''}">
                 <div>
                     <form:radiobutton path="recurrencePolicy" value="NONE" id="notRecurringRadio"
-                                      checked="checked"/>
+                                      checked="checked"
+                                      class="radio-sztoks-${deviceType}"/>
                     <label for="notRecurringRadio" class="form-entry-${deviceType}">Not recurring</label>
                 </div>
                 <div>
-                    <form:radiobutton path="recurrencePolicy" value="RECURRING" id="recurringRadio"/>
+                    <form:radiobutton path="recurrencePolicy" value="RECURRING" id="recurringRadio"
+                                      class="radio-sztoks-${deviceType}"/>
                     <label for="recurringRadio" class="form-entry-${deviceType}">Recurring</label>
                 </div>
                 <div>
-                    <form:radiobutton path="recurrencePolicy" value="RESETTABLE" id="resettableRadio"/>
+                    <form:radiobutton path="recurrencePolicy" value="RESETTABLE" id="resettableRadio"
+                                      class="radio-sztoks-${deviceType}"/>
                     <label for="resettableRadio" class="form-entry-${deviceType}">Recurring + reset to zero every month</label>
                 </div>
                 <form:errors path="recurrencePolicy"/>

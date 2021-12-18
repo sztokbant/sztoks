@@ -72,6 +72,18 @@
     line-height: normal;
 }
 
+.radio-sztoks-DESKTOP {
+}
+
+.radio-sztoks-TABLET {
+}
+
+.radio-sztoks-MOBILE {
+    width: 32px;
+    height: 32px;
+    vertical-align: text-bottom;
+}
+
 .btn-sztoks-DESKTOP {
     margin: 28px 0 0 0;
 }

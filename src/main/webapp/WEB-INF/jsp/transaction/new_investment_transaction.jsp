@@ -42,15 +42,18 @@
                 <div class="col">
                     <div class="${status.error ? 'has-error' : ''}">
                         <div>
-                            <form:radiobutton path="category" value="LONG_TERM" id="longTermRadio"/>
+                            <form:radiobutton path="category" value="LONG_TERM" id="longTermRadio"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="longTermRadio" class="form-entry-${deviceType}">Long Term</label>
                         </div>
                         <div>
-                            <form:radiobutton path="category" value="MID_TERM" id="midTermRadio"/>
+                            <form:radiobutton path="category" value="MID_TERM" id="midTermRadio"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="midTermRadio" class="form-entry-${deviceType}">Mid Term</label>
                         </div>
                         <div>
-                            <form:radiobutton path="category" value="SHORT_TERM" id="shortTermRadio" checked="checked"/>
+                            <form:radiobutton path="category" value="SHORT_TERM" id="shortTermRadio" checked="checked"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="shortTermRadio" class="form-entry-${deviceType}">Short Term</label>
                         </div>
                         <form:errors path="category"/>

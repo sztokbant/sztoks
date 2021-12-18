@@ -54,19 +54,23 @@
                 <div class="col">
                     <div class="${status.error ? 'has-error' : ''}">
                         <div>
-                            <form:radiobutton path="subtypeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"/>
+                            <form:radiobutton path="subtypeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="simpleLiabilityRadio" class="form-entry-${deviceType}">Simple Liability</label>
                         </div>
                         <div>
-                            <form:radiobutton path="subtypeName" value="PayableAccount" id="payableRadio"/>
+                            <form:radiobutton path="subtypeName" value="PayableAccount" id="payableRadio"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="payableRadio" class="form-entry-${deviceType}">Payable</label>
                         </div>
                         <div>
-                            <form:radiobutton path="subtypeName" value="SharedBillPayableAccount" id="sharedBillPayableRadio"/>
+                            <form:radiobutton path="subtypeName" value="SharedBillPayableAccount" id="sharedBillPayableRadio"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="sharedBillPayableRadio" class="form-entry-${deviceType}">Shared Bill Payable</label>
                         </div>
                         <div>
-                            <form:radiobutton path="subtypeName" value="CreditCardAccount" id="creditCardRadio"/>
+                            <form:radiobutton path="subtypeName" value="CreditCardAccount" id="creditCardRadio"
+                                              class="radio-sztoks-${deviceType}"/>
                             <label for="creditCardRadio" class="form-entry-${deviceType}">Credit Card</label>
                         </div>
                         <form:errors path="subtypeName"/>
