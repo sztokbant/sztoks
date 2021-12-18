@@ -1,3 +1,43 @@
+.navbar-sztoks-DESKTOP {
+}
+
+.navbar-sztoks-TABLET {
+}
+
+.navbar-sztoks-MOBILE {
+    font-size: 48px;
+}
+
+.navbar-margin-bottom-DESKTOP {
+    margin: 68px 0 0 0;
+}
+
+.navbar-margin-bottom-TABLET {
+    margin: 68px 0 0 0;
+}
+
+.navbar-margin-bottom-MOBILE {
+    margin: 108px 0 0 0;
+}
+
+.page-title-DESKTOP {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 0 14px 0;
+}
+
+.page-title-TABLET {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 0 14px 0;
+}
+
+.page-title-MOBILE {
+    font-size: 64px;
+    font-weight: bold;
+    margin: 0 0 14px 0;
+}
+
 .col-cell {
     font-size: 11.5px;
     padding: 2px 3px 2px 3px;

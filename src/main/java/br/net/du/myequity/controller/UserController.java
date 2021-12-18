@@ -39,19 +39,20 @@ public class UserController {
     @Autowired private UserViewModelInputValidator validator;
 
     @GetMapping(SIGNUP_MAPPING)
-    public String signup(final Model model) {
+    public String signup(final Model model, final Device device) {
         model.addAttribute(USER_FORM, new UserViewModelInput());
 
         model.addAttribute(CURRENCIES, CurrencyUnit.registeredCurrencies());
         model.addAttribute(SELECTED_CURRENCY, DEFAULT_CURRENCY_UNIT.getCode());
 
-        return SIGNUP_TEMPLATE;
+        return prepareTemplate(model, device, SIGNUP_TEMPLATE);
     }
 
     @PostMapping(SIGNUP_MAPPING)
     @Transactional
     public String signup(
             final Model model,
+            final Device device,
             @ModelAttribute(USER_FORM) final UserViewModelInput userViewModelInput,
             final BindingResult bindingResult) {
         validator.validate(userViewModelInput, bindingResult);
@@ -67,7 +68,7 @@ public class UserController {
                 model.addAttribute(SELECTED_CURRENCY, DEFAULT_CURRENCY_UNIT.getCode());
             }
 
-            return SIGNUP_TEMPLATE;
+            return prepareTemplate(model, device, SIGNUP_TEMPLATE);
         }
 
         final String email = userViewModelInput.getEmail().trim();
