@@ -10,7 +10,7 @@
                     <label for="username">E-mail</label>
                 </div>
                 <div class="col">
-                    <input id="username" name="username" type="text" class="form-control" placeholder="E-mail" autofocus="true"/>
+                    <input id="username" name="username" type="text" class="form-control form-entry-${deviceType}" placeholder="E-mail" autofocus="true"/>
                 </div>
             </div>
 
@@ -19,7 +19,7 @@
                     <label for="password">Password</label>
                 </div>
                 <div class="col">
-                    <input id="password" name="password" type="password" class="form-control" placeholder="Password"/>
+                    <input id="password" name="password" type="password" class="form-control form-entry-${deviceType}" placeholder="Password"/>
                 </div>
             </div>
 

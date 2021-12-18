@@ -6,9 +6,11 @@ import static br.net.du.myequity.controller.util.ControllerConstants.ID;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
 import static br.net.du.myequity.controller.util.ControllerConstants.SELECTED_CURRENCY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_TITLE_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.prepareTemplate;
+import static br.net.du.myequity.controller.viewmodel.SnapshotViewModelOutput.getDisplayTitle;
 
 import br.net.du.myequity.controller.interceptor.WebController;
 import br.net.du.myequity.controller.util.SnapshotUtils;
@@ -106,6 +108,7 @@ public class AccountNewController {
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_ID_KEY, snapshotId);
+        model.addAttribute(SNAPSHOT_TITLE_KEY, getDisplayTitle(snapshot));
         model.addAttribute(ACCOUNT_TYPE_KEY, accountType);
 
         model.addAttribute(CURRENCIES, snapshot.getCurrenciesInUse());

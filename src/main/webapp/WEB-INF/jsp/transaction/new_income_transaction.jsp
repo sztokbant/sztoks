@@ -24,9 +24,11 @@
         </c:when>
     </c:choose>
 
-    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newTransaction" modelAttribute="transactionForm" class="form-signin">
-        <h4 class="form-signin-heading">New Income Transaction</h4>
+    <div class="text-center page-title-${deviceType}">New Income Transaction</div>
 
+    <div class="text-center page-subtitle-${deviceType}">Snapshot: ${snapshotTitle}</div>
+
+    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newTransaction" modelAttribute="transactionForm" class="form-signin">
         <form:input type="hidden" path="typeName" value="${transactionType}" />
 
         <%@ include file="_new_transaction_common.jsp" %>
@@ -38,7 +40,7 @@
                 </div>
                 <div class="col">
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="number" min="0" max="100" step="0.01" id="tithingPercentage" path="tithingPercentage" class="form-control" placeholder="Tithing Percentage"
+                        <form:input type="number" min="0" max="100" step="0.01" id="tithingPercentage" path="tithingPercentage" class="form-control form-entry-${deviceType}" placeholder="Tithing Percentage"
                                     autofocus="true"></form:input>
                         <form:errors path="tithingPercentage"/>
                     </div>
@@ -55,31 +57,31 @@
                     <div class="${status.error ? 'has-error' : ''}">
                         <div>
                             <form:radiobutton path="category" value="JOB" id="jobRadio"/>
-                            <label for="jobRadio">Job</label>
+                            <label for="jobRadio" class="form-entry-${deviceType}">Job</label>
                         </div>
                         <div>
                             <form:radiobutton path="category" value="BUSINESS" id="businessRadio"/>
-                            <label for="businessRadio">Business</label>
+                            <label for="businessRadio" class="form-entry-${deviceType}">Business</label>
                         </div>
                         <div>
                             <form:radiobutton path="category" value="CAPITAL_GAIN" id="capitalGainRadio"/>
-                            <label for="capitalGainRadio">Capital Gain</label>
+                            <label for="capitalGainRadio" class="form-entry-${deviceType}">Capital Gain</label>
                         </div>
                         <div>
                             <form:radiobutton path="category" value="SIDE_GIG" id="sideGigRadio"/>
-                            <label for="sideGigRadio">Side Gig</label>
+                            <label for="sideGigRadio" class="form-entry-${deviceType}">Side Gig</label>
                         </div>
                         <div>
                             <form:radiobutton path="category" value="GIFT" id="giftRadio"/>
-                            <label for="giftRadio">Gift</label>
+                            <label for="giftRadio" class="form-entry-${deviceType}">Gift</label>
                         </div>
                         <div>
                             <form:radiobutton path="category" value="PROMO" id="promoRadio"/>
-                            <label for="promoRadio">Promo</label>
+                            <label for="promoRadio" class="form-entry-${deviceType}">Promo</label>
                         </div>
                         <div>
                             <form:radiobutton path="category" value="OTHER" id="otherRadio" checked="checked"/>
-                            <label for="otherRadio">Other</label>
+                            <label for="otherRadio" class="form-entry-${deviceType}">Other</label>
                         </div>
                         <form:errors path="category"/>
                     </div>

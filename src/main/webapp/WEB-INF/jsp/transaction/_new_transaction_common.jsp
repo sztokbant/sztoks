@@ -5,7 +5,7 @@
         </div>
         <div class="col">
             <div class="${status.error ? 'has-error' : ''}">
-                <form:input type="text" id="description" path="description" class="form-control" placeholder="Description"
+                <form:input type="text" id="description" path="description" class="form-control form-entry-${deviceType}" placeholder="Description"
                             autofocus="true"></form:input>
                 <form:errors path="description"/>
             </div>
@@ -23,7 +23,7 @@
         </div>
         <div class="col">
             <div class="${status.error ? 'has-error' : ''}">
-                <form:input type="date" id="date" path="date" class="form-control" placeholder="Date"
+                <form:input type="date" id="date" path="date" class="form-control form-entry-${deviceType}" placeholder="Date"
                             value="${today}" autofocus="true"></form:input>
                 <form:errors path="date"/>
             </div>
@@ -47,7 +47,7 @@
         </div>
         <div class="col">
             <div class="${status.error ? 'has-error' : ''}">
-                <form:input type="number" step="0.00000001" id="amount" path="amount" class="form-control" placeholder="Amount"
+                <form:input type="number" step="0.00000001" id="amount" path="amount" class="form-control form-entry-${deviceType}" placeholder="Amount"
                             autofocus="true"></form:input>
                 <form:errors path="amount"/>
             </div>
@@ -65,15 +65,15 @@
                 <div>
                     <form:radiobutton path="recurrencePolicy" value="NONE" id="notRecurringRadio"
                                       checked="checked"/>
-                    <label for="notRecurringRadio">Not recurring</label>
+                    <label for="notRecurringRadio" class="form-entry-${deviceType}">Not recurring</label>
                 </div>
                 <div>
                     <form:radiobutton path="recurrencePolicy" value="RECURRING" id="recurringRadio"/>
-                    <label for="recurringRadio">Recurring</label>
+                    <label for="recurringRadio" class="form-entry-${deviceType}">Recurring</label>
                 </div>
                 <div>
                     <form:radiobutton path="recurrencePolicy" value="RESETTABLE" id="resettableRadio"/>
-                    <label for="resettableRadio">Recurring + reset to zero every month</label>
+                    <label for="resettableRadio" class="form-entry-${deviceType}">Recurring + reset to zero every month</label>
                 </div>
                 <form:errors path="recurrencePolicy"/>
             </div>

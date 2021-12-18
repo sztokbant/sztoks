@@ -11,6 +11,7 @@ public class ControllerConstants {
     public static final String ID = "id";
     public static final String SNAPSHOT_BASE_CURRENCY_KEY = "baseCurrency";
     public static final String SNAPSHOT_ID_KEY = "snapshotId";
+    public static final String SNAPSHOT_TITLE_KEY = "snapshotTitle";
     public static final String SNAPSHOT_KEY = "snapshot";
     public static final String SNAPSHOTS_KEY = "snapshots";
     public static final String TRANSACTION_TYPE_KEY = "transactionType";

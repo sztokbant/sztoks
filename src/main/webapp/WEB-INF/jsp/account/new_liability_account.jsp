@@ -24,9 +24,11 @@
         </c:when>
     </c:choose>
 
-    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newAccount" modelAttribute="accountForm" class="form-signin">
-        <h4 class="form-signin-heading">New Liability Account</h4>
+    <div class="text-center page-title-${deviceType}">New Liability Account</div>
 
+    <div class="text-center page-subtitle-${deviceType}">Snapshot: ${snapshotTitle}</div>
+
+    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newAccount" modelAttribute="accountForm" class="form-signin">
         <form:input type="hidden" path="accountType" value="${accountType}"/>
 
         <spring:bind path="name">
@@ -36,7 +38,7 @@
                 </div>
                 <div class="col">
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="text" id="name" path="name" class="form-control" placeholder="Account Name"
+                        <form:input type="text" id="name" path="name" class="form-control form-entry-${deviceType}" placeholder="Account Name"
                                     autofocus="true"></form:input>
                         <form:errors path="name"/>
                     </div>
@@ -53,19 +55,19 @@
                     <div class="${status.error ? 'has-error' : ''}">
                         <div>
                             <form:radiobutton path="subtypeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"/>
-                            <label for="simpleLiabilityRadio">Simple Liability</label>
+                            <label for="simpleLiabilityRadio" class="form-entry-${deviceType}">Simple Liability</label>
                         </div>
                         <div>
                             <form:radiobutton path="subtypeName" value="PayableAccount" id="payableRadio"/>
-                            <label for="payableRadio">Payable</label>
+                            <label for="payableRadio" class="form-entry-${deviceType}">Payable</label>
                         </div>
                         <div>
                             <form:radiobutton path="subtypeName" value="SharedBillPayableAccount" id="sharedBillPayableRadio"/>
-                            <label for="sharedBillPayableRadio">Shared Bill Payable</label>
+                            <label for="sharedBillPayableRadio" class="form-entry-${deviceType}">Shared Bill Payable</label>
                         </div>
                         <div>
                             <form:radiobutton path="subtypeName" value="CreditCardAccount" id="creditCardRadio"/>
-                            <label for="creditCardRadio">Credit Card</label>
+                            <label for="creditCardRadio" class="form-entry-${deviceType}">Credit Card</label>
                         </div>
                         <form:errors path="subtypeName"/>
                     </div>

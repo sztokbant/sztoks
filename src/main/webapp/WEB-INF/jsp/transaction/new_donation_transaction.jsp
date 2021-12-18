@@ -24,10 +24,12 @@
         </c:when>
     </c:choose>
 
+    <div class="text-center page-title-${deviceType}">New Donation Transaction</div>
+
+    <div class="text-center page-subtitle-${deviceType}">Snapshot: ${snapshotTitle}</div>
+
     <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newTransaction"
                modelAttribute="transactionForm" class="form-signin">
-        <h4 class="form-signin-heading">New Donation Transaction</h4>
-
         <form:input type="hidden" path="typeName" value="${transactionType}"/>
 
         <%@ include file="_new_transaction_common.jsp" %>
@@ -41,11 +43,11 @@
                     <div class="${status.error ? 'has-error' : ''}">
                         <div>
                             <form:radiobutton path="isTaxDeductible" value="true" id="taxDeductibleRadio"/>
-                            <label for="taxDeductibleRadio">Tax Deductible</label>
+                            <label for="taxDeductibleRadio" class="form-entry-${deviceType}">Tax Deductible</label>
                         </div>
                         <div>
                             <form:radiobutton path="isTaxDeductible" value="false" id="nondeductibleRadio" checked="checked"/>
-                            <label for="nondeductibleRadio">Nondeductible</label>
+                            <label for="nondeductibleRadio" class="form-entry-${deviceType}">Nondeductible</label>
                         </div>
                         <form:errors path="isTaxDeductible"/>
                     </div>
@@ -62,15 +64,15 @@
                     <div class="${status.error ? 'has-error' : ''}">
                         <div>
                             <form:radiobutton path="category" value="FAMILY" id="familyRadio"/>
-                            <label for="familyRadio">Family</label>
+                            <label for="familyRadio" class="form-entry-${deviceType}">Family</label>
                         </div>
                         <div>
                             <form:radiobutton path="category" value="SPIRITUAL" id="spiritualRadio"/>
-                            <label for="spiritualRadio">Spiritual</label>
+                            <label for="spiritualRadio" class="form-entry-${deviceType}">Spiritual</label>
                         </div>
                         <div>
                             <form:radiobutton path="category" value="OTHER" id="otherRadio" checked="checked"/>
-                            <label for="otherRadio">Other</label>
+                            <label for="otherRadio" class="form-entry-${deviceType}">Other</label>
                         </div>
                         <form:errors path="category"/>
                     </div>

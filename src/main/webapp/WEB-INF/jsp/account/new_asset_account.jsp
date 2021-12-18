@@ -24,9 +24,11 @@
         </c:when>
     </c:choose>
 
-    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newAccount" modelAttribute="accountForm" class="form-signin">
-        <h4 class="form-signin-heading">New Asset Account</h4>
+    <div class="text-center page-title-${deviceType}">New Asset Account</div>
 
+    <div class="text-center page-subtitle-${deviceType}">Snapshot: ${snapshotTitle}</div>
+
+    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newAccount" modelAttribute="accountForm" class="form-signin">
         <form:input type="hidden" path="accountType" value="${accountType}"/>
 
         <spring:bind path="name">
@@ -36,7 +38,7 @@
                 </div>
                 <div class="col">
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="text" id="name" path="name" class="form-control" placeholder="Account Name"
+                        <form:input type="text" id="name" path="name" class="form-control form-entry-${deviceType}" placeholder="Account Name"
                                     autofocus="true"></form:input>
                         <form:errors path="name"/>
                     </div>
@@ -53,23 +55,23 @@
                     <div class="${status.error ? 'has-error' : ''}">
                         <div>
                             <form:radiobutton path="subtypeName" value="SimpleAssetAccount" id="simpleAssetRadio"/>
-                            <label for="simpleAssetRadio">Simple Asset</label>
+                            <label for="simpleAssetRadio" class="form-entry-${deviceType}">Simple Asset</label>
                         </div>
                         <div>
                             <form:radiobutton path="subtypeName" value="GiftCertificateAccount" id="giftCertificateRadio"/>
-                            <label for="giftCertificateRadio">Gift Certificate</label>
+                            <label for="giftCertificateRadio" class="form-entry-${deviceType}">Gift Certificate</label>
                         </div>
                         <div>
                             <form:radiobutton path="subtypeName" value="ReceivableAccount" id="receivableRadio"/>
-                            <label for="receivableRadio">Receivable</label>
+                            <label for="receivableRadio" class="form-entry-${deviceType}">Receivable</label>
                         </div>
                         <div>
                             <form:radiobutton path="subtypeName" value="SharedBillReceivableAccount" id="sharedBillReceivableRadio"/>
-                            <label for="sharedBillReceivableRadio">Shared Bill Receivable</label>
+                            <label for="sharedBillReceivableRadio" class="form-entry-${deviceType}">Shared Bill Receivable</label>
                         </div>
                         <div>
                             <form:radiobutton path="subtypeName" value="InvestmentAccount" id="investmentRadio"/>
-                            <label for="investmentRadio">Investment</label>
+                            <label for="investmentRadio" class="form-entry-${deviceType}">Investment</label>
                         </div>
                         <form:errors path="subtypeName"/>
                     </div>
@@ -95,15 +97,15 @@
                     <div class="${status.error ? 'has-error' : ''}">
                         <div>
                             <form:radiobutton path="futureTithingPolicy" value="NONE" id="noneRadio" checked="checked"/>
-                            <label for="noneRadio">None</label>
+                            <label for="noneRadio" class="form-entry-${deviceType}">None</label>
                         </div>
                         <div>
                             <form:radiobutton path="futureTithingPolicy" value="PROFITS_ONLY" id="profitsOnlyRadio"/>
-                            <label for="profitsOnlyRadio">Profits Only</label>
+                            <label for="profitsOnlyRadio" class="form-entry-${deviceType}">Profits Only</label>
                         </div>
                         <div>
                             <form:radiobutton path="futureTithingPolicy" value="ALL" id="allRadio"/>
-                            <label for="allRadio">All</label>
+                            <label for="allRadio" class="form-entry-${deviceType}">All</label>
                         </div>
                         <form:errors path="futureTithingPolicy"/>
                     </div>

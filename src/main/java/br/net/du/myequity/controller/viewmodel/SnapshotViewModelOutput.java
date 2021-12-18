@@ -125,7 +125,7 @@ public class SnapshotViewModelOutput {
         final SnapshotViewModelOutputBuilder builder =
                 SnapshotViewModelOutput.builder()
                         .id(snapshot.getId())
-                        .name(getDisplayTitle(snapshot.getYear(), snapshot.getMonth()))
+                        .name(getDisplayTitle(snapshot))
                         .newSnapshotAllowed(
                                 SnapshotUtils.computeNextSnapshotPeriod(snapshot).isPresent())
                         .defaultTithingPercentage(
@@ -179,6 +179,10 @@ public class SnapshotViewModelOutput {
         addTransactions(builder, snapshot);
 
         return builder.build();
+    }
+
+    public static String getDisplayTitle(@NonNull final Snapshot snapshot) {
+        return getDisplayTitle(snapshot.getYear(), snapshot.getMonth());
     }
 
     public static String getDisplayTitle(final int year, final int month) {

@@ -40,9 +40,11 @@ $(document).ready(function() {
         </c:when>
     </c:choose>
 
-    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newCurrency" modelAttribute="newCurrencyForm" class="form-signin">
-        <h4 class="form-signin-heading">Add New Currency</h4>
+    <div class="text-center page-title-${deviceType}">Add New Currency</div>
 
+    <div class="text-center page-subtitle-${deviceType}">Snapshot: ${snapshotTitle}</div>
+
+    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newCurrency" modelAttribute="newCurrencyForm" class="form-signin">
         <div class="row form-group">
             <div class="col col-form-label-${deviceType}">
                 <label for="currencyUnit">Currency</label>
@@ -51,13 +53,16 @@ $(document).ready(function() {
         </div>
 
         <div class="row form-group">
-            <div class="col" style="max-width: 40%;">
-                <label for="conversionRate"><b>Conversion Rate</b><br/><i>1 ${baseCurrency} to <span id="selected_currency"></span></i></label>
+            <div class="col col-form-label-${deviceType}">
+                <label for="conversionRate">Conversion Rate
+                    <br/>
+                    <span class="col-form-sub-label-${deviceType}">1 ${baseCurrency} to <span id="selected_currency"></span></span></label>
             </div>
             <div class="col">
                 <spring:bind path="conversionRate">
                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <form:input type="number" min="0" step="0.0001" id="conversionRate" path="conversionRate" class="form-control" placeholder="Conversion Rate"
+                        <form:input type="number" min="0" step="0.0001" id="conversionRate" path="conversionRate"
+                                    class="form-control form-entry-${deviceType}" placeholder="Conversion Rate"
                                     autofocus="true"></form:input>
                         <form:errors path="conversionRate"/>
                     </div>

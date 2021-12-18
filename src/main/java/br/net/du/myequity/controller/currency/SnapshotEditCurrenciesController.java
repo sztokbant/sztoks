@@ -1,13 +1,15 @@
-package br.net.du.myequity.controller;
+package br.net.du.myequity.controller.currency;
 
-import static br.net.du.myequity.controller.SnapshotNewCurrencyController.SNAPSHOT_NEW_CURRENCY_MAPPING;
+import static br.net.du.myequity.controller.currency.SnapshotNewCurrencyController.SNAPSHOT_NEW_CURRENCY_MAPPING;
 import static br.net.du.myequity.controller.util.ControllerConstants.ID;
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_BASE_CURRENCY_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_TITLE_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.prepareTemplate;
+import static br.net.du.myequity.controller.viewmodel.SnapshotViewModelOutput.getDisplayTitle;
 
 import br.net.du.myequity.controller.interceptor.WebController;
 import br.net.du.myequity.controller.util.SnapshotUtils;
@@ -33,7 +35,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class SnapshotEditCurrenciesController {
     private static final String SNAPSHOT_EDIT_CURRENCIES_MAPPING = "/snapshot/{id}/currencies";
 
-    private static final String SNAPSHOT_EDIT_CURRENCIES_TEMPLATE = "snapshot_edit_currencies";
+    private static final String SNAPSHOT_EDIT_CURRENCIES_TEMPLATE =
+            "currency/snapshot_edit_currencies";
     private static final String EDIT_CURRENCIES_FORM = "editCurrenciesForm";
 
     @Autowired private SnapshotService snapshotService;
@@ -94,6 +97,7 @@ public class SnapshotEditCurrenciesController {
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_ID_KEY, snapshot.getId());
+        model.addAttribute(SNAPSHOT_TITLE_KEY, getDisplayTitle(snapshot));
         model.addAttribute(SNAPSHOT_BASE_CURRENCY_KEY, snapshot.getBaseCurrencyUnit().getCode());
 
         model.addAttribute(EDIT_CURRENCIES_FORM, currenciesViewModelInput);

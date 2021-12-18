@@ -24,10 +24,12 @@
         </c:when>
     </c:choose>
 
+    <div class="text-center page-title-${deviceType}">New Investment Transaction</div>
+
+    <div class="text-center page-subtitle-${deviceType}">Snapshot: ${snapshotTitle}</div>
+
     <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newTransaction"
                modelAttribute="transactionForm" class="form-signin">
-        <h4 class="form-signin-heading">New Investment Transaction</h4>
-
         <form:input type="hidden" path="typeName" value="${transactionType}"/>
 
         <%@ include file="_new_transaction_common.jsp" %>
@@ -41,15 +43,15 @@
                     <div class="${status.error ? 'has-error' : ''}">
                         <div>
                             <form:radiobutton path="category" value="LONG_TERM" id="longTermRadio"/>
-                            <label for="longTermRadio">Long Term</label>
+                            <label for="longTermRadio" class="form-entry-${deviceType}">Long Term</label>
                         </div>
                         <div>
                             <form:radiobutton path="category" value="MID_TERM" id="midTermRadio"/>
-                            <label for="midTermRadio">Mid Term</label>
+                            <label for="midTermRadio" class="form-entry-${deviceType}">Mid Term</label>
                         </div>
                         <div>
                             <form:radiobutton path="category" value="SHORT_TERM" id="shortTermRadio" checked="checked"/>
-                            <label for="shortTermRadio">Short Term</label>
+                            <label for="shortTermRadio" class="form-entry-${deviceType}">Short Term</label>
                         </div>
                         <form:errors path="category"/>
                     </div>

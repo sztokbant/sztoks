@@ -33,7 +33,8 @@
             <div class="col">
                 <spring:bind path="email">
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="text" id="email" path="email" class="form-control" placeholder="E-mail"
+                        <form:input type="text" id="email" path="email" class="form-control form-entry-${deviceType}"
+                                    placeholder="E-mail"
                                     autofocus="true"></form:input>
                         <form:errors path="email"></form:errors>
                     </div>
@@ -48,7 +49,8 @@
             <div class="col">
                 <spring:bind path="firstName">
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="text" id="firstName" path="firstName" class="form-control" placeholder="First Name"
+                        <form:input type="text" id="firstName" path="firstName" class="form-control form-entry-${deviceType}"
+                                    placeholder="First Name"
                                     autofocus="true"></form:input>
                         <form:errors path="firstName"></form:errors>
                     </div>
@@ -63,7 +65,8 @@
             <div class="col">
                 <spring:bind path="lastName">
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="text" id="lastName" path="lastName" class="form-control" placeholder="Last Name"
+                        <form:input type="text" id="lastName" path="lastName" class="form-control form-entry-${deviceType}"
+                                    placeholder="Last Name"
                                     autofocus="true"></form:input>
                         <form:errors path="lastName"></form:errors>
                     </div>
@@ -87,7 +90,8 @@
             <div class="col">
                 <spring:bind path="tithingPercentage">
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="number" min="0" max="100" step="0.01" id="tithingPercentage" path="tithingPercentage" class="form-control"
+                        <form:input type="number" min="0" max="100" step="0.01" id="tithingPercentage" path="tithingPercentage"
+                                    class="form-control form-entry-${deviceType}"
                                     placeholder="Default Tithing Percentage"
                                     autofocus="true"></form:input>
                         <form:errors path="tithingPercentage"/>
@@ -103,7 +107,8 @@
             <div class="col">
                 <spring:bind path="password">
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="password" id="password" path="password" class="form-control"
+                        <form:input type="password" id="password" path="password"
+                                    class="form-control form-entry-${deviceType}"
                                     placeholder="Password"></form:input>
                         <form:errors path="password"></form:errors>
                     </div>
@@ -118,7 +123,8 @@
             <div class="col">
                 <spring:bind path="passwordConfirm">
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="password" id="passwordConfirm" path="passwordConfirm" class="form-control"
+                        <form:input type="password" id="passwordConfirm" path="passwordConfirm"
+                                    class="form-control form-entry-${deviceType}"
                                     placeholder="Confirm your password"></form:input>
                         <form:errors path="passwordConfirm"></form:errors>
                     </div>

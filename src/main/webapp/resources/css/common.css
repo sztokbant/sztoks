@@ -23,44 +23,65 @@
 .page-title-DESKTOP {
     font-size: 1.5rem;
     font-weight: bold;
-    margin: 0 0 14px 0;
+    margin: 0 0 0 0;
 }
 
 .page-title-TABLET {
     font-size: 1.5rem;
     font-weight: bold;
-    margin: 0 0 14px 0;
+    margin: 0 0 0 0;
 }
 
 .page-title-MOBILE {
     font-size: 64px;
     font-weight: bold;
+    margin: 0 0 0 0;
+}
+
+.page-subtitle-DESKTOP {
+    font-size: 1.0rem;
     margin: 0 0 14px 0;
+    font-weight: 500;
+}
+
+.page-subtitle-TABLET {
+    font-size: 1.0rem;
+    margin: 0 0 14px 0;
+    font-weight: 500;
+}
+
+.page-subtitle-MOBILE {
+    font-size: 48px;
+    margin: 0 0 28px 0;
+    font-weight: 500;
 }
 
 .paragraph-DESKTOP {
-    margin: 18px 0 0 0;
+    margin: 18px 0 18px 0;
     line-height: normal;
 }
 
 .paragraph-TABLET {
-    margin: 18px 0 0 0;
+    margin: 18px 0 18px 0;
     line-height: normal;
 }
 
 .paragraph-MOBILE {
-    margin: 18px 0 0 0;
+    margin: 18px 0 18px 0;
     font-size: 36px;
     line-height: normal;
 }
 
 .btn-sztoks-DESKTOP {
+    margin: 28px 0 0 0;
 }
 
 .btn-sztoks-TABLET {
+    margin: 28px 0 0 0;
 }
 
 .btn-sztoks-MOBILE {
+    margin: 28px 0 0 0;
     display: initial;
     width: 50%;
     font-size: 64px;
@@ -85,17 +106,27 @@
 
 .col-form-label-DESKTOP {
     font-weight: bold;
-    max-width: 40%;
+    max-width: 30%;
 }
 
 .col-form-label-TABLET {
     font-weight: bold;
-    max-width: 40%;
+    max-width: 30%;
 }
 
 .col-form-label-MOBILE {
     font-weight: bold;
-    max-width: 40%;
+    max-width: 30%;
+    font-size: 36px;
+}
+
+.form-entry-DESKTOP {
+}
+
+.form-entry-TABLET {
+}
+
+.form-entry-MOBILE {
     font-size: 36px;
 }
 

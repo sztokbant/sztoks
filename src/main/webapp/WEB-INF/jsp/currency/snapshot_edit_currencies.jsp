@@ -24,25 +24,25 @@
         </c:when>
     </c:choose>
 
-    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/currencies" modelAttribute="editCurrenciesForm" class="form-signin">
-        <div class="row">
-            <div class="col">
-                <h4 class="form-signin-heading">Edit Snapshot Currencies</h4>
-            </div>
-            <div class="col align-right-p7">
-                <a href="${contextPath}/snapshot/${snapshotId}/newCurrency">Add New</a>
-            </div>
-        </div>
 
+    <div class="text-center page-title-${deviceType}">Edit Currencies</div>
+
+    <div class="text-center page-subtitle-${deviceType}">Snapshot: ${snapshotTitle}</div>
+
+    <div class="text-center paragraph-${deviceType}"><a href="${contextPath}/snapshot/${snapshotId}/newCurrency">Add New</a></div>
+
+    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/currencies" modelAttribute="editCurrenciesForm" class="form-signin">
         <c:forEach var="entry" items="${editCurrenciesForm.currencyConversionRates}">
             <spring:bind path="currencyConversionRates['${entry.key}']">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <div class="row form-group">
-                        <div class="col">
-                            <label for="${entry.key}">1 ${baseCurrency} to <span class="col-form-label-${deviceType}">${entry.key}</span></label>
+                        <div class="col col-form-label-${deviceType}">
+                            <label for="${entry.key}">1 ${baseCurrency} to <b>${entry.key}</b></label>
                         </div>
                         <div class="col">
-                            <form:input type="number" min="0" step="0.0001" id="${entry.key}" path="currencyConversionRates['${entry.key}']" class="form-control" placeholder="Conversion Rate"
+                            <form:input type="number" min="0" step="0.0001" id="${entry.key}"
+                                        path="currencyConversionRates['${entry.key}']"
+                                        class="form-control form-entry-${deviceType}" placeholder="Conversion Rate"
                                         autofocus="true" value="${entry.value}"></form:input>
                             <form:errors path="currencyConversionRates['${entry.key}']"/>
                         </div>

@@ -1,4 +1,4 @@
-package br.net.du.myequity.controller;
+package br.net.du.myequity.controller.currency;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.CURRENCIES;
 import static br.net.du.myequity.controller.util.ControllerConstants.ID;
@@ -6,9 +6,11 @@ import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_SN
 import static br.net.du.myequity.controller.util.ControllerConstants.SELECTED_CURRENCY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_BASE_CURRENCY_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_TITLE_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.prepareTemplate;
+import static br.net.du.myequity.controller.viewmodel.SnapshotViewModelOutput.getDisplayTitle;
 import static java.util.stream.Collectors.toList;
 
 import br.net.du.myequity.controller.interceptor.WebController;
@@ -37,7 +39,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class SnapshotNewCurrencyController {
     public static final String SNAPSHOT_NEW_CURRENCY_MAPPING = "/snapshot/{id}/newCurrency";
 
-    private static final String SNAPSHOT_NEW_CURRENCY_TEMPLATE = "snapshot_new_currency";
+    private static final String SNAPSHOT_NEW_CURRENCY_TEMPLATE = "currency/snapshot_new_currency";
     private static final String NEW_CURRENCY_FORM = "newCurrencyForm";
 
     @Autowired private SnapshotService snapshotService;
@@ -88,6 +90,7 @@ public class SnapshotNewCurrencyController {
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_ID_KEY, snapshot.getId());
+        model.addAttribute(SNAPSHOT_TITLE_KEY, getDisplayTitle(snapshot));
         model.addAttribute(SNAPSHOT_BASE_CURRENCY_KEY, snapshot.getBaseCurrencyUnit().getCode());
 
         final SortedSet<String> currenciesInUse = snapshot.getCurrenciesInUse();
