@@ -31,13 +31,13 @@
 <%@ include file="/WEB-INF/jsp/_header.jsp" %>
 
 <div class="full-width">
-    <div class="text-center"><h4>Snapshots</h4></div>
+    <div class="text-center page-title-${deviceType}">Snapshots</div>
 
     <div class="${divClass}">
         <table class="full-width">
             <tr class="border-1px">
-                <th class="snapshots-title">Snapshot Name</th>
-                <th class="snapshots-title">Net Worth</th>
+                <th class="col-snapshots-title col-snapshot-${deviceType}">Snapshot Name</th>
+                <th class="col-snapshots-title col-snapshot-${deviceType}">Net Worth</th>
             </tr>
 
             <c:set var="isFirst" value="true"/>
@@ -50,9 +50,9 @@
                     </c:if>
 
                     <tr class="border-1px ${rowClass}">
-                    <td class="valign-top">
+                    <td class="valign-top col-snapshot-${deviceType}">
                         <div class="row">
-                            <div class="col col-snapshot-delete">
+                            <div class="col col-snapshot-delete-${deviceType}">
                                 <c:if test="${isFirst and snapshots.size() gt 1}">
                                     <form method="post" action="${contextPath}/snapshot/delete/${snapshot.id}"
                                           onsubmit="return confirm('Are you sure you want to PERMANENTLY delete snapshot \'${snapshot.name}\'?');">
@@ -67,7 +67,9 @@
                             </div>
                         </div>
                     </td>
-                    <td class="align-right-p7">${snapshot.netWorth}</td>
+                    <td class="align-right-p7 col-snapshot-${deviceType}">
+                        ${snapshot.netWorth}
+                    </td>
                 </tr>
             </c:forEach>
         </table>

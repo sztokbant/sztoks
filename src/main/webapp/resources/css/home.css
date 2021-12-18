@@ -1,9 +1,45 @@
-.snapshots-title {
+.col-snapshots-title {
     text-align: center;
     color: white;
     background: #666;
 }
 
-.col-snapshot-delete {
+.page-title-DESKTOP {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+.page-title-TABLET {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+.page-title-MOBILE {
+    font-size: 64px;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+.col-snapshot-DESKTOP {
+}
+
+.col-snapshot-TABLET {
+}
+
+.col-snapshot-MOBILE {
+    font-size: 48px;
+}
+
+.col-snapshot-delete-DESKTOP {
     max-width: 42px;
+}
+
+.col-snapshot-delete-TABLET {
+    max-width: 42px;
+}
+
+.col-snapshot-delete-MOBILE {
+    max-width: 72px;
 }
