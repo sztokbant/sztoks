@@ -6,7 +6,7 @@
             <span>${message}</span>
 
             <div class="row form-group">
-                <div class="col col-form-label">
+                <div class="col col-form-label-${deviceType}">
                     <label for="username">E-mail</label>
                 </div>
                 <div class="col">
@@ -15,7 +15,7 @@
             </div>
 
             <div class="row form-group">
-                <div class="col col-form-label">
+                <div class="col col-form-label-${deviceType}">
                     <label for="password">Password</label>
                 </div>
                 <div class="col">

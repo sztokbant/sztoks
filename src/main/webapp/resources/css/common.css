@@ -38,6 +38,22 @@
     margin: 0 0 14px 0;
 }
 
+.paragraph-DESKTOP {
+    margin: 18px 0 0 0;
+    line-height: normal;
+}
+
+.paragraph-TABLET {
+    margin: 18px 0 0 0;
+    line-height: normal;
+}
+
+.paragraph-MOBILE {
+    margin: 18px 0 0 0;
+    font-size: 36px;
+    line-height: normal;
+}
+
 .btn-sztoks-DESKTOP {
 }
 
@@ -67,9 +83,39 @@
     min-width: 20%;
 }
 
-.col-form-label {
+.col-form-label-DESKTOP {
     font-weight: bold;
     max-width: 40%;
+}
+
+.col-form-label-TABLET {
+    font-weight: bold;
+    max-width: 40%;
+}
+
+.col-form-label-MOBILE {
+    font-weight: bold;
+    max-width: 40%;
+    font-size: 36px;
+}
+
+.col-form-sub-label-DESKTOP {
+    max-width: 40%;
+    font-weight: 200;
+    font-style: italic;
+}
+
+.col-form-sub-label-TABLET {
+    max-width: 40%;
+    font-weight: 200;
+    font-style: italic;
+}
+
+.col-form-sub-label-MOBILE {
+    max-width: 40%;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 24px;
 }
 
 .transparent-button {

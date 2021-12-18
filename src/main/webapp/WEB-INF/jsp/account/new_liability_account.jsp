@@ -18,70 +18,78 @@
 <%@ include file="/WEB-INF/jsp/_header.jsp" %>
 
 <div class="full-width">
-    <div class="center-w640">
-        <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newAccount" modelAttribute="accountForm" class="form-signin">
-            <h4 class="form-signin-heading">New Liability</h4>
+    <c:choose>
+        <c:when test="${deviceType ne 'MOBILE'}">
+            <div class="center-w640">
+        </c:when>
+    </c:choose>
 
-            <form:input type="hidden" path="accountType" value="${accountType}"/>
+    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newAccount" modelAttribute="accountForm" class="form-signin">
+        <h4 class="form-signin-heading">New Liability Account</h4>
 
-            <spring:bind path="name">
-                <div class="row form-group">
-                    <div class="col col-form-label">
-                        <label for="name">Account Name</label>
+        <form:input type="hidden" path="accountType" value="${accountType}"/>
+
+        <spring:bind path="name">
+            <div class="row form-group">
+                <div class="col col-form-label-${deviceType}">
+                    <label for="name">Account Name</label>
+                </div>
+                <div class="col">
+                    <div class="${status.error ? 'has-error' : ''}">
+                        <form:input type="text" id="name" path="name" class="form-control" placeholder="Account Name"
+                                    autofocus="true"></form:input>
+                        <form:errors path="name"/>
                     </div>
-                    <div class="col">
-                        <div class="${status.error ? 'has-error' : ''}">
-                            <form:input type="text" id="name" path="name" class="form-control" placeholder="Account Name"
-                                        autofocus="true"></form:input>
-                            <form:errors path="name"/>
+                </div>
+            </div>
+        </spring:bind>
+
+        <spring:bind path="subtypeName">
+            <div class="row form-group">
+                <div class="col col-form-label-${deviceType}">
+                    Liability Type
+                </div>
+                <div class="col">
+                    <div class="${status.error ? 'has-error' : ''}">
+                        <div>
+                            <form:radiobutton path="subtypeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"/>
+                            <label for="simpleLiabilityRadio">Simple Liability</label>
                         </div>
-                    </div>
-                </div>
-            </spring:bind>
-
-            <spring:bind path="subtypeName">
-                <div class="row form-group">
-                    <div class="col col-form-label">
-                        Liability Type
-                    </div>
-                    <div class="col">
-                        <div class="${status.error ? 'has-error' : ''}">
-                            <div>
-                                <form:radiobutton path="subtypeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"/>
-                                <label for="simpleLiabilityRadio">Simple Liability</label>
-                            </div>
-                            <div>
-                                <form:radiobutton path="subtypeName" value="PayableAccount" id="payableRadio"/>
-                                <label for="payableRadio">Payable</label>
-                            </div>
-                            <div>
-                                <form:radiobutton path="subtypeName" value="SharedBillPayableAccount" id="sharedBillPayableRadio"/>
-                                <label for="sharedBillPayableRadio">Shared Bill Payable</label>
-                            </div>
-                            <div>
-                                <form:radiobutton path="subtypeName" value="CreditCardAccount" id="creditCardRadio"/>
-                                <label for="creditCardRadio">Credit Card</label>
-                            </div>
-                            <form:errors path="subtypeName"/>
+                        <div>
+                            <form:radiobutton path="subtypeName" value="PayableAccount" id="payableRadio"/>
+                            <label for="payableRadio">Payable</label>
                         </div>
+                        <div>
+                            <form:radiobutton path="subtypeName" value="SharedBillPayableAccount" id="sharedBillPayableRadio"/>
+                            <label for="sharedBillPayableRadio">Shared Bill Payable</label>
+                        </div>
+                        <div>
+                            <form:radiobutton path="subtypeName" value="CreditCardAccount" id="creditCardRadio"/>
+                            <label for="creditCardRadio">Credit Card</label>
+                        </div>
+                        <form:errors path="subtypeName"/>
                     </div>
                 </div>
-            </spring:bind>
+            </div>
+        </spring:bind>
 
-            <spring:bind path="currencyUnit">
-                <div class="row form-group">
-                    <div class="col col-form-label">
-                        <label for="currencyUnit">Currency</label>
-                    </div>
-                    <%@ include file="/WEB-INF/jsp/_currency_select.jsp" %>
+        <spring:bind path="currencyUnit">
+            <div class="row form-group">
+                <div class="col col-form-label-${deviceType}">
+                    <label for="currencyUnit">Currency</label>
                 </div>
-            </spring:bind>
+                <%@ include file="/WEB-INF/jsp/_currency_select.jsp" %>
+            </div>
+        </spring:bind>
 
-            <button class="btn btn-lg btn-primary btn-block" type="submit"
-                    onClick="this.form.submit(); this.disabled=true; this.innerText='Saving...';">Save</button>
-            <div class="text-center"><a href="${contextPath}/snapshot/${snapshotId}">Back</a></div>
-        </form:form>
-    </div>
+        <%@ include file="/WEB-INF/jsp/_default_submit_button.jsp" %>
+    </form:form>
+
+    <c:choose>
+        <c:when test="${deviceType ne 'MOBILE'}">
+            </div>
+        </c:when>
+    </c:choose>
 </div>
 
 <%@ include file="/WEB-INF/jsp/_footer.jsp" %>

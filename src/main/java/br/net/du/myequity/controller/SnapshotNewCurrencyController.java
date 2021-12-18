@@ -8,6 +8,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_BA
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
+import static br.net.du.myequity.controller.util.ControllerUtils.prepareTemplate;
 import static java.util.stream.Collectors.toList;
 
 import br.net.du.myequity.controller.interceptor.WebController;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.SortedSet;
 import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,9 +47,12 @@ public class SnapshotNewCurrencyController {
     @Autowired private NewCurrencyViewModelInputValidator validator;
 
     @GetMapping(SNAPSHOT_NEW_CURRENCY_MAPPING)
-    public String get(@PathVariable(value = ID) final Long snapshotId, final Model model) {
+    public String get(
+            @PathVariable(value = ID) final Long snapshotId,
+            final Model model,
+            final Device device) {
         final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
-        return prepareGetMapping(snapshot, model, new NewCurrencyViewModelInput());
+        return prepareGetMapping(snapshot, model, device, new NewCurrencyViewModelInput());
     }
 
     @PostMapping(SNAPSHOT_NEW_CURRENCY_MAPPING)
@@ -55,6 +60,7 @@ public class SnapshotNewCurrencyController {
     public String post(
             @PathVariable(value = ID) final Long snapshotId,
             final Model model,
+            final Device device,
             @ModelAttribute(NEW_CURRENCY_FORM)
                     final NewCurrencyViewModelInput newCurrencyViewModelInput,
             final BindingResult bindingResult) {
@@ -63,7 +69,7 @@ public class SnapshotNewCurrencyController {
         validator.validate(newCurrencyViewModelInput, bindingResult, snapshot);
 
         if (bindingResult.hasErrors()) {
-            return prepareGetMapping(snapshot, model, newCurrencyViewModelInput);
+            return prepareGetMapping(snapshot, model, device, newCurrencyViewModelInput);
         }
 
         snapshot.putCurrencyConversionRate(
@@ -77,6 +83,7 @@ public class SnapshotNewCurrencyController {
     private String prepareGetMapping(
             final Snapshot snapshot,
             final Model model,
+            final Device device,
             final NewCurrencyViewModelInput newCurrencyViewModelInput) {
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
@@ -102,6 +109,6 @@ public class SnapshotNewCurrencyController {
 
         model.addAttribute(NEW_CURRENCY_FORM, newCurrencyViewModelInput);
 
-        return SNAPSHOT_NEW_CURRENCY_TEMPLATE;
+        return prepareTemplate(model, device, SNAPSHOT_NEW_CURRENCY_TEMPLATE);
     }
 }

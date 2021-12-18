@@ -34,37 +34,45 @@ $(document).ready(function() {
 </script>
 
 <div class="full-width">
-    <div class="center-w640">
-        <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newCurrency" modelAttribute="newCurrencyForm" class="form-signin">
-            <h4 class="form-signin-heading">Add New Currency</h4>
+    <c:choose>
+        <c:when test="${deviceType ne 'MOBILE'}">
+            <div class="center-w640">
+        </c:when>
+    </c:choose>
 
-            <div class="row form-group">
-                <div class="col col-form-label">
-                    <label for="currencyUnit">Currency</label>
-                </div>
-                <%@ include file="/WEB-INF/jsp/_currency_select.jsp" %>
+    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newCurrency" modelAttribute="newCurrencyForm" class="form-signin">
+        <h4 class="form-signin-heading">Add New Currency</h4>
+
+        <div class="row form-group">
+            <div class="col col-form-label-${deviceType}">
+                <label for="currencyUnit">Currency</label>
             </div>
+            <%@ include file="/WEB-INF/jsp/_currency_select.jsp" %>
+        </div>
 
-            <div class="row form-group">
-                <div class="col" style="max-width: 40%;">
-                    <label for="conversionRate"><b>Conversion Rate</b><br/><i>1 ${baseCurrency} to <span id="selected_currency"></span></i></label>
-                </div>
-                <div class="col">
-                    <spring:bind path="conversionRate">
-                        <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="number" min="0" step="0.0001" id="conversionRate" path="conversionRate" class="form-control" placeholder="Conversion Rate"
-                                        autofocus="true"></form:input>
-                            <form:errors path="conversionRate"/>
-                        </div>
-                    </spring:bind>
-                </div>
+        <div class="row form-group">
+            <div class="col" style="max-width: 40%;">
+                <label for="conversionRate"><b>Conversion Rate</b><br/><i>1 ${baseCurrency} to <span id="selected_currency"></span></i></label>
             </div>
+            <div class="col">
+                <spring:bind path="conversionRate">
+                    <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input type="number" min="0" step="0.0001" id="conversionRate" path="conversionRate" class="form-control" placeholder="Conversion Rate"
+                                    autofocus="true"></form:input>
+                        <form:errors path="conversionRate"/>
+                    </div>
+                </spring:bind>
+            </div>
+        </div>
 
-            <button class="btn btn-lg btn-primary btn-block" type="submit"
-                    onClick="this.form.submit(); this.disabled=true; this.innerText='Saving...';">Save</button>
-            <div class="text-center"><a href="${contextPath}/snapshot/${snapshotId}">Back</a></div>
-        </form:form>
-    </div>
+        <%@ include file="/WEB-INF/jsp/_default_submit_button.jsp" %>
+    </form:form>
+
+    <c:choose>
+        <c:when test="${deviceType ne 'MOBILE'}">
+            </div>
+        </c:when>
+    </c:choose>
 </div>
 
 <%@ include file="/WEB-INF/jsp/_footer.jsp" %>

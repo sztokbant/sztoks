@@ -1,6 +1,6 @@
 <spring:bind path="description">
     <div class="row form-group">
-        <div class="col col-form-label">
+        <div class="col col-form-label-${deviceType}">
             <label for="description">Description</label>
         </div>
         <div class="col">
@@ -18,7 +18,7 @@
 
 <spring:bind path="date">
     <div class="row form-group">
-        <div class="col col-form-label">
+        <div class="col col-form-label-${deviceType}">
             <label for="date">Date</label>
         </div>
         <div class="col">
@@ -33,7 +33,7 @@
 
 <spring:bind path="currencyUnit">
     <div class="row form-group">
-        <div class="col col-form-label">
+        <div class="col col-form-label-${deviceType}">
             <label for="currencyUnit">Currency</label>
         </div>
         <%@ include file="/WEB-INF/jsp/_currency_select.jsp" %>
@@ -42,7 +42,7 @@
 
 <spring:bind path="amount">
     <div class="row form-group">
-        <div class="col col-form-label">
+        <div class="col col-form-label-${deviceType}">
             <label for="amount">Amount</label>
         </div>
         <div class="col">
@@ -57,7 +57,7 @@
 
 <spring:bind path="recurrencePolicy">
     <div class="row form-group">
-        <div class="col col-form-label">
+        <div class="col col-form-label-${deviceType}">
             Recurrence
         </div>
         <div class="col">

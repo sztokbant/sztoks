@@ -8,6 +8,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.SELECTED_CU
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
+import static br.net.du.myequity.controller.util.ControllerUtils.prepareTemplate;
 
 import br.net.du.myequity.controller.interceptor.WebController;
 import br.net.du.myequity.controller.util.SnapshotUtils;
@@ -23,6 +24,7 @@ import br.net.du.myequity.service.SnapshotService;
 import java.time.YearMonth;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,15 +47,20 @@ public class AccountNewController {
 
     @GetMapping("/snapshot/{id}/newAssetAccount")
     public String newAssetAccount(
-            @PathVariable(value = ID) final Long snapshotId, final Model model) {
-        return prepareGetMapping(snapshotId, model, AccountType.ASSET, new AccountViewModelInput());
+            @PathVariable(value = ID) final Long snapshotId,
+            final Model model,
+            final Device device) {
+        return prepareGetMapping(
+                snapshotId, model, device, AccountType.ASSET, new AccountViewModelInput());
     }
 
     @GetMapping("/snapshot/{id}/newLiabilityAccount")
     public String newLiabilityAccount(
-            @PathVariable(value = ID) final Long snapshotId, final Model model) {
+            @PathVariable(value = ID) final Long snapshotId,
+            final Model model,
+            final Device device) {
         return prepareGetMapping(
-                snapshotId, model, AccountType.LIABILITY, new AccountViewModelInput());
+                snapshotId, model, device, AccountType.LIABILITY, new AccountViewModelInput());
     }
 
     @PostMapping(NEWACCOUNT_MAPPING)
@@ -61,6 +68,7 @@ public class AccountNewController {
     public String post(
             @PathVariable(value = ID) final Long snapshotId,
             final Model model,
+            final Device device,
             @ModelAttribute(ACCOUNT_FORM) final AccountViewModelInput accountViewModelInput,
             final BindingResult bindingResult) {
         final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
@@ -69,7 +77,7 @@ public class AccountNewController {
 
         final AccountType accountType = AccountType.valueOf(accountViewModelInput.getAccountType());
         if (bindingResult.hasErrors()) {
-            return prepareGetMapping(snapshotId, model, accountType, accountViewModelInput);
+            return prepareGetMapping(snapshotId, model, device, accountType, accountViewModelInput);
         }
 
         final Account account = accountViewModelInput.toAccount();
@@ -89,6 +97,7 @@ public class AccountNewController {
     private String prepareGetMapping(
             final Long snapshotId,
             final Model model,
+            final Device device,
             final AccountType accountType,
             final AccountViewModelInput accountViewModelInput) {
         // Ensure snapshot belongs to logged user
@@ -107,10 +116,9 @@ public class AccountNewController {
 
         model.addAttribute(ACCOUNT_FORM, accountViewModelInput);
 
-        return getTemplateFor(accountType);
-    }
-
-    private String getTemplateFor(final AccountType accountType) {
-        return String.format(NEW_ACCOUNT_TEMPLATE, accountType.toString().toLowerCase());
+        return prepareTemplate(
+                model,
+                device,
+                String.format(NEW_ACCOUNT_TEMPLATE, accountType.toString().toLowerCase()));
     }
 }

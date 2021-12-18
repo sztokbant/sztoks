@@ -18,75 +18,83 @@
 <%@ include file="/WEB-INF/jsp/_header.jsp" %>
 
 <div class="full-width">
-    <div class="center-w640">
-        <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newTransaction" modelAttribute="transactionForm" class="form-signin">
-            <h4 class="form-signin-heading">New Income</h4>
+    <c:choose>
+        <c:when test="${deviceType ne 'MOBILE'}">
+            <div class="center-w640">
+        </c:when>
+    </c:choose>
 
-            <form:input type="hidden" path="typeName" value="${transactionType}" />
+    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/newTransaction" modelAttribute="transactionForm" class="form-signin">
+        <h4 class="form-signin-heading">New Income Transaction</h4>
 
-            <%@ include file="_new_transaction_common.jsp" %>
+        <form:input type="hidden" path="typeName" value="${transactionType}" />
 
-            <spring:bind path="tithingPercentage">
-                <div class="row form-group">
-                    <div class="col col-form-label">
-                        <label for="tithingPercentage">Tithing Percentage</label>
-                    </div>
-                    <div class="col">
-                        <div class="${status.error ? 'has-error' : ''}">
-                            <form:input type="number" min="0" max="100" step="0.01" id="tithingPercentage" path="tithingPercentage" class="form-control" placeholder="Tithing Percentage"
-                                        autofocus="true"></form:input>
-                            <form:errors path="tithingPercentage"/>
-                        </div>
+        <%@ include file="_new_transaction_common.jsp" %>
+
+        <spring:bind path="tithingPercentage">
+            <div class="row form-group">
+                <div class="col col-form-label-${deviceType}">
+                    <label for="tithingPercentage">Tithing Percentage</label>
+                </div>
+                <div class="col">
+                    <div class="${status.error ? 'has-error' : ''}">
+                        <form:input type="number" min="0" max="100" step="0.01" id="tithingPercentage" path="tithingPercentage" class="form-control" placeholder="Tithing Percentage"
+                                    autofocus="true"></form:input>
+                        <form:errors path="tithingPercentage"/>
                     </div>
                 </div>
-            </spring:bind>
+            </div>
+        </spring:bind>
 
-            <spring:bind path="category">
-                <div class="row form-group">
-                    <div class="col col-form-label">
-                        Income Category
-                    </div>
-                    <div class="col">
-                        <div class="${status.error ? 'has-error' : ''}">
-                            <div>
-                                <form:radiobutton path="category" value="JOB" id="jobRadio"/>
-                                <label for="jobRadio">Job</label>
-                            </div>
-                            <div>
-                                <form:radiobutton path="category" value="BUSINESS" id="businessRadio"/>
-                                <label for="businessRadio">Business</label>
-                            </div>
-                            <div>
-                                <form:radiobutton path="category" value="CAPITAL_GAIN" id="capitalGainRadio"/>
-                                <label for="capitalGainRadio">Capital Gain</label>
-                            </div>
-                            <div>
-                                <form:radiobutton path="category" value="SIDE_GIG" id="sideGigRadio"/>
-                                <label for="sideGigRadio">Side Gig</label>
-                            </div>
-                            <div>
-                                <form:radiobutton path="category" value="GIFT" id="giftRadio"/>
-                                <label for="giftRadio">Gift</label>
-                            </div>
-                            <div>
-                                <form:radiobutton path="category" value="PROMO" id="promoRadio"/>
-                                <label for="promoRadio">Promo</label>
-                            </div>
-                            <div>
-                                <form:radiobutton path="category" value="OTHER" id="otherRadio" checked="checked"/>
-                                <label for="otherRadio">Other</label>
-                            </div>
-                            <form:errors path="category"/>
+        <spring:bind path="category">
+            <div class="row form-group">
+                <div class="col col-form-label-${deviceType}">
+                    Income Category
+                </div>
+                <div class="col">
+                    <div class="${status.error ? 'has-error' : ''}">
+                        <div>
+                            <form:radiobutton path="category" value="JOB" id="jobRadio"/>
+                            <label for="jobRadio">Job</label>
                         </div>
+                        <div>
+                            <form:radiobutton path="category" value="BUSINESS" id="businessRadio"/>
+                            <label for="businessRadio">Business</label>
+                        </div>
+                        <div>
+                            <form:radiobutton path="category" value="CAPITAL_GAIN" id="capitalGainRadio"/>
+                            <label for="capitalGainRadio">Capital Gain</label>
+                        </div>
+                        <div>
+                            <form:radiobutton path="category" value="SIDE_GIG" id="sideGigRadio"/>
+                            <label for="sideGigRadio">Side Gig</label>
+                        </div>
+                        <div>
+                            <form:radiobutton path="category" value="GIFT" id="giftRadio"/>
+                            <label for="giftRadio">Gift</label>
+                        </div>
+                        <div>
+                            <form:radiobutton path="category" value="PROMO" id="promoRadio"/>
+                            <label for="promoRadio">Promo</label>
+                        </div>
+                        <div>
+                            <form:radiobutton path="category" value="OTHER" id="otherRadio" checked="checked"/>
+                            <label for="otherRadio">Other</label>
+                        </div>
+                        <form:errors path="category"/>
                     </div>
                 </div>
-            </spring:bind>
+            </div>
+        </spring:bind>
 
-            <button class="btn btn-lg btn-primary btn-block" type="submit"
-                    onClick="this.form.submit(); this.disabled=true; this.innerText='Saving...';">Save</button>
-            <div class="text-center"><a href="${contextPath}/snapshot/${snapshotId}">Back</a></div>
-        </form:form>
-    </div>
+        <%@ include file="/WEB-INF/jsp/_default_submit_button.jsp" %>
+    </form:form>
+
+    <c:choose>
+        <c:when test="${deviceType ne 'MOBILE'}">
+            </div>
+        </c:when>
+    </c:choose>
 </div>
 
 <%@ include file="/WEB-INF/jsp/_footer.jsp" %>

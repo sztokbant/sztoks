@@ -8,6 +8,7 @@ import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID
 import static br.net.du.myequity.controller.util.ControllerConstants.TRANSACTION_TYPE_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
+import static br.net.du.myequity.controller.util.ControllerUtils.prepareTemplate;
 import static br.net.du.myequity.controller.util.TransactionUtils.hasTithingImpact;
 
 import br.net.du.myequity.controller.interceptor.WebController;
@@ -25,6 +26,7 @@ import br.net.du.myequity.service.SnapshotService;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -49,23 +51,37 @@ public class TransactionNewController {
 
     @GetMapping("/snapshot/{id}/newIncomeTransaction")
     public String newIncomeTransaction(
-            @PathVariable(value = ID) final Long snapshotId, final Model model) {
+            @PathVariable(value = ID) final Long snapshotId,
+            final Model model,
+            final Device device) {
         return prepareGetMapping(
-                snapshotId, model, TransactionType.INCOME, new TransactionViewModelInput());
+                snapshotId, model, device, TransactionType.INCOME, new TransactionViewModelInput());
     }
 
     @GetMapping("/snapshot/{id}/newInvestmentTransaction")
     public String newInvestmentTransaction(
-            @PathVariable(value = ID) final Long snapshotId, final Model model) {
+            @PathVariable(value = ID) final Long snapshotId,
+            final Model model,
+            final Device device) {
         return prepareGetMapping(
-                snapshotId, model, TransactionType.INVESTMENT, new TransactionViewModelInput());
+                snapshotId,
+                model,
+                device,
+                TransactionType.INVESTMENT,
+                new TransactionViewModelInput());
     }
 
     @GetMapping("/snapshot/{id}/newDonationTransaction")
     public String newDonationTransaction(
-            @PathVariable(value = ID) final Long snapshotId, final Model model) {
+            @PathVariable(value = ID) final Long snapshotId,
+            final Model model,
+            final Device device) {
         return prepareGetMapping(
-                snapshotId, model, TransactionType.DONATION, new TransactionViewModelInput());
+                snapshotId,
+                model,
+                device,
+                TransactionType.DONATION,
+                new TransactionViewModelInput());
     }
 
     @PostMapping(NEWTRANSACTION_MAPPING)
@@ -73,6 +89,7 @@ public class TransactionNewController {
     public String post(
             @PathVariable(value = ID) final Long snapshotId,
             final Model model,
+            final Device device,
             @ModelAttribute(TRANSACTION_FORM)
                     final TransactionViewModelInput transactionViewModelInput,
             final BindingResult bindingResult) {
@@ -84,7 +101,8 @@ public class TransactionNewController {
         final TransactionType transactionType =
                 TransactionType.valueOf(transactionViewModelInput.getTypeName());
         if (bindingResult.hasErrors()) {
-            return prepareGetMapping(snapshotId, model, transactionType, transactionViewModelInput);
+            return prepareGetMapping(
+                    snapshotId, model, device, transactionType, transactionViewModelInput);
         }
 
         final Transaction transaction = transactionViewModelInput.toTransaction();
@@ -108,6 +126,7 @@ public class TransactionNewController {
     private String prepareGetMapping(
             final Long snapshotId,
             final Model model,
+            final Device device,
             final TransactionType transactionType,
             final TransactionViewModelInput transactionViewModelInput) {
         // Ensure snapshot belongs to logged user
@@ -131,10 +150,9 @@ public class TransactionNewController {
 
         model.addAttribute(TRANSACTION_FORM, transactionViewModelInput);
 
-        return getTemplateFor(transactionType);
-    }
-
-    private String getTemplateFor(final TransactionType transactionType) {
-        return String.format(NEW_TRANSACTION_TEMPLATE, transactionType.toString().toLowerCase());
+        return prepareTemplate(
+                model,
+                device,
+                String.format(NEW_TRANSACTION_TEMPLATE, transactionType.toString().toLowerCase()));
     }
 }
