@@ -25,7 +25,7 @@ $(document).ready(function() {
 
     <%@ include file="_snapshot_col_transaction_date.jsp" %>
 
-    <div class="col col-cell align-center">
+    <div class="col col-cell text-center">
         <form id="form_txn_investment_category_${entity.id}">
             <select id="select_txn_investment_category_${entity.id}" name="investment_category">
                 <c:forEach items="${investmentCategories}" var="category">

@@ -10,6 +10,6 @@ $(document).ready(function() {
 })
 </script>
 
-<div class="col col-cell align-center">
+<div class="col col-cell text-center">
     <input id="ACCOUNT_${entity.accountId}_is_paid" type="checkbox"/>
 </div>

@@ -23,7 +23,7 @@ $(document).ready(function() {
 
     <%@ include file="_account_future_tithing_select.jsp" %>
 
-    <div class="col col-cell align-center ${editableClass}">
+    <div class="col col-cell text-center ${editableClass}">
         <form id="form_receivable_due_date_${entity.accountId}">
             <span id="receivable_due_date_${entity.accountId}">${entity.dueDate}</span>
             <span><input id="new_receivable_due_date_${entity.accountId}" name="amount" type="date"

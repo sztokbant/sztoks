@@ -33,7 +33,7 @@ $(document).ready(function() {
 
     <%@ include file="_snapshot_col_transaction_date.jsp" %>
 
-    <div class="col col-cell align-center">
+    <div class="col col-cell text-center">
         <form id="form_txn_income_category_${entity.id}">
             <select id="select_txn_income_category_${entity.id}" name="income_category">
                 <c:forEach items="${incomeCategories}" var="category">
@@ -50,7 +50,7 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell align-center ${editableClass}">
+    <div class="col col-cell text-center ${editableClass}">
         <form id="form_txn_tithing_percentage_${entity.id}">
             <span id="txn_tithing_percentage_${entity.id}">${entity.tithingPercentage}</span>
             <span><input id="new_txn_tithing_percentage_${entity.id}" name="amount" type="number" min="0" max="100"

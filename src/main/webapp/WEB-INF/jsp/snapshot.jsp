@@ -41,7 +41,7 @@
                 <div class="col col-edge">
                     <div class="left-button">
                         <c:if test="${snapshot.previousId ne null}">
-                            <a class="btn btn-myequity" href="${contextPath}/snapshot/${snapshot.previousId}">&#x23EA;&nbsp;&nbsp;${snapshot.previousName}</a>
+                            <a class="btn btn-adjacent-snapshot" href="${contextPath}/snapshot/${snapshot.previousId}">&#x23EA;&nbsp;&nbsp;${snapshot.previousName}</a>
                         </c:if>
                     </div>
                 </div>
@@ -64,19 +64,19 @@
                     <div class="right-button">
                         <c:choose>
                             <c:when test="${snapshot.nextId ne null}">
-                                <a class="btn btn-myequity"
+                                <a class="btn btn-adjacent-snapshot"
                                    href="${contextPath}/snapshot/${snapshot.nextId}">${snapshot.nextName}&nbsp;&#x23E9;</a>
                             </c:when>
                             <c:otherwise>
                                     <div class="navigation-buttons-padding-bottom">
                                 <c:choose>
                                     <c:when test="${not snapshot.newSnapshotAllowed}">
-                                        <a href="#" onclick="alert('It is too early to create a Snapshot for the upcoming month. Please, try again after the 15th.');" class="btn btn-newsnapshot">&#x2795;&nbsp; Snapshot</a>
+                                        <a href="#" onclick="alert('It is too early to create a Snapshot for the upcoming month. Please, try again after the 15th.');" class="btn btn-new-snapshot">&#x2795;&nbsp; Snapshot</a>
                                     </c:when>
                                     <c:otherwise>
                                             <form method="post" action="${contextPath}/snapshot/new" onSubmit="return confirm('Are you sure you want to create a new snapshot based on the current snapshot?')">
                                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                                <input type="submit" class="btn btn-newsnapshot" value="&#x2795;  Snapshot"/>
+                                                <input type="submit" class="btn btn-new-snapshot" value="&#x2795;  Snapshot"/>
                                             </form>
                                     </c:otherwise>
                                 </c:choose>
