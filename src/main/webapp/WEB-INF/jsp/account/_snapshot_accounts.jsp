@@ -18,7 +18,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Simple Assets</i></div>
-                    <div class="col col-cell-${deviceType} col-title">Future Tithing</div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
                     <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.simpleAssetAccounts}">
@@ -56,7 +56,7 @@
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Receivables</i></div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
                     <div class="col col-cell-${deviceType} col-title">Due Date</div>
-                    <div class="col col-cell-${deviceType} col-title">Is paid?</div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">Is paid?</div>
                     <div class="col col-cell-${deviceType} col-title">Amount</div>
                     <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
                 </div>
@@ -77,7 +77,7 @@
                     <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
                     <div class="col col-cell-${deviceType} col-title">Due Day</div>
                     <div class="col col-cell-${deviceType} col-title">Number of Partners</div>
-                    <div class="col col-cell-${deviceType} col-title">Is paid?</div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">Is paid?</div>
                     <div class="col col-cell-${deviceType} col-title">Bill Amount</div>
                     <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
                 </div>
@@ -98,7 +98,7 @@
                     <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Shares</div>
                     <div class="col col-cell-${deviceType} col-title">Amount Invested</div>
-                    <div class="col col-cell-${deviceType} col-title">Average Purchase Price</div>
+                    <div class="col col-cell-${deviceType} col-title">Avg. Purchase Price</div>
                     <div class="col col-cell-${deviceType} col-title">Current Share Value</div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Profit</div>
                     <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
@@ -167,7 +167,7 @@
                     <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Payables</i></div>
                     <div class="col col-cell-${deviceType} col-title">Due Date</div>
-                    <div class="col col-cell-${deviceType} col-title">Is paid?</div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">Is paid?</div>
                     <div class="col col-cell-${deviceType} col-title">Amount</div>
                     <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
                 </div>
@@ -189,7 +189,7 @@
                     <div class="col col-cell-${deviceType} col-title">Due Day</div>
                     <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title">Number of Partners</div>
-                    <div class="col col-cell-${deviceType} col-title">Is paid?</div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">Is paid?</div>
                     <div class="col col-cell-${deviceType} col-title">Bill Amount</div>
                     <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
                 </div>

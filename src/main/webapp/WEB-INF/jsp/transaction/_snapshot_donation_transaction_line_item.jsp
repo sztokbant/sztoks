@@ -49,7 +49,7 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell-${deviceType} text-center">
+    <div class="col col-cell-${deviceType} text-center width-70px">
         <input id="TRANSACTION_${entity.id}_taxDeductible" type="checkbox"/>
     </div>
 

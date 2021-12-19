@@ -43,7 +43,7 @@
             <c:when test="${not empty snapshot.incomes}">
                 <div class="row border-1px-bottom">
                     <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
-                    <div class="col col-cell-${deviceType} col-title">&#128260;</div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">&#128260;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name">Description</div>
                     <div class="col col-cell-${deviceType} col-title">Date</div>
                     <div class="col col-cell-${deviceType} col-title">Category</div>
@@ -103,7 +103,7 @@
             <c:when test="${not empty snapshot.investments}">
                 <div class="row border-1px-bottom">
                     <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
-                    <div class="col col-cell-${deviceType} col-title">&#128260;</div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">&#128260;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name">Description</div>
                     <div class="col col-cell-${deviceType} col-title">Date</div>
                     <div class="col col-cell-${deviceType} col-title">Category</div>
@@ -190,11 +190,11 @@
             <c:when test="${not empty snapshot.donations}">
                 <div class="row border-1px-bottom">
                     <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
-                    <div class="col col-cell-${deviceType} col-title">&#128260;</div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">&#128260;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name">Description</div>
                     <div class="col col-cell-${deviceType} col-title">Date</div>
                     <div class="col col-cell-${deviceType} col-title">Category</div>
-                    <div class="col col-cell-${deviceType} col-title">Tax deductible?</div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">Tax deductible?</div>
                     <div class="col col-cell-${deviceType} col-title">Amount</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.donations}">
