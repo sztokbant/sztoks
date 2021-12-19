@@ -46,13 +46,31 @@
     color: red;
 }
 
-.center-w75pct {
+.snapshot-currencies-DESKTOP {
     width: 75%;
     position: relative;
     left: 50%;
     transform: translate(-50%, 0%);
     text-align: center;
     font-size: 12px;
+}
+
+.snapshot-currencies-TABLET {
+    width: 75%;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    text-align: center;
+    font-size: 12px;
+}
+
+.snapshot-currencies-MOBILE {
+    width: 100%;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    text-align: center;
+    font-size: 28px;
 }
 
 .mid-col {
