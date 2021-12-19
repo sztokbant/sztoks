@@ -38,7 +38,7 @@
     <div class="row">
         <div class="col">
             <div class="row">
-                <div class="col col-edge">
+                <div class="col col-edge-${deviceType}">
                     <div class="left-button">
                         <c:if test="${snapshot.previousId ne null}">
                             <a class="btn btn-sztoks btn-adjacent-snapshot-common btn-adjacent-snapshot-${deviceType}" href="${contextPath}/snapshot/${snapshot.previousId}">
@@ -74,7 +74,7 @@
                     </c:otherwise>
                 </c:choose>
 
-                <div class="col col-edge">
+                <div class="col col-edge-${deviceType}">
                     <div class="right-button align-right">
                         <c:choose>
                             <c:when test="${snapshot.nextId ne null}">

@@ -14,11 +14,10 @@ $(document).ready(function() {
 })
 </script>
 
-<div class="row center-w75pct">
-    <div class="col">
-        <b>Default Tithing</b>
-    </div>
-    <div class="col col-cell align-right">
+<div class="text-center default-tithing-${deviceType}">
+    <span><b>Default Tithing</b></span>
+
+    <div class="full-width">
         <form id="form_default_tithing_percentage">
             <span id="default_tithing_percentage" class="editable-donation">${snapshot.defaultTithingPercentage}</span>
             <span><input id="new_default_tithing_percentage" type="number"

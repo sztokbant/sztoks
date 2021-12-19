@@ -63,9 +63,17 @@
     padding-bottom: 13px;
 }
 
-.col-edge {
-    min-width: 140px;
-    max-width: 140px;
+.col-edge-DESKTOP {
+    min-width: 144px;
+    max-width: 144px;
+}
+
+.col-edge-TABLET {
+    min-width: 144px;
+    max-width: 144px;
+}
+
+.col-edge-MOBILE {
 }
 
 .asset-accounts {
@@ -114,4 +122,15 @@
 
 .transaction-subcategory-label {
     font-style: italic;
+}
+
+.default-tithing-DESKTOP {
+}
+
+.default-tithing-TABLET {
+}
+
+.default-tithing-MOBILE {
+    padding: 90px 0 0 0;
+    font-size: 28px;
 }
