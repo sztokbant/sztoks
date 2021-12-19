@@ -18,7 +18,7 @@
                             ${user.fullName} &ndash;
                         </c:when>
                     </c:choose>
-                    <a href="#" onclick="document.forms['logoutForm'].submit()"><b>Logout</b></a>
+                    <a href="#" onclick="document.forms['logoutForm'].submit()">Logout</a>
                 </li>
             </ul>
         </c:if>

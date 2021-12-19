@@ -5,7 +5,7 @@
 }
 
 .navbar-sztoks-MOBILE {
-    font-size: 48px;
+    font-size: 36px;
 }
 
 .navbar-margin-bottom-DESKTOP {
@@ -17,7 +17,7 @@
 }
 
 .navbar-margin-bottom-MOBILE {
-    margin: 108px 0 0 0;
+    margin: 92px 0 0 0;
 }
 
 .page-title-DESKTOP {
@@ -94,15 +94,19 @@
     vertical-align: text-bottom;
 }
 
-.btn-sztoks-DESKTOP {
+.btn-sztoks {
+    border-radius: 12px;
+}
+
+.btn-form-DESKTOP {
     margin: 28px 0 0 0;
 }
 
-.btn-sztoks-TABLET {
+.btn-form-TABLET {
     margin: 28px 0 0 0;
 }
 
-.btn-sztoks-MOBILE {
+.btn-form-MOBILE {
     margin: 28px 0 0 0;
     display: initial;
     width: 50%;
@@ -195,38 +199,29 @@
     transform: translate(-50%, 0%);
 }
 
-.btn-adjacent-snapshot-DESKTOP {
+.btn-adjacent-snapshot-common {
     background: blanchedalmond;
     margin: 0 6px 0 6px;
     border: 1px;
     border-style: solid;
     border-color: black;
     font-weight: bold;
+}
+
+.btn-adjacent-snapshot-DESKTOP {
     width: 144px;
 }
 
 .btn-adjacent-snapshot-TABLET {
-    background: blanchedalmond;
-    margin: 0 6px 0 6px;
-    border: 1px;
-    border-style: solid;
-    border-color: black;
-    font-weight: bold;
     width: 144px;
 }
 
 .btn-adjacent-snapshot-MOBILE {
-    background: blanchedalmond;
-    margin: 0 6px 0 6px;
-    border: 1px;
-    border-style: solid;
-    border-color: black;
-    font-weight: bold;
-    width: 256px;
-    font-size: 28px;
+    width: 270px;
+    font-size: 36px;
 }
 
-.btn-new-snapshot-DESKTOP {
+.btn-new-snapshot-common {
     background: indianred;
     color: white;
     font-weight: bold;
@@ -234,30 +229,20 @@
     border: 1px;
     border-style: solid;
     border-color: black;
+    width: 144px;
+}
+
+.btn-new-snapshot-DESKTOP {
     width: 144px;
 }
 
 .btn-new-snapshot-TABLET {
-    background: indianred;
-    color: white;
-    font-weight: bold;
-    margin: 0 6px 0 0;
-    border: 1px;
-    border-style: solid;
-    border-color: black;
     width: 144px;
 }
 
 .btn-new-snapshot-MOBILE {
-    background: indianred;
-    color: white;
-    font-weight: bold;
-    margin: 0 6px 0 0;
-    border: 1px;
-    border-style: solid;
-    border-color: black;
-    width: 256px;
-    font-size: 28px;
+    width: 270px;
+    font-size: 36px;
 }
 
 .valign-top {
