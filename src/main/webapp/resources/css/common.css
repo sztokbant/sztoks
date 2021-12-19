@@ -72,6 +72,16 @@
     line-height: normal;
 }
 
+.col-net-worth-DESKTOP {
+}
+
+.col-net-worth-TABLET {
+}
+
+.col-net-worth-MOBILE {
+    font-size: 36px;
+}
+
 .radio-sztoks-DESKTOP {
 }
 
@@ -168,7 +178,7 @@
 
 .full-width {
     width: 100%;
-    padding: 0 21px 0 21px;
+    padding: 0 15px 0 15px;
 }
 
 .center-w640 {
