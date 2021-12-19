@@ -39,14 +39,6 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
     <div class="col col-cell-${deviceType} align-right ${editableClass}">
         <form id="form_gift_certificate_current_share_value_${entity.accountId}">
             <span id="gift_certificate_current_share_value_${entity.accountId}">${entity.currentShareValue}</span>
@@ -54,10 +46,6 @@ $(document).ready(function() {
                          min="0"
                          step="0.0001" style="display: none;"/></span>
         </form>
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
     </div>
 
     <div class="col col-cell-${deviceType} align-right">

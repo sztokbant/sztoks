@@ -31,14 +31,6 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
     <%@ include file="_snapshot_col_is_paid.jsp" %>
 
     <%@ include file="_snapshot_col_bill_amount.jsp" %>

@@ -2,32 +2,6 @@
 
     <div class="col col-cell-${deviceType} col-account-name">Receivables TOTAL</div>
 
-    <div class="col col-cell-${deviceType} short"></div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
     <div class="col col-cell-${deviceType} align-right"><b><span
             id="snapshot_RECEIVABLE_balance">${snapshot.receivablesBalance}</span></b></div>
 </div>

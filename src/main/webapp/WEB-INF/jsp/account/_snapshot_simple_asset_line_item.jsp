@@ -23,26 +23,6 @@ $(document).ready(function() {
 
     <%@ include file="_account_future_tithing_select.jsp" %>
 
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
     <div class="col col-cell-${deviceType} align-right ${editableClass}">
         <form id="form_account_balance_${entity.accountId}">
             <span id="account_balance_${entity.accountId}">${entity.balance}</span>
