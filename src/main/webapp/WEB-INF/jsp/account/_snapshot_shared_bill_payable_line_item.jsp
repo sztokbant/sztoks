@@ -3,13 +3,13 @@
 
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
-    <div class="col col-cell">
+    <div class="col col-cell-${deviceType}">
         &nbsp;
     </div>
 
     <%@ include file="_snapshot_col_due_day.jsp" %>
 
-    <div class="col col-cell">
+    <div class="col col-cell-${deviceType}">
         &nbsp;
     </div>
 
@@ -19,7 +19,7 @@
 
     <%@ include file="_snapshot_col_bill_amount.jsp" %>
 
-    <div class="col col-cell align-right">
+    <div class="col col-cell-${deviceType} align-right">
         <span id="account_balance_${entity.accountId}">${entity.balance}</span>
     </div>
 </div>

@@ -21,7 +21,7 @@ $(document).ready(function() {
 
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
-    <div class="col col-cell text-center ${editableClass}">
+    <div class="col col-cell-${deviceType} text-center ${editableClass}">
         <form id="form_payable_due_date_${entity.accountId}">
             <span id="payable_due_date_${entity.accountId}">${entity.dueDate}</span>
             <span><input id="new_payable_due_date_${entity.accountId}" name="amount" type="date"
@@ -29,11 +29,11 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell">
+    <div class="col col-cell-${deviceType}">
         &nbsp;
     </div>
 
-    <div class="col col-cell">
+    <div class="col col-cell-${deviceType}">
         &nbsp;
     </div>
 
@@ -41,7 +41,7 @@ $(document).ready(function() {
 
     <%@ include file="_snapshot_col_bill_amount.jsp" %>
 
-    <div class="col col-cell align-right">
+    <div class="col col-cell-${deviceType} align-right">
         <span id="account_balance_${entity.accountId}">${entity.balance}</span>
     </div>
 </div>

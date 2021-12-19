@@ -13,7 +13,7 @@ $(document).ready(function() {
 })
 </script>
 
-<div class="col col-cell text-center">
+<div class="col col-cell-${deviceType} text-center">
     <form id="form_txn_recurrence_${entity.id}">
         <select id="select_txn_recurrence_${entity.id}" name="txn_recurrence_${entity.id}">
             <c:forEach items="${recurrencePolicies}" var="policy">

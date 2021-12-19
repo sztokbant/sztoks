@@ -1,33 +1,33 @@
 <div class="row border-1px-bottom" id="account_row_${entity.accountId}">
-    <div class="col col-cell col-account-name">
+    <div class="col col-cell-${deviceType} col-account-name">
         FUTURE TITHING
     </div>
 
-    <div class="col col-cell short">
+    <div class="col col-cell-${deviceType} short">
         &nbsp;
     </div>
 
-    <div class="col col-cell">
+    <div class="col col-cell-${deviceType}">
         &nbsp;
     </div>
 
-    <div class="col col-cell">
+    <div class="col col-cell-${deviceType}">
         &nbsp;
     </div>
 
-    <div class="col col-cell">
+    <div class="col col-cell-${deviceType}">
         &nbsp;
     </div>
 
-    <div class="col col-cell">
+    <div class="col col-cell-${deviceType}">
         &nbsp;
     </div>
 
-    <div class="col col-cell">
+    <div class="col col-cell-${deviceType}">
         &nbsp;
     </div>
 
-    <div class="col col-cell align-right">
+    <div class="col col-cell-${deviceType} align-right">
         <span id="future_tithing_balance">${snapshot.futureTithingBalance}</span>
     </div>
 </div>

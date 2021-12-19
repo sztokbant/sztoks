@@ -25,7 +25,7 @@ $(document).ready(function() {
 
     <%@ include file="_snapshot_col_transaction_date.jsp" %>
 
-    <div class="col col-cell text-center">
+    <div class="col col-cell-${deviceType} text-center">
         <form id="form_txn_investment_category_${entity.id}">
             <select id="select_txn_investment_category_${entity.id}" name="investment_category">
                 <c:forEach items="${investmentCategories}" var="category">
@@ -42,7 +42,7 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div id="div_txn_amount_${entity.id}" class="col col-cell align-right ${editableClass}">
+    <div id="div_txn_amount_${entity.id}" class="col col-cell-${deviceType} align-right ${editableClass}">
         <%@ include file="_transaction_amount_form.jsp" %>
     </div>
 </div>

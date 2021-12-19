@@ -39,7 +39,7 @@ $(document).ready(function() {
 
     <%@ include file="_account_future_tithing_select.jsp" %>
 
-    <div class="col col-cell align-right width-70px ${editableClass}">
+    <div class="col col-cell-${deviceType} align-right width-70px ${editableClass}">
         <form id="form_investment_shares_${entity.accountId}">
             <span id="investment_shares_${entity.accountId}">${entity.shares}</span>
             <span><input id="new_investment_shares_${entity.accountId}" name="amount" type="number" min="0"
@@ -47,7 +47,7 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell align-right ${editableClass}">
+    <div class="col col-cell-${deviceType} align-right ${editableClass}">
         <form id="form_investment_amount_invested_${entity.accountId}">
             <span id="investment_amount_invested_${entity.accountId}">${entity.amountInvested}</span>
             <span><input id="new_investment_amount_invested_${entity.accountId}" name="amount" type="number"
@@ -57,11 +57,11 @@ $(document).ready(function() {
     </div>
 
 
-    <div class="col col-cell align-right">
+    <div class="col col-cell-${deviceType} align-right">
         <span id="investment_average_purchase_price_${entity.accountId}">${entity.averagePurchasePrice}</span>
     </div>
 
-    <div class="col col-cell align-right ${editableClass}">
+    <div class="col col-cell-${deviceType} align-right ${editableClass}">
         <form id="form_investment_current_share_value_${entity.accountId}">
             <span id="investment_current_share_value_${entity.accountId}">${entity.currentShareValue}</span>
             <span><input id="new_investment_current_share_value_${entity.accountId}" name="amount" type="number"
@@ -83,12 +83,12 @@ $(document).ready(function() {
         </c:otherwise>
     </c:choose>
 
-    <div class="col col-cell align-right width-70px">
+    <div class="col col-cell-${deviceType} align-right width-70px">
         <span id="investment_profit_percentage_${entity.accountId}"
               class="${profitStyle}">${entity.profitPercentage}</span>
     </div>
 
-    <div class="col col-cell align-right">
+    <div class="col col-cell-${deviceType} align-right">
         <span id="investment_balance_${entity.accountId}">${entity.balance}</span>
     </div>
 </div>

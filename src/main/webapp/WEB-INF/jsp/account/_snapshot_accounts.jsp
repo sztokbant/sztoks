@@ -1,12 +1,12 @@
 <div class="row">
     <div class="col col-section asset-accounts">
         <div class="row border-1px-bottom">
-            <div class="col col-cell text-center"><b>ASSETS</b></div>
+            <div class="col col-cell-${deviceType} text-center"><b>ASSETS</b></div>
         </div>
 
         <div class="row border-1px-bottom bg-light-yellow">
-            <div class="col col-cell col-account-name">ASSETS TOTAL</div>
-            <div class="col col-cell align-right">
+            <div class="col col-cell-${deviceType} col-account-name">ASSETS TOTAL</div>
+            <div class="col col-cell-${deviceType} align-right">
                 <b><span id="total_ASSET">${snapshot.assetsTotal}</span></b>
             </div>
         </div>
@@ -16,15 +16,15 @@
         <c:choose>
             <c:when test="${not empty snapshot.simpleAssetAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title short">&nbsp;</div>
-                    <div class="col col-cell col-title col-account-name"><i>Simple Assets</i></div>
-                    <div class="col col-cell col-title width-70px">Future Tithing</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title col-account-name"><i>Simple Assets</i></div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.simpleAssetAccounts}">
                     <%@ include file="_snapshot_simple_asset_line_item.jsp" %>
@@ -38,15 +38,15 @@
         <c:choose>
             <c:when test="${not empty snapshot.giftCertificateAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title short">&nbsp;</div>
-                    <div class="col col-cell col-title col-account-name"><i>Gift Certificates</i></div>
-                    <div class="col col-cell col-title width-70px">Future Tithing</div>
-                    <div class="col col-cell col-title">Shares</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">Current Share Value</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title col-account-name"><i>Gift Certificates</i></div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
+                    <div class="col col-cell-${deviceType} col-title">Shares</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">Current Share Value</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.giftCertificateAccounts}">
                     <%@ include file="_snapshot_gift_certificate_line_item.jsp" %>
@@ -60,15 +60,15 @@
         <c:choose>
             <c:when test="${not empty snapshot.receivableAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title short">&nbsp;</div>
-                    <div class="col col-cell col-title col-account-name"><i>Receivables</i></div>
-                    <div class="col col-cell col-title">Future Tithing</div>
-                    <div class="col col-cell col-title">Due Date</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">Is paid?</div>
-                    <div class="col col-cell col-title">Amount</div>
-                    <div class="col col-cell col-title">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title col-account-name"><i>Receivables</i></div>
+                    <div class="col col-cell-${deviceType} col-title">Future Tithing</div>
+                    <div class="col col-cell-${deviceType} col-title">Due Date</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">Is paid?</div>
+                    <div class="col col-cell-${deviceType} col-title">Amount</div>
+                    <div class="col col-cell-${deviceType} col-title">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.receivableAccounts}">
                     <%@ include file="_snapshot_receivable_line_item.jsp" %>
@@ -82,15 +82,15 @@
         <c:choose>
             <c:when test="${not empty snapshot.sharedBillReceivableAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title short">&nbsp;</div>
-                    <div class="col col-cell col-title col-account-name"><i>Shared Bill Receivables</i></div>
-                    <div class="col col-cell col-title width-70px">Future Tithing</div>
-                    <div class="col col-cell col-title">Due Day</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">Number of Partners</div>
-                    <div class="col col-cell col-title">Is paid?</div>
-                    <div class="col col-cell col-title">Bill Amount</div>
-                    <div class="col col-cell col-title">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title col-account-name"><i>Shared Bill Receivables</i></div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
+                    <div class="col col-cell-${deviceType} col-title">Due Day</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">Number of Partners</div>
+                    <div class="col col-cell-${deviceType} col-title">Is paid?</div>
+                    <div class="col col-cell-${deviceType} col-title">Bill Amount</div>
+                    <div class="col col-cell-${deviceType} col-title">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.sharedBillReceivableAccounts}">
                     <%@ include file="_snapshot_shared_bill_receivable_line_item.jsp" %>
@@ -104,15 +104,15 @@
         <c:choose>
             <c:when test="${not empty snapshot.investmentAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title short">&nbsp;</div>
-                    <div class="col col-cell col-title col-account-name"><i>Investments</i></div>
-                    <div class="col col-cell col-title width-70px">Future Tithing</div>
-                    <div class="col col-cell col-title width-70px">Shares</div>
-                    <div class="col col-cell col-title">Amount Invested</div>
-                    <div class="col col-cell col-title">Average Purchase Price</div>
-                    <div class="col col-cell col-title">Current Share Value</div>
-                    <div class="col col-cell col-title width-70px">Profit</div>
-                    <div class="col col-cell col-title">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title col-account-name"><i>Investments</i></div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">Shares</div>
+                    <div class="col col-cell-${deviceType} col-title">Amount Invested</div>
+                    <div class="col col-cell-${deviceType} col-title">Average Purchase Price</div>
+                    <div class="col col-cell-${deviceType} col-title">Current Share Value</div>
+                    <div class="col col-cell-${deviceType} col-title width-70px">Profit</div>
+                    <div class="col col-cell-${deviceType} col-title">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.investmentAccounts}">
                     <%@ include file="_snapshot_investment_line_item.jsp" %>
@@ -133,12 +133,12 @@
 
     <div class="col col-section liability-accounts">
         <div class="row border-1px-bottom">
-            <div class="col col-cell text-center"><b>LIABILITIES</b></div>
+            <div class="col col-cell-${deviceType} text-center"><b>LIABILITIES</b></div>
         </div>
 
         <div class="row border-1px-bottom bg-light-yellow">
-            <div class="col col-cell col-account-name">LIABILITIES TOTAL</div>
-            <div class="col col-cell align-right">
+            <div class="col col-cell-${deviceType} col-account-name">LIABILITIES TOTAL</div>
+            <div class="col col-cell-${deviceType} align-right">
                 <b><span id="total_LIABILITY">${snapshot.liabilitiesTotal}</span></b>
             </div>
         </div>
@@ -146,14 +146,14 @@
         <c:set var="editableClass" value="editable-liability"/>
 
         <div class="row border-1px-bottom">
-            <div class="col col-cell col-title short">&nbsp;</div>
-            <div class="col col-cell col-title col-account-name"><i>Tithing</i></div>
-            <div class="col col-cell col-title">&nbsp;</div>
-            <div class="col col-cell col-title">&nbsp;</div>
-            <div class="col col-cell col-title">&nbsp;</div>
-            <div class="col col-cell col-title">&nbsp;</div>
-            <div class="col col-cell col-title">&nbsp;</div>
-            <div class="col col-cell col-title">Balance</div>
+            <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title col-account-name"><i>Tithing</i></div>
+            <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title">Balance</div>
         </div>
 
         <%@ include file="_snapshot_tithing_line_item.jsp" %>
@@ -161,14 +161,14 @@
         <%@ include file="_snapshot_tithing_total.jsp" %>
 
         <div class="row border-1px-bottom">
-            <div class="col col-cell col-title short">&nbsp;</div>
-            <div class="col col-cell col-title col-account-name"><i>Simple Liabilities</i></div>
-            <div class="col col-cell col-title">&nbsp;</div>
-            <div class="col col-cell col-title">&nbsp;</div>
-            <div class="col col-cell col-title">&nbsp;</div>
-            <div class="col col-cell col-title">&nbsp;</div>
-            <div class="col col-cell col-title">&nbsp;</div>
-            <div class="col col-cell col-title">Balance</div>
+            <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title col-account-name"><i>Simple Liabilities</i></div>
+            <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title">Balance</div>
         </div>
 
         <c:choose>
@@ -185,14 +185,14 @@
         <c:choose>
             <c:when test="${not empty snapshot.payableAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title short">&nbsp;</div>
-                    <div class="col col-cell col-title col-account-name"><i>Payables</i></div>
-                    <div class="col col-cell col-title">Due Date</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">Is paid?</div>
-                    <div class="col col-cell col-title">Amount</div>
-                    <div class="col col-cell col-title">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title col-account-name"><i>Payables</i></div>
+                    <div class="col col-cell-${deviceType} col-title">Due Date</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">Is paid?</div>
+                    <div class="col col-cell-${deviceType} col-title">Amount</div>
+                    <div class="col col-cell-${deviceType} col-title">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.payableAccounts}">
                     <%@ include file="_snapshot_payable_line_item.jsp" %>
@@ -206,15 +206,15 @@
         <c:choose>
             <c:when test="${not empty snapshot.sharedBillPayableAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title short">&nbsp;</div>
-                    <div class="col col-cell col-title col-account-name"><i>Shared Bill Payables</i></div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">Due Day</div>
-                    <div class="col col-cell col-title">&nbsp;</div>
-                    <div class="col col-cell col-title">Number of Partners</div>
-                    <div class="col col-cell col-title">Is paid?</div>
-                    <div class="col col-cell col-title">Bill Amount</div>
-                    <div class="col col-cell col-title">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title col-account-name"><i>Shared Bill Payables</i></div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">Due Day</div>
+                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title">Number of Partners</div>
+                    <div class="col col-cell-${deviceType} col-title">Is paid?</div>
+                    <div class="col col-cell-${deviceType} col-title">Bill Amount</div>
+                    <div class="col col-cell-${deviceType} col-title">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.sharedBillPayableAccounts}">
                     <%@ include file="_snapshot_shared_bill_payable_line_item.jsp" %>
@@ -228,14 +228,14 @@
         <c:choose>
             <c:when test="${not empty snapshot.creditCardAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell col-title short">&nbsp;</div>
-                    <div class="col col-cell col-title col-account-name"><i>Credit Cards</i></div>
-                    <div class="col col-cell col-title">Total Credit</div>
-                    <div class="col col-cell col-title">Available Credit</div>
-                    <div class="col col-cell col-title">Used Credit</div>
-                    <div class="col col-cell col-title">Statement</div>
-                    <div class="col col-cell col-title">Remaining Balance</div>
-                    <div class="col col-cell col-title">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title col-account-name"><i>Credit Cards</i></div>
+                    <div class="col col-cell-${deviceType} col-title">Total Credit</div>
+                    <div class="col col-cell-${deviceType} col-title">Available Credit</div>
+                    <div class="col col-cell-${deviceType} col-title">Used Credit</div>
+                    <div class="col col-cell-${deviceType} col-title">Statement</div>
+                    <div class="col col-cell-${deviceType} col-title">Remaining Balance</div>
+                    <div class="col col-cell-${deviceType} col-title">Balance</div>
                 </div>
 
                 <c:set var="currentCurrency" value=""/>

@@ -32,7 +32,7 @@ $(document).ready(function() {
 
     <%@ include file="_snapshot_col_transaction_date.jsp" %>
 
-    <div class="col col-cell text-center">
+    <div class="col col-cell-${deviceType} text-center">
         <form id="form_txn_donation_category_${entity.id}">
             <select id="select_txn_donation_category_${entity.id}" name="donation_category">
                 <c:forEach items="${donationCategories}" var="category">
@@ -49,11 +49,11 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell text-center">
+    <div class="col col-cell-${deviceType} text-center">
         <input id="TRANSACTION_${entity.id}_taxDeductible" type="checkbox"/>
     </div>
 
-    <div class="col col-cell align-right ${editableClass}">
+    <div class="col col-cell-${deviceType} align-right ${editableClass}">
         <%@ include file="_transaction_amount_form.jsp" %>
     </div>
 </div>
