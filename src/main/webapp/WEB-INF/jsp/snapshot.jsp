@@ -41,12 +41,27 @@
                 <div class="col col-edge">
                     <div class="left-button">
                         <c:if test="${snapshot.previousId ne null}">
-                            <a class="btn btn-adjacent-snapshot" href="${contextPath}/snapshot/${snapshot.previousId}">&#x23EA;&nbsp;&nbsp;${snapshot.previousName}</a>
+                            <a class="btn btn-adjacent-snapshot-${deviceType}" href="${contextPath}/snapshot/${snapshot.previousId}">
+                                <c:choose>
+                                    <c:when test="${deviceType eq 'MOBILE'}">
+                                        ${snapshot.previousName}<br/>
+                                        &#x23EA;
+                                    </c:when>
+                                    <c:otherwise>
+                                        &#x23EA;&nbsp;&nbsp;${snapshot.previousName}
+                                    </c:otherwise>
+                                </c:choose>
+                            </a>
                         </c:if>
                     </div>
-                </div>
 
-                <div class="col col-currencies">
+                    <c:choose>
+                        <c:when test="${deviceType ne 'MOBILE'}">
+                            </div>
+                            <div class="col col-currencies">
+                        </c:when>
+                    </c:choose>
+
                     <%@ include file="_snapshot_default_tithing_percentage.jsp" %>
                 </div>
             </div>
@@ -55,17 +70,30 @@
         <%@ include file="_snapshot_title.jsp" %>
 
         <div class="col">
-            <div class="row">
-                <div class="col col-currencies">
-                    <%@ include file="_snapshot_currency_conversion_rates.jsp" %>
-                </div>
+                <c:choose>
+                    <c:when test="${deviceType ne 'MOBILE'}">
+                        <div class="row"">
+                            <div class="col col-currencies">
+                                <%@ include file="_snapshot_currency_conversion_rates.jsp" %>
+                            </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="row" style="float: right;">
+                    </c:otherwise>
+                </c:choose>
 
                 <div class="col col-edge">
-                    <div class="right-button">
+                    <div class="right-button align-right">
                         <c:choose>
                             <c:when test="${snapshot.nextId ne null}">
-                                <a class="btn btn-adjacent-snapshot"
-                                   href="${contextPath}/snapshot/${snapshot.nextId}">${snapshot.nextName}&nbsp;&#x23E9;</a>
+                                <a class="btn btn-adjacent-snapshot-${deviceType}"
+                                href="${contextPath}/snapshot/${snapshot.nextId}">${snapshot.nextName}
+                                <c:choose>
+                                    <c:when test="${deviceType eq 'MOBILE'}">
+                                        <br/>
+                                    </c:when>
+                                </c:choose>
+                                &#x23E9;</a>
                             </c:when>
                             <c:otherwise>
                                     <div class="navigation-buttons-padding-bottom">
@@ -76,7 +104,18 @@
                                     <c:otherwise>
                                             <form method="post" action="${contextPath}/snapshot/new" onSubmit="return confirm('Are you sure you want to create a new snapshot based on the current snapshot?')">
                                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                                <input type="submit" class="btn btn-new-snapshot" value="&#x2795;  Snapshot"/>
+                                                <button type="submit" class="btn btn-new-snapshot-${deviceType}">
+                                                    <c:choose>
+                                                        <c:when test="${deviceType eq 'MOBILE'}">
+                                                            &#x2795;
+                                                            <br/>
+                                                            Snapshot
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            &#x2795;&nbsp; Snapshot
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </button>
                                             </form>
                                     </c:otherwise>
                                 </c:choose>
@@ -84,6 +123,12 @@
                             </c:otherwise>
                         </c:choose>
                     </div>
+
+                    <c:choose>
+                        <c:when test="${deviceType eq 'MOBILE'}">
+                            <%@ include file="_snapshot_currency_conversion_rates.jsp" %>
+                        </c:when>
+                    </c:choose>
                 </div>
             </div>
         </div>
