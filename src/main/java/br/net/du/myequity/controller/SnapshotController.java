@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.ID;
+import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.TRANSACTION_CATEGORY_TOTALS;
 import static br.net.du.myequity.controller.util.ControllerConstants.TWELVE_MONTHS_TOTALS;
@@ -52,6 +53,9 @@ public class SnapshotController {
 
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_KEY, SnapshotViewModelOutput.of(snapshot));
+
+        // For navbar
+        model.addAttribute(SNAPSHOT_ID_KEY, snapshot.getId());
 
         model.addAttribute("futureTithingPolicies", FutureTithingPolicy.shortValues());
         model.addAttribute("recurrencePolicies", RecurrencePolicy.shortValues());

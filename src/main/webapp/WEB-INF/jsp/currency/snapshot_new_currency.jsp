@@ -13,6 +13,7 @@
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 
     <script src="${contextPath}/resources/js/jquery.min.js"></script>
+    <script src="${contextPath}/resources/js/bootstrap.min.js"></script></head>
 </head>
 
 <body>

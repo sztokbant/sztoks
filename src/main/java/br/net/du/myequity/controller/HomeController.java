@@ -1,6 +1,7 @@
 package br.net.du.myequity.controller;
 
 import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOTS_KEY;
+import static br.net.du.myequity.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.myequity.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.myequity.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.myequity.controller.util.ControllerUtils.prepareTemplate;
@@ -50,6 +51,9 @@ public class HomeController {
                         .collect(Collectors.toList());
 
         model.addAttribute(SNAPSHOTS_KEY, homeSnapshotViewModelOutputs);
+
+        // For navbar
+        model.addAttribute(SNAPSHOT_ID_KEY, homeSnapshotViewModelOutputs.get(0).getId());
 
         return prepareTemplate(model, device, "home");
     }

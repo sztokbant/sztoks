@@ -9,9 +9,7 @@
 <div class="row">
     <div class="col col-section income-transactions">
         <div class="row border-1px-bottom">
-            <div class="col col-cell text-center"><b>INCOME</b>
-                <a href="/snapshot/${snapshot.id}/newIncomeTransaction" style="text-decoration: none;">&#x271A;</a>
-            </div>
+            <div class="col col-cell text-center"><b>INCOME</b></div>
         </div>
 
         <div class="row border-1px-bottom bg-light-yellow">
@@ -63,9 +61,7 @@
 <div class="row">
     <div class="col col-section investment-transactions">
         <div class="row border-1px-bottom">
-            <div class="col col-cell text-center"><b>INVESTMENTS</b>
-                <a href="/snapshot/${snapshot.id}/newInvestmentTransaction" style="text-decoration: none;">&#x271A;</a>
-            </div>
+            <div class="col col-cell text-center"><b>INVESTMENTS</b></div>
         </div>
 
         <div class="row border-1px-bottom bg-light-yellow">
@@ -130,9 +126,7 @@
 
     <div class="col col-section donation-transactions">
         <div class="row border-1px-bottom">
-            <div class="col col-cell text-center"><b>DONATIONS</b>
-                <a href="/snapshot/${snapshot.id}/newDonationTransaction" style="text-decoration: none;">&#x271A;</a>
-            </div>
+            <div class="col col-cell text-center"><b>DONATIONS</b></div>
         </div>
 
         <div class="row border-1px-bottom bg-light-yellow">

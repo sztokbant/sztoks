@@ -62,17 +62,17 @@
         <%@ include file="_snapshot_title.jsp" %>
 
         <div class="col">
-                <c:choose>
-                    <c:when test="${deviceType ne 'MOBILE'}">
-                        <div class="row"">
-                            <div class="col col-currencies">
-                                <%@ include file="_snapshot_currency_conversion_rates.jsp" %>
-                            </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="row" style="float: right;">
-                    </c:otherwise>
-                </c:choose>
+            <c:choose>
+                <c:when test="${deviceType ne 'MOBILE'}">
+                    <div class="row"">
+                        <div class="col col-currencies">
+                            <%@ include file="_snapshot_currency_conversion_rates.jsp" %>
+                        </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="row" style="float: right;">
+                </c:otherwise>
+            </c:choose>
 
                 <div class="col col-edge-${deviceType}">
                     <div class="right-button align-right">

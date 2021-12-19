@@ -1,3 +1,29 @@
+.sztoks-navbar {
+  padding: 6px;
+}
+
+a.navbar-item {
+  text-decoration: none;
+}
+
+a.navbar-item:link {
+  color: #bbb;
+}
+
+a.navbar-item:visited {
+  color: #bbb;
+}
+
+a.navbar-item:hover {
+  color: #ccc;
+  text-decoration: none;
+}
+
+a.navbar-item:active {
+  color: #ddd;
+  text-decoration: none;
+}
+
 .navbar-sztoks-DESKTOP {
 }
 
@@ -8,16 +34,47 @@
     font-size: 36px;
 }
 
+.navbar-menu {
+    margin: 0;
+}
+
+li.navbar-entry-DESKTOP {
+    line-height: 1cm;
+    padding: 0px 18px 0px 18px;
+}
+
+li.navbar-entry-TABLET {
+    line-height: 1cm;
+    padding: 0px 18px 0px 18px;
+}
+
+li.navbar-entry-MOBILE {
+    line-height: 2cm;
+    padding: 0px 18px 0px 18px;
+}
+
+.navbar-text {
+    color: #999;
+    font-style: italic;
+}
+
 .navbar-margin-bottom-DESKTOP {
-    margin: 68px 0 0 0;
+    margin: 63px 0 0 0;
 }
 
 .navbar-margin-bottom-TABLET {
-    margin: 68px 0 0 0;
+    margin: 63px 0 0 0;
 }
 
 .navbar-margin-bottom-MOBILE {
-    margin: 92px 0 0 0;
+    margin: 93px 0 0 0;
+}
+
+li.divider {
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: #999;
 }
 
 .page-title-DESKTOP {
