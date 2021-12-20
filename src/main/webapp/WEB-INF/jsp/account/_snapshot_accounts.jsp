@@ -16,7 +16,7 @@
         <c:choose>
             <c:when test="${not empty snapshot.simpleAssetAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Simple Assets</i></div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
                     <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
@@ -33,7 +33,7 @@
         <c:choose>
             <c:when test="${not empty snapshot.giftCertificateAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Gift Certificates</i></div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
                     <div class="col col-cell-${deviceType} col-title">Shares</div>
@@ -52,7 +52,7 @@
         <c:choose>
             <c:when test="${not empty snapshot.receivableAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Receivables</i></div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
                     <div class="col col-cell-${deviceType} col-title">Due Date</div>
@@ -72,7 +72,7 @@
         <c:choose>
             <c:when test="${not empty snapshot.sharedBillReceivableAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Shared Bill Receivables</i></div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
                     <div class="col col-cell-${deviceType} col-title">Due Day</div>
@@ -93,7 +93,7 @@
         <c:choose>
             <c:when test="${not empty snapshot.investmentAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Investments</i></div>
                 </div>
                 <div class="row border-1px-bottom">
@@ -137,7 +137,7 @@
         <c:set var="editableClass" value="editable-liability"/>
 
         <div class="row border-1px-bottom">
-            <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
             <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Tithing</i></div>
             <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
         </div>
@@ -147,7 +147,7 @@
         <%@ include file="_snapshot_tithing_total.jsp" %>
 
         <div class="row border-1px-bottom">
-            <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+            <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
             <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Simple Liabilities</i></div>
             <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
         </div>
@@ -166,7 +166,7 @@
         <c:choose>
             <c:when test="${not empty snapshot.payableAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Payables</i></div>
                     <div class="col col-cell-${deviceType} col-title">Due Date</div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Is paid?</div>
@@ -185,7 +185,7 @@
         <c:choose>
             <c:when test="${not empty snapshot.sharedBillPayableAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Shared Bill Payables</i></div>
                     <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title">Due Day</div>
@@ -207,7 +207,7 @@
         <c:choose>
             <c:when test="${not empty snapshot.creditCardAccounts}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Credit Cards</i></div>
                     <div class="col col-cell-${deviceType} col-title">Total Credit</div>
                     <div class="col col-cell-${deviceType} col-title">Available Credit</div>

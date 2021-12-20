@@ -2,7 +2,7 @@
 
     <div class="col col-cell-${deviceType} col-account-name">Shared Bill Payables TOTAL</div>
 
-    <div class="col col-cell-${deviceType} short"></div>
+    <div class="col col-cell-${deviceType} short-${deviceType}"></div>
 
     <div class="col col-cell-${deviceType}">
         &nbsp;

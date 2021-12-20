@@ -42,7 +42,7 @@
         <c:choose>
             <c:when test="${not empty snapshot.incomes}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title width-70px">&#128260;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name">Description</div>
                     <div class="col col-cell-${deviceType} col-title">Date</div>
@@ -102,7 +102,7 @@
         <c:choose>
             <c:when test="${not empty snapshot.investments}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title width-70px">&#128260;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name">Description</div>
                     <div class="col col-cell-${deviceType} col-title">Date</div>
@@ -189,7 +189,7 @@
         <c:choose>
             <c:when test="${not empty snapshot.donations}">
                 <div class="row border-1px-bottom">
-                    <div class="col col-cell-${deviceType} col-title short">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title width-70px">&#128260;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name">Description</div>
                     <div class="col col-cell-${deviceType} col-title">Date</div>

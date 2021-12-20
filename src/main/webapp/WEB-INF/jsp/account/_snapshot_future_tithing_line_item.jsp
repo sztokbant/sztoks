@@ -3,7 +3,7 @@
         FUTURE TITHING
     </div>
 
-    <div class="col col-cell-${deviceType} short">
+    <div class="col col-cell-${deviceType} short-${deviceType}">
         &nbsp;
     </div>
 
