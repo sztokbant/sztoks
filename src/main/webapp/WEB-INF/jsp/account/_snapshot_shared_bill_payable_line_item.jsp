@@ -3,15 +3,7 @@
 
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
     <%@ include file="_snapshot_col_due_day.jsp" %>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
 
     <%@ include file="_snapshot_col_number_of_partners.jsp" %>
 

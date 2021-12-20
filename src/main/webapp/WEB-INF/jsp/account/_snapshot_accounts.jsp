@@ -187,9 +187,7 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Shared Bill Payables</i></div>
-                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title">Due Day</div>
-                    <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title">Number of Partners</div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Is paid?</div>
                     <div class="col col-cell-${deviceType} col-title">Bill Amount</div>
