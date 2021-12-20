@@ -3,30 +3,6 @@
         FUTURE TITHING
     </div>
 
-    <div class="col col-cell-${deviceType} short-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
-    <div class="col col-cell-${deviceType}">
-        &nbsp;
-    </div>
-
     <div class="col col-cell-${deviceType} align-right">
         <span id="future_tithing_balance">${snapshot.futureTithingBalance}</span>
     </div>
