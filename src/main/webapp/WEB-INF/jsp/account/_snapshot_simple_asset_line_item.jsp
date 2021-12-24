@@ -23,7 +23,7 @@ $(document).ready(function() {
 
     <%@ include file="_account_future_tithing_select.jsp" %>
 
-    <div class="col col-cell-${deviceType} width-total-${deviceType} align-right ${editableClass}">
+    <div class="col col-cell-${deviceType} align-right ${editableClass}">
         <form id="form_account_balance_${entity.accountId}">
             <span id="account_balance_${entity.accountId}">${entity.balance}</span>
             <span><input id="new_account_balance_${entity.accountId}" name="amount" type="number"

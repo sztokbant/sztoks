@@ -11,7 +11,7 @@
 
     <%@ include file="_snapshot_col_bill_amount.jsp" %>
 
-    <div class="col col-cell-${deviceType} width-total-${deviceType} align-right">
+    <div class="col col-cell-${deviceType} align-right">
         <span id="account_balance_${entity.accountId}">${entity.balance}</span>
     </div>
 </div>

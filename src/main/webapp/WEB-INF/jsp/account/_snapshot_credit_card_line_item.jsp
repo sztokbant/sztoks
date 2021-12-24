@@ -80,7 +80,7 @@ $(document).ready(function() {
         <span id="credit_card_remaining_balance_${entity.accountId}">${entity.remainingBalance}</span>
     </div>
 
-    <div class="col col-cell-${deviceType} width-total-${deviceType} align-right">
+    <div class="col col-cell-${deviceType} align-right">
         <span id="credit_card_balance_${entity.accountId}">${entity.balance}</span>
     </div>
 </div>

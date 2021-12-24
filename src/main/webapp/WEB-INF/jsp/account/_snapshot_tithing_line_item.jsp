@@ -3,7 +3,7 @@
         TITHING
     </div>
 
-    <div class="col col-cell-${deviceType} width-total-${deviceType} align-right">
+    <div class="col col-cell-${deviceType} align-right">
         <span id="tithing_balance">${snapshot.tithingBalance}</span>
     </div>
 </div>

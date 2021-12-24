@@ -3,7 +3,7 @@
         FUTURE TITHING
     </div>
 
-    <div class="col col-cell-${deviceType} width-total-${deviceType} align-right">
+    <div class="col col-cell-${deviceType} align-right">
         <span id="future_tithing_balance">${snapshot.futureTithingBalance}</span>
     </div>
 </div>
