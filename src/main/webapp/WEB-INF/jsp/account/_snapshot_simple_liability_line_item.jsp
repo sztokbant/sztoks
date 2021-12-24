@@ -21,7 +21,7 @@ $(document).ready(function() {
 
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
-    <div class="col col-cell-${deviceType} align-right ${editableClass}">
+    <div class="col col-cell-${deviceType} width-total-${deviceType} align-right ${editableClass}">
         <form id="form_account_balance_${entity.accountId}">
             <span id="account_balance_${entity.accountId}">${entity.balance}</span>
             <span><input id="new_account_balance_${entity.accountId}" name="amount" type="number" step="0.01" style="display: none;"/></span>

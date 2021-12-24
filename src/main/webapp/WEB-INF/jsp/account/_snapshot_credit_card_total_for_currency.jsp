@@ -29,6 +29,6 @@
     </div>
     <div class="col col-cell-${deviceType} align-right"><b><span id="snapshot_credit_card_remaining_balance_${currentCurrency}">${ccTotals.remainingBalance}</span></b>
     </div>
-    <div class="col col-cell-${deviceType} align-right"><b><span id="snapshot_credit_card_balance_${currentCurrency}">${ccTotals.balance}</span></b>
+    <div class="col col-cell-${deviceType} width-total-${deviceType} align-right"><b><span id="snapshot_credit_card_balance_${currentCurrency}">${ccTotals.balance}</span></b>
     </div>
 </div>

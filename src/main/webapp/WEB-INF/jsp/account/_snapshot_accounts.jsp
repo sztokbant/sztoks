@@ -19,7 +19,7 @@
                     <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Simple Assets</i></div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
-                    <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title width-total-${deviceType} align-right">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.simpleAssetAccounts}">
                     <%@ include file="_snapshot_simple_asset_line_item.jsp" %>
@@ -38,7 +38,7 @@
                     <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
                     <div class="col col-cell-${deviceType} col-title">Shares</div>
                     <div class="col col-cell-${deviceType} col-title">Current Share Value</div>
-                    <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title width-total-${deviceType} align-right">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.giftCertificateAccounts}">
                     <%@ include file="_snapshot_gift_certificate_line_item.jsp" %>
@@ -58,7 +58,7 @@
                     <div class="col col-cell-${deviceType} col-title">Due Date</div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Is paid?</div>
                     <div class="col col-cell-${deviceType} col-title">Amount</div>
-                    <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title width-total-${deviceType} align-right">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.receivableAccounts}">
                     <%@ include file="_snapshot_receivable_line_item.jsp" %>
@@ -79,7 +79,7 @@
                     <div class="col col-cell-${deviceType} col-title">Number of Partners</div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Is paid?</div>
                     <div class="col col-cell-${deviceType} col-title">Bill Amount</div>
-                    <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title width-total-${deviceType} align-right">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.sharedBillReceivableAccounts}">
                     <%@ include file="_snapshot_shared_bill_receivable_line_item.jsp" %>
@@ -138,7 +138,7 @@
         <div class="row border-1px-bottom">
             <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
             <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Tithing</i></div>
-            <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
+            <div class="col col-cell-${deviceType} col-title width-total-${deviceType} align-right">Balance</div>
         </div>
 
         <%@ include file="_snapshot_tithing_line_item.jsp" %>
@@ -148,7 +148,7 @@
         <div class="row border-1px-bottom">
             <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
             <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Simple Liabilities</i></div>
-            <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
+            <div class="col col-cell-${deviceType} col-title width-total-${deviceType} align-right">Balance</div>
         </div>
 
         <c:choose>
@@ -170,7 +170,7 @@
                     <div class="col col-cell-${deviceType} col-title">Due Date</div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Is paid?</div>
                     <div class="col col-cell-${deviceType} col-title">Amount</div>
-                    <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title width-total-${deviceType} align-right">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.payableAccounts}">
                     <%@ include file="_snapshot_payable_line_item.jsp" %>
@@ -190,7 +190,7 @@
                     <div class="col col-cell-${deviceType} col-title">Number of Partners</div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Is paid?</div>
                     <div class="col col-cell-${deviceType} col-title">Bill Amount</div>
-                    <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title width-total-${deviceType} align-right">Balance</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.sharedBillPayableAccounts}">
                     <%@ include file="_snapshot_shared_bill_payable_line_item.jsp" %>
@@ -211,7 +211,7 @@
                     <div class="col col-cell-${deviceType} col-title">Used Credit</div>
                     <div class="col col-cell-${deviceType} col-title">Statement</div>
                     <div class="col col-cell-${deviceType} col-title">Remaining Balance</div>
-                    <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title width-total-${deviceType} align-right">Balance</div>
                 </div>
 
                 <c:set var="currentCurrency" value=""/>

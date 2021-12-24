@@ -4,5 +4,5 @@
 
     <div class="col col-cell-${deviceType} short-${deviceType}"></div>
 
-    <div class="col col-cell-${deviceType} align-right"><b><span id="snapshot_SIMPLE_LIABILITY_balance">${snapshot.simpleLiabilitiesBalance}</span></b></div>
+    <div class="col col-cell-${deviceType} width-total-${deviceType} align-right"><b><span id="snapshot_SIMPLE_LIABILITY_balance">${snapshot.simpleLiabilitiesBalance}</span></b></div>
 </div>
