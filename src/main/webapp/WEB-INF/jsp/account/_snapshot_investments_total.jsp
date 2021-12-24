@@ -16,7 +16,7 @@
 
     <fmt:parseNumber var="profitValue" value="${snapshot.investmentTotals.profitPercentage}" integerOnly="false" />
     <c:choose>
-        <c:when test="${profitValue gt 0}">
+        <c:when test="${profitValue ge 0}">
             <c:set var="profitStyle" value="cell-green" />
         </c:when>
         <c:when test="${profitValue lt 0}">

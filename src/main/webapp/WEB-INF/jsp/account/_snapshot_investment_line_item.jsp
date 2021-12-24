@@ -79,7 +79,7 @@ $(document).ready(function() {
 
             <fmt:parseNumber var="profitValue" value="${entity.profitPercentage}" integerOnly="false" />
             <c:choose>
-                <c:when test="${profitValue gt 0}">
+                <c:when test="${profitValue ge 0}">
                     <c:set var="profitStyle" value="cell-green" />
                 </c:when>
                 <c:when test="${profitValue lt 0}">
