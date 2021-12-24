@@ -329,7 +329,22 @@ li.divider {
 }
 
 .width-70px {
-    max-width: 70px;
+    min-width: 70px;
+}
+
+.width-total-DESKTOP {
+    min-width: 99px;
+    max-width: 99px;
+}
+
+.width-total-TABLET {
+    min-width: 99px;
+    max-width: 99px;
+}
+
+.width-total-MOBILE {
+    min-width: 189px;
+    max-width: 189px;
 }
 
 .align-right {

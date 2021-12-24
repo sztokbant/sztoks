@@ -37,6 +37,10 @@ $(document).ready(function() {
         <div class="row">
             <%@ include file="_snapshot_col_remove_account.jsp" %>
             <%@ include file="_snapshot_col_account_name.jsp" %>
+
+            <div class="col col-cell-${deviceType} width-total-${deviceType} align-right">
+                <span id="investment_balance_${entity.accountId}">${entity.balance}</span>
+            </div>
         </div>
 
         <div class="row">
@@ -86,13 +90,9 @@ $(document).ready(function() {
                 </c:otherwise>
             </c:choose>
 
-            <div class="col col-cell-${deviceType} align-right">
+            <div class="col col-cell-${deviceType} width-total-${deviceType} align-right">
                 <span id="investment_profit_percentage_${entity.accountId}"
                       class="${profitStyle}">${entity.profitPercentage}</span>
-            </div>
-
-            <div class="col col-cell-${deviceType} align-right">
-                <span id="investment_balance_${entity.accountId}">${entity.balance}</span>
             </div>
         </div>
     </div>

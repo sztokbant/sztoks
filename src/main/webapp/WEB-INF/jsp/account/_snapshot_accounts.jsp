@@ -102,8 +102,7 @@
                     <div class="col col-cell-${deviceType} col-title">Amount Invested</div>
                     <div class="col col-cell-${deviceType} col-title">Share Purchase Price</div>
                     <div class="col col-cell-${deviceType} col-title">Current Share Price</div>
-                    <div class="col col-cell-${deviceType} col-title">Profit</div>
-                    <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
+                    <div class="col col-cell-${deviceType} col-title width-total-${deviceType} align-right">Balance, Unrealized Gain/Loss</div>
                 </div>
                 <c:forEach var="entity" items="${snapshot.investmentAccounts}">
                     <%@ include file="_snapshot_investment_line_item.jsp" %>

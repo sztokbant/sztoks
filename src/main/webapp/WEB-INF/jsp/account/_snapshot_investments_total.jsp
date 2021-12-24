@@ -1,4 +1,8 @@
 <div class="row border-1px-bottom bg-light-yellow">
+    <div class="col col-cell-${deviceType} col-account-name">Investments TOTAL</div>
+    <div class="col col-cell-${deviceType} width-total-${deviceType} align-right"><b><span id="snapshot_investments_balance">${snapshot.investmentTotals.balance}</span></b></div>
+</div>
+<div class="row border-1px-bottom bg-light-yellow">
     <div class="col col-cell-${deviceType} width-70px"></div>
 
     <div class="col col-cell-${deviceType}"></div>
@@ -23,9 +27,7 @@
         </c:otherwise>
     </c:choose>
 
-    <div class="col col-cell-${deviceType} align-right">
+    <div class="col col-cell-${deviceType} width-total-${deviceType} align-right">
         <b><span id="snapshot_investments_profit_percentage" class="${profitStyle}">${snapshot.investmentTotals.profitPercentage}</span></b>
     </div>
-
-    <div class="col col-cell-${deviceType} align-right"><b><span id="snapshot_investments_balance">${snapshot.investmentTotals.balance}</span></b></div>
 </div>
