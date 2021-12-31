@@ -11,5 +11,6 @@ $(document).ready(function() {
 </script>
 
 <div class="col col-cell-${deviceType} text-center width-70px">
-    <input id="ACCOUNT_${entity.accountId}_is_paid" type="checkbox"/>
+    <input id="ACCOUNT_${entity.accountId}_is_paid" type="checkbox"
+           class="checkbox-sztoks-${deviceType}"/>
 </div>

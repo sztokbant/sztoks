@@ -151,6 +151,17 @@ li.divider {
     vertical-align: text-bottom;
 }
 
+.checkbox-sztoks-DESKTOP {
+}
+
+.checkbox-sztoks-TABLET {
+}
+
+.checkbox-sztoks-MOBILE {
+    width: 32px;
+    height: 32px;
+}
+
 .btn-sztoks {
     border-radius: 12px;
 }
