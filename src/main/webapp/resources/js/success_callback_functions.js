@@ -174,15 +174,12 @@ function updateProfitPercentage(entityId, profitPercentage) {
 }
 
 function colorizeProfitPercentage(percentage, element) {
-  if (percentage > 0) {
+  if (percentage >= 0) {
     element.removeClass('cell-red');
     element.addClass('cell-green');
-  } else if (percentage < 0) {
+  } else {
     element.removeClass('cell-green');
     element.addClass('cell-red');
-  } else {
-    element.removeClass('cell-red');
-    element.removeClass('cell-green');
   }
 }
 
