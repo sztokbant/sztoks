@@ -1,0 +1,9 @@
+ClearDB SSL Configuration (2022-03-03)
+
+Ref.: https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-reference-using-ssl.html
+
+1) openssl pkcs12 -export -in <db>-cert.cer -inkey <db>-key-no-password.cer -name "mysqlclient" -passout pass:<password> -out client-keystore.p12
+
+2) keytool -importkeystore -srckeystore client-keystore.p12 -srcstoretype pkcs12 -srcstorepass <password> -destkeystore truststore.jks -deststoretype JKS -deststorepass <password>
+
+3) Added to DATABASE_URL: sslMode=REQUIRED&clientCertificateKeyStoreUrl=file:private/db/truststore.jks&clientCertificateKeyStorePassword=<password>
