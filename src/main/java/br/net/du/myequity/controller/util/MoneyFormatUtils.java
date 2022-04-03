@@ -12,6 +12,8 @@ import org.joda.money.format.MoneyFormatter;
 import org.joda.money.format.MoneyFormatterBuilder;
 
 public class MoneyFormatUtils {
+    private static final int DEFAULT_SCALE = 2;
+
     private static final MoneyFormatter BRL_FORMATTER =
             new MoneyFormatterBuilder()
                     .appendLiteral("R$ ")
@@ -52,7 +54,9 @@ public class MoneyFormatUtils {
                         ? MONEY_FORMATTERS.get(currencyUnit)
                         : DEFAULT_FORMATTER;
 
+        int scale = Math.min(currencyUnit.getDecimalPlaces(), DEFAULT_SCALE);
+
         return moneyFormatter.print(
-                Money.of(currencyUnit, amount.setScale(2, RoundingMode.HALF_UP)));
+                Money.of(currencyUnit, amount.setScale(scale, RoundingMode.HALF_UP)));
     }
 }
