@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
+import java.util.TreeMap;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
@@ -204,11 +204,15 @@ public class SnapshotViewModelOutput {
 
     private static Map<String, String> toStringStringMap(
             final Map<String, BigDecimal> currencyConversionRates) {
-        return currencyConversionRates.entrySet().stream()
-                .collect(
-                        Collectors.toMap(
-                                e -> e.getKey(),
-                                e -> format(CurrencyUnit.of(e.getKey()), e.getValue())));
+        // Using TreeMap so currencies are sorted
+        final Map<String, String> stringStringMap = new TreeMap<>();
+
+        for (final String key : currencyConversionRates.keySet()) {
+            stringStringMap.put(
+                    key, format(CurrencyUnit.of(key), currencyConversionRates.get(key)));
+        }
+
+        return stringStringMap;
     }
 
     private static Map<String, CreditCardTotalsViewModelOutput> getCurrencyUnitCreditCardViewModels(

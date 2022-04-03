@@ -1,8 +1,8 @@
 package br.net.du.myequity.controller.viewmodel;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -10,7 +10,8 @@ import lombok.Setter;
 
 @NoArgsConstructor
 public class EditCurrenciesViewModelInput {
-    @Getter @Setter private Map<String, String> currencyConversionRates = new HashMap<>();
+    // Using TreeMap so currencies are sorted
+    @Getter @Setter private Map<String, String> currencyConversionRates = new TreeMap<>();
 
     public EditCurrenciesViewModelInput(
             @NonNull final Map<String, BigDecimal> currencyConversionRates) {
