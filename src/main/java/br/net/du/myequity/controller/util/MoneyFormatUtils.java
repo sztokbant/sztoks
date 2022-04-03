@@ -12,7 +12,7 @@ import org.joda.money.format.MoneyFormatter;
 import org.joda.money.format.MoneyFormatterBuilder;
 
 public class MoneyFormatUtils {
-    private static final int DEFAULT_SCALE = 2;
+    public static final int DEFAULT_SCALE = 2;
 
     private static final MoneyFormatter BRL_FORMATTER =
             new MoneyFormatterBuilder()

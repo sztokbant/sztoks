@@ -238,27 +238,27 @@ public class SnapshotViewModelOutput {
         final Map<Class, List<AccountViewModelOutput>> assetsByType =
                 breakDownAccountsByType(accountViewModels.get(AccountType.ASSET));
 
-        builder.simpleAssetAccounts(assetsByType.get(SimpleAssetAccountViewModelOutput.class));
-        builder.giftCertificateAccounts(
-                assetsByType.get(GiftCertificateAccountViewModelOutput.class));
-        builder.receivableAccounts(assetsByType.get(ReceivableAccountViewModelOutput.class));
-        builder.sharedBillReceivableAccounts(
-                assetsByType.get(SharedBillAccountViewModelOutput.class));
-        builder.investmentAccounts(assetsByType.get(InvestmentAccountViewModelOutput.class));
+        builder.simpleAssetAccounts(assetsByType.get(SimpleAssetAccountViewModelOutput.class))
+                .giftCertificateAccounts(
+                        assetsByType.get(GiftCertificateAccountViewModelOutput.class))
+                .receivableAccounts(assetsByType.get(ReceivableAccountViewModelOutput.class))
+                .sharedBillReceivableAccounts(
+                        assetsByType.get(SharedBillAccountViewModelOutput.class))
+                .investmentAccounts(assetsByType.get(InvestmentAccountViewModelOutput.class));
 
         final Map<Class, List<AccountViewModelOutput>> liabilitiesByType =
                 breakDownAccountsByType(accountViewModels.get(AccountType.LIABILITY));
-        builder.simpleLiabilityAccounts(
-                liabilitiesByType.get(SimpleLiabilityAccountViewModelOutput.class));
-        builder.payableAccounts(liabilitiesByType.get(PayableAccountViewModelOutput.class));
-        builder.sharedBillPayableAccounts(
-                liabilitiesByType.get(SharedBillAccountViewModelOutput.class));
-        builder.creditCardAccounts(liabilitiesByType.get(CreditCardAccountViewModelOutput.class));
 
-        builder.tithingBalance(
-                format(snapshot.getBaseCurrencyUnit(), snapshot.getTithingBalance()));
-        builder.futureTithingBalance(
-                format(snapshot.getBaseCurrencyUnit(), snapshot.getFutureTithingBalance()));
+        builder.simpleLiabilityAccounts(
+                        liabilitiesByType.get(SimpleLiabilityAccountViewModelOutput.class))
+                .payableAccounts(liabilitiesByType.get(PayableAccountViewModelOutput.class))
+                .sharedBillPayableAccounts(
+                        liabilitiesByType.get(SharedBillAccountViewModelOutput.class))
+                .creditCardAccounts(liabilitiesByType.get(CreditCardAccountViewModelOutput.class))
+                .tithingBalance(
+                        format(snapshot.getBaseCurrencyUnit(), snapshot.getTithingBalance()))
+                .futureTithingBalance(
+                        format(snapshot.getBaseCurrencyUnit(), snapshot.getFutureTithingBalance()));
     }
 
     private static Map<AccountType, List<AccountViewModelOutput>> getAccountViewModelOutputs(

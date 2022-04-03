@@ -1,20 +1,19 @@
 package br.net.du.myequity.controller.util;
 
 import static br.net.du.myequity.controller.interceptor.GlobalModelAttributes.LOGGED_USER;
+import static br.net.du.myequity.controller.util.MoneyFormatUtils.DEFAULT_SCALE;
 
 import br.net.du.myequity.exception.UserNotFoundException;
 import br.net.du.myequity.model.User;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.Optional;
 import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.mobile.device.Device;
 import org.springframework.ui.Model;
 
 public class ControllerUtils {
-
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.00");
     private static final String PERCENTAGE_TEMPLATE = "%s%%";
 
     public static User getLoggedUser(final Model model) {
@@ -51,7 +50,7 @@ public class ControllerUtils {
 
     public static String formatAsPercentage(final BigDecimal input) {
         final BigDecimal value = input == null ? BigDecimal.ZERO : input;
-        return String.format(PERCENTAGE_TEMPLATE, formatAsDecimal(value));
+        return String.format(PERCENTAGE_TEMPLATE, toDecimal(value, DEFAULT_SCALE));
     }
 
     public static String formatAsDecimal(final BigDecimal input) {
@@ -59,7 +58,22 @@ public class ControllerUtils {
         return toDecimal(value).toString();
     }
 
-    public static BigDecimal toDecimal(final BigDecimal value) {
-        return new BigDecimal(DECIMAL_FORMAT.format(value.setScale(2, RoundingMode.HALF_UP)));
+    public static BigDecimal toDecimal(final BigDecimal input) {
+        final BigDecimal value = input == null ? BigDecimal.ZERO : input;
+        final int scale = Math.max(getCurrentScale(value), DEFAULT_SCALE);
+        return toDecimal(value, scale);
+    }
+
+    public static BigDecimal toDecimal(final BigDecimal input, int scale) {
+        final BigDecimal value = input == null ? BigDecimal.ZERO : input;
+        return new BigDecimal(value.toString()).setScale(scale, RoundingMode.HALF_UP);
+    }
+
+    private static int getCurrentScale(@NonNull final BigDecimal value) {
+        if (!value.toString().contains(".")) {
+            return 0;
+        }
+        final String decimals = value.toString().split("\\.")[1];
+        return StringUtils.stripEnd(decimals, "0").length();
     }
 }
