@@ -50,7 +50,8 @@ $(document).ready(function() {
     </div>
 
     <div class="col col-cell-${deviceType} text-center width-70px">
-        <input id="TRANSACTION_${entity.id}_taxDeductible" type="checkbox"/>
+        <input id="TRANSACTION_${entity.id}_taxDeductible" type="checkbox"
+            class="checkbox-sztoks-${deviceType}"/>
     </div>
 
     <div class="col col-cell-${deviceType} align-right ${editableClass}">
