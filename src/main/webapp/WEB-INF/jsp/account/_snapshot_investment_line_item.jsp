@@ -73,7 +73,7 @@ $(document).ready(function() {
                     <span id="investment_current_share_value_${entity.accountId}">${entity.currentShareValue}</span>
                     <span><input id="new_investment_current_share_value_${entity.accountId}" name="amount" type="number"
                                  min="0"
-                                 step="0.01" style="display: none;"/></span>
+                                 step="0.00000001" style="display: none;"/></span>
                 </form>
             </div>
 
