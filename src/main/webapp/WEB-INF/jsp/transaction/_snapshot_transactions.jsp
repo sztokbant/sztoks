@@ -61,7 +61,7 @@
 <div class="row">
     <div class="col col-section investment-transactions">
         <div class="row border-1px-bottom">
-            <div class="col col-cell-${deviceType} text-center"><b>INVESTMENTS</b></div>
+            <div class="col col-cell-${deviceType} text-center"><b>INVESTING ACTIVITIES</b></div>
         </div>
 
         <div class="row border-1px-bottom bg-light-yellow">
