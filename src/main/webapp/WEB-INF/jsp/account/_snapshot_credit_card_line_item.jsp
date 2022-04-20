@@ -40,7 +40,7 @@ $(document).ready(function() {
         <form id="form_credit_card_total_credit_${entity.accountId}">
             <span id="credit_card_total_credit_${entity.accountId}">${entity.totalCredit}</span>
             <span><input id="new_credit_card_total_credit_${entity.accountId}" name="amount" type="number" min="0"
-                         step="0.01" style="display: none;"/></span>
+                         step="0.01" class="hidden-input"/></span>
         </form>
     </div>
 
@@ -48,7 +48,7 @@ $(document).ready(function() {
         <form id="form_credit_card_available_credit_${entity.accountId}">
             <span id="credit_card_available_credit_${entity.accountId}">${entity.availableCredit}</span>
             <span><input id="new_credit_card_available_credit_${entity.accountId}" name="amount" type="number" min="0"
-                         step="0.01" style="display: none;"/></span>
+                         step="0.01" class="hidden-input"/></span>
         </form>
     </div>
 
@@ -72,7 +72,7 @@ $(document).ready(function() {
     <div class="col col-cell-${deviceType} align-right ${editableClass}">
         <form id="form_credit_card_statement_${entity.accountId}">
             <b><span id="credit_card_statement_${entity.accountId}">${entity.statement}</span></b>
-            <span><input id="new_credit_card_statement_${entity.accountId}" name="amount" type="number" step="0.01" style="display: none;"/></span>
+            <span><input id="new_credit_card_statement_${entity.accountId}" name="amount" type="number" step="0.01" class="hidden-input"/></span>
         </form>
     </div>
 

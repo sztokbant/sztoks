@@ -18,6 +18,6 @@ $(document).ready(function() {
 <div class="col col-cell-${deviceType} col-account-name ${editableClass}">
     <form id="form_account_name_${entity.accountId}">
         <span id="account_name_${entity.accountId}">${entity.name}</span>
-        <span><input id="new_account_name_${entity.accountId}" type="text" style="display: none;"/></span>
+        <span><input id="new_account_name_${entity.accountId}" type="text" class="hidden-input"/></span>
     </form>
 </div>

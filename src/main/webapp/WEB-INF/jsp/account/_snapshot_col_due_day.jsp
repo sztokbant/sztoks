@@ -19,6 +19,6 @@ prepareUpdateForm($("#form_shared_bill_due_day_${entity.accountId}"),
     <form id="form_shared_bill_due_day_${entity.accountId}">
         <span id="shared_bill_due_day_${entity.accountId}">${entity.dueDay}</span>
         <span><input id="new_shared_bill_due_day_${entity.accountId}" name="amount" type="number" step="1" min="1" max="31"
-                     style="display: none;"/></span>
+                     class="hidden-input"/></span>
     </form>
 </div>

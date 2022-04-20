@@ -35,7 +35,7 @@ $(document).ready(function() {
         <form id="form_gift_certificate_shares_${entity.accountId}">
             <span id="gift_certificate_shares_${entity.accountId}">${entity.shares}</span>
             <span><input id="new_gift_certificate_shares_${entity.accountId}" name="amount" type="number" min="0"
-                         step="0.00000001" style="display: none;"/></span>
+                         step="0.00000001" class="hidden-input"/></span>
         </form>
     </div>
 
@@ -44,7 +44,7 @@ $(document).ready(function() {
             <span id="gift_certificate_current_share_value_${entity.accountId}">${entity.currentShareValue}</span>
             <span><input id="new_gift_certificate_current_share_value_${entity.accountId}" name="amount" type="number"
                          min="0"
-                         step="0.0001" style="display: none;"/></span>
+                         step="0.0001" class="hidden-input"/></span>
         </form>
     </div>
 

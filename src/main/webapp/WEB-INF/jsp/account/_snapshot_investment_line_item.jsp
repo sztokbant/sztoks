@@ -51,7 +51,7 @@ $(document).ready(function() {
                 <form id="form_investment_shares_${entity.accountId}">
                     <span id="investment_shares_${entity.accountId}">${entity.shares}</span>
                     <span><input id="new_investment_shares_${entity.accountId}" name="amount" type="number" min="0"
-                                 step="0.00000001" style="display: none;"/></span>
+                                 step="0.00000001" class="hidden-input"/></span>
                 </form>
             </div>
 
@@ -60,7 +60,7 @@ $(document).ready(function() {
                     <span id="investment_amount_invested_${entity.accountId}">${entity.amountInvested}</span>
                     <span><input id="new_investment_amount_invested_${entity.accountId}" name="amount" type="number"
                                  min="0"
-                                 step="0.01" style="display: none;"/></span>
+                                 step="0.01" class="hidden-input"/></span>
                 </form>
             </div>
 
@@ -73,7 +73,7 @@ $(document).ready(function() {
                     <span id="investment_current_share_value_${entity.accountId}">${entity.currentShareValue}</span>
                     <span><input id="new_investment_current_share_value_${entity.accountId}" name="amount" type="number"
                                  min="0"
-                                 step="0.00000001" style="display: none;"/></span>
+                                 step="0.00000001" class="hidden-input"/></span>
                 </form>
             </div>
 

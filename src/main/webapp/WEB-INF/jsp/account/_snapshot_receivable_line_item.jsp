@@ -27,7 +27,7 @@ $(document).ready(function() {
         <form id="form_receivable_due_date_${entity.accountId}">
             <span id="receivable_due_date_${entity.accountId}">${entity.dueDate}</span>
             <span><input id="new_receivable_due_date_${entity.accountId}" name="amount" type="date"
-                         style="display: none;"/></span>
+                         class="hidden-input"/></span>
         </form>
     </div>
 

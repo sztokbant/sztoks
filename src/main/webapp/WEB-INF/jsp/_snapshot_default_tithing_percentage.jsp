@@ -22,7 +22,7 @@ $(document).ready(function() {
             <span id="default_tithing_percentage" class="editable-donation">${snapshot.defaultTithingPercentage}</span>
             <span><input id="new_default_tithing_percentage" type="number"
                          min="0" max="100"
-                         step="0.01" style="display: none;"/></span>
+                         step="0.01" class="hidden-input"/></span>
         </form>
     </div>
 </div>
