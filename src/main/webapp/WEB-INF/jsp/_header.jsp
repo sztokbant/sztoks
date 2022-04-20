@@ -33,7 +33,7 @@
                             <a class="navbar-item" href="/snapshot/${snapshotId}/newIncomeTransaction" style="text-decoration: none;">&#x271A; Income Transaction</a>
                         </li>
                         <li class="navbar-entry-${deviceType}">
-                            <a class="navbar-item" href="/snapshot/${snapshotId}/newInvestmentTransaction" style="text-decoration: none;">&#x271A; Investment Transaction</a>
+                            <a class="navbar-item" href="/snapshot/${snapshotId}/newInvestmentTransaction" style="text-decoration: none;">&#x271A; Investing Activity Transaction</a>
                         </li>
                         <li class="navbar-entry-${deviceType}">
                             <a class="navbar-item" href="/snapshot/${snapshotId}/newDonationTransaction" style="text-decoration: none;">&#x271A; Donation Transaction</a>

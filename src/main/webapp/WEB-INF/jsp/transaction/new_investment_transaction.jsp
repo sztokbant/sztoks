@@ -27,7 +27,7 @@
         </c:when>
     </c:choose>
 
-    <div class="text-center page-title-${deviceType}">New Investment Transaction</div>
+    <div class="text-center page-title-${deviceType}">New Investing Activity Transaction</div>
 
     <div class="text-center page-subtitle-${deviceType}">Snapshot: ${snapshotTitle}</div>
 

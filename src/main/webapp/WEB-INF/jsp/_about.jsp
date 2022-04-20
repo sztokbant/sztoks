@@ -1,6 +1,6 @@
 <div class="paragraph-${deviceType}">
     <b>Sztoks</b> is a balance sheet-like web app which allows one to keep a monthly snapshot of
-    their finances, including <i>assets</i>, <i>liabilities</i>, <i>income received</i>, <i>investment transactions</i>,
+    their finances, including <i>assets</i>, <i>liabilities</i>, <i>income received</i>, <i>investing activities</i>,
     as well as <i>donations</i> made.
 </div>
 <div class="paragraph-${deviceType}">
