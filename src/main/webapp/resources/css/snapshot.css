@@ -138,24 +138,60 @@
   background: lavender;
 }
 
-.editable-income {
-  background: thistle;
+.editable-income-even {
+  background: #efcbe8;
+}
+
+.editable-income-odd {
+  background: #cfabc8;
+}
+
+.regular-income-even {
+  background: #f7f4ff;
+}
+
+.regular-income-odd {
+  background: #d7d4f7;
 }
 
 .investment-transactions {
   background: lavender;
 }
 
-.editable-investment {
-  background: thistle;
+.editable-investment-even {
+  background: #efcbe8;
+}
+
+.editable-investment-odd {
+  background: #cfabc8;
+}
+
+.regular-investment-even {
+  background: #f7f4ff;
+}
+
+.regular-investment-odd {
+  background: #d7d4f7;
 }
 
 .donation-transactions {
   background: lavender;
 }
 
-.editable-donation {
-    background: thistle;
+.editable-donation-even {
+  background: #efcbe8;
+}
+
+.editable-donation-odd {
+  background: #cfabc8;
+}
+
+.regular-donation-even {
+  background: #f7f4ff;
+}
+
+.regular-donation-odd {
+  background: #d7d4f7;
 }
 
 .bg-transaction-subcategory {

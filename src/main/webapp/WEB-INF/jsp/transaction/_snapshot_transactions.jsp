@@ -19,8 +19,6 @@
             </div>
         </div>
 
-        <c:set var="editableClass" value="editable-income"/>
-
         <div class="row border-1px-bottom bg-transaction-subcategory">
             <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
             <div class="col col-cell-${deviceType} col-title">YTD Total</div>
@@ -50,7 +48,9 @@
                     <div class="col col-cell-${deviceType} col-title">Tithing %</div>
                     <div class="col col-cell-${deviceType} col-title">Amount</div>
                 </div>
+                <c:set var="count" value="0"/>
                 <c:forEach var="entity" items="${snapshot.incomes}">
+                    <%@ include file="_zebra_income.jsp" %>
                     <%@ include file="_snapshot_income_transaction_line_item.jsp" %>
                 </c:forEach>
             </c:when>
@@ -70,8 +70,6 @@
                 <b><span id="total_INVESTMENT">${snapshot.investmentTransactionsTotal}</span></b>
             </div>
         </div>
-
-        <c:set var="editableClass" value="editable-investment"/>
 
         <div class="row border-1px-bottom bg-transaction-subcategory">
             <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
@@ -109,7 +107,9 @@
                     <div class="col col-cell-${deviceType} col-title">Category</div>
                     <div class="col col-cell-${deviceType} col-title">Amount</div>
                 </div>
+                <c:set var="count" value="0"/>
                 <c:forEach var="entity" items="${snapshot.investments}">
+                    <%@ include file="_zebra_investment.jsp" %>
                     <%@ include file="_snapshot_investment_transaction_line_item.jsp" %>
                 </c:forEach>
             </c:when>
@@ -135,8 +135,6 @@
                 <b><span id="total_DONATION">${snapshot.donationTransactionsTotal}</span></b>
             </div>
         </div>
-
-        <c:set var="editableClass" value="editable-donation"/>
 
         <div class="row border-1px-bottom bg-transaction-subcategory">
             <div class="col col-cell-${deviceType} col-title">&nbsp;</div>
@@ -197,7 +195,9 @@
                     <div class="col col-cell-${deviceType} col-title width-70px">Tax deductible?</div>
                     <div class="col col-cell-${deviceType} col-title">Amount</div>
                 </div>
+                <c:set var="count" value="0"/>
                 <c:forEach var="entity" items="${snapshot.donations}">
+                    <%@ include file="_zebra_donation.jsp" %>
                     <%@ include file="_snapshot_donation_transaction_line_item.jsp" %>
                 </c:forEach>
             </c:when>
