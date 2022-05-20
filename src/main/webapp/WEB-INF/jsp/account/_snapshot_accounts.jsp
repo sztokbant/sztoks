@@ -11,8 +11,6 @@
             </div>
         </div>
 
-        <c:set var="editableClass" value="editable-asset"/>
-
         <c:choose>
             <c:when test="${not empty snapshot.simpleAssetAccounts}">
                 <div class="row border-1px-bottom">
@@ -21,7 +19,9 @@
                     <div class="col col-cell-${deviceType} col-title width-70px">Future Tithing</div>
                     <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
                 </div>
+                <c:set var="count" value="0"/>
                 <c:forEach var="entity" items="${snapshot.simpleAssetAccounts}">
+                    <%@ include file="_zebra_asset.jsp" %>
                     <%@ include file="_snapshot_simple_asset_line_item.jsp" %>
                 </c:forEach>
                 <c:if test="${snapshot.simpleAssetAccounts.size() gt 1}">
@@ -40,7 +40,9 @@
                     <div class="col col-cell-${deviceType} col-title">Current Share Value</div>
                     <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
                 </div>
+                <c:set var="count" value="0"/>
                 <c:forEach var="entity" items="${snapshot.giftCertificateAccounts}">
+                    <%@ include file="_zebra_asset.jsp" %>
                     <%@ include file="_snapshot_gift_certificate_line_item.jsp" %>
                 </c:forEach>
                 <c:if test="${snapshot.giftCertificateAccounts.size() gt 1}">
@@ -60,7 +62,9 @@
                     <div class="col col-cell-${deviceType} col-title">Amount</div>
                     <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
                 </div>
+                <c:set var="count" value="0"/>
                 <c:forEach var="entity" items="${snapshot.receivableAccounts}">
+                    <%@ include file="_zebra_asset.jsp" %>
                     <%@ include file="_snapshot_receivable_line_item.jsp" %>
                 </c:forEach>
                 <c:if test="${snapshot.receivableAccounts.size() gt 1}">
@@ -81,7 +85,9 @@
                     <div class="col col-cell-${deviceType} col-title">Bill Amount</div>
                     <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
                 </div>
+                <c:set var="count" value="0"/>
                 <c:forEach var="entity" items="${snapshot.sharedBillReceivableAccounts}">
+                    <%@ include file="_zebra_asset.jsp" %>
                     <%@ include file="_snapshot_shared_bill_receivable_line_item.jsp" %>
                 </c:forEach>
                 <c:if test="${snapshot.sharedBillReceivableAccounts.size() gt 1}">
@@ -104,7 +110,9 @@
                     <div class="col col-cell-${deviceType} col-title">Current Share Price</div>
                     <div class="col col-cell-${deviceType} col-title width-total-${deviceType} align-right">Balance, Unrealized Gain/Loss</div>
                 </div>
+                <c:set var="count" value="0"/>
                 <c:forEach var="entity" items="${snapshot.investmentAccounts}">
+                    <%@ include file="_zebra_asset.jsp" %>
                     <%@ include file="_snapshot_investment_line_item.jsp" %>
                 </c:forEach>
                 <c:if test="${snapshot.investmentAccounts.size() gt 1}">
@@ -133,8 +141,6 @@
             </div>
         </div>
 
-        <c:set var="editableClass" value="editable-liability"/>
-
         <div class="row border-1px-bottom">
             <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
             <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Tithing</i></div>
@@ -153,7 +159,9 @@
 
         <c:choose>
             <c:when test="${not empty snapshot.simpleLiabilityAccounts}">
+                <c:set var="count" value="0"/>
                 <c:forEach var="entity" items="${snapshot.simpleLiabilityAccounts}">
+                    <%@ include file="_zebra_liability.jsp" %>
                     <%@ include file="_snapshot_simple_liability_line_item.jsp" %>
                 </c:forEach>
             </c:when>
@@ -172,7 +180,9 @@
                     <div class="col col-cell-${deviceType} col-title">Amount</div>
                     <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
                 </div>
+                <c:set var="count" value="0"/>
                 <c:forEach var="entity" items="${snapshot.payableAccounts}">
+                    <%@ include file="_zebra_liability.jsp" %>
                     <%@ include file="_snapshot_payable_line_item.jsp" %>
                 </c:forEach>
                 <c:if test="${snapshot.payableAccounts.size() gt 1}">
@@ -192,7 +202,9 @@
                     <div class="col col-cell-${deviceType} col-title">Bill Amount</div>
                     <div class="col col-cell-${deviceType} col-title align-right">Balance</div>
                 </div>
+                <c:set var="count" value="0"/>
                 <c:forEach var="entity" items="${snapshot.sharedBillPayableAccounts}">
+                    <%@ include file="_zebra_liability.jsp" %>
                     <%@ include file="_snapshot_shared_bill_payable_line_item.jsp" %>
                 </c:forEach>
                 <c:if test="${snapshot.sharedBillPayableAccounts.size() gt 1}">
@@ -215,11 +227,14 @@
                 </div>
 
                 <c:set var="currentCurrency" value=""/>
+                <c:set var="count" value="0"/>
                 <c:forEach var="entity" items="${snapshot.creditCardAccounts}">
                     <c:if test="${currentCurrency ne '' && currentCurrency ne entity.currencyUnit}">
+                        <c:set var="count" value="0"/>
                         <%@ include file="_snapshot_credit_card_total_for_currency.jsp" %>
                     </c:if>
                     <c:set var="currentCurrency" value="${entity.currencyUnit}"/>
+                    <%@ include file="_zebra_liability.jsp" %>
                     <%@ include file="_snapshot_credit_card_line_item.jsp" %>
                 </c:forEach>
                 <c:if test="${snapshot.creditCardAccounts.size() gt 1}">

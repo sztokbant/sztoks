@@ -98,16 +98,40 @@
   background: mistyrose;
 }
 
-.editable-asset {
-    background: lightpink;
+.editable-asset-even {
+    background: #ffbfce;
+}
+
+.editable-asset-odd {
+    background: #ef9fae;
+}
+
+.regular-asset-even {
+    background: #fff2f0;
+}
+
+.regular-asset-odd {
+    background: #efd2d0;
 }
 
 .liability-accounts {
   background: lightcyan;
 }
 
-.editable-liability {
-  background: paleturquoise;
+.editable-liability-even {
+    background: #affefd;
+}
+
+.editable-liability-odd {
+    background: #8be1e0;
+}
+
+.regular-liability-even {
+    background: #ebffff;
+}
+
+.regular-liability-odd {
+    background: #cbe7e7;
 }
 
 .income-transactions {

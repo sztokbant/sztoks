@@ -65,7 +65,7 @@ $(document).ready(function() {
         </c:otherwise>
     </c:choose>
 
-    <div class="col col-cell-${deviceType} align-right">
+    <div class="col col-cell-${deviceType} align-right ${regularClass}">
         <span id="credit_card_used_credit_percentage_${entity.accountId}" class="${ccUsageStyle}">${entity.usedCreditPercentage}</span>
     </div>
 
@@ -76,11 +76,11 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell-${deviceType} align-right">
+    <div class="col col-cell-${deviceType} align-right ${regularClass}">
         <span id="credit_card_remaining_balance_${entity.accountId}">${entity.remainingBalance}</span>
     </div>
 
-    <div class="col col-cell-${deviceType} align-right">
+    <div class="col col-cell-${deviceType} align-right ${regularClass}">
         <span id="credit_card_balance_${entity.accountId}">${entity.balance}</span>
     </div>
 </div>

@@ -38,13 +38,12 @@ $(document).ready(function() {
             <%@ include file="_snapshot_col_remove_account.jsp" %>
             <%@ include file="_snapshot_col_account_name.jsp" %>
 
-            <div class="col col-cell-${deviceType} width-total-${deviceType} align-right">
+            <div class="col col-cell-${deviceType} width-total-${deviceType} align-right ${regularClass}">
                 <span id="investment_balance_${entity.accountId}">${entity.balance}</span>
             </div>
         </div>
 
         <div class="row">
-
             <%@ include file="_account_future_tithing_select.jsp" %>
 
             <div class="col col-cell-${deviceType} align-right ${editableClass}">
@@ -64,7 +63,7 @@ $(document).ready(function() {
                 </form>
             </div>
 
-            <div class="col col-cell-${deviceType} align-right">
+            <div class="col col-cell-${deviceType} align-right ${regularClass}">
                 <span id="investment_average_purchase_price_${entity.accountId}">${entity.averagePurchasePrice}</span>
             </div>
 
@@ -90,7 +89,7 @@ $(document).ready(function() {
                 </c:otherwise>
             </c:choose>
 
-            <div class="col col-cell-${deviceType} width-total-${deviceType} align-right">
+            <div class="col col-cell-${deviceType} width-total-${deviceType} align-right ${regularClass}">
                 <span id="investment_profit_percentage_${entity.accountId}"
                       class="${profitStyle}">${entity.profitPercentage}</span>
             </div>

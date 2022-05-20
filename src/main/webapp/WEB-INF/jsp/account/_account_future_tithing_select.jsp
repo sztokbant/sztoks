@@ -13,7 +13,7 @@ $(document).ready(function() {
 })
 </script>
 
-<div class="col col-cell-${deviceType} text-center width-70px">
+<div class="col col-cell-${deviceType} text-center width-70px ${regularClass}">
     <form id="form_account_future_tithing_${entity.accountId}">
         <select id="select_account_future_tithing_${entity.accountId}" name="account_future_tithing_${entity.accountId}">
             <c:forEach items="${futureTithingPolicies}" var="policy">

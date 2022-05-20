@@ -48,7 +48,7 @@ $(document).ready(function() {
         </form>
     </div>
 
-    <div class="col col-cell-${deviceType} align-right">
+    <div class="col col-cell-${deviceType} align-right ${regularClass}">
         <span id="gift_certificate_balance_${entity.accountId}">${entity.balance}</span>
     </div>
 </div>
