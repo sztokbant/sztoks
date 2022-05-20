@@ -1,5 +1,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <!DOCTYPE html>
@@ -42,14 +43,26 @@
 
             <c:set var="isFirst" value="true"/>
             <c:forEach var="snapshot" items="${snapshots}">
-                    <c:set var="rowClass" value="bg-light-yellow"/>
-                    <c:set var="aClass" value=""/>
-                    <c:if test='${snapshot.name.endsWith("-01")}'>
+                <c:set var="month" value="${fn:substringAfter(snapshot.name, '-')}"/>
+                <c:choose>
+                    <c:when test='${month eq 1}'>
                         <c:set var="rowClass" value="bg-red"/>
                         <c:set var="aClass" value="bg-red-link"/>
-                    </c:if>
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var="aClass" value=""/>
+                        <c:choose>
+                            <c:when test="${month % 2 eq 0}">
+                                <c:set var="rowClass" value="bg-snapshots-even"/>
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="rowClass" value="bg-snapshots-odd"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:otherwise>
+                </c:choose>
 
-                    <tr class="border-1px ${rowClass}">
+                <tr class="border-1px ${rowClass}">
                     <td class="valign-top col-snapshot-${deviceType}">
                         <div class="row">
                             <div class="col col-snapshot-delete-${deviceType}">

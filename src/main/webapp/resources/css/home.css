@@ -1,3 +1,11 @@
+.bg-snapshots-even {
+    background: #fff9a1;
+}
+
+.bg-snapshots-odd {
+    background: #dfd981;
+}
+
 .col-snapshots-title {
     text-align: center;
     color: white;
