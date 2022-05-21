@@ -152,9 +152,13 @@ li.divider {
 }
 
 .checkbox-sztoks-DESKTOP {
+    width: 18px;
+    height: 18px;
 }
 
 .checkbox-sztoks-TABLET {
+    width: 18px;
+    height: 18px;
 }
 
 .checkbox-sztoks-MOBILE {

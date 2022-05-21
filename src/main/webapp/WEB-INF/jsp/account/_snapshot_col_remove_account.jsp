@@ -1,6 +1,6 @@
 <div class="col col-cell-${deviceType} short-${deviceType} ${regularClass}">
     <div class="delete-icon">
         <a href="#" onclick="removeAccountFromSnapshot(${snapshot.id}, ${entity.accountId}, '${fn:replace(entity.name, '\'', '\\\'')}');"
-           style="text-decoration: none;">&#x26D4;</a>
+           style="text-decoration: none;">&#128465;&#65039;</a>
     </div>
 </div>

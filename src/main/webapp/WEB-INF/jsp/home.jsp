@@ -70,7 +70,7 @@
                                     <form method="post" action="${contextPath}/snapshot/delete/${snapshot.id}"
                                           onsubmit="return confirm('Are you sure you want to PERMANENTLY delete snapshot \'${snapshot.name}\'?');">
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <input type="submit" value="&#x26D4" class="transparent-button"/>
+                                        <input type="submit" value="&#128465;&#65039;" class="transparent-button"/>
                                     </form>
                                     <c:set var="isFirst" value="false"/>
                                 </c:if>
