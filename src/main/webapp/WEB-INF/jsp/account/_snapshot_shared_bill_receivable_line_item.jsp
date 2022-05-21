@@ -3,6 +3,7 @@
 
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
+    <c:set var="includeProfitFutureTithing" value="false"/>
     <%@ include file="_account_future_tithing_select.jsp" %>
 
     <%@ include file="_snapshot_col_due_day.jsp" %>

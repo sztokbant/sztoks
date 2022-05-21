@@ -21,6 +21,7 @@ $(document).ready(function() {
 
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
+    <c:set var="includeProfitFutureTithing" value="false"/>
     <%@ include file="_account_future_tithing_select.jsp" %>
 
     <div class="col col-cell-${deviceType} text-center ${editableClass}">

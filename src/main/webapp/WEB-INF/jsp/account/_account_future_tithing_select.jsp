@@ -17,14 +17,16 @@ $(document).ready(function() {
     <form id="form_account_future_tithing_${entity.accountId}">
         <select id="select_account_future_tithing_${entity.accountId}" name="account_future_tithing_${entity.accountId}">
             <c:forEach items="${futureTithingPolicies}" var="policy">
-                <c:choose>
-                    <c:when test="${policy eq entity.futureTithingPolicy}">
-                        <option value="${policy}" selected="true">${policy}</option>
-                    </c:when>
-                    <c:otherwise>
-                        <option value="${policy}">${policy}</option>
-                    </c:otherwise>
-                </c:choose>
+                <c:if test="${policy ne 'PROFIT' or (policy eq 'PROFIT' and includeProfitFutureTithing)}">
+                    <c:choose>
+                        <c:when test="${policy eq entity.futureTithingPolicy}">
+                            <option value="${policy}" selected="true">${policy}</option>
+                        </c:when>
+                        <c:otherwise>
+                            <option value="${policy}">${policy}</option>
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
             </c:forEach>
         </select>
     </form>

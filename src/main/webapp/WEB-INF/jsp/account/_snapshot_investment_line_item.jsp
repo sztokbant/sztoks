@@ -44,6 +44,7 @@ $(document).ready(function() {
         </div>
 
         <div class="row">
+            <c:set var="includeProfitFutureTithing" value="true"/>
             <%@ include file="_account_future_tithing_select.jsp" %>
 
             <div class="col col-cell-${deviceType} align-right ${editableClass}">

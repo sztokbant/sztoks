@@ -2,24 +2,14 @@
 
 The following are old TODOs which may or may not still make sense (2022-03-03)
 
-DATA FIX:
-
-[] Cost of opportunity MUST be also counted as INCOME
-
 BUG:
 
 [] (minor) Home net worth = 0 when assetsTotal = NULL
 [] Apparent DB concurrency issue, got error after setting several isResettable in a row
 
-investigate potential bug:
+Investigate potential bug:
 
 [] Lock/refresh of Tithing & FutureTithing accounts on update
-
-
-
-Model
-[] Don't allow setting Future Tithing "PROFIT" for non-investment assets
-[] Shared Bill Payable
 
 Idea:
 
@@ -37,80 +27,23 @@ https://rapidapi.com/blog/currency-converter-api/
 QA
 
 [/] LOGS
-
 [] UNIT-TESTS
   [] Account remove controller is not allowed to remove tithing/futuretithing accounts
 
 Model
-[] Improve transaction totals query to add categories - start with Investment
-[] Property "update date every month" for payable/receivable
+
 [] Category enums should be type enumerate so they store strings, not ints, in DB
   [] They should have abbreviations too
+[] LOCK OLD SNAPSHOTS (with a checkbox?)
+[] Past snapshots should confirm on every update
 
 UX improvements
+
 [] next/prev snapshot buttons should be on the permanent top bar
 [] javascript to hide "profit only future tithing" for SimpleAssets, Receivables
-[] new transaction date field could be pre-populated with today's date or snapshot's end of month
 [] Sort baseCurrency first
 [] ignore case when sorting
 
 Performance
 
 [] Delete snapshot should delete ALL data at once instead of one txn/account at a time
-
-Model improvements
-
-[] LOCK OLD SNAPSHOTS (with a checkbox?)
-[] Past snapshots should confirm on every update
-
----
-
-[x] NAME IDEA: SZTOKS
-
-[x] Yellow Total line item for each category
-  [x] Investment
-  [x] Generic assets/liabilities
-
-UI
-[x] Home: different color for January snapshot
-[x] Past snapshots should look different (color, ...)
-[x] Separate Tithing out of Simple Liabilities, it should be its own category
-[x] Add "e.g. 10%" to sign up tithing
-[x] Change "Tithing Percentage" column name to "Tithing %"
-[x] Future tithing AJAX
-[x] Account rename
-[x] Removed extra CSRF input
-[x] favicon
-[x] Footer w/ copyright
-
-
-Model
-[x] Snapshot.name => Snapshot.year/month
-[x] prevent deletions of all but the most recent snapshot
-[x] prevent the creation of new snapshots before mid month
-[x] Future tithing - flag defined upon account creation and can't change
-[x] CONSOLIDATE TITHING & (NOT! FUTURE TITHING) ACCOUNTS TO BASE CURRENCY UPON NEW SNAPSHOT CREATION
-[x] Create tithing categories (FAMILY, SPIRITUAL, OTHER)
-[x] Create income categories (JOB, SIDE_GIG, GIFT, PROMO, OTHER)
-[x] Receivable sub-category: "Shared Bill Receivable" (n people sharing (1+), amount,
-   balance = n * (amount/(n+1))
-[x] Simple asset sub-category: GiftCertificateAccount (units, price per unit, total = u * ppu)
-[x] Checkbox "Paid?" for shared bill receivables
-[x] Property "reset every month" for recurring txns like CC credits
-[x] Allow accounts to enable/disable future tithing flag
-[x] isResettable and isRecurring should be merged into enum: { NONRECURRING, RECURRING, RECURRING_RESETTABLE }
-[x] Returning Object upon Account/Transaction update
-[x] Allow update of default tithing
-
-
-Bug
-[x] Buttons should be disabled upon click to prevent multiple entries
-[x] Concurrent transactions mess up with totals
-[x] Future tithing should have its own class, store total amount, return balance based on snapshot defaultTithingPercentage
-[x] fix future tithing not showing in summary for simple liabilities
-[x] tithing percentage edit % bug
-[x] CAN'T DELETE Tiger's Nest donation from 2016-05
-  => Probably because of the apostrophe
-[x] Concurrency bug updating txn amounts too fast corrupted total (income), and probably Tithing too
-[x] Credit card deletion not updating CC Total Credit
-
