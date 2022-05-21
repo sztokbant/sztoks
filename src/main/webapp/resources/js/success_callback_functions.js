@@ -14,7 +14,7 @@ function accountRenameUpdateSuccessCallback(data, result) {
 }
 
 function removeAccountFromSnapshot(snapshotId, entityId, accountName) {
-    var doRemove = confirm('Are you sure you want to remove "' + accountName + '" from this snapshot?');
+    var doRemove = confirm('Are you sure you want to PERMANENTLY remove "' + accountName + '" from this snapshot?');
 
     if (doRemove) {
       var data = {
@@ -301,7 +301,7 @@ function transactionRecurrenceUpdateSuccessCallback(data, result) {
 }
 
 function removeTransaction(snapshotId, entityId, type, description) {
-    var doRemove = confirm('Are you sure you want to remove ' + type + ' transaction "' + description + '" from this snapshot?');
+    var doRemove = confirm('Are you sure you want to PERMANENTLY remove ' + type + ' transaction "' + description + '" from this snapshot?');
 
     if (doRemove) {
       var data = {
