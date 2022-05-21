@@ -246,3 +246,15 @@
     width: 54px;
     height: 54px;
 }
+
+.emoji-select-cell-DESKTOP {
+    max-width: 42px;
+}
+
+.emoji-select-cell-TABLET {
+    max-width: 42px;
+}
+
+.emoji-select-cell-MOBILE {
+    max-width: 72px;
+}

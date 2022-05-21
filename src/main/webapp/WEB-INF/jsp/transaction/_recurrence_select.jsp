@@ -13,7 +13,7 @@ $(document).ready(function() {
 })
 </script>
 
-<div class="col col-cell-${deviceType} text-center width-70px ${regularClass}">
+<div class="col col-cell-${deviceType} text-center emoji-select-cell-${deviceType} ${regularClass}">
     <form id="form_txn_recurrence_${entity.id}">
         <select id="select_txn_recurrence_${entity.id}" name="txn_recurrence_${entity.id}" class="emoji-select-${deviceType}">
             <c:forEach items="${recurrencePolicies}" var="policy">
