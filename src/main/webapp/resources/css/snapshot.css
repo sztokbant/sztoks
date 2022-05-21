@@ -24,6 +24,19 @@
 .delete-icon {
     float: left;
     margin: 0 7px 0 0;
+    font-size: 14px;
+}
+
+.delete-icon-DESKTOP {
+    font-size: 14px;
+}
+
+.delete-icon-TABLET {
+    font-size: 14px;
+}
+
+.delete-icon-MOBILE {
+    font-size: 27px;
 }
 
 .col-section {
