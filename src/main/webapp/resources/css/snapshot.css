@@ -218,3 +218,18 @@
     position: relative;
     z-index: 1;
 }
+
+.emoji-select-DESKTOP {
+    width: 36px;
+    height: 27px;
+}
+
+.emoji-select-TABLET {
+    width: 36px;
+    height: 27px;
+}
+
+.emoji-select-MOBILE {
+    width: 54px;
+    height: 54px;
+}
