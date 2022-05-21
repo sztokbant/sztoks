@@ -38,10 +38,10 @@ $(document).ready(function() {
                 <c:forEach items="${donationCategories}" var="category">
                     <c:choose>
                         <c:when test="${category eq entity.category}">
-                            <option value="${category}" selected="true">${category}</option>
+                            <option value="${category}" selected="true">${fn:replace(category, '_', ' ')}</option>
                         </c:when>
                         <c:otherwise>
-                            <option value="${category}">${category}</option>
+                            <option value="${category}">${fn:replace(category, '_', ' ')}</option>
                         </c:otherwise>
                     </c:choose>
                 </c:forEach>
