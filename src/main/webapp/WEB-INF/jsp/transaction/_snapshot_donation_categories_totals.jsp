@@ -11,10 +11,10 @@
         <div class="row border-1px-bottom bg-transaction-subcategory">
             <c:choose>
                 <c:when test="${categories.value.size() gt 1}">
-                    <c:set var="categoryName" value="${fn:replace(categories.key, '_', ' ')} (${byCurrency.key})" />
+                    <c:set var="categoryName" value="${szt:capitalize(fn:replace(categories.key, '_', ' '))} (${byCurrency.key})" />
                 </c:when>
                 <c:otherwise>
-                    <c:set var="categoryName" value="${fn:replace(categories.key, '_', ' ')}" />
+                    <c:set var="categoryName" value="${szt:capitalize(fn:replace(categories.key, '_', ' '))}" />
                 </c:otherwise>
             </c:choose>
             <div class="col col-cell-${deviceType} transaction-subcategory-label">${categoryName}</div>

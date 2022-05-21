@@ -14,4 +14,10 @@
         <function-class>br.net.du.myequity.controller.jstl.Functions</function-class>
         <function-signature>java.lang.String replaceAll(java.lang.String, java.lang.String, java.lang.String)</function-signature>
     </function>
+
+    <function>
+        <name>capitalize</name>
+        <function-class>org.apache.commons.lang3.text.WordUtils</function-class>
+        <function-signature>java.lang.String capitalizeFully(java.lang.String)</function-signature>
+    </function>
 </taglib>
