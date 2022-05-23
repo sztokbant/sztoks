@@ -27,6 +27,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
     private final LocalDate date;
     private final String currencyUnit;
     private final String currencyUnitSymbol;
+    private final Integer currencyIndex;
     private final String amount;
     private final String tithingPercentage;
     private final String description;
@@ -50,6 +51,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
         date = other.getDate();
         currencyUnit = other.getCurrencyUnit();
         currencyUnitSymbol = other.getCurrencyUnitSymbol();
+        currencyIndex = other.getCurrencyIndex();
         amount = other.getAmount();
         tithingPercentage = other.getTithingPercentage();
         description = other.getDescription();
@@ -85,6 +87,11 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
                         .date(transaction.getDate())
                         .currencyUnit(transaction.getCurrencyUnit().getCode())
                         .currencyUnitSymbol(transaction.getCurrencyUnit().getSymbol())
+                        .currencyIndex(
+                                transaction
+                                        .getSnapshot()
+                                        .getCurrenciesInUseBaseFirst()
+                                        .indexOf(currencyUnit.getCode()))
                         .amount(amount)
                         .tithingPercentage(tithingPercentage)
                         .description(transaction.getDescription())
@@ -122,12 +129,15 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
 
     @Override
     public int compareTo(final TransactionViewModelOutput other) {
-        if (currencyUnit.equals(other.getCurrencyUnit())) {
-            if (date.equals(other.getDate())) {
-                return description.compareTo(other.getDescription());
+        if (type.equals(other.getType())) {
+            if (currencyIndex.equals(other.getCurrencyIndex())) {
+                if (date.equals(other.getDate())) {
+                    return description.compareTo(other.getDescription());
+                }
+                return date.compareTo(other.getDate());
             }
-            return date.compareTo(other.getDate());
+            return currencyIndex.compareTo(other.getCurrencyIndex());
         }
-        return currencyUnit.compareTo(other.getCurrencyUnit());
+        return type.compareTo(other.getType());
     }
 }
