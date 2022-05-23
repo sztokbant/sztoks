@@ -50,6 +50,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -159,6 +160,8 @@ public class Snapshot implements Comparable<Snapshot> {
     @MapKeyColumn(name = "to_currency")
     @Column(name = "conversion_rate", precision = 19, scale = 4)
     private Map<String, BigDecimal> currencyConversionRates = new HashMap<>();
+
+    @Transient private List<String> currenciesInUseBaseFirst;
 
     public Snapshot(
             final int year,
@@ -575,12 +578,7 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     public SortedSet<String> getCurrenciesInUse() {
-        final SortedSet<String> availableCurrencies = new TreeSet<>();
-
-        availableCurrencies.add(baseCurrency);
-        availableCurrencies.addAll(currencyConversionRates.keySet());
-
-        return availableCurrencies;
+        return ImmutableSortedSet.copyOf(getCurrenciesInUseBaseFirst());
     }
 
     public boolean supports(@NonNull final CurrencyUnit currencyUnit) {
@@ -597,7 +595,9 @@ public class Snapshot implements Comparable<Snapshot> {
         final BigDecimal previousValue =
                 currencyConversionRates.put(currencyUnit.getCode(), conversionRate);
 
-        if (previousValue != null) {
+        if (previousValue == null) {
+            updateCurrenciesInUse();
+        } else {
             // Recompute totals if this currency was already present
             assetsTotal = computeTotalFor(AccountType.ASSET);
             liabilitiesTotal = computeTotalFor(AccountType.LIABILITY);
@@ -609,6 +609,23 @@ public class Snapshot implements Comparable<Snapshot> {
 
         if (next != null && !next.hasConversionRate(currencyUnit)) {
             next.putCurrencyConversionRate(currencyUnit, conversionRate);
+        }
+    }
+
+    public List<String> getCurrenciesInUseBaseFirst() {
+        if (currenciesInUseBaseFirst == null) {
+            updateCurrenciesInUse();
+        }
+        return currenciesInUseBaseFirst;
+    }
+
+    private void updateCurrenciesInUse() {
+        currenciesInUseBaseFirst = new ArrayList<>();
+
+        currenciesInUseBaseFirst.add(baseCurrency);
+
+        for (final String currency : ImmutableSortedSet.copyOf(currencyConversionRates.keySet())) {
+            currenciesInUseBaseFirst.add(currency);
         }
     }
 

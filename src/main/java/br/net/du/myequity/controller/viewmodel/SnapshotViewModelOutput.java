@@ -136,30 +136,30 @@ public class SnapshotViewModelOutput {
                         .oneBaseCurrency(format(snapshot.getBaseCurrencyUnit(), BigDecimal.ONE))
                         .assetsTotal(updatableTotals.getTotalFor(AccountType.ASSET))
                         .simpleAssetsBalance(
-                                updatableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                         AccountSubtypeDisplayGroup.SIMPLE_ASSET))
                         .giftCertificatesBalance(
-                                updatableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                         AccountSubtypeDisplayGroup.GIFT_CERTIFICATE))
                         .receivablesBalance(
-                                updatableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                         AccountSubtypeDisplayGroup.RECEIVABLE))
                         .sharedBillReceivablesBalance(
-                                updatableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                         AccountSubtypeDisplayGroup.SHARED_BILL_RECEIVABLE))
                         .investmentTotals(InvestmentTotalsViewModelOutput.of(investmentTotals))
                         .totalTithingBalance(
-                                updatableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                         AccountSubtypeDisplayGroup.TITHING))
                         .liabilitiesTotal(updatableTotals.getTotalFor(AccountType.LIABILITY))
                         .simpleLiabilitiesBalance(
-                                updatableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                         AccountSubtypeDisplayGroup.SIMPLE_LIABILITY))
                         .payablesBalance(
-                                updatableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                         AccountSubtypeDisplayGroup.PAYABLE))
                         .sharedBillPayablesBalance(
-                                updatableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                         AccountSubtypeDisplayGroup.SHARED_BILL_PAYABLE))
                         .creditCardTotals(getCurrencyUnitCreditCardViewModels(creditCardTotals))
                         .incomeTransactionsTotal(

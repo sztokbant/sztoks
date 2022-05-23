@@ -29,7 +29,7 @@ public class UpdatableTotals {
         return format(snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getTotalFor(accountType)));
     }
 
-    public String getTotalForAccountSubtype(
+    public String getTotalForAccountSubtypeDisplayGroup(
             final AccountSubtypeDisplayGroup accountSubtypeDisplayGroup) {
         return format(
                 snapshot.getBaseCurrencyUnit(),

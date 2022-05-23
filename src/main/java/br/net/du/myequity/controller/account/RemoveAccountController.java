@@ -9,11 +9,9 @@ import br.net.du.myequity.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.account.AccountType;
-import br.net.du.myequity.model.account.CreditCardAccount;
 import br.net.du.myequity.model.account.FutureTithingAccount;
 import br.net.du.myequity.model.account.FutureTithingCapable;
 import br.net.du.myequity.model.account.FutureTithingPolicy;
-import br.net.du.myequity.model.account.InvestmentAccount;
 import br.net.du.myequity.model.account.TithingAccount;
 import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import br.net.du.myequity.service.AccountService;
@@ -94,15 +92,14 @@ public class RemoveAccountController {
 
         final AccountSubtypeDisplayGroup accountSubtypeDisplayGroup =
                 AccountSubtypeDisplayGroup.forClass(account.getClass());
-        if (accountSubtypeDisplayGroup != null) {
+        if (accountSubtypeDisplayGroup.useDefaultTotals()) {
             builder.accountSubtype(accountSubtypeDisplayGroup.name())
                     .totalForAccountSubtype(
-                            updatableTotals.getTotalForAccountSubtype(accountSubtypeDisplayGroup));
-        }
-
-        if (account instanceof InvestmentAccount) {
+                            updatableTotals.getTotalForAccountSubtypeDisplayGroup(
+                                    accountSubtypeDisplayGroup));
+        } else if (accountSubtypeDisplayGroup.equals(AccountSubtypeDisplayGroup.INVESTMENT)) {
             builder.investmentTotals(updatableTotals.getInvestmentTotals());
-        } else if (account instanceof CreditCardAccount) {
+        } else if (accountSubtypeDisplayGroup.equals(AccountSubtypeDisplayGroup.CREDIT_CARD)) {
             builder.creditCardTotalsForCurrencyUnit(
                     updatableTotals.getCreditCardTotalsForCurrencyUnit(account.getCurrencyUnit()));
         }
@@ -117,7 +114,7 @@ public class RemoveAccountController {
                             : updatableTotals.getTotalFor(AccountType.LIABILITY);
             builder.futureTithingBalance(updatableTotals.getFutureTithingBalance())
                     .totalTithingBalance(
-                            updatableTotals.getTotalForAccountSubtype(
+                            updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                     AccountSubtypeDisplayGroup.TITHING))
                     .totalLiability(totalLiability);
         }

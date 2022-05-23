@@ -94,7 +94,7 @@ public class RemoveTransactionController {
 
             builder.tithingBalance(updatableTotals.getTithingBalance())
                     .totalTithingBalance(
-                            updatableTotals.getTotalForAccountSubtype(
+                            updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                     AccountSubtypeDisplayGroup.TITHING))
                     .totalLiability(updatableTotals.getTotalFor(AccountType.LIABILITY))
                     .netWorth(updatableTotals.getNetWorth());

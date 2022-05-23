@@ -53,11 +53,16 @@ public class ReceivableAccountViewModelOutput extends AccountViewModelOutput {
 
     @Override
     public int compareTo(final AccountViewModelOutput other) {
-        if (!(other instanceof ReceivableAccountViewModelOutput)
-                || dueDate.equals(((ReceivableAccountViewModelOutput) other).getDueDate())) {
+        if (other instanceof ReceivableAccountViewModelOutput) {
+            if (getCurrencyUnit().equals(other.getCurrencyUnit())) {
+                if (dueDate.equals(((ReceivableAccountViewModelOutput) other).getDueDate())) {
+                    return getName().compareTo(other.getName());
+                }
+                return dueDate.compareTo(((ReceivableAccountViewModelOutput) other).getDueDate());
+            }
+            return getCurrencyIndex().compareTo(other.getCurrencyIndex());
+        } else {
             return super.compareTo(other);
         }
-
-        return dueDate.compareTo(((ReceivableAccountViewModelOutput) other).getDueDate());
     }
 }

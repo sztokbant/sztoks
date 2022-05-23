@@ -45,11 +45,16 @@ public class PayableAccountViewModelOutput extends AccountViewModelOutput {
 
     @Override
     public int compareTo(final AccountViewModelOutput other) {
-        if (!(other instanceof PayableAccountViewModelOutput)
-                || dueDate.equals(((PayableAccountViewModelOutput) other).getDueDate())) {
+        if (other instanceof PayableAccountViewModelOutput) {
+            if (getCurrencyUnit().equals(other.getCurrencyUnit())) {
+                if (dueDate.equals(((PayableAccountViewModelOutput) other).getDueDate())) {
+                    return getName().compareTo(other.getName());
+                }
+                return dueDate.compareTo(((PayableAccountViewModelOutput) other).getDueDate());
+            }
+            return getCurrencyIndex().compareTo(other.getCurrencyIndex());
+        } else {
             return super.compareTo(other);
         }
-
-        return dueDate.compareTo(((PayableAccountViewModelOutput) other).getDueDate());
     }
 }

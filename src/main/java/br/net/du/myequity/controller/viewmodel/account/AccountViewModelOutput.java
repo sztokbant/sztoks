@@ -24,6 +24,7 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
     private final String balance;
     private final String currencyUnit;
     private final String currencyUnitSymbol;
+    private final Integer currencyIndex;
 
     // fields only used on updates
     private final String netWorth;
@@ -46,6 +47,7 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
         balance = other.getBalance();
         currencyUnit = other.getCurrencyUnit();
         currencyUnitSymbol = other.getCurrencyUnitSymbol();
+        currencyIndex = other.getCurrencyIndex();
 
         netWorth = other.getNetWorth();
         accountType = other.getAccountType();
@@ -66,37 +68,40 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
         final CurrencyUnit currencyUnit = account.getCurrencyUnit();
 
         final String balance = format(currencyUnit, toDecimal(account.getBalance()));
+        final AccountSubtypeDisplayGroup accountSubtypeDisplayGroup =
+                AccountSubtypeDisplayGroup.forClass(account.getClass());
         final AccountViewModelOutputBuilder builder =
                 AccountViewModelOutput.builder()
+                        .accountType(account.getAccountType().name())
+                        .accountSubtype(accountSubtypeDisplayGroup.name())
                         .accountId(account.getId())
                         .name(account.getName())
                         .balance(balance)
                         .currencyUnit(currencyUnit.getCode())
-                        .currencyUnitSymbol(currencyUnit.getSymbol());
+                        .currencyUnitSymbol(currencyUnit.getSymbol())
+                        .currencyIndex(
+                                snapshot.getCurrenciesInUseBaseFirst()
+                                        .indexOf(currencyUnit.getCode()));
 
         if (includeTotals) {
             final UpdatableTotals updatableTotals = new UpdatableTotals(snapshot);
-            final AccountSubtypeDisplayGroup accountSubtypeDisplayGroup =
-                    AccountSubtypeDisplayGroup.forClass(account.getClass());
 
             final String totalForAccountType =
                     updatableTotals.getTotalFor(account.getAccountType());
             builder.netWorth(updatableTotals.getNetWorth())
-                    .accountType(account.getAccountType().name())
-                    .totalForAccountType(totalForAccountType)
-                    .accountSubtype(
-                            accountSubtypeDisplayGroup == null
-                                    ? null
-                                    : accountSubtypeDisplayGroup.name())
-                    .totalForAccountSubtype(
-                            accountSubtypeDisplayGroup == null
-                                    ? null
-                                    : updatableTotals.getTotalForAccountSubtype(
-                                            accountSubtypeDisplayGroup))
-                    .investmentTotals(updatableTotals.getInvestmentTotals())
-                    .creditCardTotalsForCurrencyUnit(
-                            updatableTotals.getCreditCardTotalsForCurrencyUnit(
-                                    account.getCurrencyUnit()));
+                    .totalForAccountType(totalForAccountType);
+
+            if (accountSubtypeDisplayGroup.useDefaultTotals()) {
+                builder.totalForAccountSubtype(
+                        updatableTotals.getTotalForAccountSubtypeDisplayGroup(
+                                accountSubtypeDisplayGroup));
+            } else if (accountSubtypeDisplayGroup.equals(AccountSubtypeDisplayGroup.INVESTMENT)) {
+                builder.investmentTotals(updatableTotals.getInvestmentTotals());
+            } else if (accountSubtypeDisplayGroup.equals(AccountSubtypeDisplayGroup.CREDIT_CARD)) {
+                builder.creditCardTotalsForCurrencyUnit(
+                        updatableTotals.getCreditCardTotalsForCurrencyUnit(
+                                account.getCurrencyUnit()));
+            }
 
             if (account instanceof FutureTithingCapable) {
                 final String totalLiability =
@@ -105,7 +110,7 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
                                 : updatableTotals.getTotalFor(AccountType.LIABILITY);
                 builder.futureTithingBalance(updatableTotals.getFutureTithingBalance())
                         .totalTithingBalance(
-                                updatableTotals.getTotalForAccountSubtype(
+                                updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                         AccountSubtypeDisplayGroup.TITHING))
                         .totalLiability(totalLiability);
             }
@@ -120,8 +125,15 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
 
     @Override
     public int compareTo(final AccountViewModelOutput other) {
-        return currencyUnit.equals(other.getCurrencyUnit())
-                ? name.compareTo(other.getName())
-                : currencyUnit.compareTo(other.getCurrencyUnit());
+        if (accountType.equals(other.getAccountType())) {
+            if (accountSubtype.equals(other.getAccountSubtype())) {
+                if (currencyIndex.equals(other.getCurrencyIndex())) {
+                    return name.compareTo(other.getName());
+                }
+                return currencyIndex.compareTo(other.getCurrencyIndex());
+            }
+            return accountSubtype.compareTo(other.getAccountSubtype());
+        }
+        return accountType.compareTo(other.getAccountType());
     }
 }

@@ -44,7 +44,7 @@ public class SnapshotUpdateDefaultTithingPercentageController {
                                                     snapshot.getDefaultTithingPercentage()))
                                     .futureTithingBalance(updatableTotals.getFutureTithingBalance())
                                     .totalTithingBalance(
-                                            updatableTotals.getTotalForAccountSubtype(
+                                            updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                                     AccountSubtypeDisplayGroup.TITHING))
                                     .accountType(accountType.name())
                                     .totalForAccountType(updatableTotals.getTotalFor(accountType))
