@@ -43,17 +43,17 @@
                     Taxation
                 </div>
                 <div class="col">
+                    <div>
+                        <form:radiobutton path="isTaxDeductible" value="true" id="taxDeductibleRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="taxDeductibleRadio" class="form-entry-${deviceType}">Tax Deductible</label>
+                    </div>
+                    <div>
+                        <form:radiobutton path="isTaxDeductible" value="false" id="nondeductibleRadio" checked="checked"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="nondeductibleRadio" class="form-entry-${deviceType}">Nondeductible</label>
+                    </div>
                     <div class="${status.error ? 'has-error' : ''}">
-                        <div>
-                            <form:radiobutton path="isTaxDeductible" value="true" id="taxDeductibleRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="taxDeductibleRadio" class="form-entry-${deviceType}">Tax Deductible</label>
-                        </div>
-                        <div>
-                            <form:radiobutton path="isTaxDeductible" value="false" id="nondeductibleRadio" checked="checked"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="nondeductibleRadio" class="form-entry-${deviceType}">Nondeductible</label>
-                        </div>
                         <form:errors path="isTaxDeductible"/>
                     </div>
                 </div>
@@ -66,22 +66,22 @@
                     Donation Category
                 </div>
                 <div class="col">
+                    <div>
+                        <form:radiobutton path="category" value="FAMILY" id="familyRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="familyRadio" class="form-entry-${deviceType}">Family</label>
+                    </div>
+                    <div>
+                        <form:radiobutton path="category" value="SPIRITUAL" id="spiritualRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="spiritualRadio" class="form-entry-${deviceType}">Spiritual</label>
+                    </div>
+                    <div>
+                        <form:radiobutton path="category" value="OTHER" id="otherRadio" checked="checked"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="otherRadio" class="form-entry-${deviceType}">Other</label>
+                    </div>
                     <div class="${status.error ? 'has-error' : ''}">
-                        <div>
-                            <form:radiobutton path="category" value="FAMILY" id="familyRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="familyRadio" class="form-entry-${deviceType}">Family</label>
-                        </div>
-                        <div>
-                            <form:radiobutton path="category" value="SPIRITUAL" id="spiritualRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="spiritualRadio" class="form-entry-${deviceType}">Spiritual</label>
-                        </div>
-                        <div>
-                            <form:radiobutton path="category" value="OTHER" id="otherRadio" checked="checked"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="otherRadio" class="form-entry-${deviceType}">Other</label>
-                        </div>
                         <form:errors path="category"/>
                     </div>
                 </div>

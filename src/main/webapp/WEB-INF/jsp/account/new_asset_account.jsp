@@ -40,9 +40,9 @@
                     <label for="name">Account Name</label>
                 </div>
                 <div class="col">
+                    <form:input type="text" id="name" path="name" class="form-control form-entry-${deviceType}" placeholder="Account Name"
+                                autofocus="true"/>
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="text" id="name" path="name" class="form-control form-entry-${deviceType}" placeholder="Account Name"
-                                    autofocus="true"></form:input>
                         <form:errors path="name"/>
                     </div>
                 </div>
@@ -55,32 +55,32 @@
                     Asset Type
                 </div>
                 <div class="col">
+                    <div>
+                        <form:radiobutton path="subtypeName" value="SimpleAssetAccount" id="simpleAssetRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="simpleAssetRadio" class="form-entry-${deviceType}">Simple Asset</label>
+                    </div>
+                    <div>
+                        <form:radiobutton path="subtypeName" value="GiftCertificateAccount" id="giftCertificateRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="giftCertificateRadio" class="form-entry-${deviceType}">Gift Certificate</label>
+                    </div>
+                    <div>
+                        <form:radiobutton path="subtypeName" value="ReceivableAccount" id="receivableRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="receivableRadio" class="form-entry-${deviceType}">Receivable</label>
+                    </div>
+                    <div>
+                        <form:radiobutton path="subtypeName" value="SharedBillReceivableAccount" id="sharedBillReceivableRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="sharedBillReceivableRadio" class="form-entry-${deviceType}">Shared Bill Receivable</label>
+                    </div>
+                    <div>
+                        <form:radiobutton path="subtypeName" value="InvestmentAccount" id="investmentRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="investmentRadio" class="form-entry-${deviceType}">Investment</label>
+                    </div>
                     <div class="${status.error ? 'has-error' : ''}">
-                        <div>
-                            <form:radiobutton path="subtypeName" value="SimpleAssetAccount" id="simpleAssetRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="simpleAssetRadio" class="form-entry-${deviceType}">Simple Asset</label>
-                        </div>
-                        <div>
-                            <form:radiobutton path="subtypeName" value="GiftCertificateAccount" id="giftCertificateRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="giftCertificateRadio" class="form-entry-${deviceType}">Gift Certificate</label>
-                        </div>
-                        <div>
-                            <form:radiobutton path="subtypeName" value="ReceivableAccount" id="receivableRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="receivableRadio" class="form-entry-${deviceType}">Receivable</label>
-                        </div>
-                        <div>
-                            <form:radiobutton path="subtypeName" value="SharedBillReceivableAccount" id="sharedBillReceivableRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="sharedBillReceivableRadio" class="form-entry-${deviceType}">Shared Bill Receivable</label>
-                        </div>
-                        <div>
-                            <form:radiobutton path="subtypeName" value="InvestmentAccount" id="investmentRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="investmentRadio" class="form-entry-${deviceType}">Investment</label>
-                        </div>
                         <form:errors path="subtypeName"/>
                     </div>
                 </div>
@@ -102,22 +102,22 @@
                     Future Tithing Policy
                 </div>
                 <div class="col">
+                    <div>
+                        <form:radiobutton path="futureTithingPolicy" value="NONE" id="noneRadio" checked="checked"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="noneRadio" class="form-entry-${deviceType}">&#128683; &nbsp;None</label>
+                    </div>
+                    <div>
+                        <form:radiobutton path="futureTithingPolicy" value="PROFITS_ONLY" id="profitsOnlyRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="profitsOnlyRadio" class="form-entry-${deviceType}">&#128200; &nbsp;Profits Only (just for investment accounts)</label>
+                    </div>
+                    <div>
+                        <form:radiobutton path="futureTithingPolicy" value="ALL" id="allRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="allRadio" class="form-entry-${deviceType}">&#9989; &nbsp;All</label>
+                    </div>
                     <div class="${status.error ? 'has-error' : ''}">
-                        <div>
-                            <form:radiobutton path="futureTithingPolicy" value="NONE" id="noneRadio" checked="checked"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="noneRadio" class="form-entry-${deviceType}">&#128683; &nbsp;None</label>
-                        </div>
-                        <div>
-                            <form:radiobutton path="futureTithingPolicy" value="PROFITS_ONLY" id="profitsOnlyRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="profitsOnlyRadio" class="form-entry-${deviceType}">&#128200; &nbsp;Profits Only (just for investment accounts)</label>
-                        </div>
-                        <div>
-                            <form:radiobutton path="futureTithingPolicy" value="ALL" id="allRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="allRadio" class="form-entry-${deviceType}">&#9989; &nbsp;All</label>
-                        </div>
                         <form:errors path="futureTithingPolicy"/>
                     </div>
                 </div>

@@ -61,10 +61,10 @@ $(document).ready(function() {
             </div>
             <div class="col">
                 <spring:bind path="conversionRate">
+                    <form:input type="number" min="0" step="0.0001" id="conversionRate" path="conversionRate"
+                                class="form-control form-entry-${deviceType}" placeholder="Conversion Rate"
+                                autofocus="true"/>
                     <div class="form-group ${status.error ? 'has-error' : ''}">
-                        <form:input type="number" min="0" step="0.0001" id="conversionRate" path="conversionRate"
-                                    class="form-control form-entry-${deviceType}" placeholder="Conversion Rate"
-                                    autofocus="true"></form:input>
                         <form:errors path="conversionRate"/>
                     </div>
                 </spring:bind>

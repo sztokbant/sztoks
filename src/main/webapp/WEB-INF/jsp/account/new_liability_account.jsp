@@ -40,9 +40,9 @@
                     <label for="name">Account Name</label>
                 </div>
                 <div class="col">
+                    <form:input type="text" id="name" path="name" class="form-control form-entry-${deviceType}" placeholder="Account Name"
+                                autofocus="true"/>
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="text" id="name" path="name" class="form-control form-entry-${deviceType}" placeholder="Account Name"
-                                    autofocus="true"></form:input>
                         <form:errors path="name"/>
                     </div>
                 </div>
@@ -55,27 +55,27 @@
                     Liability Type
                 </div>
                 <div class="col">
+                    <div>
+                        <form:radiobutton path="subtypeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="simpleLiabilityRadio" class="form-entry-${deviceType}">Simple Liability</label>
+                    </div>
+                    <div>
+                        <form:radiobutton path="subtypeName" value="PayableAccount" id="payableRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="payableRadio" class="form-entry-${deviceType}">Payable</label>
+                    </div>
+                    <div>
+                        <form:radiobutton path="subtypeName" value="SharedBillPayableAccount" id="sharedBillPayableRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="sharedBillPayableRadio" class="form-entry-${deviceType}">Shared Bill Payable</label>
+                    </div>
+                    <div>
+                        <form:radiobutton path="subtypeName" value="CreditCardAccount" id="creditCardRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="creditCardRadio" class="form-entry-${deviceType}">Credit Card</label>
+                    </div>
                     <div class="${status.error ? 'has-error' : ''}">
-                        <div>
-                            <form:radiobutton path="subtypeName" value="SimpleLiabilityAccount" id="simpleLiabilityRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="simpleLiabilityRadio" class="form-entry-${deviceType}">Simple Liability</label>
-                        </div>
-                        <div>
-                            <form:radiobutton path="subtypeName" value="PayableAccount" id="payableRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="payableRadio" class="form-entry-${deviceType}">Payable</label>
-                        </div>
-                        <div>
-                            <form:radiobutton path="subtypeName" value="SharedBillPayableAccount" id="sharedBillPayableRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="sharedBillPayableRadio" class="form-entry-${deviceType}">Shared Bill Payable</label>
-                        </div>
-                        <div>
-                            <form:radiobutton path="subtypeName" value="CreditCardAccount" id="creditCardRadio"
-                                              class="radio-sztoks-${deviceType}"/>
-                            <label for="creditCardRadio" class="form-entry-${deviceType}">Credit Card</label>
-                        </div>
                         <form:errors path="subtypeName"/>
                     </div>
                 </div>

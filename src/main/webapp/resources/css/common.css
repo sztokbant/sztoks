@@ -436,3 +436,15 @@ a.bg-red-link:link, a.bg-red-link:visited {
 input[type=radio] {
     margin: 0 7px 0 0;
 }
+
+.has-error {
+    color: red;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.info-message {
+    color: blue;
+    font-style: italic;
+    font-weight: bold;
+}

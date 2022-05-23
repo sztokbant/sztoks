@@ -34,11 +34,11 @@
             </div>
             <div class="col">
                 <spring:bind path="email">
+                    <form:input type="text" id="email" path="email" class="form-control form-entry-${deviceType}"
+                                placeholder="E-mail"
+                                autofocus="true"/>
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="text" id="email" path="email" class="form-control form-entry-${deviceType}"
-                                    placeholder="E-mail"
-                                    autofocus="true"></form:input>
-                        <form:errors path="email"></form:errors>
+                        <form:errors path="email"/>
                     </div>
                 </spring:bind>
             </div>
@@ -50,11 +50,11 @@
             </div>
             <div class="col">
                 <spring:bind path="firstName">
+                    <form:input type="text" id="firstName" path="firstName" class="form-control form-entry-${deviceType}"
+                                placeholder="First Name"
+                                autofocus="true"/>
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="text" id="firstName" path="firstName" class="form-control form-entry-${deviceType}"
-                                    placeholder="First Name"
-                                    autofocus="true"></form:input>
-                        <form:errors path="firstName"></form:errors>
+                        <form:errors path="firstName"/>
                     </div>
                 </spring:bind>
             </div>
@@ -66,11 +66,11 @@
             </div>
             <div class="col">
                 <spring:bind path="lastName">
+                    <form:input type="text" id="lastName" path="lastName" class="form-control form-entry-${deviceType}"
+                                placeholder="Last Name"
+                                autofocus="true"/>
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="text" id="lastName" path="lastName" class="form-control form-entry-${deviceType}"
-                                    placeholder="Last Name"
-                                    autofocus="true"></form:input>
-                        <form:errors path="lastName"></form:errors>
+                        <form:errors path="lastName"/>
                     </div>
                 </spring:bind>
             </div>
@@ -91,11 +91,11 @@
             </div>
             <div class="col">
                 <spring:bind path="tithingPercentage">
+                    <form:input type="number" min="0" max="100" step="0.01" id="tithingPercentage" path="tithingPercentage"
+                                class="form-control form-entry-${deviceType}"
+                                placeholder="Default Tithing Percentage"
+                                autofocus="true"/>
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="number" min="0" max="100" step="0.01" id="tithingPercentage" path="tithingPercentage"
-                                    class="form-control form-entry-${deviceType}"
-                                    placeholder="Default Tithing Percentage"
-                                    autofocus="true"></form:input>
                         <form:errors path="tithingPercentage"/>
                     </div>
                 </spring:bind>
@@ -108,11 +108,11 @@
             </div>
             <div class="col">
                 <spring:bind path="password">
+                    <form:input type="password" id="password" path="password"
+                                class="form-control form-entry-${deviceType}"
+                                placeholder="Password"/>
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="password" id="password" path="password"
-                                    class="form-control form-entry-${deviceType}"
-                                    placeholder="Password"></form:input>
-                        <form:errors path="password"></form:errors>
+                        <form:errors path="password"/>
                     </div>
                 </spring:bind>
             </div>
@@ -124,11 +124,11 @@
             </div>
             <div class="col">
                 <spring:bind path="passwordConfirm">
+                    <form:input type="password" id="passwordConfirm" path="passwordConfirm"
+                                class="form-control form-entry-${deviceType}"
+                                placeholder="Confirm your password"/>
                     <div class="${status.error ? 'has-error' : ''}">
-                        <form:input type="password" id="passwordConfirm" path="passwordConfirm"
-                                    class="form-control form-entry-${deviceType}"
-                                    placeholder="Confirm your password"></form:input>
-                        <form:errors path="passwordConfirm"></form:errors>
+                        <form:errors path="passwordConfirm"/>
                     </div>
                 </spring:bind>
             </div>

@@ -37,16 +37,16 @@
     <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/currencies" modelAttribute="editCurrenciesForm" class="form-signin">
         <c:forEach var="entry" items="${editCurrenciesForm.currencyConversionRates}">
             <spring:bind path="currencyConversionRates['${entry.key}']">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <div class="row form-group">
-                        <div class="col col-form-label-${deviceType}">
-                            <label for="${entry.key}">1 ${baseCurrency} to <b>${entry.key}</b></label>
-                        </div>
-                        <div class="col">
-                            <form:input type="number" min="0" step="0.0001" id="${entry.key}"
-                                        path="currencyConversionRates['${entry.key}']"
-                                        class="form-control form-entry-${deviceType}" placeholder="Conversion Rate"
-                                        autofocus="true" value="${entry.value}"></form:input>
+                <div class="row form-group">
+                    <div class="col col-form-label-${deviceType}">
+                        <label for="${entry.key}">1 ${baseCurrency} to <b>${entry.key}</b></label>
+                    </div>
+                    <div class="col">
+                        <form:input type="number" min="0" step="0.0001" id="${entry.key}"
+                                    path="currencyConversionRates['${entry.key}']"
+                                    class="form-control form-entry-${deviceType}" placeholder="Conversion Rate"
+                                    autofocus="true" value="${entry.value}"/>
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
                             <form:errors path="currencyConversionRates['${entry.key}']"/>
                         </div>
                     </div>
