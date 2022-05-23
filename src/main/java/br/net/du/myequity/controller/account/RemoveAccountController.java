@@ -91,17 +91,19 @@ public class RemoveAccountController {
                         .totalForAccountType(totalForAccountType);
 
         final AccountSubtypeDisplayGroup accountSubtypeDisplayGroup =
-                AccountSubtypeDisplayGroup.forClass(account.getClass());
-        if (accountSubtypeDisplayGroup.useDefaultTotals()) {
-            builder.accountSubtype(accountSubtypeDisplayGroup.name())
-                    .totalForAccountSubtype(
-                            updatableTotals.getTotalForAccountSubtypeDisplayGroup(
-                                    accountSubtypeDisplayGroup));
-        } else if (accountSubtypeDisplayGroup.equals(AccountSubtypeDisplayGroup.INVESTMENT)) {
+                account.getAccountSubtypeDisplayGroup();
+
+        // For INVESTMENT and CREDIT_CARD accounts totals are computed differently
+        if (accountSubtypeDisplayGroup.equals(AccountSubtypeDisplayGroup.INVESTMENT)) {
             builder.investmentTotals(updatableTotals.getInvestmentTotals());
         } else if (accountSubtypeDisplayGroup.equals(AccountSubtypeDisplayGroup.CREDIT_CARD)) {
             builder.creditCardTotalsForCurrencyUnit(
                     updatableTotals.getCreditCardTotalsForCurrencyUnit(account.getCurrencyUnit()));
+        } else {
+            builder.accountSubtype(accountSubtypeDisplayGroup.name())
+                    .totalForAccountSubtype(
+                            updatableTotals.getTotalForAccountSubtypeDisplayGroup(
+                                    accountSubtypeDisplayGroup));
         }
 
         if (account instanceof FutureTithingCapable

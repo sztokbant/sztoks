@@ -1,6 +1,7 @@
 package br.net.du.myequity.model.account;
 
 import br.net.du.myequity.model.Snapshot;
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import br.net.du.myequity.model.util.SnapshotUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -113,6 +114,8 @@ public abstract class Account implements Comparable<Account> {
             newSnapshot.addAccount(this);
         }
     }
+
+    public abstract AccountSubtypeDisplayGroup getAccountSubtypeDisplayGroup();
 
     @Override
     public boolean equals(final Object other) {

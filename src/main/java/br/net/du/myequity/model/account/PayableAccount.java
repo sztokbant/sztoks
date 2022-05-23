@@ -1,5 +1,8 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup.PAYABLE;
+
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -41,6 +44,11 @@ public class PayableAccount extends BillAccount implements DueDateUpdatable {
     public PayableAccount copy() {
         return new PayableAccount(
                 name, CurrencyUnit.of(currency), LocalDate.now(), dueDate, billAmount, isPaid);
+    }
+
+    @Override
+    public AccountSubtypeDisplayGroup getAccountSubtypeDisplayGroup() {
+        return PAYABLE;
     }
 
     @Override

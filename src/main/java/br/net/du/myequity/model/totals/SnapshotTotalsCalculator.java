@@ -28,7 +28,7 @@ public class SnapshotTotalsCalculator {
         BigDecimal totalBalance = BigDecimal.ZERO;
 
         for (final Account account : snapshot.getAccounts()) {
-            if (!accountSubtypeDisplayGroup.accepts(account.getClass())) {
+            if (!accountSubtypeDisplayGroup.equals(account.getAccountSubtypeDisplayGroup())) {
                 continue;
             }
 

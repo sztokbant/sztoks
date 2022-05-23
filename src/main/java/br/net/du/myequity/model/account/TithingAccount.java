@@ -1,5 +1,8 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup.TITHING;
+
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -37,6 +40,11 @@ public class TithingAccount extends Account {
     @Override
     public TithingAccount copy() {
         return new TithingAccount(CurrencyUnit.of(currency), LocalDate.now(), balance);
+    }
+
+    @Override
+    public AccountSubtypeDisplayGroup getAccountSubtypeDisplayGroup() {
+        return TITHING;
     }
 
     public void setBalance(@NonNull final BigDecimal newBalance) {

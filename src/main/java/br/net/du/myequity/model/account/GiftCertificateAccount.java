@@ -1,5 +1,8 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup.GIFT_CERTIFICATE;
+
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -68,6 +71,11 @@ public class GiftCertificateAccount extends Account
                 LocalDate.now(),
                 shares,
                 currentShareValue);
+    }
+
+    @Override
+    public AccountSubtypeDisplayGroup getAccountSubtypeDisplayGroup() {
+        return GIFT_CERTIFICATE;
     }
 
     @Override

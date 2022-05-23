@@ -69,7 +69,7 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
 
         final String balance = format(currencyUnit, toDecimal(account.getBalance()));
         final AccountSubtypeDisplayGroup accountSubtypeDisplayGroup =
-                AccountSubtypeDisplayGroup.forClass(account.getClass());
+                account.getAccountSubtypeDisplayGroup();
         final AccountViewModelOutputBuilder builder =
                 AccountViewModelOutput.builder()
                         .accountType(account.getAccountType().name())
@@ -91,16 +91,17 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
             builder.netWorth(updatableTotals.getNetWorth())
                     .totalForAccountType(totalForAccountType);
 
-            if (accountSubtypeDisplayGroup.useDefaultTotals()) {
-                builder.totalForAccountSubtype(
-                        updatableTotals.getTotalForAccountSubtypeDisplayGroup(
-                                accountSubtypeDisplayGroup));
-            } else if (accountSubtypeDisplayGroup.equals(AccountSubtypeDisplayGroup.INVESTMENT)) {
+            // For INVESTMENT and CREDIT_CARD accounts totals are computed differently
+            if (accountSubtypeDisplayGroup.equals(AccountSubtypeDisplayGroup.INVESTMENT)) {
                 builder.investmentTotals(updatableTotals.getInvestmentTotals());
             } else if (accountSubtypeDisplayGroup.equals(AccountSubtypeDisplayGroup.CREDIT_CARD)) {
                 builder.creditCardTotalsForCurrencyUnit(
                         updatableTotals.getCreditCardTotalsForCurrencyUnit(
                                 account.getCurrencyUnit()));
+            } else {
+                builder.totalForAccountSubtype(
+                        updatableTotals.getTotalForAccountSubtypeDisplayGroup(
+                                accountSubtypeDisplayGroup));
             }
 
             if (account instanceof FutureTithingCapable) {

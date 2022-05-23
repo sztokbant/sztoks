@@ -1,5 +1,8 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup.RECEIVABLE;
+
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -60,6 +63,11 @@ public class ReceivableAccount extends BillAccount
                 dueDate,
                 billAmount,
                 isPaid);
+    }
+
+    @Override
+    public AccountSubtypeDisplayGroup getAccountSubtypeDisplayGroup() {
+        return RECEIVABLE;
     }
 
     @Override

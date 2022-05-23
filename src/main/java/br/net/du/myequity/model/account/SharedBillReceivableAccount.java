@@ -1,7 +1,9 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup.SHARED_BILL_RECEIVABLE;
 import static br.net.du.myequity.model.util.ModelConstants.DIVISION_SCALE;
 
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.DiscriminatorValue;
@@ -65,6 +67,11 @@ public class SharedBillReceivableAccount extends SharedBillAccount implements Fu
                 isPaid(),
                 getNumberOfPartners(),
                 getDueDay());
+    }
+
+    @Override
+    public AccountSubtypeDisplayGroup getAccountSubtypeDisplayGroup() {
+        return SHARED_BILL_RECEIVABLE;
     }
 
     @Override

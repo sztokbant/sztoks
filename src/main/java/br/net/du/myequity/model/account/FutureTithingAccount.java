@@ -1,8 +1,10 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup.TITHING;
 import static br.net.du.myequity.model.util.ModelConstants.DIVISION_SCALE;
 import static br.net.du.myequity.model.util.ModelConstants.ONE_HUNDRED;
 
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -42,6 +44,11 @@ public class FutureTithingAccount extends Account {
     public FutureTithingAccount copy() {
         return new FutureTithingAccount(
                 CurrencyUnit.of(currency), LocalDate.now(), referenceAmount);
+    }
+
+    @Override
+    public AccountSubtypeDisplayGroup getAccountSubtypeDisplayGroup() {
+        return TITHING;
     }
 
     public void setReferenceAmount(@NonNull final BigDecimal newReferenceAmount) {

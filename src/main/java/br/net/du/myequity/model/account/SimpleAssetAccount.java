@@ -1,5 +1,8 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup.SIMPLE_ASSET;
+
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -45,6 +48,11 @@ public class SimpleAssetAccount extends Account implements BalanceUpdatable, Fut
     public SimpleAssetAccount copy() {
         return new SimpleAssetAccount(
                 name, CurrencyUnit.of(currency), futureTithingPolicy, LocalDate.now(), balance);
+    }
+
+    @Override
+    public AccountSubtypeDisplayGroup getAccountSubtypeDisplayGroup() {
+        return SIMPLE_ASSET;
     }
 
     @Override

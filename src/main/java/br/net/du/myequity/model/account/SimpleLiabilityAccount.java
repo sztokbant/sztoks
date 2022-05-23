@@ -1,5 +1,8 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup.SIMPLE_LIABILITY;
+
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -41,6 +44,11 @@ public class SimpleLiabilityAccount extends Account implements BalanceUpdatable 
     public SimpleLiabilityAccount copy() {
         return new SimpleLiabilityAccount(
                 name, CurrencyUnit.of(currency), LocalDate.now(), balance);
+    }
+
+    @Override
+    public AccountSubtypeDisplayGroup getAccountSubtypeDisplayGroup() {
+        return SIMPLE_LIABILITY;
     }
 
     @Override

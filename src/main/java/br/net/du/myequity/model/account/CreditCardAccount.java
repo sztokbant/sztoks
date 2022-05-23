@@ -1,8 +1,10 @@
 package br.net.du.myequity.model.account;
 
+import static br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup.CREDIT_CARD;
 import static br.net.du.myequity.model.util.ModelConstants.DIVISION_SCALE;
 import static br.net.du.myequity.model.util.ModelConstants.ONE_HUNDRED;
 
+import br.net.du.myequity.model.totals.AccountSubtypeDisplayGroup;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -79,6 +81,11 @@ public class CreditCardAccount extends Account {
                 totalCredit,
                 availableCredit,
                 statement);
+    }
+
+    @Override
+    public AccountSubtypeDisplayGroup getAccountSubtypeDisplayGroup() {
+        return CREDIT_CARD;
     }
 
     public BigDecimal getUsedCreditPercentage() {
