@@ -142,9 +142,11 @@ public class TransactionNewController {
 
         model.addAttribute(CURRENCIES, snapshot.getCurrenciesInUse());
 
-        if (StringUtils.isEmpty(transactionViewModelInput.getCurrencyUnit())) {
-            model.addAttribute(SELECTED_CURRENCY, snapshot.getBaseCurrencyUnit().toString());
-        }
+        model.addAttribute(
+                SELECTED_CURRENCY,
+                StringUtils.isEmpty(transactionViewModelInput.getCurrencyUnit())
+                        ? snapshot.getBaseCurrencyUnit().toString()
+                        : transactionViewModelInput.getCurrencyUnit());
 
         if (StringUtils.isEmpty(transactionViewModelInput.getTithingPercentage())) {
             transactionViewModelInput.setTithingPercentage(

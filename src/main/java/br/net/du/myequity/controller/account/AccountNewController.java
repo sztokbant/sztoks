@@ -113,9 +113,11 @@ public class AccountNewController {
 
         model.addAttribute(CURRENCIES, snapshot.getCurrenciesInUse());
 
-        if (StringUtils.isEmpty(accountViewModelInput.getCurrencyUnit())) {
-            model.addAttribute(SELECTED_CURRENCY, snapshot.getBaseCurrencyUnit().toString());
-        }
+        model.addAttribute(
+                SELECTED_CURRENCY,
+                StringUtils.isEmpty(accountViewModelInput.getCurrencyUnit())
+                        ? snapshot.getBaseCurrencyUnit().toString()
+                        : accountViewModelInput.getCurrencyUnit());
 
         model.addAttribute(ACCOUNT_FORM, accountViewModelInput);
 
