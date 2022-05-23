@@ -132,7 +132,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
         if (type.equals(other.getType())) {
             if (currencyIndex.equals(other.getCurrencyIndex())) {
                 if (date.equals(other.getDate())) {
-                    return description.compareTo(other.getDescription());
+                    return description.compareToIgnoreCase(other.getDescription());
                 }
                 return date.compareTo(other.getDate());
             }

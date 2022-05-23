@@ -48,7 +48,7 @@ public class PayableAccountViewModelOutput extends AccountViewModelOutput {
         if (other instanceof PayableAccountViewModelOutput) {
             if (getCurrencyUnit().equals(other.getCurrencyUnit())) {
                 if (dueDate.equals(((PayableAccountViewModelOutput) other).getDueDate())) {
-                    return getName().compareTo(other.getName());
+                    return getName().compareToIgnoreCase(other.getName());
                 }
                 return dueDate.compareTo(((PayableAccountViewModelOutput) other).getDueDate());
             }

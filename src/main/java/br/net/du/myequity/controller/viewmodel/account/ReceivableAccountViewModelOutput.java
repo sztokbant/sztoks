@@ -56,7 +56,7 @@ public class ReceivableAccountViewModelOutput extends AccountViewModelOutput {
         if (other instanceof ReceivableAccountViewModelOutput) {
             if (getCurrencyUnit().equals(other.getCurrencyUnit())) {
                 if (dueDate.equals(((ReceivableAccountViewModelOutput) other).getDueDate())) {
-                    return getName().compareTo(other.getName());
+                    return getName().compareToIgnoreCase(other.getName());
                 }
                 return dueDate.compareTo(((ReceivableAccountViewModelOutput) other).getDueDate());
             }

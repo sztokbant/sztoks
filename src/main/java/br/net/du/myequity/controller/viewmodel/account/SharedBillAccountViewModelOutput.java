@@ -68,7 +68,7 @@ public class SharedBillAccountViewModelOutput extends AccountViewModelOutput {
         if (other instanceof SharedBillAccountViewModelOutput) {
             if (getCurrencyUnit().equals(other.getCurrencyUnit())) {
                 if (dueDay.equals(((SharedBillAccountViewModelOutput) other).getDueDay())) {
-                    return getName().compareTo(other.getName());
+                    return getName().compareToIgnoreCase(other.getName());
                 }
                 return dueDay.compareTo(((SharedBillAccountViewModelOutput) other).getDueDay());
             }

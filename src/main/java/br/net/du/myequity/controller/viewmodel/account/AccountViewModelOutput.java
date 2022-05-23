@@ -129,7 +129,7 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
         if (accountType.equals(other.getAccountType())) {
             if (accountSubtype.equals(other.getAccountSubtype())) {
                 if (currencyIndex.equals(other.getCurrencyIndex())) {
-                    return name.compareTo(other.getName());
+                    return name.compareToIgnoreCase(other.getName());
                 }
                 return currencyIndex.compareTo(other.getCurrencyIndex());
             }
