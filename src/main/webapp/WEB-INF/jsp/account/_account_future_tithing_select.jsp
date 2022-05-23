@@ -26,7 +26,7 @@ $(document).ready(function() {
                             <c:set var="policyLabel" value="&#128683;"/>
                         </c:when>
                         <c:when test="${policy eq 'PROFIT'}">
-                            <c:set var="policyLabel" value="&#128178;"/>
+                            <c:set var="policyLabel" value="&#128200;"/>
                         </c:when>
                     </c:choose>
                     <c:choose>
