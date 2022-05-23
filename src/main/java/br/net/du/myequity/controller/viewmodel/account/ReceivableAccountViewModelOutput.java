@@ -35,7 +35,7 @@ public class ReceivableAccountViewModelOutput extends AccountViewModelOutput {
         final ReceivableAccount receivableAccount = (ReceivableAccount) account;
 
         final String futureTithingPolicy =
-                ((FutureTithingCapable) account).getFutureTithingPolicy().getShortValue();
+                ((FutureTithingCapable) account).getFutureTithingPolicy().name();
 
         final CurrencyUnit currencyUnit = receivableAccount.getCurrencyUnit();
 

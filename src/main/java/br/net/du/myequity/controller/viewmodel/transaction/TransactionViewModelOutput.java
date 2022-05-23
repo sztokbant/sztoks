@@ -95,7 +95,7 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
                         .amount(amount)
                         .tithingPercentage(tithingPercentage)
                         .description(transaction.getDescription())
-                        .recurrencePolicy(transaction.getRecurrencePolicy().getShortValue());
+                        .recurrencePolicy(transaction.getRecurrencePolicy().name());
 
         final String category =
                 transaction instanceof Categorizable

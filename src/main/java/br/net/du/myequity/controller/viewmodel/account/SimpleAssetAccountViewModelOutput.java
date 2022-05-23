@@ -17,7 +17,7 @@ public class SimpleAssetAccountViewModelOutput extends AccountViewModelOutput {
     public static SimpleAssetAccountViewModelOutput of(
             final Account account, final boolean includeTotals) {
         final String futureTithingPolicy =
-                ((FutureTithingCapable) account).getFutureTithingPolicy().getShortValue();
+                ((FutureTithingCapable) account).getFutureTithingPolicy().name();
 
         return new SimpleAssetAccountViewModelOutput(
                 AccountViewModelOutput.of(account, includeTotals), futureTithingPolicy);

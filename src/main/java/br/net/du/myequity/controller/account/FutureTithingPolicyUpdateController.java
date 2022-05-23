@@ -25,7 +25,9 @@ public class FutureTithingPolicyUpdateController {
                 updateFutureTithingPolicyFunction =
                         (jsonRequest, account) -> {
                             final FutureTithingPolicy newValue =
-                                    FutureTithingPolicy.forShortValue(jsonRequest.getNewValue());
+                                    FutureTithingPolicy.forValue(
+                                            jsonRequest.getNewValue(),
+                                            account.getClass().getSimpleName());
 
                             ((FutureTithingCapable) account).setFutureTithingPolicy(newValue);
 

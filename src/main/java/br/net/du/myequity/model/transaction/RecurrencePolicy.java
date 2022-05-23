@@ -1,34 +1,21 @@
 package br.net.du.myequity.model.transaction;
 
-import lombok.Getter;
 import lombok.NonNull;
 
 public enum RecurrencePolicy {
-    NONE("NO"),
-    RECURRING("REC"),
-    RESETTABLE("RES");
+    NONE,
+    RECURRING,
+    RESETTABLE;
 
-    @Getter private final String shortValue;
-
-    RecurrencePolicy(@NonNull final String shortValue) {
-        this.shortValue = shortValue;
-    }
-
-    public static String[] shortValues() {
-        return new String[] {
-            NONE.getShortValue(), RECURRING.getShortValue(), RESETTABLE.getShortValue()
-        };
-    }
-
-    public static RecurrencePolicy forShortValue(@NonNull final String shortValue) {
-        if (NONE.getShortValue().equals(shortValue)) {
+    public static RecurrencePolicy forValue(@NonNull final String value) {
+        if (NONE.name().equals(value)) {
             return NONE;
-        } else if (RECURRING.getShortValue().equals(shortValue)) {
+        } else if (RECURRING.name().equals(value)) {
             return RECURRING;
-        } else if (RESETTABLE.getShortValue().equals(shortValue)) {
+        } else if (RESETTABLE.name().equals(value)) {
             return RESETTABLE;
         }
 
-        throw new IllegalArgumentException("Unknown shortValue: " + shortValue);
+        throw new IllegalArgumentException("Unknown value: " + value);
     }
 }

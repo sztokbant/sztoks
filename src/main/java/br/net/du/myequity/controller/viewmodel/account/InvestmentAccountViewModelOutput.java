@@ -59,7 +59,7 @@ public class InvestmentAccountViewModelOutput extends AccountViewModelOutput {
         final String profitPercentage = formatAsPercentage(investmentAccount.getProfitPercentage());
 
         final String futureTithingPolicy =
-                ((FutureTithingCapable) account).getFutureTithingPolicy().getShortValue();
+                ((FutureTithingCapable) account).getFutureTithingPolicy().name();
 
         return new InvestmentAccountViewModelOutput(
                 AccountViewModelOutput.of(account, includeTotals),

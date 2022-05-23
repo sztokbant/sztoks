@@ -24,7 +24,7 @@ public class RecurrenceUpdateController {
                 updateRecurrencePolicyFunction =
                         (jsonRequest, transaction) -> {
                             final RecurrencePolicy newValue =
-                                    RecurrencePolicy.forShortValue(jsonRequest.getNewValue());
+                                    RecurrencePolicy.forValue(jsonRequest.getNewValue());
 
                             transaction.setRecurrencePolicy(newValue);
 

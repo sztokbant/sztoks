@@ -41,7 +41,7 @@ public class GiftCertificateAccountViewModelOutput extends AccountViewModelOutpu
                 format(currencyUnit, toDecimal((giftCertificateAccount.getCurrentShareValue())));
 
         final String futureTithingPolicy =
-                ((FutureTithingCapable) account).getFutureTithingPolicy().getShortValue();
+                ((FutureTithingCapable) account).getFutureTithingPolicy().name();
 
         return new GiftCertificateAccountViewModelOutput(
                 AccountViewModelOutput.of(account, includeTotals),

@@ -111,7 +111,7 @@
                         <div>
                             <form:radiobutton path="futureTithingPolicy" value="PROFITS_ONLY" id="profitsOnlyRadio"
                                               class="radio-sztoks-${deviceType}"/>
-                            <label for="profitsOnlyRadio" class="form-entry-${deviceType}">&#128200; &nbsp;Profits Only</label>
+                            <label for="profitsOnlyRadio" class="form-entry-${deviceType}">&#128200; &nbsp;Profits Only (just for investment accounts)</label>
                         </div>
                         <div>
                             <form:radiobutton path="futureTithingPolicy" value="ALL" id="allRadio"

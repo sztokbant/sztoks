@@ -47,7 +47,7 @@ public class SharedBillAccountViewModelOutput extends AccountViewModelOutput {
 
         final String futureTithingPolicy =
                 account instanceof FutureTithingCapable
-                        ? ((FutureTithingCapable) account).getFutureTithingPolicy().getShortValue()
+                        ? ((FutureTithingCapable) account).getFutureTithingPolicy().name()
                         : null;
 
         return new SharedBillAccountViewModelOutput(

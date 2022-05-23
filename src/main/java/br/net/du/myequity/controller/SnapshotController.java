@@ -57,8 +57,8 @@ public class SnapshotController {
         // For navbar
         model.addAttribute(SNAPSHOT_ID_KEY, snapshot.getId());
 
-        model.addAttribute("futureTithingPolicies", FutureTithingPolicy.shortValues());
-        model.addAttribute("recurrencePolicies", RecurrencePolicy.shortValues());
+        model.addAttribute("futureTithingPolicies", FutureTithingPolicy.values());
+        model.addAttribute("recurrencePolicies", RecurrencePolicy.values());
         model.addAttribute("incomeCategories", IncomeCategory.values());
         model.addAttribute("investmentCategories", InvestmentCategory.values());
         model.addAttribute("donationCategories", DonationCategory.values());

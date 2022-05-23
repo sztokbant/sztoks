@@ -18,13 +18,13 @@ $(document).ready(function() {
         <select id="select_txn_recurrence_${entity.id}" name="txn_recurrence_${entity.id}" class="emoji-select-${deviceType}">
             <c:forEach items="${recurrencePolicies}" var="policy">
                 <c:choose>
-                    <c:when test="${policy eq 'REC'}">
+                    <c:when test="${policy eq 'RECURRING'}">
                         <c:set var="policyLabel" value="&#128257;"/>
                     </c:when>
-                    <c:when test="${policy eq 'RES'}">
+                    <c:when test="${policy eq 'RESETTABLE'}">
                         <c:set var="policyLabel" value="&#48;&#65039;&#8419;"/>
                     </c:when>
-                    <c:when test="${policy eq 'NO'}">
+                    <c:when test="${policy eq 'NONE'}">
                         <c:set var="policyLabel" value="&#128683;"/>
                     </c:when>
                 </c:choose>

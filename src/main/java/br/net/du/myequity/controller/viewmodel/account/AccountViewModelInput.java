@@ -18,8 +18,6 @@ public class AccountViewModelInput {
                 subtypeName,
                 name,
                 CurrencyUnit.of(currencyUnit),
-                futureTithingPolicy == null
-                        ? FutureTithingPolicy.NONE
-                        : FutureTithingPolicy.valueOf(futureTithingPolicy));
+                FutureTithingPolicy.forValue(futureTithingPolicy, subtypeName));
     }
 }
