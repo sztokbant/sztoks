@@ -66,17 +66,17 @@
                     <form:radiobutton path="recurrencePolicy" value="NONE" id="notRecurringRadio"
                                       checked="checked"
                                       class="radio-sztoks-${deviceType}"/>
-                    <label for="notRecurringRadio" class="form-entry-${deviceType}">Not recurring</label>
+                    <label for="notRecurringRadio" class="form-entry-${deviceType}">&#128683; &nbsp;Not recurring</label>
                 </div>
                 <div>
                     <form:radiobutton path="recurrencePolicy" value="RECURRING" id="recurringRadio"
                                       class="radio-sztoks-${deviceType}"/>
-                    <label for="recurringRadio" class="form-entry-${deviceType}">Recurring</label>
+                    <label for="recurringRadio" class="form-entry-${deviceType}">&#128257; &nbsp;Recurring</label>
                 </div>
                 <div>
                     <form:radiobutton path="recurrencePolicy" value="RESETTABLE" id="resettableRadio"
                                       class="radio-sztoks-${deviceType}"/>
-                    <label for="resettableRadio" class="form-entry-${deviceType}">Recurring + reset to zero every month</label>
+                    <label for="resettableRadio" class="form-entry-${deviceType}">&#48;&#65039;&#8419; &nbsp;Recurring &amp; reset to zero every month</label>
                 </div>
                 <form:errors path="recurrencePolicy"/>
             </div>

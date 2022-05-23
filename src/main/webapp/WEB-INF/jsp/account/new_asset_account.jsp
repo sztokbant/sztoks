@@ -106,17 +106,17 @@
                         <div>
                             <form:radiobutton path="futureTithingPolicy" value="NONE" id="noneRadio" checked="checked"
                                               class="radio-sztoks-${deviceType}"/>
-                            <label for="noneRadio" class="form-entry-${deviceType}">None</label>
+                            <label for="noneRadio" class="form-entry-${deviceType}">&#128683; &nbsp;None</label>
                         </div>
                         <div>
                             <form:radiobutton path="futureTithingPolicy" value="PROFITS_ONLY" id="profitsOnlyRadio"
                                               class="radio-sztoks-${deviceType}"/>
-                            <label for="profitsOnlyRadio" class="form-entry-${deviceType}">Profits Only</label>
+                            <label for="profitsOnlyRadio" class="form-entry-${deviceType}">&#128200; &nbsp;Profits Only</label>
                         </div>
                         <div>
                             <form:radiobutton path="futureTithingPolicy" value="ALL" id="allRadio"
                                               class="radio-sztoks-${deviceType}"/>
-                            <label for="allRadio" class="form-entry-${deviceType}">All</label>
+                            <label for="allRadio" class="form-entry-${deviceType}">&#9989; &nbsp;All</label>
                         </div>
                         <form:errors path="futureTithingPolicy"/>
                     </div>

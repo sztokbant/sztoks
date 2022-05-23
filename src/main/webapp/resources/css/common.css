@@ -432,3 +432,7 @@ a.bg-red-link:link, a.bg-red-link:visited {
     color: #999;
     font-size: 30px;
 }
+
+input[type=radio] {
+    margin: 0 7px 0 0;
+}
