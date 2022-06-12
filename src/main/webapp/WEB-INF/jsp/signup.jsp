@@ -77,7 +77,7 @@
 
         <div class="row form-group">
             <div class="col col-form-label-${deviceType}">
-                <label for="currencyUnit">Default Currency</label>
+                <label for="currencyUnit">Base Currency</label>
             </div>
             <spring:bind path="currencyUnit">
                 <%@ include file="/WEB-INF/jsp/_currency_select.jsp" %>

@@ -25,9 +25,13 @@ import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
+import br.net.du.myequity.model.transaction.DonationCategory;
 import br.net.du.myequity.model.transaction.DonationTransaction;
+import br.net.du.myequity.model.transaction.IncomeCategory;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
+import br.net.du.myequity.model.transaction.InvestmentCategory;
 import br.net.du.myequity.model.transaction.InvestmentTransaction;
+import br.net.du.myequity.model.transaction.RecurrencePolicy;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
 import com.google.common.collect.ImmutableList;
@@ -44,7 +48,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class SnapshotTest {
-
     private BigDecimal EXPECTED_NET_WORTH = new BigDecimal("7500.00");
 
     private BigDecimal EXPECTED_NET_WORTH_WITH_TRANSACTIONS = new BigDecimal("4878.00");
@@ -549,5 +552,455 @@ class SnapshotTest {
         anotherSnapshot.setId(42L);
         assertTrue(snapshot.equals(anotherSnapshot));
         assertTrue(anotherSnapshot.equals(snapshot));
+    }
+
+    @Test
+    public void changeBaseCurrencyUnitTo_sameAsBaseCurrency_throws() {
+        // GIVEN
+        final Snapshot snapshot = buildSnapshotWithMultipleCurrencies();
+
+        // WHEN/THEN
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    snapshot.changeBaseCurrencyUnitTo(snapshot.getBaseCurrencyUnit());
+                });
+    }
+
+    @Test
+    public void changeBaseCurrencyUnitTo_unknownCurrency_throws() {
+        // GIVEN
+        final Snapshot snapshot = buildSnapshotWithMultipleCurrencies();
+
+        // WHEN/THEN
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    snapshot.changeBaseCurrencyUnitTo(CurrencyUnit.CAD);
+                });
+    }
+
+    @Test
+    public void changeBaseCurrencyUnitTo_firstCurrency_happy() {
+        // GIVEN
+        final Snapshot snapshot = buildSnapshotWithMultipleCurrencies();
+
+        // WHEN
+        snapshot.changeBaseCurrencyUnitTo(CurrencyUnit.of("BRL"));
+
+        // THEN
+        final List<String> currenciesInUseBaseFirst = snapshot.getCurrenciesInUseBaseFirst();
+        assertEquals(3, currenciesInUseBaseFirst.size());
+        assertEquals(CurrencyUnit.of("BRL").getCode(), currenciesInUseBaseFirst.get(0));
+        assertTrue(currenciesInUseBaseFirst.contains(CurrencyUnit.EUR.getCode()));
+        assertTrue(currenciesInUseBaseFirst.contains(CurrencyUnit.USD.getCode()));
+
+        verifySnapshot(
+                snapshot,
+                CurrencyUnit.of("BRL"),
+                "122500.00",
+                "34483.75",
+                "88016.25",
+                "22050.00",
+                "2450.00",
+                "2756.25",
+                "1837.50");
+
+        final Map<String, BigDecimal> currencyConversionRates =
+                snapshot.getCurrencyConversionRates();
+        assertEquals(2, currencyConversionRates.size());
+        assertTrue(new BigDecimal("0.20").compareTo(currencyConversionRates.get("USD")) == 0);
+        assertTrue(new BigDecimal("0.16").compareTo(currencyConversionRates.get("EUR")) == 0);
+    }
+
+    @Test
+    public void changeBaseCurrencyUnitTo_secondCurrency_happy() {
+        // GIVEN
+        final Snapshot snapshot = buildSnapshotWithMultipleCurrencies();
+
+        // WHEN
+        snapshot.changeBaseCurrencyUnitTo(CurrencyUnit.of("EUR"));
+
+        // THEN
+        final List<String> currenciesInUseBaseFirst = snapshot.getCurrenciesInUseBaseFirst();
+        assertEquals(3, currenciesInUseBaseFirst.size());
+        assertEquals(CurrencyUnit.EUR.getCode(), currenciesInUseBaseFirst.get(0));
+        assertTrue(currenciesInUseBaseFirst.contains(CurrencyUnit.of("BRL").getCode()));
+        assertTrue(currenciesInUseBaseFirst.contains(CurrencyUnit.USD.getCode()));
+
+        verifySnapshot(
+                snapshot,
+                CurrencyUnit.EUR,
+                "19600.00",
+                "5517.40",
+                "14082.60",
+                "3528.00",
+                "392.00",
+                "441.00",
+                "294.00");
+
+        final Map<String, BigDecimal> currencyConversionRates =
+                snapshot.getCurrencyConversionRates();
+        assertEquals(2, currencyConversionRates.size());
+        assertTrue(new BigDecimal("1.25").compareTo(currencyConversionRates.get("USD")) == 0);
+        assertTrue(new BigDecimal("6.25").compareTo(currencyConversionRates.get("BRL")) == 0);
+    }
+
+    @Test
+    public void changeBaseCurrencyUnitTo_firstCurrencyIdempotency_happy() {
+        // GIVEN
+        final Snapshot snapshot = buildSnapshotWithMultipleCurrencies();
+
+        // WHEN
+        snapshot.changeBaseCurrencyUnitTo(CurrencyUnit.of("BRL"));
+        snapshot.changeBaseCurrencyUnitTo(CurrencyUnit.USD);
+
+        // THEN
+        final List<String> currenciesInUseBaseFirst = snapshot.getCurrenciesInUseBaseFirst();
+        assertEquals(3, currenciesInUseBaseFirst.size());
+        assertEquals(CurrencyUnit.USD.getCode(), currenciesInUseBaseFirst.get(0));
+        assertTrue(currenciesInUseBaseFirst.contains(CurrencyUnit.of("BRL").getCode()));
+        assertTrue(currenciesInUseBaseFirst.contains(CurrencyUnit.EUR.getCode()));
+
+        verifySnapshot(
+                snapshot,
+                CurrencyUnit.USD,
+                "24500.00",
+                "6896.75",
+                "17603.25",
+                "4410.00",
+                "490.00",
+                "551.25",
+                "367.50");
+
+        final Map<String, BigDecimal> currencyConversionRates =
+                snapshot.getCurrencyConversionRates();
+        assertEquals(2, currencyConversionRates.size());
+        assertTrue(new BigDecimal("0.80").compareTo(currencyConversionRates.get("EUR")) == 0);
+        assertTrue(new BigDecimal("5.00").compareTo(currencyConversionRates.get("BRL")) == 0);
+    }
+
+    @Test
+    public void changeBaseCurrencyUnitTo_secondCurrencyIdempotency_happy() {
+        // GIVEN
+        final Snapshot snapshot = buildSnapshotWithMultipleCurrencies();
+
+        // WHEN
+        snapshot.changeBaseCurrencyUnitTo(CurrencyUnit.EUR);
+        snapshot.changeBaseCurrencyUnitTo(CurrencyUnit.USD);
+
+        // THEN
+        final List<String> currenciesInUseBaseFirst = snapshot.getCurrenciesInUseBaseFirst();
+        assertEquals(3, currenciesInUseBaseFirst.size());
+        assertEquals(CurrencyUnit.USD.getCode(), currenciesInUseBaseFirst.get(0));
+        assertTrue(currenciesInUseBaseFirst.contains(CurrencyUnit.of("BRL").getCode()));
+        assertTrue(currenciesInUseBaseFirst.contains(CurrencyUnit.EUR.getCode()));
+
+        verifySnapshot(
+                snapshot,
+                CurrencyUnit.USD,
+                "24500.00",
+                "6896.75",
+                "17603.25",
+                "4410.00",
+                "490.00",
+                "551.25",
+                "367.50");
+
+        final Map<String, BigDecimal> currencyConversionRates =
+                snapshot.getCurrencyConversionRates();
+        assertEquals(2, currencyConversionRates.size());
+        assertTrue(new BigDecimal("0.80").compareTo(currencyConversionRates.get("EUR")) == 0);
+        assertTrue(new BigDecimal("5.00").compareTo(currencyConversionRates.get("BRL")) == 0);
+    }
+
+    @Test
+    public void changeBaseCurrencyUnitTo_multipleCurrenciesIdempotency_happy() {
+        // GIVEN
+        final Snapshot snapshot = buildSnapshotWithMultipleCurrencies();
+
+        // WHEN
+        snapshot.changeBaseCurrencyUnitTo(CurrencyUnit.of("BRL"));
+        snapshot.changeBaseCurrencyUnitTo(CurrencyUnit.EUR);
+        snapshot.changeBaseCurrencyUnitTo(CurrencyUnit.USD);
+
+        // THEN
+        final List<String> currenciesInUseBaseFirst = snapshot.getCurrenciesInUseBaseFirst();
+        assertEquals(3, currenciesInUseBaseFirst.size());
+        assertEquals(CurrencyUnit.USD.getCode(), currenciesInUseBaseFirst.get(0));
+        assertTrue(currenciesInUseBaseFirst.contains(CurrencyUnit.of("BRL").getCode()));
+        assertTrue(currenciesInUseBaseFirst.contains(CurrencyUnit.EUR.getCode()));
+
+        verifySnapshot(
+                snapshot,
+                CurrencyUnit.USD,
+                "24500.00",
+                "6896.75",
+                "17603.25",
+                "4410.00",
+                "490.00",
+                "551.25",
+                "367.50");
+
+        final Map<String, BigDecimal> currencyConversionRates =
+                snapshot.getCurrencyConversionRates();
+        assertEquals(2, currencyConversionRates.size());
+        assertTrue(new BigDecimal("0.80").compareTo(currencyConversionRates.get("EUR")) == 0);
+        assertTrue(new BigDecimal("5.00").compareTo(currencyConversionRates.get("BRL")) == 0);
+    }
+
+    private Snapshot buildSnapshotWithMultipleCurrencies() {
+        final SimpleAssetAccount usdAsset =
+                new SimpleAssetAccount(
+                        "Savings USD",
+                        CurrencyUnit.USD,
+                        FutureTithingPolicy.NONE,
+                        LocalDate.now(),
+                        new BigDecimal("10000.00"));
+
+        final SimpleLiabilityAccount usdLiability =
+                new SimpleLiabilityAccount(
+                        "Mortgage USD",
+                        CurrencyUnit.USD,
+                        LocalDate.now(),
+                        new BigDecimal("2500.00"));
+
+        final IncomeTransaction usdIncome =
+                new IncomeTransaction(
+                        LocalDate.of(2020, 12, 15),
+                        CurrencyUnit.USD.getCode(),
+                        new BigDecimal("1800.00"),
+                        "Income USD",
+                        RecurrencePolicy.NONE,
+                        new BigDecimal("30.00"),
+                        IncomeCategory.SIDE_GIG);
+
+        final InvestmentTransaction usdInvestment =
+                new InvestmentTransaction(
+                        LocalDate.of(2020, 12, 15),
+                        CurrencyUnit.USD.getCode(),
+                        new BigDecimal("200.00"),
+                        "Investment USD",
+                        RecurrencePolicy.NONE,
+                        InvestmentCategory.SHORT_TERM);
+
+        final DonationTransaction usdDeductibleDonation =
+                new DonationTransaction(
+                        LocalDate.of(2020, 12, 15),
+                        CurrencyUnit.USD.getCode(),
+                        new BigDecimal("150.00"),
+                        "Tax Deductible Donation USD",
+                        RecurrencePolicy.NONE,
+                        true,
+                        DonationCategory.OTHER);
+
+        final DonationTransaction usdNonDeductibleDonation =
+                new DonationTransaction(
+                        LocalDate.of(2020, 12, 15),
+                        CurrencyUnit.USD.getCode(),
+                        new BigDecimal("75.00"),
+                        "Non-Tax Deductible Donation USD",
+                        RecurrencePolicy.NONE,
+                        false,
+                        DonationCategory.OTHER);
+
+        final Snapshot snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(usdAsset, usdLiability),
+                        ImmutableList.of(
+                                usdIncome,
+                                usdInvestment,
+                                usdDeductibleDonation,
+                                usdNonDeductibleDonation),
+                        ImmutableMap.of());
+        snapshot.setId(42L);
+
+        assertTrue(snapshot.supports(CurrencyUnit.USD));
+
+        assertFalse(snapshot.supports(CurrencyUnit.of("BRL")));
+        snapshot.putCurrencyConversionRate(CurrencyUnit.of("BRL"), new BigDecimal("5.00"));
+        assertTrue(snapshot.supports(CurrencyUnit.of("BRL")));
+
+        final SimpleAssetAccount brlAsset =
+                new SimpleAssetAccount(
+                        "Savings BRL",
+                        CurrencyUnit.of("BRL"),
+                        FutureTithingPolicy.NONE,
+                        LocalDate.now(),
+                        new BigDecimal("10000.00"));
+
+        final SimpleLiabilityAccount brlLiability =
+                new SimpleLiabilityAccount(
+                        "Mortgage BRL",
+                        CurrencyUnit.of("BRL"),
+                        LocalDate.now(),
+                        new BigDecimal("2500.00"));
+
+        snapshot.addAccount(brlAsset);
+        snapshot.addAccount(brlLiability);
+
+        final IncomeTransaction brlIncome =
+                new IncomeTransaction(
+                        LocalDate.of(2020, 12, 15),
+                        CurrencyUnit.of("BRL").getCode(),
+                        new BigDecimal("1800.00"),
+                        "Income BRL",
+                        RecurrencePolicy.NONE,
+                        new BigDecimal("30.00"),
+                        IncomeCategory.SIDE_GIG);
+
+        final InvestmentTransaction brlInvestment =
+                new InvestmentTransaction(
+                        LocalDate.of(2020, 12, 15),
+                        CurrencyUnit.of("BRL").getCode(),
+                        new BigDecimal("200.00"),
+                        "Investment BRL",
+                        RecurrencePolicy.NONE,
+                        InvestmentCategory.SHORT_TERM);
+
+        final DonationTransaction brlDeductibleDonation =
+                new DonationTransaction(
+                        LocalDate.of(2020, 12, 15),
+                        CurrencyUnit.of("BRL").getCode(),
+                        new BigDecimal("150.00"),
+                        "Tax Deductible Donation BRL",
+                        RecurrencePolicy.NONE,
+                        true,
+                        DonationCategory.OTHER);
+
+        final DonationTransaction brlNonDeductibleDonation =
+                new DonationTransaction(
+                        LocalDate.of(2020, 12, 15),
+                        CurrencyUnit.of("BRL").getCode(),
+                        new BigDecimal("75.00"),
+                        "Non-Tax Deductible Donation BRL",
+                        RecurrencePolicy.NONE,
+                        false,
+                        DonationCategory.OTHER);
+
+        snapshot.addTransaction(brlIncome);
+        snapshot.addTransaction(brlInvestment);
+        snapshot.addTransaction(brlDeductibleDonation);
+        snapshot.addTransaction(brlNonDeductibleDonation);
+
+        assertFalse(snapshot.supports(CurrencyUnit.EUR));
+        snapshot.putCurrencyConversionRate(CurrencyUnit.EUR, new BigDecimal("0.80"));
+        assertTrue(snapshot.supports(CurrencyUnit.EUR));
+
+        final SimpleAssetAccount eurAsset =
+                new SimpleAssetAccount(
+                        "Savings EUR",
+                        CurrencyUnit.EUR,
+                        FutureTithingPolicy.NONE,
+                        LocalDate.now(),
+                        new BigDecimal("10000.00"));
+
+        final SimpleLiabilityAccount eurLiability =
+                new SimpleLiabilityAccount(
+                        "Mortgage EUR",
+                        CurrencyUnit.EUR,
+                        LocalDate.now(),
+                        new BigDecimal("2500.00"));
+
+        snapshot.addAccount(eurAsset);
+        snapshot.addAccount(eurLiability);
+
+        final IncomeTransaction eurIncome =
+                new IncomeTransaction(
+                        LocalDate.of(2020, 12, 15),
+                        CurrencyUnit.EUR.getCode(),
+                        new BigDecimal("1800.00"),
+                        "Income EUR",
+                        RecurrencePolicy.NONE,
+                        new BigDecimal("30.00"),
+                        IncomeCategory.SIDE_GIG);
+
+        final InvestmentTransaction eurInvestment =
+                new InvestmentTransaction(
+                        LocalDate.of(2020, 12, 15),
+                        CurrencyUnit.EUR.getCode(),
+                        new BigDecimal("200.00"),
+                        "Investment EUR",
+                        RecurrencePolicy.NONE,
+                        InvestmentCategory.SHORT_TERM);
+
+        final DonationTransaction eurDeductibleDonation =
+                new DonationTransaction(
+                        LocalDate.of(2020, 12, 15),
+                        CurrencyUnit.EUR.getCode(),
+                        new BigDecimal("150.00"),
+                        "Tax Deductible Donation EUR",
+                        RecurrencePolicy.NONE,
+                        true,
+                        DonationCategory.OTHER);
+
+        final DonationTransaction eurNonDeductibleDonation =
+                new DonationTransaction(
+                        LocalDate.of(2020, 12, 15),
+                        CurrencyUnit.EUR.getCode(),
+                        new BigDecimal("75.00"),
+                        "Non-Tax Deductible Donation EUR",
+                        RecurrencePolicy.NONE,
+                        false,
+                        DonationCategory.OTHER);
+
+        snapshot.addTransaction(eurIncome);
+        snapshot.addTransaction(eurInvestment);
+        snapshot.addTransaction(eurDeductibleDonation);
+        snapshot.addTransaction(eurNonDeductibleDonation);
+
+        verifySnapshot(
+                snapshot,
+                CurrencyUnit.USD,
+                "24500.00",
+                "6896.75",
+                "17603.25",
+                "4410.00",
+                "490.00",
+                "551.25",
+                "367.50");
+
+        return snapshot;
+    }
+
+    private void verifySnapshot(
+            final Snapshot snapshot,
+            final CurrencyUnit baseCurrencyUnit,
+            final String assetsTotal,
+            final String liabilitiesTotal,
+            final String netWorth,
+            final String incomesTotal,
+            final String investmentsTotal,
+            final String donationsTotal,
+            final String taxDeductibleDonationsTotal) {
+        assertEquals(baseCurrencyUnit, snapshot.getBaseCurrencyUnit());
+        assertTrue(
+                new BigDecimal(assetsTotal).compareTo(snapshot.getTotalFor(AccountType.ASSET))
+                        == 0);
+        assertTrue(
+                new BigDecimal(liabilitiesTotal)
+                                .compareTo(snapshot.getTotalFor(AccountType.LIABILITY))
+                        == 0);
+        assertTrue(new BigDecimal(netWorth).compareTo(snapshot.getNetWorth()) == 0);
+
+        assertTrue(
+                new BigDecimal(incomesTotal).compareTo(snapshot.getTotalFor(TransactionType.INCOME))
+                        == 0);
+        assertTrue(
+                new BigDecimal(investmentsTotal)
+                                .compareTo(snapshot.getTotalFor(TransactionType.INVESTMENT))
+                        == 0);
+        assertTrue(
+                new BigDecimal(donationsTotal)
+                                .compareTo(snapshot.getTotalFor(TransactionType.DONATION))
+                        == 0);
+        assertTrue(
+                new BigDecimal(taxDeductibleDonationsTotal)
+                                .compareTo(snapshot.getTaxDeductibleDonationsTotal())
+                        == 0);
     }
 }

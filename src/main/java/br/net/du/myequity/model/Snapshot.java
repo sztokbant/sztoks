@@ -573,6 +573,175 @@ public class Snapshot implements Comparable<Snapshot> {
         return CurrencyUnit.of(baseCurrency);
     }
 
+    public void changeBaseCurrencyUnitTo(@NonNull final CurrencyUnit newBaseCurrency) {
+        if (newBaseCurrency.equals(getBaseCurrencyUnit()) || !supports(newBaseCurrency)) {
+            throw new IllegalArgumentException("Invalid currency: " + newBaseCurrency);
+        }
+
+        final String oldBaseCurrency = baseCurrency;
+
+        // Remove direct conversion rate
+        final BigDecimal oldToNewBaseCurrencyConversionRate =
+                currencyConversionRates.get(newBaseCurrency.getCode());
+        currencyConversionRates.remove(newBaseCurrency.getCode());
+
+        // Update remaining currencies
+        for (final String currency : currencyConversionRates.keySet()) {
+            currencyConversionRates.put(
+                    currency,
+                    currencyConversionRates
+                            .get(currency)
+                            .divide(
+                                    oldToNewBaseCurrencyConversionRate,
+                                    DIVISION_SCALE,
+                                    RoundingMode.HALF_UP));
+        }
+
+        // Add new direct conversion rate
+        currencyConversionRates.put(
+                oldBaseCurrency,
+                BigDecimal.ONE.divide(
+                        oldToNewBaseCurrencyConversionRate, DIVISION_SCALE, RoundingMode.HALF_UP));
+
+        // Reset all
+        baseCurrency = newBaseCurrency.getCode();
+        updateCurrenciesInUse();
+
+        resetTotals();
+    }
+
+    private void resetTotals() {
+        resetAssetsTotal();
+        resetLiabilitiesTotal();
+        resetIncomesTotal();
+        resetInvestmentsTotal();
+        resetDonationsTotal();
+    }
+
+    private void resetAssetsTotal() {
+        assetsTotal = BigDecimal.ZERO;
+
+        accounts.stream()
+                .filter(account -> account.getAccountType().equals(AccountType.ASSET))
+                .forEach(
+                        asset -> {
+                            final BigDecimal amount =
+                                    asset.getCurrencyUnit().equals(getBaseCurrencyUnit())
+                                            ? asset.getBalance()
+                                            : asset.getBalance()
+                                                    .divide(
+                                                            currencyConversionRates.get(
+                                                                    asset.getCurrencyUnit()
+                                                                            .getCode()),
+                                                            DIVISION_SCALE,
+                                                            RoundingMode.HALF_UP);
+
+                            assetsTotal = assetsTotal.add(amount);
+                        });
+    }
+
+    private void resetLiabilitiesTotal() {
+        liabilitiesTotal = BigDecimal.ZERO;
+
+        accounts.stream()
+                .filter(account -> account.getAccountType().equals(AccountType.LIABILITY))
+                .forEach(
+                        liability -> {
+                            final BigDecimal amount =
+                                    liability.getCurrencyUnit().equals(getBaseCurrencyUnit())
+                                            ? liability.getBalance()
+                                            : liability
+                                                    .getBalance()
+                                                    .divide(
+                                                            currencyConversionRates.get(
+                                                                    liability
+                                                                            .getCurrencyUnit()
+                                                                            .getCode()),
+                                                            DIVISION_SCALE,
+                                                            RoundingMode.HALF_UP);
+
+                            liabilitiesTotal = liabilitiesTotal.add(amount);
+                        });
+    }
+
+    private void resetIncomesTotal() {
+        incomesTotal = BigDecimal.ZERO;
+
+        transactions.stream()
+                .filter(
+                        transaction ->
+                                transaction.getTransactionType().equals(TransactionType.INCOME))
+                .forEach(
+                        income -> {
+                            final BigDecimal amount =
+                                    income.getCurrencyUnit().equals(getBaseCurrencyUnit())
+                                            ? income.getAmount()
+                                            : income.getAmount()
+                                                    .divide(
+                                                            currencyConversionRates.get(
+                                                                    income.getCurrencyUnit()
+                                                                            .getCode()),
+                                                            DIVISION_SCALE,
+                                                            RoundingMode.HALF_UP);
+
+                            incomesTotal = incomesTotal.add(amount);
+                        });
+    }
+
+    private void resetInvestmentsTotal() {
+        investmentsTotal = BigDecimal.ZERO;
+
+        transactions.stream()
+                .filter(
+                        transaction ->
+                                transaction.getTransactionType().equals(TransactionType.INVESTMENT))
+                .forEach(
+                        investment -> {
+                            final BigDecimal amount =
+                                    investment.getCurrencyUnit().equals(getBaseCurrencyUnit())
+                                            ? investment.getAmount()
+                                            : investment
+                                                    .getAmount()
+                                                    .divide(
+                                                            currencyConversionRates.get(
+                                                                    investment
+                                                                            .getCurrencyUnit()
+                                                                            .getCode()),
+                                                            DIVISION_SCALE,
+                                                            RoundingMode.HALF_UP);
+
+                            investmentsTotal = investmentsTotal.add(amount);
+                        });
+    }
+
+    private void resetDonationsTotal() {
+        donationsTotal = BigDecimal.ZERO;
+        taxDeductibleDonationsTotal = BigDecimal.ZERO;
+
+        transactions.stream()
+                .filter(account -> account.getTransactionType().equals(TransactionType.DONATION))
+                .forEach(
+                        donation -> {
+                            final BigDecimal amount =
+                                    donation.getCurrencyUnit().equals(getBaseCurrencyUnit())
+                                            ? donation.getAmount()
+                                            : donation.getAmount()
+                                                    .divide(
+                                                            currencyConversionRates.get(
+                                                                    donation.getCurrencyUnit()
+                                                                            .getCode()),
+                                                            DIVISION_SCALE,
+                                                            RoundingMode.HALF_UP);
+
+                            donationsTotal = donationsTotal.add(amount);
+
+                            if (((DonationTransaction) donation).isTaxDeductible()) {
+                                taxDeductibleDonationsTotal =
+                                        taxDeductibleDonationsTotal.add(amount);
+                            }
+                        });
+    }
+
     public Map<String, BigDecimal> getCurrencyConversionRates() {
         return ImmutableMap.copyOf(currencyConversionRates);
     }

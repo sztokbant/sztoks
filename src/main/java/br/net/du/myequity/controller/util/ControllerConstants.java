@@ -8,6 +8,7 @@ public class ControllerConstants {
     public static final String REDIRECT_TO_LOGIN = "redirect:/login";
 
     public static final String ACCOUNT_TYPE_KEY = "accountType";
+    public static final String CURRENCY = "currency";
     public static final String ID = "id";
     public static final String SNAPSHOT_BASE_CURRENCY_KEY = "baseCurrency";
     public static final String SNAPSHOT_ID_KEY = "snapshotId";

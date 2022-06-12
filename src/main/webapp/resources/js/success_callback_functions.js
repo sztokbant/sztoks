@@ -337,6 +337,12 @@ function donationIsDeductibleUpdateSuccessCallback(data, result) {
   $("#tax_deductible_donations_total").html(result.taxDeductibleDonationsTotal);
 }
 
+// CURRENCY
+
+function changeBaseCurrencySuccessCallback(data, result) {
+  window.location.href = "/snapshot/" + result.snapshotId;
+}
+
 // AUX FUNCTIONS
 
 function updateTotalForAccountSubType(result) {

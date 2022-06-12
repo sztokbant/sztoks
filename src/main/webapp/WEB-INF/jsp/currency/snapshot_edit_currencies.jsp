@@ -13,6 +13,8 @@
 
     <script src="${contextPath}/resources/js/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script></head>
+    <script src="${contextPath}/resources/js/ajax_field_update.js"></script>
+    <script src="${contextPath}/resources/js/success_callback_functions.js"></script>
 </head>
 
 <body>
@@ -48,6 +50,11 @@
                         <div class="form-group ${status.error ? 'has-error' : ''}">
                             <form:errors path="currencyConversionRates['${entry.key}']"/>
                         </div>
+                    </div>
+                    <div class="col col-form-label-${deviceType} align-right">
+                        <a href="#" class="btn btn-primary btn-sztoks btn-new-snapshot-${deviceType}"
+                           onClick="if (confirm('Are you sure you want to make ${entry.key} the new base currency for Snapshot \'${snapshotTitle}\'?')) { ajaxPost('snapshot/${snapshotId}/changeBaseCurrency/${entry.key}', '{}', changeBaseCurrencySuccessCallback); this.innerText='Saving...'; }">
+                        Make <b>${entry.key}</b> default</a>
                     </div>
                 </div>
             </spring:bind>
