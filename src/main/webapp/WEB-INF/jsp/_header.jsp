@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <nav class="navbar fixed-top navbar-dark bg-dark navbar-sztoks-${deviceType}">
     <div class="container-fluid">
@@ -42,9 +43,7 @@
 
                         </li>
                         <li class="navbar-entry-${deviceType} navbar-entry">
-                            <form id="logoutForm" method="POST" action="${contextPath}/logout">
-                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                            </form>
+                            <form:form id="logoutForm" method="post" action="${contextPath}/logout" />
                             <a class="navbar-item" href="#" onclick="document.forms['logoutForm'].submit()">
                                 Logout (${user.fullName})
                             </a>
@@ -63,5 +62,7 @@
         </div>
     </div>
 </nav>
+
+<input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
 <div class="navbar-margin-bottom-${deviceType}" />

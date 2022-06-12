@@ -1,7 +1,6 @@
 <div>
-    <form method="POST" action="${contextPath}/login" class="form-signin">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
+    <form:form method="post" action="${contextPath}/login" class="form-signin">
         <div class="form-group ${message != null ? 'info-message' : ''}">
             <span>${message}</span>
         </div>
@@ -33,5 +32,5 @@
                     onClick="this.form.submit(); this.disabled=true; this.innerText='Logging in...';">Log in</button>
         </div>
         <div class="text-center paragraph-${deviceType}">Don't have an account? <a href="${contextPath}/signup">Sign up for Sztoks</a>.</div>
-    </form>
+    </form:form>
 </div>

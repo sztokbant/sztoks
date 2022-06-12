@@ -49,7 +49,7 @@ function ajaxPost(endpoint, data, successCallback) {
   var postUrl = window.location.origin + "/" + endpoint + "?_csrf=" + $("#_csrf").val();
 
   $.ajax({
-    type: "POST",
+    type: "post",
     contentType: "application/json",
     url: postUrl,
     data: JSON.stringify(data),

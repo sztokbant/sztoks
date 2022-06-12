@@ -21,21 +21,18 @@
     margin: -11px 0 5px 0;
 }
 
-.delete-icon {
-    float: left;
-    margin: 0 7px 0 0;
+.short-DESKTOP {
+    max-width: 25px;
     font-size: 14px;
 }
 
-.delete-icon-DESKTOP {
+.short-TABLET {
+    max-width: 25px;
     font-size: 14px;
 }
 
-.delete-icon-TABLET {
-    font-size: 14px;
-}
-
-.delete-icon-MOBILE {
+.short-MOBILE {
+    max-width: 40px;
     font-size: 27px;
 }
 

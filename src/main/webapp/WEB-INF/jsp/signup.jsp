@@ -1,6 +1,5 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <!DOCTYPE html>
@@ -27,7 +26,7 @@
         </c:when>
     </c:choose>
 
-    <form:form method="POST" modelAttribute="userForm" class="form-signin">
+    <form:form method="post" modelAttribute="userForm" class="form-signin">
         <div class="row form-group">
             <div class="col col-form-label-${deviceType}">
                 <label for="email">E-mail</label>

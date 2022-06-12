@@ -67,11 +67,12 @@
                         <div class="row">
                             <div class="col col-snapshot-delete-${deviceType}">
                                 <c:if test="${isFirst and snapshots.size() gt 1}">
-                                    <form method="post" action="${contextPath}/snapshot/delete/${snapshot.id}"
-                                          onsubmit="return confirm('Are you sure you want to PERMANENTLY delete snapshot \'${snapshot.name}\'?');">
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <input type="submit" value="&#128465;&#65039;" class="transparent-button"/>
-                                    </form>
+                                    <form:form method="post" id="deleteSnapshotForm" action="${contextPath}/snapshot/delete/${snapshot.id}"></form:form>
+                                    <a href="#"
+                                       style="margin-left: 7px; text-decoration: none;"
+                                       onclick="if (confirm('Are you sure you want to PERMANENTLY delete snapshot \'${snapshot.name}\'?')) { document.forms['deleteSnapshotForm'].submit(); }">
+                                        &#128465;&#65039;
+                                    </a>
                                     <c:set var="isFirst" value="false"/>
                                 </c:if>
                             </div>

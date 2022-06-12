@@ -30,8 +30,6 @@
     </c:otherwise>
 </c:choose>
 
-<input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-
 <%@ include file="/WEB-INF/jsp/_header.jsp" %>
 
 <div class="full-width">
@@ -86,15 +84,18 @@
                                 <c:choose>
                                     <c:when test="${not snapshot.newSnapshotAllowed}">
                                         <a class="btn btn-sztoks btn-new-snapshot-common btn-new-snapshot-${deviceType}"
-                                           href="#" onclick="alert('It is too early to create a Snapshot for the upcoming month. Please, try again after the 15th.');" class="btn btn-sztoks btn-new-snapshot">&#x2795;&nbsp; Snapshot</a>
+                                           href="#"
+                                           onclick="alert('It is too early to create a Snapshot for the upcoming month. Please, try again after the 15th.');" class="btn btn-sztoks btn-new-snapshot">
+                                            &#x2795;&nbsp; Snapshot
+                                        </a>
                                     </c:when>
                                     <c:otherwise>
-                                        <form method="post" action="${contextPath}/snapshot/new" onSubmit="return confirm('Are you sure you want to create a new snapshot based on the current snapshot?')">
-                                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                            <button type="submit" class="btn btn-sztoks btn-new-snapshot-common btn-new-snapshot-${deviceType}">
-                                                &#x2795;&nbsp; Snapshot
-                                            </button>
-                                        </form>
+                                        <form:form method="post" id="newSnapshotForm" action="${contextPath}/snapshot/new" />
+                                        <a class="btn btn-sztoks btn-new-snapshot-common btn-new-snapshot-${deviceType}"
+                                           href="#"
+                                           onClick="if (confirm('Are you sure you want to create a new snapshot based on the current snapshot?')) { document.forms['newSnapshotForm'].submit(); }">
+                                            &#x2795;&nbsp; Snapshot
+                                        </a>
                                     </c:otherwise>
                                 </c:choose>
                                     </div>

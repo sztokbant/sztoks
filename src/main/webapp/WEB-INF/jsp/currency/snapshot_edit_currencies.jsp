@@ -1,6 +1,5 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <!DOCTYPE html>
@@ -34,7 +33,7 @@
 
     <div class="text-center paragraph-${deviceType}"><a href="${contextPath}/snapshot/${snapshotId}/newCurrency">Add New</a></div>
 
-    <form:form method="POST" action="${contextPath}/snapshot/${snapshotId}/currencies" modelAttribute="editCurrenciesForm" class="form-signin">
+    <form:form method="post" action="${contextPath}/snapshot/${snapshotId}/currencies" modelAttribute="editCurrenciesForm" class="form-signin">
         <c:forEach var="entry" items="${editCurrenciesForm.currencyConversionRates}">
             <spring:bind path="currencyConversionRates['${entry.key}']">
                 <div class="row form-group">
