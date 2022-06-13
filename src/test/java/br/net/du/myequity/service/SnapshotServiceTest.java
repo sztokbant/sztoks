@@ -13,11 +13,10 @@ import static br.net.du.myequity.test.TestConstants.THIRD_SNAPSHOT_YEAR;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
 import static br.net.du.myequity.test.TestConstants.newCreditCardAccount;
 import static br.net.du.myequity.test.TestConstants.newInvestmentAccount;
-import static br.net.du.myequity.test.TestConstants.newRecurringDonation;
 import static br.net.du.myequity.test.TestConstants.newRecurringIncome;
+import static br.net.du.myequity.test.TestConstants.newRecurringNonTaxDeductibleDonation;
 import static br.net.du.myequity.test.TestConstants.newSimpleAssetAccount;
 import static br.net.du.myequity.test.TestConstants.newSimpleLiabilityAccount;
-import static br.net.du.myequity.test.TestConstants.newSingleDonation;
 import static br.net.du.myequity.test.TestConstants.newSingleIncome;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -36,6 +35,7 @@ import br.net.du.myequity.model.account.Account;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.persistence.SnapshotRepository;
 import br.net.du.myequity.test.ModelTestUtils;
+import br.net.du.myequity.test.TestConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
@@ -68,15 +68,15 @@ public class SnapshotServiceTest {
 
         snapshot = user.getSnapshots().first();
 
-        snapshot.addAccount(newSimpleAssetAccount());
-        snapshot.addAccount(newSimpleLiabilityAccount());
+        snapshot.addAccount(newSimpleAssetAccount(CurrencyUnit.USD));
+        snapshot.addAccount(newSimpleLiabilityAccount(CurrencyUnit.USD));
         snapshot.addAccount(newCreditCardAccount());
         snapshot.addAccount(newInvestmentAccount());
 
         snapshot.addTransaction(newRecurringIncome());
-        snapshot.addTransaction(newSingleIncome());
-        snapshot.addTransaction(newRecurringDonation());
-        snapshot.addTransaction(newSingleDonation());
+        snapshot.addTransaction(newSingleIncome(CurrencyUnit.USD));
+        snapshot.addTransaction(newRecurringNonTaxDeductibleDonation(CurrencyUnit.USD));
+        snapshot.addTransaction(TestConstants.newSingleTaxDeductibleDonation(CurrencyUnit.USD));
 
         snapshot.putCurrencyConversionRate(ANOTHER_CURRENCY_UNIT, new BigDecimal("1.31"));
 
@@ -138,7 +138,9 @@ public class SnapshotServiceTest {
         assertEquals(2, newTransactions.size());
 
         final Iterator<Transaction> iterator = newTransactions.iterator();
-        assertTrue(equalsIgnoreIdAndDate(newRecurringDonation(), iterator.next()));
+        assertTrue(
+                equalsIgnoreIdAndDate(
+                        newRecurringNonTaxDeductibleDonation(CurrencyUnit.USD), iterator.next()));
         assertTrue(equalsIgnoreIdAndDate(newRecurringIncome(), iterator.next()));
 
         verify(snapshotRepository).save(newSnapshot);

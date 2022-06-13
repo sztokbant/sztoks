@@ -67,18 +67,22 @@ public class TestConstants {
     public static final String SUBTYPE_NAME_FIELD = "subtypeName";
     public static final String TITHING_PERCENTAGE_FIELD = "tithingPercentage";
 
-    public static SimpleAssetAccount newSimpleAssetAccount() {
+    public static SimpleAssetAccount newSimpleAssetAccount(final CurrencyUnit currencyUnit) {
         return new SimpleAssetAccount(
-                "Savings",
-                CurrencyUnit.USD,
+                "SimpleAsset " + currencyUnit.getCode(),
+                currencyUnit,
                 FutureTithingPolicy.NONE,
                 LocalDate.now(),
                 new BigDecimal("10000.00"));
     }
 
-    public static SimpleLiabilityAccount newSimpleLiabilityAccount() {
+    public static SimpleLiabilityAccount newSimpleLiabilityAccount(
+            final CurrencyUnit currencyUnit) {
         return new SimpleLiabilityAccount(
-                "Mortgage", CurrencyUnit.USD, LocalDate.now(), new BigDecimal("2500.00"));
+                "SimpleLiability " + currencyUnit.getCode(),
+                currencyUnit,
+                LocalDate.now(),
+                new BigDecimal("2500.00"));
     }
 
     public static CreditCardAccount newCreditCardAccount() {
@@ -119,61 +123,39 @@ public class TestConstants {
                 IncomeCategory.JOB);
     }
 
-    public static IncomeTransaction newSingleIncome(final long id) {
-        final IncomeTransaction incomeTransaction = newSingleIncome();
-        incomeTransaction.setId(id);
-        return incomeTransaction;
-    }
-
-    public static IncomeTransaction newSingleIncome() {
+    public static IncomeTransaction newSingleIncome(final CurrencyUnit currencyUnit) {
         return new IncomeTransaction(
                 LocalDate.of(2020, 12, 15),
-                CurrencyUnit.USD.getCode(),
-                new BigDecimal("1700.00"),
-                "Side Gig",
+                currencyUnit.getCode(),
+                new BigDecimal("1800.00"),
+                "Side Gig " + currencyUnit.getCode(),
                 RecurrencePolicy.NONE,
-                new BigDecimal("20.00"),
+                new BigDecimal("30.00"),
                 IncomeCategory.SIDE_GIG);
     }
 
-    public static DonationTransaction newRecurringDonation(final long id) {
-        final DonationTransaction donationTransaction = newRecurringDonation();
-        donationTransaction.setId(id);
-        return donationTransaction;
-    }
-
-    public static DonationTransaction newRecurringDonation() {
+    public static DonationTransaction newRecurringNonTaxDeductibleDonation(
+            final CurrencyUnit currencyUnit) {
         return new DonationTransaction(
                 LocalDate.of(2020, 12, 31),
-                CurrencyUnit.USD.getCode(),
-                new BigDecimal("108.00"),
-                "Charity",
+                currencyUnit.getCode(),
+                new BigDecimal("75.00"),
+                "Non-Tax Deductible Donation " + currencyUnit.getCode(),
                 RecurrencePolicy.RECURRING,
-                true,
+                false,
                 DonationCategory.SPIRITUAL);
     }
 
-    public static DonationTransaction newSingleDonation(final long id) {
-        final DonationTransaction donationTransaction = newSingleDonation();
-        donationTransaction.setId(id);
-        return donationTransaction;
-    }
-
-    public static DonationTransaction newSingleDonation() {
+    public static DonationTransaction newSingleTaxDeductibleDonation(
+            final CurrencyUnit currencyUnit) {
         return new DonationTransaction(
                 LocalDate.of(2020, 12, 15),
-                CurrencyUnit.USD.getCode(),
-                new BigDecimal("10.00"),
-                "Beggar",
+                currencyUnit.getCode(),
+                new BigDecimal("150.00"),
+                "Tax Deductible Donation " + currencyUnit.getCode(),
                 RecurrencePolicy.NONE,
                 true,
                 DonationCategory.OTHER);
-    }
-
-    public static InvestmentTransaction newRecurringInvestment(final long id) {
-        final InvestmentTransaction investmentTransaction = newRecurringInvestment();
-        investmentTransaction.setId(id);
-        return investmentTransaction;
     }
 
     public static InvestmentTransaction newRecurringInvestment() {
@@ -186,18 +168,12 @@ public class TestConstants {
                 InvestmentCategory.LONG_TERM);
     }
 
-    public static InvestmentTransaction newSingleInvestment(final long id) {
-        final InvestmentTransaction investmentTransaction = newSingleInvestment();
-        investmentTransaction.setId(id);
-        return investmentTransaction;
-    }
-
-    public static InvestmentTransaction newSingleInvestment() {
+    public static InvestmentTransaction newSingleInvestment(final CurrencyUnit currencyUnit) {
         return new InvestmentTransaction(
                 LocalDate.of(2020, 12, 15),
-                CurrencyUnit.USD.getCode(),
+                currencyUnit.getCode(),
                 new BigDecimal("200.00"),
-                "Savings",
+                "Investment " + currencyUnit.getCode(),
                 RecurrencePolicy.NONE,
                 InvestmentCategory.SHORT_TERM);
     }

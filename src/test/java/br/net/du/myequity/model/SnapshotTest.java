@@ -6,14 +6,14 @@ import static br.net.du.myequity.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_MONTH;
 import static br.net.du.myequity.test.TestConstants.FIRST_SNAPSHOT_YEAR;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
-import static br.net.du.myequity.test.TestConstants.newRecurringDonation;
 import static br.net.du.myequity.test.TestConstants.newRecurringIncome;
 import static br.net.du.myequity.test.TestConstants.newRecurringInvestment;
+import static br.net.du.myequity.test.TestConstants.newRecurringNonTaxDeductibleDonation;
 import static br.net.du.myequity.test.TestConstants.newSimpleAssetAccount;
 import static br.net.du.myequity.test.TestConstants.newSimpleLiabilityAccount;
-import static br.net.du.myequity.test.TestConstants.newSingleDonation;
 import static br.net.du.myequity.test.TestConstants.newSingleIncome;
 import static br.net.du.myequity.test.TestConstants.newSingleInvestment;
+import static br.net.du.myequity.test.TestConstants.newSingleTaxDeductibleDonation;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -25,15 +25,12 @@ import br.net.du.myequity.model.account.AccountType;
 import br.net.du.myequity.model.account.FutureTithingPolicy;
 import br.net.du.myequity.model.account.SimpleAssetAccount;
 import br.net.du.myequity.model.account.SimpleLiabilityAccount;
-import br.net.du.myequity.model.transaction.DonationCategory;
 import br.net.du.myequity.model.transaction.DonationTransaction;
-import br.net.du.myequity.model.transaction.IncomeCategory;
 import br.net.du.myequity.model.transaction.IncomeTransaction;
-import br.net.du.myequity.model.transaction.InvestmentCategory;
 import br.net.du.myequity.model.transaction.InvestmentTransaction;
-import br.net.du.myequity.model.transaction.RecurrencePolicy;
 import br.net.du.myequity.model.transaction.Transaction;
 import br.net.du.myequity.model.transaction.TransactionType;
+import br.net.du.myequity.test.TestConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
@@ -49,25 +46,26 @@ import org.junit.jupiter.api.Test;
 
 class SnapshotTest {
     private BigDecimal EXPECTED_NET_WORTH = new BigDecimal("7500.00");
-
-    private BigDecimal EXPECTED_NET_WORTH_WITH_TRANSACTIONS = new BigDecimal("4878.00");
+    private BigDecimal EXPECTED_NET_WORTH_WITH_TRANSACTIONS = new BigDecimal("4785.00");
 
     private SimpleLiabilityAccount simpleLiabilityAccount;
     private SimpleAssetAccount simpleAssetAccount;
 
     @BeforeEach
     public void setUp() {
-        simpleLiabilityAccount = newSimpleLiabilityAccount();
-        simpleAssetAccount = newSimpleAssetAccount();
+        simpleLiabilityAccount = newSimpleLiabilityAccount(CurrencyUnit.USD);
+        simpleAssetAccount = newSimpleAssetAccount(CurrencyUnit.USD);
     }
 
     @Test
     public void constructor() {
         // WHEN
         final IncomeTransaction recurringIncome = newRecurringIncome();
-        final IncomeTransaction singleIncome = newSingleIncome();
-        final DonationTransaction recurringDonation = newRecurringDonation();
-        final DonationTransaction singleDonation = newSingleDonation();
+        final IncomeTransaction singleIncome = newSingleIncome(CurrencyUnit.USD);
+        final DonationTransaction recurringDonation =
+                newRecurringNonTaxDeductibleDonation(CurrencyUnit.USD);
+        final DonationTransaction singleDonation =
+                TestConstants.newSingleTaxDeductibleDonation(CurrencyUnit.USD);
 
         final Snapshot snapshot =
                 new Snapshot(
@@ -402,7 +400,7 @@ class SnapshotTest {
                         ImmutableSortedSet.of(),
                         ImmutableList.of(),
                         ImmutableMap.of());
-        final IncomeTransaction transaction = newSingleIncome();
+        final IncomeTransaction transaction = newSingleIncome(CurrencyUnit.USD);
 
         // WHEN
         snapshot.addTransaction(transaction);
@@ -432,9 +430,9 @@ class SnapshotTest {
                         ImmutableMap.of());
 
         snapshot.addTransaction(recurringIncome);
-        snapshot.addTransaction(newSingleIncome());
-        snapshot.addTransaction(newRecurringDonation());
-        snapshot.addTransaction(newSingleDonation());
+        snapshot.addTransaction(newSingleIncome(CurrencyUnit.USD));
+        snapshot.addTransaction(newRecurringNonTaxDeductibleDonation(CurrencyUnit.USD));
+        snapshot.addTransaction(TestConstants.newSingleTaxDeductibleDonation(CurrencyUnit.USD));
 
         // WHEN
         snapshot.removeTransaction(recurringIncome);
@@ -449,11 +447,13 @@ class SnapshotTest {
     public void getTransactionsByType() {
         // GIVEN
         final IncomeTransaction recurringIncome = newRecurringIncome();
-        final IncomeTransaction singleIncome = newSingleIncome();
+        final IncomeTransaction singleIncome = newSingleIncome(CurrencyUnit.USD);
         final InvestmentTransaction recurringInvestment = newRecurringInvestment();
-        final InvestmentTransaction singleInvestment = newSingleInvestment();
-        final DonationTransaction recurringDonation = newRecurringDonation();
-        final DonationTransaction singleDonation = newSingleDonation();
+        final InvestmentTransaction singleInvestment = newSingleInvestment(CurrencyUnit.USD);
+        final DonationTransaction recurringDonation =
+                newRecurringNonTaxDeductibleDonation(CurrencyUnit.USD);
+        final DonationTransaction singleDonation =
+                TestConstants.newSingleTaxDeductibleDonation(CurrencyUnit.USD);
 
         final Snapshot snapshot =
                 new Snapshot(
@@ -783,72 +783,20 @@ class SnapshotTest {
     }
 
     private Snapshot buildSnapshotWithMultipleCurrencies() {
-        final SimpleAssetAccount usdAsset =
-                new SimpleAssetAccount(
-                        "Savings USD",
-                        CurrencyUnit.USD,
-                        FutureTithingPolicy.NONE,
-                        LocalDate.now(),
-                        new BigDecimal("10000.00"));
-
-        final SimpleLiabilityAccount usdLiability =
-                new SimpleLiabilityAccount(
-                        "Mortgage USD",
-                        CurrencyUnit.USD,
-                        LocalDate.now(),
-                        new BigDecimal("2500.00"));
-
-        final IncomeTransaction usdIncome =
-                new IncomeTransaction(
-                        LocalDate.of(2020, 12, 15),
-                        CurrencyUnit.USD.getCode(),
-                        new BigDecimal("1800.00"),
-                        "Income USD",
-                        RecurrencePolicy.NONE,
-                        new BigDecimal("30.00"),
-                        IncomeCategory.SIDE_GIG);
-
-        final InvestmentTransaction usdInvestment =
-                new InvestmentTransaction(
-                        LocalDate.of(2020, 12, 15),
-                        CurrencyUnit.USD.getCode(),
-                        new BigDecimal("200.00"),
-                        "Investment USD",
-                        RecurrencePolicy.NONE,
-                        InvestmentCategory.SHORT_TERM);
-
-        final DonationTransaction usdDeductibleDonation =
-                new DonationTransaction(
-                        LocalDate.of(2020, 12, 15),
-                        CurrencyUnit.USD.getCode(),
-                        new BigDecimal("150.00"),
-                        "Tax Deductible Donation USD",
-                        RecurrencePolicy.NONE,
-                        true,
-                        DonationCategory.OTHER);
-
-        final DonationTransaction usdNonDeductibleDonation =
-                new DonationTransaction(
-                        LocalDate.of(2020, 12, 15),
-                        CurrencyUnit.USD.getCode(),
-                        new BigDecimal("75.00"),
-                        "Non-Tax Deductible Donation USD",
-                        RecurrencePolicy.NONE,
-                        false,
-                        DonationCategory.OTHER);
-
         final Snapshot snapshot =
                 new Snapshot(
                         FIRST_SNAPSHOT_YEAR,
                         FIRST_SNAPSHOT_MONTH,
                         CURRENCY_UNIT,
                         TITHING_PERCENTAGE,
-                        ImmutableSortedSet.of(usdAsset, usdLiability),
+                        ImmutableSortedSet.of(
+                                newSimpleAssetAccount(CurrencyUnit.USD),
+                                newSimpleLiabilityAccount(CurrencyUnit.USD)),
                         ImmutableList.of(
-                                usdIncome,
-                                usdInvestment,
-                                usdDeductibleDonation,
-                                usdNonDeductibleDonation),
+                                newSingleIncome(CurrencyUnit.USD),
+                                newSingleInvestment(CurrencyUnit.USD),
+                                newSingleTaxDeductibleDonation(CurrencyUnit.USD),
+                                newRecurringNonTaxDeductibleDonation(CurrencyUnit.USD)),
                         ImmutableMap.of());
         snapshot.setId(42L);
 
@@ -858,133 +806,25 @@ class SnapshotTest {
         snapshot.putCurrencyConversionRate(CurrencyUnit.of("BRL"), new BigDecimal("5.00"));
         assertTrue(snapshot.supports(CurrencyUnit.of("BRL")));
 
-        final SimpleAssetAccount brlAsset =
-                new SimpleAssetAccount(
-                        "Savings BRL",
-                        CurrencyUnit.of("BRL"),
-                        FutureTithingPolicy.NONE,
-                        LocalDate.now(),
-                        new BigDecimal("10000.00"));
+        snapshot.addAccount(newSimpleAssetAccount(CurrencyUnit.of("BRL")));
+        snapshot.addAccount(newSimpleLiabilityAccount(CurrencyUnit.of("BRL")));
 
-        final SimpleLiabilityAccount brlLiability =
-                new SimpleLiabilityAccount(
-                        "Mortgage BRL",
-                        CurrencyUnit.of("BRL"),
-                        LocalDate.now(),
-                        new BigDecimal("2500.00"));
-
-        snapshot.addAccount(brlAsset);
-        snapshot.addAccount(brlLiability);
-
-        final IncomeTransaction brlIncome =
-                new IncomeTransaction(
-                        LocalDate.of(2020, 12, 15),
-                        CurrencyUnit.of("BRL").getCode(),
-                        new BigDecimal("1800.00"),
-                        "Income BRL",
-                        RecurrencePolicy.NONE,
-                        new BigDecimal("30.00"),
-                        IncomeCategory.SIDE_GIG);
-
-        final InvestmentTransaction brlInvestment =
-                new InvestmentTransaction(
-                        LocalDate.of(2020, 12, 15),
-                        CurrencyUnit.of("BRL").getCode(),
-                        new BigDecimal("200.00"),
-                        "Investment BRL",
-                        RecurrencePolicy.NONE,
-                        InvestmentCategory.SHORT_TERM);
-
-        final DonationTransaction brlDeductibleDonation =
-                new DonationTransaction(
-                        LocalDate.of(2020, 12, 15),
-                        CurrencyUnit.of("BRL").getCode(),
-                        new BigDecimal("150.00"),
-                        "Tax Deductible Donation BRL",
-                        RecurrencePolicy.NONE,
-                        true,
-                        DonationCategory.OTHER);
-
-        final DonationTransaction brlNonDeductibleDonation =
-                new DonationTransaction(
-                        LocalDate.of(2020, 12, 15),
-                        CurrencyUnit.of("BRL").getCode(),
-                        new BigDecimal("75.00"),
-                        "Non-Tax Deductible Donation BRL",
-                        RecurrencePolicy.NONE,
-                        false,
-                        DonationCategory.OTHER);
-
-        snapshot.addTransaction(brlIncome);
-        snapshot.addTransaction(brlInvestment);
-        snapshot.addTransaction(brlDeductibleDonation);
-        snapshot.addTransaction(brlNonDeductibleDonation);
+        snapshot.addTransaction(newSingleIncome(CurrencyUnit.of("BRL")));
+        snapshot.addTransaction(newSingleInvestment(CurrencyUnit.of("BRL")));
+        snapshot.addTransaction(newSingleTaxDeductibleDonation(CurrencyUnit.of("BRL")));
+        snapshot.addTransaction(newRecurringNonTaxDeductibleDonation(CurrencyUnit.of("BRL")));
 
         assertFalse(snapshot.supports(CurrencyUnit.EUR));
         snapshot.putCurrencyConversionRate(CurrencyUnit.EUR, new BigDecimal("0.80"));
         assertTrue(snapshot.supports(CurrencyUnit.EUR));
 
-        final SimpleAssetAccount eurAsset =
-                new SimpleAssetAccount(
-                        "Savings EUR",
-                        CurrencyUnit.EUR,
-                        FutureTithingPolicy.NONE,
-                        LocalDate.now(),
-                        new BigDecimal("10000.00"));
+        snapshot.addAccount(newSimpleAssetAccount(CurrencyUnit.EUR));
+        snapshot.addAccount(newSimpleLiabilityAccount(CurrencyUnit.EUR));
 
-        final SimpleLiabilityAccount eurLiability =
-                new SimpleLiabilityAccount(
-                        "Mortgage EUR",
-                        CurrencyUnit.EUR,
-                        LocalDate.now(),
-                        new BigDecimal("2500.00"));
-
-        snapshot.addAccount(eurAsset);
-        snapshot.addAccount(eurLiability);
-
-        final IncomeTransaction eurIncome =
-                new IncomeTransaction(
-                        LocalDate.of(2020, 12, 15),
-                        CurrencyUnit.EUR.getCode(),
-                        new BigDecimal("1800.00"),
-                        "Income EUR",
-                        RecurrencePolicy.NONE,
-                        new BigDecimal("30.00"),
-                        IncomeCategory.SIDE_GIG);
-
-        final InvestmentTransaction eurInvestment =
-                new InvestmentTransaction(
-                        LocalDate.of(2020, 12, 15),
-                        CurrencyUnit.EUR.getCode(),
-                        new BigDecimal("200.00"),
-                        "Investment EUR",
-                        RecurrencePolicy.NONE,
-                        InvestmentCategory.SHORT_TERM);
-
-        final DonationTransaction eurDeductibleDonation =
-                new DonationTransaction(
-                        LocalDate.of(2020, 12, 15),
-                        CurrencyUnit.EUR.getCode(),
-                        new BigDecimal("150.00"),
-                        "Tax Deductible Donation EUR",
-                        RecurrencePolicy.NONE,
-                        true,
-                        DonationCategory.OTHER);
-
-        final DonationTransaction eurNonDeductibleDonation =
-                new DonationTransaction(
-                        LocalDate.of(2020, 12, 15),
-                        CurrencyUnit.EUR.getCode(),
-                        new BigDecimal("75.00"),
-                        "Non-Tax Deductible Donation EUR",
-                        RecurrencePolicy.NONE,
-                        false,
-                        DonationCategory.OTHER);
-
-        snapshot.addTransaction(eurIncome);
-        snapshot.addTransaction(eurInvestment);
-        snapshot.addTransaction(eurDeductibleDonation);
-        snapshot.addTransaction(eurNonDeductibleDonation);
+        snapshot.addTransaction(newSingleIncome(CurrencyUnit.EUR));
+        snapshot.addTransaction(newSingleInvestment(CurrencyUnit.EUR));
+        snapshot.addTransaction(newSingleTaxDeductibleDonation(CurrencyUnit.EUR));
+        snapshot.addTransaction(newRecurringNonTaxDeductibleDonation(CurrencyUnit.EUR));
 
         verifySnapshot(
                 snapshot,
