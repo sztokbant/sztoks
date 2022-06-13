@@ -555,7 +555,7 @@ class SnapshotTest {
     }
 
     @Test
-    public void changeBaseCurrencyUnitTo_sameAsBaseCurrency_throws() {
+    public void putCurrencyConversionRate_zero_throws() {
         // GIVEN
         final Snapshot snapshot = buildSnapshotWithMultipleCurrencies();
 
@@ -563,8 +563,41 @@ class SnapshotTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> {
-                    snapshot.changeBaseCurrencyUnitTo(snapshot.getBaseCurrencyUnit());
+                    snapshot.putCurrencyConversionRate(CurrencyUnit.CAD, BigDecimal.ZERO);
                 });
+    }
+
+    @Test
+    public void changeBaseCurrencyUnitTo_sameAsBaseCurrency_noop() {
+        // GIVEN
+        final Snapshot snapshot = buildSnapshotWithMultipleCurrencies();
+
+        // WHEN
+        snapshot.changeBaseCurrencyUnitTo(snapshot.getBaseCurrencyUnit());
+
+        // THEN
+        final List<String> currenciesInUseBaseFirst = snapshot.getCurrenciesInUseBaseFirst();
+        assertEquals(3, currenciesInUseBaseFirst.size());
+        assertEquals(CurrencyUnit.USD.getCode(), currenciesInUseBaseFirst.get(0));
+        assertTrue(currenciesInUseBaseFirst.contains(CurrencyUnit.of("BRL").getCode()));
+        assertTrue(currenciesInUseBaseFirst.contains(CurrencyUnit.EUR.getCode()));
+
+        verifySnapshot(
+                snapshot,
+                CurrencyUnit.USD,
+                "24500.00",
+                "6896.75",
+                "17603.25",
+                "4410.00",
+                "490.00",
+                "551.25",
+                "367.50");
+
+        final Map<String, BigDecimal> currencyConversionRates =
+                snapshot.getCurrencyConversionRates();
+        assertEquals(2, currencyConversionRates.size());
+        assertTrue(new BigDecimal("0.80").compareTo(currencyConversionRates.get("EUR")) == 0);
+        assertTrue(new BigDecimal("5.00").compareTo(currencyConversionRates.get("BRL")) == 0);
     }
 
     @Test

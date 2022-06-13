@@ -574,7 +574,12 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     public void changeBaseCurrencyUnitTo(@NonNull final CurrencyUnit newBaseCurrency) {
-        if (newBaseCurrency.equals(getBaseCurrencyUnit()) || !supports(newBaseCurrency)) {
+        if (newBaseCurrency.equals(getBaseCurrencyUnit())) {
+            // NOOP
+            return;
+        }
+
+        if (!supports(newBaseCurrency)) {
             throw new IllegalArgumentException("Invalid currency: " + newBaseCurrency);
         }
 
@@ -598,8 +603,8 @@ public class Snapshot implements Comparable<Snapshot> {
         }
 
         // Add new direct conversion rate
-        currencyConversionRates.put(
-                oldBaseCurrency,
+        putCurrencyConversionRate(
+                CurrencyUnit.of(oldBaseCurrency),
                 BigDecimal.ONE.divide(
                         oldToNewBaseCurrencyConversionRate, DIVISION_SCALE, RoundingMode.HALF_UP));
 
@@ -761,6 +766,10 @@ public class Snapshot implements Comparable<Snapshot> {
 
     public void putCurrencyConversionRate(
             @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal conversionRate) {
+        if (conversionRate.compareTo(BigDecimal.ZERO) == 0) {
+            throw new IllegalArgumentException("Conversion rate can't be zero");
+        }
+
         final BigDecimal previousValue =
                 currencyConversionRates.put(currencyUnit.getCode(), conversionRate);
 
