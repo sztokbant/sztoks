@@ -158,7 +158,7 @@ public class Snapshot implements Comparable<Snapshot> {
             name = "snapshot_currency_conversion_rates",
             joinColumns = {@JoinColumn(name = "snapshot_id", referencedColumnName = "id")})
     @MapKeyColumn(name = "to_currency")
-    @Column(name = "conversion_rate", precision = 19, scale = 4)
+    @Column(name = "conversion_rate", precision = 19, scale = 8)
     private Map<String, BigDecimal> currencyConversionRates = new HashMap<>();
 
     @Transient private List<String> currenciesInUseBaseFirst;

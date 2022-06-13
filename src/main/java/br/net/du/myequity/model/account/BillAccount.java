@@ -14,7 +14,7 @@ import org.joda.money.CurrencyUnit;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public abstract class BillAccount extends Account {
 
-    @Column(precision = 19, scale = 2)
+    @Column(precision = 19, scale = 8)
     @Getter
     protected BigDecimal billAmount;
 

@@ -1,5 +1,7 @@
 package br.net.du.myequity.controller.viewmodel;
 
+import static br.net.du.myequity.controller.util.ControllerUtils.formatAsDecimal;
+
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.TreeMap;
@@ -19,6 +21,8 @@ public class EditCurrenciesViewModelInput {
                 .forEach(
                         entry ->
                                 this.currencyConversionRates.put(
-                                        entry.getKey(), entry.getValue().toPlainString()));
+                                        entry.getKey(),
+                                        new BigDecimal(formatAsDecimal(entry.getValue()))
+                                                .toString()));
     }
 }

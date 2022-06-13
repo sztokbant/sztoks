@@ -43,7 +43,7 @@
                         <label for="${entry.key}">1 ${baseCurrency} to <b>${entry.key}</b></label>
                     </div>
                     <div class="col">
-                        <form:input type="number" min="0" step="0.0001" id="${entry.key}"
+                        <form:input type="number" min="0" step="0.00000001" id="${entry.key}"
                                     path="currencyConversionRates['${entry.key}']"
                                     class="form-control form-entry-${deviceType}" placeholder="Conversion Rate"
                                     autofocus="true" value="${entry.value}"/>
