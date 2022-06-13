@@ -18,6 +18,8 @@ import static br.net.du.myequity.test.TestConstants.newRecurringNonTaxDeductible
 import static br.net.du.myequity.test.TestConstants.newSimpleAssetAccount;
 import static br.net.du.myequity.test.TestConstants.newSimpleLiabilityAccount;
 import static br.net.du.myequity.test.TestConstants.newSingleIncome;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -91,10 +93,9 @@ public class SnapshotServiceTest {
 
         // THEN
         assertEquals(snapshot.getBaseCurrencyUnit(), newSnapshot.getBaseCurrencyUnit());
-        assertTrue(
-                snapshot.getDefaultTithingPercentage()
-                                .compareTo(newSnapshot.getDefaultTithingPercentage())
-                        == 0);
+        assertThat(
+                snapshot.getDefaultTithingPercentage(),
+                comparesEqualTo(newSnapshot.getDefaultTithingPercentage()));
         assertTrue(newSnapshot.supports(CURRENCY_UNIT));
         assertTrue(newSnapshot.supports(ANOTHER_CURRENCY_UNIT));
         assertFalse(newSnapshot.supports(CurrencyUnit.EUR));
@@ -103,13 +104,9 @@ public class SnapshotServiceTest {
         assertEquals(
                 ANOTHER_CURRENCY_UNIT.toString(),
                 newSnapshot.getCurrencyConversionRates().keySet().iterator().next());
-        assertTrue(
-                new BigDecimal("1.31")
-                                .compareTo(
-                                        newSnapshot
-                                                .getCurrencyConversionRates()
-                                                .get(ANOTHER_CURRENCY_UNIT.toString()))
-                        == 0);
+        assertThat(
+                newSnapshot.getCurrencyConversionRates().get(ANOTHER_CURRENCY_UNIT.toString()),
+                comparesEqualTo(new BigDecimal("1.31")));
 
         final SortedSet<Account> originalAccounts = snapshot.getAccounts();
         final SortedSet<Account> newAccounts = newSnapshot.getAccounts();

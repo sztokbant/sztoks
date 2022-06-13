@@ -7,10 +7,11 @@ import static br.net.du.myequity.test.TestConstants.FIRST_NAME;
 import static br.net.du.myequity.test.TestConstants.LAST_NAME;
 import static br.net.du.myequity.test.TestConstants.PASSWORD;
 import static br.net.du.myequity.test.TestConstants.TITHING_PERCENTAGE;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.net.du.myequity.model.Snapshot;
 import br.net.du.myequity.model.SnapshotSummary;
@@ -56,7 +57,7 @@ class UserServiceTest {
 
         final Snapshot snapshot = snapshotService.findTopByUser(user);
         assertEquals(CURRENCY_UNIT, snapshot.getBaseCurrencyUnit());
-        assertTrue(TITHING_PERCENTAGE.compareTo(snapshot.getDefaultTithingPercentage()) == 0);
+        assertThat(snapshot.getDefaultTithingPercentage(), comparesEqualTo(TITHING_PERCENTAGE));
     }
 
     @Test

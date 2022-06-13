@@ -14,6 +14,9 @@ import static br.net.du.myequity.test.TestConstants.newSimpleLiabilityAccount;
 import static br.net.du.myequity.test.TestConstants.newSingleIncome;
 import static br.net.du.myequity.test.TestConstants.newSingleInvestment;
 import static br.net.du.myequity.test.TestConstants.newSingleTaxDeductibleDonation;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.comparesEqualTo;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -84,7 +87,7 @@ class SnapshotTest {
         assertEquals(FIRST_SNAPSHOT_MONTH, snapshot.getMonth());
 
         assertEquals(CURRENCY_UNIT, snapshot.getBaseCurrencyUnit());
-        assertTrue(TITHING_PERCENTAGE.compareTo(snapshot.getDefaultTithingPercentage()) == 0);
+        assertThat(snapshot.getDefaultTithingPercentage(), comparesEqualTo(TITHING_PERCENTAGE));
 
         assertNull(simpleAssetAccount.getSnapshot());
         assertNull(simpleLiabilityAccount.getSnapshot());
@@ -596,8 +599,8 @@ class SnapshotTest {
         final Map<String, BigDecimal> currencyConversionRates =
                 snapshot.getCurrencyConversionRates();
         assertEquals(2, currencyConversionRates.size());
-        assertTrue(new BigDecimal("0.80").compareTo(currencyConversionRates.get("EUR")) == 0);
-        assertTrue(new BigDecimal("5.00").compareTo(currencyConversionRates.get("BRL")) == 0);
+        assertThat(currencyConversionRates.get("EUR"), comparesEqualTo(new BigDecimal("0.80")));
+        assertThat(currencyConversionRates.get("BRL"), comparesEqualTo(new BigDecimal("5.00")));
     }
 
     @Test
@@ -642,8 +645,8 @@ class SnapshotTest {
         final Map<String, BigDecimal> currencyConversionRates =
                 snapshot.getCurrencyConversionRates();
         assertEquals(2, currencyConversionRates.size());
-        assertTrue(new BigDecimal("0.20").compareTo(currencyConversionRates.get("USD")) == 0);
-        assertTrue(new BigDecimal("0.16").compareTo(currencyConversionRates.get("EUR")) == 0);
+        assertThat(currencyConversionRates.get("USD"), comparesEqualTo(new BigDecimal("0.20")));
+        assertThat(currencyConversionRates.get("EUR"), comparesEqualTo(new BigDecimal("0.16")));
     }
 
     @Test
@@ -675,8 +678,8 @@ class SnapshotTest {
         final Map<String, BigDecimal> currencyConversionRates =
                 snapshot.getCurrencyConversionRates();
         assertEquals(2, currencyConversionRates.size());
-        assertTrue(new BigDecimal("1.25").compareTo(currencyConversionRates.get("USD")) == 0);
-        assertTrue(new BigDecimal("6.25").compareTo(currencyConversionRates.get("BRL")) == 0);
+        assertThat(currencyConversionRates.get("USD"), comparesEqualTo(new BigDecimal("1.25")));
+        assertThat(currencyConversionRates.get("BRL"), comparesEqualTo(new BigDecimal("6.25")));
     }
 
     @Test
@@ -709,8 +712,8 @@ class SnapshotTest {
         final Map<String, BigDecimal> currencyConversionRates =
                 snapshot.getCurrencyConversionRates();
         assertEquals(2, currencyConversionRates.size());
-        assertTrue(new BigDecimal("0.80").compareTo(currencyConversionRates.get("EUR")) == 0);
-        assertTrue(new BigDecimal("5.00").compareTo(currencyConversionRates.get("BRL")) == 0);
+        assertThat(currencyConversionRates.get("EUR"), comparesEqualTo(new BigDecimal("0.80")));
+        assertThat(currencyConversionRates.get("BRL"), comparesEqualTo(new BigDecimal("5.00")));
     }
 
     @Test
@@ -743,8 +746,8 @@ class SnapshotTest {
         final Map<String, BigDecimal> currencyConversionRates =
                 snapshot.getCurrencyConversionRates();
         assertEquals(2, currencyConversionRates.size());
-        assertTrue(new BigDecimal("0.80").compareTo(currencyConversionRates.get("EUR")) == 0);
-        assertTrue(new BigDecimal("5.00").compareTo(currencyConversionRates.get("BRL")) == 0);
+        assertThat(currencyConversionRates.get("EUR"), comparesEqualTo(new BigDecimal("0.80")));
+        assertThat(currencyConversionRates.get("BRL"), comparesEqualTo(new BigDecimal("5.00")));
     }
 
     @Test
@@ -778,8 +781,8 @@ class SnapshotTest {
         final Map<String, BigDecimal> currencyConversionRates =
                 snapshot.getCurrencyConversionRates();
         assertEquals(2, currencyConversionRates.size());
-        assertTrue(new BigDecimal("0.80").compareTo(currencyConversionRates.get("EUR")) == 0);
-        assertTrue(new BigDecimal("5.00").compareTo(currencyConversionRates.get("BRL")) == 0);
+        assertThat(currencyConversionRates.get("EUR"), comparesEqualTo(new BigDecimal("0.80")));
+        assertThat(currencyConversionRates.get("BRL"), comparesEqualTo(new BigDecimal("5.00")));
     }
 
     private Snapshot buildSnapshotWithMultipleCurrencies() {
@@ -850,30 +853,25 @@ class SnapshotTest {
             final String investmentsTotal,
             final String donationsTotal,
             final String taxDeductibleDonationsTotal) {
-        assertEquals(baseCurrencyUnit, snapshot.getBaseCurrencyUnit());
-        assertTrue(
-                new BigDecimal(assetsTotal).compareTo(snapshot.getTotalFor(AccountType.ASSET))
-                        == 0);
-        assertTrue(
-                new BigDecimal(liabilitiesTotal)
-                                .compareTo(snapshot.getTotalFor(AccountType.LIABILITY))
-                        == 0);
-        assertTrue(new BigDecimal(netWorth).compareTo(snapshot.getNetWorth()) == 0);
-
-        assertTrue(
-                new BigDecimal(incomesTotal).compareTo(snapshot.getTotalFor(TransactionType.INCOME))
-                        == 0);
-        assertTrue(
-                new BigDecimal(investmentsTotal)
-                                .compareTo(snapshot.getTotalFor(TransactionType.INVESTMENT))
-                        == 0);
-        assertTrue(
-                new BigDecimal(donationsTotal)
-                                .compareTo(snapshot.getTotalFor(TransactionType.DONATION))
-                        == 0);
-        assertTrue(
-                new BigDecimal(taxDeductibleDonationsTotal)
-                                .compareTo(snapshot.getTaxDeductibleDonationsTotal())
-                        == 0);
+        assertThat(snapshot.getBaseCurrencyUnit(), equalTo(baseCurrencyUnit));
+        assertThat(
+                snapshot.getTotalFor(AccountType.ASSET),
+                comparesEqualTo(new BigDecimal(assetsTotal)));
+        assertThat(
+                snapshot.getTotalFor(AccountType.LIABILITY),
+                comparesEqualTo(new BigDecimal(liabilitiesTotal)));
+        assertThat(snapshot.getNetWorth(), comparesEqualTo(new BigDecimal(netWorth)));
+        assertThat(
+                snapshot.getTotalFor(TransactionType.INCOME),
+                comparesEqualTo(new BigDecimal(incomesTotal)));
+        assertThat(
+                snapshot.getTotalFor(TransactionType.INVESTMENT),
+                comparesEqualTo(new BigDecimal(investmentsTotal)));
+        assertThat(
+                snapshot.getTotalFor(TransactionType.DONATION),
+                comparesEqualTo(new BigDecimal(donationsTotal)));
+        assertThat(
+                snapshot.getTaxDeductibleDonationsTotal(),
+                comparesEqualTo(new BigDecimal(taxDeductibleDonationsTotal)));
     }
 }
