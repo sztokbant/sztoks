@@ -17,7 +17,6 @@ import org.springframework.validation.SmartValidator;
 @Component
 @NoArgsConstructor
 public class NewCurrencyViewModelInputValidator implements SmartValidator {
-
     @Override
     public boolean supports(Class<?> aClass) {
         return NewCurrencyViewModelInput.class.equals(aClass);
@@ -67,8 +66,11 @@ public class NewCurrencyViewModelInputValidator implements SmartValidator {
         }
 
         try {
-            new BigDecimal(conversionRate);
-        } catch (final NumberFormatException e) {
+            final BigDecimal conversionRateBigDecimal = new BigDecimal(conversionRate);
+            if (conversionRateBigDecimal.compareTo(BigDecimal.ZERO) == 0) {
+                throw new IllegalArgumentException();
+            }
+        } catch (final Exception e) {
             errors.rejectValue(CONVERSION_RATE_FIELD, "Invalid.conversionRate");
         }
     }

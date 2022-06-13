@@ -49,11 +49,17 @@ public class EditCurrenciesViewModelInputValidator implements SmartValidator {
                 if (!snapshot.getCurrencyConversionRates().containsKey(currency)) {
                     throw new IllegalCurrencyException(currency);
                 }
+            } catch (final Exception e) {
+                errors.rejectValue(getFieldName(currency), "Invalid.currency");
+            }
 
-                final String conversionRate = entry.getValue();
-                new BigDecimal(conversionRate);
-            } catch (final IllegalCurrencyException | NumberFormatException e) {
-                errors.rejectValue(getFieldName(currency), "Invalid.value");
+            try {
+                final BigDecimal conversionRate = new BigDecimal(entry.getValue());
+                if (conversionRate.compareTo(BigDecimal.ZERO) == 0) {
+                    throw new IllegalArgumentException();
+                }
+            } catch (final Exception e) {
+                errors.rejectValue(getFieldName(currency), "Invalid.conversionRate");
             }
         }
     }

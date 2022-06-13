@@ -122,4 +122,19 @@ class EditCurrenciesViewModelInputValidatorTest {
         // THEN
         assertTrue(errors.hasFieldErrors("currencyConversionRates[EUR]"));
     }
+
+    @Test
+    public void validate_zero_hasErrors() {
+        // GIVEN
+        editCurrenciesViewModelInput.setCurrencyConversionRates(
+                ImmutableMap.of(
+                        "EUR", "0.00",
+                        "AUD", "1.5000"));
+
+        // WHEN
+        validator.validate(editCurrenciesViewModelInput, errors, snapshot);
+
+        // THEN
+        assertTrue(errors.hasFieldErrors("currencyConversionRates[EUR]"));
+    }
 }

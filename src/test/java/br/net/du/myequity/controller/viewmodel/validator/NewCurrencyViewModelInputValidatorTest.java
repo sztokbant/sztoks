@@ -23,7 +23,6 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
 class NewCurrencyViewModelInputValidatorTest {
-
     private NewCurrencyViewModelInputValidator validator;
 
     private NewCurrencyViewModelInput newCurrencyViewModelInput;
@@ -122,6 +121,19 @@ class NewCurrencyViewModelInputValidatorTest {
         // GIVEN
         newCurrencyViewModelInput.setCurrencyUnit("BRL");
         newCurrencyViewModelInput.setConversionRate("NotANumber");
+
+        // WHEN
+        validator.validate(newCurrencyViewModelInput, errors, snapshot);
+
+        // THEN
+        assertTrue(errors.hasFieldErrors(CONVERSION_RATE_FIELD));
+    }
+
+    @Test
+    public void validate_zero_hasErrors() {
+        // GIVEN
+        newCurrencyViewModelInput.setCurrencyUnit("BRL");
+        newCurrencyViewModelInput.setConversionRate("0.00");
 
         // WHEN
         validator.validate(newCurrencyViewModelInput, errors, snapshot);
