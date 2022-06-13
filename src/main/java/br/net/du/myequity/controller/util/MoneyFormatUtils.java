@@ -12,12 +12,16 @@ import org.joda.money.format.MoneyFormatter;
 import org.joda.money.format.MoneyFormatterBuilder;
 
 public class MoneyFormatUtils {
-    public static final int DEFAULT_SCALE = 2;
-
     private static final MoneyFormatter BRL_FORMATTER =
             new MoneyFormatterBuilder()
                     .appendLiteral("R$ ")
                     .appendAmount(MoneyAmountStyle.ASCII_DECIMAL_POINT_GROUP3_COMMA)
+                    .toFormatter();
+
+    private static final MoneyFormatter BTC_FORMATTER =
+            new MoneyFormatterBuilder()
+                    .appendLiteral("₿ ")
+                    .appendAmount(MoneyAmountStyle.ASCII_DECIMAL_POINT_NO_GROUPING)
                     .toFormatter();
 
     private static final MoneyFormatter CAD_FORMATTER =
@@ -42,6 +46,8 @@ public class MoneyFormatUtils {
             ImmutableMap.of(
                     CurrencyUnit.of("BRL"),
                     BRL_FORMATTER,
+                    CurrencyUnit.of("BTC"),
+                    BTC_FORMATTER,
                     CurrencyUnit.CAD,
                     CAD_FORMATTER,
                     CurrencyUnit.EUR,
@@ -54,9 +60,9 @@ public class MoneyFormatUtils {
                         ? MONEY_FORMATTERS.get(currencyUnit)
                         : DEFAULT_FORMATTER;
 
-        int scale = Math.min(currencyUnit.getDecimalPlaces(), DEFAULT_SCALE);
-
         return moneyFormatter.print(
-                Money.of(currencyUnit, amount.setScale(scale, RoundingMode.HALF_UP)));
+                Money.of(
+                        currencyUnit,
+                        amount.setScale(currencyUnit.getDecimalPlaces(), RoundingMode.HALF_UP)));
     }
 }

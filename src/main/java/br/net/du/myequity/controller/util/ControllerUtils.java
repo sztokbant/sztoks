@@ -1,7 +1,6 @@
 package br.net.du.myequity.controller.util;
 
 import static br.net.du.myequity.controller.interceptor.GlobalModelAttributes.LOGGED_USER;
-import static br.net.du.myequity.controller.util.MoneyFormatUtils.DEFAULT_SCALE;
 
 import br.net.du.myequity.exception.UserNotFoundException;
 import br.net.du.myequity.model.User;
@@ -15,6 +14,7 @@ import org.springframework.ui.Model;
 
 public class ControllerUtils {
     private static final String PERCENTAGE_TEMPLATE = "%s%%";
+    private static final int DEFAULT_SCALE = 2;
 
     public static User getLoggedUser(final Model model) {
         if (!model.containsAttribute(LOGGED_USER)) {
