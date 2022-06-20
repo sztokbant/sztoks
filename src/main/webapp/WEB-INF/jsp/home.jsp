@@ -68,11 +68,10 @@
                             <div class="col col-snapshot-delete-${deviceType}">
                                 <c:if test="${isFirst and snapshots.size() gt 1}">
                                     <form:form method="post" id="deleteSnapshotForm" action="${contextPath}/snapshot/delete/${snapshot.id}"></form:form>
-                                    <a href="#"
-                                       style="margin-left: 7px; text-decoration: none;"
+                                    <span style="cursor: pointer; margin-left: 7px;"
                                        onclick="if (confirm('Are you sure you want to PERMANENTLY delete snapshot \'${snapshot.name}\'?')) { document.forms['deleteSnapshotForm'].submit(); }">
                                         &#128465;&#65039;
-                                    </a>
+                                    </span>
                                     <c:set var="isFirst" value="false"/>
                                 </c:if>
                             </div>

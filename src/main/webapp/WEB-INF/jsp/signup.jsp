@@ -141,7 +141,7 @@
 
         <div class="text-center">
             <button class="btn btn-lg btn-primary btn-block btn-sztoks btn-form-${deviceType}" type="submit"
-                    onClick="this.form.submit(); this.disabled=true; this.innerText='Signing up...';">Sign up</button>
+                    onclick="this.form.submit(); this.disabled=true; this.innerText='Signing up...';">Sign up</button>
         </div>
         <div class="text-center paragraph-${deviceType}">Already have an account? <a href="${contextPath}/login">Log in</a>.</div>
     </form:form>

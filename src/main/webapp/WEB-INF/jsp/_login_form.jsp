@@ -29,7 +29,7 @@
 
         <div class="text-center">
             <button class="btn btn-lg btn-primary btn-block btn-sztoks btn-form-${deviceType}" type="submit"
-                    onClick="this.form.submit(); this.disabled=true; this.innerText='Logging in...';">Log in</button>
+                    onclick="this.form.submit(); this.disabled=true; this.innerText='Logging in...';">Log in</button>
         </div>
         <div class="text-center paragraph-${deviceType}">Don't have an account? <a href="${contextPath}/signup">Sign up for Sztoks</a>.</div>
     </form:form>

@@ -83,19 +83,19 @@
                                     <div class="navigation-buttons-padding-bottom">
                                 <c:choose>
                                     <c:when test="${not snapshot.newSnapshotAllowed}">
-                                        <a class="btn btn-sztoks btn-new-snapshot-common btn-new-snapshot-${deviceType}"
-                                           href="#"
-                                           onclick="alert('It is too early to create a Snapshot for the upcoming month. Please, try again after the 15th.');" class="btn btn-sztoks btn-new-snapshot">
+                                        <span style="cursor: pointer;"
+                                              class="btn btn-sztoks btn-new-snapshot-common btn-new-snapshot-${deviceType}"
+                                              onclick="alert('It is too early to create a Snapshot for the upcoming month. Please, try again after the 15th.');">
                                             &#x2795;&nbsp; Snapshot
-                                        </a>
+                                        </span>
                                     </c:when>
                                     <c:otherwise>
                                         <form:form method="post" id="newSnapshotForm" action="${contextPath}/snapshot/new" />
-                                        <a class="btn btn-sztoks btn-new-snapshot-common btn-new-snapshot-${deviceType}"
-                                           href="#"
-                                           onClick="if (confirm('Are you sure you want to create a new snapshot based on the current snapshot?')) { document.forms['newSnapshotForm'].submit(); }">
+                                        <span style="cursor: pointer;"
+                                              class="btn btn-sztoks btn-new-snapshot-common btn-new-snapshot-${deviceType}"
+                                              onclick="if (confirm('Are you sure you want to create a new snapshot based on the current snapshot?')) { document.forms['newSnapshotForm'].submit(); }">
                                             &#x2795;&nbsp; Snapshot
-                                        </a>
+                                        </span>
                                     </c:otherwise>
                                 </c:choose>
                                     </div>
