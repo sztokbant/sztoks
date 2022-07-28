@@ -35,7 +35,7 @@ https://opensource.org/licenses/MIT). See the LICENSE.txt file for details.
 
 ## Development
 
-_Sztoks_ was built using Spring Boot and Java technology with a web front-end.
+_Sztoks_ is built using Spring Boot and Java technology with a web front-end.
 
 To run from IntelliJ IDEA, create a Gradle run configuration, set *Tasks* as
 `:bootRun`, and set the following "Environment variables" in order to point to
