@@ -4,16 +4,13 @@ import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO
 import static br.net.du.myequity.controller.util.ControllerConstants.REDIRECT_TO_LOGIN;
 
 import br.net.du.myequity.exception.UserNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice(annotations = WebController.class)
+@Slf4j
 public class WebControllerExceptionHandler {
-
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(WebControllerExceptionHandler.class);
 
     @ExceptionHandler(UserNotFoundException.class)
     public String handleUserNotFoundException() {
@@ -23,7 +20,7 @@ public class WebControllerExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public String handleException(final Exception exception) {
-        LOGGER.error(exception.getMessage(), exception);
+        log.error(exception.getMessage(), exception);
         return REDIRECT_TO_HOME;
     }
 }

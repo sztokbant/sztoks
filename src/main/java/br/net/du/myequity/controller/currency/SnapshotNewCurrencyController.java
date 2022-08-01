@@ -103,11 +103,11 @@ public class SnapshotNewCurrencyController {
 
         model.addAttribute(CURRENCIES, availableCurrencies);
 
-        try {
+        // There may be a selected currency after a post error
+        if (newCurrencyViewModelInput.getCurrencyUnit() != null) {
             final CurrencyUnit selectedCurrency =
                     CurrencyUnit.of(newCurrencyViewModelInput.getCurrencyUnit());
             model.addAttribute(SELECTED_CURRENCY, selectedCurrency.getCode());
-        } catch (final Exception e) {
         }
 
         model.addAttribute(NEW_CURRENCY_FORM, newCurrencyViewModelInput);
