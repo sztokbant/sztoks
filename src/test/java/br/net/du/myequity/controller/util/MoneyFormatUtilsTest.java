@@ -10,28 +10,26 @@ class MoneyFormatUtilsTest {
     @Test
     public void format_usdBeyondMaxDecimalPlaces_roundsUp() {
         // GIVEN
-        final String currencyCode = "USD";
+        final CurrencyUnit usdCurrency = CurrencyUnit.USD;
         final String amount = "0.0450";
 
         // WHEN
-        final String formatted =
-                MoneyFormatUtils.format(CurrencyUnit.of(currencyCode), new BigDecimal(amount));
+        final String formatted = MoneyFormatUtils.format(usdCurrency, new BigDecimal(amount));
 
         // THEN
-        assertEquals("$0.05", formatted);
+        assertEquals(usdCurrency.getSymbol() + "0.05", formatted);
     }
 
     @Test
     public void format_xxxBeyondMaxDecimalPlaces_roundsUp() {
         // GIVEN
-        final String currencyCode = "XXX";
+        final CurrencyUnit xxxCurrency = CurrencyUnit.of("XXX");
         final String amount = "0.9999";
 
         // WHEN
-        final String formatted =
-                MoneyFormatUtils.format(CurrencyUnit.of(currencyCode), new BigDecimal(amount));
+        final String formatted = MoneyFormatUtils.format(xxxCurrency, new BigDecimal(amount));
 
         // THEN
-        assertEquals("XXX1", formatted);
+        assertEquals(xxxCurrency.getSymbol() + "1", formatted);
     }
 }
