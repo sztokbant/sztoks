@@ -1,0 +1,176 @@
+package br.net.du.sztoks.controller.account;
+
+import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
+import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
+import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_MONTH;
+import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_YEAR;
+import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import br.net.du.sztoks.controller.SnapshotControllerAjaxTestBase;
+import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
+import br.net.du.sztoks.model.Snapshot;
+import br.net.du.sztoks.model.User;
+import br.net.du.sztoks.model.account.Account;
+import br.net.du.sztoks.model.account.FutureTithingAccount;
+import br.net.du.sztoks.service.AccountService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedSet;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestBase {
+
+    static final Long ACCOUNT_ID = 1L;
+
+    static final BigDecimal CURRENT_FUTURE_TITHING_ACCOUNT_REFERENCE_AMOUNT =
+            new BigDecimal("500.00");
+    static final Long FUTURE_TITHING_ACCOUNT_ID = 1008L;
+
+    static final String JSON_ACCOUNT_TYPE = "accountType";
+    static final String JSON_AVAILABLE_CREDIT = "availableCredit";
+    static final String JSON_BALANCE = "balance";
+    static final String JSON_CURRENCY_UNIT = "currencyUnit";
+    static final String JSON_CURRENCY_UNIT_SYMBOL = "currencyUnitSymbol";
+    static final String JSON_CURRENT_SHARE_VALUE = "currentShareValue";
+    static final String JSON_DUE_DATE = "dueDate";
+    static final String JSON_NET_WORTH = "netWorth";
+    static final String JSON_AMOUNT_INVESTED = "amountInvested";
+    static final String JSON_AVERAGE_PURCHASE_PRICE = "averagePurchasePrice";
+    static final String JSON_PROFIT_PERCENTAGE = "profitPercentage";
+    static final String JSON_REMAINING_BALANCE = "remainingBalance";
+    static final String JSON_SHARES = "shares";
+    static final String JSON_STATEMENT = "statement";
+    static final String JSON_TOTAL_CREDIT = "totalCredit";
+    static final String JSON_TOTAL_FOR_ACCOUNT_TYPE = "totalForAccountType";
+    static final String JSON_USED_CREDIT_PERCENTAGE = "usedCreditPercentage";
+
+    final String newValue;
+
+    @MockBean AccountService accountService;
+
+    Account account;
+
+    AccountAjaxControllerTestBase(final String url, final String newValue) {
+        super(url);
+        this.newValue = newValue;
+    }
+
+    @BeforeEach
+    public void ajaxSnapshotControllerTestBaseSetUp() throws Exception {
+        snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of(),
+                        ImmutableMap.of());
+        snapshot.setId(SNAPSHOT_ID);
+
+        final ValueUpdateJsonRequest valueUpdateJsonRequest =
+                ValueUpdateJsonRequest.builder()
+                        .snapshotId(SNAPSHOT_ID)
+                        .entityId(ACCOUNT_ID)
+                        .newValue(newValue)
+                        .build();
+        requestContent = new ObjectMapper().writeValueAsString(valueUpdateJsonRequest);
+    }
+
+    @Test
+    public void post_accountNotFound_clientError() throws Exception {
+        // GIVEN
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        snapshot.setUser(user);
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+
+        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.empty());
+
+        // WHEN
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
+
+        // THEN
+        resultActions.andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void post_accountDoesNotBelongToUser_clientError() throws Exception {
+        // GIVEN
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        snapshot.setUser(user);
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+
+        final User anotherUser = new User(user.getEmail(), user.getFirstName(), user.getLastName());
+        final Long anotherUserId = user.getId() * 7;
+        anotherUser.setId(anotherUserId);
+
+        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+
+        // WHEN
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
+
+        // THEN
+        resultActions.andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void post_accountDoesNotBelongInSnapshot_clientError() throws Exception {
+        // GIVEN
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        snapshot.setUser(user);
+        when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
+
+        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+
+        // WHEN
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
+
+        // THEN
+        resultActions.andExpect(status().is4xxClientError());
+    }
+
+    protected FutureTithingAccount prepareFutureTithingAccount() {
+        final FutureTithingAccount futureTithingAccount =
+                new FutureTithingAccount(CURRENCY_UNIT, LocalDate.now(), BigDecimal.ZERO);
+
+        snapshot.addAccount(futureTithingAccount);
+        futureTithingAccount.setReferenceAmount(CURRENT_FUTURE_TITHING_ACCOUNT_REFERENCE_AMOUNT);
+        futureTithingAccount.setId(FUTURE_TITHING_ACCOUNT_ID);
+
+        return futureTithingAccount;
+    }
+}
