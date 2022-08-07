@@ -7,7 +7,7 @@ $(document).ready(function() {
 
   document.getElementById("select_txn_recurrence_${entity.id}").onchange =
     (evt) => {
-      data.newValue = evt.srcElement.value;
+      data.newValue = evt.target.value;
       ajaxPost("transaction/updateRecurrencePolicy", data, transactionRecurrenceUpdateSuccessCallback);
     };
 })

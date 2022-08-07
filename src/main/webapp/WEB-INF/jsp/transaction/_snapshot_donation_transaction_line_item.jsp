@@ -17,7 +17,7 @@ $(document).ready(function() {
 
   document.getElementById("select_txn_donation_category_${entity.id}").onchange =
     (evt) => {
-      data.newValue = evt.srcElement.value;
+      data.newValue = evt.target.value;
       ajaxPost("transaction/updateCategory", data, transactionCategoryUpdateSuccessCallback);
     };
 });

@@ -27,7 +27,7 @@ $(document).ready(function() {
 
   currencySelect.onchange =
     (evt) => {
-      newValue = evt.srcElement.value;
+      newValue = evt.target.value;
       $("#selected_currency").html(newValue);
     };
 });

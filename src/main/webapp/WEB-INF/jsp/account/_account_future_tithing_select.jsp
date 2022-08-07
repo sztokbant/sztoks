@@ -7,7 +7,7 @@ $(document).ready(function() {
 
   document.getElementById("select_account_future_tithing_${entity.accountId}").onchange =
     (evt) => {
-      data.newValue = evt.srcElement.value;
+      data.newValue = evt.target.value;
       ajaxPost("snapshot/updateFutureTithingPolicy", data, accountFutureTithingUpdateSuccessCallback);
     };
 })
