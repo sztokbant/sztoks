@@ -6,18 +6,15 @@ import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.account.AccountType;
 import br.net.du.sztoks.service.SnapshotService;
 import java.util.function.BiFunction;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 @Component
+@Slf4j
 public class SnapshotUpdater {
-    private static Logger LOG = Logger.getLogger(SnapshotUpdater.class.getName());
-    private static Level LEVEL = Level.INFO;
-
     @Autowired private SnapshotService snapshotService;
     @Autowired private SnapshotUtils snapshotUtils;
 
@@ -31,8 +28,7 @@ public class SnapshotUpdater {
                 snapshotUtils.validateLockAndRefreshSnapshot(
                         model, valueUpdateJsonRequest.getSnapshotId());
 
-        LOG.log(
-                LEVEL,
+        log.debug(
                 "[SZTOKS] Locked snapshot, assetsTotal = "
                         + snapshot.getTotalFor(AccountType.ASSET)
                         + ", liabilitiesTotal = "
@@ -40,7 +36,7 @@ public class SnapshotUpdater {
 
         final Object jsonResponse = function.apply(valueUpdateJsonRequest, snapshot);
 
-        LOG.log(LEVEL, "[SZTOKS] Saving snapshot...");
+        log.debug("[SZTOKS] Saving snapshot...");
         snapshotService.save(snapshot);
 
         return jsonResponse;

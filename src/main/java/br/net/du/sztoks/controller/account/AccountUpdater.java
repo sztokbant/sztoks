@@ -11,18 +11,15 @@ import br.net.du.sztoks.service.AccountService;
 import br.net.du.sztoks.service.SnapshotService;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 @Component
+@Slf4j
 public class AccountUpdater {
-    private static Logger LOG = Logger.getLogger(AccountUpdater.class.getName());
-    private static Level LEVEL = Level.INFO;
-
     @Autowired private SnapshotService snapshotService;
 
     @Autowired private AccountService accountService;
@@ -45,8 +42,7 @@ public class AccountUpdater {
                         : snapshotUtils.validateSnapshot(model, snapshotId);
 
         if (isSnapshotImpactingField) {
-            LOG.log(
-                    LEVEL,
+            log.debug(
                     "[SZTOKS] Locked snapshot, assetsTotal = "
                             + snapshot.getTotalFor(AccountType.ASSET)
                             + ", liabilitiesTotal = "
@@ -74,7 +70,7 @@ public class AccountUpdater {
 
         final Object jsonResponse = function.apply(valueUpdateJsonRequest, account);
 
-        LOG.log(LEVEL, "[SZTOKS] Saving account...");
+        log.debug("[SZTOKS] Saving account...");
         accountService.save(account);
 
         // DEBUG
@@ -86,11 +82,11 @@ public class AccountUpdater {
 
         if (isSnapshotImpactingField) {
             if (futureTithingAccountOpt.isPresent()) {
-                LOG.log(LEVEL, "[SZTOKS] Saving future tithing account...");
+                log.debug("[SZTOKS] Saving future tithing account...");
                 accountService.save(futureTithingAccountOpt.get());
             }
 
-            LOG.log(LEVEL, "[SZTOKS] Saving snapshot...");
+            log.debug("[SZTOKS] Saving snapshot...");
             snapshotService.save(snapshot);
         }
 

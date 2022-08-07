@@ -31,8 +31,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -57,6 +55,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.SortNatural;
 import org.joda.money.CurrencyUnit;
 
@@ -65,10 +64,8 @@ import org.joda.money.CurrencyUnit;
         name = "snapshots",
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "year", "month"}))
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@Slf4j
 public class Snapshot implements Comparable<Snapshot> {
-    private static Logger LOG = Logger.getLogger(Snapshot.class.getName());
-    private static Level LEVEL = Level.INFO;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -346,7 +343,7 @@ public class Snapshot implements Comparable<Snapshot> {
 
             assetsTotal = newAmount;
 
-            LOG.log(LEVEL, "[SZTOKS] new assetsTotal = " + newAmount);
+            log.debug("[SZTOKS] new assetsTotal = " + newAmount);
 
         } else if (accountType.equals(AccountType.LIABILITY)) {
             final BigDecimal newAmount =
@@ -356,8 +353,7 @@ public class Snapshot implements Comparable<Snapshot> {
 
             liabilitiesTotal = newAmount;
 
-            LOG.log(LEVEL, "[SZTOKS] new liabilitiesTotal = " + newAmount);
-
+            log.debug("[SZTOKS] new liabilitiesTotal = " + newAmount);
         } else {
             throw new IllegalStateException("Unknown account type");
         }
@@ -491,8 +487,7 @@ public class Snapshot implements Comparable<Snapshot> {
                             : incomesTotal.add(toBaseCurrency(currencyUnit, amount));
             incomesTotal = newAmount;
 
-            LOG.log(LEVEL, "[SZTOKS] new incomesTotal = " + newAmount);
-
+            log.debug("[SZTOKS] new incomesTotal = " + newAmount);
         } else if (transactionType == TransactionType.INVESTMENT) {
             final BigDecimal newAmount =
                     (investmentsTotal == null)
@@ -500,8 +495,7 @@ public class Snapshot implements Comparable<Snapshot> {
                             : investmentsTotal.add(toBaseCurrency(currencyUnit, amount));
             investmentsTotal = newAmount;
 
-            LOG.log(LEVEL, "[SZTOKS] new investmentsTotal = " + newAmount);
-
+            log.debug("[SZTOKS] new investmentsTotal = " + newAmount);
         } else if (transactionType == TransactionType.DONATION) {
             final BigDecimal newAmount =
                     (donationsTotal == null)
@@ -509,7 +503,7 @@ public class Snapshot implements Comparable<Snapshot> {
                             : donationsTotal.add(toBaseCurrency(currencyUnit, amount));
             donationsTotal = newAmount;
 
-            LOG.log(LEVEL, "[SZTOKS] new donationsTotal = " + newAmount);
+            log.debug("[SZTOKS] new donationsTotal = " + newAmount);
 
             if (isTaxDeductibleDonation) {
                 updateTaxDeductibleDonationsTotal(currencyUnit, amount);
