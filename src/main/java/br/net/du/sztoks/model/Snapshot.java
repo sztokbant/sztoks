@@ -305,6 +305,12 @@ public class Snapshot implements Comparable<Snapshot> {
         accounts.add(account);
         account.setSnapshot(this);
 
+        if (account instanceof FutureTithingCapable) {
+            updateFutureTithingAmount(
+                    account.getCurrencyUnit(),
+                    ((FutureTithingCapable) account).getFutureTithingReferenceAmount());
+        }
+
         updateNetWorth(account.getAccountType(), account.getCurrencyUnit(), account.getBalance());
     }
 

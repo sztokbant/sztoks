@@ -163,6 +163,11 @@ abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestB
         resultActions.andExpect(status().is4xxClientError());
     }
 
+    /**
+     * This method should only be used to populate a FutureTithingAccount in test Snapshots that do
+     * not already contain a FutureTithingAccount, e.g. when all Snapshot accounts are liabilities
+     * or assets with FutureTithingPolicy.NONE.
+     */
     protected FutureTithingAccount prepareFutureTithingAccount() {
         final FutureTithingAccount futureTithingAccount =
                 new FutureTithingAccount(CURRENCY_UNIT, LocalDate.now(), BigDecimal.ZERO);

@@ -2,6 +2,8 @@ package br.net.du.sztoks.controller.account;
 
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
@@ -12,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.sztoks.model.account.AccountType;
-import br.net.du.sztoks.model.account.FutureTithingAccount;
 import br.net.du.sztoks.model.account.FutureTithingPolicy;
 import br.net.du.sztoks.model.account.SimpleAssetAccount;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -71,7 +72,7 @@ class SnapshotRemoveAccountControllerTest extends AccountAjaxControllerTestBase 
         snapshot.setUser(user);
         snapshot.addAccount(account);
 
-        final FutureTithingAccount futureTithingAccount = prepareFutureTithingAccount();
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("84.15")));
 
         when(snapshotService.findByIdAndUserId(SNAPSHOT_ID, user.getId()))
                 .thenReturn(Optional.of(snapshot));
@@ -98,11 +99,11 @@ class SnapshotRemoveAccountControllerTest extends AccountAjaxControllerTestBase 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
         assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
         assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
-        assertEquals("$-60.15", jsonNode.get(JSON_NET_WORTH).asText());
+        assertEquals("$0.00", jsonNode.get(JSON_NET_WORTH).asText());
         assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
         assertEquals("$0.00", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
 
         verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
-        verify(accountService).save(futureTithingAccount);
+        verify(accountService).save(snapshot.getFutureTithingAccount(CURRENCY_UNIT));
     }
 }
