@@ -192,7 +192,7 @@ public class Snapshot implements Comparable<Snapshot> {
 
         consolidateTithingAccountsToBaseCurrency(baseCurrencyUnit, accounts);
         addNonTithingAccounts(accounts);
-        addTransactionAccounts(year, month, transactions);
+        addTransactions(year, month, transactions);
     }
 
     public void setDefaultTithingPercentage(@NonNull final BigDecimal newDefaultTithingPercentage) {
@@ -245,7 +245,7 @@ public class Snapshot implements Comparable<Snapshot> {
                 .forEach(account -> addAccount(account));
     }
 
-    private void addTransactionAccounts(
+    private void addTransactions(
             final int year, final int month, @NonNull final List<Transaction> transactions) {
         transactions.stream()
                 .forEach(
