@@ -5,6 +5,7 @@ import static br.net.du.sztoks.model.util.ModelConstants.DIVISION_SCALE;
 
 import br.net.du.sztoks.model.totals.AccountSubtypeDisplayGroup;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -50,7 +51,7 @@ public class SharedBillPayableAccount extends SharedBillAccount {
         }
 
         if (dueDay < 1 || dueDay > 31) {
-            throw new IllegalArgumentException("numberOfPartners must be between 1 and 31");
+            throw new IllegalArgumentException("dueDay must be between 1 and 31");
         }
 
         setCreateDate(createDate);
@@ -86,9 +87,6 @@ public class SharedBillPayableAccount extends SharedBillAccount {
         final BigDecimal numberOfPartners = new BigDecimal(this.numberOfPartners);
         return numberOfPartners
                 .multiply(billAmount)
-                .divide(
-                        numberOfPartners.add(BigDecimal.ONE),
-                        DIVISION_SCALE,
-                        BigDecimal.ROUND_HALF_UP);
+                .divide(numberOfPartners.add(BigDecimal.ONE), DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 }
