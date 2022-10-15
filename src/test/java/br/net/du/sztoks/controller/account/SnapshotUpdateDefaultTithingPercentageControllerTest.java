@@ -94,6 +94,7 @@ class SnapshotUpdateDefaultTithingPercentageControllerTest extends AccountAjaxCo
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
+        // Only checking fields relevant to the AJAX callback
         assertThat(jsonNode.get(JSON_DEFAULT_TITHING_PERCENTAGE).asText(), is("30.00%"));
 
         assertThat(jsonNode.get(JSON_ACCOUNT_TYPE).asText(), is(AccountType.LIABILITY.toString()));
