@@ -74,7 +74,8 @@ class CreditCardAccountStatementUpdateControllerTest extends AccountAjaxControll
         snapshot.setUser(user);
         snapshot.addAccount(account);
 
-        final FutureTithingAccount futureTithingAccount = prepareFutureTithingAccount();
+        final FutureTithingAccount futureTithingAccount = initializeEmptyFutureTithingAccount();
+        futureTithingAccount.setReferenceAmount(new BigDecimal("500.00"));
 
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 

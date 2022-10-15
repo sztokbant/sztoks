@@ -28,8 +28,6 @@ abstract class AccountAjaxControllerTestBase extends AjaxControllerTestBase {
 
     static final Long ACCOUNT_ID = 1L;
 
-    static final BigDecimal CURRENT_FUTURE_TITHING_ACCOUNT_REFERENCE_AMOUNT =
-            new BigDecimal("500.00");
     static final Long FUTURE_TITHING_ACCOUNT_ID = 1008L;
 
     final String newValue;
@@ -128,16 +126,15 @@ abstract class AccountAjaxControllerTestBase extends AjaxControllerTestBase {
     }
 
     /**
-     * This method should only be used to populate a FutureTithingAccount in test Snapshots that do
-     * not already contain a FutureTithingAccount, e.g. when all Snapshot accounts are liabilities
-     * or assets with FutureTithingPolicy.NONE.
+     * This method should only be used to initialize an empty FutureTithingAccount in test Snapshots
+     * that do not already contain a FutureTithingAccount, e.g. when all Snapshot accounts are
+     * liabilities or assets with FutureTithingPolicy.NONE.
      */
-    protected FutureTithingAccount prepareFutureTithingAccount() {
+    protected FutureTithingAccount initializeEmptyFutureTithingAccount() {
         final FutureTithingAccount futureTithingAccount =
                 new FutureTithingAccount(CURRENCY_UNIT, LocalDate.now(), BigDecimal.ZERO);
 
         snapshot.addAccount(futureTithingAccount);
-        futureTithingAccount.setReferenceAmount(CURRENT_FUTURE_TITHING_ACCOUNT_REFERENCE_AMOUNT);
         futureTithingAccount.setId(FUTURE_TITHING_ACCOUNT_ID);
 
         return futureTithingAccount;

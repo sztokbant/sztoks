@@ -62,7 +62,7 @@ class PayableAccountDueDateUpdateControllerTest extends AccountAjaxControllerTes
         snapshot.setUser(user);
         snapshot.addAccount(account);
 
-        final FutureTithingAccount futureTithingAccount = prepareFutureTithingAccount();
+        final FutureTithingAccount futureTithingAccount = initializeEmptyFutureTithingAccount();
 
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
