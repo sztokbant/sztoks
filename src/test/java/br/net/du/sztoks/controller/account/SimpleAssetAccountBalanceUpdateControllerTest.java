@@ -21,6 +21,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import br.net.du.sztoks.controller.ControllerTestConstants;
 import br.net.du.sztoks.model.account.AccountType;
 import br.net.du.sztoks.model.account.CreditCardAccount;
 import br.net.du.sztoks.model.account.FutureTithingPolicy;
@@ -53,7 +54,7 @@ class SimpleAssetAccountBalanceUpdateControllerTest extends AccountAjaxControlle
     public void createEntity() {
         account =
                 new SimpleAssetAccount(
-                        ACCOUNT_NAME,
+                        ControllerTestConstants.ACCOUNT_NAME,
                         CURRENCY_UNIT,
                         FutureTithingPolicy.NONE,
                         LocalDate.now(),

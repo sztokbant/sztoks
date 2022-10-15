@@ -1,5 +1,6 @@
 package br.net.du.sztoks.controller.account;
 
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_NAME;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,14 +10,10 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.sztoks.controller.AjaxControllerTestBase;
+import br.net.du.sztoks.controller.ControllerTestConstants;
 import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.sztoks.model.Snapshot;
-import br.net.du.sztoks.model.User;
-import br.net.du.sztoks.model.account.Account;
 import br.net.du.sztoks.model.account.SimpleLiabilityAccount;
-import br.net.du.sztoks.service.AccountService;
-import br.net.du.sztoks.service.SnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -26,7 +23,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -34,21 +30,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AccountRenameControllerTest extends AjaxControllerTestBase {
+class AccountRenameControllerTest extends AccountAjaxControllerTestBase {
 
-    private static final Long ACCOUNT_ID = 1L;
-    private static final String JSON_NAME = "name";
     private static final String NEW_ACCOUNT_NAME_NOT_TRIMMED = "   Wells Fargo Mortgage   ";
     private static final String NEW_ACCOUNT_NAME_TRIMMED = "Wells Fargo Mortgage";
 
-    @MockBean protected AccountService accountService;
-
-    protected Account account;
-
-    @MockBean private SnapshotService snapshotService;
-
     public AccountRenameControllerTest() {
-        super("/snapshot/renameAccount");
+        super("/snapshot/renameAccount", NEW_ACCOUNT_NAME_NOT_TRIMMED);
     }
 
     @BeforeEach
@@ -57,7 +45,7 @@ class AccountRenameControllerTest extends AjaxControllerTestBase {
                 ValueUpdateJsonRequest.builder()
                         .snapshotId(SNAPSHOT_ID)
                         .entityId(ACCOUNT_ID)
-                        .newValue(NEW_ACCOUNT_NAME_NOT_TRIMMED)
+                        .newValue(newValue)
                         .build();
         requestContent = new ObjectMapper().writeValueAsString(valueUpdateJsonRequest);
     }
@@ -66,52 +54,11 @@ class AccountRenameControllerTest extends AjaxControllerTestBase {
     public void createEntity() {
         account =
                 new SimpleLiabilityAccount(
-                        ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now(), BigDecimal.ZERO);
+                        ControllerTestConstants.ACCOUNT_NAME,
+                        CURRENCY_UNIT,
+                        LocalDate.now(),
+                        BigDecimal.ZERO);
         account.setId(ACCOUNT_ID);
-    }
-
-    @Test
-    public void post_accountNotFound_clientError() throws Exception {
-        // GIVEN
-        when(userService.findByEmail(user.getEmail())).thenReturn(user);
-
-        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.empty());
-
-        // WHEN
-        final ResultActions resultActions =
-                mvc.perform(
-                        MockMvcRequestBuilders.post(url)
-                                .with(csrf())
-                                .with(user(user.getEmail()))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(requestContent));
-
-        // THEN
-        resultActions.andExpect(status().is4xxClientError());
-    }
-
-    @Test
-    public void post_accountDoesNotBelongToUser_clientError() throws Exception {
-        // GIVEN
-        when(userService.findByEmail(user.getEmail())).thenReturn(user);
-
-        final User anotherUser = new User(user.getEmail(), user.getFirstName(), user.getLastName());
-        final Long anotherUserId = user.getId() * 7;
-        anotherUser.setId(anotherUserId);
-
-        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
-
-        // WHEN
-        final ResultActions resultActions =
-                mvc.perform(
-                        MockMvcRequestBuilders.post(url)
-                                .with(csrf())
-                                .with(user(user.getEmail()))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(requestContent));
-
-        // THEN
-        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test

@@ -1,6 +1,7 @@
 package br.net.du.sztoks.controller;
 
 public class ControllerTestConstants {
+    public static final String ACCOUNT_NAME = "Account Name";
 
     public static final String JSON_ACCOUNT_SUBTYPE = "accountSubtype";
     public static final String JSON_ACCOUNT_TYPE = "accountType";
@@ -18,6 +19,7 @@ public class ControllerTestConstants {
     public static final String JSON_DUE_DATE = "dueDate";
     public static final String JSON_FUTURE_TITHING_BALANCE = "futureTithingBalance";
     public static final String JSON_INVESTMENT_TOTALS = "investmentTotals";
+    public static final String JSON_NAME = "name";
     public static final String JSON_NET_WORTH = "netWorth";
     public static final String JSON_PROFIT_PERCENTAGE = "profitPercentage";
     public static final String JSON_REMAINING_BALANCE = "remainingBalance";
