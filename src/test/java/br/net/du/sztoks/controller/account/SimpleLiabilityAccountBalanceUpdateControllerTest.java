@@ -2,7 +2,8 @@ package br.net.du.sztoks.controller.account;
 
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -30,7 +31,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 class SimpleLiabilityAccountBalanceUpdateControllerTest extends AccountAjaxControllerTestBase {
 
-    private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
+    private static final String ACCOUNT_NAME = "Mortgage";
     private static final BigDecimal CURRENT_BALANCE = new BigDecimal("99.00");
 
     SimpleLiabilityAccountBalanceUpdateControllerTest() {
@@ -41,7 +42,7 @@ class SimpleLiabilityAccountBalanceUpdateControllerTest extends AccountAjaxContr
     public void createEntity() {
         account =
                 new SimpleLiabilityAccount(
-                        "Mortgage", CURRENCY_UNIT, LocalDate.now(), CURRENT_BALANCE);
+                        ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now(), CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
     }
 
@@ -76,11 +77,23 @@ class SimpleLiabilityAccountBalanceUpdateControllerTest extends AccountAjaxContr
         assertNotNull(resultContentAsString);
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertEquals("$108.00", jsonNode.get(JSON_BALANCE).asText());
-        assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
-        assertEquals("$-108.00", jsonNode.get(JSON_NET_WORTH).asText());
-        assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals("$108.00", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+
+        // Only checking fields relevant to the AJAX callback
+        assertThat(jsonNode.get(JSON_BALANCE).asText(), is("$108.00"));
+
+        assertThat(
+                jsonNode.get(JSON_ACCOUNT_SUBTYPE).asText(),
+                is(SimpleLiabilityAccount.ACCOUNT_SUB_TYPE));
+        assertThat(jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText(), is("$108.00"));
+
+        assertThat(jsonNode.get(JSON_ACCOUNT_TYPE).asText(), is(AccountType.LIABILITY.toString()));
+        assertThat(jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_SUBTYPE).asText(), is("$108.00"));
+
+        assertThat(jsonNode.get(JSON_FUTURE_TITHING_BALANCE).asText(), is("null"));
+        assertThat(jsonNode.get(JSON_TOTAL_TITHING_BALANCE).asText(), is("null"));
+        assertThat(jsonNode.get(JSON_TOTAL_LIABILITY).asText(), is("null"));
+
+        assertThat(jsonNode.get(JSON_NET_WORTH).asText(), is("$-108.00"));
 
         verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
     }

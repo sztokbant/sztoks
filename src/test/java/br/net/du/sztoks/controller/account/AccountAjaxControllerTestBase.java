@@ -39,6 +39,7 @@ abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestB
             new BigDecimal("500.00");
     static final Long FUTURE_TITHING_ACCOUNT_ID = 1008L;
 
+    static final String JSON_ACCOUNT_SUBTYPE = "accountSubtype";
     static final String JSON_ACCOUNT_TYPE = "accountType";
     static final String JSON_AVAILABLE_CREDIT = "availableCredit";
     static final String JSON_BALANCE = "balance";
@@ -49,14 +50,19 @@ abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestB
     static final String JSON_NET_WORTH = "netWorth";
     static final String JSON_AMOUNT_INVESTED = "amountInvested";
     static final String JSON_AVERAGE_PURCHASE_PRICE = "averagePurchasePrice";
+    static final String JSON_CREDIT_CARD_TOTALS_FOR_CURRENCY_UNIT =
+            "creditCardTotalsForCurrencyUnit";
     static final String JSON_DEFAULT_TITHING_PERCENTAGE = "defaultTithingPercentage";
     static final String JSON_FUTURE_TITHING_BALANCE = "futureTithingBalance";
+    static final String JSON_INVESTMENT_TOTALS = "investmentTotals";
     static final String JSON_PROFIT_PERCENTAGE = "profitPercentage";
     static final String JSON_REMAINING_BALANCE = "remainingBalance";
     static final String JSON_SHARES = "shares";
     static final String JSON_STATEMENT = "statement";
     static final String JSON_TOTAL_CREDIT = "totalCredit";
+    static final String JSON_TOTAL_FOR_ACCOUNT_SUBTYPE = "totalForAccountSubtype";
     static final String JSON_TOTAL_FOR_ACCOUNT_TYPE = "totalForAccountType";
+    static final String JSON_TOTAL_LIABILITY = "totalLiability";
     static final String JSON_TOTAL_TITHING_BALANCE = "totalTithingBalance";
     static final String JSON_USED_CREDIT_PERCENTAGE = "usedCreditPercentage";
 

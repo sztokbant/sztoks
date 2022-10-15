@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public abstract class AjaxControllerTestBase {
-    protected static final String ACCOUNT_NAME = "Mortgage";
+    protected static final String ACCOUNT_NAME = "Account Name";
 
     @Autowired protected MockMvc mvc;
 
