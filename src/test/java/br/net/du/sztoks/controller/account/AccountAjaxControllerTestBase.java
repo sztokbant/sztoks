@@ -2,25 +2,18 @@ package br.net.du.sztoks.controller.account;
 
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
-import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_MONTH;
-import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_YEAR;
-import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.sztoks.controller.SnapshotControllerAjaxTestBase;
+import br.net.du.sztoks.controller.AjaxControllerTestBase;
 import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
-import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.User;
 import br.net.du.sztoks.model.account.Account;
 import br.net.du.sztoks.model.account.FutureTithingAccount;
 import br.net.du.sztoks.service.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -31,7 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestBase {
+abstract class AccountAjaxControllerTestBase extends AjaxControllerTestBase {
 
     static final Long ACCOUNT_ID = 1L;
 
@@ -52,17 +45,6 @@ abstract class AccountAjaxControllerTestBase extends SnapshotControllerAjaxTestB
 
     @BeforeEach
     public void ajaxSnapshotControllerTestBaseSetUp() throws Exception {
-        snapshot =
-                new Snapshot(
-                        FIRST_SNAPSHOT_YEAR,
-                        FIRST_SNAPSHOT_MONTH,
-                        CURRENCY_UNIT,
-                        TITHING_PERCENTAGE,
-                        ImmutableSortedSet.of(),
-                        ImmutableList.of(),
-                        ImmutableMap.of());
-        snapshot.setId(SNAPSHOT_ID);
-
         final ValueUpdateJsonRequest valueUpdateJsonRequest =
                 ValueUpdateJsonRequest.builder()
                         .snapshotId(SNAPSHOT_ID)

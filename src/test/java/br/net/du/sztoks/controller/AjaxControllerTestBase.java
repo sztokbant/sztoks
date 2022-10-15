@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-public abstract class SnapshotControllerAjaxTestBase {
+public abstract class AjaxControllerTestBase {
 
     @Autowired protected MockMvc mvc;
 
@@ -45,14 +45,15 @@ public abstract class SnapshotControllerAjaxTestBase {
     @BeforeEach
     public void ajaxControllerTestBaseSetUp() throws Exception {
         user = buildUser();
+        createSnapshot();
         createEntity();
     }
 
-    public SnapshotControllerAjaxTestBase(final String url) {
+    public AjaxControllerTestBase(final String url) {
         this.url = url;
     }
 
-    public void createEntity() {
+    public void createSnapshot() {
         snapshot =
                 new Snapshot(
                         FIRST_SNAPSHOT_YEAR,
@@ -64,6 +65,8 @@ public abstract class SnapshotControllerAjaxTestBase {
                         ImmutableMap.of());
         snapshot.setId(SNAPSHOT_ID);
     }
+
+    protected abstract void createEntity();
 
     @Test
     public void post_noCsrfToken_forbidden() throws Exception {
