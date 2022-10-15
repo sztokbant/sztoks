@@ -52,16 +52,6 @@ class SnapshotRemoveAccountControllerTest extends AccountAjaxControllerTestBase 
 
     @BeforeEach
     public void setUp() throws Exception {
-        final ValueUpdateJsonRequest valueUpdateJsonRequest =
-                ValueUpdateJsonRequest.builder()
-                        .snapshotId(SNAPSHOT_ID)
-                        .entityId(ACCOUNT_ID)
-                        .build();
-        requestContent = new ObjectMapper().writeValueAsString(valueUpdateJsonRequest);
-    }
-
-    @Override
-    public void createEntity() {
         account =
                 new SimpleAssetAccount(
                         "Savings",
@@ -70,6 +60,13 @@ class SnapshotRemoveAccountControllerTest extends AccountAjaxControllerTestBase 
                         LocalDate.now(),
                         CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
+
+        final ValueUpdateJsonRequest valueUpdateJsonRequest =
+                ValueUpdateJsonRequest.builder()
+                        .snapshotId(SNAPSHOT_ID)
+                        .entityId(ACCOUNT_ID)
+                        .build();
+        requestContent = new ObjectMapper().writeValueAsString(valueUpdateJsonRequest);
     }
 
     @Test

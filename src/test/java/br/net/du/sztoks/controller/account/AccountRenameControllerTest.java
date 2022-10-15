@@ -41,17 +41,6 @@ class AccountRenameControllerTest extends AccountAjaxControllerTestBase {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final ValueUpdateJsonRequest valueUpdateJsonRequest =
-                ValueUpdateJsonRequest.builder()
-                        .snapshotId(SNAPSHOT_ID)
-                        .entityId(ACCOUNT_ID)
-                        .newValue(newValue)
-                        .build();
-        requestContent = new ObjectMapper().writeValueAsString(valueUpdateJsonRequest);
-    }
-
-    @Override
-    public void createEntity() {
         account =
                 new SimpleLiabilityAccount(
                         ControllerTestConstants.ACCOUNT_NAME,
@@ -59,6 +48,14 @@ class AccountRenameControllerTest extends AccountAjaxControllerTestBase {
                         LocalDate.now(),
                         BigDecimal.ZERO);
         account.setId(ACCOUNT_ID);
+
+        final ValueUpdateJsonRequest valueUpdateJsonRequest =
+                ValueUpdateJsonRequest.builder()
+                        .snapshotId(SNAPSHOT_ID)
+                        .entityId(ACCOUNT_ID)
+                        .newValue(newValue)
+                        .build();
+        requestContent = new ObjectMapper().writeValueAsString(valueUpdateJsonRequest);
     }
 
     @Test

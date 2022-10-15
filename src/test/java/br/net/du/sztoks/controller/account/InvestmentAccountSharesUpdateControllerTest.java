@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,8 +49,8 @@ class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerT
         super("/snapshot/updateAccountShares", "75.00");
     }
 
-    @Override
-    public void createEntity() {
+    @BeforeEach
+    public void setUp() {
         account =
                 new InvestmentAccount(
                         "AMZN",

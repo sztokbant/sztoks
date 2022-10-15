@@ -43,17 +43,9 @@ public abstract class AjaxControllerTestBase {
     protected Snapshot snapshot;
 
     @BeforeEach
-    public void ajaxControllerTestBaseSetUp() throws Exception {
+    public void ajaxControllerTestBaseSetUp() {
         user = buildUser();
-        createSnapshot();
-        createEntity();
-    }
 
-    public AjaxControllerTestBase(final String url) {
-        this.url = url;
-    }
-
-    public void createSnapshot() {
         snapshot =
                 new Snapshot(
                         FIRST_SNAPSHOT_YEAR,
@@ -66,7 +58,9 @@ public abstract class AjaxControllerTestBase {
         snapshot.setId(SNAPSHOT_ID);
     }
 
-    protected abstract void createEntity();
+    public AjaxControllerTestBase(final String url) {
+        this.url = url;
+    }
 
     @Test
     public void post_noCsrfToken_forbidden() throws Exception {

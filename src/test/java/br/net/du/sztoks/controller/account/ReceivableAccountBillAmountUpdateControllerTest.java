@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,8 +44,8 @@ class ReceivableAccountBillAmountUpdateControllerTest extends AccountAjaxControl
         super("/snapshot/updateAccountBillAmount", "108.00");
     }
 
-    @Override
-    public void createEntity() {
+    @BeforeEach
+    public void setUp() {
         account =
                 new ReceivableAccount(
                         "Friend",

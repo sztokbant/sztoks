@@ -48,13 +48,6 @@ class SnapshotUpdateDefaultTithingPercentageControllerTest extends AccountAjaxCo
 
     @BeforeEach
     public void setUp() throws Exception {
-        final ValueUpdateJsonRequest valueUpdateJsonRequest =
-                ValueUpdateJsonRequest.builder().snapshotId(SNAPSHOT_ID).newValue(newValue).build();
-        requestContent = new ObjectMapper().writeValueAsString(valueUpdateJsonRequest);
-    }
-
-    @Override
-    public void createEntity() {
         account =
                 new SimpleAssetAccount(
                         "Savings",
@@ -63,6 +56,10 @@ class SnapshotUpdateDefaultTithingPercentageControllerTest extends AccountAjaxCo
                         LocalDate.now(),
                         CURRENT_BALANCE);
         account.setId(ACCOUNT_ID);
+
+        final ValueUpdateJsonRequest valueUpdateJsonRequest =
+                ValueUpdateJsonRequest.builder().snapshotId(SNAPSHOT_ID).newValue(newValue).build();
+        requestContent = new ObjectMapper().writeValueAsString(valueUpdateJsonRequest);
     }
 
     @Test
