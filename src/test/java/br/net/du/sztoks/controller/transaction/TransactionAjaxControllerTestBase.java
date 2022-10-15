@@ -38,13 +38,6 @@ abstract class TransactionAjaxControllerTestBase extends SnapshotControllerAjaxT
     static final BigDecimal CURRENT_TITHING_ACCOUNT_BALANCE = new BigDecimal("500.00");
     static final Long TITHING_ACCOUNT_ID = 108L;
 
-    static final String JSON_AMOUNT = "amount";
-    static final String JSON_CURRENCY_UNIT = "currencyUnit";
-    static final String JSON_NET_WORTH = "netWorth";
-    static final String JSON_TITHING_BALANCE = "tithingBalance";
-    static final String JSON_TOTAL_FOR_TRANSACTION_TYPE = "totalForTransactionType";
-    static final String JSON_TOTAL_LIABILITY = "totalLiability";
-
     final String newValue;
 
     @MockBean TransactionService transactionService;

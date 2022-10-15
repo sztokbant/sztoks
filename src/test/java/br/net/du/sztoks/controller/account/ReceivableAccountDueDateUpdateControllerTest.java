@@ -1,5 +1,6 @@
 package br.net.du.sztoks.controller.account;
 
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_DUE_DATE;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
 import static org.hamcrest.MatcherAssert.assertThat;

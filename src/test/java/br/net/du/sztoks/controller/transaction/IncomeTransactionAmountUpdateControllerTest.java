@@ -1,5 +1,11 @@
 package br.net.du.sztoks.controller.transaction;
 
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_AMOUNT;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_CURRENCY_UNIT;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_NET_WORTH;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TITHING_BALANCE;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_FOR_TRANSACTION_TYPE;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_LIABILITY;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertEquals;

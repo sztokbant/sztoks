@@ -1,8 +1,10 @@
 package br.net.du.sztoks.controller.account;
 
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_DUE_DATE;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -84,7 +86,8 @@ class PayableAccountDueDateUpdateControllerTest extends AccountAjaxControllerTes
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
-        assertEquals(newValue, jsonNode.get(JSON_DUE_DATE).asText());
+        // Only checking fields relevant to the AJAX callback
+        assertThat(jsonNode.get(JSON_DUE_DATE).asText(), is(newValue));
 
         verify(snapshotService).findById(eq(SNAPSHOT_ID));
         verify(accountService, times(0)).save(futureTithingAccount);

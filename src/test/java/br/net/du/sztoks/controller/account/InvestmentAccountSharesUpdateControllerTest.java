@@ -1,5 +1,13 @@
 package br.net.du.sztoks.controller.account;
 
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_ACCOUNT_TYPE;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_AVERAGE_PURCHASE_PRICE;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_BALANCE;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_CURRENCY_UNIT;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_CURRENCY_UNIT_SYMBOL;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_NET_WORTH;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_SHARES;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_FOR_ACCOUNT_TYPE;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
