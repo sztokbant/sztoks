@@ -48,15 +48,13 @@ public class RemoveAccountController {
                         valueUpdateJsonRequest.getEntityId(),
                         valueUpdateJsonRequest.getSnapshotId());
 
-        if (!accountOpt.isPresent()) {
+        if (!accountOpt.isPresent()
+                || accountOpt.get() instanceof TithingAccount
+                || accountOpt.get() instanceof FutureTithingAccount) {
             throw new IllegalArgumentException("account not found");
         }
 
         final Account account = accountOpt.get();
-
-        if (account instanceof TithingAccount || account instanceof FutureTithingAccount) {
-            throw new IllegalArgumentException("account not found");
-        }
 
         final Optional<Account> futureTithingAccountOpt =
                 hasFutureTithingImpact(account)
