@@ -9,10 +9,13 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.sztoks.controller.AccountControllerTestBase;
+import br.net.du.sztoks.controller.AjaxControllerTestBase;
 import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.sztoks.model.Snapshot;
+import br.net.du.sztoks.model.User;
+import br.net.du.sztoks.model.account.Account;
 import br.net.du.sztoks.model.account.SimpleLiabilityAccount;
+import br.net.du.sztoks.service.AccountService;
 import br.net.du.sztoks.service.SnapshotService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,12 +34,16 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AccountRenameControllerTest extends AccountControllerTestBase {
+class AccountRenameControllerTest extends AjaxControllerTestBase {
 
+    private static final Long ACCOUNT_ID = 1L;
     private static final String JSON_NAME = "name";
-
     private static final String NEW_ACCOUNT_NAME_NOT_TRIMMED = "   Wells Fargo Mortgage   ";
     private static final String NEW_ACCOUNT_NAME_TRIMMED = "Wells Fargo Mortgage";
+
+    @MockBean protected AccountService accountService;
+
+    protected Account account;
 
     @MockBean private SnapshotService snapshotService;
 
@@ -61,6 +68,50 @@ class AccountRenameControllerTest extends AccountControllerTestBase {
                 new SimpleLiabilityAccount(
                         ACCOUNT_NAME, CURRENCY_UNIT, LocalDate.now(), BigDecimal.ZERO);
         account.setId(ACCOUNT_ID);
+    }
+
+    @Test
+    public void post_accountNotFound_clientError() throws Exception {
+        // GIVEN
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.empty());
+
+        // WHEN
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
+
+        // THEN
+        resultActions.andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void post_accountDoesNotBelongToUser_clientError() throws Exception {
+        // GIVEN
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        final User anotherUser = new User(user.getEmail(), user.getFirstName(), user.getLastName());
+        final Long anotherUserId = user.getId() * 7;
+        anotherUser.setId(anotherUserId);
+
+        when(accountService.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+
+        // WHEN
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
+
+        // THEN
+        resultActions.andExpect(status().is4xxClientError());
     }
 
     @Test
