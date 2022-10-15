@@ -16,6 +16,7 @@ public class ControllerTestConstants {
     public static final String JSON_CURRENCY_UNIT_SYMBOL = "currencyUnitSymbol";
     public static final String JSON_CURRENT_SHARE_VALUE = "currentShareValue";
     public static final String JSON_DEFAULT_TITHING_PERCENTAGE = "defaultTithingPercentage";
+    public static final String JSON_DESCRIPTION = "description";
     public static final String JSON_DUE_DATE = "dueDate";
     public static final String JSON_FUTURE_TITHING_BALANCE = "futureTithingBalance";
     public static final String JSON_INVESTMENT_TOTALS = "investmentTotals";

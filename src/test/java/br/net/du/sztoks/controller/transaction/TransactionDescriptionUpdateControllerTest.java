@@ -1,6 +1,6 @@
-package br.net.du.sztoks.controller.account;
+package br.net.du.sztoks.controller.transaction;
 
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_NAME;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_DESCRIPTION;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -9,13 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.sztoks.controller.ControllerTestConstants;
-import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
-import br.net.du.sztoks.model.Snapshot;
-import br.net.du.sztoks.model.account.SimpleLiabilityAccount;
+import br.net.du.sztoks.model.transaction.IncomeCategory;
+import br.net.du.sztoks.model.transaction.IncomeTransaction;
+import br.net.du.sztoks.model.transaction.RecurrencePolicy;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -26,38 +24,34 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AccountRenameControllerTest extends AccountAjaxControllerTestBase {
+class TransactionDescriptionUpdateControllerTest extends TransactionAjaxControllerTestBase {
 
-    private static final String NEW_ACCOUNT_NAME_NOT_TRIMMED = "   Wells Fargo Mortgage   ";
-    private static final String NEW_ACCOUNT_NAME_TRIMMED = "Wells Fargo Mortgage";
+    private static final String ORIGINAL_DESCRIPTION = "BTC (TODO)";
+    private static final String NEW_DESCRIPTION = "BTC (1.87654321)";
 
-    public AccountRenameControllerTest() {
-        super("/snapshot/renameAccount", NEW_ACCOUNT_NAME_NOT_TRIMMED);
+    TransactionDescriptionUpdateControllerTest() {
+        super("/transaction/updateDescription", NEW_DESCRIPTION);
     }
 
     @BeforeEach
     public void setUp() throws Exception {
-        account =
-                new SimpleLiabilityAccount(
-                        ControllerTestConstants.ACCOUNT_NAME,
-                        CURRENCY_UNIT,
+        transaction =
+                new IncomeTransaction(
                         LocalDate.now(),
-                        BigDecimal.ZERO);
-        account.setId(ACCOUNT_ID);
-
-        final ValueUpdateJsonRequest valueUpdateJsonRequest =
-                ValueUpdateJsonRequest.builder()
-                        .snapshotId(SNAPSHOT_ID)
-                        .entityId(ACCOUNT_ID)
-                        .newValue(newValue)
-                        .build();
-        requestContent = new ObjectMapper().writeValueAsString(valueUpdateJsonRequest);
+                        CURRENCY_UNIT.getCode(),
+                        new BigDecimal("0.00"),
+                        ORIGINAL_DESCRIPTION,
+                        RecurrencePolicy.NONE,
+                        new BigDecimal("20.00"),
+                        IncomeCategory.JOB);
+        transaction.setId(TRANSACTION_ID);
     }
 
     @Test
@@ -65,20 +59,20 @@ class AccountRenameControllerTest extends AccountAjaxControllerTestBase {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
-        final Snapshot snapshot = user.getSnapshots().first();
-
-        snapshot.addAccount(account);
+        snapshot.setUser(user);
+        snapshot.addTransaction(transaction);
 
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
-        when(accountService.findByIdAndSnapshotId(ACCOUNT_ID, SNAPSHOT_ID))
-                .thenReturn(Optional.of(account));
+
+        when(transactionService.findByIdAndSnapshotId(TRANSACTION_ID, SNAPSHOT_ID))
+                .thenReturn(Optional.of(transaction));
 
         // WHEN
         final ResultActions resultActions =
                 mvc.perform(
                         MockMvcRequestBuilders.post(url)
                                 .with(csrf())
-                                .with(user(user.getEmail()))
+                                .with(SecurityMockMvcRequestPostProcessors.user(user.getEmail()))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(requestContent));
 
@@ -92,8 +86,8 @@ class AccountRenameControllerTest extends AccountAjaxControllerTestBase {
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
         // Only checking fields relevant to the AJAX callback
-        assertThat(jsonNode.get(JSON_NAME).textValue(), is(NEW_ACCOUNT_NAME_TRIMMED));
+        assertThat(jsonNode.get(JSON_DESCRIPTION).textValue(), is(NEW_DESCRIPTION));
 
-        verify(accountService).save(account);
+        verify(transactionService).save(transaction);
     }
 }
