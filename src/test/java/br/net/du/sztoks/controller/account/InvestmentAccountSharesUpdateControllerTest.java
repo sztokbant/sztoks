@@ -1,16 +1,21 @@
 package br.net.du.sztoks.controller.account;
 
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_ACCOUNT_TYPE;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_AMOUNT_INVESTED;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_AVERAGE_PURCHASE_PRICE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_BALANCE;
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_CURRENCY_UNIT;
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_CURRENCY_UNIT_SYMBOL;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_FUTURE_TITHING_BALANCE;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_INVESTMENT_TOTALS;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_NET_WORTH;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_PROFIT_PERCENTAGE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_SHARES;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_FOR_ACCOUNT_TYPE;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_LIABILITY;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_TITHING_BALANCE;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -40,7 +45,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerTestBase {
 
-    private static final AccountType ACCOUNT_TYPE = AccountType.ASSET;
     private static final BigDecimal CURRENT_CURRENT_SHARE_VALUE = new BigDecimal("4200.00");
     private static final BigDecimal CURRENT_AMOUNT_INVESTED = new BigDecimal("2100.00");
     private static final BigDecimal CURRENT_SHARES = new BigDecimal("50.00");
@@ -64,12 +68,14 @@ class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerT
     }
 
     @Test
-    public void updateAccountShares_happy() throws Exception {
+    public void updateAccountShares_futureTithingPolicyNone_happy() throws Exception {
         // GIVEN
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
         snapshot.addAccount(account);
+
+        assertThat(snapshot.getFutureTithingBalance(), is(BigDecimal.ZERO));
 
         when(snapshotService.findByIdAndUserId(SNAPSHOT_ID, user.getId()))
                 .thenReturn(Optional.of(snapshot));
@@ -95,18 +101,83 @@ class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerT
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
-        assertEquals(newValue, jsonNode.get(JSON_SHARES).asText());
+        // Only checking fields relevant to the AJAX callback
+        assertThat(jsonNode.get(JSON_SHARES).asText(), is(newValue));
+        assertThat(jsonNode.get(JSON_AVERAGE_PURCHASE_PRICE).asText(), is("$28.00"));
+        assertThat(jsonNode.get(JSON_PROFIT_PERCENTAGE).asText(), is("14900.00%"));
+        assertThat(jsonNode.get(JSON_BALANCE).asText(), is("$315,000.00"));
 
-        assertEquals("$28.00", jsonNode.get(JSON_AVERAGE_PURCHASE_PRICE).asText());
+        assertThat(jsonNode.get(JSON_ACCOUNT_TYPE).asText(), is(AccountType.ASSET.toString()));
+        assertThat(jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText(), is("$315,000.00"));
 
-        final String expectedAccountBalance = "$315,000.00";
-        assertEquals(expectedAccountBalance, jsonNode.get(JSON_BALANCE).asText());
+        final JsonNode investmentTotals = jsonNode.get(JSON_INVESTMENT_TOTALS);
+        assertThat(investmentTotals.get(JSON_AMOUNT_INVESTED).asText(), is("$2,100.00"));
+        assertThat(investmentTotals.get(JSON_PROFIT_PERCENTAGE).asText(), is("14900.00%"));
+        assertThat(investmentTotals.get(JSON_BALANCE).asText(), is("$315,000.00"));
 
-        assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
-        assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
-        assertEquals(expectedAccountBalance, jsonNode.get(JSON_NET_WORTH).asText());
-        assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals(expectedAccountBalance, jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        assertThat(jsonNode.get(JSON_FUTURE_TITHING_BALANCE).asText(), is("$0.00"));
+        assertThat(jsonNode.get(JSON_TOTAL_TITHING_BALANCE).asText(), is("$0.00"));
+        assertThat(jsonNode.get(JSON_TOTAL_LIABILITY).asText(), is("$0.00"));
+
+        assertThat(jsonNode.get(JSON_NET_WORTH).asText(), is("$315,000.00"));
+
+        verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
+    }
+
+    @Test
+    public void updateAccountShares_futureTithingPolicyProfitsOnly_happy() throws Exception {
+        // GIVEN
+        when(userService.findByEmail(user.getEmail())).thenReturn(user);
+
+        snapshot.setUser(user);
+        snapshot.addAccount(account);
+
+        ((InvestmentAccount) account).setFutureTithingPolicy(FutureTithingPolicy.PROFITS_ONLY);
+        assertThat(snapshot.getFutureTithingBalance(), is(new BigDecimal("31185.00000000")));
+
+        when(snapshotService.findByIdAndUserId(SNAPSHOT_ID, user.getId()))
+                .thenReturn(Optional.of(snapshot));
+
+        when(accountService.findByIdAndSnapshotId(ACCOUNT_ID, SNAPSHOT_ID))
+                .thenReturn(Optional.of(account));
+
+        // WHEN
+        final ResultActions resultActions =
+                mvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .with(csrf())
+                                .with(SecurityMockMvcRequestPostProcessors.user(user.getEmail()))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent));
+
+        // THEN
+        resultActions.andExpect(status().isOk());
+
+        final MvcResult mvcResult = resultActions.andReturn();
+        final String resultContentAsString = mvcResult.getResponse().getContentAsString();
+        assertNotNull(resultContentAsString);
+
+        final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
+
+        // Only checking fields relevant to the AJAX callback
+        assertThat(jsonNode.get(JSON_SHARES).asText(), is(newValue));
+        assertThat(jsonNode.get(JSON_AVERAGE_PURCHASE_PRICE).asText(), is("$28.00"));
+        assertThat(jsonNode.get(JSON_PROFIT_PERCENTAGE).asText(), is("14900.00%"));
+        assertThat(jsonNode.get(JSON_BALANCE).asText(), is("$315,000.00"));
+
+        assertThat(jsonNode.get(JSON_ACCOUNT_TYPE).asText(), is(AccountType.ASSET.toString()));
+        assertThat(jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText(), is("$315,000.00"));
+
+        final JsonNode investmentTotals = jsonNode.get(JSON_INVESTMENT_TOTALS);
+        assertThat(investmentTotals.get(JSON_AMOUNT_INVESTED).asText(), is("$2,100.00"));
+        assertThat(investmentTotals.get(JSON_PROFIT_PERCENTAGE).asText(), is("14900.00%"));
+        assertThat(investmentTotals.get(JSON_BALANCE).asText(), is("$315,000.00"));
+
+        assertThat(jsonNode.get(JSON_FUTURE_TITHING_BALANCE).asText(), is("$46,935.00"));
+        assertThat(jsonNode.get(JSON_TOTAL_TITHING_BALANCE).asText(), is("$46,935.00"));
+        assertThat(jsonNode.get(JSON_TOTAL_LIABILITY).asText(), is("$46,935.00"));
+
+        assertThat(jsonNode.get(JSON_NET_WORTH).asText(), is("$268,065.00"));
 
         verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
     }

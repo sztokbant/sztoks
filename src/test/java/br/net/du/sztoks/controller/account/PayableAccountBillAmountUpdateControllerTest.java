@@ -1,13 +1,19 @@
 package br.net.du.sztoks.controller.account;
 
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_ACCOUNT_SUBTYPE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_ACCOUNT_TYPE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_BALANCE;
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_CURRENCY_UNIT;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_BILL_AMOUNT;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_FUTURE_TITHING_BALANCE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_NET_WORTH;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_FOR_ACCOUNT_SUBTYPE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_FOR_ACCOUNT_TYPE;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_LIABILITY;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_TITHING_BALANCE;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -36,7 +42,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 class PayableAccountBillAmountUpdateControllerTest extends AccountAjaxControllerTestBase {
 
-    private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
     private static final BigDecimal CURRENT_BILL_AMOUNT = new BigDecimal("99.00");
 
     PayableAccountBillAmountUpdateControllerTest() {
@@ -87,11 +92,23 @@ class PayableAccountBillAmountUpdateControllerTest extends AccountAjaxController
         assertNotNull(resultContentAsString);
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertEquals("$108.00", jsonNode.get(JSON_BALANCE).asText());
-        assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
-        assertEquals("$-108.00", jsonNode.get(JSON_NET_WORTH).asText());
-        assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals("$108.00", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+
+        // Only checking fields relevant to the AJAX callback
+        assertThat(jsonNode.get(JSON_BILL_AMOUNT).asText(), is("$108.00"));
+        assertThat(jsonNode.get(JSON_BALANCE).asText(), is("$108.00"));
+
+        assertThat(
+                jsonNode.get(JSON_ACCOUNT_SUBTYPE).asText(), is(PayableAccount.ACCOUNT_SUB_TYPE));
+        assertThat(jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_SUBTYPE).asText(), is("$108.00"));
+
+        assertThat(jsonNode.get(JSON_ACCOUNT_TYPE).asText(), is(AccountType.LIABILITY.toString()));
+        assertThat(jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText(), is("$108.00"));
+
+        assertThat(jsonNode.get(JSON_FUTURE_TITHING_BALANCE).asText(), is("null"));
+        assertThat(jsonNode.get(JSON_TOTAL_TITHING_BALANCE).asText(), is("null"));
+        assertThat(jsonNode.get(JSON_TOTAL_LIABILITY).asText(), is("null"));
+
+        assertThat(jsonNode.get(JSON_NET_WORTH).asText(), is("$-108.00"));
 
         verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
     }

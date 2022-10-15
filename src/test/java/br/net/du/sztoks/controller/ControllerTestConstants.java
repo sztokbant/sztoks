@@ -10,6 +10,7 @@ public class ControllerTestConstants {
     public static final String JSON_AVAILABLE_CREDIT = "availableCredit";
     public static final String JSON_AVERAGE_PURCHASE_PRICE = "averagePurchasePrice";
     public static final String JSON_BALANCE = "balance";
+    public static final String JSON_BILL_AMOUNT = "billAmount";
     public static final String JSON_CREDIT_CARD_TOTALS_FOR_CURRENCY_UNIT =
             "creditCardTotalsForCurrencyUnit";
     public static final String JSON_CURRENCY_UNIT = "currencyUnit";
