@@ -1,14 +1,15 @@
 package br.net.du.sztoks.controller.transaction;
 
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_AMOUNT;
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_CURRENCY_UNIT;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_NET_WORTH;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TITHING_BALANCE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_FOR_TRANSACTION_TYPE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_LIABILITY;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_TITHING_BALANCE;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -16,7 +17,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.sztoks.model.account.TithingAccount;
+import br.net.du.sztoks.model.account.AccountType;
 import br.net.du.sztoks.model.transaction.IncomeCategory;
 import br.net.du.sztoks.model.transaction.IncomeTransaction;
 import br.net.du.sztoks.model.transaction.RecurrencePolicy;
@@ -39,7 +40,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 class IncomeTransactionAmountUpdateControllerTest extends TransactionAjaxControllerTestBase {
 
-    private static final BigDecimal CURRENT_TRANSACTION_AMOUNT = new BigDecimal("0.00");
+    private static final BigDecimal CURRENT_TRANSACTION_AMOUNT = new BigDecimal("99.00");
     private static final BigDecimal TITHING_PERCENTAGE = new BigDecimal("20.00");
 
     IncomeTransactionAmountUpdateControllerTest() {
@@ -66,10 +67,12 @@ class IncomeTransactionAmountUpdateControllerTest extends TransactionAjaxControl
         when(userService.findByEmail(user.getEmail())).thenReturn(user);
 
         snapshot.setUser(user);
-
-        final TithingAccount tithingAccount = prepareTithingAccount();
-
         snapshot.addTransaction(transaction);
+
+        // Sanity checks (before)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("-19.80")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(BigDecimal.ZERO));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(new BigDecimal("19.80000000")));
 
         when(snapshotService.findByIdAndUserId(SNAPSHOT_ID, user.getId()))
                 .thenReturn(Optional.of(snapshot));
@@ -94,13 +97,21 @@ class IncomeTransactionAmountUpdateControllerTest extends TransactionAjaxControl
         assertNotNull(resultContentAsString);
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
-        assertEquals("$108.00", jsonNode.get(JSON_AMOUNT).asText());
-        assertEquals("$108.00", jsonNode.get(JSON_TOTAL_FOR_TRANSACTION_TYPE).asText());
-        assertEquals("$521.60", jsonNode.get(JSON_TITHING_BALANCE).asText());
 
-        assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
-        assertEquals("$521.60", jsonNode.get(JSON_TOTAL_LIABILITY).asText());
-        assertEquals("$-521.60", jsonNode.get(JSON_NET_WORTH).asText());
+        // Only checking fields relevant to the AJAX callback
+        assertThat(jsonNode.get(JSON_AMOUNT).asText(), is("$108.00"));
+        assertThat(jsonNode.get(JSON_TOTAL_FOR_TRANSACTION_TYPE).asText(), is("$108.00"));
+
+        assertThat(jsonNode.get(JSON_TITHING_BALANCE).asText(), is("$21.60"));
+        assertThat(jsonNode.get(JSON_TOTAL_TITHING_BALANCE).asText(), is("$21.60"));
+        assertThat(jsonNode.get(JSON_TOTAL_LIABILITY).asText(), is("$21.60"));
+
+        assertThat(jsonNode.get(JSON_NET_WORTH).asText(), is("$-21.60"));
+
+        // Sanity checks (after)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("-21.60")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(BigDecimal.ZERO));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(new BigDecimal("21.60000000")));
 
         verify(userService).findByEmail(eq(user.getEmail()));
         verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
@@ -108,6 +119,5 @@ class IncomeTransactionAmountUpdateControllerTest extends TransactionAjaxControl
 
         verify(transactionService).save(transaction);
         verify(snapshotService).save(snapshot);
-        verify(accountService).save(tithingAccount);
     }
 }

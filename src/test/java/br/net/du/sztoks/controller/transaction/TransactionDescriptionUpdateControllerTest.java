@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import br.net.du.sztoks.model.account.AccountType;
 import br.net.du.sztoks.model.transaction.IncomeCategory;
 import br.net.du.sztoks.model.transaction.IncomeTransaction;
 import br.net.du.sztoks.model.transaction.RecurrencePolicy;
@@ -46,7 +47,7 @@ class TransactionDescriptionUpdateControllerTest extends TransactionAjaxControll
                 new IncomeTransaction(
                         LocalDate.now(),
                         CURRENCY_UNIT.getCode(),
-                        new BigDecimal("0.00"),
+                        new BigDecimal("19098.98"),
                         ORIGINAL_DESCRIPTION,
                         RecurrencePolicy.NONE,
                         new BigDecimal("20.00"),
@@ -61,6 +62,12 @@ class TransactionDescriptionUpdateControllerTest extends TransactionAjaxControll
 
         snapshot.setUser(user);
         snapshot.addTransaction(transaction);
+
+        // Sanity checks (before)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("-3819.80")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(BigDecimal.ZERO));
+        assertThat(
+                snapshot.getTotalFor(AccountType.LIABILITY), is(new BigDecimal("3819.79600000")));
 
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
@@ -87,6 +94,12 @@ class TransactionDescriptionUpdateControllerTest extends TransactionAjaxControll
 
         // Only checking fields relevant to the AJAX callback
         assertThat(jsonNode.get(JSON_DESCRIPTION).textValue(), is(NEW_DESCRIPTION));
+
+        // Sanity checks (after)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("-3819.80")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(BigDecimal.ZERO));
+        assertThat(
+                snapshot.getTotalFor(AccountType.LIABILITY), is(new BigDecimal("3819.79600000")));
 
         verify(transactionService).save(transaction);
     }

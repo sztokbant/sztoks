@@ -1,7 +1,6 @@
 package br.net.du.sztoks.controller.transaction;
 
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
-import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -9,13 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import br.net.du.sztoks.controller.AjaxControllerTestBase;
 import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
-import br.net.du.sztoks.model.account.TithingAccount;
 import br.net.du.sztoks.model.transaction.Transaction;
 import br.net.du.sztoks.service.AccountService;
 import br.net.du.sztoks.service.TransactionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,9 +23,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 abstract class TransactionAjaxControllerTestBase extends AjaxControllerTestBase {
 
     static final Long TRANSACTION_ID = 1L;
-
-    static final BigDecimal CURRENT_TITHING_ACCOUNT_BALANCE = new BigDecimal("500.00");
-    static final Long TITHING_ACCOUNT_ID = 108L;
 
     final String newValue;
 
@@ -77,16 +70,5 @@ abstract class TransactionAjaxControllerTestBase extends AjaxControllerTestBase 
 
         // THEN
         resultActions.andExpect(status().is4xxClientError());
-    }
-
-    protected TithingAccount prepareTithingAccount() {
-        final TithingAccount tithingAccount =
-                new TithingAccount(CURRENCY_UNIT, LocalDate.now(), BigDecimal.ZERO);
-
-        snapshot.addAccount(tithingAccount);
-        tithingAccount.setBalance(CURRENT_TITHING_ACCOUNT_BALANCE);
-        tithingAccount.setId(TITHING_ACCOUNT_ID);
-
-        return tithingAccount;
     }
 }
