@@ -70,6 +70,11 @@ class SnapshotUpdateDefaultTithingPercentageControllerTest extends AccountAjaxCo
         snapshot.setUser(user);
         snapshot.addAccount(account);
 
+        // Sanity checks (before)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("84.15")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(new BigDecimal("99.00")));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(new BigDecimal("14.85000000")));
+
         assertThat(snapshot.getDefaultTithingPercentage(), is(new BigDecimal("15.00")));
         assertThat(snapshot.getNetWorth(), is(new BigDecimal("84.15")));
 
@@ -107,6 +112,11 @@ class SnapshotUpdateDefaultTithingPercentageControllerTest extends AccountAjaxCo
         assertThat(jsonNode.get(JSON_TOTAL_TITHING_BALANCE).asText(), is("$29.70"));
 
         assertThat(jsonNode.get(JSON_NET_WORTH).asText(), is("$69.30"));
+
+        // Sanity checks (after)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("69.30")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(new BigDecimal("99.00")));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(new BigDecimal("29.70000000")));
 
         verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
         verify(snapshotService).save(snapshot);

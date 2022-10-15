@@ -1,19 +1,17 @@
 package br.net.du.sztoks.controller.account;
 
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_ACCOUNT_TYPE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_AVAILABLE_CREDIT;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_BALANCE;
+import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_CREDIT_CARD_TOTALS_FOR_CURRENCY_UNIT;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_CURRENCY_UNIT;
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_CURRENCY_UNIT_SYMBOL;
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_NET_WORTH;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_REMAINING_BALANCE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_STATEMENT;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_CREDIT;
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_TOTAL_FOR_ACCOUNT_TYPE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_USED_CREDIT_PERCENTAGE;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -44,13 +42,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 class CreditCardAccountStatementUpdateControllerTest extends AccountAjaxControllerTestBase {
 
-    private static final AccountType ACCOUNT_TYPE = AccountType.LIABILITY;
     private static final BigDecimal CURRENT_AVAILABLE_CREDIT = new BigDecimal("2100.00");
     private static final BigDecimal CURRENT_TOTAL_CREDIT = new BigDecimal("3000.00");
     private static final BigDecimal CURRENT_STATEMENT = new BigDecimal("400.00");
 
     CreditCardAccountStatementUpdateControllerTest() {
-        super("/snapshot/updateCreditCardStatement", "1500.00");
+        super("/snapshot/updateCreditCardStatement", "600.00");
     }
 
     @BeforeEach
@@ -77,6 +74,11 @@ class CreditCardAccountStatementUpdateControllerTest extends AccountAjaxControll
         final FutureTithingAccount futureTithingAccount = initializeEmptyFutureTithingAccount();
         futureTithingAccount.setReferenceAmount(new BigDecimal("500.00"));
 
+        // Sanity checks (before)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("-975.00")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(BigDecimal.ZERO));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(new BigDecimal("975.00000000")));
+
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
 
         when(accountService.findByIdAndSnapshotId(ACCOUNT_ID, SNAPSHOT_ID))
@@ -100,25 +102,31 @@ class CreditCardAccountStatementUpdateControllerTest extends AccountAjaxControll
 
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
-        assertEquals("$3,000.00", jsonNode.get(JSON_TOTAL_CREDIT).asText());
-        assertEquals("$2,100.00", jsonNode.get(JSON_AVAILABLE_CREDIT).asText());
+        // Only checking fields relevant to the AJAX callback
+        assertThat(jsonNode.get(JSON_STATEMENT).asText(), is("$600.00"));
+        assertThat(jsonNode.get(JSON_REMAINING_BALANCE).asText(), is("$300.00"));
 
-        final String expectedUsedCreditPercentage = "30.00%";
-        assertEquals(
-                expectedUsedCreditPercentage, jsonNode.get(JSON_USED_CREDIT_PERCENTAGE).asText());
+        assertThat(jsonNode.get(JSON_CURRENCY_UNIT).asText(), is(CURRENCY_UNIT.toString()));
+        final JsonNode creditCardTotalsForCurrencyUnit =
+                jsonNode.get(JSON_CREDIT_CARD_TOTALS_FOR_CURRENCY_UNIT);
+        assertThat(
+                creditCardTotalsForCurrencyUnit.get(JSON_TOTAL_CREDIT).asText(), is("$3,000.00"));
+        assertThat(
+                creditCardTotalsForCurrencyUnit.get(JSON_AVAILABLE_CREDIT).asText(),
+                is("$2,100.00"));
+        assertThat(
+                creditCardTotalsForCurrencyUnit.get(JSON_USED_CREDIT_PERCENTAGE).asText(),
+                is("30.00%"));
+        assertThat(creditCardTotalsForCurrencyUnit.get(JSON_STATEMENT).asText(), is("$600.00"));
+        assertThat(
+                creditCardTotalsForCurrencyUnit.get(JSON_REMAINING_BALANCE).asText(),
+                is("$300.00"));
+        assertThat(creditCardTotalsForCurrencyUnit.get(JSON_BALANCE).asText(), is("$900.00"));
 
-        final String expectedAccountBalance = "$900.00";
-        assertEquals(expectedAccountBalance, jsonNode.get(JSON_BALANCE).asText());
-
-        assertEquals("$1,500.00", jsonNode.get(JSON_STATEMENT).asText());
-
-        assertEquals("$-600.00", jsonNode.get(JSON_REMAINING_BALANCE).asText());
-
-        assertEquals(CURRENCY_UNIT.toString(), jsonNode.get(JSON_CURRENCY_UNIT).asText());
-        assertEquals(CURRENCY_UNIT.getSymbol(), jsonNode.get(JSON_CURRENCY_UNIT_SYMBOL).asText());
-        assertEquals("$-975.00", jsonNode.get(JSON_NET_WORTH).asText());
-        assertEquals(ACCOUNT_TYPE.toString(), jsonNode.get(JSON_ACCOUNT_TYPE).asText());
-        assertEquals("$975.00", jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText());
+        // Sanity checks (after)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("-975.00")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(BigDecimal.ZERO));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(new BigDecimal("975.00000000")));
 
         verify(snapshotService).findById(eq(SNAPSHOT_ID));
         verify(accountService, times(0)).save(futureTithingAccount);

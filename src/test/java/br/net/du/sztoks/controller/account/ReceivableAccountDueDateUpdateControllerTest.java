@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import br.net.du.sztoks.model.account.AccountType;
 import br.net.du.sztoks.model.account.FutureTithingAccount;
 import br.net.du.sztoks.model.account.FutureTithingPolicy;
 import br.net.du.sztoks.model.account.ReceivableAccount;
@@ -64,6 +65,11 @@ class ReceivableAccountDueDateUpdateControllerTest extends AccountAjaxController
         snapshot.setUser(user);
         snapshot.addAccount(account);
 
+        // Sanity checks (before)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("4200.00")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(new BigDecimal("4200.00")));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(BigDecimal.ZERO));
+
         final FutureTithingAccount futureTithingAccount = initializeEmptyFutureTithingAccount();
 
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
@@ -91,6 +97,11 @@ class ReceivableAccountDueDateUpdateControllerTest extends AccountAjaxController
 
         // Only checking fields relevant to the AJAX callback
         assertThat(jsonNode.get(JSON_DUE_DATE).asText(), is(newValue));
+
+        // Sanity checks (after)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("4200.00")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(new BigDecimal("4200.00")));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(BigDecimal.ZERO));
 
         verify(snapshotService).findById(eq(SNAPSHOT_ID));
         verify(accountService, times(0)).save(futureTithingAccount);

@@ -77,7 +77,10 @@ class SnapshotRemoveAccountControllerTest extends AccountAjaxControllerTestBase 
         snapshot.setUser(user);
         snapshot.addAccount(account);
 
+        // Sanity checks (before)
         assertThat(snapshot.getNetWorth(), is(new BigDecimal("84.15")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(new BigDecimal("99.00")));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(new BigDecimal("14.85000000")));
 
         when(snapshotService.findByIdAndUserId(SNAPSHOT_ID, user.getId()))
                 .thenReturn(Optional.of(snapshot));
@@ -120,6 +123,11 @@ class SnapshotRemoveAccountControllerTest extends AccountAjaxControllerTestBase 
         assertThat(jsonNode.get(JSON_TOTAL_LIABILITY).asText(), is("$0.00"));
 
         assertThat(jsonNode.get(JSON_NET_WORTH).asText(), is("$0.00"));
+
+        // Sanity checks (after)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("0.00")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(new BigDecimal("0.00")));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(new BigDecimal("0.00000000")));
 
         verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
         verify(accountService).save(snapshot.getFutureTithingAccount(CURRENCY_UNIT));

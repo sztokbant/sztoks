@@ -71,6 +71,11 @@ class ReceivableAccountBillAmountUpdateControllerTest extends AccountAjaxControl
         snapshot.setUser(user);
         snapshot.addAccount(account);
 
+        // Sanity checks (before)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("99.00")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(new BigDecimal("99.00")));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(BigDecimal.ZERO));
+
         when(snapshotService.findByIdAndUserId(SNAPSHOT_ID, user.getId()))
                 .thenReturn(Optional.of(snapshot));
 
@@ -112,6 +117,11 @@ class ReceivableAccountBillAmountUpdateControllerTest extends AccountAjaxControl
         assertThat(jsonNode.get(JSON_TOTAL_LIABILITY).asText(), is("$0.00"));
 
         assertThat(jsonNode.get(JSON_NET_WORTH).asText(), is("$108.00"));
+
+        // Sanity checks (after)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("108.00")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(new BigDecimal("108.00")));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(BigDecimal.ZERO));
 
         verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
     }

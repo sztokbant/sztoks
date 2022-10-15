@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.net.du.sztoks.controller.ControllerTestConstants;
 import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.sztoks.model.Snapshot;
+import br.net.du.sztoks.model.account.AccountType;
 import br.net.du.sztoks.model.account.SimpleLiabilityAccount;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,6 +70,11 @@ class AccountRenameControllerTest extends AccountAjaxControllerTestBase {
 
         snapshot.addAccount(account);
 
+        // Sanity checks (before)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("0.00")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(BigDecimal.ZERO));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(BigDecimal.ZERO));
+
         when(snapshotService.findById(SNAPSHOT_ID)).thenReturn(Optional.of(snapshot));
         when(accountService.findByIdAndSnapshotId(ACCOUNT_ID, SNAPSHOT_ID))
                 .thenReturn(Optional.of(account));
@@ -93,6 +99,11 @@ class AccountRenameControllerTest extends AccountAjaxControllerTestBase {
 
         // Only checking fields relevant to the AJAX callback
         assertThat(jsonNode.get(JSON_NAME).textValue(), is(NEW_ACCOUNT_NAME_TRIMMED));
+
+        // Sanity checks (after)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("0.00")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(BigDecimal.ZERO));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(BigDecimal.ZERO));
 
         verify(accountService).save(account);
     }

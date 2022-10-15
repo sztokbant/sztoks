@@ -77,6 +77,11 @@ class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerT
 
         assertThat(snapshot.getFutureTithingBalance(), is(BigDecimal.ZERO));
 
+        // Sanity checks (before)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("210000.00")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(new BigDecimal("210000.0000")));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(BigDecimal.ZERO));
+
         when(snapshotService.findByIdAndUserId(SNAPSHOT_ID, user.getId()))
                 .thenReturn(Optional.of(snapshot));
 
@@ -121,6 +126,11 @@ class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerT
 
         assertThat(jsonNode.get(JSON_NET_WORTH).asText(), is("$315,000.00"));
 
+        // Sanity checks (after)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("315000.00")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(new BigDecimal("315000.0000")));
+        assertThat(snapshot.getTotalFor(AccountType.LIABILITY), is(BigDecimal.ZERO));
+
         verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
     }
 
@@ -134,6 +144,12 @@ class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerT
 
         ((InvestmentAccount) account).setFutureTithingPolicy(FutureTithingPolicy.PROFITS_ONLY);
         assertThat(snapshot.getFutureTithingBalance(), is(new BigDecimal("31185.00000000")));
+
+        // Sanity checks (before)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("178815.00")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(new BigDecimal("210000.0000")));
+        assertThat(
+                snapshot.getTotalFor(AccountType.LIABILITY), is(new BigDecimal("31185.00000000")));
 
         when(snapshotService.findByIdAndUserId(SNAPSHOT_ID, user.getId()))
                 .thenReturn(Optional.of(snapshot));
@@ -178,6 +194,12 @@ class InvestmentAccountSharesUpdateControllerTest extends AccountAjaxControllerT
         assertThat(jsonNode.get(JSON_TOTAL_LIABILITY).asText(), is("$46,935.00"));
 
         assertThat(jsonNode.get(JSON_NET_WORTH).asText(), is("$268,065.00"));
+
+        // Sanity checks (after)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("268065.00")));
+        assertThat(snapshot.getTotalFor(AccountType.ASSET), is(new BigDecimal("315000.0000")));
+        assertThat(
+                snapshot.getTotalFor(AccountType.LIABILITY), is(new BigDecimal("46935.00000000")));
 
         verify(snapshotService).findByIdAndUserId(eq(SNAPSHOT_ID), eq(user.getId()));
     }
