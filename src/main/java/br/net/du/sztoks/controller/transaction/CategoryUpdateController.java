@@ -29,19 +29,14 @@ public class CategoryUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Transaction, Object> updateCategoryFunction =
                 (jsonRequest, transaction) -> {
                     if (transaction instanceof IncomeTransaction) {
-                        final IncomeCategory category =
-                                IncomeCategory.valueOf(jsonRequest.getNewValue());
-                        ((IncomeTransaction) transaction).setCategory(category);
-
+                        ((IncomeTransaction) transaction)
+                                .setCategory(IncomeCategory.valueOf(jsonRequest.getNewValue()));
                     } else if (transaction instanceof InvestmentTransaction) {
-                        final InvestmentCategory category =
-                                InvestmentCategory.valueOf(jsonRequest.getNewValue());
-                        ((InvestmentTransaction) transaction).setCategory(category);
-
+                        ((InvestmentTransaction) transaction)
+                                .setCategory(InvestmentCategory.valueOf(jsonRequest.getNewValue()));
                     } else if (transaction instanceof DonationTransaction) {
-                        final DonationCategory category =
-                                DonationCategory.valueOf(jsonRequest.getNewValue());
-                        ((DonationTransaction) transaction).setCategory(category);
+                        ((DonationTransaction) transaction)
+                                .setCategory(DonationCategory.valueOf(jsonRequest.getNewValue()));
                     }
 
                     return TransactionViewModelOutput.of(transaction, false);

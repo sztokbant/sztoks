@@ -26,8 +26,8 @@ public class DueDateUpdateController {
 
         final BiFunction<ValueUpdateJsonRequest, Account, Object> updateDueDateFunction =
                 (jsonRequest, account) -> {
-                    final LocalDate dueDate = LocalDate.parse(jsonRequest.getNewValue());
-                    ((DueDateUpdatable) account).setDueDate(dueDate);
+                    ((DueDateUpdatable) account)
+                            .setDueDate(LocalDate.parse(jsonRequest.getNewValue()));
 
                     if (account instanceof PayableAccount) {
                         return PayableAccountViewModelOutput.of(account, false);

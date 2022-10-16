@@ -93,8 +93,8 @@ public class BillUpdateController {
 
         final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
                 (jsonRequest, account) -> {
-                    final Integer newValue = Integer.parseInt(jsonRequest.getNewValue());
-                    ((SharedBillAccount) account).setDueDay(newValue);
+                    ((SharedBillAccount) account)
+                            .setDueDay(Integer.parseInt(jsonRequest.getNewValue()));
 
                     return SharedBillAccountViewModelOutput.of(account, false);
                 };

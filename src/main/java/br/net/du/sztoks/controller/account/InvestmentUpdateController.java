@@ -26,10 +26,8 @@ public class InvestmentUpdateController {
 
         final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAccountSharesFunction =
                 (jsonRequest, account) -> {
-                    final SharesUpdatable sharesUpdatable = (SharesUpdatable) account;
-
-                    final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                    sharesUpdatable.setShares(newValue);
+                    ((SharesUpdatable) account)
+                            .setShares(new BigDecimal(jsonRequest.getNewValue()));
 
                     if (account instanceof InvestmentAccount) {
                         return InvestmentAccountViewModelOutput.of(account, true);
@@ -55,12 +53,10 @@ public class InvestmentUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Account, Object>
                 updateInvestmentAmountInvestedFunction =
                         (jsonRequest, account) -> {
-                            final InvestmentAccount investmentAccount = (InvestmentAccount) account;
+                            ((InvestmentAccount) account)
+                                    .setAmountInvested(new BigDecimal(jsonRequest.getNewValue()));
 
-                            final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            investmentAccount.setAmountInvested(newValue);
-
-                            return InvestmentAccountViewModelOutput.of(investmentAccount, true);
+                            return InvestmentAccountViewModelOutput.of(account, true);
                         };
 
         return accountUpdater.updateField(
@@ -77,10 +73,9 @@ public class InvestmentUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Account, Object>
                 updateAccountCurrentShareValueFunction =
                         (jsonRequest, account) -> {
-                            final SharesUpdatable sharesUpdatable = (SharesUpdatable) account;
-
-                            final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            sharesUpdatable.setCurrentShareValue(newValue);
+                            ((SharesUpdatable) account)
+                                    .setCurrentShareValue(
+                                            new BigDecimal(jsonRequest.getNewValue()));
 
                             if (account instanceof InvestmentAccount) {
                                 return InvestmentAccountViewModelOutput.of(account, true);

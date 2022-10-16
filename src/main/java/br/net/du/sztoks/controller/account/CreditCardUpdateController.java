@@ -24,12 +24,10 @@ public class CreditCardUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Account, Object>
                 updateCreditCardTotalCreditFunction =
                         (jsonRequest, account) -> {
-                            final CreditCardAccount creditCardAccount = (CreditCardAccount) account;
+                            ((CreditCardAccount) account)
+                                    .setTotalCredit(new BigDecimal(jsonRequest.getNewValue()));
 
-                            final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            creditCardAccount.setTotalCredit(newValue);
-
-                            return CreditCardAccountViewModelOutput.of(creditCardAccount, true);
+                            return CreditCardAccountViewModelOutput.of(account, true);
                         };
 
         return accountUpdater.updateField(
@@ -46,12 +44,10 @@ public class CreditCardUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Account, Object>
                 updateCreditCardAvailableCreditFunction =
                         (jsonRequest, account) -> {
-                            final CreditCardAccount creditCardAccount = (CreditCardAccount) account;
+                            ((CreditCardAccount) account)
+                                    .setAvailableCredit(new BigDecimal(jsonRequest.getNewValue()));
 
-                            final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            creditCardAccount.setAvailableCredit(newValue);
-
-                            return CreditCardAccountViewModelOutput.of(creditCardAccount, true);
+                            return CreditCardAccountViewModelOutput.of(account, true);
                         };
 
         return accountUpdater.updateField(
@@ -68,12 +64,10 @@ public class CreditCardUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Account, Object>
                 updateCreditCardStatementFunction =
                         (jsonRequest, account) -> {
-                            final CreditCardAccount creditCardAccount = (CreditCardAccount) account;
+                            ((CreditCardAccount) account)
+                                    .setStatement(new BigDecimal(jsonRequest.getNewValue()));
 
-                            final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                            creditCardAccount.setStatement(newValue);
-
-                            return CreditCardAccountViewModelOutput.of(creditCardAccount, true);
+                            return CreditCardAccountViewModelOutput.of(account, true);
                         };
 
         return accountUpdater.updateField(

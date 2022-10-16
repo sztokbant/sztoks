@@ -24,8 +24,7 @@ public class TransactionDateUpdateController {
 
         final BiFunction<ValueUpdateJsonRequest, Transaction, Object> updateTransactionFunction =
                 (jsonRequest, transaction) -> {
-                    final LocalDate newDate = LocalDate.parse(jsonRequest.getNewValue());
-                    transaction.setDate(newDate);
+                    transaction.setDate(LocalDate.parse(jsonRequest.getNewValue()));
 
                     return EntityUpdateDateJsonResponse.builder()
                             .date(transaction.getDate())

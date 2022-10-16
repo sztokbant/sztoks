@@ -22,9 +22,7 @@ public class AmountUpdateController {
 
         final BiFunction<ValueUpdateJsonRequest, Transaction, Object> updateAmountFunction =
                 (jsonRequest, transaction) -> {
-                    final BigDecimal newAmount = new BigDecimal(jsonRequest.getNewValue());
-
-                    transaction.setAmount(newAmount);
+                    transaction.setAmount(new BigDecimal(jsonRequest.getNewValue()));
 
                     return TransactionViewModelOutput.of(transaction, true);
                 };

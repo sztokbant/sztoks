@@ -23,8 +23,8 @@ public class BalanceUpdateController {
 
         final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
                 (jsonRequest, account) -> {
-                    final BigDecimal newValue = new BigDecimal(jsonRequest.getNewValue());
-                    ((BalanceUpdatable) account).setBalance(newValue);
+                    ((BalanceUpdatable) account)
+                            .setBalance(new BigDecimal(jsonRequest.getNewValue()));
 
                     return AccountViewModelOutput.of(account, true);
                 };

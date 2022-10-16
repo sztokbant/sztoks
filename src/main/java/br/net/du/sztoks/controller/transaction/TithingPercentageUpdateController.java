@@ -29,10 +29,8 @@ public class TithingPercentageUpdateController {
                                         + " does not have attribute tithingPercentage");
                     }
 
-                    final BigDecimal newTithingPercentage =
-                            new BigDecimal(jsonRequest.getNewValue());
-
-                    ((IncomeTransaction) transaction).setTithingPercentage(newTithingPercentage);
+                    ((IncomeTransaction) transaction)
+                            .setTithingPercentage(new BigDecimal(jsonRequest.getNewValue()));
 
                     return TransactionViewModelOutput.of(transaction, true);
                 };

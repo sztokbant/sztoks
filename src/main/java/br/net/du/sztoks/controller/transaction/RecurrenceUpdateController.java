@@ -23,10 +23,8 @@ public class RecurrenceUpdateController {
         final BiFunction<ValueUpdateJsonRequest, Transaction, Object>
                 updateRecurrencePolicyFunction =
                         (jsonRequest, transaction) -> {
-                            final RecurrencePolicy newValue =
-                                    RecurrencePolicy.forValue(jsonRequest.getNewValue());
-
-                            transaction.setRecurrencePolicy(newValue);
+                            transaction.setRecurrencePolicy(
+                                    RecurrencePolicy.forValue(jsonRequest.getNewValue()));
 
                             return TransactionViewModelOutput.of(transaction, false);
                         };

@@ -22,11 +22,8 @@ public class TaxDeductibleUpdateController {
 
         final BiFunction<ValueUpdateJsonRequest, Transaction, Object> updateTaxDeductibleFunction =
                 (jsonRequest, transaction) -> {
-                    final DonationTransaction donationTransaction =
-                            (DonationTransaction) transaction;
-
-                    final boolean newValue = Boolean.valueOf(jsonRequest.getNewValue());
-                    donationTransaction.setTaxDeductible(newValue);
+                    ((DonationTransaction) transaction)
+                            .setTaxDeductible(Boolean.valueOf(jsonRequest.getNewValue()));
 
                     return TransactionViewModelOutput.of(transaction, true);
                 };
