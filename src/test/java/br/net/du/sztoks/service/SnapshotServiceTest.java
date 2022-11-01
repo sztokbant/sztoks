@@ -157,6 +157,9 @@ public class SnapshotServiceTest {
 
     @Test
     public void newSnapshot_twice_properlySetsNextAndPrevious() {
+        // GIVEN
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("525075.00")));
+
         // WHEN
         final Snapshot secondSnapshot =
                 snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
@@ -175,6 +178,9 @@ public class SnapshotServiceTest {
 
         assertThat(thirdSnapshot.getPrevious(), is(secondSnapshot));
         assertNull(thirdSnapshot.getNext());
+
+        assertThat(secondSnapshot.getNetWorth(), is(new BigDecimal("522750.00")));
+        assertThat(thirdSnapshot.getNetWorth(), is(new BigDecimal("520425.00")));
     }
 
     @Test
