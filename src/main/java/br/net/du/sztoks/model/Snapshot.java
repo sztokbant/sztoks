@@ -191,7 +191,7 @@ public class Snapshot implements Comparable<Snapshot> {
         this.currencyConversionRates.putAll(currencyConversionRates);
 
         consolidateTithingAccountsToBaseCurrency(baseCurrencyUnit, accounts);
-        addNonTithingAccounts(accounts);
+        addNonTithingNonFutureTithingAccounts(accounts);
         addTransactions(year, month, transactions);
     }
 
@@ -238,9 +238,12 @@ public class Snapshot implements Comparable<Snapshot> {
                                                 account.getCurrencyUnit(), account.getBalance())));
     }
 
-    private void addNonTithingAccounts(@NonNull final SortedSet<Account> accounts) {
+    private void addNonTithingNonFutureTithingAccounts(@NonNull final SortedSet<Account> accounts) {
         accounts.stream()
-                .filter(account -> !(account instanceof TithingAccount))
+                .filter(
+                        account ->
+                                !(account instanceof TithingAccount)
+                                        && !(account instanceof FutureTithingAccount))
                 .map(account -> account.copy())
                 .forEach(account -> addAccount(account));
     }

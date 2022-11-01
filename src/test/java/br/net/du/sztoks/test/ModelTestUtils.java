@@ -8,6 +8,7 @@ import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE;
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.User;
 import br.net.du.sztoks.model.account.CreditCardAccount;
+import br.net.du.sztoks.model.account.FutureTithingAccount;
 import br.net.du.sztoks.model.account.InvestmentAccount;
 import br.net.du.sztoks.model.account.PayableAccount;
 import br.net.du.sztoks.model.account.ReceivableAccount;
@@ -67,6 +68,11 @@ public class ModelTestUtils {
     }
 
     public static boolean equalsIgnoreId(final TithingAccount a1, final TithingAccount a2) {
+        return a1.getName().equals(a2.getName());
+    }
+
+    public static boolean equalsIgnoreId(
+            final FutureTithingAccount a1, final FutureTithingAccount a2) {
         return a1.getName().equals(a2.getName());
     }
 

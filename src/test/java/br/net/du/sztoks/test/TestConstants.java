@@ -106,6 +106,17 @@ public class TestConstants {
                 new BigDecimal("3500.00"));
     }
 
+    public static InvestmentAccount newInvestmentAccountWithFutureTithing() {
+        return new InvestmentAccount(
+                "My Investment with Future Tithing",
+                CurrencyUnit.USD,
+                FutureTithingPolicy.PROFITS_ONLY,
+                LocalDate.now(),
+                new BigDecimal("175.00"),
+                new BigDecimal("1100.00"),
+                new BigDecimal("3500.00"));
+    }
+
     public static IncomeTransaction newRecurringIncome(final long id) {
         final IncomeTransaction incomeTransaction = newRecurringIncome();
         incomeTransaction.setId(id);

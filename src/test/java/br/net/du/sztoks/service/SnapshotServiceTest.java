@@ -12,14 +12,16 @@ import static br.net.du.sztoks.test.TestConstants.THIRD_SNAPSHOT_MONTH;
 import static br.net.du.sztoks.test.TestConstants.THIRD_SNAPSHOT_YEAR;
 import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE;
 import static br.net.du.sztoks.test.TestConstants.newCreditCardAccount;
-import static br.net.du.sztoks.test.TestConstants.newInvestmentAccount;
+import static br.net.du.sztoks.test.TestConstants.newInvestmentAccountWithFutureTithing;
 import static br.net.du.sztoks.test.TestConstants.newRecurringIncome;
 import static br.net.du.sztoks.test.TestConstants.newRecurringNonTaxDeductibleDonation;
 import static br.net.du.sztoks.test.TestConstants.newSimpleAssetAccount;
 import static br.net.du.sztoks.test.TestConstants.newSimpleLiabilityAccount;
 import static br.net.du.sztoks.test.TestConstants.newSingleIncome;
+import static br.net.du.sztoks.test.TestConstants.newSingleTaxDeductibleDonation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.comparesEqualTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -37,7 +39,6 @@ import br.net.du.sztoks.model.account.Account;
 import br.net.du.sztoks.model.transaction.Transaction;
 import br.net.du.sztoks.persistence.SnapshotRepository;
 import br.net.du.sztoks.test.ModelTestUtils;
-import br.net.du.sztoks.test.TestConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
@@ -73,12 +74,12 @@ public class SnapshotServiceTest {
         snapshot.addAccount(newSimpleAssetAccount(CurrencyUnit.USD));
         snapshot.addAccount(newSimpleLiabilityAccount(CurrencyUnit.USD));
         snapshot.addAccount(newCreditCardAccount());
-        snapshot.addAccount(newInvestmentAccount());
+        snapshot.addAccount(newInvestmentAccountWithFutureTithing());
 
         snapshot.addTransaction(newRecurringIncome());
         snapshot.addTransaction(newSingleIncome(CurrencyUnit.USD));
         snapshot.addTransaction(newRecurringNonTaxDeductibleDonation(CurrencyUnit.USD));
-        snapshot.addTransaction(TestConstants.newSingleTaxDeductibleDonation(CurrencyUnit.USD));
+        snapshot.addTransaction(newSingleTaxDeductibleDonation(CurrencyUnit.USD));
 
         snapshot.putCurrencyConversionRate(ANOTHER_CURRENCY_UNIT, new BigDecimal("1.31"));
 
@@ -87,6 +88,9 @@ public class SnapshotServiceTest {
 
     @Test
     public void newSnapshot_happy() throws Exception {
+        // GIVEN
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("525075.00")));
+
         // WHEN
         final Snapshot newSnapshot =
                 snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
@@ -96,6 +100,9 @@ public class SnapshotServiceTest {
         assertThat(
                 snapshot.getDefaultTithingPercentage(),
                 comparesEqualTo(newSnapshot.getDefaultTithingPercentage()));
+
+        assertThat(newSnapshot.getNetWorth(), is(new BigDecimal("522750.00")));
+
         assertTrue(newSnapshot.supports(CURRENCY_UNIT));
         assertTrue(newSnapshot.supports(ANOTHER_CURRENCY_UNIT));
         assertFalse(newSnapshot.supports(CurrencyUnit.EUR));
