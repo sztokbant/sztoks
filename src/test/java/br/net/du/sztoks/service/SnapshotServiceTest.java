@@ -22,7 +22,6 @@ import static br.net.du.sztoks.test.TestConstants.newSingleTaxDeductibleDonation
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -96,7 +95,7 @@ public class SnapshotServiceTest {
                 snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
 
         // THEN
-        assertEquals(snapshot.getBaseCurrencyUnit(), newSnapshot.getBaseCurrencyUnit());
+        assertThat(newSnapshot.getBaseCurrencyUnit(), is(snapshot.getBaseCurrencyUnit()));
         assertThat(
                 snapshot.getDefaultTithingPercentage(),
                 comparesEqualTo(newSnapshot.getDefaultTithingPercentage()));
@@ -107,17 +106,17 @@ public class SnapshotServiceTest {
         assertTrue(newSnapshot.supports(ANOTHER_CURRENCY_UNIT));
         assertFalse(newSnapshot.supports(CurrencyUnit.EUR));
 
-        assertEquals(1, newSnapshot.getCurrencyConversionRates().size());
-        assertEquals(
-                ANOTHER_CURRENCY_UNIT.toString(),
-                newSnapshot.getCurrencyConversionRates().keySet().iterator().next());
+        assertThat(newSnapshot.getCurrencyConversionRates().size(), is(1));
+        assertThat(
+                newSnapshot.getCurrencyConversionRates().keySet().iterator().next(),
+                is(ANOTHER_CURRENCY_UNIT.toString()));
         assertThat(
                 newSnapshot.getCurrencyConversionRates().get(ANOTHER_CURRENCY_UNIT.toString()),
                 comparesEqualTo(new BigDecimal("1.31")));
 
         final SortedSet<Account> originalAccounts = snapshot.getAccounts();
         final SortedSet<Account> newAccounts = newSnapshot.getAccounts();
-        assertEquals(originalAccounts.size(), newAccounts.size());
+        assertThat(newAccounts.size(), is(originalAccounts.size()));
 
         for (final Account originalAccount : originalAccounts) {
             boolean found = false;
@@ -138,8 +137,8 @@ public class SnapshotServiceTest {
         final SortedSet<Transaction> originalTransactions = snapshot.getTransactions();
         final SortedSet<Transaction> newTransactions = newSnapshot.getTransactions();
 
-        assertEquals(4, originalTransactions.size());
-        assertEquals(2, newTransactions.size());
+        assertThat(originalTransactions.size(), is(4));
+        assertThat(newTransactions.size(), is(2));
 
         final Iterator<Transaction> iterator = newTransactions.iterator();
         assertTrue(
@@ -151,8 +150,8 @@ public class SnapshotServiceTest {
 
         assertNull(snapshot.getPrevious());
 
-        assertEquals(newSnapshot, snapshot.getNext());
-        assertEquals(snapshot, newSnapshot.getPrevious());
+        assertThat(snapshot.getNext(), is(newSnapshot));
+        assertThat(newSnapshot.getPrevious(), is(snapshot));
         assertNull(newSnapshot.getNext());
     }
 
@@ -169,12 +168,12 @@ public class SnapshotServiceTest {
         verify(snapshotRepository, times(1)).save(eq(thirdSnapshot));
 
         assertNull(snapshot.getPrevious());
-        assertEquals(secondSnapshot, snapshot.getNext());
+        assertThat(snapshot.getNext(), is(secondSnapshot));
 
-        assertEquals(snapshot, secondSnapshot.getPrevious());
-        assertEquals(thirdSnapshot, secondSnapshot.getNext());
+        assertThat(secondSnapshot.getPrevious(), is(snapshot));
+        assertThat(secondSnapshot.getNext(), is(thirdSnapshot));
 
-        assertEquals(secondSnapshot, thirdSnapshot.getPrevious());
+        assertThat(thirdSnapshot.getPrevious(), is(secondSnapshot));
         assertNull(thirdSnapshot.getNext());
     }
 
@@ -186,7 +185,7 @@ public class SnapshotServiceTest {
         secondSnapshot.setId(snapshot.getId() + 1);
         user.addSnapshot(secondSnapshot);
 
-        assertEquals(2, user.getSnapshots().size());
+        assertThat(user.getSnapshots().size(), is(2));
 
         // THEN
         assertThrows(
@@ -195,7 +194,7 @@ public class SnapshotServiceTest {
                     snapshotService.deleteSnapshot(user, snapshot);
                 });
 
-        assertEquals(2, user.getSnapshots().size());
+        assertThat(user.getSnapshots().size(), is(2));
     }
 
     @Test
@@ -206,14 +205,14 @@ public class SnapshotServiceTest {
         secondSnapshot.setId(snapshot.getId() + 1);
         user.addSnapshot(secondSnapshot);
 
-        assertEquals(2, user.getSnapshots().size());
+        assertThat(user.getSnapshots().size(), is(2));
 
         // WHEN
         snapshotService.deleteSnapshot(user, secondSnapshot);
 
         // THEN
-        assertEquals(1, user.getSnapshots().size());
-        assertEquals(snapshot, user.getSnapshots().first());
+        assertThat(user.getSnapshots().size(), is(1));
+        assertThat(user.getSnapshots().first(), is(snapshot));
 
         assertNull(snapshot.getPrevious());
         assertNull(snapshot.getNext());
@@ -236,7 +235,7 @@ public class SnapshotServiceTest {
         fourthSnapshot.setId(thirdSnapshot.getId() + 1);
         user.addSnapshot(fourthSnapshot);
 
-        assertEquals(4, user.getSnapshots().size());
+        assertThat(user.getSnapshots().size(), is(4));
 
         // THEN
         assertThrows(
@@ -245,13 +244,13 @@ public class SnapshotServiceTest {
                     snapshotService.deleteSnapshot(user, thirdSnapshot);
                 });
 
-        assertEquals(4, user.getSnapshots().size());
+        assertThat(user.getSnapshots().size(), is(4));
     }
 
     @Test
     public void deleteSnapshot_onlyRemainingSnapshot() {
         // GIVEN
-        assertEquals(1, user.getSnapshots().size());
+        assertThat(user.getSnapshots().size(), is(1));
 
         // THEN
         assertThrows(
@@ -260,7 +259,7 @@ public class SnapshotServiceTest {
                     snapshotService.deleteSnapshot(user, snapshot);
                 });
 
-        assertEquals(1, user.getSnapshots().size());
+        assertThat(user.getSnapshots().size(), is(1));
     }
 
     private Snapshot newEmptySnapshot(final int year, final int month) {
