@@ -3,6 +3,7 @@ $(document).ready(function() {
   prepareCheckbox(
     "ACCOUNT_${entity.accountId}_is_paid",
     ${snapshot.id},
+    ${snapshot.old},
     ${entity.accountId},
     ${entity.isPaid} == true,
     "snapshot/updateBillIsPaid",

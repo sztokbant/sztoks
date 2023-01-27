@@ -1,25 +1,24 @@
 <%@ include file="_transaction_amount_update_callback.jsp" %>
 
+
 <script type="text/javascript">
 $(document).ready(function() {
   prepareCheckbox(
     "TRANSACTION_${entity.id}_taxDeductible",
     ${snapshot.id},
+    ${snapshot.old},
     ${entity.id},
     ${entity.taxDeductible} == true,
     "transaction/setTaxDeductible",
     donationIsDeductibleUpdateSuccessCallback);
 
-  var data = {
-    snapshotId: ${snapshot.id},
-    entityId: ${entity.id},
-  };
-
-  document.getElementById("select_txn_donation_category_${entity.id}").onchange =
-    (evt) => {
-      data.newValue = evt.target.value;
-      ajaxPost("transaction/updateCategory", data, transactionCategoryUpdateSuccessCallback);
-    };
+  prepareSelect("select_txn_donation_category_${entity.id}",
+    ${snapshot.id},
+    ${snapshot.old},
+    ${entity.id},
+    "transaction/updateCategory",
+    transactionCategoryUpdateSuccessCallback
+  );
 });
 </script>
 

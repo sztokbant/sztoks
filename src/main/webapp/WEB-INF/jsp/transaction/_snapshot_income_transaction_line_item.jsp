@@ -4,6 +4,7 @@
 $(document).ready(function() {
   var data = {
     snapshotId: ${snapshot.id},
+    isOldSnapshot: ${snapshot.old},
     entityId: ${entity.id},
   };
 
@@ -15,11 +16,13 @@ $(document).ready(function() {
     transactionTithingPercentageUpdateSuccessCallback,
   );
 
-  document.getElementById("select_txn_income_category_${entity.id}").onchange =
-    (evt) => {
-      data.newValue = evt.target.value;
-      ajaxPost("transaction/updateCategory", data, transactionCategoryUpdateSuccessCallback);
-    };
+  prepareSelect("select_txn_income_category_${entity.id}",
+    ${snapshot.id},
+    ${snapshot.old},
+    ${entity.id},
+    "transaction/updateCategory",
+    transactionCategoryUpdateSuccessCallback
+  );
 });
 </script>
 

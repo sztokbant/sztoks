@@ -13,12 +13,13 @@ function accountRenameUpdateSuccessCallback(data, result) {
   $("#account_name_" + data.entityId).html(result.name);
 }
 
-function removeAccountFromSnapshot(snapshotId, entityId, accountName) {
+function removeAccountFromSnapshot(snapshotId, isOldSnapshot, entityId, accountName) {
     var doRemove = confirm('Are you sure you want to PERMANENTLY remove "' + accountName + '" from this snapshot?');
 
     if (doRemove) {
       var data = {
         snapshotId: snapshotId,
+        isOldSnapshot: isOldSnapshot,
         entityId: entityId,
       };
 
@@ -300,12 +301,13 @@ function transactionCategoryUpdateSuccessCallback(data, result) {
 function transactionRecurrenceUpdateSuccessCallback(data, result) {
 }
 
-function removeTransaction(snapshotId, entityId, type, description) {
+function removeTransaction(snapshotId, isOldSnapshot, entityId, type, description) {
     var doRemove = confirm('Are you sure you want to PERMANENTLY remove ' + type + ' transaction "' + description + '" from this snapshot?');
 
     if (doRemove) {
       var data = {
         snapshotId: snapshotId,
+        isOldSnapshot: isOldSnapshot,
         entityId: entityId,
       };
 

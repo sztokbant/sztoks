@@ -48,6 +48,8 @@ import org.joda.money.CurrencyUnit;
 @Builder
 public class SnapshotViewModelOutput {
     private final Long id;
+    private final boolean isOld;
+
     private final String name;
     private final boolean newSnapshotAllowed;
 
@@ -125,6 +127,7 @@ public class SnapshotViewModelOutput {
         final SnapshotViewModelOutputBuilder builder =
                 SnapshotViewModelOutput.builder()
                         .id(snapshot.getId())
+                        .isOld(snapshot.getNext() != null)
                         .name(getDisplayTitle(snapshot))
                         .newSnapshotAllowed(
                                 SnapshotUtils.computeNextSnapshotPeriod(snapshot).isPresent())

@@ -2,17 +2,13 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-  var data = {
-    snapshotId: ${snapshot.id},
-    entityId: ${entity.id},
-  };
-
-
-  document.getElementById("select_txn_investment_category_${entity.id}").onchange =
-    (evt) => {
-      data.newValue = evt.target.value;
-      ajaxPost("transaction/updateCategory", data, transactionCategoryUpdateSuccessCallback);
-    };
+  prepareSelect("select_txn_investment_category_${entity.id}",
+    ${snapshot.id},
+    ${snapshot.old},
+    ${entity.id},
+    "transaction/updateCategory",
+    transactionCategoryUpdateSuccessCallback
+  );
 });
 </script>
 

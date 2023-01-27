@@ -2,6 +2,7 @@
 $(document).ready(function() {
   var data = {
     snapshotId: ${snapshot.id},
+    isOldSnapshot: ${snapshot.old},
   };
 
   prepareUpdateForm($("#form_default_tithing_percentage"),

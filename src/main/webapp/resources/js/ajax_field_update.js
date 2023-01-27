@@ -46,6 +46,10 @@ function stripDecimalForText(text) {
 }
 
 function ajaxPost(endpoint, data, successCallback) {
+  if (data.isOldSnapshot && !confirm('Are you sure you want to change an OLD snapshot?')) {
+    return false;
+  }
+
   var postUrl = window.location.origin + "/" + endpoint + "?_csrf=" + $("#_csrf").val();
 
   $.ajax({
@@ -66,27 +70,56 @@ function ajaxPost(endpoint, data, successCallback) {
       console.log("Error: ", e);
     }
   });
+
+  return true;
 }
 
-function prepareCheckbox(elementId, snapshotId, entityId, isChecked, endpoint, successCallback) {
+function prepareCheckbox(elementId, snapshotId, isOldSnapshot, entityId, isChecked, endpoint, successCallback) {
   const checkbox = document.getElementById(elementId);
 
-  if (isChecked) {
-    checkbox.setAttribute('checked', true);
-  }
+  // Initial value on page load
+  checkbox.checked = isChecked;
 
   checkbox.addEventListener('change', (event) => {
     var data = {
       snapshotId: snapshotId,
+      isOldSnapshot: isOldSnapshot,
       entityId: entityId,
+      newValue: event.currentTarget.checked,
     };
 
-    if (event.currentTarget.checked) {
-      data['newValue'] = true;
+    if (ajaxPost(endpoint, data, successCallback)) {
+      checkbox.checked = data['newValue'];
     } else {
-      data['newValue'] = false;
+      checkbox.checked = !data['newValue'];
     }
-
-    ajaxPost(endpoint, data, successCallback);
   })
+}
+
+function prepareSelect(elementId, snapshotId, isOldSnapshot, entityId, endpoint, successCallback) {
+  const element = document.getElementById(elementId)
+
+  // Initial value on page load
+  element.oldValue = element.value;
+
+  var data = {
+    snapshotId: snapshotId,
+    isOldSnapshot: isOldSnapshot,
+    entityId: entityId,
+  };
+
+  element.onfocus =
+      () => {
+        element.oldValue = element.value;
+      };
+
+  element.onchange =
+      (evt) => {
+        data.newValue = evt.target.value;
+        if (!ajaxPost(endpoint, data, successCallback)) {
+          element.value = element.oldValue;
+        } else {
+          element.oldValue = element.value;
+        };
+      };
 }

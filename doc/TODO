@@ -34,7 +34,7 @@ Model
 
 [] Category enums should be type enumerate so they store strings, not ints, in DB
   [] They should have abbreviations too
-[] LOCK OLD SNAPSHOTS (with a checkbox?)
+[x] Lock old snapshots (confirm on every change)
 [] Past snapshots should confirm on every update
 
 UX improvements

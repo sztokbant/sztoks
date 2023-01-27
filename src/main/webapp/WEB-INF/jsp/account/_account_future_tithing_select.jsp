@@ -1,15 +1,12 @@
 <script type="text/javascript">
 $(document).ready(function() {
-  var data = {
-    snapshotId: ${snapshot.id},
-    entityId: ${entity.accountId},
-  };
-
-  document.getElementById("select_account_future_tithing_${entity.accountId}").onchange =
-    (evt) => {
-      data.newValue = evt.target.value;
-      ajaxPost("snapshot/updateFutureTithingPolicy", data, accountFutureTithingUpdateSuccessCallback);
-    };
+  prepareSelect("select_account_future_tithing_${entity.accountId}",
+    ${snapshot.id},
+    ${snapshot.old},
+    ${entity.accountId},
+    "snapshot/updateFutureTithingPolicy",
+    accountFutureTithingUpdateSuccessCallback
+  );
 })
 </script>
 

@@ -1,15 +1,12 @@
 <script type="text/javascript">
 $(document).ready(function() {
-  var data = {
-    snapshotId: ${snapshot.id},
-    entityId: ${entity.id},
-  };
-
-  document.getElementById("select_txn_recurrence_${entity.id}").onchange =
-    (evt) => {
-      data.newValue = evt.target.value;
-      ajaxPost("transaction/updateRecurrencePolicy", data, transactionRecurrenceUpdateSuccessCallback);
-    };
+  prepareSelect("select_txn_recurrence_${entity.id}",
+    ${snapshot.id},
+    ${snapshot.old},
+    ${entity.id},
+    "transaction/updateRecurrencePolicy",
+    transactionRecurrenceUpdateSuccessCallback
+  );
 })
 </script>
 

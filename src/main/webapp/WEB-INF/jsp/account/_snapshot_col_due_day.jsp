@@ -2,6 +2,7 @@
 $(document).ready(function() {
 var data = {
   snapshotId: ${snapshot.id},
+  isOldSnapshot: ${snapshot.old},
   entityId: ${entity.accountId},
 };
 
