@@ -26,6 +26,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.mobile:spring-mobile-starter:2.0.0.M3'
 
+    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.3'
+
     runtimeOnly 'mysql:mysql-connector-java:8.0.20'
     testImplementation 'com.h2database:h2:1.4.200'
     testImplementation 'org.mockito:mockito-inline:3.7.0'
