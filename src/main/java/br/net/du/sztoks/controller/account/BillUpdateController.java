@@ -52,7 +52,7 @@ public class BillUpdateController {
 
         final BiFunction<ValueUpdateJsonRequest, Account, Object> updateAmountFunction =
                 (jsonRequest, account) -> {
-                    final boolean newValue = new Boolean(jsonRequest.getNewValue());
+                    final boolean newValue = Boolean.valueOf(jsonRequest.getNewValue());
 
                     ((BillAccount) account).setIsPaid(newValue);
 
