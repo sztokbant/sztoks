@@ -29,19 +29,15 @@ public class WebSecurityConfig {
                 new CsrfTokenRequestAttributeHandler();
         requestHandler.setCsrfRequestAttributeName("_csrf");
 
-        http.authorizeHttpRequests()
-                .requestMatchers("/resources/**", "/signup")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll()
-                .and()
+        http.authorizeHttpRequests(
+                        (authz) ->
+                                authz.requestMatchers("/resources/**", "/signup")
+                                        .permitAll()
+                                        .anyRequest()
+                                        .authenticated())
+                .formLogin((form) -> form.loginPage("/login").permitAll())
+                .logout((logout) -> logout.permitAll())
+
                 // New Spring Security 6 defaults
                 .securityContext((securityContext) -> securityContext.requireExplicitSave(true))
                 .csrf((csrf) -> csrf.csrfTokenRequestHandler(requestHandler));
