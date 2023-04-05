@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -23,7 +24,12 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests()
+        // set the name of the attribute the CsrfToken will be populated on
+        final CsrfTokenRequestAttributeHandler requestHandler =
+                new CsrfTokenRequestAttributeHandler();
+        requestHandler.setCsrfRequestAttributeName("_csrf");
+
+        http.authorizeHttpRequests()
                 .requestMatchers("/resources/**", "/signup")
                 .permitAll()
                 .anyRequest()
@@ -36,7 +42,11 @@ public class WebSecurityConfig {
                 .logout()
                 .permitAll()
                 .and()
-                .build();
+                // New Spring Security 6 defaults
+                .securityContext((securityContext) -> securityContext.requireExplicitSave(true))
+                .csrf((csrf) -> csrf.csrfTokenRequestHandler(requestHandler));
+
+        return http.build();
     }
 
     @Bean
