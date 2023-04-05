@@ -2,8 +2,8 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'org.springframework.boot' version '2.7.10'
-    id "io.spring.dependency-management" version "1.0.10.RELEASE"
-    id "com.diffplug.spotless" version "5.8.2"
+    id "io.spring.dependency-management" version "1.1.0"
+    id "com.diffplug.spotless" version "5.17.1"
 }
 
 repositories {
@@ -14,12 +14,12 @@ repositories {
 }
 
 dependencies {
-    implementation 'javax.servlet:jstl:1.2'
+    implementation 'javax.servlet:jstl'
     implementation 'com.google.collections:google-collections:1.0'
-    implementation 'org.apache.commons:commons-lang3:3.10'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core:9.0.41'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.41'
-    implementation 'org.joda:joda-money:1.0.1'
+    implementation 'org.apache.commons:commons-lang3'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    implementation 'org.joda:joda-money:1.0.3'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-tomcat'
@@ -28,17 +28,17 @@ dependencies {
 
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.3'
 
-    runtimeOnly 'mysql:mysql-connector-java:8.0.20'
+    runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'com.h2database:h2:1.4.200'
-    testImplementation 'org.mockito:mockito-inline:3.7.0'
+    testImplementation 'org.mockito:mockito-inline'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test:5.3.3.RELEASE'
+    testImplementation 'org.springframework.security:spring-security-test'
 
     // Lombok
-    compileOnly 'org.projectlombok:lombok:1.18.16'
-    annotationProcessor 'org.projectlombok:lombok:1.18.16'
-    testCompileOnly 'org.projectlombok:lombok:1.18.16'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 group = 'com.example'
