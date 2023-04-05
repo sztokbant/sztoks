@@ -41,6 +41,8 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
+ext['spring-security.version']='5.8.2'
+
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 description = 'demo'

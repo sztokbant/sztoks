@@ -8,24 +8,23 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired PasswordEncoder passwordEncoder;
-
+public class WebSecurityConfig {
     @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Override
-    protected void configure(final HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/resources/**", "/signup")
+    @Autowired PasswordEncoder passwordEncoder;
+
+    @Bean
+    public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
+        return http.authorizeHttpRequests()
+                .requestMatchers("/resources/**", "/signup")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -35,16 +34,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                .permitAll();
+                .permitAll()
+                .and()
+                .build();
     }
 
     @Bean
-    public AuthenticationManager customAuthenticationManager() throws Exception {
-        return authenticationManager();
-    }
-
-    @Autowired
-    public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+    public AuthenticationManager authenticationManager(final HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder)
+                .and()
+                .build();
     }
 }
