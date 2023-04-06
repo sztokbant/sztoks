@@ -20,7 +20,6 @@ import br.net.du.sztoks.model.util.UserUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
-import com.sun.istack.NotNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -165,7 +164,7 @@ public class Snapshot implements Comparable<Snapshot> {
             final int month,
             @NonNull final CurrencyUnit baseCurrencyUnit,
             @NonNull final BigDecimal defaultTithingPercentage,
-            @NotNull final SortedSet<Account> accounts,
+            @NonNull final SortedSet<Account> accounts,
             @NonNull final List<Transaction> transactions,
             @NonNull final Map<String, BigDecimal> currencyConversionRates) {
         this.year = year;
