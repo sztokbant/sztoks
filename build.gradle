@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     implementation 'com.google.collections:google-collections:1.0'
+    implementation 'io.github.mngsk:device-detector:1.0.10'
     implementation 'net.logstash.logback:logstash-logback-encoder:7.3'
     implementation 'org.apache.commons:commons-lang3'
     implementation 'org.apache.tomcat.embed:tomcat-embed-core'
@@ -21,13 +22,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-tomcat'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'io.github.mngsk:device-detector:1.0.10'
 
     // JSTL
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
 
     runtimeOnly 'com.mysql:mysql-connector-j'
+
     testImplementation 'com.h2database:h2:1.4.200'
     testImplementation 'org.mockito:mockito-inline'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
