@@ -4,17 +4,20 @@ import static br.net.du.sztoks.controller.interceptor.GlobalModelAttributes.LOGG
 
 import br.net.du.sztoks.exception.UserNotFoundException;
 import br.net.du.sztoks.model.User;
+import io.github.mngsk.devicedetector.DeviceDetector;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.mobile.device.Device;
 import org.springframework.ui.Model;
 
 public class ControllerUtils {
     private static final String PERCENTAGE_TEMPLATE = "%s%%";
     private static final int DEFAULT_SCALE = 2;
+
+    private static final DeviceDetector DEVICE_DETECTOR =
+            new DeviceDetector.DeviceDetectorBuilder().build();
 
     public static User getLoggedUser(final Model model) {
         if (!model.containsAttribute(LOGGED_USER)) {
@@ -30,21 +33,14 @@ public class ControllerUtils {
     }
 
     public static String prepareTemplate(
+            final String userAgent,
             @NonNull final Model model,
-            @NonNull final Device device,
             @NonNull final String templateName) {
-        final String deviceType;
-        if (device.isMobile()) {
-            deviceType = "MOBILE";
-        } else if (device.isTablet()) {
-            deviceType = "TABLET";
-        } else {
-            deviceType = "DESKTOP";
-        }
-
-        model.addAttribute("deviceType", deviceType);
-        model.addAttribute("devicePlatform", device.getDevicePlatform().toString());
-
+        model.addAttribute(
+                "deviceType",
+                userAgent == null || DEVICE_DETECTOR.detect(userAgent).isDesktop()
+                        ? "DESKTOP"
+                        : "MOBILE");
         return templateName;
     }
 

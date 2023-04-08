@@ -3,6 +3,7 @@ package br.net.du.sztoks.controller.util;
 import org.joda.money.CurrencyUnit;
 
 public class ControllerConstants {
+    public static final String USER_AGENT_REQUEST_HEADER_KEY = "User-Agent";
     public static final String REDIRECT_SNAPSHOT_TEMPLATE = "redirect:/snapshot/%d";
     public static final String REDIRECT_TO_HOME = "redirect:/";
     public static final String REDIRECT_TO_LOGIN = "redirect:/login";

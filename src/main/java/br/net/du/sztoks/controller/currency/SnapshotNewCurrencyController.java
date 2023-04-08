@@ -7,6 +7,7 @@ import static br.net.du.sztoks.controller.util.ControllerConstants.SELECTED_CURR
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_BASE_CURRENCY_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_TITLE_KEY;
+import static br.net.du.sztoks.controller.util.ControllerConstants.USER_AGENT_REQUEST_HEADER_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.sztoks.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.sztoks.controller.util.ControllerUtils.prepareTemplate;
@@ -26,7 +27,6 @@ import java.util.List;
 import java.util.SortedSet;
 import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mobile.device.Device;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @WebController
 public class SnapshotNewCurrencyController {
@@ -51,18 +52,20 @@ public class SnapshotNewCurrencyController {
     @GetMapping(SNAPSHOT_NEW_CURRENCY_MAPPING)
     public String get(
             @PathVariable(value = ID) final Long snapshotId,
-            final Model model,
-            final Device device) {
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
+            final Model model) {
         final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
-        return prepareGetMapping(snapshot, model, device, new NewCurrencyViewModelInput());
+        return prepareGetMapping(userAgent, model, snapshot, new NewCurrencyViewModelInput());
     }
 
     @PostMapping(SNAPSHOT_NEW_CURRENCY_MAPPING)
     @Transactional
     public String post(
             @PathVariable(value = ID) final Long snapshotId,
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
             final Model model,
-            final Device device,
             @ModelAttribute(NEW_CURRENCY_FORM)
                     final NewCurrencyViewModelInput newCurrencyViewModelInput,
             final BindingResult bindingResult) {
@@ -71,7 +74,7 @@ public class SnapshotNewCurrencyController {
         validator.validate(newCurrencyViewModelInput, bindingResult, snapshot);
 
         if (bindingResult.hasErrors()) {
-            return prepareGetMapping(snapshot, model, device, newCurrencyViewModelInput);
+            return prepareGetMapping(userAgent, model, snapshot, newCurrencyViewModelInput);
         }
 
         snapshot.putCurrencyConversionRate(
@@ -83,9 +86,9 @@ public class SnapshotNewCurrencyController {
     }
 
     private String prepareGetMapping(
-            final Snapshot snapshot,
+            final String userAgent,
             final Model model,
-            final Device device,
+            final Snapshot snapshot,
             final NewCurrencyViewModelInput newCurrencyViewModelInput) {
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
@@ -112,6 +115,6 @@ public class SnapshotNewCurrencyController {
 
         model.addAttribute(NEW_CURRENCY_FORM, newCurrencyViewModelInput);
 
-        return prepareTemplate(model, device, SNAPSHOT_NEW_CURRENCY_TEMPLATE);
+        return prepareTemplate(userAgent, model, SNAPSHOT_NEW_CURRENCY_TEMPLATE);
     }
 }

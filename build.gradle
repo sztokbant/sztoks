@@ -8,9 +8,6 @@ plugins {
 
 repositories {
     mavenCentral()
-
-    // spring-mobile-starter
-    maven { url "https://repo.spring.io/milestone" }
 }
 
 dependencies {
@@ -25,7 +22,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-tomcat'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.mobile:spring-mobile-starter:2.0.0.M3'
+    implementation 'io.github.mngsk:device-detector:1.0.10'
 
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'com.h2database:h2:1.4.200'

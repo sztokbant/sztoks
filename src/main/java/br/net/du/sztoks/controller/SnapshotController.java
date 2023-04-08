@@ -5,6 +5,7 @@ import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_ID_K
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.TRANSACTION_CATEGORY_TOTALS;
 import static br.net.du.sztoks.controller.util.ControllerConstants.TWELVE_MONTHS_TOTALS;
+import static br.net.du.sztoks.controller.util.ControllerConstants.USER_AGENT_REQUEST_HEADER_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.YTD_TOTALS;
 import static br.net.du.sztoks.controller.util.ControllerUtils.getLoggedUser;
@@ -30,10 +31,10 @@ import br.net.du.sztoks.service.SnapshotService;
 import java.util.List;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mobile.device.Device;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @WebController
 public class SnapshotController {
@@ -45,9 +46,10 @@ public class SnapshotController {
 
     @GetMapping("/snapshot/{id}")
     public String get(
-            @PathVariable(value = ID) final Long snapshotId,
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
             final Model model,
-            final Device device) {
+            @PathVariable(value = ID) final Long snapshotId) {
         final User user = getLoggedUser(model);
         final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
 
@@ -74,7 +76,7 @@ public class SnapshotController {
                 getCumulativeTransactionCategoryTotalsViewModelOutput(user, snapshot);
         model.addAttribute(TRANSACTION_CATEGORY_TOTALS, value);
 
-        return prepareTemplate(model, device, SNAPSHOT);
+        return prepareTemplate(userAgent, model, SNAPSHOT);
     }
 
     private CumulativeTransactionTotalsViewModelOutput

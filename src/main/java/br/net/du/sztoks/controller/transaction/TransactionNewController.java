@@ -7,6 +7,7 @@ import static br.net.du.sztoks.controller.util.ControllerConstants.SELECTED_CURR
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_TITLE_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.TRANSACTION_TYPE_KEY;
+import static br.net.du.sztoks.controller.util.ControllerConstants.USER_AGENT_REQUEST_HEADER_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.sztoks.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.sztoks.controller.util.ControllerUtils.prepareTemplate;
@@ -28,7 +29,6 @@ import br.net.du.sztoks.service.SnapshotService;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mobile.device.Device;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @WebController
 public class TransactionNewController {
@@ -54,21 +55,27 @@ public class TransactionNewController {
     @GetMapping("/snapshot/{id}/newIncomeTransaction")
     public String newIncomeTransaction(
             @PathVariable(value = ID) final Long snapshotId,
-            final Model model,
-            final Device device) {
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
+            final Model model) {
         return prepareGetMapping(
-                snapshotId, model, device, TransactionType.INCOME, new TransactionViewModelInput());
+                userAgent,
+                model,
+                snapshotId,
+                TransactionType.INCOME,
+                new TransactionViewModelInput());
     }
 
     @GetMapping("/snapshot/{id}/newInvestmentTransaction")
     public String newInvestmentTransaction(
             @PathVariable(value = ID) final Long snapshotId,
-            final Model model,
-            final Device device) {
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
+            final Model model) {
         return prepareGetMapping(
-                snapshotId,
+                userAgent,
                 model,
-                device,
+                snapshotId,
                 TransactionType.INVESTMENT,
                 new TransactionViewModelInput());
     }
@@ -76,12 +83,13 @@ public class TransactionNewController {
     @GetMapping("/snapshot/{id}/newDonationTransaction")
     public String newDonationTransaction(
             @PathVariable(value = ID) final Long snapshotId,
-            final Model model,
-            final Device device) {
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
+            final Model model) {
         return prepareGetMapping(
-                snapshotId,
+                userAgent,
                 model,
-                device,
+                snapshotId,
                 TransactionType.DONATION,
                 new TransactionViewModelInput());
     }
@@ -90,8 +98,9 @@ public class TransactionNewController {
     @Transactional
     public String post(
             @PathVariable(value = ID) final Long snapshotId,
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
             final Model model,
-            final Device device,
             @ModelAttribute(TRANSACTION_FORM)
                     final TransactionViewModelInput transactionViewModelInput,
             final BindingResult bindingResult) {
@@ -104,7 +113,7 @@ public class TransactionNewController {
                 TransactionType.valueOf(transactionViewModelInput.getTypeName());
         if (bindingResult.hasErrors()) {
             return prepareGetMapping(
-                    snapshotId, model, device, transactionType, transactionViewModelInput);
+                    userAgent, model, snapshotId, transactionType, transactionViewModelInput);
         }
 
         final Transaction transaction = transactionViewModelInput.toTransaction();
@@ -126,9 +135,9 @@ public class TransactionNewController {
     }
 
     private String prepareGetMapping(
-            final Long snapshotId,
+            final String userAgent,
             final Model model,
-            final Device device,
+            final Long snapshotId,
             final TransactionType transactionType,
             final TransactionViewModelInput transactionViewModelInput) {
         // Ensure snapshot belongs to logged user
@@ -156,8 +165,8 @@ public class TransactionNewController {
         model.addAttribute(TRANSACTION_FORM, transactionViewModelInput);
 
         return prepareTemplate(
+                userAgent,
                 model,
-                device,
                 String.format(NEW_TRANSACTION_TEMPLATE, transactionType.toString().toLowerCase()));
     }
 }

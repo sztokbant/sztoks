@@ -6,6 +6,7 @@ import static br.net.du.sztoks.controller.util.ControllerConstants.REDIRECT_SNAP
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_BASE_CURRENCY_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_TITLE_KEY;
+import static br.net.du.sztoks.controller.util.ControllerConstants.USER_AGENT_REQUEST_HEADER_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.sztoks.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.sztoks.controller.util.ControllerUtils.prepareTemplate;
@@ -22,7 +23,6 @@ import br.net.du.sztoks.service.SnapshotService;
 import java.math.BigDecimal;
 import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mobile.device.Device;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @WebController
 public class SnapshotEditCurrenciesController {
@@ -47,9 +48,10 @@ public class SnapshotEditCurrenciesController {
 
     @GetMapping(SNAPSHOT_EDIT_CURRENCIES_MAPPING)
     public String get(
-            @PathVariable(value = ID) final Long snapshotId,
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
             final Model model,
-            final Device device) {
+            @PathVariable(value = ID) final Long snapshotId) {
         final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
 
         if (snapshot.getCurrencyConversionRates().isEmpty()) {
@@ -58,15 +60,16 @@ public class SnapshotEditCurrenciesController {
 
         final EditCurrenciesViewModelInput currenciesViewModelInput =
                 new EditCurrenciesViewModelInput(snapshot.getCurrencyConversionRates());
-        return prepareGetMapping(snapshot, model, device, currenciesViewModelInput);
+        return prepareGetMapping(userAgent, model, snapshot, currenciesViewModelInput);
     }
 
     @PostMapping(SNAPSHOT_EDIT_CURRENCIES_MAPPING)
     @Transactional
     public String post(
-            @PathVariable(value = ID) final Long snapshotId,
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
             final Model model,
-            final Device device,
+            @PathVariable(value = ID) final Long snapshotId,
             @ModelAttribute(EDIT_CURRENCIES_FORM)
                     final EditCurrenciesViewModelInput currenciesViewModelInput,
             final BindingResult bindingResult) {
@@ -75,7 +78,7 @@ public class SnapshotEditCurrenciesController {
         validator.validate(currenciesViewModelInput, bindingResult, snapshot);
 
         if (bindingResult.hasErrors()) {
-            return prepareGetMapping(snapshot, model, device, currenciesViewModelInput);
+            return prepareGetMapping(userAgent, model, snapshot, currenciesViewModelInput);
         }
 
         currenciesViewModelInput.getCurrencyConversionRates().entrySet().stream()
@@ -90,9 +93,9 @@ public class SnapshotEditCurrenciesController {
     }
 
     private String prepareGetMapping(
-            final Snapshot snapshot,
+            final String userAgent,
             final Model model,
-            final Device device,
+            final Snapshot snapshot,
             final EditCurrenciesViewModelInput currenciesViewModelInput) {
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
@@ -102,6 +105,6 @@ public class SnapshotEditCurrenciesController {
 
         model.addAttribute(EDIT_CURRENCIES_FORM, currenciesViewModelInput);
 
-        return prepareTemplate(model, device, SNAPSHOT_EDIT_CURRENCIES_TEMPLATE);
+        return prepareTemplate(userAgent, model, SNAPSHOT_EDIT_CURRENCIES_TEMPLATE);
     }
 }

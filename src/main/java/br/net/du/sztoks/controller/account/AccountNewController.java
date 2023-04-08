@@ -7,6 +7,7 @@ import static br.net.du.sztoks.controller.util.ControllerConstants.REDIRECT_SNAP
 import static br.net.du.sztoks.controller.util.ControllerConstants.SELECTED_CURRENCY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_TITLE_KEY;
+import static br.net.du.sztoks.controller.util.ControllerConstants.USER_AGENT_REQUEST_HEADER_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.sztoks.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.sztoks.controller.util.ControllerUtils.prepareTemplate;
@@ -26,7 +27,6 @@ import br.net.du.sztoks.service.SnapshotService;
 import java.time.YearMonth;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mobile.device.Device;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @WebController
 public class AccountNewController {
@@ -49,28 +50,31 @@ public class AccountNewController {
 
     @GetMapping("/snapshot/{id}/newAssetAccount")
     public String newAssetAccount(
-            @PathVariable(value = ID) final Long snapshotId,
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
             final Model model,
-            final Device device) {
+            @PathVariable(value = ID) final Long snapshotId) {
         return prepareGetMapping(
-                snapshotId, model, device, AccountType.ASSET, new AccountViewModelInput());
+                userAgent, model, snapshotId, AccountType.ASSET, new AccountViewModelInput());
     }
 
     @GetMapping("/snapshot/{id}/newLiabilityAccount")
     public String newLiabilityAccount(
-            @PathVariable(value = ID) final Long snapshotId,
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
             final Model model,
-            final Device device) {
+            @PathVariable(value = ID) final Long snapshotId) {
         return prepareGetMapping(
-                snapshotId, model, device, AccountType.LIABILITY, new AccountViewModelInput());
+                userAgent, model, snapshotId, AccountType.LIABILITY, new AccountViewModelInput());
     }
 
     @PostMapping(NEWACCOUNT_MAPPING)
     @Transactional
     public String post(
-            @PathVariable(value = ID) final Long snapshotId,
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
             final Model model,
-            final Device device,
+            @PathVariable(value = ID) final Long snapshotId,
             @ModelAttribute(ACCOUNT_FORM) final AccountViewModelInput accountViewModelInput,
             final BindingResult bindingResult) {
         final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
@@ -79,7 +83,8 @@ public class AccountNewController {
 
         final AccountType accountType = AccountType.valueOf(accountViewModelInput.getAccountType());
         if (bindingResult.hasErrors()) {
-            return prepareGetMapping(snapshotId, model, device, accountType, accountViewModelInput);
+            return prepareGetMapping(
+                    userAgent, model, snapshotId, accountType, accountViewModelInput);
         }
 
         final Account account = accountViewModelInput.toAccount();
@@ -97,9 +102,9 @@ public class AccountNewController {
     }
 
     private String prepareGetMapping(
-            final Long snapshotId,
+            final String userAgent,
             final Model model,
-            final Device device,
+            final Long snapshotId,
             final AccountType accountType,
             final AccountViewModelInput accountViewModelInput) {
         // Ensure snapshot belongs to logged user
@@ -122,8 +127,8 @@ public class AccountNewController {
         model.addAttribute(ACCOUNT_FORM, accountViewModelInput);
 
         return prepareTemplate(
+                userAgent,
                 model,
-                device,
                 String.format(NEW_ACCOUNT_TEMPLATE, accountType.toString().toLowerCase()));
     }
 }

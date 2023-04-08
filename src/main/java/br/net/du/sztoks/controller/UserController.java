@@ -4,6 +4,7 @@ import static br.net.du.sztoks.controller.util.ControllerConstants.CURRENCIES;
 import static br.net.du.sztoks.controller.util.ControllerConstants.DEFAULT_CURRENCY_UNIT;
 import static br.net.du.sztoks.controller.util.ControllerConstants.REDIRECT_TO_HOME;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SELECTED_CURRENCY;
+import static br.net.du.sztoks.controller.util.ControllerConstants.USER_AGENT_REQUEST_HEADER_KEY;
 import static br.net.du.sztoks.controller.util.ControllerUtils.prepareTemplate;
 
 import br.net.du.sztoks.controller.interceptor.WebController;
@@ -15,13 +16,13 @@ import java.math.BigDecimal;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.money.CurrencyUnit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mobile.device.Device;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @Slf4j
 @WebController
@@ -37,20 +38,24 @@ public class UserController {
     @Autowired private UserViewModelInputValidator validator;
 
     @GetMapping(SIGNUP_MAPPING)
-    public String signup(final Model model, final Device device) {
+    public String signup(
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
+            final Model model) {
         model.addAttribute(USER_FORM, new UserViewModelInput());
 
         model.addAttribute(CURRENCIES, CurrencyUnit.registeredCurrencies());
         model.addAttribute(SELECTED_CURRENCY, DEFAULT_CURRENCY_UNIT.getCode());
 
-        return prepareTemplate(model, device, SIGNUP_TEMPLATE);
+        return prepareTemplate(userAgent, model, SIGNUP_TEMPLATE);
     }
 
     @PostMapping(SIGNUP_MAPPING)
     @Transactional
     public String signup(
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
             final Model model,
-            final Device device,
             @ModelAttribute(USER_FORM) final UserViewModelInput userViewModelInput,
             final BindingResult bindingResult) {
         validator.validate(userViewModelInput, bindingResult);
@@ -66,7 +71,7 @@ public class UserController {
                 model.addAttribute(SELECTED_CURRENCY, DEFAULT_CURRENCY_UNIT.getCode());
             }
 
-            return prepareTemplate(model, device, SIGNUP_TEMPLATE);
+            return prepareTemplate(userAgent, model, SIGNUP_TEMPLATE);
         }
 
         final String email = userViewModelInput.getEmail().trim();
@@ -86,7 +91,11 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(
-            final Model model, final Device device, final String error, final String logout) {
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
+            final Model model,
+            final String error,
+            final String logout) {
 
         if (error != null) {
             final String errorMsg = "Invalid E-mail or Password.";
@@ -98,6 +107,6 @@ public class UserController {
             model.addAttribute("message", "You have been logged out successfully.");
         }
 
-        return prepareTemplate(model, device, "login");
+        return prepareTemplate(userAgent, model, "login");
     }
 }
