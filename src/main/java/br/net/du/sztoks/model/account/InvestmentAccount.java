@@ -5,12 +5,12 @@ import static br.net.du.sztoks.model.util.ModelConstants.DIVISION_SCALE;
 import static br.net.du.sztoks.model.util.ModelConstants.ONE_HUNDRED;
 
 import br.net.du.sztoks.model.totals.AccountSubtypeDisplayGroup;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -24,14 +23,10 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
-        // set the name of the attribute the CsrfToken will be populated on
-        final CsrfTokenRequestAttributeHandler requestHandler =
-                new CsrfTokenRequestAttributeHandler();
-        requestHandler.setCsrfRequestAttributeName("_csrf");
-
         http.authorizeHttpRequests(
                         (authz) ->
-                                authz.requestMatchers("/resources/**", "/signup")
+                                authz.shouldFilterAllDispatcherTypes(false)
+                                        .requestMatchers("/resources/**", "/signup")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())
@@ -39,10 +34,7 @@ public class WebSecurityConfig {
                 .logout((logout) -> logout.permitAll())
 
                 // Setting to false to enable auto-login upon sign-up
-                .securityContext((securityContext) -> securityContext.requireExplicitSave(false))
-
-                // New Spring Security 6 defaults
-                .csrf((csrf) -> csrf.csrfTokenRequestHandler(requestHandler));
+                .securityContext((securityContext) -> securityContext.requireExplicitSave(false));
 
         return http.build();
     }

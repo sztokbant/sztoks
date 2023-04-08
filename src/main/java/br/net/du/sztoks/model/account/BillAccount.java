@@ -1,9 +1,9 @@
 package br.net.du.sztoks.model.account;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

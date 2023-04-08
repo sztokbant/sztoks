@@ -3,13 +3,13 @@ package br.net.du.sztoks.model.transaction;
 import static br.net.du.sztoks.model.util.ModelConstants.DIVISION_SCALE;
 import static br.net.du.sztoks.model.util.ModelConstants.ONE_HUNDRED;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

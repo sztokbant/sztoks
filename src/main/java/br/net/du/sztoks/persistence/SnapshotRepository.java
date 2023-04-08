@@ -5,9 +5,9 @@ import br.net.du.sztoks.model.SnapshotSummary;
 import br.net.du.sztoks.model.User;
 import br.net.du.sztoks.model.totals.CumulativeTransactionCategoryTotals;
 import br.net.du.sztoks.model.totals.CumulativeTransactionTotals;
+import jakarta.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.LockModeType;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 

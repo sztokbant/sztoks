@@ -4,11 +4,11 @@ import static br.net.du.sztoks.model.totals.AccountSubtypeDisplayGroup.SHARED_BI
 import static br.net.du.sztoks.model.util.ModelConstants.DIVISION_SCALE;
 
 import br.net.du.sztoks.model.totals.AccountSubtypeDisplayGroup;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;

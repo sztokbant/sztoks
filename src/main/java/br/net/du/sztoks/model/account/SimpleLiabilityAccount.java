@@ -3,11 +3,11 @@ package br.net.du.sztoks.model.account;
 import static br.net.du.sztoks.model.totals.AccountSubtypeDisplayGroup.SIMPLE_LIABILITY;
 
 import br.net.du.sztoks.model.totals.AccountSubtypeDisplayGroup;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

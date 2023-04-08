@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'org.springframework.boot' version '2.7.10'
+    id 'org.springframework.boot' version '3.0.5'
     id "io.spring.dependency-management" version "1.1.0"
     id "com.diffplug.spotless" version "6.13.0"
 }
@@ -11,7 +11,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'javax.servlet:jstl'
     implementation 'com.google.collections:google-collections:1.0'
     implementation 'net.logstash.logback:logstash-logback-encoder:7.3'
     implementation 'org.apache.commons:commons-lang3'
@@ -23,6 +22,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-tomcat'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'io.github.mngsk:device-detector:1.0.10'
+
+    // JSTL
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
 
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'com.h2database:h2:1.4.200'
@@ -37,12 +40,10 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
-ext['spring-security.version']='5.8.2'
-
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 description = 'demo'
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 publishing {
     publications {

@@ -2,9 +2,9 @@ package br.net.du.sztoks.persistence;
 
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.account.Account;
+import jakarta.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.LockModeType;
 import org.springframework.data.jpa.repository.Lock;
 
 public interface AccountRepository extends CustomRepository<Account, Long> {
