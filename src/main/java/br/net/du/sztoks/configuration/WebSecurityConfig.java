@@ -38,8 +38,10 @@ public class WebSecurityConfig {
                 .formLogin((form) -> form.loginPage("/login").permitAll())
                 .logout((logout) -> logout.permitAll())
 
+                // Setting to false to enable auto-login upon sign-up
+                .securityContext((securityContext) -> securityContext.requireExplicitSave(false))
+
                 // New Spring Security 6 defaults
-                .securityContext((securityContext) -> securityContext.requireExplicitSave(true))
                 .csrf((csrf) -> csrf.csrfTokenRequestHandler(requestHandler));
 
         return http.build();
