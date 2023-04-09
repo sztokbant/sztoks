@@ -12,7 +12,7 @@ spring:
 
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL57Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
         generate_statistics: false
 
   messages:
