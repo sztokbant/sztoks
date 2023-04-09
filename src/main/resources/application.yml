@@ -28,3 +28,10 @@ logging:
     root: INFO
     org.springframework.orm.jpa: INFO
     org.springframework.transaction: INFO
+#    org.springframework.security: TRACE
+
+server:
+  servlet:
+    session:
+      persistent: true
+      timeout: 604800s
