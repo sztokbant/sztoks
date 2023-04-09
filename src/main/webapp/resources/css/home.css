@@ -15,18 +15,11 @@
 .col-snapshot-DESKTOP {
 }
 
-.col-snapshot-TABLET {
-}
-
 .col-snapshot-MOBILE {
     font-size: 48px;
 }
 
 .col-snapshot-delete-DESKTOP {
-    max-width: 42px;
-}
-
-.col-snapshot-delete-TABLET {
     max-width: 42px;
 }
 
