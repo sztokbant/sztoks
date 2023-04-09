@@ -37,12 +37,16 @@ https://opensource.org/licenses/MIT). See the LICENSE.txt file for details.
 
 _Sztoks_ is built using Spring Boot and Java technology with a web front-end.
 
-To run from IntelliJ IDEA, create a Gradle run configuration, set *Tasks* as
-`:bootRun`, and set the following "Environment variables" in order to point to
+To run from IntelliJ IDEA:
+
+1. Start a local MySQL server (mysqld).
+1. Connect to MySQL and create database `sztoks`.
+1. On IntelliJ IDEA, create a new `Gradle` run configuration, set *Run* as
+`:bootRun`, and set the following *Environment variables* in order to point to
 your MySQL server settings, e.g.:
 
 ```
-JDBC_DATABASE_URL=jdbc:mysql://localhost/myequity?user=root&password=&reconnect=true&serverTimezone=UTC;JDBC_DATABASE_PASSWORD=;JDBC_DATABASE_USERNAME=root
+JDBC_DATABASE_URL=jdbc:mysql://localhost/sztoks?user=root&password=&reconnect=true&serverTimezone=UTC;JDBC_DATABASE_PASSWORD=;JDBC_DATABASE_USERNAME=root
 ```
 
 ## Contributing

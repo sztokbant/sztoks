@@ -25,7 +25,7 @@ public class SimpleAssetAccount extends Account implements BalanceUpdatable, Fut
     @Getter
     private BigDecimal balance;
 
-    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
+    // Used by {@link br.net.du.sztoks.controller.viewmodel.account.AccountFactory}
     public SimpleAssetAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,

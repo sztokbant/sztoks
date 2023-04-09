@@ -30,7 +30,7 @@ public class GiftCertificateAccount extends Account
     @Getter
     private BigDecimal currentShareValue;
 
-    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
+    // Used by {@link br.net.du.sztoks.controller.viewmodel.account.AccountFactory}
     public GiftCertificateAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,

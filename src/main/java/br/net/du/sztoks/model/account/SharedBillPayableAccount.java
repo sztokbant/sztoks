@@ -21,7 +21,7 @@ public class SharedBillPayableAccount extends SharedBillAccount {
 
     public static final String ACCOUNT_SUB_TYPE = "SHARED_BILL_PAYABLE";
 
-    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
+    // Used by {@link br.net.du.sztoks.controller.viewmodel.account.AccountFactory}
     public SharedBillPayableAccount(
             @NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
         super(

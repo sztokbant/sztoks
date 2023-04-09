@@ -21,7 +21,7 @@ public class SharedBillReceivableAccount extends SharedBillAccount implements Fu
 
     public static final String ACCOUNT_SUB_TYPE = "SHARED_BILL_RECEIVABLE";
 
-    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
+    // Used by {@link br.net.du.sztoks.controller.viewmodel.account.AccountFactory}
     public SharedBillReceivableAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,

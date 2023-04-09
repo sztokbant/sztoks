@@ -25,7 +25,7 @@ public class SimpleLiabilityAccount extends Account implements BalanceUpdatable 
     @Getter
     private BigDecimal balance;
 
-    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
+    // Used by {@link br.net.du.sztoks.controller.viewmodel.account.AccountFactory}
     public SimpleLiabilityAccount(
             @NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
         this(name, currencyUnit, LocalDate.now(), BigDecimal.ZERO);

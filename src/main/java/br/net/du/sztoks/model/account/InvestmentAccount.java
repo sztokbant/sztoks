@@ -36,7 +36,7 @@ public class InvestmentAccount extends Account implements SharesUpdatable, Futur
     @Getter
     private BigDecimal currentShareValue;
 
-    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
+    // Used by {@link br.net.du.sztoks.controller.viewmodel.account.AccountFactory}
     public InvestmentAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,

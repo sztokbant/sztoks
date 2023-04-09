@@ -25,7 +25,7 @@ public class ReceivableAccount extends BillAccount
 
     @Column @Getter @Setter private LocalDate dueDate;
 
-    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
+    // Used by {@link br.net.du.sztoks.controller.viewmodel.account.AccountFactory}
     public ReceivableAccount(
             @NonNull final String name,
             @NonNull final CurrencyUnit currencyUnit,

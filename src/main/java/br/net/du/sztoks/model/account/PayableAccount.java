@@ -24,7 +24,7 @@ public class PayableAccount extends BillAccount implements DueDateUpdatable {
 
     @Column @Getter @Setter private LocalDate dueDate;
 
-    // Used by {@link br.net.du.myequity.controller.viewmodel.account.AccountFactory}
+    // Used by {@link br.net.du.sztoks.controller.viewmodel.account.AccountFactory}
     public PayableAccount(@NonNull final String name, @NonNull final CurrencyUnit currencyUnit) {
         this(name, currencyUnit, LocalDate.now(), LocalDate.now(), BigDecimal.ZERO, false);
     }
