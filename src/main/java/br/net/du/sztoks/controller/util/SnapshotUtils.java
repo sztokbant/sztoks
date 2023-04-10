@@ -8,14 +8,20 @@ import br.net.du.sztoks.service.SnapshotService;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 @Component
 public class SnapshotUtils {
     @Autowired private SnapshotService snapshotService;
 
+    @Transactional
     public Snapshot validateSnapshot(final Model model, final Long snapshotId) {
         final User user = getLoggedUser(model);
+
+        if (snapshotId == 0) {
+            return snapshotService.findTopByUser(user);
+        }
 
         final Optional<Snapshot> snapshotOpt = snapshotService.findById(snapshotId);
         if (!snapshotBelongsToUser(user, snapshotOpt)) {

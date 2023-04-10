@@ -145,7 +145,7 @@ public class TransactionNewController {
 
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
-        model.addAttribute(SNAPSHOT_ID_KEY, snapshotId);
+        model.addAttribute(SNAPSHOT_ID_KEY, snapshot.getId());
         model.addAttribute(SNAPSHOT_TITLE_KEY, getDisplayTitle(snapshot));
         model.addAttribute(TRANSACTION_TYPE_KEY, transactionType);
 
