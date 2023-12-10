@@ -7,10 +7,10 @@
             <a class="navbar-item" href="#" class="navbar-toggle collapsed" data-toggle="dropdown" data-target="#bs-example-navbar-collapse-1">
                 <c:choose>
                     <c:when test="${sztoksEnv eq 'localhost'}">
-                        <c:set var="envDiscriminator" value=" LOCALHOST" />
+                        <c:set var="envDiscriminator" value=" <span style='color: #00ff00;'>LOCALHOST</span>" />
                     </c:when>
                     <c:when test="${sztoksEnv eq 'beta'}">
-                        <c:set var="envDiscriminator" value=" BETA" />
+                        <c:set var="envDiscriminator" value=" <span style='color: #00ff00;'>BETA</span>" />
                     </c:when>
                     <c:otherwise>
                         <c:set var="envDiscriminator" value="" />
