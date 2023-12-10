@@ -17,7 +17,7 @@ class MoneyFormatUtilsTest {
         final String formatted = MoneyFormatUtils.format(usdCurrency, new BigDecimal(amount));
 
         // THEN
-        assertEquals(usdCurrency.getSymbol() + "0.05", formatted);
+        assertEquals("$0.05", formatted);
     }
 
     @Test

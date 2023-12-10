@@ -36,6 +36,12 @@ public class MoneyFormatUtils {
                     .appendAmount(MoneyAmountStyle.ASCII_DECIMAL_POINT_GROUP3_COMMA)
                     .toFormatter();
 
+    private static final MoneyFormatter USD_FORMATTER =
+            new MoneyFormatterBuilder()
+                    .appendLiteral("$")
+                    .appendAmount(MoneyAmountStyle.ASCII_DECIMAL_POINT_GROUP3_COMMA)
+                    .toFormatter();
+
     private static final MoneyFormatter DEFAULT_FORMATTER =
             new MoneyFormatterBuilder()
                     .appendCurrencySymbolLocalized()
@@ -51,7 +57,9 @@ public class MoneyFormatUtils {
                     CurrencyUnit.CAD,
                     CAD_FORMATTER,
                     CurrencyUnit.EUR,
-                    EUR_FORMATTER);
+                    EUR_FORMATTER,
+                    CurrencyUnit.USD,
+                    USD_FORMATTER);
 
     public static String format(
             @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal amount) {
