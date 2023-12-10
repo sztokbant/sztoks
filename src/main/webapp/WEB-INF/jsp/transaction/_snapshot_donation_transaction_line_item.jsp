@@ -27,9 +27,9 @@ $(document).ready(function() {
 
     <%@ include file="_recurrence_select.jsp" %>
 
-    <%@ include file="_snapshot_col_transaction_description.jsp" %>
-
     <%@ include file="_snapshot_col_transaction_date.jsp" %>
+
+    <%@ include file="_snapshot_col_transaction_description.jsp" %>
 
     <div class="col col-cell-${deviceType} text-center ${regularClass}">
         <form id="form_txn_donation_category_${entity.id}">

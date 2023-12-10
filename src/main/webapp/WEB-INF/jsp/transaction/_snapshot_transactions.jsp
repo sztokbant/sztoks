@@ -42,8 +42,8 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title emoji-select-cell-${deviceType}">&#128257;</div>
-                    <div class="col col-cell-${deviceType} col-title col-account-name">Description</div>
                     <div class="col col-cell-${deviceType} col-title">Date</div>
+                    <div class="col col-cell-${deviceType} col-title col-account-name">Description</div>
                     <div class="col col-cell-${deviceType} col-title">Category</div>
                     <div class="col col-cell-${deviceType} col-title">Tithing %</div>
                     <div class="col col-cell-${deviceType} col-title">Amount</div>
@@ -102,8 +102,8 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title emoji-select-cell-${deviceType}">&#128257;</div>
-                    <div class="col col-cell-${deviceType} col-title col-account-name">Description</div>
                     <div class="col col-cell-${deviceType} col-title">Date</div>
+                    <div class="col col-cell-${deviceType} col-title col-account-name">Description</div>
                     <div class="col col-cell-${deviceType} col-title">Category</div>
                     <div class="col col-cell-${deviceType} col-title">Amount</div>
                 </div>
@@ -189,8 +189,8 @@
                 <div class="row border-1px-bottom">
                     <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title emoji-select-cell-${deviceType}">&#128257;</div>
-                    <div class="col col-cell-${deviceType} col-title col-account-name">Description</div>
                     <div class="col col-cell-${deviceType} col-title">Date</div>
+                    <div class="col col-cell-${deviceType} col-title col-account-name">Description</div>
                     <div class="col col-cell-${deviceType} col-title">Category</div>
                     <div class="col col-cell-${deviceType} col-title width-70px">Tax deductible?</div>
                     <div class="col col-cell-${deviceType} col-title">Amount</div>
