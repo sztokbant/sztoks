@@ -12,6 +12,9 @@
                     <c:when test="${sztoksEnv eq 'beta'}">
                         <c:set var="envDiscriminator" value=" <span style='color: #00ff00;'>BETA</span>" />
                     </c:when>
+                    <c:when test="${sztoksEnv eq 'gamma'}">
+                        <c:set var="envDiscriminator" value=" <span style='color: #ffa500;'>GAMMA</span>" />
+                    </c:when>
                     <c:otherwise>
                         <c:set var="envDiscriminator" value="" />
                     </c:otherwise>
