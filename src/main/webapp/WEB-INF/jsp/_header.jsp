@@ -5,7 +5,19 @@
     <div class="container-fluid">
         <div class="navbar-header sztoks-navbar">
             <a class="navbar-item" href="#" class="navbar-toggle collapsed" data-toggle="dropdown" data-target="#bs-example-navbar-collapse-1">
-                <b>&#9776;&nbsp; Sztoks</b>
+                <c:choose>
+                    <c:when test="${sztoksEnv eq 'localhost'}">
+                        <c:set var="envDiscriminator" value=" LOCALHOST" />
+                    </c:when>
+                    <c:when test="${sztoksEnv eq 'beta'}">
+                        <c:set var="envDiscriminator" value=" BETA" />
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var="envDiscriminator" value="" />
+                    </c:otherwise>
+                </c:choose>
+
+                <b>&#9776;&nbsp; Sztoks</b>${envDiscriminator}
             </a>
         </div>
 

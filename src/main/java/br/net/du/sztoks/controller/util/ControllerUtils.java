@@ -41,6 +41,7 @@ public class ControllerUtils {
                 userAgent == null || DEVICE_DETECTOR.detect(userAgent).isDesktop()
                         ? "DESKTOP"
                         : "MOBILE");
+        model.addAttribute("sztoksEnv", System.getenv("SZTOKS_ENV"));
         return templateName;
     }
 

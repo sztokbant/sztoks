@@ -46,7 +46,7 @@ To run from IntelliJ IDEA:
 your MySQL server settings, e.g.:
 
 ```
-JDBC_DATABASE_URL=jdbc:mysql://localhost/sztoks?user=root&password=&reconnect=true&serverTimezone=UTC;JDBC_DATABASE_PASSWORD=;JDBC_DATABASE_USERNAME=root
+SZTOKS_ENV=localhost;JDBC_DATABASE_URL=jdbc:mysql://localhost/sztoks?user=root&password=&reconnect=true&serverTimezone=UTC;JDBC_DATABASE_PASSWORD=;JDBC_DATABASE_USERNAME=root
 ```
 
 ## Contributing
