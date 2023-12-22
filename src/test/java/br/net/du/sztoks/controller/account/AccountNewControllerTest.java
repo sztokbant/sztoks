@@ -19,7 +19,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import br.net.du.sztoks.controller.PostControllerTestBase;
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.account.Account;
-import br.net.du.sztoks.model.account.DueDateUpdatable;
 import br.net.du.sztoks.model.account.FutureTithingPolicy;
 import br.net.du.sztoks.model.account.PayableAccount;
 import br.net.du.sztoks.model.account.ReceivableAccount;
@@ -45,8 +44,8 @@ class AccountNewControllerTest extends PostControllerTestBase {
     private static final String POST_URL = "/snapshot/" + SNAPSHOT_ID + "/newAccount";
     private static final String SNAPSHOT_URL = String.format("/snapshot/%d", SNAPSHOT_ID);
 
-    @MockBean protected SnapshotService snapshotService;
     @MockBean protected AccountService accountService;
+    @MockBean protected SnapshotService snapshotService;
 
     private Snapshot snapshot;
 
@@ -73,9 +72,9 @@ class AccountNewControllerTest extends PostControllerTestBase {
                         MockMvcRequestBuilders.post(url)
                                 .with(csrf())
                                 .with(user(user.getEmail()))
-                                .param(NAME_KEY, "Simple Asset")
                                 .param(ACCOUNT_TYPE_KEY, "ASSET")
                                 .param(SUBTYPE_NAME_KEY, "SimpleAssetAccount")
+                                .param(NAME_KEY, "Simple Asset")
                                 .param(CURRENCY_UNIT_KEY, CURRENCY_UNIT.getCode())
                                 .param(FUTURE_TITHYNG_POLICY_KEY, FutureTithingPolicy.ALL.name())
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED));
@@ -85,9 +84,11 @@ class AccountNewControllerTest extends PostControllerTestBase {
 
         final Account account = snapshot.getAccounts().first();
         assertTrue(account instanceof SimpleAssetAccount);
-        assertThat(
-                ((SimpleAssetAccount) account).getFutureTithingPolicy(),
-                is(FutureTithingPolicy.ALL));
+
+        final SimpleAssetAccount simpleAssetAccount = (SimpleAssetAccount) account;
+        assertThat(simpleAssetAccount.getName(), is("Simple Asset"));
+        assertThat(simpleAssetAccount.getCurrencyUnit(), is(CURRENCY_UNIT));
+        assertThat(simpleAssetAccount.getFutureTithingPolicy(), is(FutureTithingPolicy.ALL));
 
         verifyRedirect(resultActions, SNAPSHOT_URL);
     }
@@ -103,9 +104,9 @@ class AccountNewControllerTest extends PostControllerTestBase {
                         MockMvcRequestBuilders.post(url)
                                 .with(csrf())
                                 .with(user(user.getEmail()))
-                                .param(NAME_KEY, "Receivable")
                                 .param(ACCOUNT_TYPE_KEY, "ASSET")
                                 .param(SUBTYPE_NAME_KEY, "ReceivableAccount")
+                                .param(NAME_KEY, "Receivable")
                                 .param(CURRENCY_UNIT_KEY, CURRENCY_UNIT.getCode())
                                 .param(FUTURE_TITHYNG_POLICY_KEY, FutureTithingPolicy.ALL.name())
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED));
@@ -115,11 +116,13 @@ class AccountNewControllerTest extends PostControllerTestBase {
 
         final Account account = snapshot.getAccounts().first();
         assertTrue(account instanceof ReceivableAccount);
+
+        final ReceivableAccount receivableAccount = (ReceivableAccount) account;
+        assertThat(receivableAccount.getName(), is("Receivable"));
+        assertThat(receivableAccount.getCurrencyUnit(), is(CURRENCY_UNIT));
+        assertThat(receivableAccount.getFutureTithingPolicy(), is(FutureTithingPolicy.ALL));
         assertThat(
-                ((ReceivableAccount) account).getFutureTithingPolicy(),
-                is(FutureTithingPolicy.ALL));
-        assertThat(
-                ((DueDateUpdatable) account).getDueDate(),
+                receivableAccount.getDueDate(),
                 is(YearMonth.of(snapshot.getYear(), snapshot.getMonth()).atEndOfMonth()));
 
         verifyRedirect(resultActions, SNAPSHOT_URL);
@@ -136,15 +139,21 @@ class AccountNewControllerTest extends PostControllerTestBase {
                         MockMvcRequestBuilders.post(url)
                                 .with(csrf())
                                 .with(user(user.getEmail()))
-                                .param(NAME_KEY, "Simple Liability")
                                 .param(ACCOUNT_TYPE_KEY, "LIABILITY")
                                 .param(SUBTYPE_NAME_KEY, "SimpleLiabilityAccount")
+                                .param(NAME_KEY, "Simple Liability")
                                 .param(CURRENCY_UNIT_KEY, CURRENCY_UNIT.getCode())
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED));
 
         // THEN
         assertThat(snapshot.getAccounts().size(), is(1));
-        assertTrue(snapshot.getAccounts().first() instanceof SimpleLiabilityAccount);
+        final Account account = snapshot.getAccounts().first();
+        assertTrue(account instanceof SimpleLiabilityAccount);
+
+        final SimpleLiabilityAccount simpleLiabilityAccount = (SimpleLiabilityAccount) account;
+        assertThat(simpleLiabilityAccount.getName(), is("Simple Liability"));
+        assertThat(simpleLiabilityAccount.getCurrencyUnit(), is(CURRENCY_UNIT));
+
         verifyRedirect(resultActions, SNAPSHOT_URL);
     }
 
@@ -159,11 +168,10 @@ class AccountNewControllerTest extends PostControllerTestBase {
                         MockMvcRequestBuilders.post(url)
                                 .with(csrf())
                                 .with(user(user.getEmail()))
-                                .param(NAME_KEY, "Payable")
                                 .param(ACCOUNT_TYPE_KEY, "LIABILITY")
                                 .param(SUBTYPE_NAME_KEY, "PayableAccount")
+                                .param(NAME_KEY, "Payable")
                                 .param(CURRENCY_UNIT_KEY, CURRENCY_UNIT.getCode())
-                                .param(FUTURE_TITHYNG_POLICY_KEY, FutureTithingPolicy.ALL.name())
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED));
 
         // THEN
@@ -171,8 +179,12 @@ class AccountNewControllerTest extends PostControllerTestBase {
 
         final Account account = snapshot.getAccounts().first();
         assertTrue(account instanceof PayableAccount);
+
+        final PayableAccount payableAccount = (PayableAccount) account;
+        assertThat(payableAccount.getName(), is("Payable"));
+        assertThat(payableAccount.getCurrencyUnit(), is(CURRENCY_UNIT));
         assertThat(
-                ((DueDateUpdatable) account).getDueDate(),
+                payableAccount.getDueDate(),
                 is(YearMonth.of(snapshot.getYear(), snapshot.getMonth()).atEndOfMonth()));
 
         verifyRedirect(resultActions, SNAPSHOT_URL);
@@ -189,9 +201,9 @@ class AccountNewControllerTest extends PostControllerTestBase {
                         MockMvcRequestBuilders.post(url)
                                 .with(csrf())
                                 .with(user(user.getEmail()))
-                                .param(NAME_KEY, "Receivable")
                                 .param(ACCOUNT_TYPE_KEY, "ASSET")
                                 .param(SUBTYPE_NAME_KEY, "ReceivableAccount")
+                                .param(NAME_KEY, "Receivable")
                                 .param(CURRENCY_UNIT_KEY, CURRENCY_UNIT.getCode())
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED));
 
@@ -200,9 +212,14 @@ class AccountNewControllerTest extends PostControllerTestBase {
 
         final Account account = snapshot.getAccounts().first();
         assertTrue(account instanceof ReceivableAccount);
+
+        final ReceivableAccount receivableAccount = (ReceivableAccount) account;
+        assertThat(receivableAccount.getName(), is("Receivable"));
+        assertThat(receivableAccount.getCurrencyUnit(), is(CURRENCY_UNIT));
+        assertThat(receivableAccount.getFutureTithingPolicy(), is(FutureTithingPolicy.NONE));
         assertThat(
-                ((ReceivableAccount) account).getFutureTithingPolicy(),
-                is(FutureTithingPolicy.NONE));
+                receivableAccount.getDueDate(),
+                is(YearMonth.of(snapshot.getYear(), snapshot.getMonth()).atEndOfMonth()));
 
         verifyRedirect(resultActions, SNAPSHOT_URL);
     }
@@ -219,9 +236,9 @@ class AccountNewControllerTest extends PostControllerTestBase {
                         MockMvcRequestBuilders.post(url)
                                 .with(csrf())
                                 .with(user(user.getEmail()))
-                                .param(NAME_KEY, "Payable")
                                 .param(ACCOUNT_TYPE_KEY, "ASSET")
                                 .param(SUBTYPE_NAME_KEY, "PayableAccount")
+                                .param(NAME_KEY, "Payable")
                                 .param(CURRENCY_UNIT_KEY, CURRENCY_UNIT.getCode())
                                 .param(FUTURE_TITHYNG_POLICY_KEY, FutureTithingPolicy.ALL.name())
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED));
@@ -231,9 +248,6 @@ class AccountNewControllerTest extends PostControllerTestBase {
 
         final Account account = snapshot.getAccounts().first();
         assertTrue(account instanceof PayableAccount);
-        assertThat(
-                ((DueDateUpdatable) account).getDueDate(),
-                is(YearMonth.of(snapshot.getYear(), snapshot.getMonth()).atEndOfMonth()));
 
         verifyRedirect(resultActions, SNAPSHOT_URL);
     }

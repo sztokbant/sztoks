@@ -14,7 +14,7 @@ import static br.net.du.sztoks.test.TestConstants.PASSWORD;
 import static br.net.du.sztoks.test.TestConstants.PASSWORD_CONFIRM_FIELD;
 import static br.net.du.sztoks.test.TestConstants.PASSWORD_FIELD;
 import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE;
-import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE_FIELD;
+import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE_KEY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -116,7 +116,7 @@ class UserControllerTest {
                                 .param(FIRST_NAME_FIELD, FIRST_NAME + EXTRA_SPACES)
                                 .param(LAST_NAME_FIELD, LAST_NAME + EXTRA_SPACES)
                                 .param(CURRENCY_UNIT_KEY, CURRENCY_UNIT.getCode())
-                                .param(TITHING_PERCENTAGE_FIELD, TITHING_PERCENTAGE.toPlainString())
+                                .param(TITHING_PERCENTAGE_KEY, TITHING_PERCENTAGE.toPlainString())
                                 .param(PASSWORD_FIELD, PASSWORD)
                                 .param(PASSWORD_CONFIRM_FIELD, PASSWORD));
 

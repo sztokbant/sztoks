@@ -9,7 +9,7 @@ import static br.net.du.sztoks.test.TestConstants.LAST_NAME;
 import static br.net.du.sztoks.test.TestConstants.LAST_NAME_FIELD;
 import static br.net.du.sztoks.test.TestConstants.PASSWORD_CONFIRM_FIELD;
 import static br.net.du.sztoks.test.TestConstants.PASSWORD_FIELD;
-import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE_FIELD;
+import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE_KEY;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
@@ -210,7 +210,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(TITHING_PERCENTAGE_FIELD));
+        assertTrue(errors.hasFieldErrors(TITHING_PERCENTAGE_KEY));
     }
 
     @Test
@@ -222,7 +222,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(TITHING_PERCENTAGE_FIELD));
+        assertTrue(errors.hasFieldErrors(TITHING_PERCENTAGE_KEY));
     }
 
     @Test
@@ -234,7 +234,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(TITHING_PERCENTAGE_FIELD));
+        assertTrue(errors.hasFieldErrors(TITHING_PERCENTAGE_KEY));
     }
 
     @Test

@@ -5,18 +5,18 @@ import static br.net.du.sztoks.controller.viewmodel.TransactionViewModelInputTes
 import static br.net.du.sztoks.controller.viewmodel.TransactionViewModelInputTest.populateIncomeTransactionAttributes;
 import static br.net.du.sztoks.controller.viewmodel.TransactionViewModelInputTest.populateInvestmentTransactionAttributes;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
-import static br.net.du.sztoks.test.TestConstants.AMOUNT_FIELD;
+import static br.net.du.sztoks.test.TestConstants.AMOUNT_KEY;
 import static br.net.du.sztoks.test.TestConstants.ANOTHER_CURRENCY_UNIT;
-import static br.net.du.sztoks.test.TestConstants.CATEGORY_FIELD;
+import static br.net.du.sztoks.test.TestConstants.CATEGORY_KEY;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT_KEY;
-import static br.net.du.sztoks.test.TestConstants.DATE_FIELD;
+import static br.net.du.sztoks.test.TestConstants.DATE_KEY;
 import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_MONTH;
 import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_YEAR;
-import static br.net.du.sztoks.test.TestConstants.IS_TAX_DEDUCTIBLE_FIELD;
-import static br.net.du.sztoks.test.TestConstants.RECURRENCE_POLICY;
+import static br.net.du.sztoks.test.TestConstants.IS_TAX_DEDUCTIBLE_KEY;
+import static br.net.du.sztoks.test.TestConstants.RECURRENCE_POLICY_KEY;
 import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE;
-import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE_FIELD;
+import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE_KEY;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -159,7 +159,7 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(DATE_FIELD));
+        assertTrue(errors.hasFieldErrors(DATE_KEY));
     }
 
     @Test
@@ -212,7 +212,7 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(AMOUNT_FIELD));
+        assertTrue(errors.hasFieldErrors(AMOUNT_KEY));
     }
 
     @Test
@@ -225,7 +225,7 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(RECURRENCE_POLICY));
+        assertTrue(errors.hasFieldErrors(RECURRENCE_POLICY_KEY));
     }
 
     @Test
@@ -238,7 +238,7 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(TITHING_PERCENTAGE_FIELD));
+        assertTrue(errors.hasFieldErrors(TITHING_PERCENTAGE_KEY));
     }
 
     @Test
@@ -251,7 +251,7 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(CATEGORY_FIELD));
+        assertTrue(errors.hasFieldErrors(CATEGORY_KEY));
     }
 
     @Test
@@ -264,6 +264,6 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(IS_TAX_DEDUCTIBLE_FIELD));
+        assertTrue(errors.hasFieldErrors(IS_TAX_DEDUCTIBLE_KEY));
     }
 }

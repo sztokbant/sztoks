@@ -51,22 +51,24 @@ public class TestConstants {
     public static final CurrencyUnit ANOTHER_CURRENCY_UNIT = CurrencyUnit.AUD;
     public static final BigDecimal TITHING_PERCENTAGE = new BigDecimal("15.00");
 
-    public static final String AMOUNT_FIELD = "amount";
+    public static final String AMOUNT_KEY = "amount";
     public static final String CONVERSION_RATE_FIELD = "conversionRate";
     public static final String CURRENCY_UNIT_KEY = "currencyUnit";
-    public static final String DATE_FIELD = "date";
+    public static final String DATE_KEY = "date";
+    public static final String DESCRIPTION_KEY = "description";
     public static final String EMAIL_FIELD = "email";
     public static final String FIRST_NAME_FIELD = "firstName";
     public static final String FUTURE_TITHYNG_POLICY_KEY = "futureTithingPolicy";
-    public static final String CATEGORY_FIELD = "category";
-    public static final String IS_TAX_DEDUCTIBLE_FIELD = "isTaxDeductible";
+    public static final String CATEGORY_KEY = "category";
+    public static final String IS_TAX_DEDUCTIBLE_KEY = "isTaxDeductible";
     public static final String LAST_NAME_FIELD = "lastName";
     public static final String NAME_FIELD = "name";
     public static final String PASSWORD_CONFIRM_FIELD = "passwordConfirm";
     public static final String PASSWORD_FIELD = "password";
-    public static final String RECURRENCE_POLICY = "recurrencePolicy";
+    public static final String RECURRENCE_POLICY_KEY = "recurrencePolicy";
     public static final String SUBTYPE_NAME_KEY = "subtypeName";
-    public static final String TITHING_PERCENTAGE_FIELD = "tithingPercentage";
+    public static final String TITHING_PERCENTAGE_KEY = "tithingPercentage";
+    public static final String TYPE_NAME_KEY = "typeName";
 
     public static SimpleAssetAccount newSimpleAssetAccount(final CurrencyUnit currencyUnit) {
         return new SimpleAssetAccount(
