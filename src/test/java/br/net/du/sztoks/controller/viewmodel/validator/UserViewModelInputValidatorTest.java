@@ -1,6 +1,6 @@
 package br.net.du.sztoks.controller.viewmodel.validator;
 
-import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT_FIELD;
+import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT_KEY;
 import static br.net.du.sztoks.test.TestConstants.EMAIL;
 import static br.net.du.sztoks.test.TestConstants.EMAIL_FIELD;
 import static br.net.du.sztoks.test.TestConstants.FIRST_NAME;
@@ -174,7 +174,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_KEY));
     }
 
     @Test
@@ -186,7 +186,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_KEY));
     }
 
     @Test
@@ -198,7 +198,7 @@ class UserViewModelInputValidatorTest {
         validator.validate(userViewModelInput, errors);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_KEY));
     }
 
     @Test

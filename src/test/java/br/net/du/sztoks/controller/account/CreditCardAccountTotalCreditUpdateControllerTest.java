@@ -1,6 +1,6 @@
 package br.net.du.sztoks.controller.account;
 
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_ACCOUNT_TYPE;
+import static br.net.du.sztoks.controller.ControllerTestConstants.ACCOUNT_TYPE_KEY;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_AVAILABLE_CREDIT;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_BALANCE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_CREDIT_CARD_TOTALS_FOR_CURRENCY_UNIT;
@@ -107,7 +107,7 @@ class CreditCardAccountTotalCreditUpdateControllerTest extends AccountAjaxContro
         assertThat(jsonNode.get(JSON_BALANCE).asText(), is("$4,900.00"));
         assertThat(jsonNode.get(JSON_REMAINING_BALANCE).asText(), is("$4,500.00"));
 
-        assertThat(jsonNode.get(JSON_ACCOUNT_TYPE).asText(), is(AccountType.LIABILITY.toString()));
+        assertThat(jsonNode.get(ACCOUNT_TYPE_KEY).asText(), is(AccountType.LIABILITY.toString()));
         assertThat(jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText(), is("$4,900.00"));
 
         assertThat(jsonNode.get(JSON_CURRENCY_UNIT).asText(), is(CURRENCY_UNIT.toString()));

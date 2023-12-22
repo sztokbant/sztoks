@@ -1,6 +1,6 @@
 package br.net.du.sztoks.controller.account;
 
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_ACCOUNT_TYPE;
+import static br.net.du.sztoks.controller.ControllerTestConstants.ACCOUNT_TYPE_KEY;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_DEFAULT_TITHING_PERCENTAGE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_FUTURE_TITHING_BALANCE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_NET_WORTH;
@@ -105,7 +105,7 @@ class SnapshotUpdateDefaultTithingPercentageControllerTest extends AccountAjaxCo
         // Only checking fields relevant to the AJAX callback
         assertThat(jsonNode.get(JSON_DEFAULT_TITHING_PERCENTAGE).asText(), is("30.00%"));
 
-        assertThat(jsonNode.get(JSON_ACCOUNT_TYPE).asText(), is(AccountType.LIABILITY.toString()));
+        assertThat(jsonNode.get(ACCOUNT_TYPE_KEY).asText(), is(AccountType.LIABILITY.toString()));
         assertThat(jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText(), is("$29.70"));
 
         assertThat(jsonNode.get(JSON_FUTURE_TITHING_BALANCE).asText(), is("$29.70"));

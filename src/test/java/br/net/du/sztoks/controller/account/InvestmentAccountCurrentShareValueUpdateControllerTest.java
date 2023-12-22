@@ -1,6 +1,6 @@
 package br.net.du.sztoks.controller.account;
 
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_ACCOUNT_TYPE;
+import static br.net.du.sztoks.controller.ControllerTestConstants.ACCOUNT_TYPE_KEY;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_AMOUNT_INVESTED;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_BALANCE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_CURRENT_SHARE_VALUE;
@@ -110,7 +110,7 @@ class InvestmentAccountCurrentShareValueUpdateControllerTest extends AccountAjax
         assertThat(jsonNode.get(JSON_PROFIT_PERCENTAGE).asText(), is("38.72%"));
         assertThat(jsonNode.get(JSON_BALANCE).asText(), is("$6,515.64"));
 
-        assertThat(jsonNode.get(JSON_ACCOUNT_TYPE).asText(), is(AccountType.ASSET.toString()));
+        assertThat(jsonNode.get(ACCOUNT_TYPE_KEY).asText(), is(AccountType.ASSET.toString()));
         assertThat(jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText(), is("$6,515.64"));
 
         final JsonNode investmentTotals = jsonNode.get(JSON_INVESTMENT_TOTALS);
@@ -178,7 +178,7 @@ class InvestmentAccountCurrentShareValueUpdateControllerTest extends AccountAjax
         assertThat(jsonNode.get(JSON_PROFIT_PERCENTAGE).asText(), is("38.72%"));
         assertThat(jsonNode.get(JSON_BALANCE).asText(), is("$6,515.64"));
 
-        assertThat(jsonNode.get(JSON_ACCOUNT_TYPE).asText(), is(AccountType.ASSET.toString()));
+        assertThat(jsonNode.get(ACCOUNT_TYPE_KEY).asText(), is(AccountType.ASSET.toString()));
         assertThat(jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText(), is("$6,515.64"));
 
         final JsonNode investmentTotals = jsonNode.get(JSON_INVESTMENT_TOTALS);

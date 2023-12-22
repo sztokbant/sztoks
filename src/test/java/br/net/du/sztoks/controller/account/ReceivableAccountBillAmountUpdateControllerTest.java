@@ -1,7 +1,7 @@
 package br.net.du.sztoks.controller.account;
 
+import static br.net.du.sztoks.controller.ControllerTestConstants.ACCOUNT_TYPE_KEY;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_ACCOUNT_SUBTYPE;
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_ACCOUNT_TYPE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_BALANCE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_BILL_AMOUNT;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_FUTURE_TITHING_BALANCE;
@@ -109,7 +109,7 @@ class ReceivableAccountBillAmountUpdateControllerTest extends AccountAjaxControl
                 is(ReceivableAccount.ACCOUNT_SUB_TYPE));
         assertThat(jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_SUBTYPE).asText(), is("$108.00"));
 
-        assertThat(jsonNode.get(JSON_ACCOUNT_TYPE).asText(), is(AccountType.ASSET.toString()));
+        assertThat(jsonNode.get(ACCOUNT_TYPE_KEY).asText(), is(AccountType.ASSET.toString()));
         assertThat(jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText(), is("$108.00"));
 
         assertThat(jsonNode.get(JSON_FUTURE_TITHING_BALANCE).asText(), is("$0.00"));

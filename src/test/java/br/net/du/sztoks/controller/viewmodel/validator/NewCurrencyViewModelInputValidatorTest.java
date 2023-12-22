@@ -3,7 +3,7 @@ package br.net.du.sztoks.controller.viewmodel.validator;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CONVERSION_RATE_FIELD;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
-import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT_FIELD;
+import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT_KEY;
 import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_MONTH;
 import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_YEAR;
 import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE;
@@ -87,7 +87,7 @@ class NewCurrencyViewModelInputValidatorTest {
         validator.validate(newCurrencyViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_KEY));
     }
 
     @Test
@@ -100,7 +100,7 @@ class NewCurrencyViewModelInputValidatorTest {
         validator.validate(newCurrencyViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_KEY));
     }
 
     @Test
@@ -113,7 +113,7 @@ class NewCurrencyViewModelInputValidatorTest {
         validator.validate(newCurrencyViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_KEY));
     }
 
     @Test

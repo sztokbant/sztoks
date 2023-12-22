@@ -3,11 +3,11 @@ package br.net.du.sztoks.controller.viewmodel.validator;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.ANOTHER_CURRENCY_UNIT;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
-import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT_FIELD;
+import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT_KEY;
 import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_MONTH;
 import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_YEAR;
 import static br.net.du.sztoks.test.TestConstants.NAME_FIELD;
-import static br.net.du.sztoks.test.TestConstants.SUBTYPE_NAME_FIELD;
+import static br.net.du.sztoks.test.TestConstants.SUBTYPE_NAME_KEY;
 import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -169,7 +169,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(SUBTYPE_NAME_FIELD));
+        assertTrue(errors.hasFieldErrors(SUBTYPE_NAME_KEY));
     }
 
     @Test
@@ -182,7 +182,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(SUBTYPE_NAME_FIELD));
+        assertTrue(errors.hasFieldErrors(SUBTYPE_NAME_KEY));
     }
 
     @Test
@@ -195,7 +195,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(SUBTYPE_NAME_FIELD));
+        assertTrue(errors.hasFieldErrors(SUBTYPE_NAME_KEY));
     }
 
     @Test
@@ -208,7 +208,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_KEY));
     }
 
     @Test
@@ -221,7 +221,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_KEY));
     }
 
     @Test
@@ -234,7 +234,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_KEY));
     }
 
     @Test
@@ -247,7 +247,7 @@ class AccountViewModelInputValidatorTest {
         accountViewModelInputValidator.validate(accountViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_KEY));
     }
 
     @Test

@@ -2,7 +2,7 @@ package br.net.du.sztoks.controller;
 
 import static br.net.du.sztoks.test.ControllerTestUtils.verifyRedirect;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
-import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT_FIELD;
+import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT_KEY;
 import static br.net.du.sztoks.test.TestConstants.EMAIL;
 import static br.net.du.sztoks.test.TestConstants.EMAIL_FIELD;
 import static br.net.du.sztoks.test.TestConstants.EXTRA_SPACES;
@@ -115,7 +115,7 @@ class UserControllerTest {
                                 .param(EMAIL_FIELD, EMAIL + EXTRA_SPACES)
                                 .param(FIRST_NAME_FIELD, FIRST_NAME + EXTRA_SPACES)
                                 .param(LAST_NAME_FIELD, LAST_NAME + EXTRA_SPACES)
-                                .param(CURRENCY_UNIT_FIELD, CURRENCY_UNIT.getCode())
+                                .param(CURRENCY_UNIT_KEY, CURRENCY_UNIT.getCode())
                                 .param(TITHING_PERCENTAGE_FIELD, TITHING_PERCENTAGE.toPlainString())
                                 .param(PASSWORD_FIELD, PASSWORD)
                                 .param(PASSWORD_CONFIRM_FIELD, PASSWORD));

@@ -1,6 +1,6 @@
 package br.net.du.sztoks.controller.account;
 
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_NAME;
+import static br.net.du.sztoks.controller.ControllerTestConstants.NAME_KEY;
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -98,7 +98,7 @@ class AccountRenameControllerTest extends AccountAjaxControllerTestBase {
         final JsonNode jsonNode = new ObjectMapper().readTree(resultContentAsString);
 
         // Only checking fields relevant to the AJAX callback
-        assertThat(jsonNode.get(JSON_NAME).textValue(), is(NEW_ACCOUNT_NAME_TRIMMED));
+        assertThat(jsonNode.get(NAME_KEY).textValue(), is(NEW_ACCOUNT_NAME_TRIMMED));
 
         // Sanity checks (after)
         assertThat(snapshot.getNetWorth(), is(new BigDecimal("0.00")));

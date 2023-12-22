@@ -9,7 +9,7 @@ import static br.net.du.sztoks.test.TestConstants.AMOUNT_FIELD;
 import static br.net.du.sztoks.test.TestConstants.ANOTHER_CURRENCY_UNIT;
 import static br.net.du.sztoks.test.TestConstants.CATEGORY_FIELD;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
-import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT_FIELD;
+import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT_KEY;
 import static br.net.du.sztoks.test.TestConstants.DATE_FIELD;
 import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_MONTH;
 import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_YEAR;
@@ -172,7 +172,7 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_KEY));
     }
 
     @Test
@@ -185,7 +185,7 @@ class TransactionViewModelInputValidatorTest {
         validator.validate(transactionViewModelInput, errors, snapshot);
 
         // THEN
-        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_FIELD));
+        assertTrue(errors.hasFieldErrors(CURRENCY_UNIT_KEY));
     }
 
     @Test

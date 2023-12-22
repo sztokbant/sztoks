@@ -1,7 +1,7 @@
 package br.net.du.sztoks.controller.account;
 
+import static br.net.du.sztoks.controller.ControllerTestConstants.ACCOUNT_TYPE_KEY;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_ACCOUNT_SUBTYPE;
-import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_ACCOUNT_TYPE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_CREDIT_CARD_TOTALS_FOR_CURRENCY_UNIT;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_FUTURE_TITHING_BALANCE;
 import static br.net.du.sztoks.controller.ControllerTestConstants.JSON_INVESTMENT_TOTALS;
@@ -115,7 +115,7 @@ class SnapshotRemoveAccountControllerTest extends AccountAjaxControllerTestBase 
         assertThat(jsonNode.get(JSON_INVESTMENT_TOTALS).asText(), is("null"));
         assertThat(jsonNode.get(JSON_CREDIT_CARD_TOTALS_FOR_CURRENCY_UNIT).asText(), is("null"));
 
-        assertThat(jsonNode.get(JSON_ACCOUNT_TYPE).asText(), is(AccountType.ASSET.toString()));
+        assertThat(jsonNode.get(ACCOUNT_TYPE_KEY).asText(), is(AccountType.ASSET.toString()));
         assertThat(jsonNode.get(JSON_TOTAL_FOR_ACCOUNT_TYPE).asText(), is("$0.00"));
 
         assertThat(jsonNode.get(JSON_FUTURE_TITHING_BALANCE).asText(), is("$0.00"));
