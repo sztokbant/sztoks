@@ -56,6 +56,10 @@ public class SnapshotViewModelOutput {
     private final String defaultTithingPercentage;
 
     private final String netWorth;
+    private final String netWorthDiff;
+    private final String netWorthDiffPercentage;
+    private final boolean isNetWorthIncreased;
+
     private final Map<String, String> currencyConversionRates;
     private final String oneBaseCurrency;
 
@@ -134,6 +138,9 @@ public class SnapshotViewModelOutput {
                         .defaultTithingPercentage(
                                 formatAsPercentage(snapshot.getDefaultTithingPercentage()))
                         .netWorth(updatableTotals.getNetWorth())
+                        .netWorthDiff(updatableTotals.getNetWorthDiff())
+                        .netWorthDiffPercentage(updatableTotals.getNetWorthDiffPercentage())
+                        .isNetWorthIncreased(updatableTotals.isNetWorthIncreased())
                         .currencyConversionRates(
                                 toStringStringMap(snapshot.getCurrencyConversionRates()))
                         .oneBaseCurrency(format(snapshot.getBaseCurrencyUnit(), BigDecimal.ONE))
