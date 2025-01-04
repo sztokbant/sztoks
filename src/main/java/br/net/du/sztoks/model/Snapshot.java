@@ -229,7 +229,7 @@ public class Snapshot implements Comparable<Snapshot> {
             @NonNull final SortedSet<Account> accounts) {
         accounts.stream()
                 .filter(account -> (account instanceof TithingAccount))
-                .map(account -> account.copy())
+                .map(Account::copy)
                 .forEach(
                         account ->
                                 updateTithingAmount(
@@ -244,23 +244,22 @@ public class Snapshot implements Comparable<Snapshot> {
                         account ->
                                 !(account instanceof TithingAccount)
                                         && !(account instanceof FutureTithingAccount))
-                .map(account -> account.copy())
-                .forEach(account -> addAccount(account));
+                .map(Account::copy)
+                .forEach(this::addAccount);
     }
 
     private void addTransactions(
             final int year, final int month, @NonNull final List<Transaction> transactions) {
-        transactions.stream()
-                .forEach(
-                        transaction -> {
-                            final Transaction transactionCopy = transaction.copy();
+        transactions.forEach(
+                transaction -> {
+                    final Transaction transactionCopy = transaction.copy();
 
-                            final LocalDate newDate =
-                                    transactionCopy.getDate().withYear(year).withMonth(month);
-                            transactionCopy.setDate(newDate);
+                    final LocalDate newDate =
+                            transactionCopy.getDate().withYear(year).withMonth(month);
+                    transactionCopy.setDate(newDate);
 
-                            addTransaction(transactionCopy);
-                        });
+                    addTransaction(transactionCopy);
+                });
     }
 
     public void setPrevious(final Snapshot previous) {
@@ -282,7 +281,7 @@ public class Snapshot implements Comparable<Snapshot> {
                 .collect(
                         collectingAndThen(
                                 groupingBy(
-                                        accountData -> accountData.getAccountType(),
+                                        Account::getAccountType,
                                         collectingAndThen(toSet(), ImmutableSortedSet::copyOf)),
                                 ImmutableMap::copyOf));
     }
@@ -386,7 +385,7 @@ public class Snapshot implements Comparable<Snapshot> {
                 .collect(
                         collectingAndThen(
                                 groupingBy(
-                                        transaction -> transaction.getTransactionType(),
+                                        Transaction::getTransactionType,
                                         collectingAndThen(toSet(), ImmutableSortedSet::copyOf)),
                                 ImmutableMap::copyOf));
     }
@@ -416,8 +415,7 @@ public class Snapshot implements Comparable<Snapshot> {
                             + id);
         }
 
-        if (transaction instanceof IncomeTransaction) {
-            final IncomeTransaction incomeTransaction = (IncomeTransaction) transaction;
+        if (transaction instanceof IncomeTransaction incomeTransaction) {
             updateTithingAmount(
                     incomeTransaction.getCurrencyUnit(), incomeTransaction.getTithingAmount());
         } else if (transaction instanceof DonationTransaction) {
@@ -440,8 +438,7 @@ public class Snapshot implements Comparable<Snapshot> {
             return;
         }
 
-        if (transaction instanceof IncomeTransaction) {
-            final IncomeTransaction incomeTransaction = (IncomeTransaction) transaction;
+        if (transaction instanceof IncomeTransaction incomeTransaction) {
             updateTithingAmount(
                     incomeTransaction.getCurrencyUnit(),
                     incomeTransaction.getTithingAmount().negate());
@@ -814,9 +811,8 @@ public class Snapshot implements Comparable<Snapshot> {
 
         currenciesInUseBaseFirst.add(baseCurrency);
 
-        for (final String currency : ImmutableSortedSet.copyOf(currencyConversionRates.keySet())) {
-            currenciesInUseBaseFirst.add(currency);
-        }
+        currenciesInUseBaseFirst.addAll(
+                ImmutableSortedSet.copyOf(currencyConversionRates.keySet()));
     }
 
     public void setUser(final User newUser) {
@@ -969,7 +965,7 @@ public class Snapshot implements Comparable<Snapshot> {
     private BigDecimal getTithingBalanceFor(
             @NonNull final Class<? extends Account> tithingAccountType) {
         return accounts.stream()
-                .filter(account -> tithingAccountType.isInstance(account))
+                .filter(tithingAccountType::isInstance)
                 .map(account -> toBaseCurrency(account.getCurrencyUnit(), account.getBalance()))
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
@@ -992,15 +988,13 @@ public class Snapshot implements Comparable<Snapshot> {
             return true;
         }
 
-        if (!(other instanceof Snapshot)) {
+        if (!(other instanceof Snapshot otherSnapshot)) {
             return false;
         }
 
         if (id == null) {
             return false;
         }
-
-        final Snapshot otherSnapshot = (Snapshot) other;
 
         return id.equals(otherSnapshot.getId());
     }
