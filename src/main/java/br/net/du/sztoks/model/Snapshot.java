@@ -6,6 +6,7 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
 
+import br.net.du.sztoks.exception.SztoksException;
 import br.net.du.sztoks.model.account.Account;
 import br.net.du.sztoks.model.account.AccountType;
 import br.net.du.sztoks.model.account.FutureTithingAccount;
@@ -320,6 +321,15 @@ public class Snapshot implements Comparable<Snapshot> {
         // Prevents infinite loop
         if (!accounts.contains(account)) {
             return;
+        }
+
+        if (account instanceof FutureTithingAccount
+                && ((FutureTithingAccount) account).getReferenceAmount().compareTo(BigDecimal.ZERO)
+                        != 0) {
+            throw new SztoksException(
+                    "Can't remove a "
+                            + FutureTithingAccount.class.getSimpleName()
+                            + " instance with reference amount different than zero.");
         }
 
         if (account instanceof FutureTithingCapable) {
@@ -839,7 +849,7 @@ public class Snapshot implements Comparable<Snapshot> {
         }
 
         if (!currencyConversionRates.containsKey(currencyUnit.getCode())) {
-            throw new IllegalArgumentException(
+            throw new SztoksException(
                     "Snapshot "
                             + id
                             + " does not have currency conversion rate for "
