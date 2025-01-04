@@ -833,32 +833,50 @@ public class Snapshot implements Comparable<Snapshot> {
                 .setScale(2, RoundingMode.HALF_UP);
     }
 
+    public BigDecimal getNetWorthAs(final CurrencyUnit currencyUnit) {
+        if (currencyUnit.equals(getBaseCurrencyUnit())) {
+            return getNetWorth();
+        }
+
+        if (!currencyConversionRates.containsKey(currencyUnit.getCode())) {
+            throw new IllegalArgumentException(
+                    "Snapshot "
+                            + id
+                            + " does not have currency conversion rate for "
+                            + currencyUnit.getCode());
+        }
+
+        return getNetWorth().multiply(currencyConversionRates.get(currencyUnit.getCode()));
+    }
+
     public BigDecimal getNetWorthIncrease() {
         if (previous == null) {
             return BigDecimal.ZERO;
         }
 
-        if (getBaseCurrencyUnit().equals(previous.getBaseCurrencyUnit())) {
-            return getNetWorth().subtract(previous.getNetWorth());
-        } else {
-            // TODO: convert currency
-            return BigDecimal.ZERO;
-        }
+        final BigDecimal previousNetWorth =
+                (getBaseCurrencyUnit().equals(previous.getBaseCurrencyUnit())
+                                || previous.hasConversionRate(getBaseCurrencyUnit()))
+                        ? previous.getNetWorthAs(getBaseCurrencyUnit())
+                        : toBaseCurrency(previous.getBaseCurrencyUnit(), previous.getNetWorth());
+
+        return getNetWorth().subtract(previousNetWorth);
     }
 
     public BigDecimal getNetWorthIncreasePercentage() {
-        if (previous == null) {
+        if (previous == null || previous.getNetWorth().compareTo(BigDecimal.ZERO) == 0) {
             return BigDecimal.ZERO;
         }
 
-        if (getBaseCurrencyUnit().equals(previous.getBaseCurrencyUnit())) {
-            return getNetWorthIncrease()
-                    .divide(previous.getNetWorth(), DIVISION_SCALE, RoundingMode.HALF_UP)
-                    .multiply(ONE_HUNDRED);
-        } else {
-            // TODO: convert currency
-            return BigDecimal.ZERO;
-        }
+        final BigDecimal previousNetWorth =
+                (getBaseCurrencyUnit().equals(previous.getBaseCurrencyUnit())
+                                || previous.hasConversionRate(getBaseCurrencyUnit()))
+                        ? previous.getNetWorthAs(getBaseCurrencyUnit())
+                        : toBaseCurrency(previous.getBaseCurrencyUnit(), previous.getNetWorth());
+
+        return getNetWorthIncrease()
+                .divide(previousNetWorth, DIVISION_SCALE, RoundingMode.HALF_UP)
+                .multiply(ONE_HUNDRED);
     }
 
     public BigDecimal getTotalFor(@NonNull final AccountType accountType) {
