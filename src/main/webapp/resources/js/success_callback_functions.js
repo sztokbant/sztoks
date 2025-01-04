@@ -131,7 +131,7 @@ function updateSnapshotInvestmentTotals(result) {
   profit_percentage_span.html(result.investmentTotals.profitPercentage);
 
   let percentage = stripDecimalForText(result.investmentTotals.profitPercentage);
-  colorizeProfitPercentage(percentage, profit_percentage_span);
+  colorizeProfitIncreaseElement(percentage, profit_percentage_span);
 
   $("#snapshot_investments_balance").html(result.investmentTotals.balance);
 }
@@ -171,11 +171,11 @@ function updateProfitPercentage(entityId, profitPercentage) {
   profit_percentage_span.html(profitPercentage);
 
   let percentage = stripDecimalForText(profitPercentage);
-  colorizeProfitPercentage(percentage, profit_percentage_span);
+  colorizeProfitIncreaseElement(percentage, profit_percentage_span);
 }
 
-function colorizeProfitPercentage(percentage, element) {
-  if (percentage >= 0) {
+function colorizeProfitIncreaseElement(amount, element) {
+  if (amount >= 0) {
     element.removeClass('cell-red');
     element.addClass('cell-green');
   } else {
@@ -375,6 +375,14 @@ function updateTithingBalance(result) {
 
 function updateNetWorth(result) {
   $("#snapshot_net_worth").html(result.netWorth);
-  $("#snapshot_net_worth_increase").html(result.netWorthIncrease);
-  $("#snapshot_net_worth_increase_percentage").html(result.netWorthIncreasePercentage);
+
+  let amount = stripDecimalForText(result.netWorthIncrease);
+
+  let snapshot_net_worth_increase_span = $("#snapshot_net_worth_increase");
+  snapshot_net_worth_increase_span.html(result.netWorthIncrease);
+  colorizeProfitIncreaseElement(amount, snapshot_net_worth_increase_span)
+
+  let snapshot_net_worth_increase_percentage_span = $("#snapshot_net_worth_increase_percentage");
+  snapshot_net_worth_increase_percentage_span.html(result.netWorthIncreasePercentage);
+  colorizeProfitIncreaseElement(amount, snapshot_net_worth_increase_percentage_span)
 }
