@@ -833,6 +833,34 @@ public class Snapshot implements Comparable<Snapshot> {
                 .setScale(2, RoundingMode.HALF_UP);
     }
 
+    public BigDecimal getNetWorthIncrease() {
+        if (previous == null) {
+            return BigDecimal.ZERO;
+        }
+
+        if (getBaseCurrencyUnit().equals(previous.getBaseCurrencyUnit())) {
+            return getNetWorth().subtract(previous.getNetWorth());
+        } else {
+            // TODO: convert currency
+            return BigDecimal.ZERO;
+        }
+    }
+
+    public BigDecimal getNetWorthIncreasePercentage() {
+        if (previous == null) {
+            return BigDecimal.ZERO;
+        }
+
+        if (getBaseCurrencyUnit().equals(previous.getBaseCurrencyUnit())) {
+            return getNetWorthIncrease()
+                    .divide(previous.getNetWorth(), DIVISION_SCALE, RoundingMode.HALF_UP)
+                    .multiply(ONE_HUNDRED);
+        } else {
+            // TODO: convert currency
+            return BigDecimal.ZERO;
+        }
+    }
+
     public BigDecimal getTotalFor(@NonNull final AccountType accountType) {
         if (accountType.equals(AccountType.ASSET)) {
             if (assetsTotal == null) {
