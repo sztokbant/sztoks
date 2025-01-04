@@ -49,6 +49,9 @@ public class SnapshotUpdateDefaultTithingPercentageController {
                                     .accountType(accountType.name())
                                     .totalForAccountType(updatableTotals.getTotalFor(accountType))
                                     .netWorth(updatableTotals.getNetWorth())
+                                    .netWorthIncrease(updatableTotals.getNetWorthIncrease())
+                                    .netWorthIncreasePercentage(
+                                            updatableTotals.getNetWorthIncreasePercentage())
                                     .build();
                         };
 
@@ -65,5 +68,7 @@ public class SnapshotUpdateDefaultTithingPercentageController {
         private final String accountType;
         private final String totalForAccountType;
         private final String netWorth;
+        private final String netWorthIncrease;
+        private final String netWorthIncreasePercentage;
     }
 }

@@ -28,6 +28,9 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
 
     // fields only used on updates
     private final String netWorth;
+    private final String netWorthIncrease;
+    private final String netWorthIncreasePercentage;
+
     private final String accountType;
     private final String totalForAccountType;
 
@@ -50,6 +53,9 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
         currencyIndex = other.getCurrencyIndex();
 
         netWorth = other.getNetWorth();
+        netWorthIncrease = other.getNetWorthIncrease();
+        netWorthIncreasePercentage = other.getNetWorthIncreasePercentage();
+
         accountType = other.getAccountType();
         totalForAccountType = other.getTotalForAccountType();
 
@@ -89,6 +95,8 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
             final String totalForAccountType =
                     updatableTotals.getTotalFor(account.getAccountType());
             builder.netWorth(updatableTotals.getNetWorth())
+                    .netWorthIncrease(updatableTotals.getNetWorthIncrease())
+                    .netWorthIncreasePercentage(updatableTotals.getNetWorthIncreasePercentage())
                     .totalForAccountType(totalForAccountType);
 
             // For INVESTMENT and CREDIT_CARD accounts totals are computed differently

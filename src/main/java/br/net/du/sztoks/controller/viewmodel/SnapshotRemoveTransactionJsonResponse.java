@@ -15,5 +15,7 @@ public class SnapshotRemoveTransactionJsonResponse {
     private String tithingBalance;
     private String totalTithingBalance;
     private String netWorth;
+    private String netWorthIncrease;
+    private String netWorthIncreasePercentage;
     private String totalLiability;
 }

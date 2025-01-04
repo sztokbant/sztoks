@@ -97,7 +97,9 @@ public class RemoveTransactionController {
                             updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                     AccountSubtypeDisplayGroup.TITHING))
                     .totalLiability(updatableTotals.getTotalFor(AccountType.LIABILITY))
-                    .netWorth(updatableTotals.getNetWorth());
+                    .netWorth(updatableTotals.getNetWorth())
+                    .netWorthIncrease(updatableTotals.getNetWorthIncrease())
+                    .netWorthIncreasePercentage(updatableTotals.getNetWorthIncreasePercentage());
         }
 
         return builder.entityId(valueUpdateJsonRequest.getEntityId())

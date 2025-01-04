@@ -12,6 +12,8 @@ public class SnapshotRemoveAccountJsonResponse {
     private String currencyUnit;
     private String currencyUnitSymbol;
     private String netWorth;
+    private String netWorthIncrease;
+    private String netWorthIncreasePercentage;
     private String accountType;
     private String totalForAccountType;
 

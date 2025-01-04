@@ -27,9 +27,9 @@
                 <div class="align-right-p7 col col-net-worth-${deviceType}">
                     <span id="snapshot_net_worth">${snapshot.netWorth}</span>
                     <br/>
-                    <span id="snapshot_net_worth_diff" class="${netWorthDiffStyle}">${snapshot.netWorthIncrease}</span>
+                    <span id="snapshot_net_worth_increase" class="${netWorthDiffStyle}">${snapshot.netWorthIncrease}</span>
                     <br/>
-                    <span id="snapshot_net_worth_diff_percentage" class="${netWorthDiffStyle}">${snapshot.netWorthIncreasePercentage}</span>
+                    <span id="snapshot_net_worth_increase_percentage" class="${netWorthDiffStyle}">${snapshot.netWorthIncreasePercentage}</span>
                 </div>
             </div>
         </div>

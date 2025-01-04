@@ -375,4 +375,6 @@ function updateTithingBalance(result) {
 
 function updateNetWorth(result) {
   $("#snapshot_net_worth").html(result.netWorth);
+  $("#snapshot_net_worth_increase").html(result.netWorthIncrease);
+  $("#snapshot_net_worth_increase_percentage").html(result.netWorthIncreasePercentage);
 }

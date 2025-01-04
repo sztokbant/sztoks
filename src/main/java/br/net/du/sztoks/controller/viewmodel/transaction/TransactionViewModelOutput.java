@@ -42,6 +42,8 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
     private final String tithingBalance;
     private final String totalTithingBalance;
     private final String netWorth;
+    private final String netWorthIncrease;
+    private final String netWorthIncreasePercentage;
     private final String totalLiability;
 
     public TransactionViewModelOutput(final TransactionViewModelOutput other) {
@@ -63,6 +65,8 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
         tithingBalance = other.getTithingBalance();
         totalTithingBalance = other.getTotalTithingBalance();
         netWorth = other.getNetWorth();
+        netWorthIncrease = other.getNetWorthIncrease();
+        netWorthIncreasePercentage = other.getNetWorthIncreasePercentage();
         totalLiability = other.getTotalLiability();
     }
 
@@ -120,7 +124,10 @@ public class TransactionViewModelOutput implements Comparable<TransactionViewMod
                                 updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                         AccountSubtypeDisplayGroup.TITHING))
                         .totalLiability(updatableTotals.getTotalFor(AccountType.LIABILITY))
-                        .netWorth(updatableTotals.getNetWorth());
+                        .netWorth(updatableTotals.getNetWorth())
+                        .netWorthIncrease(updatableTotals.getNetWorthIncrease())
+                        .netWorthIncreasePercentage(
+                                updatableTotals.getNetWorthIncreasePercentage());
             }
         }
 

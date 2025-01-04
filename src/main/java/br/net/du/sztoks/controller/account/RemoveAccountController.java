@@ -85,6 +85,8 @@ public class RemoveAccountController {
                         .currencyUnit(currencyUnit.getCode())
                         .currencyUnitSymbol(currencyUnit.getSymbol())
                         .netWorth(updatableTotals.getNetWorth())
+                        .netWorthIncrease(updatableTotals.getNetWorthIncrease())
+                        .netWorthIncreasePercentage(updatableTotals.getNetWorthIncreasePercentage())
                         .accountType(account.getAccountType().name())
                         .totalForAccountType(totalForAccountType);
 
