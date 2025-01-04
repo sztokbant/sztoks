@@ -213,6 +213,69 @@ class SnapshotTest {
     }
 
     @Test
+    public void setDefaultTithingPercentage_happy() {
+        // GIVEN
+        final Snapshot snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
+                        ImmutableList.of(),
+                        ImmutableMap.of());
+
+        // WHEN
+        BigDecimal newDefaultTithingPercentage = new BigDecimal("30.00");
+        snapshot.setDefaultTithingPercentage(newDefaultTithingPercentage);
+
+        // THEN
+        assertThat(snapshot.getDefaultTithingPercentage(), is(newDefaultTithingPercentage));
+    }
+
+    @Test
+    public void setDefaultTithingPercentage_negative_throws() {
+        // GIVEN
+        final Snapshot snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
+                        ImmutableList.of(),
+                        ImmutableMap.of());
+
+        // WHEN/THEN
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    snapshot.setDefaultTithingPercentage(new BigDecimal("-1.00"));
+                });
+    }
+
+    @Test
+    public void setDefaultTithingPercentage_greaterThan100Pct_throws() {
+        // GIVEN
+        final Snapshot snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
+                        ImmutableList.of(),
+                        ImmutableMap.of());
+
+        // WHEN/THEN
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    snapshot.setDefaultTithingPercentage(new BigDecimal("101.00"));
+                });
+    }
+
+    @Test
     public void getTotalFor_liabilities() {
         // GIVEN
         final Snapshot snapshot =
