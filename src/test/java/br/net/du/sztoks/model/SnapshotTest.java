@@ -175,7 +175,7 @@ class SnapshotTest {
     }
 
     @Test
-    public void getNetWorthAs_nonexistingConversionRate_throws() {
+    public void getNetWorthAs_nonexistentConversionRate_throws() {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
@@ -282,7 +282,7 @@ class SnapshotTest {
     }
 
     @Test
-    public void removeAccount_nonexisting() {
+    public void removeAccount_nonexistent() {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(
@@ -372,7 +372,7 @@ class SnapshotTest {
     }
 
     @Test
-    public void getAccount_nonexisting() {
+    public void getAccount_nonexistent() {
         // GIVEN
         final Snapshot snapshot =
                 new Snapshot(

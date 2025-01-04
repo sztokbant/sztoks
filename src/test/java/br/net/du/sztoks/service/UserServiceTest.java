@@ -61,7 +61,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void findByEmail_nonexistingUser_null() {
+    public void findByEmail_nonexistentUser_null() {
         // WHEN
         final User user = userService.findByEmail(EMAIL);
 
