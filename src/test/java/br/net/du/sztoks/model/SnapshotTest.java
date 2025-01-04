@@ -2,10 +2,12 @@ package br.net.du.sztoks.model;
 
 import static br.net.du.sztoks.test.ModelTestUtils.equalsIgnoreId;
 import static br.net.du.sztoks.test.ModelTestUtils.equalsIgnoreIdAndDate;
+import static br.net.du.sztoks.test.TestConstants.ANOTHER_CURRENCY_UNIT;
 import static br.net.du.sztoks.test.TestConstants.CURRENCY_UNIT;
 import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_MONTH;
 import static br.net.du.sztoks.test.TestConstants.FIRST_SNAPSHOT_YEAR;
 import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE;
+import static br.net.du.sztoks.test.TestConstants.newInvestmentAccountWithFutureTithing;
 import static br.net.du.sztoks.test.TestConstants.newRecurringIncome;
 import static br.net.du.sztoks.test.TestConstants.newRecurringInvestment;
 import static br.net.du.sztoks.test.TestConstants.newRecurringNonTaxDeductibleDonation;
@@ -17,15 +19,18 @@ import static br.net.du.sztoks.test.TestConstants.newSingleTaxDeductibleDonation
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import br.net.du.sztoks.exception.SztoksException;
 import br.net.du.sztoks.model.account.Account;
 import br.net.du.sztoks.model.account.AccountType;
 import br.net.du.sztoks.model.account.FutureTithingPolicy;
+import br.net.du.sztoks.model.account.InvestmentAccount;
 import br.net.du.sztoks.model.account.SimpleAssetAccount;
 import br.net.du.sztoks.model.account.SimpleLiabilityAccount;
 import br.net.du.sztoks.model.transaction.DonationTransaction;
@@ -38,6 +43,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
@@ -126,7 +132,67 @@ class SnapshotTest {
                         ImmutableMap.of());
 
         // THEN
-        assertEquals(EXPECTED_NET_WORTH, snapshot.getNetWorth());
+        assertThat(snapshot.getNetWorth(), is(EXPECTED_NET_WORTH));
+        assertThat(snapshot.getNetWorthIncrease(), is(BigDecimal.ZERO));
+        assertThat(snapshot.getNetWorthIncreasePercentage(), is(BigDecimal.ZERO));
+    }
+
+    @Test
+    public void getNetWorthAs_sameAsBaseCurrency_returnsNetWorth() {
+        // GIVEN
+        final Snapshot snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
+                        ImmutableList.of(),
+                        ImmutableMap.of());
+
+        // THEN
+        assertThat(snapshot.getNetWorthAs(snapshot.getBaseCurrencyUnit()), is(EXPECTED_NET_WORTH));
+    }
+
+    @Test
+    public void getNetWorthAs_existingConversionRate_properlyConverts() {
+        // GIVEN
+        final Snapshot snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
+                        ImmutableList.of(),
+                        ImmutableMap.of());
+        snapshot.putCurrencyConversionRate(ANOTHER_CURRENCY_UNIT, new BigDecimal("1.31"));
+
+        // THEN
+        assertThat(
+                snapshot.getNetWorthAs(ANOTHER_CURRENCY_UNIT).setScale(4, RoundingMode.HALF_UP),
+                is(new BigDecimal("9825.0000")));
+    }
+
+    @Test
+    public void getNetWorthAs_nonexistingConversionRate_throws() {
+        // GIVEN
+        final Snapshot snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(simpleAssetAccount, simpleLiabilityAccount),
+                        ImmutableList.of(),
+                        ImmutableMap.of());
+
+        // THEN
+        assertThrows(
+                SztoksException.class,
+                () -> {
+                    snapshot.getNetWorthAs(ANOTHER_CURRENCY_UNIT);
+                });
     }
 
     @Test
@@ -241,6 +307,49 @@ class SnapshotTest {
         // THEN
         assertEquals(2, snapshot.getAccounts().size());
         assertEquals(EXPECTED_NET_WORTH, snapshot.getNetWorth());
+    }
+
+    @Test
+    public void removeAccount_FutureTithingAccount_happy() {
+        // GIVEN
+        final InvestmentAccount accountWithFutureTithing = newInvestmentAccountWithFutureTithing();
+        final Snapshot snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(accountWithFutureTithing),
+                        ImmutableList.of(),
+                        ImmutableMap.of());
+        snapshot.removeAccount(accountWithFutureTithing);
+
+        // WHEN
+        snapshot.removeAccount(snapshot.getFutureTithingAccount(CURRENCY_UNIT));
+
+        // THEN
+        assertThat(snapshot.getAccounts().size(), is(0));
+    }
+
+    @Test
+    public void removeAccount_nonZeroFutureTithingAccount_throws() {
+        // GIVEN
+        final Snapshot snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(newInvestmentAccountWithFutureTithing()),
+                        ImmutableList.of(),
+                        ImmutableMap.of());
+
+        // WHEN/THEN
+        assertThrows(
+                SztoksException.class,
+                () -> {
+                    snapshot.removeAccount(snapshot.getFutureTithingAccount(CURRENCY_UNIT));
+                });
     }
 
     @Test
