@@ -4,7 +4,7 @@
 
         <div class="full-width border-1px">
             <div class="row bg-light-yellow">
-                <div class="col col-net-worth-${deviceType}">
+                <div class="align-left-p7 col col-net-worth-${deviceType}">
                     <b>NET WORTH</b>
                 </div>
 
@@ -24,7 +24,7 @@
                     </c:otherwise>
                 </c:choose>
 
-                <div class="col col-net-worth-${deviceType}">
+                <div class="align-right-p7 col col-net-worth-${deviceType}">
                     <span id="snapshot_net_worth">${snapshot.netWorth}</span>
                     <br/>
                     <span id="snapshot_net_worth_diff" class="${netWorthDiffStyle}">${snapshot.netWorthIncrease}</span>

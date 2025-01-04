@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <%@ include file="_snapshot_title.jsp" %>
+        <%@ include file="_snapshot_header.jsp" %>
 
         <div class="col">
             <c:choose>
