@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'org.springframework.boot' version '3.0.5'
+    id 'org.springframework.boot' version '3.1.12'
     id "io.spring.dependency-management" version "1.1.0"
     id "com.diffplug.spotless" version "6.25.0"
 }
@@ -30,7 +30,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     testImplementation 'com.h2database:h2:1.4.200'
-    testImplementation 'org.mockito:mockito-inline'
+    testImplementation("org.mockito:mockito-core")
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
@@ -44,7 +44,16 @@ dependencies {
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 description = 'demo'
-java.sourceCompatibility = JavaVersion.VERSION_17
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.release = 21
+}
 
 publishing {
     publications {
