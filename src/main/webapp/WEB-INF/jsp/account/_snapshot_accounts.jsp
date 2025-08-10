@@ -217,6 +217,7 @@
             <c:when test="${not empty snapshot.creditCardAccounts}">
                 <div class="row border-1px-bottom">
                     <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Credit Cards</i></div>
                     <div class="col col-cell-${deviceType} col-title">Total Credit</div>
                     <div class="col col-cell-${deviceType} col-title">Available Credit</div>

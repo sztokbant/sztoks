@@ -77,4 +77,27 @@ public class CreditCardUpdateController {
                 updateCreditCardStatementFunction,
                 false);
     }
+
+    @PostMapping("/snapshot/payCreditCardStatement")
+    public Object payCreditCardStatement(
+            final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
+        final BiFunction<ValueUpdateJsonRequest, Account, Object> payCreditCardStatementFunction =
+                (jsonRequest, account) -> {
+                    final CreditCardAccount creditCardAccount = (CreditCardAccount) account;
+                    final BigDecimal statement = creditCardAccount.getStatement();
+                    final BigDecimal availableCredit = creditCardAccount.getAvailableCredit();
+
+                    creditCardAccount.setAvailableCredit(availableCredit.add(statement));
+                    creditCardAccount.setStatement(BigDecimal.ZERO);
+
+                    return CreditCardAccountViewModelOutput.of(account, true);
+                };
+
+        return accountUpdater.updateField(
+                model,
+                valueUpdateJsonRequest,
+                CreditCardAccount.class,
+                payCreditCardStatementFunction,
+                true);
+    }
 }

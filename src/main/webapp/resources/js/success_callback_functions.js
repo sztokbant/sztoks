@@ -192,6 +192,21 @@ function payableDueDateUpdateSuccessCallback(data, result) {
 
 // CREDIT CARD ACCOUNT
 
+function payStatement(snapshotId, isOldSnapshot, entityId, accountName) {
+  var doPay = confirm('Are you sure you want to set "' + accountName + '" statement as paid? ' +
+    'This will set the statement amount to zero and increase the available credit.');
+
+  if (doPay) {
+    var data = {
+      snapshotId: snapshotId,
+      isOldSnapshot: isOldSnapshot,
+      entityId: entityId,
+    };
+
+    ajaxPost('snapshot/payCreditCardStatement', data, creditCardPayStatementSuccessCallback);
+  }
+}
+
 function updateSnapshotCreditCardTotals(result) {
   $("#snapshot_credit_card_total_credit_" + result.currencyUnit)
     .html(result.creditCardTotalsForCurrencyUnit.totalCredit);
@@ -257,6 +272,16 @@ function creditCardStatementUpdateSuccessCallback(data, result) {
   $("#credit_card_statement_" + data.entityId).html(result.statement);
   $("#credit_card_remaining_balance_" + data.entityId).html(result.remainingBalance);
   updateSnapshotCreditCardTotals(result);
+}
+
+function creditCardPayStatementSuccessCallback(data, result) {
+  $("#credit_card_available_credit_" + data.entityId).html(result.availableCredit);
+  $("#credit_card_statement_" + data.entityId).html(result.statement);
+  $("#credit_card_balance_" + data.entityId).html(result.balance);
+  updateUsedCreditPercentage(data.entityId, result.usedCreditPercentage);
+  updateTotalForAccountType(result);
+  updateSnapshotCreditCardTotals(result);
+  updateNetWorth(result);
 }
 
 // TRANSACTION (ALL)

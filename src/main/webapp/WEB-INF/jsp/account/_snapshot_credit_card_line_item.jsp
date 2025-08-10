@@ -35,6 +35,13 @@ $(document).ready(function() {
 <div class="row border-1px-bottom" id="account_row_${entity.accountId}">
     <%@ include file="_snapshot_col_remove_account.jsp" %>
 
+    <div class="col col-cell-${deviceType} short-${deviceType} ${regularClass}">
+    <span style="cursor: pointer;"
+          onclick="payStatement(${snapshot.id}, ${snapshot.old}, ${entity.accountId}, '${fn:replace(entity.name, '\'', '\\\'')}');">
+        &#x1F4B0;
+    </span>
+    </div>
+
     <%@ include file="_snapshot_col_account_name.jsp" %>
 
     <div class="col col-cell-${deviceType} align-right ${editableClass}">

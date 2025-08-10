@@ -2,6 +2,7 @@
 <div class="row border-1px-bottom bg-light-yellow">
     <div class="col col-cell-${deviceType} col-account-name">Credit Cards TOTAL ${currentCurrency}</div>
     <div class="col col-cell-${deviceType} short-${deviceType}"></div>
+    <div class="col col-cell-${deviceType} short-${deviceType}"></div>
     <div class="col col-cell-${deviceType} align-right"><b><span id="snapshot_credit_card_total_credit_${currentCurrency}">${ccTotals.totalCredit}</span></b>
     </div>
     <div class="col col-cell-${deviceType} align-right"><b><span id="snapshot_credit_card_available_credit_${currentCurrency}">${ccTotals.availableCredit}</span></b>
