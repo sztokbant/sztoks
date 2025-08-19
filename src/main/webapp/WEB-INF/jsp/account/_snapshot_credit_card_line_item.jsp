@@ -37,6 +37,7 @@ $(document).ready(function() {
 
     <div class="col col-cell-${deviceType} short-${deviceType} ${regularClass}">
     <span style="cursor: pointer;"
+          title="Pay Statement"
           onclick="payStatement(${snapshot.id}, ${snapshot.old}, ${entity.accountId}, '${fn:replace(entity.name, '\'', '\\\'')}');">
         &#x1F4B0;
     </span>
