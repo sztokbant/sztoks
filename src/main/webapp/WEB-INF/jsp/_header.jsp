@@ -15,6 +15,9 @@
                     <c:when test="${sztoksEnv eq 'gamma'}">
                         <c:set var="envDiscriminator" value=" <span style='color: #ffa500;'>GAMMA</span>" />
                     </c:when>
+                    <c:when test="${sztoksEnv eq 'personal'}">
+                        <c:set var="envDiscriminator" value=" <span style='color: #8f00ff;'>PERSONAL</span>" />
+                    </c:when>
                     <c:otherwise>
                         <c:set var="envDiscriminator" value="" />
                     </c:otherwise>
