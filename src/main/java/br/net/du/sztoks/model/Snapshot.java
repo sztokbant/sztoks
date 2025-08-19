@@ -860,13 +860,7 @@ public class Snapshot implements Comparable<Snapshot> {
             return BigDecimal.ZERO;
         }
 
-        final BigDecimal previousNetWorth =
-                (getBaseCurrencyUnit().equals(previous.getBaseCurrencyUnit())
-                                || previous.hasConversionRate(getBaseCurrencyUnit()))
-                        ? previous.getNetWorthAs(getBaseCurrencyUnit())
-                        : toBaseCurrency(previous.getBaseCurrencyUnit(), previous.getNetWorth());
-
-        return getNetWorth().subtract(previousNetWorth);
+        return getNetWorth().subtract(getPreviousNetWorthInBaseCurrencyUnit());
     }
 
     public BigDecimal getNetWorthIncreasePercentage() {
@@ -874,15 +868,19 @@ public class Snapshot implements Comparable<Snapshot> {
             return BigDecimal.ZERO;
         }
 
-        final BigDecimal previousNetWorth =
-                (getBaseCurrencyUnit().equals(previous.getBaseCurrencyUnit())
-                                || previous.hasConversionRate(getBaseCurrencyUnit()))
-                        ? previous.getNetWorthAs(getBaseCurrencyUnit())
-                        : toBaseCurrency(previous.getBaseCurrencyUnit(), previous.getNetWorth());
-
         return getNetWorthIncrease()
-                .divide(previousNetWorth, DIVISION_SCALE, RoundingMode.HALF_UP)
+                .divide(
+                        getPreviousNetWorthInBaseCurrencyUnit(),
+                        DIVISION_SCALE,
+                        RoundingMode.HALF_UP)
                 .multiply(ONE_HUNDRED);
+    }
+
+    private BigDecimal getPreviousNetWorthInBaseCurrencyUnit() {
+        return (getBaseCurrencyUnit().equals(previous.getBaseCurrencyUnit())
+                || previous.hasConversionRate(getBaseCurrencyUnit()))
+                ? previous.getNetWorthAs(getBaseCurrencyUnit())
+                : toBaseCurrency(previous.getBaseCurrencyUnit(), previous.getNetWorth());
     }
 
     public BigDecimal getTotalFor(@NonNull final AccountType accountType) {
