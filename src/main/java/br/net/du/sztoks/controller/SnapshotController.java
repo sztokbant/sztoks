@@ -1,6 +1,7 @@
 package br.net.du.sztoks.controller;
 
 import static br.net.du.sztoks.controller.util.ControllerConstants.ID;
+import static br.net.du.sztoks.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.TRANSACTION_CATEGORY_TOTALS;
@@ -31,6 +32,7 @@ import br.net.du.sztoks.service.SnapshotService;
 import java.util.List;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -77,6 +79,17 @@ public class SnapshotController {
         model.addAttribute(TRANSACTION_CATEGORY_TOTALS, value);
 
         return prepareTemplate(userAgent, model, SNAPSHOT);
+    }
+
+    @GetMapping("/snapshot/{id}/reset")
+    @Transactional
+    public Object reset(final Model model, @PathVariable(value = ID) final Long snapshotId) {
+        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
+
+        snapshot.resetAll();
+        snapshotService.save(snapshot);
+
+        return String.format(REDIRECT_SNAPSHOT_TEMPLATE, snapshot.getId());
     }
 
     private CumulativeTransactionTotalsViewModelOutput

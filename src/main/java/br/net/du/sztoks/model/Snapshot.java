@@ -617,11 +617,19 @@ public class Snapshot implements Comparable<Snapshot> {
                 BigDecimal.ONE.divide(
                         oldToNewBaseCurrencyConversionRate, DIVISION_SCALE, RoundingMode.HALF_UP));
 
-        // Reset all
         baseCurrency = newBaseCurrency.getCode();
         updateCurrenciesInUse();
 
         resetTotals();
+    }
+
+    public void resetAll() {
+        resetTithingAccounts();
+        resetTotals();
+
+        if (next != null) {
+            next.resetAll();
+        }
     }
 
     private void resetTotals() {
@@ -756,6 +764,63 @@ public class Snapshot implements Comparable<Snapshot> {
                         });
     }
 
+    private void resetTithingAccounts() {
+        // Reset all Tithing accounts to zero
+        accounts.stream()
+                .filter(account -> account instanceof TithingAccount)
+                .forEach(
+                        account -> {
+                            final TithingAccount tithingAccount = (TithingAccount) account;
+                            final BigDecimal previousBalance = tithingAccount.getBalance();
+                            updateTithingAmount(
+                                    tithingAccount.getCurrencyUnit(), previousBalance.negate());
+                        });
+
+        // Begin from previous snapshot's consolidated tithing
+        if (previous != null) {
+            final CurrencyUnit previousBaseCurrencyUnit = previous.getBaseCurrencyUnit();
+            final BigDecimal previousTithingBalance = previous.getTithingBalance();
+            updateTithingAmount(previousBaseCurrencyUnit, previousTithingBalance);
+        }
+
+        // Process income transactions
+        transactions.stream()
+                .filter(transaction -> transaction instanceof IncomeTransaction)
+                .forEach(
+                        transaction -> {
+                            final IncomeTransaction incomeTransaction =
+                                    (IncomeTransaction) transaction;
+                            updateTithingAmount(
+                                    incomeTransaction.getCurrencyUnit(),
+                                    incomeTransaction.getTithingAmount());
+                        });
+
+        // Process donation transactions
+        transactions.stream()
+                .filter(transaction -> transaction instanceof DonationTransaction)
+                .forEach(
+                        transaction -> {
+                            final DonationTransaction donationTransaction =
+                                    (DonationTransaction) transaction;
+                            updateTithingAmount(
+                                    donationTransaction.getCurrencyUnit(),
+                                    donationTransaction.getAmount().negate());
+                        });
+
+        // Remove empty Tithing accounts
+        final List<Account> emptyTithingAccounts =
+                accounts.stream()
+                        .filter(
+                                account ->
+                                        account instanceof TithingAccount
+                                                && account.getBalance().compareTo(BigDecimal.ZERO)
+                                                        == 0)
+                        .toList();
+        for (final Account account : emptyTithingAccounts) {
+            removeAccount(account);
+        }
+    }
+
     public Map<String, BigDecimal> getCurrencyConversionRates() {
         return ImmutableMap.copyOf(currencyConversionRates);
     }
@@ -878,7 +943,7 @@ public class Snapshot implements Comparable<Snapshot> {
 
     private BigDecimal getPreviousNetWorthInBaseCurrencyUnit() {
         return (getBaseCurrencyUnit().equals(previous.getBaseCurrencyUnit())
-                || previous.hasConversionRate(getBaseCurrencyUnit()))
+                        || previous.hasConversionRate(getBaseCurrencyUnit()))
                 ? previous.getNetWorthAs(getBaseCurrencyUnit())
                 : toBaseCurrency(previous.getBaseCurrencyUnit(), previous.getNetWorth());
     }
