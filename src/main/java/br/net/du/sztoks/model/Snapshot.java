@@ -471,7 +471,8 @@ public class Snapshot implements Comparable<Snapshot> {
         tithingAccount.setBalance(tithingAccount.getBalance().add(plusAmount));
 
         if (next != null) {
-            next.updateTithingAmount(currencyUnit, plusAmount);
+            final BigDecimal plusAmountInBaseCurrency = toBaseCurrency(currencyUnit, plusAmount);
+            next.updateTithingAmount(getBaseCurrencyUnit(), plusAmountInBaseCurrency);
         }
     }
 
