@@ -627,6 +627,7 @@ public class Snapshot implements Comparable<Snapshot> {
 
     public void resetAll() {
         resetTithingAccounts();
+        resetFutureTithingAccounts();
         resetTotals();
 
         if (next != null) {
@@ -809,12 +810,42 @@ public class Snapshot implements Comparable<Snapshot> {
                                     donationTransaction.getAmount().negate());
                         });
 
-        // Remove empty Tithing accounts
+        removeZeroBalanceTithingAccounts(TithingAccount.class);
+    }
+
+    private void resetFutureTithingAccounts() {
+        // For each FutureTithing account, set reference amount to zero.
+        accounts.stream()
+                .filter(account -> account instanceof FutureTithingAccount)
+                .forEach(
+                        account ->
+                                ((FutureTithingAccount) account)
+                                        .setReferenceAmount(BigDecimal.ZERO));
+
+        // For each FutureTithingCapable account, reprocess FutureTithing amount.
+        accounts.stream()
+                .filter(account -> account instanceof FutureTithingCapable)
+                .forEach(
+                        account ->
+                                updateFutureTithingAmount(
+                                        account.getCurrencyUnit(),
+                                        ((FutureTithingCapable) account)
+                                                .getFutureTithingReferenceAmount()));
+
+        removeZeroBalanceTithingAccounts(FutureTithingAccount.class);
+    }
+
+    private void removeZeroBalanceTithingAccounts(@NonNull final Class tithingClass) {
+        if (!tithingClass.equals(TithingAccount.class)
+                && !tithingClass.equals(FutureTithingAccount.class)) {
+            throw new IllegalArgumentException("Received non-tithing class argument");
+        }
+
         final List<Account> emptyTithingAccounts =
                 accounts.stream()
                         .filter(
                                 account ->
-                                        account instanceof TithingAccount
+                                        tithingClass.isInstance(account)
                                                 && account.getBalance().compareTo(BigDecimal.ZERO)
                                                         == 0)
                         .toList();
