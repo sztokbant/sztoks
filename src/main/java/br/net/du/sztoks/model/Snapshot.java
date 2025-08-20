@@ -649,20 +649,12 @@ public class Snapshot implements Comparable<Snapshot> {
         accounts.stream()
                 .filter(account -> account.getAccountType().equals(AccountType.ASSET))
                 .forEach(
-                        asset -> {
-                            final BigDecimal amount =
-                                    asset.getCurrencyUnit().equals(getBaseCurrencyUnit())
-                                            ? asset.getBalance()
-                                            : asset.getBalance()
-                                                    .divide(
-                                                            currencyConversionRates.get(
-                                                                    asset.getCurrencyUnit()
-                                                                            .getCode()),
-                                                            DIVISION_SCALE,
-                                                            RoundingMode.HALF_UP);
-
-                            assetsTotal = assetsTotal.add(amount);
-                        });
+                        asset ->
+                                assetsTotal =
+                                        assetsTotal.add(
+                                                toBaseCurrency(
+                                                        asset.getCurrencyUnit(),
+                                                        asset.getBalance())));
     }
 
     private void resetLiabilitiesTotal() {
@@ -671,22 +663,12 @@ public class Snapshot implements Comparable<Snapshot> {
         accounts.stream()
                 .filter(account -> account.getAccountType().equals(AccountType.LIABILITY))
                 .forEach(
-                        liability -> {
-                            final BigDecimal amount =
-                                    liability.getCurrencyUnit().equals(getBaseCurrencyUnit())
-                                            ? liability.getBalance()
-                                            : liability
-                                                    .getBalance()
-                                                    .divide(
-                                                            currencyConversionRates.get(
-                                                                    liability
-                                                                            .getCurrencyUnit()
-                                                                            .getCode()),
-                                                            DIVISION_SCALE,
-                                                            RoundingMode.HALF_UP);
-
-                            liabilitiesTotal = liabilitiesTotal.add(amount);
-                        });
+                        liability ->
+                                liabilitiesTotal =
+                                        liabilitiesTotal.add(
+                                                toBaseCurrency(
+                                                        liability.getCurrencyUnit(),
+                                                        liability.getBalance())));
     }
 
     private void resetIncomesTotal() {
@@ -697,20 +679,12 @@ public class Snapshot implements Comparable<Snapshot> {
                         transaction ->
                                 transaction.getTransactionType().equals(TransactionType.INCOME))
                 .forEach(
-                        income -> {
-                            final BigDecimal amount =
-                                    income.getCurrencyUnit().equals(getBaseCurrencyUnit())
-                                            ? income.getAmount()
-                                            : income.getAmount()
-                                                    .divide(
-                                                            currencyConversionRates.get(
-                                                                    income.getCurrencyUnit()
-                                                                            .getCode()),
-                                                            DIVISION_SCALE,
-                                                            RoundingMode.HALF_UP);
-
-                            incomesTotal = incomesTotal.add(amount);
-                        });
+                        income ->
+                                incomesTotal =
+                                        incomesTotal.add(
+                                                toBaseCurrency(
+                                                        income.getCurrencyUnit(),
+                                                        income.getAmount())));
     }
 
     private void resetInvestmentsTotal() {
@@ -721,22 +695,12 @@ public class Snapshot implements Comparable<Snapshot> {
                         transaction ->
                                 transaction.getTransactionType().equals(TransactionType.INVESTMENT))
                 .forEach(
-                        investment -> {
-                            final BigDecimal amount =
-                                    investment.getCurrencyUnit().equals(getBaseCurrencyUnit())
-                                            ? investment.getAmount()
-                                            : investment
-                                                    .getAmount()
-                                                    .divide(
-                                                            currencyConversionRates.get(
-                                                                    investment
-                                                                            .getCurrencyUnit()
-                                                                            .getCode()),
-                                                            DIVISION_SCALE,
-                                                            RoundingMode.HALF_UP);
-
-                            investmentsTotal = investmentsTotal.add(amount);
-                        });
+                        investment ->
+                                investmentsTotal =
+                                        investmentsTotal.add(
+                                                toBaseCurrency(
+                                                        investment.getCurrencyUnit(),
+                                                        investment.getAmount())));
     }
 
     private void resetDonationsTotal() {
@@ -748,16 +712,8 @@ public class Snapshot implements Comparable<Snapshot> {
                 .forEach(
                         donation -> {
                             final BigDecimal amount =
-                                    donation.getCurrencyUnit().equals(getBaseCurrencyUnit())
-                                            ? donation.getAmount()
-                                            : donation.getAmount()
-                                                    .divide(
-                                                            currencyConversionRates.get(
-                                                                    donation.getCurrencyUnit()
-                                                                            .getCode()),
-                                                            DIVISION_SCALE,
-                                                            RoundingMode.HALF_UP);
-
+                                    toBaseCurrency(
+                                            donation.getCurrencyUnit(), donation.getAmount());
                             donationsTotal = donationsTotal.add(amount);
 
                             if (((DonationTransaction) donation).isTaxDeductible()) {
