@@ -471,8 +471,8 @@ public class Snapshot implements Comparable<Snapshot> {
         tithingAccount.setBalance(tithingAccount.getBalance().add(plusAmount));
 
         if (next != null) {
-            final BigDecimal plusAmountInBaseCurrency = toBaseCurrency(currencyUnit, plusAmount);
-            next.updateTithingAmount(getBaseCurrencyUnit(), plusAmountInBaseCurrency);
+            next.updateTithingAmount(
+                    getBaseCurrencyUnit(), toBaseCurrency(currencyUnit, plusAmount));
         }
     }
 
@@ -854,7 +854,13 @@ public class Snapshot implements Comparable<Snapshot> {
         }
 
         if (next != null && !next.hasConversionRate(currencyUnit)) {
-            next.putCurrencyConversionRate(currencyUnit, conversionRate);
+            next.putCurrencyConversionRate(
+                    currencyUnit,
+                    next.getBaseCurrencyUnit().equals(getBaseCurrencyUnit())
+                            ? conversionRate
+                            : conversionRate.multiply(
+                                    next.getCurrencyConversionRates()
+                                            .get(getBaseCurrencyUnit().getCode())));
         }
     }
 

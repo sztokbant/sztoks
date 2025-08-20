@@ -11,6 +11,7 @@ import static br.net.du.sztoks.test.TestConstants.SECOND_SNAPSHOT_YEAR;
 import static br.net.du.sztoks.test.TestConstants.THIRD_SNAPSHOT_MONTH;
 import static br.net.du.sztoks.test.TestConstants.THIRD_SNAPSHOT_YEAR;
 import static br.net.du.sztoks.test.TestConstants.TITHING_PERCENTAGE;
+import static br.net.du.sztoks.test.TestConstants.YET_ANOTHER_CURRENCY_UNIT;
 import static br.net.du.sztoks.test.TestConstants.newCreditCardAccount;
 import static br.net.du.sztoks.test.TestConstants.newInvestmentAccountWithFutureTithing;
 import static br.net.du.sztoks.test.TestConstants.newRecurringIncome;
@@ -36,6 +37,7 @@ import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.User;
 import br.net.du.sztoks.model.account.Account;
 import br.net.du.sztoks.model.account.FutureTithingAccount;
+import br.net.du.sztoks.model.account.TithingAccount;
 import br.net.du.sztoks.model.transaction.Transaction;
 import br.net.du.sztoks.persistence.SnapshotRepository;
 import br.net.du.sztoks.test.ModelTestUtils;
@@ -46,7 +48,9 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,15 +76,15 @@ public class SnapshotServiceTest {
 
         snapshot = user.getSnapshots().first();
 
-        snapshot.addAccount(newSimpleAssetAccount(CurrencyUnit.USD));
-        snapshot.addAccount(newSimpleLiabilityAccount(CurrencyUnit.USD));
+        snapshot.addAccount(newSimpleAssetAccount(CURRENCY_UNIT));
+        snapshot.addAccount(newSimpleLiabilityAccount(CURRENCY_UNIT));
         snapshot.addAccount(newCreditCardAccount());
         snapshot.addAccount(newInvestmentAccountWithFutureTithing());
 
         snapshot.addTransaction(newRecurringIncome());
-        snapshot.addTransaction(newSingleIncome(CurrencyUnit.USD));
-        snapshot.addTransaction(newRecurringNonTaxDeductibleDonation(CurrencyUnit.USD));
-        snapshot.addTransaction(newSingleTaxDeductibleDonation(CurrencyUnit.USD));
+        snapshot.addTransaction(newSingleIncome(CURRENCY_UNIT));
+        snapshot.addTransaction(newRecurringNonTaxDeductibleDonation(CURRENCY_UNIT));
+        snapshot.addTransaction(newSingleTaxDeductibleDonation(CURRENCY_UNIT));
 
         snapshot.putCurrencyConversionRate(ANOTHER_CURRENCY_UNIT, new BigDecimal("1.31"));
 
@@ -145,7 +149,7 @@ public class SnapshotServiceTest {
         final Iterator<Transaction> iterator = newTransactions.iterator();
         assertTrue(
                 equalsIgnoreIdAndDate(
-                        newRecurringNonTaxDeductibleDonation(CurrencyUnit.USD), iterator.next()));
+                        newRecurringNonTaxDeductibleDonation(CURRENCY_UNIT), iterator.next()));
         assertTrue(equalsIgnoreIdAndDate(newRecurringIncome(), iterator.next()));
 
         verify(snapshotRepository).save(newSnapshot);
@@ -335,6 +339,95 @@ public class SnapshotServiceTest {
     }
 
     @Test
+    public void
+            changeBaseCurrencyUnit_3snapshotsTithingOnFirstInDifferentCurrency_properlyPropagateConversionRateAndWontAddTithingInThatCurrencyToThird() {
+        // GIVEN
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("525075.00")));
+
+        final Snapshot secondSnapshot =
+                snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
+        secondSnapshot.changeBaseCurrencyUnitTo(ANOTHER_CURRENCY_UNIT);
+        assertThat(secondSnapshot.getNetWorth(), is(new BigDecimal("684802.50")));
+
+        final Snapshot thirdSnapshot =
+                snapshotService.newSnapshot(user, THIRD_SNAPSHOT_YEAR, THIRD_SNAPSHOT_MONTH);
+        assertThat(thirdSnapshot.getNetWorth(), is(new BigDecimal("681756.75")));
+
+        assertThat(getTithingAccounts(snapshot).size(), is(1));
+        assertTrue(
+                getTithingAccounts(snapshot).stream()
+                        .anyMatch(
+                                tithingAccount ->
+                                        CURRENCY_UNIT.equals(tithingAccount.getCurrencyUnit())));
+
+        assertThat(getTithingAccounts(secondSnapshot).size(), is(1));
+        assertTrue(
+                getTithingAccounts(secondSnapshot).stream()
+                        .anyMatch(
+                                tithingAccount ->
+                                        CURRENCY_UNIT.equals(tithingAccount.getCurrencyUnit())));
+
+        assertThat(getTithingAccounts(thirdSnapshot).size(), is(2));
+        assertTrue(
+                getTithingAccounts(thirdSnapshot).stream()
+                        .anyMatch(
+                                tithingAccount ->
+                                        CURRENCY_UNIT.equals(tithingAccount.getCurrencyUnit())));
+        assertTrue(
+                getTithingAccounts(thirdSnapshot).stream()
+                        .anyMatch(
+                                tithingAccount ->
+                                        ANOTHER_CURRENCY_UNIT.equals(
+                                                tithingAccount.getCurrencyUnit())));
+
+        // WHEN
+        snapshot.putCurrencyConversionRate(YET_ANOTHER_CURRENCY_UNIT, new BigDecimal("0.8"));
+        snapshot.addTransaction(newSingleIncome(YET_ANOTHER_CURRENCY_UNIT));
+
+        // THEN
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("524400.00")));
+        assertThat(secondSnapshot.getNetWorth(), is(new BigDecimal("683918.25")));
+        assertThat(thirdSnapshot.getNetWorth(), is(new BigDecimal("680872.50")));
+
+        assertThat(
+                secondSnapshot
+                        .getCurrencyConversionRates()
+                        .get(YET_ANOTHER_CURRENCY_UNIT.getCode()),
+                is(new BigDecimal("0.610687024")));
+
+        assertThat(
+                thirdSnapshot.getCurrencyConversionRates().get(YET_ANOTHER_CURRENCY_UNIT.getCode()),
+                is(new BigDecimal("0.610687024")));
+
+        assertThat(getTithingAccounts(snapshot).size(), is(2));
+        assertTrue(
+                getTithingAccounts(snapshot).stream()
+                        .anyMatch(t -> CURRENCY_UNIT.equals(t.getCurrencyUnit())));
+        assertTrue(
+                getTithingAccounts(snapshot).stream()
+                        .anyMatch(t -> YET_ANOTHER_CURRENCY_UNIT.equals(t.getCurrencyUnit())));
+
+        assertThat(getTithingAccounts(secondSnapshot).size(), is(1));
+        assertTrue(
+                getTithingAccounts(secondSnapshot).stream()
+                        .anyMatch(t -> CURRENCY_UNIT.equals(t.getCurrencyUnit())));
+        assertFalse(
+                getTithingAccounts(secondSnapshot).stream()
+                        .anyMatch(t -> YET_ANOTHER_CURRENCY_UNIT.equals(t.getCurrencyUnit())));
+
+        assertThat(getTithingAccounts(thirdSnapshot).size(), is(2));
+        assertTrue(
+                getTithingAccounts(thirdSnapshot).stream()
+                        .anyMatch(t -> CURRENCY_UNIT.equals(t.getCurrencyUnit())));
+        assertTrue(
+                getTithingAccounts(thirdSnapshot).stream()
+                        .anyMatch(t -> ANOTHER_CURRENCY_UNIT.equals(t.getCurrencyUnit())));
+        assertFalse(
+                getTithingAccounts(thirdSnapshot).stream()
+                        .anyMatch(t -> YET_ANOTHER_CURRENCY_UNIT.equals(t.getCurrencyUnit())));
+    }
+
+    @Test
     public void deleteSnapshot_first_throws() {
         // GIVEN
         final Snapshot secondSnapshot =
@@ -428,5 +521,12 @@ public class SnapshotServiceTest {
                 ImmutableSortedSet.of(),
                 ImmutableList.of(),
                 ImmutableMap.of());
+    }
+
+    private static Set<TithingAccount> getTithingAccounts(final Snapshot snapshot) {
+        return snapshot.getAccounts().stream()
+                .filter(account -> account instanceof TithingAccount)
+                .map(account -> (TithingAccount) account)
+                .collect(Collectors.toSet());
     }
 }

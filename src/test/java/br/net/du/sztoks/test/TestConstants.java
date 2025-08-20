@@ -49,6 +49,7 @@ public class TestConstants {
     public static final String ACCOUNT_NAME = "Account Name";
     public static final CurrencyUnit CURRENCY_UNIT = CurrencyUnit.USD;
     public static final CurrencyUnit ANOTHER_CURRENCY_UNIT = CurrencyUnit.AUD;
+    public static final CurrencyUnit YET_ANOTHER_CURRENCY_UNIT = CurrencyUnit.EUR;
     public static final BigDecimal TITHING_PERCENTAGE = new BigDecimal("15.00");
 
     public static final String AMOUNT_KEY = "amount";
