@@ -1,6 +1,6 @@
 package br.net.du.sztoks.controller;
 
-import br.net.du.sztoks.controller.util.SnapshotUtils;
+import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.account.AccountType;
@@ -16,7 +16,7 @@ import org.springframework.ui.Model;
 @Slf4j
 public class SnapshotUpdater {
     @Autowired private SnapshotService snapshotService;
-    @Autowired private SnapshotUtils snapshotUtils;
+    @Autowired private SnapshotValidations snapshotValidations;
 
     @Transactional
     public Object updateField(
@@ -25,7 +25,7 @@ public class SnapshotUpdater {
             final BiFunction<ValueUpdateJsonRequest, Snapshot, Object> function) {
         // Ensure snapshot belongs to logged user
         final Snapshot snapshot =
-                snapshotUtils.validateLockAndRefreshSnapshot(
+                snapshotValidations.validateLockAndRefreshSnapshot(
                         model, valueUpdateJsonRequest.getSnapshotId());
 
         log.debug(

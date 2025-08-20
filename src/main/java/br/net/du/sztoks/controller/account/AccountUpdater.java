@@ -2,7 +2,7 @@ package br.net.du.sztoks.controller.account;
 
 import static br.net.du.sztoks.controller.util.AccountUtils.hasFutureTithingImpact;
 
-import br.net.du.sztoks.controller.util.SnapshotUtils;
+import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.account.Account;
@@ -24,7 +24,7 @@ public class AccountUpdater {
 
     @Autowired private AccountService accountService;
 
-    @Autowired private SnapshotUtils snapshotUtils;
+    @Autowired private SnapshotValidations snapshotValidations;
 
     @Transactional
     public Object updateField(
@@ -38,8 +38,8 @@ public class AccountUpdater {
         // Ensure snapshot belongs to logged user
         final Snapshot snapshot =
                 isSnapshotImpactingField
-                        ? snapshotUtils.validateLockAndRefreshSnapshot(model, snapshotId)
-                        : snapshotUtils.validateSnapshot(model, snapshotId);
+                        ? snapshotValidations.validateLockAndRefreshSnapshot(model, snapshotId)
+                        : snapshotValidations.validateSnapshot(model, snapshotId);
 
         if (isSnapshotImpactingField) {
             log.debug(

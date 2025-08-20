@@ -14,7 +14,7 @@ import static br.net.du.sztoks.controller.util.ControllerUtils.prepareTemplate;
 import static br.net.du.sztoks.controller.viewmodel.SnapshotViewModelOutput.getDisplayTitle;
 
 import br.net.du.sztoks.controller.interceptor.WebController;
-import br.net.du.sztoks.controller.util.SnapshotUtils;
+import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.UserViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.account.AccountViewModelInput;
 import br.net.du.sztoks.controller.viewmodel.validator.AccountViewModelInputValidator;
@@ -44,7 +44,7 @@ public class AccountNewController {
 
     @Autowired private SnapshotService snapshotService;
 
-    @Autowired private SnapshotUtils snapshotUtils;
+    @Autowired private SnapshotValidations snapshotValidations;
 
     @Autowired private AccountViewModelInputValidator accountViewModelInputValidator;
 
@@ -77,7 +77,7 @@ public class AccountNewController {
             @PathVariable(value = ID) final Long snapshotId,
             @ModelAttribute(ACCOUNT_FORM) final AccountViewModelInput accountViewModelInput,
             final BindingResult bindingResult) {
-        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotValidations.validateSnapshot(model, snapshotId);
 
         accountViewModelInputValidator.validate(accountViewModelInput, bindingResult, snapshot);
 
@@ -108,7 +108,7 @@ public class AccountNewController {
             final AccountType accountType,
             final AccountViewModelInput accountViewModelInput) {
         // Ensure snapshot belongs to logged user
-        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotValidations.validateSnapshot(model, snapshotId);
 
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));

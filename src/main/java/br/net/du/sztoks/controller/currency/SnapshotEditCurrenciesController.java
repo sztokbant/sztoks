@@ -13,7 +13,7 @@ import static br.net.du.sztoks.controller.util.ControllerUtils.prepareTemplate;
 import static br.net.du.sztoks.controller.viewmodel.SnapshotViewModelOutput.getDisplayTitle;
 
 import br.net.du.sztoks.controller.interceptor.WebController;
-import br.net.du.sztoks.controller.util.SnapshotUtils;
+import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.EditCurrenciesViewModelInput;
 import br.net.du.sztoks.controller.viewmodel.UserViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.validator.EditCurrenciesViewModelInputValidator;
@@ -42,7 +42,7 @@ public class SnapshotEditCurrenciesController {
 
     @Autowired private SnapshotService snapshotService;
 
-    @Autowired private SnapshotUtils snapshotUtils;
+    @Autowired private SnapshotValidations snapshotValidations;
 
     @Autowired private EditCurrenciesViewModelInputValidator validator;
 
@@ -52,7 +52,7 @@ public class SnapshotEditCurrenciesController {
                     final String userAgent,
             final Model model,
             @PathVariable(value = ID) final Long snapshotId) {
-        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotValidations.validateSnapshot(model, snapshotId);
 
         if (snapshot.getCurrencyConversionRates().isEmpty()) {
             return "redirect:" + SNAPSHOT_NEW_CURRENCY_MAPPING;
@@ -73,7 +73,7 @@ public class SnapshotEditCurrenciesController {
             @ModelAttribute(EDIT_CURRENCIES_FORM)
                     final EditCurrenciesViewModelInput currenciesViewModelInput,
             final BindingResult bindingResult) {
-        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotValidations.validateSnapshot(model, snapshotId);
 
         validator.validate(currenciesViewModelInput, bindingResult, snapshot);
 

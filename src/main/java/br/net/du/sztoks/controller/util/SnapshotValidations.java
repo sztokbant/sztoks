@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 @Component
-public class SnapshotUtils {
+public class SnapshotValidations {
     @Autowired private SnapshotService snapshotService;
 
     @Transactional

@@ -3,7 +3,7 @@ package br.net.du.sztoks.controller.currency;
 import static br.net.du.sztoks.controller.util.ControllerConstants.CURRENCY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.ID;
 
-import br.net.du.sztoks.controller.util.SnapshotUtils;
+import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.service.SnapshotService;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SnapshotChangeBaseCurrencyController {
     @Autowired private SnapshotService snapshotService;
 
-    @Autowired private SnapshotUtils snapshotUtils;
+    @Autowired private SnapshotValidations snapshotValidations;
 
     @PostMapping("/snapshot/{id}/changeBaseCurrency/{currency}")
     @Transactional
@@ -27,7 +27,7 @@ public class SnapshotChangeBaseCurrencyController {
             @PathVariable(value = ID) final Long snapshotId,
             @PathVariable(value = CURRENCY) final String currency,
             final Model model) {
-        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotValidations.validateSnapshot(model, snapshotId);
 
         snapshot.changeBaseCurrencyUnitTo(CurrencyUnit.of(currency));
 

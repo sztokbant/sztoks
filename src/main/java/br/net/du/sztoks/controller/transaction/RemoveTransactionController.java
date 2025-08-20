@@ -2,7 +2,7 @@ package br.net.du.sztoks.controller.transaction;
 
 import static br.net.du.sztoks.controller.util.TransactionUtils.hasTithingImpact;
 
-import br.net.du.sztoks.controller.util.SnapshotUtils;
+import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.SnapshotRemoveTransactionJsonResponse;
 import br.net.du.sztoks.controller.viewmodel.UpdatableTotals;
 import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
@@ -31,7 +31,7 @@ public class RemoveTransactionController {
 
     @Autowired private TransactionService transactionService;
 
-    @Autowired private SnapshotUtils snapshotUtils;
+    @Autowired private SnapshotValidations snapshotValidations;
 
     @Autowired private AccountService accountService;
 
@@ -41,7 +41,7 @@ public class RemoveTransactionController {
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         // Ensure snapshot belongs to logged user
         final Snapshot snapshot =
-                snapshotUtils.validateLockAndRefreshSnapshot(
+                snapshotValidations.validateLockAndRefreshSnapshot(
                         model, valueUpdateJsonRequest.getSnapshotId());
 
         final Optional<Transaction> transactionOpt =

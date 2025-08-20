@@ -13,7 +13,7 @@ import static br.net.du.sztoks.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.sztoks.controller.util.ControllerUtils.prepareTemplate;
 
 import br.net.du.sztoks.controller.interceptor.WebController;
-import br.net.du.sztoks.controller.util.SnapshotUtils;
+import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.CumulativeTransactionCategoryTotalsViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.CumulativeTransactionTotalsViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.SnapshotViewModelOutput;
@@ -44,7 +44,7 @@ public class SnapshotController {
 
     @Autowired private SnapshotService snapshotService;
 
-    @Autowired private SnapshotUtils snapshotUtils;
+    @Autowired private SnapshotValidations snapshotValidations;
 
     @GetMapping("/snapshot/{id}")
     public String get(
@@ -53,7 +53,7 @@ public class SnapshotController {
             final Model model,
             @PathVariable(value = ID) final Long snapshotId) {
         final User user = getLoggedUser(model);
-        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotValidations.validateSnapshot(model, snapshotId);
 
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
         model.addAttribute(SNAPSHOT_KEY, SnapshotViewModelOutput.of(snapshot));
@@ -84,7 +84,7 @@ public class SnapshotController {
     @GetMapping("/snapshot/{id}/reset")
     @Transactional
     public Object reset(final Model model, @PathVariable(value = ID) final Long snapshotId) {
-        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotValidations.validateSnapshot(model, snapshotId);
 
         snapshot.resetAll();
         snapshotService.save(snapshot);

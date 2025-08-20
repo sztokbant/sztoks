@@ -15,7 +15,7 @@ import static br.net.du.sztoks.controller.util.TransactionUtils.hasTithingImpact
 import static br.net.du.sztoks.controller.viewmodel.SnapshotViewModelOutput.getDisplayTitle;
 
 import br.net.du.sztoks.controller.interceptor.WebController;
-import br.net.du.sztoks.controller.util.SnapshotUtils;
+import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.UserViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.transaction.TransactionViewModelInput;
 import br.net.du.sztoks.controller.viewmodel.validator.TransactionViewModelInputValidator;
@@ -46,7 +46,7 @@ public class TransactionNewController {
 
     @Autowired private SnapshotService snapshotService;
 
-    @Autowired private SnapshotUtils snapshotUtils;
+    @Autowired private SnapshotValidations snapshotValidations;
 
     @Autowired private TransactionViewModelInputValidator transactionViewModelInputValidator;
 
@@ -104,7 +104,8 @@ public class TransactionNewController {
             @ModelAttribute(TRANSACTION_FORM)
                     final TransactionViewModelInput transactionViewModelInput,
             final BindingResult bindingResult) {
-        final Snapshot snapshot = snapshotUtils.validateLockAndRefreshSnapshot(model, snapshotId);
+        final Snapshot snapshot =
+                snapshotValidations.validateLockAndRefreshSnapshot(model, snapshotId);
 
         transactionViewModelInputValidator.validate(
                 transactionViewModelInput, bindingResult, snapshot);
@@ -141,7 +142,7 @@ public class TransactionNewController {
             final TransactionType transactionType,
             final TransactionViewModelInput transactionViewModelInput) {
         // Ensure snapshot belongs to logged user
-        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotValidations.validateSnapshot(model, snapshotId);
 
         final User user = getLoggedUser(model);
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));

@@ -2,7 +2,7 @@ package br.net.du.sztoks.controller.account;
 
 import static br.net.du.sztoks.controller.util.AccountUtils.hasFutureTithingImpact;
 
-import br.net.du.sztoks.controller.util.SnapshotUtils;
+import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.SnapshotRemoveAccountJsonResponse;
 import br.net.du.sztoks.controller.viewmodel.UpdatableTotals;
 import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
@@ -32,7 +32,7 @@ public class RemoveAccountController {
 
     @Autowired protected AccountService accountService;
 
-    @Autowired protected SnapshotUtils snapshotUtils;
+    @Autowired protected SnapshotValidations snapshotValidations;
 
     @PostMapping("/snapshot/removeAccount")
     @Transactional
@@ -40,7 +40,7 @@ public class RemoveAccountController {
             final Model model, @RequestBody final ValueUpdateJsonRequest valueUpdateJsonRequest) {
         // Ensure snapshot belongs to logged user
         final Snapshot snapshot =
-                snapshotUtils.validateLockAndRefreshSnapshot(
+                snapshotValidations.validateLockAndRefreshSnapshot(
                         model, valueUpdateJsonRequest.getSnapshotId());
 
         final Optional<Account> accountOpt =

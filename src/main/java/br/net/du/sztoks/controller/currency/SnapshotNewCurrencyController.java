@@ -15,7 +15,7 @@ import static br.net.du.sztoks.controller.viewmodel.SnapshotViewModelOutput.getD
 import static java.util.stream.Collectors.toList;
 
 import br.net.du.sztoks.controller.interceptor.WebController;
-import br.net.du.sztoks.controller.util.SnapshotUtils;
+import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.NewCurrencyViewModelInput;
 import br.net.du.sztoks.controller.viewmodel.UserViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.validator.NewCurrencyViewModelInputValidator;
@@ -45,7 +45,7 @@ public class SnapshotNewCurrencyController {
 
     @Autowired private SnapshotService snapshotService;
 
-    @Autowired private SnapshotUtils snapshotUtils;
+    @Autowired private SnapshotValidations snapshotValidations;
 
     @Autowired private NewCurrencyViewModelInputValidator validator;
 
@@ -55,7 +55,7 @@ public class SnapshotNewCurrencyController {
             @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
                     final String userAgent,
             final Model model) {
-        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotValidations.validateSnapshot(model, snapshotId);
         return prepareGetMapping(userAgent, model, snapshot, new NewCurrencyViewModelInput());
     }
 
@@ -69,7 +69,7 @@ public class SnapshotNewCurrencyController {
             @ModelAttribute(NEW_CURRENCY_FORM)
                     final NewCurrencyViewModelInput newCurrencyViewModelInput,
             final BindingResult bindingResult) {
-        final Snapshot snapshot = snapshotUtils.validateSnapshot(model, snapshotId);
+        final Snapshot snapshot = snapshotValidations.validateSnapshot(model, snapshotId);
 
         validator.validate(newCurrencyViewModelInput, bindingResult, snapshot);
 
