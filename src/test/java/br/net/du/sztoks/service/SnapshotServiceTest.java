@@ -265,23 +265,16 @@ public class SnapshotServiceTest {
 
     @Test
     public void
-            newSnapshot_changeBaseCurrencyUnitToExistingInPrevious_properlyComputesNetWorthIncrease() {
+            changeBaseCurrencyUnit_toExistingCurrencyInPreviousSnapshot_properlyComputesNetWorthIncrease() {
         // GIVEN
         assertThat(snapshot.getNetWorth(), is(new BigDecimal("525075.00")));
-
-        // WHEN
         final Snapshot secondSnapshot =
                 snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
+
+        // WHEN
         secondSnapshot.changeBaseCurrencyUnitTo(ANOTHER_CURRENCY_UNIT);
 
         // THEN
-        verify(snapshotRepository, times(1)).save(eq(secondSnapshot));
-
-        assertNull(snapshot.getPrevious());
-        assertThat(snapshot.getNext(), is(secondSnapshot));
-
-        assertThat(secondSnapshot.getPrevious(), is(snapshot));
-        assertNull(secondSnapshot.getNext());
 
         assertThat(secondSnapshot.getNetWorth(), is(new BigDecimal("684802.50")));
         assertThat(
@@ -293,26 +286,19 @@ public class SnapshotServiceTest {
     }
 
     @Test
-    public void newSnapshot_changeBaseCurrencyUnitToNew_properlyComputesNetWorthIncrease() {
+    public void changeBaseCurrencyUnit_toNew_properlyComputesNetWorthIncrease() {
         // GIVEN
         assertThat(snapshot.getNetWorth(), is(new BigDecimal("525075.00")));
-
-        // WHEN
         final Snapshot secondSnapshot =
                 snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
+        verify(snapshotRepository, times(1)).save(eq(secondSnapshot));
+
+        // WHEN
         final CurrencyUnit newCurrencyUnit = CurrencyUnit.EUR;
         secondSnapshot.putCurrencyConversionRate(newCurrencyUnit, new BigDecimal("0.97"));
         secondSnapshot.changeBaseCurrencyUnitTo(newCurrencyUnit);
 
         // THEN
-        verify(snapshotRepository, times(1)).save(eq(secondSnapshot));
-
-        assertNull(snapshot.getPrevious());
-        assertThat(snapshot.getNext(), is(secondSnapshot));
-
-        assertThat(secondSnapshot.getPrevious(), is(snapshot));
-        assertNull(secondSnapshot.getNext());
-
         assertThat(secondSnapshot.getNetWorth(), is(new BigDecimal("507067.50")));
         assertThat(
                 secondSnapshot.getNetWorthIncrease().setScale(2, RoundingMode.HALF_UP),
@@ -320,6 +306,32 @@ public class SnapshotServiceTest {
         assertThat(
                 secondSnapshot.getNetWorthIncreasePercentage().setScale(4, RoundingMode.HALF_UP),
                 is(new BigDecimal("-0.4428")));
+    }
+
+    @Test
+    public void
+            changeBaseCurrencyUnit_notTheLastSnapshot_wontAddBaseCurrencyConversionToFollowingSnapshot() {
+        // GIVEN
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("525075.00")));
+        final Snapshot secondSnapshot =
+                snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
+
+        // WHEN
+        snapshot.changeBaseCurrencyUnitTo(ANOTHER_CURRENCY_UNIT);
+
+        // THEN
+        assertThat(
+                secondSnapshot.getNetWorthIncreasePercentage().setScale(4, RoundingMode.HALF_UP),
+                is(new BigDecimal("-0.4428")));
+
+        assertThat(
+                secondSnapshot.getCurrencyConversionRates().size(),
+                is(snapshot.getCurrencyConversionRates().size()));
+        assertThat(
+                secondSnapshot
+                        .getCurrencyConversionRates()
+                        .containsKey(secondSnapshot.getBaseCurrencyUnit().getCode()),
+                is(false));
     }
 
     @Test

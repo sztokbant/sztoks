@@ -743,6 +743,28 @@ class SnapshotTest {
     }
 
     @Test
+    public void putCurrencyConversionRate_sameAsBaseCurrency_noop() {
+        // GIVEN
+        final Snapshot snapshot = buildSnapshotWithMultipleCurrencies();
+        final Map<String, BigDecimal> currencyConversionRatesBefore =
+                snapshot.getCurrencyConversionRates();
+        assertThat(
+                currencyConversionRatesBefore.containsKey(snapshot.getBaseCurrencyUnit().getCode()),
+                is(false));
+
+        // WHEN
+        snapshot.putCurrencyConversionRate(snapshot.getBaseCurrencyUnit(), BigDecimal.ONE);
+
+        // THEN
+        final Map<String, BigDecimal> currencyConversionRatesAfter =
+                snapshot.getCurrencyConversionRates();
+        assertThat(
+                currencyConversionRatesBefore.containsKey(snapshot.getBaseCurrencyUnit().getCode()),
+                is(false));
+        assertThat(currencyConversionRatesAfter.size(), is(currencyConversionRatesBefore.size()));
+    }
+
+    @Test
     public void changeBaseCurrencyUnitTo_sameAsBaseCurrency_noop() {
         // GIVEN
         final Snapshot snapshot = buildSnapshotWithMultipleCurrencies();

@@ -612,13 +612,14 @@ public class Snapshot implements Comparable<Snapshot> {
                                     RoundingMode.HALF_UP));
         }
 
+        baseCurrency = newBaseCurrency.getCode();
+
         // Add new direct conversion rate
         putCurrencyConversionRate(
                 CurrencyUnit.of(oldBaseCurrency),
                 BigDecimal.ONE.divide(
                         oldToNewBaseCurrencyConversionRate, DIVISION_SCALE, RoundingMode.HALF_UP));
 
-        baseCurrency = newBaseCurrency.getCode();
         updateCurrenciesInUse();
 
         resetTotals();
@@ -841,6 +842,11 @@ public class Snapshot implements Comparable<Snapshot> {
 
     public void putCurrencyConversionRate(
             @NonNull final CurrencyUnit currencyUnit, @NonNull final BigDecimal conversionRate) {
+        if (getBaseCurrencyUnit().equals(currencyUnit)) {
+            // NOOP
+            return;
+        }
+
         if (conversionRate.compareTo(BigDecimal.ZERO) == 0) {
             throw new IllegalArgumentException("Conversion rate can't be zero");
         }
