@@ -1,4 +1,4 @@
-package br.net.du.sztoks.controller;
+package br.net.du.sztoks.controller.snapshot;
 
 import static br.net.du.sztoks.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
 import static br.net.du.sztoks.controller.util.ControllerUtils.getLoggedUser;

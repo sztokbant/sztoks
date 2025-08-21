@@ -1,4 +1,4 @@
-package br.net.du.sztoks.controller;
+package br.net.du.sztoks.controller.snapshot;
 
 import static br.net.du.sztoks.test.ControllerTestUtils.verifyRedirect;
 import static br.net.du.sztoks.test.ModelTestUtils.buildUser;
@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
+import br.net.du.sztoks.controller.PostControllerTestBase;
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.User;
 import br.net.du.sztoks.service.AccountService;

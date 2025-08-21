@@ -1,4 +1,4 @@
-package br.net.du.sztoks.controller;
+package br.net.du.sztoks.controller.home;
 
 import static br.net.du.sztoks.test.ControllerTestUtils.verifyRedirect;
 import static br.net.du.sztoks.test.ModelTestUtils.buildUser;

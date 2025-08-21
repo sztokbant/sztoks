@@ -1,4 +1,4 @@
-package br.net.du.sztoks.controller;
+package br.net.du.sztoks.controller.home;
 
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOTS_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;

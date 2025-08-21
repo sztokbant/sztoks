@@ -1,4 +1,4 @@
-package br.net.du.sztoks.controller;
+package br.net.du.sztoks.controller.snapshot;
 
 import static br.net.du.sztoks.test.ModelTestUtils.SNAPSHOT_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;

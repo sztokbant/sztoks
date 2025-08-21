@@ -1,4 +1,4 @@
-package br.net.du.sztoks.controller;
+package br.net.du.sztoks.controller.user;
 
 import static br.net.du.sztoks.controller.util.ControllerConstants.CURRENCIES;
 import static br.net.du.sztoks.controller.util.ControllerConstants.DEFAULT_CURRENCY_UNIT;

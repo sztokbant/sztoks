@@ -1,4 +1,4 @@
-package br.net.du.sztoks.controller;
+package br.net.du.sztoks.controller.snapshot;
 
 import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.ValueUpdateJsonRequest;
