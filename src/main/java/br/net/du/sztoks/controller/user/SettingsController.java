@@ -98,13 +98,18 @@ public class SettingsController {
             return prepareTemplate(userAgent, model, NAME_CHANGE_TEMPLATE);
         }
 
-        user.setFirstName(nameChangeInput.getFirstName().trim());
-        user.setLastName(nameChangeInput.getLastName().trim());
-        userService.save(user);
+        final String newFirstName = nameChangeInput.getFirstName().trim();
+        final String newLastName = nameChangeInput.getLastName().trim();
+
+        if (!user.getFirstName().equals(newFirstName) || !user.getLastName().equals(newLastName)) {
+            user.setFirstName(newFirstName);
+            user.setLastName(newLastName);
+            userService.save(user);
+
+            model.addAttribute("message", "You have successfully changed your name.");
+        }
 
         model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
-
-        model.addAttribute("message", "You have successfully changed your name.");
 
         return prepareTemplate(userAgent, model, SETTINGS_TEMPLATE);
     }
