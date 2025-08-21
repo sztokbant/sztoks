@@ -8,7 +8,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.net.du.sztoks.controller.viewmodel.SnapshotViewModelOutput;
-import br.net.du.sztoks.controller.viewmodel.UserViewModelOutput;
+import br.net.du.sztoks.controller.viewmodel.user.UserViewModelOutput;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

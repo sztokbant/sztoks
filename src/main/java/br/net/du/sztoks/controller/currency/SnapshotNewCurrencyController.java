@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 import br.net.du.sztoks.controller.interceptor.WebController;
 import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.NewCurrencyViewModelInput;
-import br.net.du.sztoks.controller.viewmodel.UserViewModelOutput;
+import br.net.du.sztoks.controller.viewmodel.user.UserViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.validator.NewCurrencyViewModelInputValidator;
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.User;

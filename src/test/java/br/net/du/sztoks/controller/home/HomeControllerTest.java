@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import br.net.du.sztoks.controller.viewmodel.SnapshotSummaryViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.UpdatableTotals;
-import br.net.du.sztoks.controller.viewmodel.UserViewModelOutput;
+import br.net.du.sztoks.controller.viewmodel.user.UserViewModelOutput;
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.SnapshotSummary;
 import br.net.du.sztoks.model.User;

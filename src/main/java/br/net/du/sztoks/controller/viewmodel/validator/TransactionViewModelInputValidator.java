@@ -1,17 +1,17 @@
 package br.net.du.sztoks.controller.viewmodel.validator;
 
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.AMOUNT_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.CATEGORY_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.CURRENCY_UNIT_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.DATE_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.DESCRIPTION_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.IS_TAX_DEDUCTIBLE_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.AMOUNT_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.CATEGORY_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.CURRENCY_UNIT_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.DATE_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.DESCRIPTION_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.IS_TAX_DEDUCTIBLE_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.RECURRENCE_POLICY_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.getSnapshot;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.rejectIfInvalidCurrencyUnit;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.rejectIfInvalidTithingPercentage;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.rejectIfUnsupportedCurrencyUnit;
 import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.NOT_EMPTY_ERRORCODE;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.RECURRENCE_POLICY_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.getSnapshot;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.rejectIfInvalidCurrencyUnit;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.rejectIfInvalidTithingPercentage;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.rejectIfUnsupportedCurrencyUnit;
 import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace;
 
 import br.net.du.sztoks.controller.viewmodel.transaction.TransactionViewModelInput;

@@ -17,7 +17,7 @@ import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.CumulativeTransactionCategoryTotalsViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.CumulativeTransactionTotalsViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.SnapshotViewModelOutput;
-import br.net.du.sztoks.controller.viewmodel.UserViewModelOutput;
+import br.net.du.sztoks.controller.viewmodel.user.UserViewModelOutput;
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.User;
 import br.net.du.sztoks.model.account.FutureTithingPolicy;

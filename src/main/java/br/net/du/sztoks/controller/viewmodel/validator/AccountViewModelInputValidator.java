@@ -1,13 +1,13 @@
 package br.net.du.sztoks.controller.viewmodel.validator;
 
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.CURRENCY_UNIT_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.FUTURE_TITHING_POLICY_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.NAME_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.CURRENCY_UNIT_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.FUTURE_TITHING_POLICY_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.NAME_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.SUBTYPE_NAME_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.getSnapshot;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.rejectIfInvalidCurrencyUnit;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.rejectIfUnsupportedCurrencyUnit;
 import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.NOT_EMPTY_ERRORCODE;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.SUBTYPE_NAME_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.getSnapshot;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.rejectIfInvalidCurrencyUnit;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.rejectIfUnsupportedCurrencyUnit;
 import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace;
 
 import br.net.du.sztoks.controller.viewmodel.account.AccountViewModelInput;

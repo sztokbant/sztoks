@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import br.net.du.sztoks.controller.viewmodel.UserViewModelInput;
+import br.net.du.sztoks.controller.viewmodel.user.UserViewModelInput;
 import br.net.du.sztoks.model.User;
 import br.net.du.sztoks.service.UserService;
 import org.apache.commons.lang3.StringUtils;

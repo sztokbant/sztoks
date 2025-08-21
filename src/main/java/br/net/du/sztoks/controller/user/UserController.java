@@ -8,7 +8,7 @@ import static br.net.du.sztoks.controller.util.ControllerConstants.USER_AGENT_RE
 import static br.net.du.sztoks.controller.util.ControllerUtils.prepareTemplate;
 
 import br.net.du.sztoks.controller.interceptor.WebController;
-import br.net.du.sztoks.controller.viewmodel.UserViewModelInput;
+import br.net.du.sztoks.controller.viewmodel.user.UserViewModelInput;
 import br.net.du.sztoks.controller.viewmodel.validator.UserViewModelInputValidator;
 import br.net.du.sztoks.service.SecurityService;
 import br.net.du.sztoks.service.UserService;

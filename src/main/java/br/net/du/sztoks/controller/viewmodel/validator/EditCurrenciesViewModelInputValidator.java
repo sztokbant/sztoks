@@ -1,6 +1,6 @@
 package br.net.du.sztoks.controller.viewmodel.validator;
 
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.getSnapshot;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.getSnapshot;
 
 import br.net.du.sztoks.controller.viewmodel.EditCurrenciesViewModelInput;
 import br.net.du.sztoks.model.Snapshot;

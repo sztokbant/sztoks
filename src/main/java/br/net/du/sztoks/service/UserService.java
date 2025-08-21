@@ -54,4 +54,12 @@ public class UserService {
     public User findByEmail(final String email) {
         return userRepository.findByEmail(email);
     }
+
+    public boolean validateLogin(final String email, final String rawPassword) {
+        final User user = userRepository.findByEmail(email);
+        if (user != null && passwordEncoder.matches(rawPassword, user.getPassword())) {
+            return true;
+        }
+        return false;
+    }
 }

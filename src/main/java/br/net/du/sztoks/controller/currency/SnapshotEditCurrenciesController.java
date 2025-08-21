@@ -15,7 +15,7 @@ import static br.net.du.sztoks.controller.viewmodel.SnapshotViewModelOutput.getD
 import br.net.du.sztoks.controller.interceptor.WebController;
 import br.net.du.sztoks.controller.util.SnapshotValidations;
 import br.net.du.sztoks.controller.viewmodel.EditCurrenciesViewModelInput;
-import br.net.du.sztoks.controller.viewmodel.UserViewModelOutput;
+import br.net.du.sztoks.controller.viewmodel.user.UserViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.validator.EditCurrenciesViewModelInputValidator;
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.User;

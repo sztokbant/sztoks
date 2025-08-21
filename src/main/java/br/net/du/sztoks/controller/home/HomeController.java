@@ -1,7 +1,6 @@
 package br.net.du.sztoks.controller.home;
 
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOTS_KEY;
-import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.USER_AGENT_REQUEST_HEADER_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.USER_KEY;
 import static br.net.du.sztoks.controller.util.ControllerUtils.getLoggedUser;
@@ -11,7 +10,7 @@ import static br.net.du.sztoks.controller.util.MoneyFormatUtils.format;
 
 import br.net.du.sztoks.controller.interceptor.WebController;
 import br.net.du.sztoks.controller.viewmodel.SnapshotSummaryViewModelOutput;
-import br.net.du.sztoks.controller.viewmodel.UserViewModelOutput;
+import br.net.du.sztoks.controller.viewmodel.user.UserViewModelOutput;
 import br.net.du.sztoks.model.User;
 import br.net.du.sztoks.service.SnapshotService;
 import java.util.List;
@@ -49,9 +48,6 @@ public class HomeController {
                         .collect(Collectors.toList());
 
         model.addAttribute(SNAPSHOTS_KEY, homeSnapshotViewModelOutputs);
-
-        // For navbar
-        model.addAttribute(SNAPSHOT_ID_KEY, homeSnapshotViewModelOutputs.get(0).getId());
 
         return prepareTemplate(userAgent, model, "home");
     }

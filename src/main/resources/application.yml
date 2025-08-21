@@ -25,12 +25,17 @@ spring:
 
 logging:
   level:
-    root: INFO
-    org.springframework.orm.jpa: INFO
-    org.springframework.transaction: INFO
-#    org.springframework.security: TRACE
+    org.springframework: DEBUG
+    org.hibernate: DEBUG
+    root: DEBUG
 
 server:
+  error:
+    include-exception: true
+    include-stacktrace: always
+    whitelabel:
+      enabled: true
+
   servlet:
     session:
       persistent: true

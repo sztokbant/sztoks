@@ -1,18 +1,16 @@
 package br.net.du.sztoks.controller.viewmodel.validator;
 
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.EMAIL_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.FIRST_NAME_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.LAST_NAME_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.rejectIfInvalidCurrencyUnit;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.rejectIfInvalidTithingPercentage;
+import static br.net.du.sztoks.controller.viewmodel.validator.UserValidationCommons.FIRST_NAME_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.UserValidationCommons.LAST_NAME_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.UserValidationCommons.PASSWORD_CONFIRM_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.UserValidationCommons.PASSWORD_FIELD;
 import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.NOT_EMPTY_ERRORCODE;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.PASSWORD_CONFIRM_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.PASSWORD_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.rejectIfInvalidCurrencyUnit;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.rejectIfInvalidTithingPercentage;
 import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhitespace;
 
-import br.net.du.sztoks.controller.viewmodel.UserViewModelInput;
+import br.net.du.sztoks.controller.viewmodel.user.UserViewModelInput;
 import br.net.du.sztoks.service.UserService;
-import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,8 +19,6 @@ import org.springframework.validation.Validator;
 
 @Component
 public class UserViewModelInputValidator implements Validator {
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^(.+)@(.+)$");
-
     private final UserService userService;
 
     @Autowired
@@ -45,18 +41,9 @@ public class UserViewModelInputValidator implements Validator {
         rejectIfInvalidTithingPercentage(userViewModelInput.getTithingPercentage(), errors);
         rejectIfEmptyOrWhitespace(errors, PASSWORD_CONFIRM_FIELD, NOT_EMPTY_ERRORCODE);
 
-        rejectIfInvalidOrExistingEmail(errors, userViewModelInput);
+        final String email = userViewModelInput.getEmail();
+        UserValidationCommons.rejectIfInvalidOrExistingEmail(errors, email, userService);
         rejectIfInvalidPassword(errors, userViewModelInput);
-    }
-
-    private void rejectIfInvalidOrExistingEmail(
-            final Errors errors, final UserViewModelInput userViewModelInput) {
-        if (StringUtils.isEmpty(userViewModelInput.getEmail())
-                || !EMAIL_PATTERN.matcher(userViewModelInput.getEmail()).matches()) {
-            errors.rejectValue(EMAIL_FIELD, "Invalid.userForm.email");
-        } else if (userService.findByEmail(userViewModelInput.getEmail()) != null) {
-            errors.rejectValue(EMAIL_FIELD, "Duplicate.userForm.email");
-        }
     }
 
     private void rejectIfInvalidPassword(

@@ -1,5 +1,4 @@
 <div>
-
     <form:form method="post" action="${contextPath}/login" class="form-signin">
         <div class="form-group ${message != null ? 'info-message' : ''}">
             <span>${message}</span>

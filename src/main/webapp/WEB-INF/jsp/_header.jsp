@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <nav class="navbar fixed-top navbar-dark bg-dark navbar-sztoks-${deviceType}">
     <div class="container-fluid">
@@ -34,31 +35,39 @@
                         <li class="navbar-entry-${deviceType}">
                             <a class="navbar-item" href="/">Snapshot List</a>
                         </li>
+                        <c:choose>
+                        <c:when test="${not empty snapshotId}">
+                            <li class="navbar-entry-${deviceType} divider"></li>
+                            <li class="navbar-entry-${deviceType}">
+                                <span class="navbar-text">Balance Sheet</span>
+                            </li>
+                            <li class="navbar-entry-${deviceType}">
+                                <a class="navbar-item" href="/snapshot/${snapshotId}/newAssetAccount" style="text-decoration: none;">&#x271A; Asset Account</a>
+                            </li>
+                            <li class="navbar-entry-${deviceType}">
+                                <a class="navbar-item" href="/snapshot/${snapshotId}/newLiabilityAccount" style="text-decoration: none;">&#x271A; Liability Account</a>
+                            </li>
+                            <li class="navbar-entry-${deviceType} divider"></li>
+                            <li class="navbar-entry-${deviceType}">
+                                <span class="navbar-text">Transactions</span>
+                            </li>
+                            <li class="navbar-entry-${deviceType}">
+                                <a class="navbar-item" href="/snapshot/${snapshotId}/newIncomeTransaction" style="text-decoration: none;">&#x271A; Income Transaction</a>
+                            </li>
+                            <li class="navbar-entry-${deviceType}">
+                                <a class="navbar-item" href="/snapshot/${snapshotId}/newInvestmentTransaction" style="text-decoration: none;">&#x271A; Investing Activity Transaction</a>
+                            </li>
+                            <li class="navbar-entry-${deviceType}">
+                                <a class="navbar-item" href="/snapshot/${snapshotId}/newDonationTransaction" style="text-decoration: none;">&#x271A; Donation Transaction</a>
+                            </li>
+                        </c:when>
+                        </c:choose>
                         <li class="navbar-entry-${deviceType} divider"></li>
                         <li class="navbar-entry-${deviceType}">
-                            <span class="navbar-text">Balance Sheet</span>
+                            <span class="navbar-text">User</span>
                         </li>
                         <li class="navbar-entry-${deviceType}">
-                            <a class="navbar-item" href="/snapshot/${snapshotId}/newAssetAccount" style="text-decoration: none;">&#x271A; Asset Account</a>
-                        </li>
-                        <li class="navbar-entry-${deviceType}">
-                            <a class="navbar-item" href="/snapshot/${snapshotId}/newLiabilityAccount" style="text-decoration: none;">&#x271A; Liability Account</a>
-                        </li>
-                        <li class="navbar-entry-${deviceType} divider"></li>
-                        <li class="navbar-entry-${deviceType}">
-                            <span class="navbar-text">Transactions</span>
-                        </li>
-                        <li class="navbar-entry-${deviceType}">
-                            <a class="navbar-item" href="/snapshot/${snapshotId}/newIncomeTransaction" style="text-decoration: none;">&#x271A; Income Transaction</a>
-                        </li>
-                        <li class="navbar-entry-${deviceType}">
-                            <a class="navbar-item" href="/snapshot/${snapshotId}/newInvestmentTransaction" style="text-decoration: none;">&#x271A; Investing Activity Transaction</a>
-                        </li>
-                        <li class="navbar-entry-${deviceType}">
-                            <a class="navbar-item" href="/snapshot/${snapshotId}/newDonationTransaction" style="text-decoration: none;">&#x271A; Donation Transaction</a>
-                        </li>
-                        <li class="navbar-entry-${deviceType} divider">
-
+                            <a class="navbar-item" href="/settings/email" style="text-decoration: none;">Change E-mail Address</a>
                         </li>
                         <li class="navbar-entry-${deviceType} navbar-entry">
                             <form:form id="logoutForm" method="post" action="${contextPath}/logout" />

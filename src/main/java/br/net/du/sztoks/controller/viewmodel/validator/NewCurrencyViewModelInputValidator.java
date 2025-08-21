@@ -1,8 +1,8 @@
 package br.net.du.sztoks.controller.viewmodel.validator;
 
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.CONVERSION_RATE_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.CURRENCY_UNIT_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.ValidationCommons.getSnapshot;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.CONVERSION_RATE_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.CURRENCY_UNIT_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.SnapshotValidationCommons.getSnapshot;
 
 import br.net.du.sztoks.controller.viewmodel.NewCurrencyViewModelInput;
 import br.net.du.sztoks.model.Snapshot;

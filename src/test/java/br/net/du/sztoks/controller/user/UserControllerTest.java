@@ -23,7 +23,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import br.net.du.sztoks.controller.viewmodel.UserViewModelInput;
+import br.net.du.sztoks.controller.viewmodel.user.UserViewModelInput;
 import br.net.du.sztoks.controller.viewmodel.validator.UserViewModelInputValidator;
 import br.net.du.sztoks.service.SecurityService;
 import br.net.du.sztoks.service.UserService;

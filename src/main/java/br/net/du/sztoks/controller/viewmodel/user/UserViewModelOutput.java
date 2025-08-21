@@ -1,4 +1,4 @@
-package br.net.du.sztoks.controller.viewmodel;
+package br.net.du.sztoks.controller.viewmodel.user;
 
 import br.net.du.sztoks.model.User;
 import lombok.Builder;
