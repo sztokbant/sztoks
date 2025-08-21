@@ -13,7 +13,7 @@
 
     <script src="${contextPath}/resources/js/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script></head>
-<script src="${contextPath}/resources/js/ajax_field_update.js"></script>
+    <script src="${contextPath}/resources/js/ajax_field_update.js"></script>
 <script>
     function validateEmailChange() {
         const currentEmail = document.getElementById("currentEmail").value.trim();
@@ -116,7 +116,7 @@
                         onclick="if (validateEmailChange()) { this.form.submit(); this.disabled=true; this.innerText='...'; return true; } else { return false; }">
                 Save
                 </button>
-                <div class="text-center paragraph-${deviceType}"><a href="${contextPath}/">Return to Snapshots</a></div>
+                <div class="text-center paragraph-${deviceType}"><a href="${contextPath}/settings">Return to Settings</a></div>
             </div>
         </form:form>
     </div>

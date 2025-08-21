@@ -26,10 +26,23 @@ public class SettingsController {
     private static final String FORM_MODEL_ATTRIBUTE = "emailUpdateInput";
     private static final String EMAIL_UPDATE_MAPPING = "/settings/email";
     private static final String EMAIL_UPDATE_TEMPLATE = "user/email_update";
+    private static final String SETTINGS_MAPPING = "/settings";
+    private static final String SETTINGS_TEMPLATE = "user/settings";
 
     @Autowired private UserService userService;
 
     @Autowired private EmailUpdateInputValidator validator;
+
+    @GetMapping(SETTINGS_MAPPING)
+    public String showSettingsPage(
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
+            final Model model) {
+        final User user = getLoggedUser(model);
+        model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
+
+        return prepareTemplate(userAgent, model, SETTINGS_TEMPLATE);
+    }
 
     @GetMapping(EMAIL_UPDATE_MAPPING)
     public String showEmailUpdateForm(

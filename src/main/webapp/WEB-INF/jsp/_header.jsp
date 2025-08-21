@@ -64,10 +64,7 @@
                         </c:choose>
                         <li class="navbar-entry-${deviceType} divider"></li>
                         <li class="navbar-entry-${deviceType}">
-                            <span class="navbar-text">User</span>
-                        </li>
-                        <li class="navbar-entry-${deviceType}">
-                            <a class="navbar-item" href="/settings/email" style="text-decoration: none;">Update E-mail Address</a>
+                            <a class="navbar-item" href="/settings" style="text-decoration: none;">Settings</a>
                         </li>
                         <li class="navbar-entry-${deviceType} navbar-entry">
                             <form:form id="logoutForm" method="post" action="${contextPath}/logout" />

@@ -25,9 +25,9 @@ spring:
 
 logging:
   level:
-    org.springframework: DEBUG
-    org.hibernate: DEBUG
-    root: DEBUG
+    org.springframework: INFO
+    org.hibernate: INFO
+    root: INFO
 
 server:
   error:
