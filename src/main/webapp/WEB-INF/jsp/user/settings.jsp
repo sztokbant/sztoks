@@ -33,11 +33,12 @@
         ${user.email}
     </div>
 
-    <div class="form-group ${message != null ? 'info-message' : ''}">
-        <span>${message}</span>
-    </div>
 
-    <div>
+    <div class="text-center">
+        <div class="form-group ${message != null ? 'info-message' : ''}">
+            <span>${message}</span>
+        </div>
+
         <form>
             <button class="btn btn-lg btn-primary btn-block btn-sztoks btn-form-${deviceType}"
                     type="submit" formaction="/settings/name">
