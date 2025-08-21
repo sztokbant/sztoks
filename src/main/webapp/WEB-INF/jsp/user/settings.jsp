@@ -53,6 +53,13 @@
             </button>
         </form>
 
+        <form>
+            <button class="btn btn-lg btn-primary btn-block btn-sztoks btn-form-${deviceType}"
+                    type="submit" formaction="/settings/password">
+                Change Password
+            </button>
+        </form>
+
         <div class="text-center paragraph-${deviceType}"><a href="${contextPath}/">Return to Snapshots</a></div>
     </div>
 

@@ -1,7 +1,7 @@
 package br.net.du.sztoks.controller.viewmodel.validator;
 
 import static br.net.du.sztoks.controller.viewmodel.validator.UserValidationCommons.EMAIL_FIELD;
-import static br.net.du.sztoks.controller.viewmodel.validator.UserValidationCommons.PASSWORD_FIELD;
+import static br.net.du.sztoks.controller.viewmodel.validator.UserValidationCommons.rejectIfInvalidCurrentPassword;
 
 import br.net.du.sztoks.controller.viewmodel.user.EmailUpdateInput;
 import br.net.du.sztoks.service.UserService;
@@ -37,7 +37,11 @@ public class EmailUpdateInputValidator implements Validator {
 
         rejectIfEmailsDontMatch(errors, emailUpdateInput);
 
-        rejectIfInvalidPassword(errors, emailUpdateInput);
+        rejectIfInvalidCurrentPassword(
+                errors,
+                emailUpdateInput.getCurrentEmail(),
+                emailUpdateInput.getCurrentPassword(),
+                userService);
     }
 
     private void rejectIfNoop(final Errors errors, final EmailUpdateInput emailUpdateInput) {
@@ -55,13 +59,6 @@ public class EmailUpdateInputValidator implements Validator {
         if (!emailConfirmation.equals(email)) {
             errors.rejectValue(
                     EMAIL_CONFIRMATION_FIELD, "Invalid.userForm.emailConfirmationMismatch");
-        }
-    }
-
-    private void rejectIfInvalidPassword(Errors errors, EmailUpdateInput emailUpdateInput) {
-        if (!userService.validateLogin(
-                emailUpdateInput.getCurrentEmail().trim(), emailUpdateInput.getPassword())) {
-            errors.rejectValue(PASSWORD_FIELD, "Invalid.userForm.password");
         }
     }
 }

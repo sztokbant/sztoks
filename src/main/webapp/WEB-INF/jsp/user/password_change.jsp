@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Update E-mail Address</title>
+    <title>Change Password</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
@@ -14,26 +14,25 @@
     <script src="${contextPath}/resources/js/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script></head>
 <script>
-    function validateEmailUpdate() {
-        const currentEmail = document.getElementById("currentEmail").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const emailConfirmation = document.getElementById("emailConfirmation").value.trim();
-        const currentPassword = document.getElementById("currentPassword").value;
+    function validatePasswordChange() {
+        const currentPassword = document.getElementById("currentPassword").value.trim();
+        const password = document.getElementById("password").value;
+        const passwordConfirmation = document.getElementById("passwordConfirm").value;
 
-        if (email === "") {
-            alert("New e-mail cannot be empty.");
+        if (currentPassword === "") {
+            alert("Current password missing.");
             return false;
         }
-        if (email !== emailConfirmation) {
-            alert("E-mails do not match.");
-            return false; // prevent submission
+        if (password === "") {
+            alert("Password cannot be empty.");
+            return false;
         }
-        if (email === currentEmail) {
-            alert("New e-mail must be different from current e-mail.");
-            return false; // prevent submission
+        if (password !== passwordConfirmation) {
+            alert("Passwords do not match.");
+            return false;
         }
-        if (currentPassword === "") {
-            alert("Password missing.");
+        if (password === currentPassword) {
+            alert("Password must be different from current password.");
             return false;
         }
         return true; // allow submission
@@ -51,56 +50,58 @@
         </c:when>
     </c:choose>
 
-    <div class="text-center page-title-${deviceType}">Update E-mail Address</div>
+    <div class="text-center page-title-${deviceType}">Change Password</div>
 
-    <div class="text-center page-subtitle-${deviceType}">Current E-mail Address: <b>${user.email}</b></div>
+    <div class="text-center page-subtitle-${deviceType}">
+        <b>${user.fullName}</b><br/>
+        ${user.email}
+    </div>
 
     <div>
-        <form:form modelAttribute="emailUpdateInput" method="post" action="${contextPath}/settings/email" class="form-signin">
-            <form:input type="hidden" id="currentEmail" path="currentEmail" value="${user.email}"/>
+        <form:form modelAttribute="passwordChangeInput" method="post" action="${contextPath}/settings/password" class="form-signin">
+            <form:input type="hidden" id="email" path="email" value="${user.email}"/>
 
             <div class="form-group ${message != null ? 'info-message' : ''}">
                 <span>${message}</span>
             </div>
 
-            <spring:bind path="email">
-                <div class="row form-group">
-                    <div class="col col-form-label-${deviceType}">
-                        <label for="email">New E-mail</label>
-                    </div>
-                    <div class="col">
-                        <form:input type="text" id="email" path="email" class="form-control form-entry-${deviceType}" placeholder="New E-mail Address"
-                                    autofocus="true"/>
-                        <div class="${status.error ? 'has-error' : ''}">
-                            <form:errors path="email"/>
-                        </div>
-                    </div>
-                </div>
-            </spring:bind>
-
-            <spring:bind path="emailConfirmation">
-                <div class="row form-group">
-                    <div class="col col-form-label-${deviceType}">
-                        <label for="emailConfirmation">New E-mail Confirmation</label>
-                    </div>
-                    <div class="col">
-                        <form:input type="text" id="emailConfirmation" path="emailConfirmation" class="form-control form-entry-${deviceType}" placeholder="New E-mail Address Confirmation" />
-                        <div class="${status.error ? 'has-error' : ''}">
-                            <form:errors path="emailConfirmation"/>
-                        </div>
-                    </div>
-                </div>
-            </spring:bind>
-
             <spring:bind path="currentPassword">
                 <div class="row form-group">
                     <div class="col col-form-label-${deviceType}">
-                        <label for="password">Your Current Password</label>
+                        <label for="currentPassword">Your Current Password</label>
                     </div>
                     <div class="col">
                         <form:input type="password" id="currentPassword" path="currentPassword" class="form-control form-entry-${deviceType}" placeholder="Password" />
                         <div class="${status.error ? 'has-error' : ''}">
                             <form:errors path="currentPassword"/>
+                        </div>
+                    </div>
+                </div>
+            </spring:bind>
+
+            <spring:bind path="password">
+                <div class="row form-group">
+                    <div class="col col-form-label-${deviceType}">
+                        <label for="password">New Password</label>
+                    </div>
+                    <div class="col">
+                        <form:input type="password" id="password" path="password" class="form-control form-entry-${deviceType}" placeholder="New Password" />
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:errors path="password"/>
+                        </div>
+                    </div>
+                </div>
+            </spring:bind>
+
+            <spring:bind path="passwordConfirm">
+                <div class="row form-group">
+                    <div class="col col-form-label-${deviceType}">
+                        <label for="passwordConfirm">New Password Confirmation</label>
+                    </div>
+                    <div class="col">
+                        <form:input type="password" id="passwordConfirm" path="passwordConfirm" class="form-control form-entry-${deviceType}" placeholder="New Password Confirmation" />
+                        <div class="${status.error ? 'has-error' : ''}">
+                            <form:errors path="passwordConfirm"/>
                         </div>
                     </div>
                 </div>
@@ -112,7 +113,7 @@
 
             <div class="text-center">
                 <button class="btn btn-lg btn-primary btn-block btn-sztoks btn-form-${deviceType}" type="submit"
-                        onclick="if (validateEmailUpdate()) { this.form.submit(); this.disabled=true; this.innerText='...'; return true; } else { return false; }">
+                        onclick="if (validatePasswordChange()) { this.form.submit(); this.disabled=true; this.innerText='...'; return true; } else { return false; }">
                 Save
                 </button>
                 <div class="text-center paragraph-${deviceType}"><a href="${contextPath}/settings">Return to Settings</a></div>

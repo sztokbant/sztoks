@@ -8,13 +8,21 @@ import static br.net.du.sztoks.controller.util.ControllerUtils.prepareTemplate;
 import br.net.du.sztoks.controller.interceptor.WebController;
 import br.net.du.sztoks.controller.viewmodel.user.EmailUpdateInput;
 import br.net.du.sztoks.controller.viewmodel.user.NameChangeInput;
+import br.net.du.sztoks.controller.viewmodel.user.PasswordChangeInput;
 import br.net.du.sztoks.controller.viewmodel.user.UserViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.validator.EmailUpdateInputValidator;
 import br.net.du.sztoks.controller.viewmodel.validator.NameChangeInputValidator;
+import br.net.du.sztoks.controller.viewmodel.validator.PasswordChangeInputValidator;
 import br.net.du.sztoks.model.User;
 import br.net.du.sztoks.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,14 +39,21 @@ public class SettingsController {
     private static final String NAME_CHANGE_FORM_MODEL_ATTRIBUTE = "nameChangeInput";
     private static final String NAME_CHANGE_MAPPING = "/settings/name";
     private static final String NAME_CHANGE_TEMPLATE = "user/name_change";
+    private static final String PASSWORD_CHANGE_FORM_MODEL_ATTRIBUTE = "passwordChangeInput";
+    private static final String PASSWORD_CHANGE_MAPPING = "/settings/password";
+    private static final String PASSWORD_CHANGE_TEMPLATE = "user/password_change";
     private static final String SETTINGS_MAPPING = "/settings";
     private static final String SETTINGS_TEMPLATE = "user/settings";
 
     @Autowired private UserService userService;
 
+    @Autowired private NameChangeInputValidator nameChangeInputValidator;
+
     @Autowired private EmailUpdateInputValidator emailUpdateInputValidator;
 
-    @Autowired private NameChangeInputValidator nameChangeInputValidator;
+    @Autowired private PasswordChangeInputValidator passwordChangeInputValidator;
+
+    @Autowired PasswordEncoder passwordEncoder;
 
     @GetMapping(SETTINGS_MAPPING)
     public String showSettingsPage(
@@ -66,18 +81,6 @@ public class SettingsController {
                         .lastName(user.getLastName())
                         .build());
         return prepareTemplate(userAgent, model, NAME_CHANGE_TEMPLATE);
-    }
-
-    @GetMapping(EMAIL_UPDATE_MAPPING)
-    public String showEmailUpdateForm(
-            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
-                    final String userAgent,
-            final Model model) {
-        final User user = getLoggedUser(model);
-        model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
-
-        model.addAttribute(EMAIL_UPDATE_FORM_MODEL_ATTRIBUTE, new EmailUpdateInput());
-        return prepareTemplate(userAgent, model, EMAIL_UPDATE_TEMPLATE);
     }
 
     @PostMapping(NAME_CHANGE_MAPPING)
@@ -114,6 +117,18 @@ public class SettingsController {
         return prepareTemplate(userAgent, model, SETTINGS_TEMPLATE);
     }
 
+    @GetMapping(EMAIL_UPDATE_MAPPING)
+    public String showEmailUpdateForm(
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
+            final Model model) {
+        final User user = getLoggedUser(model);
+        model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
+
+        model.addAttribute(EMAIL_UPDATE_FORM_MODEL_ATTRIBUTE, new EmailUpdateInput());
+        return prepareTemplate(userAgent, model, EMAIL_UPDATE_TEMPLATE);
+    }
+
     @PostMapping(EMAIL_UPDATE_MAPPING)
     public String updateEmail(
             @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
@@ -121,7 +136,9 @@ public class SettingsController {
             final Model model,
             @ModelAttribute(EMAIL_UPDATE_FORM_MODEL_ATTRIBUTE)
                     final EmailUpdateInput emailUpdateInput,
-            final BindingResult bindingResult) {
+            final BindingResult bindingResult,
+            final HttpServletRequest request,
+            final HttpServletResponse response) {
         emailUpdateInputValidator.validate(emailUpdateInput, bindingResult);
 
         final User user = getLoggedUser(model);
@@ -135,8 +152,61 @@ public class SettingsController {
         user.setEmail(emailUpdateInput.getEmail().trim());
         userService.save(user);
 
+        // Logs out user
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+
         model.addAttribute(
                 "message", "You have successfully updated your e-mail, please log in again.");
+
+        return prepareTemplate(userAgent, model, "login");
+    }
+
+    @GetMapping(PASSWORD_CHANGE_MAPPING)
+    public String showPasswordChangeForm(
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
+            final Model model) {
+        final User user = getLoggedUser(model);
+        model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
+
+        model.addAttribute(PASSWORD_CHANGE_FORM_MODEL_ATTRIBUTE, new PasswordChangeInput());
+        return prepareTemplate(userAgent, model, PASSWORD_CHANGE_TEMPLATE);
+    }
+
+    @PostMapping(PASSWORD_CHANGE_MAPPING)
+    public String changePassword(
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
+            final Model model,
+            @ModelAttribute(PASSWORD_CHANGE_FORM_MODEL_ATTRIBUTE)
+                    final PasswordChangeInput passwordChangeInput,
+            final BindingResult bindingResult,
+            final HttpServletRequest request,
+            final HttpServletResponse response) {
+        passwordChangeInputValidator.validate(passwordChangeInput, bindingResult);
+
+        final User user = getLoggedUser(model);
+        model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute(PASSWORD_CHANGE_FORM_MODEL_ATTRIBUTE, passwordChangeInput);
+            return prepareTemplate(userAgent, model, PASSWORD_CHANGE_TEMPLATE);
+        }
+
+        user.setPassword(passwordEncoder.encode(passwordChangeInput.getPassword()));
+        userService.save(user);
+
+        // Logs out user
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+
+        model.addAttribute(
+                "message", "You have successfully changed your password, please log in again.");
 
         return prepareTemplate(userAgent, model, "login");
     }
