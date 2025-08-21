@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Change E-mail Address</title>
+    <title>Update E-mail Address</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
@@ -52,12 +52,12 @@
         </c:when>
     </c:choose>
 
-    <div class="text-center page-title-${deviceType}">Change E-mail Address</div>
+    <div class="text-center page-title-${deviceType}">Update E-mail Address</div>
 
     <div class="text-center page-subtitle-${deviceType}">Current E-mail Address: <b>${user.email}</b></div>
 
     <div>
-        <form:form modelAttribute="emailUpdateViewModelInput" method="post" action="${contextPath}/settings/email" class="form-signin">
+        <form:form modelAttribute="emailUpdateInput" method="post" action="${contextPath}/settings/email" class="form-signin">
             <form:input type="hidden" id="currentEmail" path="currentEmail" value="${user.email}"/>
 
             <div class="form-group ${message != null ? 'info-message' : ''}">

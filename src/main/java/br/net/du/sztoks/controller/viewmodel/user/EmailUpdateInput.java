@@ -3,7 +3,7 @@ package br.net.du.sztoks.controller.viewmodel.user;
 import lombok.Data;
 
 @Data
-public class EmailUpdateViewModelInput {
+public class EmailUpdateInput {
     private String currentEmail;
     private String email;
     private String emailConfirmation;
