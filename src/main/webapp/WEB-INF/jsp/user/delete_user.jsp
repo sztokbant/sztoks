@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Permanently Delete Your Account</title>
+    <title>Permanently Delete My Account</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
@@ -38,7 +38,7 @@
         </c:when>
     </c:choose>
 
-    <div class="text-center page-title-${deviceType}">Permanently Delete Your Account</div>
+    <div class="text-center page-title-${deviceType}">Permanently Delete My Account</div>
 
     <div class="text-center page-subtitle-${deviceType}">
         <b>${user.fullName}</b><br/>
