@@ -63,7 +63,7 @@
         <form>
             <button class="btn btn-lg btn-primary btn-block btn-sztoks btn-red btn-form-${deviceType}"
                     type="submit" formaction="/settings/delete_user">
-                Permanently Delete My Account
+                Delete My Account
             </button>
         </form>
 
