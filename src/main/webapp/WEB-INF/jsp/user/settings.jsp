@@ -60,6 +60,13 @@
             </button>
         </form>
 
+        <form>
+            <button class="btn btn-lg btn-primary btn-block btn-sztoks btn-red btn-form-${deviceType}"
+                    type="submit" formaction="/settings/delete_user">
+                Permanently Delete My Account
+            </button>
+        </form>
+
         <div class="text-center paragraph-${deviceType}"><a href="${contextPath}/">Return to Snapshots</a></div>
     </div>
 

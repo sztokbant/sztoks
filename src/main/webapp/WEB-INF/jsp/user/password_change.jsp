@@ -13,7 +13,7 @@
 
     <script src="${contextPath}/resources/js/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script></head>
-<script>
+    <script>
     function validatePasswordChange() {
         const currentPassword = document.getElementById("currentPassword").value.trim();
         const password = document.getElementById("password").value;
@@ -36,7 +36,8 @@
             return false;
         }
         return true; // allow submission
-    }</script>
+    }
+    </script>
 </head>
 
 <body>

@@ -13,7 +13,7 @@
 
     <script src="${contextPath}/resources/js/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script></head>
-<script>
+    <script>
     function validateEmailUpdate() {
         const currentEmail = document.getElementById("currentEmail").value.trim();
         const email = document.getElementById("email").value.trim();
@@ -26,18 +26,19 @@
         }
         if (email !== emailConfirmation) {
             alert("E-mails do not match.");
-            return false; // prevent submission
+            return false;
         }
         if (email === currentEmail) {
             alert("New e-mail must be different from current e-mail.");
-            return false; // prevent submission
+            return false;
         }
         if (currentPassword === "") {
             alert("Password missing.");
             return false;
         }
         return true; // allow submission
-    }</script>
+    }
+    </script>
 </head>
 
 <body>

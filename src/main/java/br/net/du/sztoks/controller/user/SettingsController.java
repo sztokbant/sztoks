@@ -6,10 +6,12 @@ import static br.net.du.sztoks.controller.util.ControllerUtils.getLoggedUser;
 import static br.net.du.sztoks.controller.util.ControllerUtils.prepareTemplate;
 
 import br.net.du.sztoks.controller.interceptor.WebController;
+import br.net.du.sztoks.controller.viewmodel.user.DeleteUserInput;
 import br.net.du.sztoks.controller.viewmodel.user.EmailUpdateInput;
 import br.net.du.sztoks.controller.viewmodel.user.NameChangeInput;
 import br.net.du.sztoks.controller.viewmodel.user.PasswordChangeInput;
 import br.net.du.sztoks.controller.viewmodel.user.UserViewModelOutput;
+import br.net.du.sztoks.controller.viewmodel.validator.DeleteUserInputValidator;
 import br.net.du.sztoks.controller.viewmodel.validator.EmailUpdateInputValidator;
 import br.net.du.sztoks.controller.viewmodel.validator.NameChangeInputValidator;
 import br.net.du.sztoks.controller.viewmodel.validator.PasswordChangeInputValidator;
@@ -33,6 +35,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @Slf4j
 @WebController
 public class SettingsController {
+    private static final String DELETE_USER_FORM_MODEL_ATTRIBUTE = "deleteUserInput";
+    private static final String DELETE_USER_MAPPING = "/settings/delete_user";
+    private static final String DELETE_USER_TEMPLATE = "user/delete_user";
     private static final String EMAIL_UPDATE_FORM_MODEL_ATTRIBUTE = "emailUpdateInput";
     private static final String EMAIL_UPDATE_MAPPING = "/settings/email";
     private static final String EMAIL_UPDATE_TEMPLATE = "user/email_update";
@@ -52,6 +57,8 @@ public class SettingsController {
     @Autowired private EmailUpdateInputValidator emailUpdateInputValidator;
 
     @Autowired private PasswordChangeInputValidator passwordChangeInputValidator;
+
+    @Autowired private DeleteUserInputValidator deleteUserInputValidator;
 
     @Autowired PasswordEncoder passwordEncoder;
 
@@ -209,5 +216,39 @@ public class SettingsController {
                 "message", "You have successfully changed your password, please log in again.");
 
         return prepareTemplate(userAgent, model, "login");
+    }
+
+    @GetMapping(DELETE_USER_MAPPING)
+    public String showDeleteUserForm(
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
+            final Model model) {
+        final User user = getLoggedUser(model);
+        model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
+
+        model.addAttribute(DELETE_USER_FORM_MODEL_ATTRIBUTE, new DeleteUserInput());
+        return prepareTemplate(userAgent, model, DELETE_USER_TEMPLATE);
+    }
+
+    @PostMapping(DELETE_USER_MAPPING)
+    public String changePassword(
+            @RequestHeader(value = USER_AGENT_REQUEST_HEADER_KEY, required = false)
+                    final String userAgent,
+            final Model model,
+            @ModelAttribute(DELETE_USER_FORM_MODEL_ATTRIBUTE) final DeleteUserInput deleteUserInput,
+            final BindingResult bindingResult) {
+        deleteUserInputValidator.validate(deleteUserInput, bindingResult);
+
+        final User user = getLoggedUser(model);
+        model.addAttribute(USER_KEY, UserViewModelOutput.of(user));
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute(DELETE_USER_FORM_MODEL_ATTRIBUTE, deleteUserInput);
+            return prepareTemplate(userAgent, model, DELETE_USER_TEMPLATE);
+        }
+
+        userService.delete(user);
+
+        return "redirect:/login?logout";
     }
 }

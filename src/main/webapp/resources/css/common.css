@@ -141,6 +141,23 @@ li.divider {
     font-size: 64px;
 }
 
+.btn-red {
+    border-color: lightcoral;
+    background-color: indianred;
+}
+
+.btn-red:hover {
+    border-color: indianred;
+    background-color: firebrick;
+}
+
+.btn-red:active,
+.btn-red:focus{
+    border-color: indianred !important;
+    background-color: darkred !important;
+    outline: 3px solid indianred;
+}
+
 .col-cell-DESKTOP {
     font-size: 11.5px;
     padding: 2px 3px 2px 3px;

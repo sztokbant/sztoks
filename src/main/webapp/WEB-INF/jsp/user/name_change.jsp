@@ -6,14 +6,14 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Update E-mail Address</title>
+    <title>Change Name</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 
     <script src="${contextPath}/resources/js/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script></head>
-<script>
+    <script>
     function validateNameChange() {
         const firstName = document.getElementById("firstName").value.trim();
         const lastName = document.getElementById("lastName").value.trim();
@@ -27,7 +27,8 @@
             return false;
         }
         return true; // allow submission
-    }</script>
+    }
+    </script>
 </head>
 
 <body>

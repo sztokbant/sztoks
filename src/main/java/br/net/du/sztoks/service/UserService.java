@@ -55,6 +55,10 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public void delete(final User user) {
+        userRepository.delete(user);
+    }
+
     public boolean validateLogin(final String email, final String rawPassword) {
         final User user = userRepository.findByEmail(email);
         if (user != null && passwordEncoder.matches(rawPassword, user.getPassword())) {
