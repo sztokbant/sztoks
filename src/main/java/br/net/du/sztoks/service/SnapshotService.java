@@ -4,6 +4,7 @@ import br.net.du.sztoks.exception.SztoksException;
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.SnapshotSummary;
 import br.net.du.sztoks.model.User;
+import br.net.du.sztoks.model.account.FutureTithingAccount;
 import br.net.du.sztoks.model.totals.CumulativeTransactionCategoryTotals;
 import br.net.du.sztoks.model.totals.CumulativeTransactionTotals;
 import br.net.du.sztoks.persistence.SnapshotRepository;
@@ -111,9 +112,14 @@ public class SnapshotService {
             throw new SztoksException("Only the most recent Snapshot can be deleted.");
         }
 
-        snapshot.getAccounts().forEach(account -> snapshot.removeAccount(account));
+        // Remove non-FutureTithingAccount's first to ensure future tithing reference amount is
+        // zero when removing.
+        snapshot.getAccounts().stream()
+                .filter(account -> !(account instanceof FutureTithingAccount))
+                .forEach(snapshot::removeAccount);
+        snapshot.getAccounts().forEach(snapshot::removeAccount);
 
-        snapshot.getTransactions().forEach(transaction -> snapshot.removeTransaction(transaction));
+        snapshot.getTransactions().forEach(snapshot::removeTransaction);
 
         user.removeSnapshot(snapshot);
 

@@ -457,6 +457,10 @@ public class SnapshotServiceTest {
 
         assertThat(user.getSnapshots().size(), is(2));
 
+        // Add a new account with future tithing. Deleting the snapshot should ensure
+        // FutureTithingAccount's are the last to be removed, so reference amounts are zero.
+        secondSnapshot.addAccount(newInvestmentAccountWithFutureTithing());
+
         // WHEN
         snapshotService.deleteSnapshot(user, secondSnapshot);
 
