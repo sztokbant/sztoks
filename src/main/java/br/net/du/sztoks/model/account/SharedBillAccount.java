@@ -35,7 +35,7 @@ public abstract class SharedBillAccount extends BillAccount {
         }
 
         if (dueDay < 1 || dueDay > 31) {
-            throw new IllegalArgumentException("numberOfPartners must be between 1 and 31");
+            throw new IllegalArgumentException("dueDay must be between 1 and 31");
         }
 
         this.numberOfPartners = numberOfPartners;

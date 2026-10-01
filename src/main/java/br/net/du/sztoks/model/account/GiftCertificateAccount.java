@@ -104,7 +104,7 @@ public class GiftCertificateAccount extends Account
 
     @Override
     public void setCurrentShareValue(@NonNull final BigDecimal currentShareValue) {
-        if (shares.compareTo(BigDecimal.ZERO) < 0) {
+        if (currentShareValue.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("currentShareValue must not be negative");
         }
 
@@ -133,7 +133,8 @@ public class GiftCertificateAccount extends Account
 
     @Override
     public void setFutureTithingPolicy(@NonNull final FutureTithingPolicy futureTithingPolicy) {
-        if (this.futureTithingPolicy.equals(futureTithingPolicy)) {
+        if (this.futureTithingPolicy != null
+                && this.futureTithingPolicy.equals(futureTithingPolicy)) {
             return;
         }
 

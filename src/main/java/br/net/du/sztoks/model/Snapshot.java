@@ -622,7 +622,7 @@ public class Snapshot implements Comparable<Snapshot> {
 
         updateCurrenciesInUse();
 
-        resetTotals();
+        resetAll();
     }
 
     public void resetAll() {
@@ -850,7 +850,7 @@ public class Snapshot implements Comparable<Snapshot> {
             incomesTotal = computeTotalFor(TransactionType.INCOME);
             investmentsTotal = computeTotalFor(TransactionType.INVESTMENT);
             donationsTotal = computeTotalFor(TransactionType.DONATION);
-            taxDeductibleDonationsTotal = comupteTaxDeductibleDonationsTotal();
+            taxDeductibleDonationsTotal = computeTaxDeductibleDonationsTotal();
         }
 
         if (next != null && !next.hasConversionRate(currencyUnit)) {
@@ -1001,12 +1001,12 @@ public class Snapshot implements Comparable<Snapshot> {
 
     public BigDecimal getTaxDeductibleDonationsTotal() {
         if (taxDeductibleDonationsTotal == null) {
-            taxDeductibleDonationsTotal = comupteTaxDeductibleDonationsTotal();
+            taxDeductibleDonationsTotal = computeTaxDeductibleDonationsTotal();
         }
         return taxDeductibleDonationsTotal;
     }
 
-    private BigDecimal comupteTaxDeductibleDonationsTotal() {
+    private BigDecimal computeTaxDeductibleDonationsTotal() {
         return transactions.stream()
                 .filter(
                         transaction ->
@@ -1039,10 +1039,16 @@ public class Snapshot implements Comparable<Snapshot> {
             return amount;
         }
 
-        return amount.divide(
-                currencyConversionRates.get(currencyUnit.getCode()),
-                DIVISION_SCALE,
-                RoundingMode.HALF_UP);
+        final BigDecimal rate = currencyConversionRates.get(currencyUnit.getCode());
+        if (rate == null || rate.compareTo(BigDecimal.ZERO) == 0) {
+            throw new SztoksException(
+                    "Missing or zero conversion rate for "
+                            + currencyUnit.getCode()
+                            + " in snapshot "
+                            + id);
+        }
+
+        return amount.divide(rate, DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     @Override

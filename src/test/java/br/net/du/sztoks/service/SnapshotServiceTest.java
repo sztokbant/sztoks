@@ -287,6 +287,11 @@ public class SnapshotServiceTest {
         assertThat(
                 secondSnapshot.getNetWorthIncreasePercentage().setScale(4, RoundingMode.HALF_UP),
                 is(new BigDecimal("-0.4428")));
+
+        assertThat(secondSnapshot.getBaseCurrencyUnit(), is(ANOTHER_CURRENCY_UNIT));
+        assertThat(snapshot.getBaseCurrencyUnit(), is(CURRENCY_UNIT));
+        assertTrue(secondSnapshot.supports(CURRENCY_UNIT));
+        assertTrue(secondSnapshot.supports(ANOTHER_CURRENCY_UNIT));
     }
 
     @Test
@@ -317,17 +322,43 @@ public class SnapshotServiceTest {
             changeBaseCurrencyUnit_notTheLastSnapshot_wontAddBaseCurrencyConversionToFollowingSnapshot() {
         // GIVEN
         assertThat(snapshot.getNetWorth(), is(new BigDecimal("525075.00")));
+        assertThat(snapshot.getBaseCurrencyUnit(), is(CURRENCY_UNIT));
+
         final Snapshot secondSnapshot =
                 snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
 
-        // WHEN
+        assertThat(secondSnapshot.getBaseCurrencyUnit(), is(CURRENCY_UNIT));
+        assertThat(secondSnapshot.getNetWorth(), is(new BigDecimal("522750.00")));
+        assertTrue(secondSnapshot.supports(CURRENCY_UNIT));
+        assertTrue(secondSnapshot.supports(ANOTHER_CURRENCY_UNIT));
+
+        // WHEN — change base on the older snapshot (not the latest)
         snapshot.changeBaseCurrencyUnitTo(ANOTHER_CURRENCY_UNIT);
 
-        // THEN
+        // THEN — bases: only the edited snapshot changes base
+        assertThat(snapshot.getBaseCurrencyUnit(), is(ANOTHER_CURRENCY_UNIT));
+        assertThat(secondSnapshot.getBaseCurrencyUnit(), is(CURRENCY_UNIT));
+
+        // Both snapshots still support the shared currencies (propagation / existing rates)
+        assertTrue(snapshot.supports(CURRENCY_UNIT));
+        assertTrue(snapshot.supports(ANOTHER_CURRENCY_UNIT));
+        assertTrue(secondSnapshot.supports(CURRENCY_UNIT));
+        assertTrue(secondSnapshot.supports(ANOTHER_CURRENCY_UNIT));
+
+        // First net worth is rescaled into the new base (525075.00 * 1.31)
+        assertThat(snapshot.getNetWorth(), is(new BigDecimal("687848.25")));
+
+        // Following snapshot stays in original base; value is preserved through resetAll cascade
+        // (tithing carry is converted, not dropped / double-applied in a broken way)
+        assertThat(secondSnapshot.getNetWorth(), is(new BigDecimal("522750.00")));
+
+        // Relative increase vs previous remains consistent after previous base change
         assertThat(
                 secondSnapshot.getNetWorthIncreasePercentage().setScale(4, RoundingMode.HALF_UP),
                 is(new BigDecimal("-0.4428")));
 
+        // Conversion-rate maps stay aligned in size; following snapshot does not store its own
+        // base currency as a conversion-rate key
         assertThat(
                 secondSnapshot.getCurrencyConversionRates().size(),
                 is(snapshot.getCurrencyConversionRates().size()));
@@ -336,6 +367,10 @@ public class SnapshotServiceTest {
                         .getCurrencyConversionRates()
                         .containsKey(secondSnapshot.getBaseCurrencyUnit().getCode()),
                 is(false));
+
+        // Tithing remains readable on both after forward resetAll()
+        assertThat(snapshot.getTithingBalance().compareTo(BigDecimal.ZERO) > 0, is(true));
+        assertThat(secondSnapshot.getTithingBalance().compareTo(BigDecimal.ZERO) > 0, is(true));
     }
 
     @Test
@@ -425,6 +460,91 @@ public class SnapshotServiceTest {
         assertFalse(
                 getTithingAccounts(thirdSnapshot).stream()
                         .anyMatch(t -> YET_ANOTHER_CURRENCY_UNIT.equals(t.getCurrencyUnit())));
+    }
+
+    @Test
+    public void addIncomeOnNonLatestSnapshot_cascadesTithingDeltaToAllFollowingSnapshots() {
+        // GIVEN — chain of three snapshots (same base currency)
+        final Snapshot secondSnapshot =
+                snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
+        final Snapshot thirdSnapshot =
+                snapshotService.newSnapshot(user, THIRD_SNAPSHOT_YEAR, THIRD_SNAPSHOT_MONTH);
+
+        final BigDecimal firstTithingBefore = snapshot.getTithingBalance();
+        final BigDecimal secondTithingBefore = secondSnapshot.getTithingBalance();
+        final BigDecimal thirdTithingBefore = thirdSnapshot.getTithingBalance();
+
+        final BigDecimal firstNetWorthBefore = snapshot.getNetWorth();
+        final BigDecimal secondNetWorthBefore = secondSnapshot.getNetWorth();
+        final BigDecimal thirdNetWorthBefore = thirdSnapshot.getNetWorth();
+
+        // newSingleIncome: 1800.00 @ 30% => tithing delta 540.00
+        final BigDecimal expectedTithingDelta = new BigDecimal("540.00");
+
+        // WHEN — add income on a non-latest snapshot
+        snapshot.addTransaction(newSingleIncome(CURRENCY_UNIT));
+
+        // THEN — policy: delta cascades to every following snapshot
+        assertThat(
+                snapshot.getTithingBalance(),
+                comparesEqualTo(firstTithingBefore.add(expectedTithingDelta)));
+        assertThat(
+                secondSnapshot.getTithingBalance(),
+                comparesEqualTo(secondTithingBefore.add(expectedTithingDelta)));
+        assertThat(
+                thirdSnapshot.getTithingBalance(),
+                comparesEqualTo(thirdTithingBefore.add(expectedTithingDelta)));
+
+        assertThat(
+                snapshot.getNetWorth(),
+                comparesEqualTo(firstNetWorthBefore.subtract(expectedTithingDelta)));
+        assertThat(
+                secondSnapshot.getNetWorth(),
+                comparesEqualTo(secondNetWorthBefore.subtract(expectedTithingDelta)));
+        assertThat(
+                thirdSnapshot.getNetWorth(),
+                comparesEqualTo(thirdNetWorthBefore.subtract(expectedTithingDelta)));
+    }
+
+    @Test
+    public void addDonationOnNonLatestSnapshot_cascadesTithingDeltaToAllFollowingSnapshots() {
+        final Snapshot secondSnapshot =
+                snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
+        final Snapshot thirdSnapshot =
+                snapshotService.newSnapshot(user, THIRD_SNAPSHOT_YEAR, THIRD_SNAPSHOT_MONTH);
+
+        final BigDecimal firstTithingBefore = snapshot.getTithingBalance();
+        final BigDecimal secondTithingBefore = secondSnapshot.getTithingBalance();
+        final BigDecimal thirdTithingBefore = thirdSnapshot.getTithingBalance();
+
+        final BigDecimal firstNetWorthBefore = snapshot.getNetWorth();
+        final BigDecimal secondNetWorthBefore = secondSnapshot.getNetWorth();
+        final BigDecimal thirdNetWorthBefore = thirdSnapshot.getNetWorth();
+
+        // newSingleTaxDeductibleDonation: amount 150.00 => tithing decreases by 150.00
+        final BigDecimal expectedTithingDelta = new BigDecimal("150.00");
+
+        snapshot.addTransaction(newSingleTaxDeductibleDonation(CURRENCY_UNIT));
+
+        assertThat(
+                snapshot.getTithingBalance(),
+                comparesEqualTo(firstTithingBefore.subtract(expectedTithingDelta)));
+        assertThat(
+                secondSnapshot.getTithingBalance(),
+                comparesEqualTo(secondTithingBefore.subtract(expectedTithingDelta)));
+        assertThat(
+                thirdSnapshot.getTithingBalance(),
+                comparesEqualTo(thirdTithingBefore.subtract(expectedTithingDelta)));
+
+        assertThat(
+                snapshot.getNetWorth(),
+                comparesEqualTo(firstNetWorthBefore.add(expectedTithingDelta)));
+        assertThat(
+                secondSnapshot.getNetWorth(),
+                comparesEqualTo(secondNetWorthBefore.add(expectedTithingDelta)));
+        assertThat(
+                thirdSnapshot.getNetWorth(),
+                comparesEqualTo(thirdNetWorthBefore.add(expectedTithingDelta)));
     }
 
     @Test

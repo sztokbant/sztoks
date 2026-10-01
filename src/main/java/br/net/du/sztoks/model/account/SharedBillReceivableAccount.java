@@ -101,7 +101,8 @@ public class SharedBillReceivableAccount extends SharedBillAccount implements Fu
 
     @Override
     public void setFutureTithingPolicy(@NonNull final FutureTithingPolicy futureTithingPolicy) {
-        if (this.futureTithingPolicy.equals(futureTithingPolicy)) {
+        if (this.futureTithingPolicy != null
+                && this.futureTithingPolicy.equals(futureTithingPolicy)) {
             return;
         }
 

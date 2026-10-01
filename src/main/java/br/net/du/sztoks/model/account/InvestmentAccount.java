@@ -182,7 +182,8 @@ public class InvestmentAccount extends Account implements SharesUpdatable, Futur
 
     @Override
     public void setFutureTithingPolicy(@NonNull final FutureTithingPolicy futureTithingPolicy) {
-        if (this.futureTithingPolicy.equals(futureTithingPolicy)) {
+        if (this.futureTithingPolicy != null
+                && this.futureTithingPolicy.equals(futureTithingPolicy)) {
             return;
         }
 
@@ -207,6 +208,7 @@ public class InvestmentAccount extends Account implements SharesUpdatable, Futur
             return balance;
         }
 
+        // FutureTithingPolicy.PROFITS_ONLY
         return balance.subtract(amountInvested);
     }
 }
