@@ -60,6 +60,9 @@ public class InvestmentAccount extends Account implements SharesUpdatable, Futur
             @NonNull final BigDecimal amountInvested,
             @NonNull final BigDecimal currentShareValue) {
         super(name, AccountType.ASSET, currencyUnit, createDate);
+        if (shares.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("shares must not be negative");
+        }
         this.futureTithingPolicy = futureTithingPolicy;
         this.shares = shares;
         this.amountInvested = amountInvested;
@@ -127,6 +130,10 @@ public class InvestmentAccount extends Account implements SharesUpdatable, Futur
 
     @Override
     public void setShares(@NonNull final BigDecimal shares) {
+        if (shares.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("shares must not be negative");
+        }
+
         if (this.shares.compareTo(shares) == 0) {
             return;
         }

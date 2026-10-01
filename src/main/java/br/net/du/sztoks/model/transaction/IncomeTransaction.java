@@ -35,6 +35,7 @@ public class IncomeTransaction extends Transaction implements Categorizable<Inco
             @NonNull final BigDecimal tithingPercentage,
             @NonNull final IncomeCategory incomeCategory) {
         super(date, currency, amount, description, recurrencePolicy);
+        validateTithingPercentage(tithingPercentage);
         this.tithingPercentage = tithingPercentage;
         category = incomeCategory.name();
     }
@@ -81,10 +82,7 @@ public class IncomeTransaction extends Transaction implements Categorizable<Inco
             return;
         }
 
-        if (tithingPercentage.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException(
-                    "tithingPercentage must be greater than or equal to zero");
-        }
+        validateTithingPercentage(tithingPercentage);
 
         final BigDecimal oldTithingAmount = getTithingAmount();
 
@@ -104,5 +102,13 @@ public class IncomeTransaction extends Transaction implements Categorizable<Inco
     @Override
     public void setCategory(@NonNull final IncomeCategory category) {
         this.category = category.name();
+    }
+
+    private static void validateTithingPercentage(@NonNull final BigDecimal tithingPercentage) {
+        if (tithingPercentage.compareTo(BigDecimal.ZERO) < 0
+                || tithingPercentage.compareTo(ONE_HUNDRED) > 0) {
+            throw new IllegalArgumentException(
+                    "tithingPercentage must be between 0 and 100 (inclusive)");
+        }
     }
 }
