@@ -15,6 +15,7 @@
 
     <script src="${contextPath}/resources/js/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+    <script src="${contextPath}/resources/js/number_input_sanitize.js"></script>
     <script src="${contextPath}/resources/js/ajax_field_update.js"></script>
     <script src="${contextPath}/resources/js/success_callback_functions.js"></script>
 </head>

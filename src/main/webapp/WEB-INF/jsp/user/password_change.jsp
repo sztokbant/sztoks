@@ -12,7 +12,8 @@
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 
     <script src="${contextPath}/resources/js/jquery.min.js"></script>
-    <script src="${contextPath}/resources/js/bootstrap.min.js"></script></head>
+    <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+
     <script>
     function validatePasswordChange() {
         const currentPassword = document.getElementById("currentPassword").value.trim();

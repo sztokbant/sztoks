@@ -13,6 +13,7 @@
 
     <script src="${contextPath}/resources/js/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+    <script src="${contextPath}/resources/js/number_input_sanitize.js"></script>
 </head>
 
 <body>
