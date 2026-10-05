@@ -1,15 +1,11 @@
 // Sanitizes pasting of non-number characters in number fields
 function stripDecimalForText(text) {
-    return text
-        .replace(/^[^\d-]+/g, '')
-        .replaceAll(',', '')
-        .replaceAll('%', '')
-        .trim();
+    return String(text).replace(/[^\d.-]/g, '');
 }
 
 function sanitizeNumberString(text) {
     if (text == null) return '';
-    return stripDecimalForText(String(text).replace(/\s/g, ''));
+    return stripDecimalForText(text);
 }
 
 document.addEventListener('paste', function (e) {
