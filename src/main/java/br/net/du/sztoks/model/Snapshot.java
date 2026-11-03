@@ -1,5 +1,6 @@
 package br.net.du.sztoks.model;
 
+import static br.net.du.sztoks.model.account.FutureTithingAccount.MIN_REFERENCE;
 import static br.net.du.sztoks.model.util.ModelConstants.DIVISION_SCALE;
 import static br.net.du.sztoks.model.util.ModelConstants.ONE_HUNDRED;
 import static java.util.stream.Collectors.collectingAndThen;
@@ -322,13 +323,17 @@ public class Snapshot implements Comparable<Snapshot> {
             return;
         }
 
-        if (account instanceof FutureTithingAccount
-                && ((FutureTithingAccount) account).getReferenceAmount().compareTo(BigDecimal.ZERO)
-                        != 0) {
-            throw new SztoksException(
-                    "Can't remove a "
-                            + FutureTithingAccount.class.getSimpleName()
-                            + " instance with reference amount different than zero.");
+        if (account instanceof FutureTithingAccount) {
+            final FutureTithingAccount fta = (FutureTithingAccount) account;
+            if (fta.getReferenceAmount().abs().compareTo(MIN_REFERENCE) >= 0) {
+                throw new SztoksException(
+                        "Can't remove a "
+                                + FutureTithingAccount.class.getSimpleName()
+                                + " instance with reference amount different than zero.");
+            }
+            if (fta.getReferenceAmount().compareTo(BigDecimal.ZERO) != 0) {
+                fta.setReferenceAmount(BigDecimal.ZERO);
+            }
         }
 
         if (account instanceof FutureTithingCapable) {

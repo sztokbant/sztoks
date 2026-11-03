@@ -98,6 +98,13 @@ public class ReceivableAccount extends BillAccount
     }
 
     @Override
+    protected void updateFutureTithingAmount(final BigDecimal balanceDiff) {
+        if (!getFutureTithingPolicy().equals(FutureTithingPolicy.NONE)) {
+            getSnapshot().updateFutureTithingAmount(getCurrencyUnit(), balanceDiff);
+        }
+    }
+
+    @Override
     public BigDecimal getFutureTithingReferenceAmount() {
         if (getFutureTithingPolicy().equals(FutureTithingPolicy.NONE)) {
             return BigDecimal.ZERO;

@@ -136,4 +136,44 @@ class InvestmentAccountTest {
         assertThat(account.getShares(), comparesEqualTo(new BigDecimal("3.00")));
         assertThat(account.getBalance(), comparesEqualTo(new BigDecimal("30.00")));
     }
+
+    @Test
+    public void removeInvestmentWithFutureTithing_afterShareUpdates_futureTithingReferenceIsZero() {
+        final Snapshot snapshot =
+                new Snapshot(
+                        FIRST_SNAPSHOT_YEAR,
+                        FIRST_SNAPSHOT_MONTH,
+                        CURRENCY_UNIT,
+                        TITHING_PERCENTAGE,
+                        ImmutableSortedSet.of(),
+                        ImmutableList.of(),
+                        ImmutableMap.of());
+
+        final InvestmentAccount investment =
+                new InvestmentAccount(
+                        ACCOUNT_NAME,
+                        CURRENCY_UNIT,
+                        FutureTithingPolicy.PROFITS_ONLY,
+                        LocalDate.now(),
+                        new BigDecimal("175.00"),
+                        new BigDecimal("1100.00"),
+                        new BigDecimal("3500.00"));
+        snapshot.addAccount(investment);
+
+        // Stress incremental updates (scale-sensitive path)
+        investment.setCurrentShareValue(new BigDecimal("3500.00000001"));
+        investment.setCurrentShareValue(new BigDecimal("3499.99999999"));
+        investment.setShares(new BigDecimal("175.00000001"));
+        investment.setShares(new BigDecimal("175.00"));
+        investment.setAmountInvested(new BigDecimal("1100.00000001"));
+        investment.setAmountInvested(new BigDecimal("1100.00"));
+
+        snapshot.removeAccount(investment);
+
+        final FutureTithingAccount fta = snapshot.getFutureTithingAccount(CURRENCY_UNIT);
+        assertThat(fta.getReferenceAmount(), comparesEqualTo(BigDecimal.ZERO));
+
+        // Removing the empty FTA must not throw
+        snapshot.removeAccount(fta);
+    }
 }

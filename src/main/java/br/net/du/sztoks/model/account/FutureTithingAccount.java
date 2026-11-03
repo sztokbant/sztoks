@@ -24,6 +24,9 @@ public class FutureTithingAccount extends Account {
 
     public static final String ACCOUNT_SUB_TYPE = "FUTURE_TITHING";
 
+    public static final BigDecimal MIN_REFERENCE =
+            BigDecimal.ONE.movePointLeft(DIVISION_SCALE); // 0.00000001
+
     @Column(precision = 19, scale = 8)
     @Getter
     private BigDecimal referenceAmount;
@@ -51,14 +54,21 @@ public class FutureTithingAccount extends Account {
         return TITHING;
     }
 
+    private static BigDecimal normalizeReference(@NonNull final BigDecimal amount) {
+        final BigDecimal scaled = amount.setScale(DIVISION_SCALE, RoundingMode.HALF_UP);
+        return scaled.abs().compareTo(MIN_REFERENCE) < 0 ? BigDecimal.ZERO : scaled;
+    }
+
     public void setReferenceAmount(@NonNull final BigDecimal newReferenceAmount) {
-        if (referenceAmount.compareTo(newReferenceAmount) == 0) {
+        final BigDecimal normalized = normalizeReference(newReferenceAmount);
+
+        if (referenceAmount.compareTo(normalized) == 0) {
             return;
         }
 
         final BigDecimal oldBalance = getBalance();
 
-        referenceAmount = newReferenceAmount;
+        referenceAmount = normalized;
 
         final BigDecimal newBalance = getBalance();
 

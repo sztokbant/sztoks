@@ -37,6 +37,8 @@ import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.User;
 import br.net.du.sztoks.model.account.Account;
 import br.net.du.sztoks.model.account.FutureTithingAccount;
+import br.net.du.sztoks.model.account.FutureTithingPolicy;
+import br.net.du.sztoks.model.account.ReceivableAccount;
 import br.net.du.sztoks.model.account.TithingAccount;
 import br.net.du.sztoks.model.transaction.Transaction;
 import br.net.du.sztoks.persistence.SnapshotRepository;
@@ -47,6 +49,7 @@ import com.google.common.collect.ImmutableSortedSet;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
@@ -634,6 +637,52 @@ public class SnapshotServiceTest {
                 });
 
         assertThat(user.getSnapshots().size(), is(1));
+    }
+
+    @Test
+    public void deleteSnapshot_last_afterPaidReceivableWithFutureTithing_happy() {
+        final Snapshot secondSnapshot =
+                snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
+
+        final ReceivableAccount receivable =
+                new ReceivableAccount(
+                        "Loan",
+                        CURRENCY_UNIT,
+                        FutureTithingPolicy.ALL,
+                        LocalDate.now(),
+                        LocalDate.now(),
+                        new BigDecimal("1000.00"),
+                        false);
+        secondSnapshot.addAccount(receivable);
+
+        // This used to leave FTA residual when paid
+        receivable.setIsPaid(true);
+
+        // Prefer also remove explicitly, then delete
+        secondSnapshot.removeAccount(receivable);
+
+        snapshotService.deleteSnapshot(user, secondSnapshot);
+
+        assertThat(user.getSnapshots().size(), is(1));
+    }
+
+    @Test
+    public void deleteSnapshot_last_withSubScaleFutureTithingResidual_happy() {
+        final Snapshot secondSnapshot =
+                newEmptySnapshot(SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
+        secondSnapshot.setId(snapshot.getId() + 1);
+        user.addSnapshot(secondSnapshot);
+
+        final FutureTithingAccount fta = secondSnapshot.getFutureTithingAccount(CURRENCY_UNIT);
+
+        // Normalized to 0 by setReferenceAmount; delete must still succeed
+        fta.setReferenceAmount(new BigDecimal("4.4E-9"));
+        assertThat(fta.getReferenceAmount(), comparesEqualTo(BigDecimal.ZERO));
+
+        snapshotService.deleteSnapshot(user, secondSnapshot);
+
+        assertThat(user.getSnapshots().size(), is(1));
+        assertThat(user.getSnapshots().first(), is(snapshot));
     }
 
     private Snapshot newEmptySnapshot(final int year, final int month) {
