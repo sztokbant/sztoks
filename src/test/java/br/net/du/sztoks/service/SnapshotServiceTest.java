@@ -36,6 +36,7 @@ import br.net.du.sztoks.exception.SztoksException;
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.User;
 import br.net.du.sztoks.model.account.Account;
+import br.net.du.sztoks.model.account.AdditionalCurrencyAccount;
 import br.net.du.sztoks.model.account.FutureTithingAccount;
 import br.net.du.sztoks.model.account.FutureTithingPolicy;
 import br.net.du.sztoks.model.account.ReceivableAccount;
@@ -51,6 +52,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
@@ -683,6 +685,42 @@ public class SnapshotServiceTest {
 
         assertThat(user.getSnapshots().size(), is(1));
         assertThat(user.getSnapshots().first(), is(snapshot));
+    }
+
+    @Test
+    public void newSnapshot_copiesAdditionalCurrencyAccount() {
+        final CurrencyUnit eur = CurrencyUnit.EUR;
+        snapshot.putCurrencyConversionRate(eur, new BigDecimal("0.80"));
+
+        final AdditionalCurrencyAccount eurHolding =
+                new AdditionalCurrencyAccount(
+                        "EUR Safe",
+                        eur,
+                        FutureTithingPolicy.PROFITS_ONLY,
+                        LocalDate.now(),
+                        new BigDecimal("80.00"),
+                        new BigDecimal("100.00"));
+        snapshot.addAccount(eurHolding);
+
+        final Snapshot next =
+                snapshotService.newSnapshot(user, SECOND_SNAPSHOT_YEAR, SECOND_SNAPSHOT_MONTH);
+
+        final Optional<Account> copied =
+                next.getAccounts().stream()
+                        .filter(a -> a instanceof AdditionalCurrencyAccount)
+                        .filter(a -> a.getName().equals("EUR Safe"))
+                        .findFirst();
+
+        assertTrue(copied.isPresent());
+        final AdditionalCurrencyAccount nextHolding = (AdditionalCurrencyAccount) copied.get();
+        assertThat(nextHolding.getCurrencyUnit(), comparesEqualTo(eur));
+        assertThat(nextHolding.getShares(), comparesEqualTo(new BigDecimal("80.00")));
+        assertThat(nextHolding.getAmountInvested(), comparesEqualTo(new BigDecimal("100.00")));
+        assertThat(nextHolding.getFutureTithingPolicy(), is(FutureTithingPolicy.PROFITS_ONLY));
+        // Value in base: 80 / 0.80 = 100
+        assertThat(
+                nextHolding.getValueInBaseCurrency(),
+                comparesEqualTo(new BigDecimal("100.00000000")));
     }
 
     private Snapshot newEmptySnapshot(final int year, final int month) {

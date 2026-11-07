@@ -106,4 +106,27 @@ class AdditionalCurrencyAccountTest {
         // Quantity restored (80 EUR)
         assertThat(eurHolding.getShares(), comparesEqualTo(new BigDecimal("80.00000000")));
     }
+
+    @Test
+    void setShares_profitsOnly_updatesFutureTithingByProfitDiff() {
+        final AdditionalCurrencyAccount account =
+                new AdditionalCurrencyAccount(
+                        "EUR Safe",
+                        EUR,
+                        FutureTithingPolicy.PROFITS_ONLY,
+                        LocalDate.now(),
+                        BigDecimal.ZERO,
+                        new BigDecimal("100.00")); // base cost
+        snapshot.addAccount(account);
+
+        account.setShares(
+                new BigDecimal("80.00")); // value in base = 100, profit in account ccy = 0
+
+        final FutureTithingAccount fta = snapshot.getFutureTithingAccount(EUR);
+        // profitInAccountCurrency = 80 - 100*0.80 = 0
+        assertThat(fta.getReferenceAmount(), comparesEqualTo(BigDecimal.ZERO));
+
+        account.setShares(new BigDecimal("96.00")); // value base = 120, profit ccy = 96 - 80 = 16
+        assertThat(fta.getReferenceAmount(), comparesEqualTo(new BigDecimal("16.00000000")));
+    }
 }
