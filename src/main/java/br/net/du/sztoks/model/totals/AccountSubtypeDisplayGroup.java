@@ -2,6 +2,7 @@ package br.net.du.sztoks.model.totals;
 
 public enum AccountSubtypeDisplayGroup {
     CREDIT_CARD,
+    ADDITIONAL_CURRENCY,
     GIFT_CERTIFICATE,
     INVESTMENT,
     PAYABLE,

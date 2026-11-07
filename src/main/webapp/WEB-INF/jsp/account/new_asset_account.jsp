@@ -74,6 +74,13 @@
                                           class="radio-sztoks-${deviceType}"/>
                         <label for="sharedBillReceivableRadio" class="form-entry-${deviceType}">Shared Bill Receivable</label>
                     </div>
+                    <c:if test="${hasAdditionalCurrencies}">
+                    <div>
+                        <form:radiobutton path="subtypeName" value="AdditionalCurrencyAccount" id="additionalCurrencyRadio"
+                                          class="radio-sztoks-${deviceType}"/>
+                        <label for="additionalCurrencyRadio" class="form-entry-${deviceType}">Additional Currency</label>
+                    </div>
+                    </c:if>
                     <div>
                         <form:radiobutton path="subtypeName" value="InvestmentAccount" id="investmentRadio"
                                           class="radio-sztoks-${deviceType}"/>
@@ -109,7 +116,7 @@
                     <div>
                         <form:radiobutton path="futureTithingPolicy" value="PROFITS_ONLY" id="profitsOnlyRadio"
                                           class="radio-sztoks-${deviceType}"/>
-                        <label for="profitsOnlyRadio" class="form-entry-${deviceType}">&#128200; &nbsp;Profits Only (just for investment accounts)</label>
+                        <label for="profitsOnlyRadio" class="form-entry-${deviceType}">&#128200; &nbsp;Profits Only (investment / additional currency)</label>
                     </div>
                     <div>
                         <form:radiobutton path="futureTithingPolicy" value="ALL" id="allRadio"
@@ -134,6 +141,71 @@
 </div>
 
 <%@ include file="/WEB-INF/jsp/_footer.jsp" %>
+
+
+<script type="text/javascript">
+$(document).ready(function () {
+  var baseCurrency = '<c:out value="${baseCurrency}"/>';
+  var allCurrencies = [
+<c:forEach items="${currencies}" var="c" varStatus="st">
+    '<c:out value="${c}"/>'<c:if test="${!st.last}">,</c:if>
+</c:forEach>
+  ];
+  var additionalCurrencies = [
+<c:forEach items="${additionalCurrencies}" var="c" varStatus="st">
+    '<c:out value="${c}"/>'<c:if test="${!st.last}">,</c:if>
+</c:forEach>
+  ];
+
+  function rebuildCurrencyOptions(currencies, selected) {
+    var $select = $('#currency_select');
+    $select.empty();
+    if (!currencies || currencies.length === 0) {
+      return;
+    }
+    // Ensure selected is always one of the options shown
+    var effective =
+      selected && currencies.indexOf(selected) >= 0 ? selected : currencies[0];
+    currencies.forEach(function (code) {
+      $select.append(
+        $('<option></option>')
+          .attr('value', code)
+          .text(code)
+          .prop('selected', code === effective)
+      );
+    });
+    // Force the closed control to display the chosen value
+    $select.val(effective).trigger('change');
+  }
+
+  function applyCurrencyFilter() {
+    var isAdditional = $('#additionalCurrencyRadio').is(':checked');
+    var current = $('#currency_select').val();
+    if (isAdditional) {
+      var preferred =
+        current && additionalCurrencies.indexOf(current) >= 0
+          ? current
+          : additionalCurrencies[0];
+      rebuildCurrencyOptions(additionalCurrencies, preferred);
+    } else {
+      // Keep whatever is selected if still valid; otherwise keep current or first available
+      var preferred =
+        current && allCurrencies.indexOf(current) >= 0 ? current : current || allCurrencies[0];
+      if (allCurrencies.indexOf(preferred) < 0) {
+        preferred = allCurrencies[0];
+      }
+      rebuildCurrencyOptions(allCurrencies, preferred);
+    }
+  }
+
+  $('input[name="subtypeName"]').on('change', applyCurrencyFilter);
+
+  // If Additional Currency is already selected (e.g. validation redisplay), normalize options
+  if ($('#additionalCurrencyRadio').is(':checked')) {
+    applyCurrencyFilter();
+  }
+});
+</script>
 
 </body>
 </html>

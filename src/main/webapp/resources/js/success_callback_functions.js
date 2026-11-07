@@ -136,6 +136,7 @@ function updateSnapshotInvestmentTotals(result) {
   $("#snapshot_investments_balance").html(result.investmentTotals.balance);
 }
 
+
 function investmentSharesUpdateSuccessCallback(data, result) {
   $("#investment_shares_" + data.entityId).html(result.shares);
   $("#investment_average_purchase_price_" + data.entityId).html(result.averagePurchasePrice);
@@ -162,6 +163,48 @@ function investmentCurrentShareValueUpdateSuccessCallback(data, result) {
   $("#investment_balance_" + data.entityId).html(result.balance);
   updateTotalForAccountType(result);
   updateSnapshotInvestmentTotals(result);
+  updateTithingBalance(result);
+  updateNetWorth(result);
+}
+
+// ADDITIONAL CURRENCY ACCOUNT
+
+function updateSnapshotAdditionalCurrencyTotals(result) {
+  if (!result.additionalCurrencyTotalsForCurrencyUnit) {
+    return;
+  }
+  const currency = result.currencyUnit;
+  const totals = result.additionalCurrencyTotalsForCurrencyUnit;
+  $("#snapshot_additional_currency_shares_" + currency).html(totals.shares);
+  $("#snapshot_additional_currency_amount_invested_" + currency).html(totals.amountInvested);
+  $("#snapshot_additional_currency_average_purchase_price_" + currency).html(totals.averagePurchasePrice);
+  $("#snapshot_additional_currency_balance_" + currency).html(totals.balance);
+  const profitEl = $("#snapshot_additional_currency_profit_percentage_" + currency);
+  profitEl.html(totals.profitPercentage);
+  colorizeProfitIncreaseElement(stripDecimalForText(totals.profitPercentage), profitEl);
+}
+
+function additionalCurrencySharesUpdateSuccessCallback(data, result) {
+  $("#additional_currency_shares_" + data.entityId).html(result.shares);
+  $("#additional_currency_value_in_base_" + data.entityId).html(result.valueInBaseCurrency);
+  $("#additional_currency_average_purchase_price_" + data.entityId).html(result.averagePurchasePrice);
+  const profitEl = $("#additional_currency_profit_percentage_" + data.entityId);
+  profitEl.html(result.profitPercentage);
+  colorizeProfitIncreaseElement(stripDecimalForText(result.profitPercentage), profitEl);
+  updateSnapshotAdditionalCurrencyTotals(result);
+  updateTotalForAccountType(result);
+  updateTithingBalance(result);
+  updateNetWorth(result);
+}
+
+function additionalCurrencyAmountInvestedUpdateSuccessCallback(data, result) {
+  $("#additional_currency_amount_invested_" + data.entityId).html(result.amountInvested);
+  $("#additional_currency_average_purchase_price_" + data.entityId).html(result.averagePurchasePrice);
+  $("#additional_currency_value_in_base_" + data.entityId).html(result.valueInBaseCurrency);
+  const profitEl = $("#additional_currency_profit_percentage_" + data.entityId);
+  profitEl.html(result.profitPercentage);
+  colorizeProfitIncreaseElement(stripDecimalForText(result.profitPercentage), profitEl);
+  updateSnapshotAdditionalCurrencyTotals(result);
   updateTithingBalance(result);
   updateNetWorth(result);
 }

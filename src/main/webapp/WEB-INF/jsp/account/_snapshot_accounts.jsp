@@ -97,6 +97,35 @@
         </c:choose>
 
         <c:choose>
+            <c:when test="${not empty snapshot.additionalCurrencyAccounts}">
+                <div class="row border-1px-bottom">
+                    <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Additional Currencies</i></div>
+                    <div class="col col-cell-${deviceType} col-title short-${deviceType}">&nbsp;</div>
+                    <div class="col col-cell-${deviceType} col-title width-total-${deviceType}">Future Tithing</div>
+                    <div class="col col-cell-${deviceType} col-title">Shares</div>
+                    <div class="col col-cell-${deviceType} col-title">Amount Invested</div>
+                    <div class="col col-cell-${deviceType} col-title">Avg Purchase Price</div>
+                    <div class="col col-cell-${deviceType} col-title width-total-${deviceType} align-right">Balance, Unrealized Gain/Loss</div>
+                </div>
+
+                <c:set var="currentCurrency" value=""/>
+                <c:set var="count" value="0"/>
+                <c:forEach var="entity" items="${snapshot.additionalCurrencyAccounts}">
+                    <c:if test="${currentCurrency ne '' && currentCurrency ne entity.currencyUnit}">
+                        <c:set var="count" value="0"/>
+                        <%@ include file="_snapshot_additional_currency_total_for_currency.jsp" %>
+                    </c:if>
+                    <c:set var="currentCurrency" value="${entity.currencyUnit}"/>
+                    <%@ include file="_zebra_asset.jsp" %>
+                    <%@ include file="_snapshot_additional_currency_line_item.jsp" %>
+                </c:forEach>
+                <c:if test="${snapshot.additionalCurrencyAccounts.size() ge 1}">
+                    <%@ include file="_snapshot_additional_currency_total_for_currency.jsp" %>
+                </c:if>
+            </c:when>
+        </c:choose>
+
+        <c:choose>
             <c:when test="${not empty snapshot.investmentAccounts}">
                 <div class="row border-1px-bottom">
                     <div class="col col-cell-${deviceType} col-title col-account-name align-left"><i>Investments</i></div>

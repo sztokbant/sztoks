@@ -4,6 +4,7 @@ import static br.net.du.sztoks.controller.util.ControllerUtils.formatAsPercentag
 import static br.net.du.sztoks.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.sztoks.controller.util.MoneyFormatUtils.format;
 
+import br.net.du.sztoks.controller.viewmodel.account.AdditionalCurrencyTotalsViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.account.CreditCardTotalsViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.account.InvestmentTotalsViewModelOutput;
 import br.net.du.sztoks.model.Snapshot;
@@ -76,5 +77,12 @@ public class UpdatableTotals {
     public String getFutureTithingBalance() {
         return format(
                 snapshot.getBaseCurrencyUnit(), toDecimal(snapshot.getFutureTithingBalance()));
+    }
+
+    public AdditionalCurrencyTotalsViewModelOutput getAdditionalCurrencyTotalsForCurrencyUnit(
+            final CurrencyUnit currencyUnit) {
+        return AdditionalCurrencyTotalsViewModelOutput.of(
+                snapshotTotalsCalculator.getAdditionalCurrenciesTotalForCurrency(currencyUnit),
+                snapshot.getBaseCurrencyUnit());
     }
 }

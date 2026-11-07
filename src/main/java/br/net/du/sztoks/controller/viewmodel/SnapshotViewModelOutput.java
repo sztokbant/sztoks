@@ -7,6 +7,8 @@ import static br.net.du.sztoks.controller.util.ViewModelOutputUtils.getTransacti
 import static java.util.stream.Collectors.toList;
 
 import br.net.du.sztoks.controller.viewmodel.account.AccountViewModelOutput;
+import br.net.du.sztoks.controller.viewmodel.account.AdditionalCurrencyAccountViewModelOutput;
+import br.net.du.sztoks.controller.viewmodel.account.AdditionalCurrencyTotalsViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.account.CreditCardAccountViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.account.CreditCardTotalsViewModelOutput;
 import br.net.du.sztoks.controller.viewmodel.account.GiftCertificateAccountViewModelOutput;
@@ -80,6 +82,8 @@ public class SnapshotViewModelOutput {
     private final List<AccountViewModelOutput> simpleAssetAccounts;
     private final String simpleAssetsBalance;
 
+    private final List<AccountViewModelOutput> additionalCurrencyAccounts;
+    private final Map<String, AdditionalCurrencyTotalsViewModelOutput> additionalCurrencyTotals;
     private final List<AccountViewModelOutput> giftCertificateAccounts;
     private final String giftCertificatesBalance;
 
@@ -119,6 +123,16 @@ public class SnapshotViewModelOutput {
         final Map<CurrencyUnit, CreditCardsTotal> creditCardTotals =
                 snapshotTotalsCalculator.getCreditCardsTotalByCurrency();
         final InvestmentsTotal investmentTotals = snapshotTotalsCalculator.getInvestmentsTotal();
+        final Map<String, AdditionalCurrencyTotalsViewModelOutput> additionalCurrencyTotalsMap =
+                new TreeMap<>();
+        snapshotTotalsCalculator
+                .getAdditionalCurrenciesTotalByCurrency()
+                .forEach(
+                        (currencyUnit, total) ->
+                                additionalCurrencyTotalsMap.put(
+                                        currencyUnit.getCode(),
+                                        AdditionalCurrencyTotalsViewModelOutput.of(
+                                                total, snapshot.getBaseCurrencyUnit())));
 
         final Long previousId = snapshot.getPreviousId();
         final String previousDisplayTitle = getPreviousDisplayTitle(snapshot);
@@ -158,6 +172,7 @@ public class SnapshotViewModelOutput {
                                 updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                         AccountSubtypeDisplayGroup.SHARED_BILL_RECEIVABLE))
                         .investmentTotals(InvestmentTotalsViewModelOutput.of(investmentTotals))
+                        .additionalCurrencyTotals(additionalCurrencyTotalsMap)
                         .totalTithingBalance(
                                 updatableTotals.getTotalForAccountSubtypeDisplayGroup(
                                         AccountSubtypeDisplayGroup.TITHING))
@@ -249,6 +264,8 @@ public class SnapshotViewModelOutput {
                 breakDownAccountsByType(accountViewModels.get(AccountType.ASSET));
 
         builder.simpleAssetAccounts(assetsByType.get(SimpleAssetAccountViewModelOutput.class))
+                .additionalCurrencyAccounts(
+                        assetsByType.get(AdditionalCurrencyAccountViewModelOutput.class))
                 .giftCertificateAccounts(
                         assetsByType.get(GiftCertificateAccountViewModelOutput.class))
                 .receivableAccounts(assetsByType.get(ReceivableAccountViewModelOutput.class))

@@ -9,10 +9,12 @@ public enum FutureTithingPolicy {
 
     public static FutureTithingPolicy forValue(
             final String value, @NonNull final String accountSubClassName) {
-        if (value == null || value.equals(NONE.name())) {
+        if (value == null || value.isBlank() || value.equals(NONE.name())) {
             return NONE;
         } else if (value.equals(PROFITS_ONLY.name())
-                && accountSubClassName.equals(InvestmentAccount.class.getSimpleName())) {
+                && (accountSubClassName.equals(InvestmentAccount.class.getSimpleName())
+                        || accountSubClassName.equals(
+                                AdditionalCurrencyAccount.class.getSimpleName()))) {
             return PROFITS_ONLY;
         } else {
             return ALL;

@@ -30,8 +30,9 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
 /**
  * Structural + light behavioral guards for {@link FutureTithingCapable}.
  *
- * <p>{@link BillAccount#updateFutureTithingAmount(BigDecimal)} is a no-op. Any concrete bill account
- * that is {@code FutureTithingCapable} must override it (the {@link ReceivableAccount} drift bug).
+ * <p>{@link BillAccount#updateFutureTithingAmount(BigDecimal)} is a no-op. Any concrete bill
+ * account that is {@code FutureTithingCapable} must override it (the {@link ReceivableAccount}
+ * drift bug).
  *
  * <p>Abstract intermediates that implement {@code FutureTithingCapable} are ignored; only concrete
  * types are scanned. New bill-based capable types fail CI until they override the hook.

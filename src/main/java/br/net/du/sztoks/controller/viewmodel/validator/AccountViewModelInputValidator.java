@@ -13,6 +13,7 @@ import static org.springframework.validation.ValidationUtils.rejectIfEmptyOrWhit
 import br.net.du.sztoks.controller.viewmodel.account.AccountViewModelInput;
 import br.net.du.sztoks.model.Snapshot;
 import br.net.du.sztoks.model.account.Account;
+import br.net.du.sztoks.model.account.AdditionalCurrencyAccount;
 import br.net.du.sztoks.model.account.FutureTithingPolicy;
 import br.net.du.sztoks.model.account.TithingAccount;
 import br.net.du.sztoks.service.AccountService;
@@ -51,8 +52,16 @@ public class AccountViewModelInputValidator implements SmartValidator {
         rejectIfInvalidCurrencyUnit(accountViewModelInput.getCurrencyUnit(), errors);
         rejectIfInvalidFutureTithingPolicy(accountViewModelInput.getFutureTithingPolicy(), errors);
         if (!errors.hasFieldErrors(CURRENCY_UNIT_FIELD)) {
-            rejectIfUnsupportedCurrencyUnit(
-                    snapshot, CurrencyUnit.of(accountViewModelInput.getCurrencyUnit()), errors);
+            final CurrencyUnit currencyUnit =
+                    CurrencyUnit.of(accountViewModelInput.getCurrencyUnit());
+            rejectIfUnsupportedCurrencyUnit(snapshot, currencyUnit, errors);
+            if (!errors.hasFieldErrors(CURRENCY_UNIT_FIELD)
+                    && AdditionalCurrencyAccount.class
+                            .getSimpleName()
+                            .equals(accountViewModelInput.getSubtypeName())
+                    && currencyUnit.equals(snapshot.getBaseCurrencyUnit())) {
+                errors.rejectValue(CURRENCY_UNIT_FIELD, "Invalid.value");
+            }
         }
     }
 

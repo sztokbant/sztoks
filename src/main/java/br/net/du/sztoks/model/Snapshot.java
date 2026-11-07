@@ -10,6 +10,7 @@ import static java.util.stream.Collectors.toSet;
 import br.net.du.sztoks.exception.SztoksException;
 import br.net.du.sztoks.model.account.Account;
 import br.net.du.sztoks.model.account.AccountType;
+import br.net.du.sztoks.model.account.AdditionalCurrencyAccount;
 import br.net.du.sztoks.model.account.FutureTithingAccount;
 import br.net.du.sztoks.model.account.FutureTithingCapable;
 import br.net.du.sztoks.model.account.TithingAccount;
@@ -599,10 +600,29 @@ public class Snapshot implements Comparable<Snapshot> {
         }
 
         final String oldBaseCurrency = baseCurrency;
+        final CurrencyUnit previousBase = CurrencyUnit.of(oldBaseCurrency);
 
         // Remove direct conversion rate
         final BigDecimal oldToNewBaseCurrencyConversionRate =
                 currencyConversionRates.get(newBaseCurrency.getCode());
+        if (oldToNewBaseCurrencyConversionRate == null
+                || oldToNewBaseCurrencyConversionRate.compareTo(BigDecimal.ZERO) == 0) {
+            throw new IllegalArgumentException(
+                    "Missing or zero conversion rate for " + newBaseCurrency.getCode());
+        }
+
+        // Adjust additional-currency holdings while rates still reflect previous base
+        // Snapshot of the list avoids concurrent modification if the account set is touched
+        final List<AdditionalCurrencyAccount> additionalCurrencyAccounts =
+                accounts.stream()
+                        .filter(account -> account instanceof AdditionalCurrencyAccount)
+                        .map(AdditionalCurrencyAccount.class::cast)
+                        .toList();
+        for (final AdditionalCurrencyAccount account : additionalCurrencyAccounts) {
+            account.onSnapshotBaseCurrencyChanged(
+                    previousBase, newBaseCurrency, oldToNewBaseCurrencyConversionRate);
+        }
+
         currencyConversionRates.remove(newBaseCurrency.getCode());
 
         // Update remaining currencies
@@ -775,8 +795,12 @@ public class Snapshot implements Comparable<Snapshot> {
     }
 
     private void resetFutureTithingAccounts() {
+        // Snapshot accounts first: updateFutureTithingAmount may create a new
+        // FutureTithingAccount (e.g. after base-currency invert) and would CME a live stream.
+        final List<Account> accountsSnapshot = List.copyOf(accounts);
+
         // For each FutureTithing account, set reference amount to zero.
-        accounts.stream()
+        accountsSnapshot.stream()
                 .filter(account -> account instanceof FutureTithingAccount)
                 .forEach(
                         account ->
@@ -784,7 +808,7 @@ public class Snapshot implements Comparable<Snapshot> {
                                         .setReferenceAmount(BigDecimal.ZERO));
 
         // For each FutureTithingCapable account, reprocess FutureTithing amount.
-        accounts.stream()
+        accountsSnapshot.stream()
                 .filter(account -> account instanceof FutureTithingCapable)
                 .forEach(
                         account ->

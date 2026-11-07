@@ -38,6 +38,7 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
     private final String totalForAccountSubtype;
     private final InvestmentTotalsViewModelOutput investmentTotals;
     private final CreditCardTotalsViewModelOutput creditCardTotalsForCurrencyUnit;
+    private final AdditionalCurrencyTotalsViewModelOutput additionalCurrencyTotalsForCurrencyUnit;
 
     private final String futureTithingBalance;
     private final String totalTithingBalance;
@@ -63,6 +64,8 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
         totalForAccountSubtype = other.getTotalForAccountSubtype();
         investmentTotals = other.getInvestmentTotals();
         creditCardTotalsForCurrencyUnit = other.getCreditCardTotalsForCurrencyUnit();
+        additionalCurrencyTotalsForCurrencyUnit =
+                other.getAdditionalCurrencyTotalsForCurrencyUnit();
 
         futureTithingBalance = other.getFutureTithingBalance();
         totalTithingBalance = other.getTotalTithingBalance();
@@ -99,12 +102,18 @@ public class AccountViewModelOutput implements Comparable<AccountViewModelOutput
                     .netWorthIncreasePercentage(updatableTotals.getNetWorthIncreasePercentage())
                     .totalForAccountType(totalForAccountType);
 
-            // For INVESTMENT and CREDIT_CARD accounts totals are computed differently
+            // For INVESTMENT, ADDITIONAL CURRENCY and CREDIT_CARD accounts totals are computed
+            // differently
             if (accountSubtypeDisplayGroup.equals(AccountSubtypeDisplayGroup.INVESTMENT)) {
                 builder.investmentTotals(updatableTotals.getInvestmentTotals());
             } else if (accountSubtypeDisplayGroup.equals(AccountSubtypeDisplayGroup.CREDIT_CARD)) {
                 builder.creditCardTotalsForCurrencyUnit(
                         updatableTotals.getCreditCardTotalsForCurrencyUnit(
+                                account.getCurrencyUnit()));
+            } else if (accountSubtypeDisplayGroup.equals(
+                    AccountSubtypeDisplayGroup.ADDITIONAL_CURRENCY)) {
+                builder.additionalCurrencyTotalsForCurrencyUnit(
+                        updatableTotals.getAdditionalCurrencyTotalsForCurrencyUnit(
                                 account.getCurrencyUnit()));
             } else {
                 builder.totalForAccountSubtype(

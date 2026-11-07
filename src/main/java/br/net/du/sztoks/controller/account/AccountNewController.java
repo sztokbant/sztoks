@@ -1,10 +1,13 @@
 package br.net.du.sztoks.controller.account;
 
 import static br.net.du.sztoks.controller.util.ControllerConstants.ACCOUNT_TYPE_KEY;
+import static br.net.du.sztoks.controller.util.ControllerConstants.ADDITIONAL_CURRENCIES;
 import static br.net.du.sztoks.controller.util.ControllerConstants.CURRENCIES;
+import static br.net.du.sztoks.controller.util.ControllerConstants.HAS_ADDITIONAL_CURRENCIES;
 import static br.net.du.sztoks.controller.util.ControllerConstants.ID;
 import static br.net.du.sztoks.controller.util.ControllerConstants.REDIRECT_SNAPSHOT_TEMPLATE;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SELECTED_CURRENCY;
+import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_BASE_CURRENCY_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_ID_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.SNAPSHOT_TITLE_KEY;
 import static br.net.du.sztoks.controller.util.ControllerConstants.USER_AGENT_REQUEST_HEADER_KEY;
@@ -25,6 +28,8 @@ import br.net.du.sztoks.model.account.AccountType;
 import br.net.du.sztoks.model.account.DueDateUpdatable;
 import br.net.du.sztoks.service.SnapshotService;
 import java.time.YearMonth;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,6 +122,14 @@ public class AccountNewController {
         model.addAttribute(ACCOUNT_TYPE_KEY, accountType);
 
         model.addAttribute(CURRENCIES, snapshot.getCurrenciesInUse());
+
+        final List<String> additionalCurrencies =
+                snapshot.getCurrenciesInUse().stream()
+                        .filter(c -> !c.equals(snapshot.getBaseCurrencyUnit().getCode()))
+                        .collect(Collectors.toList());
+        model.addAttribute(ADDITIONAL_CURRENCIES, additionalCurrencies);
+        model.addAttribute(HAS_ADDITIONAL_CURRENCIES, !additionalCurrencies.isEmpty());
+        model.addAttribute(SNAPSHOT_BASE_CURRENCY_KEY, snapshot.getBaseCurrencyUnit().getCode());
 
         model.addAttribute(
                 SELECTED_CURRENCY,

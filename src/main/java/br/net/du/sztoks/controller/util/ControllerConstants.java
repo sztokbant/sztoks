@@ -24,6 +24,8 @@ public class ControllerConstants {
     public static final String TRANSACTION_CATEGORY_TOTALS = "transactionCategoryTotals";
 
     public static final String CURRENCIES = "currencies";
+    public static final String ADDITIONAL_CURRENCIES = "additionalCurrencies";
+    public static final String HAS_ADDITIONAL_CURRENCIES = "hasAdditionalCurrencies";
     public static final CurrencyUnit DEFAULT_CURRENCY_UNIT = CurrencyUnit.USD;
     public static final String SELECTED_CURRENCY = "selectedCurrency";
 }
