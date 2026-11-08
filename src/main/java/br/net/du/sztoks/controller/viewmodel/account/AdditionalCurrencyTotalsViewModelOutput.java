@@ -1,12 +1,10 @@
 package br.net.du.sztoks.controller.viewmodel.account;
 
-import static br.net.du.sztoks.controller.util.ControllerUtils.formatAsDecimal;
 import static br.net.du.sztoks.controller.util.ControllerUtils.formatAsPercentage;
 import static br.net.du.sztoks.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.sztoks.controller.util.MoneyFormatUtils.format;
 
 import br.net.du.sztoks.model.totals.AdditionalCurrenciesTotal;
-import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +28,7 @@ public class AdditionalCurrencyTotalsViewModelOutput {
             final AdditionalCurrenciesTotal total, final CurrencyUnit baseCurrency) {
         return AdditionalCurrencyTotalsViewModelOutput.builder()
                 .currencyUnit(total.getCurrencyUnit().getCode())
-                .shares(new BigDecimal(formatAsDecimal(total.getShares())).toString())
+                .shares(format(total.getCurrencyUnit(), toDecimal(total.getShares())))
                 .amountInvested(format(baseCurrency, toDecimal(total.getAmountInvested())))
                 .averagePurchasePrice(
                         format(baseCurrency, toDecimal(total.getAveragePurchasePrice())))

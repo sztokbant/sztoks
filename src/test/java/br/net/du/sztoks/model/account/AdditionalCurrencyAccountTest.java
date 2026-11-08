@@ -61,7 +61,7 @@ class AdditionalCurrencyAccountTest {
     }
 
     @Test
-    void onSnapshotBaseCurrencyChanged_invertsWhenAccountCurrencyBecomesBase() {
+    void onSnapshotBaseCurrencyChanged_keepsCurrencyAndShares_restatesAmountInvested() {
         final AdditionalCurrencyAccount account =
                 new AdditionalCurrencyAccount(
                         "EUR cash",
@@ -72,16 +72,16 @@ class AdditionalCurrencyAccountTest {
                         new BigDecimal("100.00"));
         snapshot.addAccount(account);
 
-        // 1 USD = 0.80 EUR → becoming EUR base: shares 80 EUR → 100 USD, invested 100 USD → 80 EUR
-        account.onSnapshotBaseCurrencyChanged(CURRENCY_UNIT, EUR, new BigDecimal("0.80"));
+        // 1 USD = 0.80 EUR → base becomes EUR: cost 100 USD → 80 EUR; still 80 EUR shares
+        account.onSnapshotBaseCurrencyChanged(new BigDecimal("0.80"));
 
-        assertThat(account.getCurrencyUnit(), comparesEqualTo(CURRENCY_UNIT));
-        assertThat(account.getShares(), comparesEqualTo(new BigDecimal("100.00000000")));
+        assertThat(account.getCurrencyUnit(), comparesEqualTo(EUR));
+        assertThat(account.getShares(), comparesEqualTo(new BigDecimal("80.00")));
         assertThat(account.getAmountInvested(), comparesEqualTo(new BigDecimal("80.00000000")));
     }
 
     @Test
-    void changeBaseCurrency_roundTripUsdEurUsd_doesNotThrow() {
+    void changeBaseCurrency_roundTripUsdEurUsd_keepsAccountCurrency() {
         final AdditionalCurrencyAccount eurHolding =
                 new AdditionalCurrencyAccount(
                         "EUR Safe",
@@ -95,16 +95,16 @@ class AdditionalCurrencyAccountTest {
         // USD -> EUR
         snapshot.changeBaseCurrencyUnitTo(EUR);
         assertThat(snapshot.getBaseCurrencyUnit(), comparesEqualTo(EUR));
-        // Holding inverted into previous base (USD)
-        assertThat(eurHolding.getCurrencyUnit(), comparesEqualTo(CURRENCY_UNIT));
+        assertThat(eurHolding.getCurrencyUnit(), comparesEqualTo(EUR));
+        assertThat(eurHolding.getShares(), comparesEqualTo(new BigDecimal("80.00")));
+        assertThat(eurHolding.getAmountInvested(), comparesEqualTo(new BigDecimal("80.00000000")));
 
-        // EUR -> USD
+        // EUR -> USD (rate for USD is 1/0.8 = 1.25 after first flip)
         snapshot.changeBaseCurrencyUnitTo(CURRENCY_UNIT);
         assertThat(snapshot.getBaseCurrencyUnit(), comparesEqualTo(CURRENCY_UNIT));
-        // Holding inverted back into EUR
         assertThat(eurHolding.getCurrencyUnit(), comparesEqualTo(EUR));
-        // Quantity restored (80 EUR)
-        assertThat(eurHolding.getShares(), comparesEqualTo(new BigDecimal("80.00000000")));
+        assertThat(eurHolding.getShares(), comparesEqualTo(new BigDecimal("80.00")));
+        assertThat(eurHolding.getAmountInvested(), comparesEqualTo(new BigDecimal("100.00000000")));
     }
 
     @Test

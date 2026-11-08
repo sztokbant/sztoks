@@ -186,33 +186,22 @@ public class AdditionalCurrencyAccount extends Account implements FutureTithingC
     }
 
     /**
-     * After snapshot base change: scale cost basis into the new base and, if this holding's unit is
-     * now the base, invert shares into {@code previousBase}.
+     * After snapshot base change: restate cost basis into the new base. Account currency and shares
+     * are unchanged (asset identity is fixed, like other account types).
      *
-     * @param previousBase previous snapshot base
-     * @param unitsOfNewBasePerOldBase how many units of the new base equal 1 unit of previousBase
-     *     (the old conversion rate entry for the new base currency)
+     * @param unitsOfNewBasePerOldBase how many units of the new base equal 1 unit of the previous
+     *     base (the old conversion rate entry for the new base currency)
      */
-    public void onSnapshotBaseCurrencyChanged(
-            @NonNull final CurrencyUnit previousBase,
-            @NonNull final CurrencyUnit newBase,
-            @NonNull final BigDecimal unitsOfNewBasePerOldBase) {
+    public void onSnapshotBaseCurrencyChanged(@NonNull final BigDecimal unitsOfNewBasePerOldBase) {
         if (unitsOfNewBasePerOldBase.compareTo(BigDecimal.ZERO) == 0) {
             throw new IllegalArgumentException("conversion rate must not be zero");
         }
 
-        // amountInvested was in previousBase; express in newBase
+        // amountInvested was in previous base; express in new base
         amountInvested =
                 amountInvested
                         .multiply(unitsOfNewBasePerOldBase)
                         .setScale(DIVISION_SCALE, RoundingMode.HALF_UP);
-
-        if (getCurrencyUnit().equals(newBase)) {
-            // Holding was denominated in what is now base → invert into previous base units.
-            // Rate R means 1 previousBase = R newBase, so shares_newBase / R = shares_previousBase.
-            shares = shares.divide(unitsOfNewBasePerOldBase, DIVISION_SCALE, RoundingMode.HALF_UP);
-            setCurrencyUnit(previousBase);
-        }
     }
 
     @Override

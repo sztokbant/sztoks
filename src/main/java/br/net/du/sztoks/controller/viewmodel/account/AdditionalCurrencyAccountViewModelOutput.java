@@ -1,6 +1,5 @@
 package br.net.du.sztoks.controller.viewmodel.account;
 
-import static br.net.du.sztoks.controller.util.ControllerUtils.formatAsDecimal;
 import static br.net.du.sztoks.controller.util.ControllerUtils.formatAsPercentage;
 import static br.net.du.sztoks.controller.util.ControllerUtils.toDecimal;
 import static br.net.du.sztoks.controller.util.MoneyFormatUtils.format;
@@ -8,7 +7,6 @@ import static br.net.du.sztoks.controller.util.MoneyFormatUtils.format;
 import br.net.du.sztoks.model.account.Account;
 import br.net.du.sztoks.model.account.AdditionalCurrencyAccount;
 import br.net.du.sztoks.model.account.FutureTithingCapable;
-import java.math.BigDecimal;
 import lombok.Getter;
 import org.joda.money.CurrencyUnit;
 
@@ -44,7 +42,7 @@ public class AdditionalCurrencyAccountViewModelOutput extends AccountViewModelOu
         final CurrencyUnit base = account.getSnapshot().getBaseCurrencyUnit();
         final CurrencyUnit unit = account.getCurrencyUnit();
 
-        final String shares = new BigDecimal(formatAsDecimal(aca.getShares())).toString();
+        final String shares = format(unit, toDecimal(aca.getShares()));
         final String amountInvested = format(base, toDecimal(aca.getAmountInvested()));
         final String averagePurchasePrice = format(base, toDecimal(aca.getAveragePurchasePrice()));
         final String valueInBaseCurrency = format(base, toDecimal(aca.getValueInBaseCurrency()));

@@ -600,8 +600,6 @@ public class Snapshot implements Comparable<Snapshot> {
         }
 
         final String oldBaseCurrency = baseCurrency;
-        final CurrencyUnit previousBase = CurrencyUnit.of(oldBaseCurrency);
-
         // Remove direct conversion rate
         final BigDecimal oldToNewBaseCurrencyConversionRate =
                 currencyConversionRates.get(newBaseCurrency.getCode());
@@ -612,16 +610,13 @@ public class Snapshot implements Comparable<Snapshot> {
         }
 
         // Adjust additional-currency holdings while rates still reflect previous base
-        // Snapshot of the list avoids concurrent modification if the account set is touched
-        final List<AdditionalCurrencyAccount> additionalCurrencyAccounts =
-                accounts.stream()
-                        .filter(account -> account instanceof AdditionalCurrencyAccount)
-                        .map(AdditionalCurrencyAccount.class::cast)
-                        .toList();
-        for (final AdditionalCurrencyAccount account : additionalCurrencyAccounts) {
-            account.onSnapshotBaseCurrencyChanged(
-                    previousBase, newBaseCurrency, oldToNewBaseCurrencyConversionRate);
-        }
+        accounts.stream()
+                .filter(account -> account instanceof AdditionalCurrencyAccount)
+                .map(AdditionalCurrencyAccount.class::cast)
+                .forEach(
+                        account ->
+                                account.onSnapshotBaseCurrencyChanged(
+                                        oldToNewBaseCurrencyConversionRate));
 
         currencyConversionRates.remove(newBaseCurrency.getCode());
 
