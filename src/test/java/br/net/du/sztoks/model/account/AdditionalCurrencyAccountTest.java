@@ -129,4 +129,32 @@ class AdditionalCurrencyAccountTest {
         account.setShares(new BigDecimal("96.00")); // value base = 120, profit ccy = 96 - 80 = 16
         assertThat(fta.getReferenceAmount(), comparesEqualTo(new BigDecimal("16.00000000")));
     }
+
+    @Test
+    void putCurrencyConversionRate_profitsOnly_updatesFutureTithingInvariant() {
+        final AdditionalCurrencyAccount account =
+                new AdditionalCurrencyAccount(
+                        "EUR Safe",
+                        EUR,
+                        FutureTithingPolicy.PROFITS_ONLY,
+                        LocalDate.now(),
+                        new BigDecimal("80.00"),
+                        new BigDecimal("100.00")); // base cost
+        snapshot.addAccount(account);
+        // rate 0.80 → cost in EUR = 80, profit = 0
+        final FutureTithingAccount fta = snapshot.getFutureTithingAccount(EUR);
+        assertThat(fta.getReferenceAmount(), comparesEqualTo(BigDecimal.ZERO));
+        assertThat(account.getFutureTithingReferenceAmount(), comparesEqualTo(BigDecimal.ZERO));
+
+        // Cheaper EUR in USD terms: 1 USD = 0.50 EUR → cost in EUR = 50, profit = 30
+        snapshot.putCurrencyConversionRate(EUR, new BigDecimal("0.50"));
+
+        assertThat(
+                account.getFutureTithingReferenceAmount(),
+                comparesEqualTo(new BigDecimal("30.00000000")));
+        // Stored FTA should match (this is what fails today — still 0)
+        assertThat(
+                fta.getReferenceAmount(),
+                comparesEqualTo(account.getFutureTithingReferenceAmount()));
+    }
 }

@@ -868,7 +868,11 @@ public class Snapshot implements Comparable<Snapshot> {
         if (previousValue == null) {
             updateCurrenciesInUse();
         } else {
-            // Recompute totals if this currency was already present
+            // PROFITS_ONLY additional-currency future tithing depends on conversion rates.
+            // Rebuild FTA references before recomputing totals so liability net worth
+            // stays consistent with values at the new rates.
+            resetFutureTithingAccounts();
+
             assetsTotal = computeTotalFor(AccountType.ASSET);
             liabilitiesTotal = computeTotalFor(AccountType.LIABILITY);
             incomesTotal = computeTotalFor(TransactionType.INCOME);
